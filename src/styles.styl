@@ -1,8 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~leaflet/dist/leaflet.css"
 @import "~font-awesome/css/font-awesome.css"
-@import "~@angular/material/prebuilt-themes/indigo-pink.css"
-@import "~materialize-css/dist/css/materialize.css"
+@import "~foundation-sites/dist/css/foundation.css"
+
+lightBlue=#0f83bd
+lightGrey=#d3d3d3
+backgroundHighlight=#b3e5ff
 
 .img-marker
   img
@@ -24,3 +27,40 @@
     border-radius: 50%;
     line-height 19px;
     color: #fff;
+
+.control-bar
+  border-bottom: 1px solid lightGrey
+  .dropdown-pane
+    z-index 9999
+
+app-dock
+  height auto
+  .dock-button
+    padding: 10px;
+    cursor: pointer
+    border-bottom 1px solid lightGrey
+    text-align center
+    &.active
+      background-color backgroundHighlight
+
+  .dock-button-label
+    font-size 0.5em
+    line-height 0.5
+    color #6a6a6a
+
+  .dock-button-icon
+    display: inline-block;
+    border: none;
+    pointer-events: none;
+
+.dock-panel
+  width: 250px
+  height: 100%
+  .dock-panel-title
+    color: lightBlue
+  .dock-panel-content
+    padding 5px
+  .dock-panel-controls
+    bottom: 0
+app-map
+  z-index 1

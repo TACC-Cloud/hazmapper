@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
-import { MatDialog } from "@angular/material";
 import * as L  from 'leaflet';
 import 'types.leaflet.heat';
 import 'leaflet.markercluster';
 
 import { GeoDataService} from "../../services/geo-data.service";
 import { createMarker } from "../../utils/leafletUtils";
-import { GalleryComponent } from "../gallery/gallery.component";
 import {Feature} from "geojson";
 
 
@@ -24,12 +22,13 @@ export class MapComponent implements OnInit {
 
   constructor(private GeoDataService: GeoDataService,
               private route: ActivatedRoute,
-              public dialog: MatDialog) {
+              ) {
     this.featureClickHandler.bind(this);
 
   }
 
   ngOnInit() {
+    console.log(this)
     const mapType: string = this.route.snapshot.queryParamMap.get('mapType');
     this.projectId = +this.route.snapshot.paramMap.get("projectId");
     this.cluster = this.route.snapshot.queryParamMap.get('mapType');
@@ -90,10 +89,10 @@ export class MapComponent implements OnInit {
    * @param ev
    */
   featureClickHandler(ev: any): void {
-    this.dialog.open(GalleryComponent, {
-      data: <Feature>ev.layer.feature,
-      maxWidth: '50%',
-    })
+    // this.dialog.open(GalleryComponent, {
+    //   data: <Feature>ev.layer.feature,
+    //   maxWidth: '50%',
+    // })
 
   }
 }

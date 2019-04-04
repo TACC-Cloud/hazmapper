@@ -1,10 +1,9 @@
 import {Injectable, NgModule} from '@angular/core';
 import {Routes, RouterModule, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
-import { MapComponent } from "./components/map/map.component";
 import { NotFoundComponent} from "./components/notfound/notfound.component";
-import { ProjectsComponent } from "./components/projects/projects.component";
 import {AuthenticationService} from "./services/authentication.service";
 import {Observable} from "rxjs";
+import {MainComponent} from "./components/main/main.component";
 
 
 @Injectable()
@@ -18,8 +17,9 @@ class Activate implements CanActivate {
 
 
 const routes: Routes = [
-  {path: 'projects/:projectId', component: MapComponent,  canActivate: [Activate]},
-  {path: 'projects', component: ProjectsComponent, canActivate: [Activate]},
+  // {path: 'projects/:projectId', component: MapComponent,  canActivate: [Activate]},
+  // {path: 'projects', component: ProjectsComponent, canActivate: [Activate]},
+  {path: '', component: MainComponent, canActivate: []},
   {path: '404', component: NotFoundComponent },
   {path: '**', redirectTo: 'projects'}
 ];

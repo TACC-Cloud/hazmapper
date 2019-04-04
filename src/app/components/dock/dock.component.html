@@ -1,0 +1,48 @@
+<div class="grid-x">
+  <div class="cell shrink">
+    <div class="dock-button" (click)="showAssetsPanel=!showAssetsPanel" [ngClass]="{'active': showAssetsPanel}">
+      <div>
+        <img class="dock-button-icon" src="assets/assets.png" width="32px">
+      </div>
+      <div class="dock-button-label">
+        <span>Assets</span>
+      </div>
+    </div>
+    <div class="dock-button" (click)="showLayersPanel=!showLayersPanel" [ngClass]="{'active': showLayersPanel}">
+      <div>
+        <img class="dock-button-icon" src="assets/layers.png" width="32px">
+      </div>
+      <div class="dock-button-label">
+        <span>Layers</span>
+      </div>
+    </div>
+    <div class="dock-button" (click)="showAssetsPanel=!showAssetsPanel" [ngClass]="{'active': showAssetsPanel}">
+      <div>
+        <img class="dock-button-icon" src="assets/filters.png" width="32px">
+      </div>
+      <div class="dock-button-label">
+        <span>Filters</span>
+      </div>
+    </div>
+    <div class="dock-button" (click)="showAssetsPanel=!showAssetsPanel" [ngClass]="{'active': showAssetsPanel}">
+      <div>
+        <img class="dock-button-icon" src="assets/measure.png" width="32px">
+      </div>
+      <div class="dock-button-label">
+        <span>Measure</span>
+      </div>
+    </div>
+    <div class="dock-button" (click)="showAssetsPanel=!showAssetsPanel" [ngClass]="{'active': showAssetsPanel}">
+      <div>
+        <img class="dock-button-icon" src="assets/settings.png" width="32px">
+      </div>
+      <div class="dock-button-label">
+        <span>Settings</span>
+      </div>
+    </div>
+  </div>
+  <div class="cell auto dock-panel">
+    <app-assets-panel *ngIf="showAssetsPanel" ></app-assets-panel>
+    <app-layers-panel *ngIf="showLayersPanel" ></app-layers-panel>
+  </div>
+</div>
