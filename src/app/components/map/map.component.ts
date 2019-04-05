@@ -16,9 +16,9 @@ import {Feature} from "geojson";
 })
 export class MapComponent implements OnInit {
   map: L.Map;
-  projectId: number;
+  // projectId: number;
   mapType: string = "normal";
-  cluster: string;
+  // cluster: string;
 
   constructor(private GeoDataService: GeoDataService,
               private route: ActivatedRoute,
@@ -28,10 +28,9 @@ export class MapComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this)
     const mapType: string = this.route.snapshot.queryParamMap.get('mapType');
-    this.projectId = +this.route.snapshot.paramMap.get("projectId");
-    this.cluster = this.route.snapshot.queryParamMap.get('mapType');
+    // this.projectId = +this.route.snapshot.paramMap.get("projectId");
+    // this.cluster = this.route.snapshot.queryParamMap.get('mapType');
 
     this.map = new L.Map('map', {
      center: [40, -80],
@@ -55,7 +54,7 @@ export class MapComponent implements OnInit {
     let geojsonOptions = {
       pointToLayer: createMarker
     };
-    this.GeoDataService.getAllFeatures(this.projectId).subscribe(collection=> {
+    this.GeoDataService.features.subscribe(collection=> {
       let fg = new L.FeatureGroup();
       let markers = L.markerClusterGroup({
         iconCreateFunction: (cluster)=>{

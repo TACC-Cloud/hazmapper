@@ -19,7 +19,7 @@ class Activate implements CanActivate {
 const routes: Routes = [
   // {path: 'projects/:projectId', component: MapComponent,  canActivate: [Activate]},
   // {path: 'projects', component: ProjectsComponent, canActivate: [Activate]},
-  {path: '', component: MainComponent, canActivate: []},
+  {path: '', component: MainComponent, canActivate: [Activate]},
   {path: '404', component: NotFoundComponent },
   {path: '**', redirectTo: 'projects'}
 ];

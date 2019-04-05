@@ -16,6 +16,7 @@ import { LayersPanelComponent } from './components/layers-panel/layers-panel.com
 import { SettingsPanelComponent } from './components/settings-panel/settings-panel.component';
 import { FiltersPanelComponent } from './components/filters-panel/filters-panel.component';
 import { MeasurePanelComponent } from './components/measure-panel/measure-panel.component';
+import { AssetDetailComponent } from './components/asset-detail/asset-detail.component';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import { MeasurePanelComponent } from './components/measure-panel/measure-panel.
     SettingsPanelComponent,
     FiltersPanelComponent,
     MeasurePanelComponent,
+    AssetDetailComponent,
   ],
   imports: [
     BrowserModule,

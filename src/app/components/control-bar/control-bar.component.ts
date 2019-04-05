@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ProjectsService } from "../../services/projects.service";
+import { Project } from "../../models/models";
+import { GeoDataService } from "../../services/geo-data.service";
 
 @Component({
   selector: 'app-control-bar',
@@ -7,9 +10,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ControlBarComponent implements OnInit {
 
-  constructor() { }
+  private projects : Array<Project>;
+  selectedProject : Project;
+
+  constructor(private ProjectsService : ProjectsService, private GeoDataService: GeoDataService) { }
 
   ngOnInit() {
+    this.ProjectsService.getProjects().subscribe( (projects)=> {
+      this.projects = projects;
+    })
+  }
+
+  selectProject(p: Project) {
+    this.selectedProject = p;
+    this.GeoDataService.getAllFeatures(p.id);
   }
 
 }

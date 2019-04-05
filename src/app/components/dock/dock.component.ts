@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {GeoDataService} from "../../services/geo-data.service";
+import {FeatureCollection} from "geojson";
 
 @Component({
   selector: 'app-dock',
@@ -9,11 +11,17 @@ export class DockComponent implements OnInit {
 
   showAssetsPanel;
   showLayersPanel: boolean = false;
-  constructor() { }
+  features : FeatureCollection;
+
+  constructor(private GeoDataService: GeoDataService) { }
 
   ngOnInit() {
     this.showAssetsPanel = false;
     this.showLayersPanel = false;
+    this.GeoDataService.features.subscribe( (fc)=> {
+      this.features = fc;
+      console.log(this.features)
+    })
   }
 
 }
