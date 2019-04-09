@@ -7,7 +7,10 @@ import 'leaflet.markercluster';
 import { GeoDataService} from "../../services/geo-data.service";
 import { createMarker } from "../../utils/leafletUtils";
 import {Feature} from "geojson";
-
+import {FeatureGroup, LatLng, LeafletMouseEvent} from "leaflet";
+import * as turf from '@turf/turf';
+import { AllGeoJSON } from "@turf/helpers";
+import {skip} from "rxjs/operators";
 
 @Component({
   selector: 'app-map',
@@ -19,12 +22,14 @@ export class MapComponent implements OnInit {
   // projectId: number;
   mapType: string = "normal";
   // cluster: string;
+  activeFeature: Feature;
+  features : FeatureGroup = new FeatureGroup();
 
   constructor(private GeoDataService: GeoDataService,
               private route: ActivatedRoute,
               ) {
     this.featureClickHandler.bind(this);
-
+    this.mouseEventHandler.bind(this);
   }
 
   ngOnInit() {
@@ -41,9 +46,42 @@ export class MapComponent implements OnInit {
       maxZoom: 19,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
-    baseOSM.addTo(this.map);
+    this.map.addLayer(baseOSM);
+    let satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    });
+
     this.loadFeatures();
 
+    // Publish the mouse location on the mapMouseLocation stream
+    this.map.on("mousemove", (ev:LeafletMouseEvent)=>this.mouseEventHandler(ev));
+
+    // Listen on the activeFeature stream and zoom map to that feature when it changes
+    this.GeoDataService.activeFeature.pipe(skip(1)).subscribe( (next)=>{
+      this.activeFeature = next;
+      console.log(next);
+      console.log(turf.bbox(<AllGeoJSON>next));
+      let bbox = turf.bbox(<AllGeoJSON>next);
+
+      this.map.fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]]);
+    });
+
+    // Listen for changes to the basemap
+    this.GeoDataService.basemap.pipe(skip(1)).subscribe((next)=>{
+      if (next == 'sat') {
+        this.map.removeLayer(baseOSM);
+        this.map.addLayer(satellite);
+      }
+      if (next == 'roads') {
+        this.map.removeLayer(satellite);
+        this.map.addLayer(baseOSM);
+      }
+    });
+  }
+
+
+  mouseEventHandler (ev:any) :void{
+    this.GeoDataService.mapMouseLocation = ev.latlng;
   }
 
 
@@ -55,7 +93,7 @@ export class MapComponent implements OnInit {
       pointToLayer: createMarker
     };
     this.GeoDataService.features.subscribe(collection=> {
-      let fg = new L.FeatureGroup();
+      this.features.clearLayers();
       let markers = L.markerClusterGroup({
         iconCreateFunction: (cluster)=>{
           return L.divIcon({html:`<div><b>${cluster.getChildCount()}</b></div>`, className:'marker-cluster'})
@@ -68,13 +106,13 @@ export class MapComponent implements OnInit {
         if (d.geometry.type == "Point") {
           markers.addLayer(feat);
         } else {
-          fg.addLayer(feat);
+          this.features.addLayer(feat);
         }
       });
-      fg.addLayer(markers);
-      this.map.addLayer(fg);
+      this.features.addLayer(markers);
+      this.map.addLayer(this.features);
       try {
-        this.map.fitBounds(fg.getBounds());
+        this.map.fitBounds(this.features.getBounds());
       } catch (e) {
         console.log(e);
       }
@@ -88,10 +126,6 @@ export class MapComponent implements OnInit {
    * @param ev
    */
   featureClickHandler(ev: any): void {
-    // this.dialog.open(GalleryComponent, {
-    //   data: <Feature>ev.layer.feature,
-    //   maxWidth: '50%',
-    // })
-
+    this.GeoDataService.activeFeature = ev.layer.feature;
   }
 }

@@ -3,8 +3,9 @@
     <span class="dock-panel-title"> Assets </span>
   </div>
   <div class="dock-panel-content">
-    <div *ngFor="let feat of features.features">
-      <div (click)="selectFeature(feat)"> {{feat.properties|json}} </div>
+    <div *ngFor="let feat of features.features" (click)="selectFeature(feat)">
+      <app-feature-icon [feature]=feat></app-feature-icon>
+      <div > {{feat.properties.label || feat.id}} </div>
     </div>
   </div>
   <div class="dock-panel-controls">

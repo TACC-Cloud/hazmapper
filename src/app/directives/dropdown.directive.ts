@@ -23,7 +23,6 @@ export class DropdownToggleDirective {
   }
 
   toggleOpen () {
-    console.log("toggle open")
     this.dropdown.toggle();
   }
 }
@@ -44,7 +43,6 @@ export class DropdownDirective {
   }
 
   toggle() {
-    console.log("toggle")
     this.isOpen =! this.isOpen;
     if (this.isOpen) {
       this.renderer.addClass(this._menuElement.nativeElement, 'is-open')

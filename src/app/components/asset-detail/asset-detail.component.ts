@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {GeoDataService} from "../../services/geo-data.service";
 
 @Component({
   selector: 'app-asset-detail',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AssetDetailComponent implements OnInit {
 
-  constructor() { }
+  constructor(private GeoDataService: GeoDataService) { }
 
   ngOnInit() {
+  }
+
+  close() {
+    this.GeoDataService.activeFeature = null;
   }
 
 }

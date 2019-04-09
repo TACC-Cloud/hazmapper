@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ProjectsService } from "../../services/projects.service";
 import { Project } from "../../models/models";
 import { GeoDataService } from "../../services/geo-data.service";
+import {LatLng} from "leaflet";
+import {skip} from "rxjs/operators";
 
 @Component({
   selector: 'app-control-bar',
@@ -12,12 +14,17 @@ export class ControlBarComponent implements OnInit {
 
   private projects : Array<Project>;
   selectedProject : Project;
+  mapMouseLocation: LatLng = new LatLng(0,0);
 
   constructor(private ProjectsService : ProjectsService, private GeoDataService: GeoDataService) { }
 
   ngOnInit() {
     this.ProjectsService.getProjects().subscribe( (projects)=> {
       this.projects = projects;
+    })
+
+    this.GeoDataService.mapMouseLocation.pipe(skip(1)).subscribe( (next)=>{
+      this.mapMouseLocation = next;
     })
   }
 

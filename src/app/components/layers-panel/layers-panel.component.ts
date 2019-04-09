@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {GeoDataService} from "../../services/geo-data.service";
 
 @Component({
   selector: 'app-layers-panel',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LayersPanelComponent implements OnInit {
 
-  constructor() { }
+  basemap : string = 'sat';
+  constructor(private GeoDataService: GeoDataService) { }
 
   ngOnInit() {
+  }
+
+  selectBasemap(bmap: string) : void {
+    this.basemap = bmap;
+    this.GeoDataService.basemap = this.basemap;
   }
 
 }

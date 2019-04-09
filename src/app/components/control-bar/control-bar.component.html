@@ -1,3 +1,4 @@
+
 <div appDropdown>
   <span class="hollow tiny"  appDropdownToggle>Projects</span>
   <div class="dropdown-pane" appDropdownMenu>
@@ -7,6 +8,10 @@
       </li>
     </ul>
   </div>
+</div>
+<div>
+  <span> lat: {{ mapMouseLocation.lat | number:'.4' }}</span>
+  <span> lon: {{ mapMouseLocation.lng | number:'.4' }}</span>
 </div>
 <!--<div>-->
 <!--  <div>-->
