@@ -10,8 +10,10 @@
   </div>
 </div>
 <div>
-  <span> lat: {{ mapMouseLocation.lat | number:'.4' }}</span>
-  <span> lon: {{ mapMouseLocation.lng | number:'.4' }}</span>
+  <span class="lat-lon-label"> Lat: </span>
+  <span> {{ mapMouseLocation.lat | number:'.4' }}</span>
+  <span class="lat-lon-label"> Lon: </span>
+  <span> {{ mapMouseLocation.lng | number:'.4' }}</span>
 </div>
 <!--<div>-->
 <!--  <div>-->

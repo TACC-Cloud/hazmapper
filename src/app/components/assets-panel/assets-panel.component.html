@@ -3,10 +3,10 @@
     <span class="dock-panel-title"> Assets </span>
   </div>
   <div class="dock-panel-content">
-    <div *ngFor="let feat of features.features" (click)="selectFeature(feat)">
-      <app-feature-icon [feature]=feat></app-feature-icon>
-      <div > {{feat.properties.label || feat.id}} </div>
-    </div>
+    <app-feature-row
+      *ngFor="let feat of features.features"
+      (click)="selectFeature(feat)" [feature]="feat">
+    </app-feature-row>
   </div>
   <div class="dock-panel-controls">
     <div class="expanded button-group tiny">

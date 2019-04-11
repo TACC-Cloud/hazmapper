@@ -18,6 +18,7 @@ import { FiltersPanelComponent } from './components/filters-panel/filters-panel.
 import { MeasurePanelComponent } from './components/measure-panel/measure-panel.component';
 import { AssetDetailComponent } from './components/asset-detail/asset-detail.component';
 import { FeatureIconComponent } from './components/feature-icon/feature-icon.component';
+import { FeatureRowComponent } from './components/feature-row/feature-row.component';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import { FeatureIconComponent } from './components/feature-icon/feature-icon.com
     MeasurePanelComponent,
     AssetDetailComponent,
     FeatureIconComponent,
+    FeatureRowComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {GeoDataService} from "../../services/geo-data.service";
+import {Feature} from "geojson";
 
 @Component({
   selector: 'app-asset-detail',
@@ -8,9 +9,13 @@ import {GeoDataService} from "../../services/geo-data.service";
 })
 export class AssetDetailComponent implements OnInit {
 
+  feature: Feature;
   constructor(private GeoDataService: GeoDataService) { }
 
   ngOnInit() {
+   this.GeoDataService.activeFeature.subscribe( (next)=>{
+     this.feature = next;
+   })
   }
 
   close() {

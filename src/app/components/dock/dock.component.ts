@@ -12,6 +12,7 @@ export class DockComponent implements OnInit {
   showAssetsPanel;
   showLayersPanel: boolean = false;
   features : FeatureCollection;
+  panelsDisplay: IpanelsDisplay;
 
   constructor(private GeoDataService: GeoDataService) { }
 
@@ -22,6 +23,29 @@ export class DockComponent implements OnInit {
       this.features = fc;
       console.log(this.features)
     })
+    this.panelsDisplay = <IpanelsDisplay>{
+      assets: false,
+      layers: false,
+      filters: false,
+      measure: false,
+      settings: false
+    }
   }
 
+  showPanel(pname: string) {
+    for (let key in this.panelsDisplay) {
+      if (key != pname) this.panelsDisplay[key] = false;
+    }
+    this.panelsDisplay[pname] = !this.panelsDisplay[pname];
+
+  }
+
+}
+
+interface IpanelsDisplay {
+  assets: boolean;
+  layers: boolean;
+  filters: boolean;
+  measure: boolean;
+  settings: boolean;
 }
