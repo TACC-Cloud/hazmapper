@@ -41,7 +41,13 @@ export class DropdownDirective {
   constructor(private elementRef: ElementRef, private renderer: Renderer2)   {
 
   }
-
+  @HostListener('document:click', ['$event.target'])
+    public onClick(targetElement) {
+        const clickedInside = this.elementRef.nativeElement.contains(targetElement);
+        if (!clickedInside) {
+            this.toggle();
+        }
+    }
   toggle() {
     this.isOpen =! this.isOpen;
     if (this.isOpen) {
