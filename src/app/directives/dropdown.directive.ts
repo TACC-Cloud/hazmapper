@@ -44,7 +44,7 @@ export class DropdownDirective {
   @HostListener('document:click', ['$event.target'])
     public onClick(targetElement) {
         const clickedInside = this.elementRef.nativeElement.contains(targetElement);
-        if (!clickedInside) {
+        if (!clickedInside && this.isOpen) {
             this.toggle();
         }
     }
