@@ -19,6 +19,7 @@ import { MeasurePanelComponent } from './components/measure-panel/measure-panel.
 import { AssetDetailComponent } from './components/asset-detail/asset-detail.component';
 import { FeatureIconComponent } from './components/feature-icon/feature-icon.component';
 import { FeatureRowComponent } from './components/feature-row/feature-row.component';
+import { FeatureMetadataComponent } from './components/feature-metadata/feature-metadata.component';
 
 
 @NgModule({
@@ -33,6 +34,7 @@ import { FeatureRowComponent } from './components/feature-row/feature-row.compon
     AssetDetailComponent,
     FeatureIconComponent,
     FeatureRowComponent,
+    FeatureMetadataComponent,
   ],
   imports: [
     BrowserModule,

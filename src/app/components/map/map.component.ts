@@ -28,6 +28,8 @@ export class MapComponent implements OnInit {
   constructor(private GeoDataService: GeoDataService,
               private route: ActivatedRoute,
               ) {
+
+    // Have to bind these to keep this being this
     this.featureClickHandler.bind(this);
     this.mouseEventHandler.bind(this);
   }
@@ -63,7 +65,7 @@ export class MapComponent implements OnInit {
       console.log(turf.bbox(<AllGeoJSON>next));
       let bbox = turf.bbox(<AllGeoJSON>next);
 
-      this.map.fitBounds([[bbox[0], bbox[1]], [bbox[2], bbox[3]]]);
+      this.map.fitBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]]);
     });
 
     // Listen for changes to the basemap
