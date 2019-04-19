@@ -3,14 +3,17 @@
 @import "~@fortawesome/fontawesome-free/css/all.css"
 @import "~foundation-sites/dist/css/foundation.css"
 @import url('https://fonts.googleapis.com/css?family=Raleway');
+@import "variables.styl"
 
-html, body {
+html, body, h1, h2, h3, h4, h5, h6 {
   font-family Raleway
 }
 
 lightBlue=#0f83bd
 lightGrey=#d3d3d3
 backgroundHighlight=#b3e5ff
+greenActive=#1aff8c
+$AppMediumBlue=#22c7ff
 
 .img-marker
   img
@@ -63,6 +66,7 @@ app-dock
   height: 100%
   .dock-panel-title
     color: lightBlue
+    font-size 1.25em
   .dock-panel-content
     padding 5px
   .dock-panel-controls

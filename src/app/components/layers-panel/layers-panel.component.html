@@ -1,13 +1,23 @@
 <div class="dock-panel">
   <div class="dock-panel-content">
-    <span class="dock-panel-title"> Layers </span>
+    <p class="dock-panel-title"> Layers </p>
     <h6> Basemap</h6>
     <div class="button-group small expanded">
-      <button [ngClass]="{'success': basemap=='sat'}" class="button" (click)="selectBasemap('sat')">Satellite</button>
-      <button [ngClass]="{'success': basemap=='roads'}"class="button" (click)="selectBasemap('roads')">Roads</button>
+      <button [ngClass]="{'success': basemap=='sat', 'hollow': basemap!='sat'}" class="button" (click)="selectBasemap('sat')">Satellite</button>
+      <button [ngClass]="{'success': basemap=='roads', 'hollow': basemap!='roads'}"class="button" (click)="selectBasemap('roads')">Roads</button>
     </div>
+    <hr>
     <h6> Overlays </h6>
-
+    <div *ngFor="let ov of overlays" class="overlay" (click)="selectOverlay(ov)">
+      <div class="grid-x grid-padding-x align-middle">
+        <div class="cell small-4 panel-thumbnail">
+          <img src="/api/assets/{{ov.project_id}}/{{ov.uuid}}.thumb.jpeg">
+        </div>
+        <div class="cell auto">
+          <span class="overlay-label"> {{ov.label}} </span>
+        </div>
+      </div>
+    </div>
   </div>
 
 </div>

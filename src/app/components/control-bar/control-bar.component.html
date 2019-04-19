@@ -3,7 +3,7 @@
   <span class="hollow tiny"  appDropdownToggle>Projects</span>
   <div class="dropdown-pane" appDropdownMenu>
     <ul class="no-bullet">
-      <li *ngFor="let p of projects" (click)="selectProject(p)">
+      <li *ngFor="let p of projects" (click)="selectProject(p)" [ngClass]="{'active-project': p === selectedProject}">
         {{ p.name }}
       </li>
     </ul>

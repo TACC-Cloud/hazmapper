@@ -2,6 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import {GeoDataService} from "../../services/geo-data.service";
 import {FeatureCollection} from "geojson";
 
+
+
+interface IpanelsDisplay {
+  assets: boolean;
+  layers: boolean;
+  filters: boolean;
+  measure: boolean;
+  settings: boolean;
+}
+
 @Component({
   selector: 'app-dock',
   templateUrl: './dock.component.html',
@@ -9,20 +19,16 @@ import {FeatureCollection} from "geojson";
 })
 export class DockComponent implements OnInit {
 
-  showAssetsPanel;
-  showLayersPanel: boolean = false;
   features : FeatureCollection;
   panelsDisplay: IpanelsDisplay;
 
   constructor(private GeoDataService: GeoDataService) { }
 
   ngOnInit() {
-    this.showAssetsPanel = false;
-    this.showLayersPanel = false;
     this.GeoDataService.features.subscribe( (fc)=> {
       this.features = fc;
-      console.log(this.features)
-    })
+    });
+
     this.panelsDisplay = <IpanelsDisplay>{
       assets: false,
       layers: false,
@@ -42,10 +48,3 @@ export class DockComponent implements OnInit {
 
 }
 
-interface IpanelsDisplay {
-  assets: boolean;
-  layers: boolean;
-  filters: boolean;
-  measure: boolean;
-  settings: boolean;
-}

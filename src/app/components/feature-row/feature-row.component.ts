@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Feature} from "geojson";
+import {Feature} from "../../models/models";
 
 @Component({
   selector: 'app-feature-row',

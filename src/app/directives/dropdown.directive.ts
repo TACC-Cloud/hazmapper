@@ -31,7 +31,6 @@ export class DropdownToggleDirective {
   selector: '[appDropdown]'
 })
 export class DropdownDirective {
-  manageDropdown : boolean = false;
   @ContentChild(DropdownMenuDirective) private _menu: DropdownMenuDirective;
   @ContentChild(DropdownMenuDirective, {read: ElementRef}) private _menuElement: ElementRef;
   @ContentChild(DropdownToggleDirective) private _toggle: DropdownToggleDirective;

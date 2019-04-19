@@ -31,6 +31,7 @@ export class ControlBarComponent implements OnInit {
   selectProject(p: Project) {
     this.selectedProject = p;
     this.GeoDataService.getAllFeatures(p.id);
+    this.GeoDataService.getOverlays(p.id);
   }
 
 }

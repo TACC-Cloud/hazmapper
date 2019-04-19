@@ -1,5 +1,5 @@
 import {CircleMarker, circleMarker, divIcon, LatLng, Marker, marker} from "leaflet";
-import {Feature} from "geojson";
+import {Feature} from "../models/models";
 
 
 
@@ -16,7 +16,7 @@ function createCircleMarker (feature: Feature, latlng: LatLng): CircleMarker {
 }
 
 function createImageMarker (feature: Feature, latlng: LatLng): Marker {
-  let asset = feature.properties.assets[0];
+  let asset = feature.assets[0];
   // let divHtml = `<a href="${asset.path}.jpeg" target="_blank"> <img src="${asset.path}.thumb.jpeg" width="50px" height="50px"></a>`;
   let divHtml = `<img src="/api/${asset.path}.thumb.jpeg" width="50px" height="50px">`;
 
@@ -33,19 +33,14 @@ function createCollectionMarker (feature: Feature, latlng: LatLng) : Marker {
 
 export function createMarker(feature: Feature, latlng: LatLng) : Marker {
   let marker;
-  if (feature.properties
-      && feature.properties.assets
-      && feature.properties.assets.length == 1) {
+  if (feature.featureType() == 'image') {
     marker = createImageMarker(feature, latlng);
-  } else if (    feature.properties
-      && feature.properties.assets
-      && feature.properties.assets.length > 1){
+  } else if (feature.featureType() == 'collection'){
     marker =  createCollectionMarker(feature, latlng);
   }
   else {
     marker = createCircleMarker(feature, latlng)
   }
-  // marker = createCollectionMarker(feature, latlng);
   return marker;
 
 }

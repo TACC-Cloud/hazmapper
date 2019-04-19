@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Feature} from "geojson";
+import {Feature} from '../../models/models'
+console.log(Feature)
 
 @Component({
   selector: 'app-feature-icon',
@@ -13,25 +14,5 @@ export class FeatureIconComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-  }
-
-  featureType(feat: Feature) : string {
-    if (feat.properties.assets &&
-      feat.properties.assets.length == 1 &&
-      feat.properties.assets[0].asset_type == 'image') {
-      return 'image'
-    } else if (feat.properties.assets &&
-      feat.properties.assets.length == 1 &&
-      feat.properties.assets[0].asset_type == 'video') {
-      return 'video'
-    } else if (feat.properties.assets &&
-      feat.properties.assets.length == 1 &&
-      feat.properties.assets[0].asset_type == 'audio') {
-      return 'audio'
-    } else if (feat.properties.assets &&
-      feat.properties.assets.length == 1 &&
-      feat.properties.assets[0].asset_type == 'lidar') {
-      return 'lidar'
-    }
   }
 }

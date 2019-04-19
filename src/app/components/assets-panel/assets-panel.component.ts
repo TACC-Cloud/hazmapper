@@ -1,5 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Feature, FeatureCollection} from "geojson";
+import {Component, OnInit} from '@angular/core';
+import {FeatureCollection} from "geojson";
 import {GeoDataService} from "../../services/geo-data.service";
 
 @Component({
@@ -14,6 +14,7 @@ export class AssetsPanelComponent implements OnInit {
   ngOnInit() {
     this.GeoDataService.features.subscribe( (fc: FeatureCollection)=> {
       this.features = fc;
+      console.log(fc)
     })
   }
 
