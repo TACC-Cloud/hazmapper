@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {Feature} from "../../models/models";
 
 @Component({
   selector: 'app-feature-metadata',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./feature-metadata.component.styl']
 })
 export class FeatureMetadataComponent implements OnInit {
+
+  @Input() feature : Feature;
 
   constructor() { }
 

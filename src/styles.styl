@@ -9,17 +9,18 @@ html, body, h1, h2, h3, h4, h5, h6 {
   font-family Raleway
 }
 
-lightBlue=#0f83bd
-lightGrey=#d3d3d3
-backgroundHighlight=#b3e5ff
-greenActive=#1aff8c
-$AppMediumBlue=#22c7ff
+html, body
+  height: 100%
+
+
+.light-blue
+  color $AppMediumBlue
 
 .img-marker
-  img
-    border-radius: 50%
-    border: 3px solid #fff
-
+  border: 1px solid lightGrey
+  background-color #fff
+  width: 50px;
+  height: 50px;
 .icon-marker
   i
     color: #ec2def
@@ -36,58 +37,34 @@ $AppMediumBlue=#22c7ff
     line-height 19px;
     color: #fff;
 
+[appDropdown]
+  cursor pointer
+
 .control-bar
   border-bottom: 1px solid lightGrey
   .dropdown-pane
     z-index 9999
 
-app-dock
-  height auto
-  .dock-button
-    padding: 10px;
-    cursor: pointer
-    border-bottom 1px solid lightGrey
-    text-align center
-    &.active
-      background-color backgroundHighlight
 
-  .dock-button-label
-    font-size 0.5em
-    line-height 0.5
-    color #6a6a6a
-
-  .dock-button-icon
-    display: inline-block;
-    border: none;
-    pointer-events: none;
 
 .dock-panel
   width: 250px
-  height: 100%
+  display flex
+  flex-direction column
+  height auto
   .dock-panel-title
     color: lightBlue
     font-size 1.25em
   .dock-panel-content
     padding 5px
+    overflow-y scroll
+    pointer-events all !important
+    height calc(100% - 80px)
   .dock-panel-controls
     bottom: 0
 app-map
   z-index 1
 
-app-asset-detail
-  position: fixed;
-  z-index: 5000;
-  width: 35%;
-  min-width: 250px;
-  max-width: 400px;
-  right: 10px;
-  height: auto;
-  top: 75px;
-  bottom: 10px;
-  background-color: #fff
-  box-shadow: 0px 2px 2px 2px hsla(0, 0%, 0%, 0.35);
-  pointer-events: all;
-  /* transition: right 0.5s ease-out; */
-  transition: opacity 0.25s linear;
+
 
 

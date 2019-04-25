@@ -1,18 +1,18 @@
-<div class="dock-panel">
-  <div class="dock-panel-content">
-    <span class="dock-panel-title"> Assets </span>
-  </div>
-  <div class="dock-panel-content">
-    <app-feature-row
-      *ngFor="let feat of features.features"
-      (click)="selectFeature(feat)" [feature]="feat">
-    </app-feature-row>
-  </div>
-  <div class="dock-panel-controls">
-    <div class="expanded button-group tiny">
-      <button class="button hollow">Export to GeoJSON</button>
-      <button class="button hollow">Export to KML</button>
-    </div>
+<div class="dock-panel-header">
+  <span class="dock-panel-title"> Assets </span>
+</div>
+<div class="dock-panel-content">
+  <app-feature-row
+    *ngFor="let feat of features.features"
+    (click)="selectFeature(feat)" [feature]="feat"
+    [ngClass]="{'active': activeFeature && feat.id == activeFeature.id}"
+  >
+  </app-feature-row>
+</div>
+<div class="dock-panel-controls">
+  <div class="expanded button-group tiny">
+    <button class="button hollow">Export to GeoJSON</button>
+    <button class="button hollow">Export to KML</button>
   </div>
 </div>
 

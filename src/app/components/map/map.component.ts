@@ -10,7 +10,7 @@ import {Feature} from "geojson";
 import {FeatureGroup, ImageOverlay, LatLng, LeafletMouseEvent} from "leaflet";
 import * as turf from '@turf/turf';
 import { AllGeoJSON } from "@turf/helpers";
-import {skip} from "rxjs/operators";
+import {filter, skip} from "rxjs/operators";
 import {Overlay} from "../../models/models";
 
 @Component({
@@ -67,7 +67,7 @@ export class MapComponent implements OnInit {
 
 
     // Listen on the activeFeature stream and zoom map to that feature when it changes
-    this.GeoDataService.activeFeature.pipe(skip(1)).subscribe( (next)=>{
+    this.GeoDataService.activeFeature.pipe(filter(n=> n!=null)).subscribe( (next)=>{
       this.activeFeature = next;
       let bbox = turf.bbox(<AllGeoJSON>next);
       this.map.fitBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]]);
@@ -144,6 +144,7 @@ export class MapComponent implements OnInit {
    * @param ev
    */
   featureClickHandler(ev: any): void {
-    this.GeoDataService.activeFeature = ev.layer.feature;
+    let f = ev.layer.feature;
+    this.GeoDataService.activeFeature = f;
   }
 }

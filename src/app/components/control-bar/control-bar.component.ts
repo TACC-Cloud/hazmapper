@@ -21,6 +21,8 @@ export class ControlBarComponent implements OnInit {
   ngOnInit() {
     this.ProjectsService.getProjects().subscribe( (projects)=> {
       this.projects = projects;
+      // TODO: remove that
+      this.selectProject(projects[0])
     })
 
     this.GeoDataService.mapMouseLocation.pipe(skip(1)).subscribe( (next)=>{
@@ -28,7 +30,7 @@ export class ControlBarComponent implements OnInit {
     })
   }
 
-  selectProject(p: Project) {
+  selectProject(p: Project) : void {
     this.selectedProject = p;
     this.GeoDataService.getAllFeatures(p.id);
     this.GeoDataService.getOverlays(p.id);

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {GeoDataService} from "../../services/geo-data.service";
-import {Feature} from "geojson";
+import {Feature} from "../../models/models";
 
 @Component({
   selector: 'app-main',

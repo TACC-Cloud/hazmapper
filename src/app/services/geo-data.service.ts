@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {BehaviorSubject, Observable} from "rxjs";
-import {FeatureCollection} from "geojson";
 import {LatLng} from "leaflet";
 import {Overlay} from "../models/models";
-import { Feature } from "../models/models";
+import { Feature, FeatureCollection} from "../models/models";
 
 @Injectable({
   providedIn: 'root'
@@ -54,12 +53,22 @@ export class GeoDataService {
     return this._features.asObservable();
   }
 
-  public get activeFeature(): Observable<Feature> {
+  public get activeFeature(){
     return this._activeFeature.asObservable();
   }
 
-  public set activeFeature(f) {
-    this._activeFeature.next(f);
+  // TODO: This is heinous
+  public set activeFeature(f:any) {
+    if (f) {
+      if (f == this._activeFeature.getValue()) {
+        this._activeFeature.next(null);
+      } else {
+        this._activeFeature.next(f);
+      }
+    } else {
+      this._activeFeature.next(null);
+    }
+
   }
 
   public get activeOverlay(): Observable<Overlay> {

@@ -1,4 +1,7 @@
-import {Feature as GeoJSONFeature, GeoJsonProperties, Geometry} from "geojson";
+import {Feature as GeoJSONFeature,
+  GeoJsonProperties,
+  Geometry,
+  FeatureCollection as IFeatureCollection } from "geojson";
 
 
 export interface FeatureAsset {
@@ -35,6 +38,12 @@ export interface Overlay {
 interface AppGeoJSONFeature extends GeoJSONFeature {
   assets?: Array<FeatureAsset>
   styles?: FeatureStyles
+  // featureType?(): String
+}
+
+export class FeatureCollection implements IFeatureCollection {
+  features: Feature[];
+  type: any;
 }
 
 
@@ -55,7 +64,7 @@ export class Feature implements AppGeoJSONFeature {
     this.styles = f.styles;
   }
 
-  featureType?() {
+  featureType?(): String {
     if (this.assets &&
         this.assets.length == 1) {
       return this.assets[0].asset_type

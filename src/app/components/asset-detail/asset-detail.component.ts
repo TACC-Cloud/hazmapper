@@ -22,4 +22,5 @@ export class AssetDetailComponent implements OnInit {
     this.GeoDataService.activeFeature = null;
   }
 
+
 }

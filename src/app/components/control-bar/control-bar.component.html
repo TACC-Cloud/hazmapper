@@ -1,6 +1,9 @@
 
 <div appDropdown>
-  <span class="hollow tiny"  appDropdownToggle>Projects</span>
+  <span class="hollow tiny"  appDropdownToggle>
+    Projects <span class="light-blue" *ngIf="selectedProject"> : {{selectedProject.name}}</span>
+  </span>
+
   <div class="dropdown-pane" appDropdownMenu>
     <ul class="no-bullet">
       <li *ngFor="let p of projects" (click)="selectProject(p)" [ngClass]="{'active-project': p === selectedProject}">

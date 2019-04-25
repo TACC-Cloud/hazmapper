@@ -1,6 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Feature} from '../../models/models'
-console.log(Feature)
 
 @Component({
   selector: 'app-feature-icon',
