@@ -14,21 +14,21 @@ function createCircleMarker (feature: Feature, latlng: LatLng): CircleMarker {
 }
 
 function createImageMarker (feature: Feature, latlng: LatLng): Marker {
-  let asset = feature.assets[0];
-  // let divHtml = `<a href="${asset.path}.jpeg" target="_blank"> <img src="${asset.path}.thumb.jpeg" width="50px" height="50px"></a>`;
-  // let divHtml = `<img src="/api/${asset.path}.thumb.jpeg" width="50px" height="50px">`;
   let divHtml = "<i class='fas fa-camera-retro fa-2x light-blue'></i>";
-
-  let ico = divIcon({className: 'img-marker', html: divHtml});
+  let ico = divIcon({className: 'leaflet-fa-marker-icon', html: divHtml});
   return marker(latlng, {icon: ico});
 }
 
 function createCollectionMarker (feature: Feature, latlng: LatLng) : Marker {
-  let divHtml = '<i class="fa fa-folder-open"></i>';
+  let divHtml = '<i class="fa fa-folder-open fa-2x light-blue"></i>';
   let ico = divIcon({className: 'icon-marker', html: divHtml});
   return marker(latlng, {icon: ico});
 }
-
+function createVideoMarker (feature: Feature, latlng: LatLng): Marker {
+  let divHtml = "<i class='fas fa-video fa-2x light-blue'></i>";
+  let ico = divIcon({className: 'leaflet-fa-marker-icon', html: divHtml});
+  return marker(latlng, {icon: ico});
+}
 
 export function createMarker(feature: Feature, latlng: LatLng) : Marker {
   let marker;
@@ -36,6 +36,8 @@ export function createMarker(feature: Feature, latlng: LatLng) : Marker {
     marker = createImageMarker(feature, latlng);
   } else if (feature.featureType() == 'collection'){
     marker =  createCollectionMarker(feature, latlng);
+  } else if (feature.featureType() == 'video') {
+    marker = createVideoMarker(feature, latlng)
   }
   else {
     marker = createCircleMarker(feature, latlng)

@@ -3,7 +3,6 @@ import {Feature as GeoJSONFeature,
   Geometry,
   FeatureCollection as IFeatureCollection } from "geojson";
 
-
 export interface FeatureAsset {
   id: number
   path: string
@@ -63,6 +62,8 @@ export class Feature implements AppGeoJSONFeature {
     this.assets = f.assets;
     this.styles = f.styles;
   }
+
+
 
   featureType?(): String {
     if (this.assets &&

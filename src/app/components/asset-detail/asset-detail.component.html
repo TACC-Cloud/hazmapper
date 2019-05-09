@@ -1,9 +1,9 @@
-<div class="grid-y">
+<div class="grid-y asset-detail">
   <div class="cell medium-1">
     <div class="asset-detail-header">
       <app-feature-icon [feature]="feature"></app-feature-icon>
       <div>
-        {{feature.properties.label || feature.id}}
+        {{feature.properties.label || feature.properties.title || feature.id}}
       </div>
       <div>
         <button class="close-button" (click)="close()">
@@ -14,13 +14,16 @@
     <hr>
   </div>
   <div class="cell medium-10 auto asset-detail-content">
-    <img *ngIf="feature.featureType() ==='image'" src="/api/{{feature.assets[0].path}}.jpeg">
+    <img *ngIf="feature.featureType() ==='image'" src="/api/{{feature.assets[0].path}}">
+    <video *ngIf="feature.featureType() ==='video'" controls width="100%">
+      <source src="/api/{{feature.assets[0].path}}" type="video/mp4">
+    </video>
     <app-feature-metadata [feature]="feature"></app-feature-metadata>
   </div>
   <div class="cell medium-1 text-center asset-detail-footer">
     <hr>
     <div *ngIf="feature.featureType() === 'image'">
-      <a href="/api/{{feature.assets[0].path}}.jpeg" download="feature-{{feature.id}}.jpeg">
+      <a href="/api/{{feature.assets[0].path}}" download="feature-{{feature.id}}.jpeg">
         <button class="button small">
           Download
         </button>

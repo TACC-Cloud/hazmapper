@@ -12,7 +12,7 @@ export class JwtInterceptor implements HttpInterceptor {
     let authToken = this.authSvc.getJWT();
     request = request.clone({
         setHeaders: {
-            'X-JWT-Assertion': authToken
+            'X-JWT-Assertion-designsafe': authToken
         }
     });
 
