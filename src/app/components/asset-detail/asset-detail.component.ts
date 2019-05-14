@@ -10,11 +10,14 @@ import {Feature} from "../../models/models";
 export class AssetDetailComponent implements OnInit {
 
   feature: Feature;
+  featureSource: string;
+
   constructor(private GeoDataService: GeoDataService) { }
 
   ngOnInit() {
    this.GeoDataService.activeFeature.subscribe( (next)=>{
      this.feature = next;
+     this.featureSource = "/api" + this.feature.assets[0].path
    })
   }
 

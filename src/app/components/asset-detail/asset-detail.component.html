@@ -15,8 +15,9 @@
   </div>
   <div class="cell medium-10 auto asset-detail-content">
     <img *ngIf="feature.featureType() ==='image'" src="/api/{{feature.assets[0].path}}">
-    <video *ngIf="feature.featureType() ==='video'" controls width="100%">
-      <source src="/api/{{feature.assets[0].path}}" type="video/mp4">
+    <video *ngIf="feature.featureType() ==='video'"
+           [src]=featureSource
+           controls width="100%">
     </video>
     <app-feature-metadata [feature]="feature"></app-feature-metadata>
   </div>
