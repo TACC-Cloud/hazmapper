@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { OAuthModule } from 'angular-oauth2-oidc';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
@@ -41,7 +42,8 @@ import { FeatureMetadataComponent } from './components/feature-metadata/feature-
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    DirectivesModule
+    DirectivesModule,
+    OAuthModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
