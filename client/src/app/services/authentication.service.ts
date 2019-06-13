@@ -1,36 +1,65 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import {Observable, of} from "rxjs";
-import {map} from "rxjs/operators";
+import { OAuthService } from 'angular-oauth2-oidc';
+import { JwksValidationHandler } from 'angular-oauth2-oidc';
 
+@Injectable()
+export class SSOService {
 
-@Injectable({
-  providedIn: 'root'
-})
-export class AuthenticationService {
-  jwt: string ='';
-  apiClient: object;
+  constructor(private oauthService: OAuthService) {
+  }
 
-  constructor(private http: HttpClient) {
+  private configureOauthService() {
+
+    /** enable below validation only if jwks object is defined as part of oauthconfig obj */
+    // this.oauthService.tokenValidationHandler = new JwksValidationHandler();
+
+    /** commented below because below resource is protected by some identity server ex: wso2 */
+    //this.oauthService.loadDiscoveryDocumentAndTryLogin();
+
+    this.oauthService.tryLogin({});
+  }
+
+  public obtainAccessToken() {
+    this.oauthService.initImplicitFlow();
+  }
+
+  public getUserName(): string {
+
+    const accessToken = this.getAccessToken();
+    const claims = this.getUserClaims();
+    console.log('access token ',accessToken);
+    this.getUserInfo();
+    return claims['sub'].split('@')[0];
 
   }
 
+  public getUserInfo(): string {
+    const idToken =  this.oauthService.getIdToken();
+    console.log('id token ',idToken);
+    return typeof idToken['sub'] !== 'undefined' ? idToken['sub'].toString() : '';
+  }
 
-  public authenticate(): Observable<boolean> {
+  public getAccessToken(): string {
+    return this.oauthService.getAccessToken();
+  }
 
-    if (this.jwt) {
-      return of(true);
+  public getUserClaims(): object {
+    return this.oauthService.getIdentityClaims();
+  }
+
+
+
+  public isLoggedIn(): boolean {
+    if (this.oauthService.getAccessToken() === null) {
+      return false;
     }
-    return this.http.get("/api/auth/").pipe(
-      map(data=>{
-        this.jwt = data["jwt"];
-        return true;
-        })
-    );
+    return true;
   }
 
-  public getJWT(): string {
-    return this.jwt;
+  public logout(): void {
+      this.oauthService.logOut();
+      location.reload();
   }
+
 
 }

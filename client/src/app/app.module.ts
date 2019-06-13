@@ -9,7 +9,6 @@ import { MapComponent} from "./components/map/map.component";
 import { DockComponent } from "./components/dock/dock.component";
 import { MainComponent } from "./components/main/main.component";
 import { AssetsPanelComponent } from "./components/assets-panel/assets-panel.component";
-import { JwtInterceptor } from "./app.interceptors";
 import { NotFoundComponent } from './components/notfound/notfound.component';
 import { ControlBarComponent } from './components/control-bar/control-bar.component';
 import { DirectivesModule } from "./directives/directives.module";
@@ -21,6 +20,7 @@ import { AssetDetailComponent } from './components/asset-detail/asset-detail.com
 import { FeatureIconComponent } from './components/feature-icon/feature-icon.component';
 import { FeatureRowComponent } from './components/feature-row/feature-row.component';
 import { FeatureMetadataComponent } from './components/feature-metadata/feature-metadata.component';
+import {SSOService} from "./services/authentication.service";
 
 
 @NgModule({
@@ -43,10 +43,10 @@ import { FeatureMetadataComponent } from './components/feature-metadata/feature-
     HttpClientModule,
     BrowserAnimationsModule,
     DirectivesModule,
-    OAuthModule
+    OAuthModule.forRoot(),
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    SSOService
   ],
   bootstrap: [AppComponent],
   entryComponents: []

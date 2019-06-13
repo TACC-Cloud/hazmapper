@@ -4,6 +4,7 @@ import {BehaviorSubject, Observable} from "rxjs";
 import {LatLng} from "leaflet";
 import {Overlay} from "../models/models";
 import { Feature, FeatureCollection} from "../models/models";
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +33,7 @@ export class GeoDataService {
 
   // TODO: Add types on the observable
   getAllFeatures (projectId : number): void {
-    this.http.get(`/api/projects/${projectId}/features/`)
+    this.http.get(environment.apiUrl + `/api/projects/${projectId}/features/`)
       .subscribe( (fc: FeatureCollection)=>{
         fc.features = fc.features.map( (feat: Feature)=> {return new Feature(feat)});
         this._features.next(fc)
@@ -40,7 +41,7 @@ export class GeoDataService {
   }
 
   getOverlays (projectId: number): void {
-    this.http.get(`/api/projects/${projectId}/overlays/`).subscribe( (ovs: Array<Overlay>)=>{
+    this.http.get(environment.apiUrl + `/api/projects/${projectId}/overlays/`).subscribe( (ovs: Array<Overlay>)=>{
       this._overlays.next(ovs)
     })
   }

@@ -4,7 +4,23 @@
 
 export const environment = {
   production: false,
-  apiUrl: "localhost:4200/api"
+  apiUrl: 'http://geoapi.local:8888/',
+  sso: {
+    clientId : 'HU2tcATL_I537UCk3HY9xtOFi_Ya',
+    serverUrl: 'http://agave.designsafe-ci.org',
+    issuer :  '/oauth2/token',
+    redirectUri : "http://geowebapp.local:8080",
+    scope: 'openid',
+    tokenEndpoint:  '/oauth2/token',
+    userinfoEndpoint:  '/oauth2/userinfo',
+    authorizationEndpoint:  '/oauth2/authorize',
+    strictDiscoveryDocumentValidation: false,
+    jwksEndpoint: '/oauth2/jwks',
+    showDebugInformation: true,
+    requireHttps: false,
+    responseType: 'token',
+    oidc: false
+  }
 };
 
 /*

@@ -6,7 +6,7 @@ client/dist
 /out-tsc
 # Only exists if Bazel was run
 /bazel-out
-
+__pycache__
 # dependencies
 node_modules
 

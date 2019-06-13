@@ -1,7 +1,41 @@
 version: "3"
 
-volumes:
-  assets:
-
 networks:
-  geoapi:
+ geowebapp:
+
+services:
+  nginx:
+    image: nginx
+    ports:
+      - 80:80
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    volumes:
+      - ./conf/nginx.conf:/etc/nginx/nginx.conf
+      - ./client/dist/viewer:/static/
+    container_name: geowebapp_nginx
+    networks:
+        - geowebapp
+
+  webapp:
+    build:
+      context: ./server
+    image: geowebapp
+    volumes:
+      - ./server:/app
+    ports:
+      - 8400:8400
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    environment:
+      - FLASK_APP=/app/app.py
+      - FLASK_ENV=development
+    stdin_open: true
+    tty: true
+    container_name: geowebapp
+    hostname: geowebapp
+    networks:
+        - geowebapp
+    command: "gunicorn -w 4 -b 0.0.0.0:8400 app:app --reload"
