@@ -20,7 +20,7 @@ import { AssetDetailComponent } from './components/asset-detail/asset-detail.com
 import { FeatureIconComponent } from './components/feature-icon/feature-icon.component';
 import { FeatureRowComponent } from './components/feature-row/feature-row.component';
 import { FeatureMetadataComponent } from './components/feature-metadata/feature-metadata.component';
-import {SSOService} from "./services/authentication.service";
+import {AuthService} from "./services/authentication.service";
 
 
 @NgModule({
@@ -46,7 +46,7 @@ import {SSOService} from "./services/authentication.service";
     OAuthModule.forRoot(),
   ],
   providers: [
-    SSOService
+    AuthService
   ],
   bootstrap: [AppComponent],
   entryComponents: []

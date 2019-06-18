@@ -18,7 +18,7 @@ export class DropdownMenuDirective {
   },
 })
 export class DropdownToggleDirective {
-  constructor(@Inject(forwardRef(() => DropdownDirective)) public dropdown, elementRef: ElementRef<HTMLElement>) {
+  constructor(@Inject(forwardRef(() => DropdownDirective)) public dropdown) {
 
   }
 
@@ -31,9 +31,9 @@ export class DropdownToggleDirective {
   selector: '[appDropdown]'
 })
 export class DropdownDirective {
-  @ContentChild(DropdownMenuDirective) private _menu: DropdownMenuDirective;
-  @ContentChild(DropdownMenuDirective, {read: ElementRef}) private _menuElement: ElementRef;
-  @ContentChild(DropdownToggleDirective) private _toggle: DropdownToggleDirective;
+  @ContentChild(DropdownMenuDirective, {static: true, read: ElementRef}) private _menu: DropdownMenuDirective;
+  @ContentChild(DropdownMenuDirective, {static: true, read: ElementRef}) private _menuElement: ElementRef;
+  @ContentChild(DropdownToggleDirective, {static: true, read: ElementRef}) private _toggle: DropdownToggleDirective;
 
   private isOpen : boolean = false;
 
