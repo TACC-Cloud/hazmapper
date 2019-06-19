@@ -10,7 +10,10 @@ import {Feature} from "../../models/models";
 export class MainComponent implements OnInit {
 
   private activeFeature : Feature;
-  constructor(private GeoDataService: GeoDataService) { }
+
+  constructor(private GeoDataService: GeoDataService) {
+    console.log("main component")
+  }
 
   ngOnInit() {
     this.GeoDataService.activeFeature.subscribe( next=>{

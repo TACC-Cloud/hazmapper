@@ -3,6 +3,38 @@ import {Feature as GeoJSONFeature,
   Geometry,
   FeatureCollection as IFeatureCollection } from "geojson";
 
+export class AuthToken {
+  token : string;
+  expires:  Date;
+
+  /**
+   *
+   * @param token : String
+   * @param expires : Number
+   */
+  constructor(token: string, expires: number) {
+    this.token = token;
+    this.expires = new Date(new Date().getTime() + expires * 1000)
+  }
+
+  static fromDateTime(token: string, expires: Date) {
+
+  }
+
+  /**
+   * Checks if the token is expired or not
+   */
+  public isExpired() : boolean {
+    return new Date().getTime() < this.expires.getTime();
+  }
+}
+
+
+export class User {
+
+}
+
+
 export interface FeatureAsset {
   id: number
   path: string

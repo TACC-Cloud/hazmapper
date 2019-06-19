@@ -21,6 +21,7 @@ import { FeatureIconComponent } from './components/feature-icon/feature-icon.com
 import { FeatureRowComponent } from './components/feature-row/feature-row.component';
 import { FeatureMetadataComponent } from './components/feature-metadata/feature-metadata.component';
 import {AuthService} from "./services/authentication.service";
+import { CallbackComponent } from './components/callback/callback.component';
 
 
 @NgModule({
@@ -36,6 +37,7 @@ import {AuthService} from "./services/authentication.service";
     FeatureIconComponent,
     FeatureRowComponent,
     FeatureMetadataComponent,
+    CallbackComponent,
   ],
   imports: [
     BrowserModule,

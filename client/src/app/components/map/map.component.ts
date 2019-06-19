@@ -34,6 +34,7 @@ export class MapComponent implements OnInit {
     // Have to bind these to keep this being this
     this.featureClickHandler.bind(this);
     this.mouseEventHandler.bind(this);
+    console.log("MapComponent")
   }
 
   ngOnInit() {
