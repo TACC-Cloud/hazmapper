@@ -2,6 +2,7 @@
 
 # compiled output
 /dist
+src/environments/jwt.ts
 /tmp
 /out-tsc
 # Only exists if Bazel was run

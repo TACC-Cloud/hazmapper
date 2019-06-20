@@ -2,10 +2,12 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import { jwt } from './jwt';
+
 export const environment = {
   production: false,
   apiUrl: 'http://geoapi.local:8888/',
-  jwt: ''
+  jwt: jwt
 };
 
 /*

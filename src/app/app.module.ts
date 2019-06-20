@@ -22,6 +22,7 @@ import { FeatureRowComponent } from './components/feature-row/feature-row.compon
 import { FeatureMetadataComponent } from './components/feature-metadata/feature-metadata.component';
 import {AuthService} from "./services/authentication.service";
 import { CallbackComponent } from './components/callback/callback.component';
+import {JwtInterceptor} from "./app.interceptors";
 
 
 @NgModule({
@@ -48,7 +49,12 @@ import { CallbackComponent } from './components/callback/callback.component';
     OAuthModule.forRoot(),
   ],
   providers: [
-    AuthService
+    AuthService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent],
   entryComponents: []

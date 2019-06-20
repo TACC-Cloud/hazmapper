@@ -1,6 +1,14 @@
-# Viewer
+# Hazmapper
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.3.
+
+
+## Getting started
+- Get a JWT from Joe M or someone on the CIC team
+- GOTO jwt.io and edit that JWT to have your username/details
+- Create a file in src/environments called jwt.ts that has this in it: 
+        
+        export const jwt = "YOUR JWT FROM ABOVE"
 
 ## Development server
 
