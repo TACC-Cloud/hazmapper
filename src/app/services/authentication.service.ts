@@ -31,7 +31,7 @@ export class AuthService {
       //
     }
 
-    let client_id = "O05FK1aGSCgi2CqKt1hWWh6zsywa";
+    let client_id = "RMCJHgW9CwJ6mKjhLTDnUYBo9Hka";
     let callback  = location.origin + '/callback';
     let state = Math.random().toString(36);
     let AUTH_URL = `https://agave.designsafe-ci.org/authorize?client_id=${client_id}&response_type=token&redirect_uri=${callback}&state=${state}`;
