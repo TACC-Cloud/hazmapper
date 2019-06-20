@@ -17,8 +17,8 @@ export class AuthToken {
     this.expires = new Date(new Date().getTime() + expires * 1000)
   }
 
-  static fromDateTime(token: string, expires: Date) {
-
+  static fromJSON(token: string, expires: string) {
+    // let expires : Date = new Date(expires);
   }
 
   /**

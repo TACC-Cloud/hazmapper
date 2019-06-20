@@ -15,7 +15,7 @@ export class CallbackComponent implements OnInit {
     let token = this.route.snapshot.queryParamMap.get("access_token");
     let expires_in = +this.route.snapshot.queryParamMap.get("expires_in");
     this.auth.setToken(token, expires_in);
-    this.router.navigate(['/']);
+    // this.router.navigate(['/']);
   }
 
 }
