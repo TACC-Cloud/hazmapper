@@ -6,7 +6,7 @@ import { jwt } from './jwt';
 
 export const environment = {
   production: false,
-  apiUrl: 'http://geoapi.local:8888/',
+  apiUrl: 'http://geoapi.local:8888',
   jwt: jwt
 };
 

@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { OAuthModule } from 'angular-oauth2-oidc';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
@@ -20,6 +19,7 @@ import { AssetDetailComponent } from './components/asset-detail/asset-detail.com
 import { FeatureIconComponent } from './components/feature-icon/feature-icon.component';
 import { FeatureRowComponent } from './components/feature-row/feature-row.component';
 import { FeatureMetadataComponent } from './components/feature-metadata/feature-metadata.component';
+import { SidenavComponent } from "./components/sidenav/sidenav.component";
 import {AuthService} from "./services/authentication.service";
 import { CallbackComponent } from './components/callback/callback.component';
 import {JwtInterceptor} from "./app.interceptors";
@@ -28,6 +28,7 @@ import {JwtInterceptor} from "./app.interceptors";
 @NgModule({
   declarations: [
     AppComponent, MapComponent, NotFoundComponent, MainComponent, DockComponent,
+    SidenavComponent,
     AssetsPanelComponent,
     ControlBarComponent,
     LayersPanelComponent,
@@ -46,7 +47,6 @@ import {JwtInterceptor} from "./app.interceptors";
     HttpClientModule,
     BrowserAnimationsModule,
     DirectivesModule,
-    OAuthModule.forRoot(),
   ],
   providers: [
     AuthService,

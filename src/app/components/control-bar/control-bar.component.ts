@@ -12,9 +12,9 @@ import {skip} from "rxjs/operators";
 })
 export class ControlBarComponent implements OnInit {
 
-  private projects : Array<Project>;
-  selectedProject : Project;
-  mapMouseLocation: LatLng = new LatLng(0,0);
+  public projects : Array<Project>;
+  public selectedProject : Project;
+  public mapMouseLocation: LatLng = new LatLng(0,0);
 
   constructor(private ProjectsService : ProjectsService, private GeoDataService: GeoDataService) { }
 

@@ -6,7 +6,7 @@ import {MainComponent} from "./components/main/main.component";
 import { CallbackComponent } from "./components/callback/callback.component";
 
 @Injectable()
-class Activate implements CanActivate {
+export class Activate implements CanActivate {
   constructor(private authSvc: AuthService) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean  {

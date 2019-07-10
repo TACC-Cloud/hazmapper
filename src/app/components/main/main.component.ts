@@ -9,7 +9,7 @@ import {Feature} from "../../models/models";
 })
 export class MainComponent implements OnInit {
 
-  private activeFeature : Feature;
+  public activeFeature : Feature;
 
   constructor(private GeoDataService: GeoDataService) {
     console.log("main component")
