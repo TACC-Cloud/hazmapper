@@ -25,7 +25,7 @@ export class AuthService {
     }
     if (!this.userToken || this.userToken.isExpired()) {
 
-      let client_id = "RMCJHgW9CwJ6mKjhLTDnUYBo9Hka";
+      let client_id = environment.clientId;
       let callback  = location.origin + '/callback';
       let state = Math.random().toString(36);
       let AUTH_URL = `https://agave.designsafe-ci.org/authorize?client_id=${client_id}&response_type=token&redirect_uri=${callback}&state=${state}`;

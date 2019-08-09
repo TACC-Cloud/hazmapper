@@ -8,12 +8,14 @@ export interface AppEnvironment {
   production: boolean;
   apiUrl: string;
   jwt?: string;
+  clientId: string;
 }
 
 export const  environment : AppEnvironment =  {
   production: false,
   apiUrl: 'http://geoapi.local:8888',
-  jwt: jwt
+  jwt: jwt,
+  clientId: "RMCJHgW9CwJ6mKjhLTDnUYBo9Hka",
 };
 
 /*
