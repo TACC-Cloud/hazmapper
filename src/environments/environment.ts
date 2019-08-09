@@ -4,7 +4,13 @@
 
 import { jwt } from './jwt';
 
-export const environment = {
+export interface AppEnvironment {
+  production: boolean;
+  apiUrl: string;
+  jwt?: string;
+}
+
+export const  environment : AppEnvironment =  {
   production: false,
   apiUrl: 'http://geoapi.local:8888',
   jwt: jwt

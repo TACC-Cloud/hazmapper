@@ -1,5 +1,7 @@
-export const environment = {
+import {AppEnvironment} from "./environment";
+
+export const environment: AppEnvironment = {
   production: true,
-  apiUrl: "https://geoapi.tacc.utexas.edu",
+  apiUrl: "https://agave.designsafe-ci.org",
   jwt: ''
 };
