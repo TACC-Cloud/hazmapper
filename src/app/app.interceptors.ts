@@ -11,17 +11,19 @@ export class JwtInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
     // TODO: Add Bearer token from login on api requests also
+    if (request.url.indexOf(environment.apiUrl)> -1) {
+      if (this.authSvc.isLoggedIn()) {
 
-    if (environment.jwt) {
-      // add header
-      request = request.clone({
-        setHeaders: {
+      }
+      if (environment.jwt) {
+        // add header
+        request = request.clone({
+          setHeaders: {
             'X-JWT-Assertion-designsafe': environment.jwt
-        }
-      });
+          }
+        });
+      }
     }
-
-
     return next.handle(request);
   }
 }

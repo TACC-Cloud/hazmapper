@@ -5,33 +5,33 @@ import {Feature as GeoJSONFeature,
 
 export class AuthToken {
   token : string;
-  expires:  Date;
-
+  expires: Date;
   /**
    *
    * @param token : String
-   * @param expires : Number
+   * @param expires_in
    */
-  constructor(token: string, expires: number) {
+  constructor(token: string, expires: Date) {
     this.token = token;
-    this.expires = new Date(new Date().getTime() + expires * 1000)
+    this.expires = new Date(expires);
   }
 
-  static fromJSON(token: string, expires: string) {
-    // let expires : Date = new Date(expires);
+  static fromExpiresIn(token: string, expires_in: number) {
+    let expires = new Date(new Date().getTime() + expires_in * 1000);
+    return new AuthToken(token, expires);
+  }
+
+  static fromExpiryDate(token: string, expires: string | Date) {
+    let expireyTimestamp = new Date(expires);
+    return new AuthToken(token, expireyTimestamp);
   }
 
   /**
    * Checks if the token is expired or not
    */
   public isExpired() : boolean {
-    return new Date().getTime() < this.expires.getTime();
+    return new Date().getTime() > this.expires.getTime();
   }
-}
-
-
-export class User {
-
 }
 
 
