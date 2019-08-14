@@ -1,0 +1,17 @@
+<h4> Create a new Project </h4>
+
+<form [formGroup]="projCreateForm" (ngSubmit)="submit()">
+    <label> Name:
+        <input type="text" formControlName="name" required="true">
+    </label>
+
+    <label> Description
+        <textarea formControlName="description" required="true"></textarea>
+    </label>
+    <div class="button-group small">
+        <button class="button small warning" (click)="close()">Close</button>
+        <button class="button small align-right" type="submit" [disabled]="!projCreateForm.valid">Submit</button>
+    </div>
+</form>
+
+

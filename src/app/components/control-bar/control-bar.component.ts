@@ -4,6 +4,8 @@ import { Project } from "../../models/models";
 import { GeoDataService } from "../../services/geo-data.service";
 import {LatLng} from "leaflet";
 import {skip} from "rxjs/operators";
+import {BsModalService} from "ngx-foundation";
+import {ModalCreateProjectComponent} from "../modal-create-project/modal-create-project.component";
 
 @Component({
   selector: 'app-control-bar',
@@ -16,7 +18,9 @@ export class ControlBarComponent implements OnInit {
   public selectedProject : Project;
   public mapMouseLocation: LatLng = new LatLng(0,0);
 
-  constructor(private ProjectsService : ProjectsService, private GeoDataService: GeoDataService) { }
+  constructor(private ProjectsService : ProjectsService,
+              private GeoDataService: GeoDataService,
+              private bsModalService: BsModalService) { }
 
   ngOnInit() {
     this.ProjectsService.getProjects().subscribe( (projects)=> {
@@ -38,6 +42,7 @@ export class ControlBarComponent implements OnInit {
 
   openCreateProjectModal() {
     console.log("opening modal")
+    this.bsModalService.show(ModalCreateProjectComponent);
   }
 
 }

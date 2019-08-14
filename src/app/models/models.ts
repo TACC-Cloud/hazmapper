@@ -3,6 +3,17 @@ import {Feature as GeoJSONFeature,
   Geometry,
   FeatureCollection as IFeatureCollection } from "geojson";
 
+export interface Project {
+  description: string
+  id: number
+  name: string
+  uuid: string
+}
+
+export class Project implements Project {
+
+}
+
 export class AuthToken {
   token : string;
   expires: Date;
@@ -42,12 +53,7 @@ interface FeatureStyles {
   [key: string]: string | number
 }
 
-export interface Project {
-  description: string
-  id: number
-  name: string
-  uuid: string
-}
+
 
 export interface Overlay {
   id: number

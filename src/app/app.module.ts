@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InfiniteScrollModule } from "ngx-infinite-scroll";
-import { ModalModule } from "ngx-foundation";
+import { ModalModule, BsDropdownModule} from "ngx-foundation";
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from "./app.component";
@@ -26,6 +26,8 @@ import { SidenavComponent } from "./components/sidenav/sidenav.component";
 import { AuthService } from "./services/authentication.service";
 import { CallbackComponent } from './components/callback/callback.component';
 import { JwtInterceptor } from "./app.interceptors";
+import { ModalCreateProjectComponent } from './components/modal-create-project/modal-create-project.component';
+import {ReactiveFormsModule} from "@angular/forms";
 
 
 @NgModule({
@@ -43,6 +45,7 @@ import { JwtInterceptor } from "./app.interceptors";
     FeatureRowComponent,
     FeatureMetadataComponent,
     CallbackComponent,
+    ModalCreateProjectComponent,
   ],
   imports: [
     BrowserModule,
@@ -51,7 +54,8 @@ import { JwtInterceptor } from "./app.interceptors";
     BrowserAnimationsModule,
     DirectivesModule,
     InfiniteScrollModule,
-    ModalModule
+    ModalModule.forRoot(),
+    ReactiveFormsModule,
   ],
   providers: [
     AuthService,
@@ -62,7 +66,7 @@ import { JwtInterceptor } from "./app.interceptors";
     }
   ],
   bootstrap: [AppComponent],
-  entryComponents: []
+  entryComponents: [ModalCreateProjectComponent]
 })
 export class AppModule { }
 
