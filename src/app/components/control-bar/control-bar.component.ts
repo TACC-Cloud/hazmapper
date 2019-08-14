@@ -36,4 +36,8 @@ export class ControlBarComponent implements OnInit {
     this.GeoDataService.getOverlays(p.id);
   }
 
+  openCreateProjectModal() {
+    console.log("opening modal")
+  }
+
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {GeoDataService} from "../../services/geo-data.service";
 import {Overlay} from "../../models/models";
+import {AppEnvironment, environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-layers-panel',
@@ -11,10 +12,14 @@ export class LayersPanelComponent implements OnInit {
 
   basemap : string;
   overlays : Array<Overlay>;
+  environment: AppEnvironment;
 
-  constructor(private GeoDataService: GeoDataService) { }
+  constructor(private GeoDataService: GeoDataService) {
+
+  }
 
   ngOnInit() {
+    this.environment = environment;
     this.GeoDataService.overlays.subscribe((ovs)=>{
       this.overlays = ovs;
     })
@@ -29,7 +34,6 @@ export class LayersPanelComponent implements OnInit {
   }
 
   selectOverlay(ov) : void {
-    console.log(ov)
     this.GeoDataService.activeOverlay = ov;
   }
 

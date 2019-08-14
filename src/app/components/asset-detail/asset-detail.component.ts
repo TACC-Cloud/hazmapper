@@ -19,7 +19,11 @@ export class AssetDetailComponent implements OnInit {
    this.environment = environment;
    this.GeoDataService.activeFeature.subscribe( (next)=>{
      this.feature = next;
-     this.featureSource =this.environment.apiUrl + this.feature.assets[0].path
+     try {
+       this.featureSource = this.environment.apiUrl + this.feature.assets[0].path;
+     } catch (e) {
+       this.featureSource = null;
+     }
    })
   }
 

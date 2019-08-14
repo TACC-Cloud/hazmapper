@@ -11,9 +11,7 @@ export class MainComponent implements OnInit {
 
   public activeFeature : Feature;
 
-  constructor(private GeoDataService: GeoDataService) {
-    console.log("main component")
-  }
+  constructor(private GeoDataService: GeoDataService) {}
 
   ngOnInit() {
     this.GeoDataService.activeFeature.subscribe( next=>{

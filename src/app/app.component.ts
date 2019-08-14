@@ -9,9 +9,7 @@ import {AuthService} from "./services/authentication.service";
 export class AppComponent {
   title = 'viewer';
 
-  constructor(private authService: AuthService) {
-    console.log("Constructor")
-  }
+  constructor(private authService: AuthService) {}
 
   ngOnInit() {
     this.authService.login();

@@ -11,7 +11,7 @@
     <div *ngFor="let ov of overlays" class="overlay" (click)="selectOverlay(ov)">
       <div class="grid-x grid-padding-x align-middle">
         <div class="cell small-4 panel-thumbnail">
-          <img src="/api/assets/{{ov.project_id}}/{{ov.uuid}}.thumb.jpeg">
+          <img src="{{environment.apiUrl}}/assets/{{ov.project_id}}/{{ov.uuid}}.thumb.jpeg">
         </div>
         <div class="cell auto">
           <span class="overlay-label"> {{ov.label}} </span>

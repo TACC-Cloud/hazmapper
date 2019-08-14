@@ -12,6 +12,7 @@ import * as turf from '@turf/turf';
 import { AllGeoJSON } from "@turf/helpers";
 import {filter, skip} from "rxjs/operators";
 import {Overlay} from "../../models/models";
+import {AppEnvironment, environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-map',
@@ -26,6 +27,7 @@ export class MapComponent implements OnInit {
   activeOverlay: Overlay;
   features : FeatureGroup = new FeatureGroup();
   overlays: Map<number, ImageOverlay>;
+  environment: AppEnvironment;
 
   constructor(private GeoDataService: GeoDataService,
               private route: ActivatedRoute,
@@ -34,14 +36,13 @@ export class MapComponent implements OnInit {
     // Have to bind these to keep this being this
     this.featureClickHandler.bind(this);
     this.mouseEventHandler.bind(this);
-    console.log("MapComponent")
   }
 
   ngOnInit() {
     const mapType: string = this.route.snapshot.queryParamMap.get('mapType');
     // this.projectId = +this.route.snapshot.paramMap.get("projectId");
     // this.cluster = this.route.snapshot.queryParamMap.get('mapType');
-
+    this.environment = environment;
     this.overlays = new Map();
     this.map = new L.Map('map', {
      center: [40, -80],
@@ -92,7 +93,7 @@ export class MapComponent implements OnInit {
       this.features.removeLayer(this.overlays.get(ov.id));
       this.overlays.delete(ov.id);
     } else {
-      let overlay = L.imageOverlay('api/assets/'+ov.path, [[ov.minLat, ov.minLon], [ov.maxLat, ov.maxLon]]);
+      let overlay = L.imageOverlay(environment.apiUrl+'/assets/'+ov.path, [[ov.minLat, ov.minLon], [ov.maxLat, ov.maxLon]]);
       this.overlays.set(ov.id, overlay);
       this.features.addLayer(overlay);
     }

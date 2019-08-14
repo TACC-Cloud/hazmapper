@@ -21,11 +21,6 @@ export class AuthToken {
     return new AuthToken(token, expires);
   }
 
-  static fromExpiryDate(token: string, expires: string | Date) {
-    let expireyTimestamp = new Date(expires);
-    return new AuthToken(token, expireyTimestamp);
-  }
-
   /**
    * Checks if the token is expired or not
    */

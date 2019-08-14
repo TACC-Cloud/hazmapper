@@ -2,6 +2,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { InfiniteScrollModule } from "ngx-infinite-scroll";
+import { ModalModule } from "ngx-foundation";
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from "./app.component";
 import { MapComponent} from "./components/map/map.component";
@@ -20,9 +23,9 @@ import { FeatureIconComponent } from './components/feature-icon/feature-icon.com
 import { FeatureRowComponent } from './components/feature-row/feature-row.component';
 import { FeatureMetadataComponent } from './components/feature-metadata/feature-metadata.component';
 import { SidenavComponent } from "./components/sidenav/sidenav.component";
-import {AuthService} from "./services/authentication.service";
+import { AuthService } from "./services/authentication.service";
 import { CallbackComponent } from './components/callback/callback.component';
-import {JwtInterceptor} from "./app.interceptors";
+import { JwtInterceptor } from "./app.interceptors";
 
 
 @NgModule({
@@ -47,6 +50,8 @@ import {JwtInterceptor} from "./app.interceptors";
     HttpClientModule,
     BrowserAnimationsModule,
     DirectivesModule,
+    InfiniteScrollModule,
+    ModalModule
   ],
   providers: [
     AuthService,

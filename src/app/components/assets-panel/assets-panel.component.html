@@ -1,9 +1,16 @@
 <div class="dock-panel-header">
   <span class="dock-panel-title"> Assets </span>
 </div>
-<div class="dock-panel-content">
+<div
+    class="dock-panel-content"
+    infiniteScroll
+    [infiniteScrollDistance]="1"
+    [infiniteScrollThrottle]="50"
+    (scrolled)="onScroll()"
+    [scrollWindow]="false"
+>
   <app-feature-row
-    *ngFor="let feat of features.features"
+    *ngFor="let feat of displayFeatures"
     (click)="selectFeature(feat)" [feature]="feat"
     [ngClass]="{'active': activeFeature && feat.id == activeFeature.id}"
   >

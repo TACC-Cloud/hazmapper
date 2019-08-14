@@ -38,25 +38,24 @@ html, body
 [appDropdown]
   cursor pointer
 
-.control-bar
-  border-bottom: 1px solid lightGrey
-  .dropdown-pane
-    z-index 9999
 
 
+.no-margin
+    margin 0
+.no-padding
+    padding 0
 
 .dock-panel
   width: 250px
   display flex
   flex-direction column
-  height auto
+  height calc(100vh - 60px)
   .dock-panel-title
     color: lightBlue
     font-size 1.25em
   .dock-panel-content
     padding 5px
     overflow-y scroll
-    pointer-events all !important
     height calc(100% - 80px)
   .dock-panel-controls
     bottom: 0

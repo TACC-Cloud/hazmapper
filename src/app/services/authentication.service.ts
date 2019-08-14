@@ -29,7 +29,6 @@ export class AuthService {
       let callback  = location.origin + '/callback';
       let state = Math.random().toString(36);
       let AUTH_URL = `https://agave.designsafe-ci.org/authorize?client_id=${client_id}&response_type=token&redirect_uri=${callback}&state=${state}`;
-
       window.location.href = AUTH_URL;
     }
   }
@@ -38,7 +37,6 @@ export class AuthService {
    * Checks to make sure that the user has a token and the token is not expired;
    */
   public isLoggedIn(): boolean {
-    console.log(this.userToken);
     return this.userToken && !this.userToken.isExpired()
   }
 
@@ -48,9 +46,7 @@ export class AuthService {
   }
 
   public setToken(token: string, expires: number): void {
-    console.log(token, expires);
     this.userToken = AuthToken.fromExpiresIn(token, expires);
-    console.log(JSON.stringify(this.userToken));
     localStorage.setItem(this.LS_TOKEN_KEY, JSON.stringify(this.userToken));
   }
 
