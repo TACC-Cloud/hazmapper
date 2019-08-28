@@ -30,5 +30,12 @@
         </button>
       </a>
     </div>
+    <div *ngIf="feature.featureType() === 'point_cloud'">
+      <a href="{{environment.apiUrl}}{{feature.assets[0].path}}/index.html">
+        <button class="button small">
+          View
+        </button>
+      </a>
+    </div>
   </div>
 </div>
