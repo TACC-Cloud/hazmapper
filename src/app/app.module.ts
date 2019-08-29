@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InfiniteScrollModule } from "ngx-infinite-scroll";
 import { ModalModule, BsDropdownModule} from "ngx-foundation";
+import {FileSizeModule} from 'ngx-filesize';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from "./app.component";
@@ -28,6 +29,7 @@ import { CallbackComponent } from './components/callback/callback.component';
 import { JwtInterceptor } from "./app.interceptors";
 import { ModalCreateProjectComponent } from './components/modal-create-project/modal-create-project.component';
 import {ReactiveFormsModule} from "@angular/forms";
+import { ModalFileBrowserComponent } from './components/modal-file-browser/modal-file-browser.component';
 
 
 @NgModule({
@@ -46,6 +48,7 @@ import {ReactiveFormsModule} from "@angular/forms";
     FeatureMetadataComponent,
     CallbackComponent,
     ModalCreateProjectComponent,
+    ModalFileBrowserComponent,
   ],
   imports: [
     BrowserModule,
@@ -56,6 +59,7 @@ import {ReactiveFormsModule} from "@angular/forms";
     InfiniteScrollModule,
     ModalModule.forRoot(),
     ReactiveFormsModule,
+    FileSizeModule,
   ],
   providers: [
     AuthService,
@@ -66,7 +70,7 @@ import {ReactiveFormsModule} from "@angular/forms";
     }
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ModalCreateProjectComponent]
+  entryComponents: [ModalCreateProjectComponent, ModalFileBrowserComponent]
 })
 export class AppModule { }
 

@@ -5,9 +5,9 @@ import {Feature as GeoJSONFeature,
 
 export interface Project {
   description: string
-  id: number
+  id?: number
   name: string
-  uuid: string
+  uuid?: string
 }
 
 export class Project implements Project {
