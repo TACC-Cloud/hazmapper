@@ -26,7 +26,7 @@ import { FeatureMetadataComponent } from './components/feature-metadata/feature-
 import { SidenavComponent } from "./components/sidenav/sidenav.component";
 import { AuthService } from "./services/authentication.service";
 import { CallbackComponent } from './components/callback/callback.component';
-import { JwtInterceptor } from "./app.interceptors";
+import {AuthInterceptor, JwtInterceptor} from "./app.interceptors";
 import { ModalCreateProjectComponent } from './components/modal-create-project/modal-create-project.component';
 import {ReactiveFormsModule} from "@angular/forms";
 import { ModalFileBrowserComponent } from './components/modal-file-browser/modal-file-browser.component';
@@ -67,6 +67,11 @@ import { ModalFileBrowserComponent } from './components/modal-file-browser/modal
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
       multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      multi: true,
+      useClass: AuthInterceptor
     }
   ],
   bootstrap: [AppComponent],
