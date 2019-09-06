@@ -2,8 +2,13 @@
 
 // TODO: Fix annoying margin flash
 :host
+    min-height 20em
+    .fileslisting
+        max-height 15em
+        overflow-y scroll
     .file-row
         border 1px solid transparent
-        :hover
+        &:hover
             border 1px solid $lightGrey;
-
+        &.selected
+            background #d3d3d3

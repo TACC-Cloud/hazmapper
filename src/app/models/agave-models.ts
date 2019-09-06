@@ -1,3 +1,24 @@
+export interface AgaveSystem {
+  name: string;
+  description: string;
+  type: string;
+  id: string;
+  lastUpdated: Date;
+  _links?: object;
+  default: boolean;
+  public: boolean;
+  status: string;
+}
+
+export interface AgaveSystemsListResponse extends AgaveArrayResponse{
+  result: AgaveSystem[]
+}
+
+export interface AgaveFileListingResponse extends  AgaveArrayResponse {
+  result: FileInfo[]
+}
+
+
 export interface AgaveArrayResponse {
   version: string;
   message: string;
@@ -22,4 +43,6 @@ export interface FileInfo {
   name: string;
   _links?: object;
 }
+
+
 

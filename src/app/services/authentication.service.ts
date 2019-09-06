@@ -7,11 +7,13 @@ import {Observable, ReplaySubject} from "rxjs";
 export class AuthenticatedUser {
   public readonly username: string;
   public readonly email: string;
+  private _token: AuthToken;
 
   constructor(username: string, email:string){
     this.username = username;
     this.email = email;
   }
+
 }
 
 interface OpenIDUser {
@@ -29,9 +31,11 @@ export class AuthService {
   private LS_TOKEN_KEY = 'hazmapperToken';
   private LS_USER_KEY = 'hazmapperUser';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient) {};
 
-  };
+  get getCurrentUser(){
+    return this._currentUser._getNow();
+  }
 
   public login() {
     // First, check if the user has a token in localStorage
@@ -41,8 +45,9 @@ export class AuthService {
       this.userToken = new AuthToken(token.token, new Date(token.expires));
       let userStr = localStorage.getItem(this.LS_USER_KEY);
       let user = JSON.parse(userStr);
-      console.log(user);
-      this._currentUser.next(new AuthenticatedUser(user.username, user.email));
+      this._currentUser.next(
+        new AuthenticatedUser(user.username, user.email)
+      );
     } catch (e) {
       //
     }

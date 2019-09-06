@@ -3,7 +3,7 @@
     <img src="assets/hazmapper-header-logo.png" width="150px">
   </div>
     <div class="top-bar-right">
-        <div class="light-blue">{{ currentUser.username }}</div>
+        <div class="light-blue" *ngIf="currentUser">{{ currentUser.username }}</div>
     </div>
 </div>
 <div class="grid-x">

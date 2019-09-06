@@ -1,23 +1,30 @@
 import { Component, OnInit } from '@angular/core';
-import {AgaveFilesService} from "../../services/agave-files.service";
+import {AgaveSystemsService} from "../../services/agave-systems.service";
 import {AuthenticatedUser, AuthService} from "../../services/authentication.service";
-import {FileInfo} from "../../models/agave-models";
-// import * as path from "path";
+import { RemoteFile} from "ng-tapis/models/remote-file";
+import {ApiService} from "ng-tapis/services/api.service";
 
 @Component({
   selector: 'app-modal-file-browser',
   templateUrl: './modal-file-browser.component.html',
-  styleUrls: ['./modal-file-browser.component.styl']
+  styleUrls: ['./modal-file-browser.component.styl'],
 })
 export class ModalFileBrowserComponent implements OnInit {
 
   private currentUser: AuthenticatedUser;
-  public filesList: Array<FileInfo>;
-  selectedFile: FileInfo;
+  public filesList: Array<RemoteFile>;
+  selectedFile: RemoteFile;
+  inProgress: boolean;
 
-  constructor(private AgaveFilesService: AgaveFilesService, private authService: AuthService) { }
+  constructor(private AgaveFilesService: ApiService,
+              private authService: AuthService,
+              private AgaveSystemsService: AgaveSystemsService) { }
 
   ngOnInit() {
+    this.AgaveSystemsService.list();
+    this.AgaveSystemsService.projects.subscribe(systems=>{
+      console.log(systems);
+    });
     this.authService.currentUser.subscribe(next=>{
       this.currentUser = next;
       this.browse('designsafe.storage.default', this.currentUser.username)
@@ -26,12 +33,12 @@ export class ModalFileBrowserComponent implements OnInit {
   }
 
   browse(system: string, path: string) {
-    this.AgaveFilesService.listFiles(system, path).subscribe(files=>{
-      this.filesList = files;
-    });
+    this.inProgress = true;
+    this.selectedFile = null;
+    this.AgaveFilesService.filesList({systemId: system, filePath:path});
   }
 
-  select(file:FileInfo) {
+  select(file:RemoteFile) {
     this.selectedFile = file;
   }
 }

@@ -3,8 +3,9 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InfiniteScrollModule } from "ngx-infinite-scroll";
-import { ModalModule, BsDropdownModule} from "ngx-foundation";
-import {FileSizeModule} from 'ngx-filesize';
+import {ModalModule, BsDropdownModule} from "ngx-foundation";
+import { FileSizeModule } from 'ngx-filesize';
+import { ApiModule} from "ng-tapis";
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from "./app.component";
@@ -51,6 +52,7 @@ import { ModalFileBrowserComponent } from './components/modal-file-browser/modal
     ModalFileBrowserComponent,
   ],
   imports: [
+    ApiModule.forRoot({rootUrl:'https://agave.designsafe-ci.org'}),
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
@@ -60,6 +62,7 @@ import { ModalFileBrowserComponent } from './components/modal-file-browser/modal
     ModalModule.forRoot(),
     ReactiveFormsModule,
     FileSizeModule,
+
   ],
   providers: [
     AuthService,
