@@ -1,25 +1,22 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {BehaviorSubject, Observable, throwError} from "rxjs";
-import {AgaveFileListingResponse, FileInfo} from "../models/agave-models";
-import {catchError, retry} from "rxjs/operators";
-import {of} from "rxjs"
+import {BehaviorSubject, Observable} from "rxjs";
+import { ApiService} from "ng-tapis";
+import {RemoteFile} from "ng-tapis";
 
 @Injectable({
   providedIn: 'root'
 })
-export class AgaveFilesService {
+export class TapisFilesService {
 
   private baseUrl = 'https://agave.designsafe-ci.org/files/v2/';
-  public currentListing: Array<FileInfo>;
-  private _listing: BehaviorSubject<FileInfo[]> = new BehaviorSubject<FileInfo[]>([]);
-  public readonly listing: Observable<FileInfo[]> = this._listing.asObservable();
+  public currentListing: Array<RemoteFile>;
+  private _listing: BehaviorSubject<RemoteFile[]> = new BehaviorSubject<RemoteFile[]>([]);
+  public readonly listing: Observable<RemoteFile[]> = this._listing.asObservable();
 
-  constructor(private http:HttpClient) { }
+  constructor(private tapis:ApiService) { }
 
   listFiles(system: string, path: string) {
-    this.http.get<AgaveFileListingResponse>(this.baseUrl + `listings/system/${system}/${path}`)
-
+    this.tapis.filesList({systemId:system, filePath:path})
       .subscribe(resp=> {
         let files = resp.result;
         //This removes the first item in the listing, which in Agave is always a reference to self.

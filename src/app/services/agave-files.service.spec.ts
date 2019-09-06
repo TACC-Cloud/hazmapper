@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AgaveFilesService } from './agave-files.service';
+import { TapisFilesService } from './tapis-files.service';
 
 describe('AgaveFilesService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: AgaveFilesService = TestBed.get(AgaveFilesService);
+    const service: TapisFilesService = TestBed.get(TapisFilesService);
     expect(service).toBeTruthy();
   });
 });

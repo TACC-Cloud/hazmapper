@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {AgaveSystemsService} from "../../services/agave-systems.service";
 import {AuthenticatedUser, AuthService} from "../../services/authentication.service";
 import { RemoteFile} from "ng-tapis/models/remote-file";
-import {ApiService} from "ng-tapis/services/api.service";
+import {ApiService} from "ng-tapis";
+import { TapisFilesService } from "../../services/tapis-files.service";
 
 @Component({
   selector: 'app-modal-file-browser',
@@ -16,7 +17,8 @@ export class ModalFileBrowserComponent implements OnInit {
   selectedFile: RemoteFile;
   inProgress: boolean;
 
-  constructor(private AgaveFilesService: ApiService,
+  constructor(private tapisService: ApiService,
+              private tapisFilesService: TapisFilesService,
               private authService: AuthService,
               private AgaveSystemsService: AgaveSystemsService) { }
 
@@ -35,7 +37,11 @@ export class ModalFileBrowserComponent implements OnInit {
   browse(system: string, path: string) {
     this.inProgress = true;
     this.selectedFile = null;
-    this.AgaveFilesService.filesList({systemId: system, filePath:path});
+    this.tapisFilesService.listFiles(system,path);
+    this.tapisFilesService.listing.subscribe(listing=>{
+      this.inProgress = false;
+      this.filesList = listing;
+    })
   }
 
   select(file:RemoteFile) {
