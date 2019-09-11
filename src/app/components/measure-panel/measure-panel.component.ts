@@ -7,8 +7,6 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MeasurePanelComponent implements OnInit {
 
-  constructor() { }
-
   ngOnInit() {
   }
 

@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import {featureFixture} from "../../fixtures/feature.fixture";
 import { FeatureMetadataComponent } from './feature-metadata.component';
 
 describe('FeatureMetadataComponent', () => {
@@ -16,6 +16,7 @@ describe('FeatureMetadataComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(FeatureMetadataComponent);
     component = fixture.componentInstance;
+    component.feature = featureFixture;
     fixture.detectChanges();
   });
 

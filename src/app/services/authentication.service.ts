@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http'
-import { AuthToken } from "../models/models";
-import {environment} from "../../environments/environment";
-import {Observable, ReplaySubject} from "rxjs";
+import { HttpClient } from '@angular/common/http';
+import { AuthToken } from '../models/models';
+import {environment} from '../../environments/environment';
+import {Observable, ReplaySubject} from 'rxjs';
 
 export class AuthenticatedUser {
   public readonly username: string;
   public readonly email: string;
   private _token: AuthToken;
 
-  constructor(username: string, email:string){
+  constructor(username: string, email: string) {
     this.username = username;
     this.email = email;
   }
@@ -22,29 +22,25 @@ interface OpenIDUser {
 }
 
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class AuthService {
 
   private _currentUser: ReplaySubject<AuthenticatedUser> = new ReplaySubject<AuthenticatedUser>(1);
   public readonly currentUser: Observable<AuthenticatedUser> = this._currentUser.asObservable();
-  userToken : AuthToken;
+  userToken: AuthToken;
   private LS_TOKEN_KEY = 'hazmapperToken';
   private LS_USER_KEY = 'hazmapperUser';
 
-  constructor(private http: HttpClient) {};
-
-  get getCurrentUser(){
-    return this._currentUser._getNow();
-  }
+  constructor(private http: HttpClient) {}
 
   public login() {
     // First, check if the user has a token in localStorage
     try {
-      let tokenStr = localStorage.getItem(this.LS_TOKEN_KEY);
-      let token = JSON.parse(tokenStr);
+      const tokenStr = localStorage.getItem(this.LS_TOKEN_KEY);
+      const token = JSON.parse(tokenStr);
       this.userToken = new AuthToken(token.token, new Date(token.expires));
-      let userStr = localStorage.getItem(this.LS_USER_KEY);
-      let user = JSON.parse(userStr);
+      const userStr = localStorage.getItem(this.LS_USER_KEY);
+      const user = JSON.parse(userStr);
       this._currentUser.next(
         new AuthenticatedUser(user.username, user.email)
       );
@@ -53,10 +49,10 @@ export class AuthService {
     }
     if (!this.userToken || this.userToken.isExpired()) {
       this.logout();
-      let client_id = environment.clientId;
-      let callback  = location.origin + '/callback';
-      let state = Math.random().toString(36);
-      let AUTH_URL = `https://agave.designsafe-ci.org/authorize?scope=openid&client_id=${client_id}&response_type=token&redirect_uri=${callback}&state=${state}`;
+      const client_id = environment.clientId;
+      const callback  = location.origin + '/callback';
+      const state = Math.random().toString(36);
+      const AUTH_URL = `https://agave.designsafe-ci.org/authorize?scope=openid&client_id=${client_id}&response_type=token&redirect_uri=${callback}&state=${state}`;
       window.location.href = AUTH_URL;
     }
   }
@@ -65,7 +61,7 @@ export class AuthService {
    * Checks to make sure that the user has a token and the token is not expired;
    */
   public isLoggedIn(): boolean {
-    return this.userToken && !this.userToken.isExpired()
+    return this.userToken && !this.userToken.isExpired();
   }
 
   public logout(): void {
@@ -80,9 +76,9 @@ export class AuthService {
   }
 
   public getUserInfo() {
-    let INFO_URL=`https://agave.designsafe-ci.org/oauth2/userinfo?schema=openid`;
-    return this.http.get<OpenIDUser>(INFO_URL).subscribe(resp=>{
-      let user = new AuthenticatedUser(resp.name, resp.email);
+    const INFO_URL = `https://agave.designsafe-ci.org/oauth2/userinfo?schema=openid`;
+    return this.http.get<OpenIDUser>(INFO_URL).subscribe(resp => {
+      const user = new AuthenticatedUser(resp.name, resp.email);
       localStorage.setItem(this.LS_USER_KEY, JSON.stringify(user));
       this._currentUser.next(user);
     });

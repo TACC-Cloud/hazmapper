@@ -29,7 +29,7 @@ import { AuthService } from "./services/authentication.service";
 import { CallbackComponent } from './components/callback/callback.component';
 import {AuthInterceptor, JwtInterceptor} from "./app.interceptors";
 import { ModalCreateProjectComponent } from './components/modal-create-project/modal-create-project.component';
-import {ReactiveFormsModule} from "@angular/forms";
+import {ReactiveFormsModule, FormsModule} from "@angular/forms";
 import { ModalFileBrowserComponent } from './components/modal-file-browser/modal-file-browser.component';
 
 
@@ -61,6 +61,7 @@ import { ModalFileBrowserComponent } from './components/modal-file-browser/modal
     InfiniteScrollModule,
     ModalModule.forRoot(),
     ReactiveFormsModule,
+    FormsModule,
     FileSizeModule,
 
   ],

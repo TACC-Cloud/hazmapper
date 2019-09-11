@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { SystemSummary } from "ng-tapis";
-import { ApiService } from "ng-tapis";
-import {Observable, ReplaySubject} from "rxjs";
+import {SystemSummary} from 'ng-tapis';
+import { ApiService } from 'ng-tapis';
+import {Observable, ReplaySubject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -18,11 +18,11 @@ export class AgaveSystemsService {
   constructor(private tapis: ApiService) { }
 
   list() {
-    this.tapis.systemsList({'type':'STORAGE'})
-      .subscribe(resp=>{
+    this.tapis.systemsList({type: 'STORAGE'})
+      .subscribe(resp => {
         this.systemsList = resp.result;
         this._systems.next(resp.result);
-        this._projects.next(resp.result.filter(sys=>sys.id.startsWith('project')));
+        this._projects.next(resp.result.filter(sys => sys.id.startsWith('project')));
       }, error => {
         this._systems.next(null);
         this._projects.next(null);

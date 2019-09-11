@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {AgaveSystemsService} from "../../services/agave-systems.service";
-import {AuthenticatedUser, AuthService} from "../../services/authentication.service";
-import { RemoteFile} from "ng-tapis/models/remote-file";
-import {ApiService} from "ng-tapis";
-import { TapisFilesService } from "../../services/tapis-files.service";
+import {AgaveSystemsService} from '../../services/agave-systems.service';
+import {AuthenticatedUser, AuthService} from '../../services/authentication.service';
+import { RemoteFile} from 'ng-tapis/models/remote-file';
+import {ApiService} from 'ng-tapis';
+import { TapisFilesService } from '../../services/tapis-files.service';
 
 @Component({
   selector: 'app-modal-file-browser',
@@ -17,19 +17,19 @@ export class ModalFileBrowserComponent implements OnInit {
   selectedFile: RemoteFile;
   inProgress: boolean;
 
-  constructor(private tapisService: ApiService,
-              private tapisFilesService: TapisFilesService,
+  constructor(private tapisFilesService: TapisFilesService,
               private authService: AuthService,
-              private AgaveSystemsService: AgaveSystemsService) { }
+              private agaveSystemsService: AgaveSystemsService) { }
 
   ngOnInit() {
-    this.AgaveSystemsService.list();
-    this.AgaveSystemsService.projects.subscribe(systems=>{
-      console.log(systems);
-    });
-    this.authService.currentUser.subscribe(next=>{
+    // TODO: Get the systems in there
+    this.agaveSystemsService.list();
+    // this.AgaveSystemsService.projects.subscribe(systems=>{
+    //   console.log(systems);
+    // });
+    this.authService.currentUser.subscribe(next => {
       this.currentUser = next;
-      this.browse('designsafe.storage.default', this.currentUser.username)
+      this.browse('designsafe.storage.default', this.currentUser.username);
     });
 
   }
@@ -37,14 +37,14 @@ export class ModalFileBrowserComponent implements OnInit {
   browse(system: string, path: string) {
     this.inProgress = true;
     this.selectedFile = null;
-    this.tapisFilesService.listFiles(system,path);
-    this.tapisFilesService.listing.subscribe(listing=>{
+    this.tapisFilesService.listFiles(system, path);
+    this.tapisFilesService.listing.subscribe(listing => {
       this.inProgress = false;
       this.filesList = listing;
-    })
+    });
   }
 
-  select(file:RemoteFile) {
+  select(file: RemoteFile) {
     this.selectedFile = file;
   }
 }
