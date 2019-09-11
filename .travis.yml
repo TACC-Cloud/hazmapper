@@ -14,4 +14,4 @@ before_script:
     - npm install
 
 script:
-    - ng test
+    - ng test --watch=false --browsers=ChromeHeadless
