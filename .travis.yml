@@ -14,4 +14,4 @@ before_script:
     - npm install
 
 script:
-    - ng test --watch=false --browsers=ChromeHeadless
+    - ng test --watch=false --browsers=ChromeHeadless --environment=production
