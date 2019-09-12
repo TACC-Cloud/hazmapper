@@ -10,6 +10,7 @@ import {AgaveSystemsService} from '../../services/agave-systems.service';
 import {FileSizeModule} from 'ngx-filesize';
 import {userFixture} from '../../fixtures/user.fixture';
 import {of} from 'rxjs';
+import {BsModalRef} from 'ngx-foundation';
 
 describe('ModalFileBrowserComponent', () => {
   let component: ModalFileBrowserComponent;
@@ -32,7 +33,8 @@ describe('ModalFileBrowserComponent', () => {
         },
         {
           provide: AuthService, useFactory: () => instance(MockAuth)
-        }
+        },
+        BsModalRef
       ]
     })
     .compileComponents();
