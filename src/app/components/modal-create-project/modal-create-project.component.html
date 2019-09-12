@@ -9,7 +9,7 @@
         <textarea formControlName="description" required="true"></textarea>
     </label>
     <div class="button-group small">
-        <button class="button small warning" (click)="close()">Close</button>
+        <button class="button small warning" type="button" (click)="close()">Close</button>
         <button class="button small align-right" type="submit" [disabled]="!projCreateForm.valid">Submit</button>
     </div>
 </form>

@@ -23,15 +23,17 @@ export class ModalCreateProjectComponent implements OnInit {
   }
 
   close() {
+    console.log("hide");
     this.bsModalRef.hide();
   }
 
   submit() {
+    console.log("submit");
     const p = new Project();
     p.description = this.projCreateForm.get('description').value;
     p.name = this.projCreateForm.get('name').value;
     this.projectsService.create(p).subscribe();
-    this.close();
+    this.bsModalRef.hide();
   }
 
 }

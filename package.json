@@ -32,6 +32,8 @@
     "ng-tapis": "^2.1.5",
     "rxjs": "~6.5.3",
     "service": "^0.1.4",
+    "ts-mocks": "^2.5.0",
+    "ts-sinon": "^1.0.21",
     "tslib": "^1.9.0",
     "types.leaflet.heat": "^1.0.3",
     "zone.js": "~0.9.1"

@@ -1,20 +1,23 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ModalCreateProjectComponent } from './modal-create-project.component';
-import {GeoDataService} from '../../services/geo-data.service';
-import {instance, mock} from 'ts-mockito';
-import {AuthService} from '../../services/authentication.service';
+import {anything, instance, mock, reset, spy, when} from 'ts-mockito';
 import {BsModalRef, ModalModule} from 'ngx-foundation';
 import {ProjectsService} from '../../services/projects.service';
 import {ReactiveFormsModule} from '@angular/forms';
+import {featureFixture} from '../../fixtures/feature.fixture';
+import {Test} from 'tslint';
+
+class MockModal {
+  hide() {}
+}
 
 describe('ModalCreateProjectComponent', () => {
   let component: ModalCreateProjectComponent;
   let fixture: ComponentFixture<ModalCreateProjectComponent>;
-  const MockModal: BsModalRef = mock(BsModalRef);
   const MockProjects: ProjectsService = mock(ProjectsService);
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [ ModalCreateProjectComponent ],
       imports: [ReactiveFormsModule, ModalModule],
@@ -23,20 +26,29 @@ describe('ModalCreateProjectComponent', () => {
           provide: ProjectsService, useFactory: () => instance(MockProjects)
         },
         {
-          provide: BsModalRef, useFactory: () => instance(MockModal)
+          provide: BsModalRef, useClass: MockModal
         }
       ]
-    })
-    .compileComponents();
-  }));
+    });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(ModalCreateProjectComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    reset(MockProjects);
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should not call submit on cancel', () => {
+    const modals = TestBed.get(BsModalRef);
+    spyOn(modals, 'hide').and.returnValue('');
+    const spySubmit = spyOn(component, 'submit');
+    fixture.detectChanges();
+    component.close();
+    expect(spySubmit).not.toHaveBeenCalled();
   });
 });
