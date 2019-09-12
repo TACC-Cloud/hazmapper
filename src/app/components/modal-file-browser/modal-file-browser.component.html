@@ -1,4 +1,5 @@
 <h4> Select a File/Folder </h4>
+<small><em> Note: Only files are selectable, not folders. Double click on a folder to navigate into it. </em></small>
 <hr>
 <select></select>
 <div class="fileslisting">
@@ -7,11 +8,11 @@
             <i class="fas fa-spin fa-atom"></i>
         </div>
     </div>
-    <div class="grid-x file-row" *ngFor="let file of filesList" [ngClass]="{'selected':file===selectedFile}">
-        <div class="cell medium-9" (click)="select(file)">
-            <i class="fas fa-folder" *ngIf="file.type === 'dir'" (click)="browse(file.system, file.path)"></i>
+    <div class="grid-x file-row" *ngFor="let file of filesList" [ngClass]="{'selected':selectedFiles.has(file.path)}">
+        <div class="cell medium-9 clickable" (click)="select(file)"  (dblclick)="browse(file)">
+            <i class="fas fa-folder" *ngIf="file.type === 'dir'" ></i>
             <i class="far fa-file" *ngIf="file.type !== 'dir'"></i>
-            {{ file.name }}
+            <span > {{ file.name }} </span>
         </div>
         <div class="cell medium-3">
             {{file.length | filesize }}
@@ -19,8 +20,8 @@
     </div>
 </div>
 <div>
-    <button class="button warning">Cancel</button>
-    <button class="button" [disabled]="!selectedFile">Import</button>
+    <button class="button warning" (click)="cancel()">Cancel</button>
+    <button class="button" [disabled]="!selectedFiles.size">Import</button>
 </div>
 
 

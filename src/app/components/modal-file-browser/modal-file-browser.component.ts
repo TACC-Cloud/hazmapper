@@ -4,6 +4,8 @@ import {AuthenticatedUser, AuthService} from '../../services/authentication.serv
 import { RemoteFile} from 'ng-tapis/models/remote-file';
 import {ApiService} from 'ng-tapis';
 import { TapisFilesService } from '../../services/tapis-files.service';
+import { BsModalRef } from 'ngx-foundation/modal/bs-modal-ref.service';
+
 
 @Component({
   selector: 'app-modal-file-browser',
@@ -16,28 +18,36 @@ export class ModalFileBrowserComponent implements OnInit {
   public filesList: Array<RemoteFile>;
   selectedFile: RemoteFile;
   inProgress: boolean;
+  public selectedFiles: Map<string, RemoteFile> = new Map();
 
   constructor(private tapisFilesService: TapisFilesService,
+              private modalRef: BsModalRef,
               private authService: AuthService,
               private agaveSystemsService: AgaveSystemsService) { }
 
   ngOnInit() {
     // TODO: Get the systems in there
     this.agaveSystemsService.list();
-    // this.AgaveSystemsService.projects.subscribe(systems=>{
-    //   console.log(systems);
-    // });
+    this.agaveSystemsService.projects.subscribe(systems => {
+      console.log(systems);
+    });
     this.authService.currentUser.subscribe(next => {
       this.currentUser = next;
-      this.browse('designsafe.storage.default', this.currentUser.username);
+      const init = <RemoteFile> {
+        system: 'designsafe.storage.default',
+        type: 'dir',
+        path: this.currentUser.username
+      };
+      this.browse(init);
     });
 
   }
 
-  browse(system: string, path: string) {
+  browse(file: RemoteFile) {
+    if (file.type !== 'dir') { return; }
     this.inProgress = true;
-    this.selectedFile = null;
-    this.tapisFilesService.listFiles(system, path);
+    this.selectedFiles.clear();
+    this.tapisFilesService.listFiles(file.system, file.path);
     this.tapisFilesService.listing.subscribe(listing => {
       this.inProgress = false;
       this.filesList = listing;
@@ -45,6 +55,21 @@ export class ModalFileBrowserComponent implements OnInit {
   }
 
   select(file: RemoteFile) {
-    this.selectedFile = file;
+    if (this.tapisFilesService.checkIfSelectable(file)) {
+      this.addSelectedFile(file);
+    }
+  }
+
+  addSelectedFile(file: RemoteFile) {
+    if (this.selectedFiles.has(file.path)) {
+      this.selectedFiles.delete(file.path);
+    } else {
+      this.selectedFiles.set(file.path, file);
+    }
+  }
+
+
+  cancel() {
+    this.modalRef.hide();
   }
 }

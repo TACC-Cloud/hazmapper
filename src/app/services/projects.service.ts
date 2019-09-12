@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {BehaviorSubject, Observable, ReplaySubject} from "rxjs";
-import {Project} from "../models/models";
+import {HttpClient} from '@angular/common/http';
+import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
+import {Project} from '../models/models';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -16,20 +16,20 @@ export class ProjectsService {
 
   constructor(private http: HttpClient) { }
 
-  getProjects (): Observable<Project[]> {
-    let prom =  this.http.get<Project[]>(environment.apiUrl + `/api/projects/`);
-    prom.subscribe( resp=> {
+  getProjects(): Observable<Project[]> {
+    const prom =  this.http.get<Project[]>(environment.apiUrl + `/api/projects/`);
+    prom.subscribe( resp => {
       this._projects.next(resp);
     });
     return prom;
   }
 
-  create (data: Project): Observable<Project> {
-    let prom = this.http.post<Project>(environment.apiUrl + `/api/projects/`, data);
-    prom.subscribe(proj=>{
-      let p = new Project();
-      p.name = "test";
-      p.description = "test";
+  create(data: Project): Observable<Project> {
+    const prom = this.http.post<Project>(environment.apiUrl + `/api/projects/`, data);
+    prom.subscribe(proj => {
+      const p = new Project();
+      p.name = 'test';
+      p.description = 'test';
       // Spread operator, just pushes the new project into the array
       this._projects.next([...this._projects.value, proj]);
       // Set the active project to the one just created?
