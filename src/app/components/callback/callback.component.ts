@@ -19,6 +19,7 @@ export class CallbackComponent implements OnInit {
     let token = params.get("access_token");
     let expires_in = +params.get("expires_in");
     this.auth.setToken(token, expires_in);
+    this.auth.getUserInfo();
     this.router.navigate(['/']);
   }
 
