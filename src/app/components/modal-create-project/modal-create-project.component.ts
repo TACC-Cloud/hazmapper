@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { BsModalService, BsModalRef } from "ngx-foundation";
+import { BsModalService, BsModalRef } from 'ngx-foundation';
 import { FormGroup, FormControl } from '@angular/forms';
-import { ProjectsService } from "../../services/projects.service";
-import { Project } from "../../models/models";
+import { ProjectsService } from '../../services/projects.service';
+import { Project } from '../../models/models';
 
 @Component({
   selector: 'app-modal-create-project',
@@ -23,15 +23,17 @@ export class ModalCreateProjectComponent implements OnInit {
   }
 
   close() {
+    console.log("hide");
     this.bsModalRef.hide();
   }
 
   submit() {
-    let p = new Project();
+    console.log("submit");
+    const p = new Project();
     p.description = this.projCreateForm.get('description').value;
     p.name = this.projCreateForm.get('name').value;
     this.projectsService.create(p).subscribe();
-    this.close();
+    this.bsModalRef.hide();
   }
 
 }

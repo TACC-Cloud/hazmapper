@@ -13,7 +13,7 @@ export interface AppEnvironment {
 
 export const  environment : AppEnvironment =  {
   production: false,
-  apiUrl: 'http://geoapi.local:8888',
+  apiUrl: 'http://c002.rodeo.tacc.utexas.edu:31474/',
   jwt: jwt,
   clientId: "RMCJHgW9CwJ6mKjhLTDnUYBo9Hka",
 };

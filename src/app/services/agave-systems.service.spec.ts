@@ -1,18 +1,18 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AuthService } from './authentication.service';
+import { AgaveSystemsService } from './agave-systems.service';
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 
-describe('AuthenticationService', () => {
+describe('AgaveSystemsService', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    providers: [AuthService],
+    providers: [AgaveSystemsService],
     imports: [
       HttpClientTestingModule
     ]
   }));
 
   it('should be created', () => {
-    const service: AuthService = TestBed.get(AuthService);
+    const service: AgaveSystemsService = TestBed.get(AgaveSystemsService);
     expect(service).toBeTruthy();
   });
 });

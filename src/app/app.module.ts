@@ -3,8 +3,9 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InfiniteScrollModule } from "ngx-infinite-scroll";
-import { ModalModule, BsDropdownModule} from "ngx-foundation";
-import {FileSizeModule} from 'ngx-filesize';
+import {ModalModule, BsDropdownModule} from "ngx-foundation";
+import { FileSizeModule } from 'ngx-filesize';
+import { ApiModule} from "ng-tapis";
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from "./app.component";
@@ -26,9 +27,9 @@ import { FeatureMetadataComponent } from './components/feature-metadata/feature-
 import { SidenavComponent } from "./components/sidenav/sidenav.component";
 import { AuthService } from "./services/authentication.service";
 import { CallbackComponent } from './components/callback/callback.component';
-import { JwtInterceptor } from "./app.interceptors";
+import {AuthInterceptor, JwtInterceptor} from "./app.interceptors";
 import { ModalCreateProjectComponent } from './components/modal-create-project/modal-create-project.component';
-import {ReactiveFormsModule} from "@angular/forms";
+import {ReactiveFormsModule, FormsModule} from "@angular/forms";
 import { ModalFileBrowserComponent } from './components/modal-file-browser/modal-file-browser.component';
 
 
@@ -51,6 +52,7 @@ import { ModalFileBrowserComponent } from './components/modal-file-browser/modal
     ModalFileBrowserComponent,
   ],
   imports: [
+    ApiModule.forRoot({rootUrl:'https://agave.designsafe-ci.org'}),
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
@@ -59,7 +61,9 @@ import { ModalFileBrowserComponent } from './components/modal-file-browser/modal
     InfiniteScrollModule,
     ModalModule.forRoot(),
     ReactiveFormsModule,
+    FormsModule,
     FileSizeModule,
+
   ],
   providers: [
     AuthService,
@@ -67,6 +71,11 @@ import { ModalFileBrowserComponent } from './components/modal-file-browser/modal
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
       multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      multi: true,
+      useClass: AuthInterceptor
     }
   ],
   bootstrap: [AppComponent],

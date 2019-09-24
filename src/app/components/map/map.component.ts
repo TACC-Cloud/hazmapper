@@ -39,7 +39,7 @@ export class MapComponent implements OnInit {
   }
 
   ngOnInit() {
-    const mapType: string = this.route.snapshot.queryParamMap.get('mapType');
+    // const mapType: string = this.route.snapshot.queryParamMap.get('mapType');
     // this.projectId = +this.route.snapshot.paramMap.get("projectId");
     // this.cluster = this.route.snapshot.queryParamMap.get('mapType');
     this.environment = environment;

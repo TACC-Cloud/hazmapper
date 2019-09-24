@@ -54,7 +54,6 @@ interface FeatureStyles {
 }
 
 
-
 export interface Overlay {
   id: number
   path: string
