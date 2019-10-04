@@ -4,7 +4,7 @@ import { Project } from '../../models/models';
 import { GeoDataService } from '../../services/geo-data.service';
 import {LatLng} from 'leaflet';
 import {skip} from 'rxjs/operators';
-import {BsModalService} from 'ngx-foundation';
+import {BsModalRef, BsModalService} from 'ngx-foundation';
 import {ModalCreateProjectComponent} from '../modal-create-project/modal-create-project.component';
 import {ModalFileBrowserComponent} from '../modal-file-browser/modal-file-browser.component';
 
@@ -19,38 +19,38 @@ export class ControlBarComponent implements OnInit {
   public selectedProject: Project;
   public mapMouseLocation: LatLng = new LatLng(0, 0);
 
-  constructor(private ProjectsService: ProjectsService,
-              private GeoDataService: GeoDataService,
+  constructor(private projectsService: ProjectsService,
+              private geoDataService: GeoDataService,
               private bsModalService: BsModalService) { }
 
   ngOnInit() {
-    this.ProjectsService.getProjects();
-    this.ProjectsService.projects.subscribe( (projects) => {
+    this.projectsService.getProjects();
+    this.projectsService.projects.subscribe( (projects) => {
       this.projects = projects;
 
       if (this.projects.length) {
-        this.ProjectsService.setActiveProject(this.projects[0]);
+        this.projectsService.setActiveProject(this.projects[0]);
       }
     });
 
-    this.ProjectsService.activeProject.subscribe(next => {
+    this.projectsService.activeProject.subscribe(next => {
       this.selectedProject = next;
       this.getDataForProject(this.selectedProject);
     });
 
-    this.GeoDataService.mapMouseLocation.pipe(skip(1)).subscribe( (next) => {
+    this.geoDataService.mapMouseLocation.pipe(skip(1)).subscribe( (next) => {
       this.mapMouseLocation = next;
     });
   }
 
   selectProject(p: Project): void {
-    this.ProjectsService.setActiveProject(p);
+    this.projectsService.setActiveProject(p);
     this.getDataForProject(p);
   }
 
   getDataForProject(p: Project): void {
-    this.GeoDataService.getAllFeatures(p.id);
-    this.GeoDataService.getOverlays(p.id);
+    this.geoDataService.getAllFeatures(p.id);
+    this.geoDataService.getOverlays(p.id);
   }
 
   openCreateProjectModal() {
@@ -58,7 +58,11 @@ export class ControlBarComponent implements OnInit {
   }
 
   openFileBrowserModal() {
-    this.bsModalService.show(ModalFileBrowserComponent);
+    debugger;
+    const modal: BsModalRef = this.bsModalService.show(ModalFileBrowserComponent);
+    modal.content.onClose.subscribe( (next) => {
+      console.log(next);
+    });
   }
 
 }

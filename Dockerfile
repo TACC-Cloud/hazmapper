@@ -1,6 +1,5 @@
-FROM nginx
 
-FROM node:12 as node
+FROM node:12-alpine as node
 
 RUN mkdir /www
 COPY package.json /www
@@ -10,8 +9,11 @@ RUN npm install
 WORKDIR /
 COPY . /www
 WORKDIR /www
-RUN ng build --prod
+RUN ng build --prod --base-href /hazmapper/
 RUN ls
-WORKDIR /
-COPY --from=node /www/dist/ /usr/share/nginx/html
 
+
+FROM nginx:1.17-alpine
+WORKDIR /
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=node /www/dist/ /usr/share/nginx/html

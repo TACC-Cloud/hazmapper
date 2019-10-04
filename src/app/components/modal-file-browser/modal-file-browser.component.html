@@ -1,4 +1,4 @@
-<h4> Select a File/Folder </h4>
+<h4> Select Files </h4>
 <small><em> Note: Only files are selectable, not folders. Double click on a folder to navigate into it. </em></small>
 <hr>
 <select></select>
@@ -21,7 +21,7 @@
 </div>
 <div>
     <button class="button warning" (click)="cancel()">Cancel</button>
-    <button class="button" [disabled]="!selectedFiles.size">Import</button>
+    <button class="button" [disabled]="!selectedFiles.size" (click)="chooseFiles()">Import</button>
 </div>
 
 

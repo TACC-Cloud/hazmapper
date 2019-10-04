@@ -1,12 +1,17 @@
+import {jwt} from './jwt';
+
 export interface AppEnvironment {
   production: boolean;
   apiUrl: string;
   jwt?: string;
   clientId: string;
+  baseHref: string;
 }
 
 export const environment: AppEnvironment = {
   production: true,
-  apiUrl: 'https://agave.designsafe-ci.org',
-  clientId: 'RMCJHgW9CwJ6mKjhLTDnUYBo9Hka'
+  apiUrl: 'http://c002.rodeo.tacc.utexas.edu:31474/',
+  clientId: 'i5KHgfi2TYzaK2lZGeEkT_s61wQa',
+  baseHref: '/hazmapper/'
 };
+

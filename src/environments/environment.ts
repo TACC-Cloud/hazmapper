@@ -9,13 +9,15 @@ export interface AppEnvironment {
   apiUrl: string;
   jwt?: string;
   clientId: string;
+  baseHref: string;
 }
 
-export const  environment : AppEnvironment =  {
+export const  environment: AppEnvironment =  {
   production: false,
   apiUrl: 'http://c002.rodeo.tacc.utexas.edu:31474/',
   jwt: jwt,
-  clientId: "RMCJHgW9CwJ6mKjhLTDnUYBo9Hka",
+  clientId: 'RMCJHgW9CwJ6mKjhLTDnUYBo9Hka',
+  baseHref: '/'
 };
 
 /*

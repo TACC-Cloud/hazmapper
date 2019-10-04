@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
-import { AuthService} from "./services/authentication.service";
-import { environment } from "../environments/environment";
-import {catchError} from "rxjs/operators";
+import { AuthService} from './services/authentication.service';
+import { environment } from '../environments/environment';
+import {catchError} from 'rxjs/operators';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
@@ -11,11 +11,11 @@ export class JwtInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-    if (request.url.indexOf('https://agave.designsafe-ci.org')>-1) {
+    if (request.url.indexOf('https://agave.designsafe-ci.org') > -1) {
       if (this.authSvc.isLoggedIn()) {
         request = request.clone({
           setHeaders: {
-            'Authorization': 'Bearer ' + this.authSvc.userToken.token
+            Authorization: 'Bearer ' + this.authSvc.userToken.token
           }
         });
       }
@@ -23,7 +23,7 @@ export class JwtInterceptor implements HttpInterceptor {
 
     // This is only for local development, we put the JWT on the request
     // because it is not behind ws02
-    if (request.url.indexOf(environment.apiUrl)> -1)  {
+    if (request.url.indexOf(environment.apiUrl) > -1)  {
 
       if (environment.jwt) {
         // add header
@@ -52,6 +52,6 @@ export class AuthInterceptor implements HttpInterceptor {
 
             const error = err.error.message || err.statusText;
             return throwError(error);
-        }))
+        }));
     }
 }
