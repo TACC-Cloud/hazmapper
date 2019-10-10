@@ -55,7 +55,8 @@ import {environment} from '../environments/environment';
     ModalFileBrowserComponent,
   ],
   imports: [
-    ApiModule.forRoot({rootUrl: 'https://agave.designsafe-ci.org'}),
+    // this is for the ng-tapis library
+    ApiModule.forRoot({rootUrl: 'https://agave.designsafe-ci.org/'}),
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,

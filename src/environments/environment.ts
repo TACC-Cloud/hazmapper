@@ -14,7 +14,7 @@ export interface AppEnvironment {
 
 export const  environment: AppEnvironment =  {
   production: false,
-  apiUrl: 'http://c002.rodeo.tacc.utexas.edu:31474/',
+  apiUrl: 'localhost:8000',
   jwt: jwt,
   clientId: 'RMCJHgW9CwJ6mKjhLTDnUYBo9Hka',
   baseHref: '/'
