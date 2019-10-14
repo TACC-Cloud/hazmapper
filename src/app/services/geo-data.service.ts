@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {BehaviorSubject, Observable} from "rxjs";
-import {LatLng} from "leaflet";
-import {Overlay} from "../models/models";
-import { Feature, FeatureCollection} from "../models/models";
+import {HttpClient} from '@angular/common/http';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {LatLng} from 'leaflet';
+import {Overlay} from '../models/models';
+import { Feature, FeatureCollection} from '../models/models';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -11,15 +11,15 @@ import { environment } from '../../environments/environment';
 })
 export class GeoDataService {
 
-  private _features : BehaviorSubject<FeatureCollection>;
-  private _activeFeature : BehaviorSubject<any>;
-  private _mapMouseLocation : BehaviorSubject<any>;
+  private _features: BehaviorSubject<FeatureCollection>;
+  private _activeFeature: BehaviorSubject<any>;
+  private _mapMouseLocation: BehaviorSubject<any>;
   private _basemap: BehaviorSubject<any>;
   private _overlays: BehaviorSubject<any>;
-  private _activeOverlay : BehaviorSubject<any>;
+  private _activeOverlay: BehaviorSubject<any>;
 
   constructor(private http: HttpClient) {
-    this._features = new BehaviorSubject<FeatureCollection>({type: "FeatureCollection", features: []});
+    this._features = new BehaviorSubject<FeatureCollection>({type: 'FeatureCollection', features: []});
     this._activeFeature = new BehaviorSubject<any>(null);
     this._mapMouseLocation = new BehaviorSubject<any>(null);
 
@@ -32,18 +32,18 @@ export class GeoDataService {
   }
 
   // TODO: Add types on the observable
-  getAllFeatures (projectId : number): void {
-    this.http.get(environment.apiUrl + `/api/projects/${projectId}/features/`)
-      .subscribe( (fc: FeatureCollection)=>{
-        fc.features = fc.features.map( (feat: Feature)=> {return new Feature(feat)});
-        this._features.next(fc)
+  getAllFeatures(projectId: number): void {
+    this.http.get<FeatureCollection>(environment.apiUrl + `/api/projects/${projectId}/features/`)
+      .subscribe( (fc: FeatureCollection) => {
+        fc.features = fc.features.map( (feat: Feature) => new Feature(feat));
+        this._features.next(fc);
       });
   }
 
-  getOverlays (projectId: number): void {
-    this.http.get(environment.apiUrl + `/api/projects/${projectId}/overlays/`).subscribe( (ovs: Array<Overlay>)=>{
-      this._overlays.next(ovs)
-    })
+  getOverlays(projectId: number): void {
+    this.http.get(environment.apiUrl + `/api/projects/${projectId}/overlays/`).subscribe( (ovs: Array<Overlay>) => {
+      this._overlays.next(ovs);
+    });
   }
 
   public get overlays(): Observable<Array<Overlay>> {
@@ -54,14 +54,14 @@ export class GeoDataService {
     return this._features.asObservable();
   }
 
-  public get activeFeature(){
+  public get activeFeature() {
     return this._activeFeature.asObservable();
   }
 
   // TODO: This is heinous
-  public set activeFeature(f:any) {
+  public set activeFeature(f: any) {
     if (f) {
-      if (f == this._activeFeature.getValue()) {
+      if (f === this._activeFeature.getValue()) {
         this._activeFeature.next(null);
       } else {
         this._activeFeature.next(f);
@@ -76,12 +76,12 @@ export class GeoDataService {
     return this._activeOverlay.asObservable();
   }
 
-  public set activeOverlay(ov){
+  public set activeOverlay(ov) {
     this._activeOverlay.next(ov);
   }
 
 
-  public get mapMouseLocation() : Observable<LatLng> {
+  public get mapMouseLocation(): Observable<LatLng> {
     return this._mapMouseLocation.asObservable();
   }
 

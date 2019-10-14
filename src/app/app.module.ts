@@ -26,7 +26,6 @@ import { AssetDetailComponent } from './components/asset-detail/asset-detail.com
 import { FeatureIconComponent } from './components/feature-icon/feature-icon.component';
 import { FeatureRowComponent } from './components/feature-row/feature-row.component';
 import { FeatureMetadataComponent } from './components/feature-metadata/feature-metadata.component';
-import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { AuthService } from './services/authentication.service';
 import { CallbackComponent } from './components/callback/callback.component';
 import {AuthInterceptor, JwtInterceptor} from './app.interceptors';
@@ -39,7 +38,6 @@ import {environment} from '../environments/environment';
 @NgModule({
   declarations: [
     AppComponent, MapComponent, NotFoundComponent, MainComponent, DockComponent,
-    SidenavComponent,
     AssetsPanelComponent,
     ControlBarComponent,
     LayersPanelComponent,
@@ -67,6 +65,7 @@ import {environment} from '../environments/environment';
     ReactiveFormsModule,
     FormsModule,
     FileSizeModule,
+    BsDropdownModule.forRoot(),
 
   ],
   providers: [

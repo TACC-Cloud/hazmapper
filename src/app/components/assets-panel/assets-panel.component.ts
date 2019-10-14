@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {FeatureCollection} from "geojson";
-import {GeoDataService} from "../../services/geo-data.service";
-import {Feature} from "../../models/models";
+import {FeatureCollection} from 'geojson';
+import {GeoDataService} from '../../services/geo-data.service';
+import {Feature} from '../../models/models';
 
 @Component({
   selector: 'app-assets-panel',
@@ -9,36 +9,36 @@ import {Feature} from "../../models/models";
   styleUrls: ['./assets-panel.component.styl']
 })
 export class AssetsPanelComponent implements OnInit {
-  features : FeatureCollection;
+  features: FeatureCollection;
   activeFeature: Feature;
   displayFeatures: Array<Feature>;
-  count: number = 200;
-  scrollStep : number = 200;
+  count = 200;
+  scrollStep = 200;
 
   constructor(private GeoDataService: GeoDataService) { }
 
   ngOnInit() {
-    this.GeoDataService.features.subscribe( (fc: FeatureCollection)=> {
+    this.GeoDataService.features.subscribe( (fc: FeatureCollection) => {
       this.features = fc;
-      this.displayFeatures = this.features.features.slice(0, this.count)
+      this.displayFeatures = this.features.features.slice(0, this.count);
     });
-    this.GeoDataService.activeFeature.subscribe( (next)=>{
+    this.GeoDataService.activeFeature.subscribe( (next) => {
       this.activeFeature = next;
-    })
+    });
 
   }
 
   // TODO: Implement onScrollUp and scrolling to the right feature when a marker is clicked on the map
 
   onScroll() {
-    console.log(this.displayFeatures.length)
+    console.log(this.displayFeatures.length);
 
     this.displayFeatures.push(...this.features.features.slice(this.count, this.count + this.scrollStep));
     this.count += this.scrollStep;
   }
 
-  trackByFn(index: number, feat: Feature) : number {
-    return <number>feat.id;
+  trackByFn(index: number, feat: Feature): number {
+    return <number> feat.id;
   }
 
   selectFeature(feat) {
