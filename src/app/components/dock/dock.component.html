@@ -24,22 +24,22 @@
         <span>Filters</span>
       </div>
     </div>
-    <div class="dock-button" (click)="showPanel('measure')" [ngClass]="{'active': panelsDisplay.measure}">
-      <div>
-        <img class="dock-button-icon" src="assets/measure.png" width="32px">
-      </div>
-      <div class="dock-button-label">
-        <span>Measure</span>
-      </div>
-    </div>
-    <div class="dock-button" (click)="showPanel('settings')" [ngClass]="{'active': panelsDisplay.settings}">
-      <div>
-        <img class="dock-button-icon" src="assets/settings.png" width="32px">
-      </div>
-      <div class="dock-button-label">
-        <span>Settings</span>
-      </div>
-    </div>
+<!--    <div class="dock-button" (click)="showPanel('measure')" [ngClass]="{'active': panelsDisplay.measure}">-->
+<!--      <div>-->
+<!--        <img class="dock-button-icon" src="assets/measure.png" width="32px">-->
+<!--      </div>-->
+<!--      <div class="dock-button-label">-->
+<!--        <span>Measure</span>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div class="dock-button" (click)="showPanel('settings')" [ngClass]="{'active': panelsDisplay.settings}">-->
+<!--      <div>-->
+<!--        <img class="dock-button-icon" src="assets/settings.png" width="32px">-->
+<!--      </div>-->
+<!--      <div class="dock-button-label">-->
+<!--        <span>Settings</span>-->
+<!--      </div>-->
+<!--    </div>-->
   </div>
   <div class="cell auto dock-panel">
     <app-assets-panel *ngIf="panelsDisplay.assets" ></app-assets-panel>

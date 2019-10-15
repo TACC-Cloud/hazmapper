@@ -23,6 +23,7 @@ export class AssetsPanelComponent implements OnInit {
 
   ngOnInit() {
     this.geoDataService.features.subscribe( (fc: FeatureCollection) => {
+      console.log(fc);
       this.features = fc;
       this.displayFeatures = this.features.features.slice(0, this.count);
     });

@@ -6,6 +6,8 @@ import {Overlay} from '../models/models';
 import { Feature, FeatureCollection} from '../models/models';
 import { environment } from '../../environments/environment';
 import {Form} from '@angular/forms';
+import {take} from 'rxjs/operators';
+import * as querystring from 'querystring';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +15,7 @@ import {Form} from '@angular/forms';
 export class GeoDataService {
 
   private _features: BehaviorSubject<FeatureCollection>;
+  private features$: Observable<FeatureCollection>;
   private _activeFeature: BehaviorSubject<any>;
   private _mapMouseLocation: BehaviorSubject<any>;
   private _basemap: BehaviorSubject<any>;
@@ -21,6 +24,7 @@ export class GeoDataService {
 
   constructor(private http: HttpClient) {
     this._features = new BehaviorSubject<FeatureCollection>({type: 'FeatureCollection', features: []});
+    this.features$ = this._features.asObservable();
     this._activeFeature = new BehaviorSubject<any>(null);
     this._mapMouseLocation = new BehaviorSubject<any>(null);
 
@@ -32,9 +36,9 @@ export class GeoDataService {
     this._activeOverlay = new BehaviorSubject<any>(null);
   }
 
-  // TODO: Add types on the observable
-  getAllFeatures(projectId: number): void {
-    this.http.get<FeatureCollection>(environment.apiUrl + `/projects/${projectId}/features/`)
+  getFeatures(projectId: number, query: object = {}): void {
+    const qstring: string = querystring.stringify(query || {});
+    this.http.get<FeatureCollection>(environment.apiUrl + `/projects/${projectId}/features/` + '?' + qstring)
       .subscribe( (fc: FeatureCollection) => {
         fc.features = fc.features.map( (feat: Feature) => new Feature(feat));
         this._features.next(fc);
@@ -42,7 +46,7 @@ export class GeoDataService {
   }
 
   addFeature(feat: Feature): void {
-    this._features.subscribe( (current) => {
+    this.features$.pipe(take(1)).subscribe( (current: FeatureCollection) => {
       current.features.push(feat);
       this._features.next(current);
     });
@@ -52,9 +56,11 @@ export class GeoDataService {
   uploadFile(projectId: number, file: File): void {
     const form: FormData = new FormData();
     form.append('file', file, file.name);
-    this.http.post(environment.apiUrl + `/api/projects/${projectId}/features/files/`, form)
-      .subscribe( (feat: Feature) => {
-        this.addFeature(feat);
+    this.http.post<Array<Feature>>(environment.apiUrl + `/api/projects/${projectId}/features/files/`, form)
+      .subscribe( (feats) => {
+        feats.forEach( (feat) => {
+          this.addFeature(new Feature(feat));
+        });
       }, (error => {
         console.log(error);
       }));
