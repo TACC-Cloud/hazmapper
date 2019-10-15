@@ -17,7 +17,6 @@ import { MainComponent } from './components/main/main.component';
 import { AssetsPanelComponent } from './components/assets-panel/assets-panel.component';
 import { NotFoundComponent } from './components/notfound/notfound.component';
 import { ControlBarComponent } from './components/control-bar/control-bar.component';
-import { DirectivesModule } from './directives/directives.module';
 import { LayersPanelComponent } from './components/layers-panel/layers-panel.component';
 import { SettingsPanelComponent } from './components/settings-panel/settings-panel.component';
 import { FiltersPanelComponent } from './components/filters-panel/filters-panel.component';
@@ -59,7 +58,6 @@ import {environment} from '../environments/environment';
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    DirectivesModule,
     InfiniteScrollModule,
     ModalModule.forRoot(),
     ReactiveFormsModule,

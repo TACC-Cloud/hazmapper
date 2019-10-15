@@ -16,16 +16,14 @@ export class ProjectsService {
 
   constructor(private http: HttpClient) { }
 
-  getProjects(): Observable<Project[]> {
-    const prom =  this.http.get<Project[]>(environment.apiUrl + `/api/projects/`);
-    prom.subscribe( resp => {
-      this._projects.next(resp);
-    });
-    return prom;
+  getProjects(): void {
+   this.http.get<Project[]>(environment.apiUrl + `/projects/`).subscribe( resp => {
+     this._projects.next(resp);
+   });
   }
 
   create(data: Project): Observable<Project> {
-    const prom = this.http.post<Project>(environment.apiUrl + `/api/projects/`, data);
+    const prom = this.http.post<Project>(environment.apiUrl + `/projects/`, data);
     prom.subscribe(proj => {
       const p = new Project();
       p.name = 'test';

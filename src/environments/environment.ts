@@ -14,7 +14,7 @@ export interface AppEnvironment {
 
 export const  environment: AppEnvironment =  {
   production: false,
-  apiUrl: 'http://localhost',
+  apiUrl: 'http://localhost:8888',
   jwt: jwt,
   clientId: 'RMCJHgW9CwJ6mKjhLTDnUYBo9Hka',
   baseHref: '/'

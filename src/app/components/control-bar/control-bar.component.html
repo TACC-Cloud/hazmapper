@@ -1,51 +1,30 @@
 <div class="grid-x align-justify align-middle">
     <div class="cell small-4 no-padding">
         <div class="grid-x">
-            <div appDropdown>
-                <span class="button tiny hollow no-margin"  appDropdownToggle>
-                    <i class="fas fa-caret-down"></i>
-                    File
-                </span>
-
-              <div class="dropdown-pane" appDropdownMenu>
-                  <ul class="no-bullet">
-                      <li>
-                           <button class="button tiny success no-margin" (click)="openCreateProjectModal()">
-                                <i class="fas fa-plus"></i> Create Project
-                           </button>
-                      </li>
-                      <li>
-                           <button class="button tiny success no-margin" (click)="openFileBrowserModal()">
-                                <i class="fas fa-plus"></i> Import from Agave
-                           </button>
-                      </li>
+            <button class="button tiny success" (click)="openCreateProjectModal()"> <i class="fas fa-plus"></i></button>
+            <ul class="dropdown vertical menu" dropdown>
+                <li class="is-dropdown-submenu-parent">
+                    <button dropdownToggle  class="dropdown button tiny hollow">
+                        Maps
+                        <span class="" *ngIf="selectedProject"> : {{selectedProject.name}}</span>
+                    </button>
+                    <ul *dropdownMenu class="menu is-dropdown-submenu">
+                        <li class="clickable" *ngFor="let p of projects" (click)="selectProject(p)" [ngClass]="{'active-project': p === selectedProject}">
+                            {{ p.name }}
+                        </li>
                     </ul>
-              </div>
-            </div>
-            <div appDropdown>
-                <span class="button tiny hollow no-margin"  appDropdownToggle>
-                    <i class="fas fa-caret-down"></i>
-                    Projects
-                    <span class="" *ngIf="selectedProject"> : {{selectedProject.name}}</span>
-                </span>
-
-              <div class="dropdown-pane" appDropdownMenu>
-                  <ul class="no-bullet">
-                      <li *ngFor="let p of projects" (click)="selectProject(p)" [ngClass]="{'active-project': p === selectedProject}">
-                        {{ p.name }}
-                      </li>
-                    </ul>
-              </div>
-            </div>
+                </li>
+            </ul>
         </div>
+
     </div>
     <div class="cell small-4 align-right">
         <div class="grid-x align-right">
             <div class="cell small-6 align-right">
-              <span class="lat-lon-label"> Lat: </span>
-              <span> {{ mapMouseLocation.lat | number:'.4' }}</span>
-              <span class="lat-lon-label"> Lon: </span>
-              <span> {{ mapMouseLocation.lng | number:'.4' }}</span>
+                <span class="lat-lon-label"> Lat: </span>
+                <span> {{ mapMouseLocation.lat | number:'.4' }}</span>
+                <span class="lat-lon-label"> Lon: </span>
+                <span> {{ mapMouseLocation.lng | number:'.4' }}</span>
             </div>
         </div>
     </div>

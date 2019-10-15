@@ -32,7 +32,7 @@ export class ModalCreateProjectComponent implements OnInit {
     const p = new Project();
     p.description = this.projCreateForm.get('description').value;
     p.name = this.projCreateForm.get('name').value;
-    this.projectsService.create(p).subscribe();
+    this.projectsService.create(p);
     this.bsModalRef.hide();
   }
 

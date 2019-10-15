@@ -1,13 +1,13 @@
 import {Feature as GeoJSONFeature,
   GeoJsonProperties,
   Geometry,
-  FeatureCollection as IFeatureCollection } from "geojson";
+  FeatureCollection as IFeatureCollection } from 'geojson';
 
 export interface Project {
-  description: string
-  id?: number
-  name: string
-  uuid?: string
+  description: string;
+  id?: number;
+  name: string;
+  uuid?: string;
 }
 
 export class Project implements Project {
@@ -15,12 +15,12 @@ export class Project implements Project {
 }
 
 export class AuthToken {
-  token : string;
+  token: string;
   expires: Date;
   /**
    *
    * @param token : String
-   * @param expires_in
+   * @param expires: Date
    */
   constructor(token: string, expires: Date) {
     this.token = token;
@@ -28,47 +28,47 @@ export class AuthToken {
   }
 
   static fromExpiresIn(token: string, expires_in: number) {
-    let expires = new Date(new Date().getTime() + expires_in * 1000);
+    const expires = new Date(new Date().getTime() + expires_in * 1000);
     return new AuthToken(token, expires);
   }
 
   /**
    * Checks if the token is expired or not
    */
-  public isExpired() : boolean {
+  public isExpired(): boolean {
     return new Date().getTime() > this.expires.getTime();
   }
 }
 
 
 export interface FeatureAsset {
-  id: number
-  path: string
-  uuid: string
-  feature_id: number
-  asset_type: string
+  id: number;
+  path: string;
+  uuid: string;
+  feature_id: number;
+  asset_type: string;
 }
 
 interface FeatureStyles {
-  [key: string]: string | number
+  [key: string]: string | number;
 }
 
 
 export interface Overlay {
-  id: number
-  path: string
-  uuid: string
-  minLon: number
-  minLat: number
-  maxLon: number
-  maxLat: number
-  project_id: number
-  label: string
+  id: number;
+  path: string;
+  uuid: string;
+  minLon: number;
+  minLat: number;
+  maxLon: number;
+  maxLat: number;
+  project_id: number;
+  label: string;
 }
 
 interface AppGeoJSONFeature extends GeoJSONFeature {
-  assets?: Array<FeatureAsset>
-  styles?: FeatureStyles
+  assets?: Array<FeatureAsset>;
+  styles?: FeatureStyles;
   // featureType?(): String
 }
 
@@ -97,15 +97,15 @@ export class Feature implements AppGeoJSONFeature {
 
 
 
-  featureType?(): String {
+  featureType?(): string {
     if (this.assets &&
-        this.assets.length == 1) {
-      return this.assets[0].asset_type
+        this.assets.length === 1) {
+      return this.assets[0].asset_type;
     }
 
     if (this.assets &&
         this.assets.length > 1) {
-      return 'collection'
+      return 'collection';
     }
 
     if (!this.assets.length) {

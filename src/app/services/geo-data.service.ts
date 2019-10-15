@@ -5,6 +5,7 @@ import {LatLng} from 'leaflet';
 import {Overlay} from '../models/models';
 import { Feature, FeatureCollection} from '../models/models';
 import { environment } from '../../environments/environment';
+import {Form} from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -33,11 +34,30 @@ export class GeoDataService {
 
   // TODO: Add types on the observable
   getAllFeatures(projectId: number): void {
-    this.http.get<FeatureCollection>(environment.apiUrl + `/api/projects/${projectId}/features/`)
+    this.http.get<FeatureCollection>(environment.apiUrl + `/projects/${projectId}/features/`)
       .subscribe( (fc: FeatureCollection) => {
         fc.features = fc.features.map( (feat: Feature) => new Feature(feat));
         this._features.next(fc);
       });
+  }
+
+  addFeature(feat: Feature): void {
+    this._features.subscribe( (current) => {
+      current.features.push(feat);
+      this._features.next(current);
+    });
+  }
+
+
+  uploadFile(projectId: number, file: File): void {
+    const form: FormData = new FormData();
+    form.append('file', file, file.name);
+    this.http.post(environment.apiUrl + `/api/projects/${projectId}/features/files/`, form)
+      .subscribe( (feat: Feature) => {
+        this.addFeature(feat);
+      }, (error => {
+        console.log(error);
+      }));
   }
 
   getOverlays(projectId: number): void {

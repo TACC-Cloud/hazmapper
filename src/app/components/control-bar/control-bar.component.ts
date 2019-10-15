@@ -57,11 +57,9 @@ export class ControlBarComponent implements OnInit {
     this.bsModalService.show(ModalCreateProjectComponent);
   }
 
-  openFileBrowserModal() {
-    const modal: BsModalRef = this.bsModalService.show(ModalFileBrowserComponent);
-    modal.content.onClose.subscribe( (next) => {
-      console.log(next);
-    });
-  }
+
+
+
+
 
 }
