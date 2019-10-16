@@ -1,10 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {FeatureCollection} from 'geojson';
 import {GeoDataService} from '../../services/geo-data.service';
-import {Feature, Project} from '../../models/models';
+import {AssetFilters, Feature, Project} from '../../models/models';
 import {BsModalRef, BsModalService} from 'ngx-foundation';
 import {ModalFileBrowserComponent} from '../modal-file-browser/modal-file-browser.component';
 import {ProjectsService} from '../../services/projects.service';
+
+
+
+
 
 @Component({
   selector: 'app-assets-panel',
@@ -18,6 +22,7 @@ export class AssetsPanelComponent implements OnInit {
   activeProject: Project;
   count = 200;
   scrollStep = 200;
+  filters = new AssetFilters();
 
   constructor(private geoDataService: GeoDataService, private bsModalService: BsModalService, private projectsService: ProjectsService) { }
 
@@ -63,6 +68,9 @@ export class AssetsPanelComponent implements OnInit {
     }
   }
 
+  updateAssetTypeFilters(ftype: string): void {
+    this.filters.updateAssetTypes(ftype);
+  }
 
   selectFeature(feat) {
     this.geoDataService.activeFeature = feat;

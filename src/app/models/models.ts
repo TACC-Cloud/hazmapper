@@ -3,6 +3,33 @@ import {Feature as GeoJSONFeature,
   Geometry,
   FeatureCollection as IFeatureCollection } from 'geojson';
 
+
+// TODO: break these out into their own files
+
+export class AssetFilters {
+
+  // bbox has the following format: [sw_lng, sw_lat, ne_lng, ne_lat], the same as leaflet
+  bbox: Array<number> = [];
+  assetTypes: Set<string> = new Set<string>();
+
+  updateAssetTypes(assetType: string) {
+    this.assetTypes.has(assetType) ? this.assetTypes.delete(assetType) : this.assetTypes.add(assetType);
+  }
+
+  updateBBox(bbox: Array<number>): void {
+    this.bbox = bbox;
+  }
+
+  toJson(): object {
+    return {
+      assetTypes: [...this.assetTypes],
+      bbox: this.bbox
+    };
+  }
+
+}
+
+
 export interface Project {
   description: string;
   id?: number;

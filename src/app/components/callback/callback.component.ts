@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Router, Route} from "@angular/router";
-import {AuthService} from "../../services/authentication.service";
+import {ActivatedRoute, Router, Route} from '@angular/router';
+import {AuthService} from '../../services/authentication.service';
 
 @Component({
   selector: 'app-callback',
@@ -14,10 +14,10 @@ export class CallbackComponent implements OnInit {
   ngOnInit() {
     // TODO: For some reason wso2 is sending back a fragment like #access_token=qadad&expires_in=3600
 
-    let frag = this.route.snapshot.fragment;
-    let params = new URLSearchParams(frag);
-    let token = params.get("access_token");
-    let expires_in = +params.get("expires_in");
+    const frag = this.route.snapshot.fragment;
+    const params = new URLSearchParams(frag);
+    const token = params.get('access_token');
+    const expires_in = +params.get('expires_in');
     this.auth.setToken(token, expires_in);
     this.auth.getUserInfo();
     this.router.navigate(['/']);
