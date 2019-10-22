@@ -6,6 +6,7 @@ import {ApiService} from 'ng-tapis';
 import { TapisFilesService } from '../../services/tapis-files.service';
 import { BsModalRef } from 'ngx-foundation/modal/bs-modal-ref.service';
 import {Subject} from 'rxjs';
+import {Project} from '../../models/models';
 
 @Component({
   selector: 'app-modal-file-browser',
@@ -20,6 +21,7 @@ export class ModalFileBrowserComponent implements OnInit {
   inProgress: boolean;
   public selectedFiles: Map<string, RemoteFile> = new Map();
   public onClose: Subject<Array<RemoteFile>> = new Subject<Array<RemoteFile>>();
+  private activeProject: Project;
 
   constructor(private tapisFilesService: TapisFilesService,
               private modalRef: BsModalRef,

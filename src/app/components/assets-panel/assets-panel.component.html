@@ -23,8 +23,11 @@
         class="dock-panel-content"
         infiniteScroll
         [infiniteScrollDistance]="1"
-        [infiniteScrollThrottle]="50"
-        (scrolled)="onScroll()"
+        [infiniteScrollUpDistance]="1"
+        [infiniteScrollThrottle]="100"
+        (scrolled)="scrollDown()"
+        (scrolledUp)="scrollUp()"
+        [alwaysCallback]="true"
         [scrollWindow]="false"
     >
         <app-feature-row
@@ -36,8 +39,8 @@
     </div>
     <div class="dock-panel-controls">
         <div class="expanded button-group tiny">
-            <button class="button hollow">Export to GeoJSON</button>
-            <button class="button hollow">Export to KML</button>
+            <button class="button hollow" (click)="exportGeoJSON()">Export to GeoJSON</button>
+<!--            <button class="button hollow">Export to KML</button>-->
         </div>
     </div>
 </div>

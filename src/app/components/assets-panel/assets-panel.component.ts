@@ -5,8 +5,60 @@ import {AssetFilters, Feature, Project} from '../../models/models';
 import {BsModalRef, BsModalService} from 'ngx-foundation';
 import {ModalFileBrowserComponent} from '../modal-file-browser/modal-file-browser.component';
 import {ProjectsService} from '../../services/projects.service';
+import {RemoteFile} from 'ng-tapis';
+import {Subject} from 'rxjs';
 
 
+
+class ScrollableArray<T> {
+
+  private windowSize = 200;
+  private fetchSize = 100;
+  private content: Array<T> = [];
+  public readonly length: number = this.content.length;
+  private startIdx  = 0;
+  public readonly currentSelection: Subject<Array<T>> = new Subject();
+
+  constructor(data: Array<T>) {
+    this.content = data;
+  }
+
+  setContent(data: Array<T>) {
+    this.content = data;
+    this.startIdx = 0;
+
+    this.currentSelection.next(this.content.slice(this.startIdx, this.windowSize));
+  }
+
+  setFetchSize(num: number) {
+    this.fetchSize = num;
+  }
+
+  setWindowSize(num: number) {
+    this.windowSize = num;
+  }
+
+  scrollTo(target: any) {
+    const idx: number = this.content.indexOf(target);
+    if (idx >= 0) {
+      // this.startIdx = idx;
+      this.startIdx = Math.min(this.content.length - this.fetchSize, idx);
+      this.currentSelection.next(this.content.slice(this.startIdx, this.startIdx + this.windowSize));
+    }
+  }
+
+  scrollUp() {
+    this.startIdx = Math.max(0, this.startIdx - this.fetchSize);
+    const tmp = this.content.slice(this.startIdx, this.startIdx + this.windowSize);
+    this.currentSelection.next(tmp);  }
+
+  scrollDown() {
+    this.startIdx = Math.min(this.content.length - this.fetchSize, this.startIdx + this.fetchSize);
+    const tmp = this.content.slice(this.startIdx, this.startIdx + this.windowSize);
+    this.currentSelection.next(tmp);
+  }
+
+}
 
 
 
@@ -18,46 +70,46 @@ import {ProjectsService} from '../../services/projects.service';
 export class AssetsPanelComponent implements OnInit {
   features: FeatureCollection;
   activeFeature: Feature;
+  scrollableFeatures: ScrollableArray<Feature> = new ScrollableArray([]);
   displayFeatures: Array<Feature>;
   activeProject: Project;
-  count = 200;
-  scrollStep = 200;
-  filters = new AssetFilters();
 
   constructor(private geoDataService: GeoDataService, private bsModalService: BsModalService, private projectsService: ProjectsService) { }
 
   ngOnInit() {
+    this.scrollableFeatures.currentSelection.subscribe( (next: Array<Feature>) => {
+      this.displayFeatures = next;
+    });
     this.geoDataService.features.subscribe( (fc: FeatureCollection) => {
       console.log(fc);
       this.features = fc;
-      this.displayFeatures = this.features.features.slice(0, this.count);
+      this.scrollableFeatures.setContent(this.features.features);
     });
     this.geoDataService.activeFeature.subscribe( (next) => {
       this.activeFeature = next;
+      if (this.activeFeature) { this.scrollToActiveFeature(); }
     });
-
     this.projectsService.activeProject.subscribe( (current) => {
       this.activeProject = current;
     });
-
   }
 
-  // TODO: Implement onScrollUp and scrolling to the right feature when a marker is clicked on the map
-  onScroll() {
-    console.log(this.displayFeatures.length);
-
-    this.displayFeatures.push(...this.features.features.slice(this.count, this.count + this.scrollStep));
-    this.count += this.scrollStep;
+  scrollToActiveFeature() {
+    this.scrollableFeatures.scrollTo(this.activeFeature);
   }
 
-  trackByFn(index: number, feat: Feature): number {
-    return <number> feat.id;
+  scrollDown() {
+    this.scrollableFeatures.scrollDown();
+  }
+
+  scrollUp() {
+    this.scrollableFeatures.scrollUp();
   }
 
   openFileBrowserModal() {
     const modal: BsModalRef = this.bsModalService.show(ModalFileBrowserComponent);
-    modal.content.onClose.subscribe( (next) => {
-      console.log(next);
+    modal.content.onClose.subscribe( (files: Array<RemoteFile>) => {
+      this.geoDataService.importFileFromTapis(this.activeProject.id, files);
     });
   }
 
@@ -68,9 +120,11 @@ export class AssetsPanelComponent implements OnInit {
     }
   }
 
-  updateAssetTypeFilters(ftype: string): void {
-    this.filters.updateAssetTypes(ftype);
+  exportGeoJSON() {
+    this.geoDataService.downloadGeoJSON(this.activeProject.id);
   }
+
+
 
   selectFeature(feat) {
     this.geoDataService.activeFeature = feat;

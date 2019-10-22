@@ -10,10 +10,10 @@ export class AssetFilters {
 
   // bbox has the following format: [sw_lng, sw_lat, ne_lng, ne_lat], the same as leaflet
   bbox: Array<number> = [];
-  assetTypes: Set<string> = new Set<string>();
+  assetType: Set<string> = new Set<string>();
 
   updateAssetTypes(assetType: string) {
-    this.assetTypes.has(assetType) ? this.assetTypes.delete(assetType) : this.assetTypes.add(assetType);
+    this.assetType.has(assetType) ? this.assetType.delete(assetType) : this.assetType.add(assetType);
   }
 
   updateBBox(bbox: Array<number>): void {
@@ -22,7 +22,7 @@ export class AssetFilters {
 
   toJson(): object {
     return {
-      assetTypes: [...this.assetTypes],
+      assetType: [...this.assetType],
       bbox: this.bbox
     };
   }

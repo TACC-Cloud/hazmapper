@@ -10,10 +10,10 @@
         <div>
             <h6>Asset Types</h6>
             <div>
-                <label for="imageFilter">Images </label> <input type="checkbox" id="imageFilter">
+                <label for="imageFilter">Images </label> <input type="checkbox" id="imageFilter" (change)="updateAssetTypeFilters('image')">
             </div>
             <div>
-                <label for="videoFilter">Videos </label> <input type="checkbox" id="videoFilter">
+                <label for="videoFilter">Videos </label> <input type="checkbox" id="videoFilter" (change)="updateAssetTypeFilters('video')">
             </div>
         </div>
     </div>

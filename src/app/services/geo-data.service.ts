@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {LatLng} from 'leaflet';
-import {Overlay} from '../models/models';
+import {AssetFilters, Overlay} from '../models/models';
 import { Feature, FeatureCollection} from '../models/models';
 import { environment } from '../../environments/environment';
 import {Form} from '@angular/forms';
 import {take} from 'rxjs/operators';
 import * as querystring from 'querystring';
+import {RemoteFile} from 'ng-tapis';
 
 @Injectable({
   providedIn: 'root'
@@ -36,8 +37,8 @@ export class GeoDataService {
     this._activeOverlay = new BehaviorSubject<any>(null);
   }
 
-  getFeatures(projectId: number, query: object = {}): void {
-    const qstring: string = querystring.stringify(query || {});
+  getFeatures(projectId: number, query: AssetFilters = new AssetFilters()): void {
+    const qstring: string = querystring.stringify(query.toJson());
     this.http.get<FeatureCollection>(environment.apiUrl + `/projects/${projectId}/features/` + '?' + qstring)
       .subscribe( (fc: FeatureCollection) => {
         fc.features = fc.features.map( (feat: Feature) => new Feature(feat));
@@ -50,6 +51,35 @@ export class GeoDataService {
       current.features.push(feat);
       this._features.next(current);
     });
+  }
+
+  importFileFromTapis(projectId: number, files: Array<RemoteFile>): void {
+
+    const tmp = files.map( f => ({system: f.system, path: f.path}));
+    const payload = {
+      files: tmp
+    };
+    this.http.post(environment.apiUrl + `/projects/${projectId}/features/files/import/`, payload)
+      .subscribe( (resp) => {
+        console.log(resp);
+      }, error => {
+        console.log(error);
+      });
+  }
+
+  downloadGeoJSON(projectId: number, query: AssetFilters = new AssetFilters()) {
+    const qstring: string = querystring.stringify(query.toJson());
+    const downloadLink = document.createElement('a');
+
+    this.http.get<FeatureCollection>(environment.apiUrl + `/projects/${projectId}/features/` + '?' + qstring)
+      .subscribe( (resp) => {
+        const blob = new Blob([JSON.stringify(resp)], {type: 'application/json'});
+        downloadLink.href = URL.createObjectURL(blob);
+        downloadLink.setAttribute('download', 'hazmapper.json');
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+      });
   }
 
 
