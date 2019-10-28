@@ -7,59 +7,7 @@ import {ModalFileBrowserComponent} from '../modal-file-browser/modal-file-browse
 import {ProjectsService} from '../../services/projects.service';
 import {RemoteFile} from 'ng-tapis';
 import {Subject} from 'rxjs';
-
-
-
-class ScrollableArray<T> {
-
-  private windowSize = 200;
-  private fetchSize = 100;
-  private content: Array<T> = [];
-  public readonly length: number = this.content.length;
-  private startIdx  = 0;
-  public readonly currentSelection: Subject<Array<T>> = new Subject();
-
-  constructor(data: Array<T>) {
-    this.content = data;
-  }
-
-  setContent(data: Array<T>) {
-    this.content = data;
-    this.startIdx = 0;
-
-    this.currentSelection.next(this.content.slice(this.startIdx, this.windowSize));
-  }
-
-  setFetchSize(num: number) {
-    this.fetchSize = num;
-  }
-
-  setWindowSize(num: number) {
-    this.windowSize = num;
-  }
-
-  scrollTo(target: any) {
-    const idx: number = this.content.indexOf(target);
-    if (idx >= 0) {
-      // this.startIdx = idx;
-      this.startIdx = Math.min(this.content.length - this.fetchSize, idx);
-      this.currentSelection.next(this.content.slice(this.startIdx, this.startIdx + this.windowSize));
-    }
-  }
-
-  scrollUp() {
-    this.startIdx = Math.max(0, this.startIdx - this.fetchSize);
-    const tmp = this.content.slice(this.startIdx, this.startIdx + this.windowSize);
-    this.currentSelection.next(tmp);  }
-
-  scrollDown() {
-    this.startIdx = Math.min(this.content.length - this.fetchSize, this.startIdx + this.fetchSize);
-    const tmp = this.content.slice(this.startIdx, this.startIdx + this.windowSize);
-    this.currentSelection.next(tmp);
-  }
-
-}
-
+import { ScrollableArray } from '../../utils/ScrollableArray';
 
 
 @Component({
@@ -123,8 +71,6 @@ export class AssetsPanelComponent implements OnInit {
   exportGeoJSON() {
     this.geoDataService.downloadGeoJSON(this.activeProject.id);
   }
-
-
 
   selectFeature(feat) {
     this.geoDataService.activeFeature = feat;
