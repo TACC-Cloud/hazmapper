@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import {AgaveSystemsService} from '../../services/agave-systems.service';
 import {AuthenticatedUser, AuthService} from '../../services/authentication.service';
 import { RemoteFile} from 'ng-tapis/models/remote-file';
-import {ApiService} from 'ng-tapis';
+import { SystemSummary} from 'ng-tapis';
 import { TapisFilesService } from '../../services/tapis-files.service';
 import { BsModalRef } from 'ngx-foundation/modal/bs-modal-ref.service';
-import {Subject} from 'rxjs';
+import {forkJoin, Subject, combineLatest} from 'rxjs';
 import {Project} from '../../models/models';
+import {combineAll} from 'rxjs/operators';
 
 @Component({
   selector: 'app-modal-file-browser',
@@ -21,7 +22,11 @@ export class ModalFileBrowserComponent implements OnInit {
   inProgress: boolean;
   public selectedFiles: Map<string, RemoteFile> = new Map();
   public onClose: Subject<Array<RemoteFile>> = new Subject<Array<RemoteFile>>();
-  private activeProject: Project;
+  public projects: Array<SystemSummary>;
+  private selectedSystem: SystemSummary;
+  public myDataSystem: SystemSummary;
+  public communityDataSystem: SystemSummary;
+  public publishedDataSystem: SystemSummary;
 
   constructor(private tapisFilesService: TapisFilesService,
               private modalRef: BsModalRef,
@@ -31,20 +36,45 @@ export class ModalFileBrowserComponent implements OnInit {
   ngOnInit() {
     // TODO: Get the systems in there
     this.agaveSystemsService.list();
-    this.agaveSystemsService.projects.subscribe(systems => {
-      console.log(systems);
-    });
-    this.authService.currentUser.subscribe(next => {
-      this.currentUser = next;
-      const init = <RemoteFile> {
-        system: 'designsafe.storage.default',
-        type: 'dir',
-        path: this.currentUser.username
-      };
-      this.browse(init);
-    });
+
+
+    // TODO: change those hard coded systemIds to environment vars or some sort of config
+    // this.agaveSystemsService.systems.subscribe( (next) => {
+    //   this.myDataSystem = next.find( (sys) => sys.id === 'designsafe.storage.default');
+    //   this.communityDataSystem = next.find( (sys) => sys.id === 'designsafe.storage.community');
+    //   this.publishedDataSystem = next.find( (sys) => sys.id === 'designsafe.storage.published');
+    //   this.selectedSystem = this.myDataSystem;
+    // });
+
+    combineLatest([this.authService.currentUser, this.agaveSystemsService.systems, this.agaveSystemsService.projects])
+      .subscribe( ([user, systems, projects]) => {
+        this.myDataSystem = systems.find( (sys) => sys.id === 'designsafe.storage.default');
+        this.communityDataSystem = systems.find( (sys) => sys.id === 'designsafe.storage.community');
+        this.publishedDataSystem = systems.find( (sys) => sys.id === 'designsafe.storage.published');
+        this.selectedSystem = this.myDataSystem;
+        this.projects = projects;
+        this.currentUser = user;
+        const init = <RemoteFile> {
+          system: this.myDataSystem.id,
+          type: 'dir',
+          path: this.currentUser.username
+        };
+        this.browse(init);
+      });
 
   }
+
+  selectSystem(system: SystemSummary): void {
+    let pth;
+    system.id === this.myDataSystem.id ? pth = this.currentUser.username : pth = '/';
+    const init = <RemoteFile> {
+      system: system.id,
+      type: 'dir',
+      path: pth
+    };
+    this.browse(init);
+  }
+
 
   browse(file: RemoteFile) {
     if (file.type !== 'dir') { return; }

@@ -10,7 +10,7 @@ export class AgaveSystemsService {
 
   private baseUrl = 'https://agave.designsafe-ci.org/systems/v2/';
   private _systems: ReplaySubject<SystemSummary[]> = new ReplaySubject<SystemSummary[]>(1);
-  public readonly systems: Observable<SystemSummary[]>;
+  public readonly systems: Observable<SystemSummary[]> = this._systems.asObservable();
   private _projects: ReplaySubject<SystemSummary[]> = new ReplaySubject<SystemSummary[]>(1);
   public readonly projects: Observable<SystemSummary[]> = this._projects.asObservable();
   private systemsList: SystemSummary[];
@@ -20,7 +20,6 @@ export class AgaveSystemsService {
   list() {
     this.tapis.systemsList({type: 'STORAGE'})
       .subscribe(resp => {
-        this.systemsList = resp.result;
         this._systems.next(resp.result);
         this._projects.next(resp.result.filter(sys => sys.id.startsWith('project')));
       }, error => {

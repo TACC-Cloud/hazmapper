@@ -7,6 +7,7 @@ import {skip} from 'rxjs/operators';
 import {BsModalRef, BsModalService} from 'ngx-foundation';
 import {ModalCreateProjectComponent} from '../modal-create-project/modal-create-project.component';
 import {ModalFileBrowserComponent} from '../modal-file-browser/modal-file-browser.component';
+import {interval, Observable, Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-control-bar',
@@ -15,9 +16,13 @@ import {ModalFileBrowserComponent} from '../modal-file-browser/modal-file-browse
 })
 export class ControlBarComponent implements OnInit {
 
+  private REFRESHTIME = 60000; // 60 secs per reload
   public projects: Project[];
   public selectedProject: Project;
   public mapMouseLocation: LatLng = new LatLng(0, 0);
+  public liveRefresh = true;
+  private timer: Observable<number> = interval(this.REFRESHTIME * 1000);
+  private timerSubscription: Subscription;
 
   constructor(private projectsService: ProjectsService,
               private geoDataService: GeoDataService,
@@ -41,6 +46,17 @@ export class ControlBarComponent implements OnInit {
     this.geoDataService.mapMouseLocation.pipe(skip(1)).subscribe( (next) => {
       this.mapMouseLocation = next;
     });
+    this.timerSubscription = this.timer.subscribe( () => {
+      this.reloadFeatures();
+    });
+  }
+
+  reloadFeatures() {
+    this.geoDataService.getFeatures(this.selectedProject.id);
+  }
+
+  setLiveRefresh(option: boolean) {
+    option ? this.timerSubscription = this.timer.subscribe(() => { this.reloadFeatures(); }) : this.timerSubscription.unsubscribe();
   }
 
   selectProject(p: Project): void {
@@ -56,10 +72,5 @@ export class ControlBarComponent implements OnInit {
   openCreateProjectModal() {
     this.bsModalService.show(ModalCreateProjectComponent);
   }
-
-
-
-
-
 
 }

@@ -1,7 +1,14 @@
 <h4> Select Files </h4>
 <small><em> Note: Only files are selectable, not folders. Double click on a folder to navigate into it. </em></small>
 <hr>
-<select></select>
+<select (ngModelChange)="selectSystem($event)" [(ngModel)]="selectedSystem">
+    <option [ngValue]="myDataSystem"> My Data </option>
+    <option [ngValue]="communityDataSystem"> Community Data</option>
+    <option [ngValue]="publishedDataSystem"> Published Data</option>
+    <optgroup label="My Projects">
+        <option *ngFor="let project of projects" [ngValue]="project">{{project.description}}</option>
+    </optgroup>
+</select>
 <div class="fileslisting">
     <div class="grid-x" *ngIf="inProgress">
         <div class="cell medium-12">

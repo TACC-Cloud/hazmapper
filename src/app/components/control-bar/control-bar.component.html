@@ -1,5 +1,5 @@
 <div class="grid-x align-justify align-middle">
-    <div class="cell small-4 no-padding">
+    <div class="cell small-4 no-padding align-middle">
         <div class="grid-x">
             <button class="button tiny success" (click)="openCreateProjectModal()"> <i class="fas fa-plus"></i></button>
             <ul class="dropdown vertical menu" dropdown>
@@ -15,8 +15,19 @@
                     </ul>
                 </li>
             </ul>
+            <div class="align-middle">
+                <span> Live Refresh </span>
+            </div>
+            <div class="switch tiny">
+                <input class="switch-input" id="exampleSwitch" type="checkbox"
+                       name="exampleSwitch"
+                       (change)="setLiveRefresh(liveRefresh)"
+                       [(ngModel)]="liveRefresh">
+                <label class="switch-paddle" for="exampleSwitch">
+                    <span class="show-for-sr">Live refresh</span>
+                </label>
+            </div>
         </div>
-
     </div>
     <div class="cell small-4 align-right">
         <div class="grid-x align-right">
