@@ -14,7 +14,7 @@
     <hr>
   </div>
   <div class="cell medium-10 auto asset-detail-content">
-    <img *ngIf="feature.featureType() ==='image'" src="{{environment.apiUrl}}/assets/{{feature.assets[0].path}}">
+    <img *ngIf="feature.featureType() ==='image'" [src]="featureSource">
     <video *ngIf="feature.featureType() ==='video'"
            [src]=featureSource
            controls width="100%">
@@ -24,14 +24,14 @@
   <div class="cell medium-1 text-center asset-detail-footer">
     <hr>
     <div *ngIf="feature.featureType() === 'image'">
-      <a href="{{environment.apiUrl}}/assets/{{feature.assets[0].path}}" download="feature-{{feature.id}}.jpeg">
+      <a [href]="featureSource" download="feature-{{feature.id}}.jpeg">
         <button class="button small">
           Download
         </button>
       </a>
     </div>
     <div *ngIf="feature.featureType() === 'point_cloud'">
-      <a href="{{environment.apiUrl}}/assets/{{feature.assets[0].path}}/index.html">
+      <a [href]="featureSource+'/index.html'">
         <button class="button small">
           View
         </button>

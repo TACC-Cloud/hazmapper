@@ -96,7 +96,8 @@ export interface Overlay {
 interface AppGeoJSONFeature extends GeoJSONFeature {
   assets?: Array<FeatureAsset>;
   styles?: FeatureStyles;
-  // featureType?(): String
+  featureSource?: string;
+  featureType?(): string;
 }
 
 export class FeatureCollection implements IFeatureCollection {
@@ -124,7 +125,7 @@ export class Feature implements AppGeoJSONFeature {
 
 
 
-  featureType?(): string {
+  featureType(): string {
     if (this.assets &&
         this.assets.length === 1) {
       return this.assets[0].asset_type;
