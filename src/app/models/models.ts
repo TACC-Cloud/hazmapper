@@ -20,7 +20,7 @@ export class AssetFilters {
     this.bbox = bbox;
   }
 
-  toJson(): object {
+  toJson() {
     return {
       assetType: [...this.assetType],
       bbox: this.bbox
