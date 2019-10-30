@@ -1,7 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {GeoDataService} from "../../services/geo-data.service";
-import {FeatureCollection} from "geojson";
-
 
 
 interface IpanelsDisplay {
@@ -10,6 +7,7 @@ interface IpanelsDisplay {
   filters: boolean;
   measure: boolean;
   settings: boolean;
+  pointClouds: boolean;
 }
 
 @Component({
@@ -19,28 +17,24 @@ interface IpanelsDisplay {
 })
 export class DockComponent implements OnInit {
 
-  features : FeatureCollection;
   panelsDisplay: IpanelsDisplay;
 
-  constructor(private GeoDataService: GeoDataService) { }
+  constructor() { }
 
   ngOnInit() {
-    this.GeoDataService.features.subscribe( (fc)=> {
-      this.features = fc;
-    });
-
-    this.panelsDisplay = <IpanelsDisplay>{
+    this.panelsDisplay = <IpanelsDisplay> {
       assets: false,
       layers: false,
       filters: false,
+      pointClouds: false,
       measure: false,
       settings: false
-    }
+    };
   }
 
   showPanel(pname: string) {
-    for (let key in this.panelsDisplay) {
-      if (key != pname) this.panelsDisplay[key] = false;
+    for (const key in this.panelsDisplay) {
+      if (key !== pname) { this.panelsDisplay[key] = false; }
     }
     this.panelsDisplay[pname] = !this.panelsDisplay[pname];
 

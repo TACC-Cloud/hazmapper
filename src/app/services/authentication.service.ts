@@ -54,7 +54,6 @@ export class AuthService {
     const client_id = environment.clientId;
     const callback = location.origin + environment.baseHref + 'callback';
     const state = Math.random().toString(36);
-    console.log(state);
     const AUTH_URL = `https://agave.designsafe-ci.org/authorize?scope=openid&client_id=${client_id}&response_type=token&redirect_uri=${callback}&state=${state}`;
     window.location.href = AUTH_URL;
   }

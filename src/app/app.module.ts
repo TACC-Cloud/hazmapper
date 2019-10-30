@@ -32,6 +32,8 @@ import { ModalCreateProjectComponent } from './components/modal-create-project/m
 import {ReactiveFormsModule, FormsModule} from '@angular/forms';
 import { ModalFileBrowserComponent } from './components/modal-file-browser/modal-file-browser.component';
 import {environment} from '../environments/environment';
+import { ModalCreatePointCloudComponent } from './components/modal-create-point-cloud/modal-create-point-cloud.component';
+import { PointCloudsPanelComponent } from './components/point-clouds-panel/point-clouds-panel.component';
 
 
 @NgModule({
@@ -50,6 +52,8 @@ import {environment} from '../environments/environment';
     CallbackComponent,
     ModalCreateProjectComponent,
     ModalFileBrowserComponent,
+    ModalCreatePointCloudComponent,
+    PointCloudsPanelComponent,
   ],
   imports: [
     // this is for the ng-tapis library
@@ -84,7 +88,7 @@ import {environment} from '../environments/environment';
     }
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ModalCreateProjectComponent, ModalFileBrowserComponent]
+  entryComponents: [ModalCreateProjectComponent, ModalFileBrowserComponent, ModalCreatePointCloudComponent]
 })
 export class AppModule { }
 

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, Observable, ReplaySubject, Subject} from 'rxjs';
 import {LatLng} from 'leaflet';
-import {AssetFilters, Overlay} from '../models/models';
+import {AssetFilters, IPointCloud, Overlay} from '../models/models';
 import { Feature, FeatureCollection} from '../models/models';
 import { environment } from '../../environments/environment';
 import {Form} from '@angular/forms';
@@ -22,6 +22,8 @@ export class GeoDataService {
   private _basemap: BehaviorSubject<any>;
   private _overlays: BehaviorSubject<any>;
   private _activeOverlay: BehaviorSubject<any>;
+  private _pointClouds: Subject<Array<IPointCloud>> = new Subject<Array<IPointCloud>>();
+  public readonly pointClouds: Observable<Array<IPointCloud>> = this._pointClouds.asObservable();
 
   constructor(private http: HttpClient) {
     this._features = new BehaviorSubject<FeatureCollection>({type: 'FeatureCollection', features: []});
@@ -46,12 +48,33 @@ export class GeoDataService {
       });
   }
 
+  getPointClouds(projectId: number) {
+    this.http.get<Array<IPointCloud>>(environment.apiUrl + `/projects/${projectId}/point-cloud/`)
+      .subscribe( (resp ) => {
+        this._pointClouds.next(resp);
+      });
+  }
+
   addFeature(feat: Feature): void {
     this.features$.pipe(take(1)).subscribe( (current: FeatureCollection) => {
       current.features.push(feat);
       this._features.next(current);
     });
   }
+
+  addPointCloud(projectId: number, title: string, conversionParams: string): void {
+    const payload = {
+      description: title,
+      conversion_parameters: conversionParams
+    };
+    this.http.post(environment.apiUrl + `/projects/${projectId}/point-cloud/`, payload)
+      .subscribe( (resp) => {
+        console.log(resp);
+      }, error => {
+        // TODO: notification
+      });
+  }
+
 
   importFileFromTapis(projectId: number, files: Array<RemoteFile>): void {
 
@@ -61,9 +84,8 @@ export class GeoDataService {
     };
     this.http.post(environment.apiUrl + `/projects/${projectId}/features/files/import/`, payload)
       .subscribe( (resp) => {
-        console.log(resp);
       }, error => {
-        console.log(error);
+        // TODO: Add notification / toast
       });
   }
 
@@ -91,9 +113,9 @@ export class GeoDataService {
         feats.forEach( (feat) => {
           this.addFeature(new Feature(feat));
         });
-      }, (error => {
-        console.log(error);
-      }));
+      }, error => {
+        // TODO: Add notification
+      });
   }
 
   getOverlays(projectId: number): void {

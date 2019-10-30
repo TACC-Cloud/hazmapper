@@ -7,6 +7,14 @@ import {environment} from '../../environments/environment';
 
 // TODO: break these out into their own files
 
+export interface IPointCloud {
+  id: number;
+  description: string;
+  conversion_parameters: string;
+  feature_id?: number;
+  task_id?: string;
+}
+
 export class AssetFilters {
 
   // bbox has the following format: [sw_lng, sw_lat, ne_lng, ne_lat], the same as leaflet

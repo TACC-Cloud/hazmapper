@@ -4,6 +4,7 @@ import {GeoDataService} from '../../services/geo-data.service';
 import {AssetFilters, Feature, Project} from '../../models/models';
 import {BsModalRef, BsModalService} from 'ngx-foundation';
 import {ModalFileBrowserComponent} from '../modal-file-browser/modal-file-browser.component';
+import { ModalCreatePointCloudComponent} from '../modal-create-point-cloud/modal-create-point-cloud.component';
 import {ProjectsService} from '../../services/projects.service';
 import {RemoteFile} from 'ng-tapis';
 import {Subject} from 'rxjs';
@@ -29,7 +30,6 @@ export class AssetsPanelComponent implements OnInit {
       this.displayFeatures = next;
     });
     this.geoDataService.features.subscribe( (fc: FeatureCollection) => {
-      console.log(fc);
       this.features = fc;
       this.scrollableFeatures.setContent(this.features.features);
     });
@@ -60,6 +60,14 @@ export class AssetsPanelComponent implements OnInit {
       this.geoDataService.importFileFromTapis(this.activeProject.id, files);
     });
   }
+
+  openPointCloudCreateModal() {
+    const modal: BsModalRef = this.bsModalService.show(ModalCreatePointCloudComponent);
+    // modal.content.onClose.subscribe( (files: Array<RemoteFile>) => {
+    //   this.geoDataService.importFileFromTapis(this.activeProject.id, files);
+    // });
+  }
+
 
   handleFileInput(files: FileList) {
     // tslint:disable-next-line:prefer-for-of

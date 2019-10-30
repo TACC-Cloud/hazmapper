@@ -13,8 +13,8 @@
                     <li class="clickable">
                         <label for="upload"> From local file </label>
                         <input type="file" id="upload" style="display: none" (change)="handleFileInput($event.target.files)">
-
                     </li>
+                    <li class="clickable" (click)="openPointCloudCreateModal()">Create Point Cloud Dataset</li>
                 </ul>
             </li>
         </ul>

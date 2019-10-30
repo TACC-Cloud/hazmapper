@@ -1,6 +1,6 @@
 <div class="grid-x align-justify align-middle">
-    <div class="cell small-4 no-padding align-middle">
-        <div class="grid-x">
+    <div class="cell small-4 no-padding">
+        <div class="grid-x align-middle">
             <button class="button tiny success" (click)="openCreateProjectModal()"> <i class="fas fa-plus"></i></button>
             <ul class="dropdown vertical menu" dropdown>
                 <li class="is-dropdown-submenu-parent">
@@ -15,7 +15,12 @@
                     </ul>
                 </li>
             </ul>
-            <div class="align-middle">
+
+        </div>
+    </div>
+    <div class="cell auto">
+        <div class="grid-x align-right align-middle">
+            <div style="padding-right: 5px">
                 <span> Live Refresh </span>
             </div>
             <div class="switch tiny">
@@ -27,11 +32,7 @@
                     <span class="show-for-sr">Live refresh</span>
                 </label>
             </div>
-        </div>
-    </div>
-    <div class="cell small-4 align-right">
-        <div class="grid-x align-right">
-            <div class="cell small-6 align-right">
+            <div style="padding-right: 5px;padding-left: 5px">
                 <span class="lat-lon-label"> Lat: </span>
                 <span> {{ mapMouseLocation.lat | number:'.4' }}</span>
                 <span class="lat-lon-label"> Lon: </span>

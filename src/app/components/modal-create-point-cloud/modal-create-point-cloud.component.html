@@ -1,0 +1,19 @@
+<h4> Create a Point Cloud </h4>
+
+<form [formGroup]="pcCreateForm" (ngSubmit)="submit()">
+    <label> Description:
+        <input type="text" formControlName="description" required="true">
+    </label>
+
+    <label> Additional Conversion Parameters
+        <textarea formControlName="conversionParameters" required="false"></textarea>
+        <span class="help-text"> These will be added to the parameters passed to Potree Converter. By default, the only parameters passed are <code>--generate-page index.html</code> </span>
+    </label>
+    <hr>
+
+    <div class="button-group small">
+        <button class="button small warning" type="button" (click)="close()">Close</button>
+        <button class="button small align-right" type="submit" [disabled]="!pcCreateForm.valid">Submit</button>
+    </div>
+</form>
+

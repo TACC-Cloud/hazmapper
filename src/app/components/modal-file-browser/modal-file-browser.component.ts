@@ -5,9 +5,7 @@ import { RemoteFile} from 'ng-tapis/models/remote-file';
 import { SystemSummary} from 'ng-tapis';
 import { TapisFilesService } from '../../services/tapis-files.service';
 import { BsModalRef } from 'ngx-foundation/modal/bs-modal-ref.service';
-import {forkJoin, Subject, combineLatest} from 'rxjs';
-import {Project} from '../../models/models';
-import {combineAll} from 'rxjs/operators';
+import { Subject, combineLatest} from 'rxjs';
 
 @Component({
   selector: 'app-modal-file-browser',
@@ -18,8 +16,7 @@ export class ModalFileBrowserComponent implements OnInit {
 
   private currentUser: AuthenticatedUser;
   public filesList: Array<RemoteFile>;
-  selectedFile: RemoteFile;
-  inProgress: boolean;
+  public inProgress: boolean;
   public selectedFiles: Map<string, RemoteFile> = new Map();
   public onClose: Subject<Array<RemoteFile>> = new Subject<Array<RemoteFile>>();
   public projects: Array<SystemSummary>;
@@ -34,18 +31,10 @@ export class ModalFileBrowserComponent implements OnInit {
               private agaveSystemsService: AgaveSystemsService) { }
 
   ngOnInit() {
-    // TODO: Get the systems in there
     this.agaveSystemsService.list();
 
-
     // TODO: change those hard coded systemIds to environment vars or some sort of config
-    // this.agaveSystemsService.systems.subscribe( (next) => {
-    //   this.myDataSystem = next.find( (sys) => sys.id === 'designsafe.storage.default');
-    //   this.communityDataSystem = next.find( (sys) => sys.id === 'designsafe.storage.community');
-    //   this.publishedDataSystem = next.find( (sys) => sys.id === 'designsafe.storage.published');
-    //   this.selectedSystem = this.myDataSystem;
-    // });
-
+    // wait on the currentUser and systems to resolve
     combineLatest([this.authService.currentUser, this.agaveSystemsService.systems, this.agaveSystemsService.projects])
       .subscribe( ([user, systems, projects]) => {
         this.myDataSystem = systems.find( (sys) => sys.id === 'designsafe.storage.default');

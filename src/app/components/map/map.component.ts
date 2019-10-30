@@ -134,9 +134,7 @@ export class MapComponent implements OnInit {
       this.map.addLayer(this.features);
       try {
         this.map.fitBounds(this.features.getBounds());
-      } catch (e) {
-        console.log(e);
-      }
+      } catch (e) {}
     });
 
   }
