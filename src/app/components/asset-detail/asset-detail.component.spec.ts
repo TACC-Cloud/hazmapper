@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed} from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA} from "@angular/core";
 import { AssetDetailComponent } from './asset-detail.component';
 import {GeoDataService} from "../../services/geo-data.service";
-import {Feature, FeatureAsset} from "../../models/models";
+import {Feature, IFeatureAsset} from "../../models/models";
 import {of, Observable} from "rxjs";
 
 class MockData {

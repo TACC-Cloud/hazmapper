@@ -2,6 +2,7 @@ import {Feature as GeoJSONFeature,
   GeoJsonProperties,
   Geometry,
   FeatureCollection as IFeatureCollection } from 'geojson';
+import {environment} from '../../environments/environment';
 
 
 // TODO: break these out into their own files
@@ -68,13 +69,29 @@ export class AuthToken {
 }
 
 
-export interface FeatureAsset {
+export interface IFeatureAsset {
   id: number;
   path: string;
   uuid: string;
   feature_id: number;
   asset_type: string;
+  assetPath: string;
 }
+
+export class FeatureAsset implements IFeatureAsset {
+  id: number;
+  path: string;
+  uuid: string;
+  feature_id: number;
+  asset_type: string;
+
+  // TODO: Implenent this
+  get assetPath(): string {
+    return '';
+  }
+
+}
+
 
 interface FeatureStyles {
   [key: string]: string | number;
@@ -94,10 +111,9 @@ export interface Overlay {
 }
 
 interface AppGeoJSONFeature extends GeoJSONFeature {
-  assets?: Array<FeatureAsset>;
+  assets?: Array<IFeatureAsset>;
   styles?: FeatureStyles;
-  featureSource?: string;
-  featureType?(): string;
+  // featureType?(): String
 }
 
 export class FeatureCollection implements IFeatureCollection {
@@ -111,7 +127,7 @@ export class Feature implements AppGeoJSONFeature {
   properties: GeoJsonProperties;
   id?: string | number;
   type: any;
-  assets?: Array<FeatureAsset>;
+  assets?: Array<IFeatureAsset>;
   styles?: FeatureStyles;
 
   constructor(f: AppGeoJSONFeature) {
@@ -123,9 +139,7 @@ export class Feature implements AppGeoJSONFeature {
     this.styles = f.styles;
   }
 
-
-
-  featureType(): string {
+  featureType?(): string {
     if (this.assets &&
         this.assets.length === 1) {
       return this.assets[0].asset_type;

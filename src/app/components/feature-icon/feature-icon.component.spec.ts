@@ -1,7 +1,7 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import {FeatureIconComponent} from './feature-icon.component';
-import {Feature, FeatureAsset} from "../../models/models";
+import {Feature, IFeatureAsset} from "../../models/models";
 
 describe('FeatureIconComponent', () => {
   let component: FeatureIconComponent;
@@ -30,7 +30,7 @@ describe('FeatureIconComponent', () => {
       type: "Feature",
       geometry: {type: 'Point', coordinates: [0, 0]},
       properties: {},
-      assets: [<FeatureAsset>{asset_type: 'image'}]
+      assets: [<IFeatureAsset>{asset_type: 'image'}]
     });
     fixture.detectChanges();
     const i = element.querySelector('i');
@@ -42,7 +42,7 @@ describe('FeatureIconComponent', () => {
       type: "Feature",
       geometry: {type: 'Point', coordinates: [0, 0]},
       properties: {},
-      assets: [<FeatureAsset>{asset_type: 'video'}]
+      assets: [<IFeatureAsset>{asset_type: 'video'}]
     });
     fixture.detectChanges();
     const i = element.querySelector('i');
