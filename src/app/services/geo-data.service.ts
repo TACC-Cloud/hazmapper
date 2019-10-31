@@ -15,6 +15,8 @@ import {RemoteFile} from 'ng-tapis';
 })
 export class GeoDataService {
 
+
+  // TODO: clean this up and put the observables up here. Also look into Replay/Behavior
   private _features: BehaviorSubject<FeatureCollection>;
   private features$: Observable<FeatureCollection>;
   private _activeFeature: BehaviorSubject<any>;
@@ -22,7 +24,7 @@ export class GeoDataService {
   private _basemap: BehaviorSubject<any>;
   private _overlays: BehaviorSubject<any>;
   private _activeOverlay: BehaviorSubject<any>;
-  private _pointClouds: Subject<Array<IPointCloud>> = new Subject<Array<IPointCloud>>();
+  private _pointClouds: ReplaySubject<Array<IPointCloud>> = new ReplaySubject<Array<IPointCloud>>(1);
   public readonly pointClouds: Observable<Array<IPointCloud>> = this._pointClouds.asObservable();
 
   constructor(private http: HttpClient) {

@@ -17,7 +17,8 @@ export class PointCloudsPanelComponent implements OnInit {
 
   ngOnInit() {
 
-    this.geoDataService.pointClouds.subscribe( (next) => {
+    this.geoDataService.pointClouds.subscribe( (next: Array<IPointCloud>) => {
+      console.log(next);
       this.pointClouds = next;
     });
   }

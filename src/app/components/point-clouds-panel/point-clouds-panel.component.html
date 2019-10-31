@@ -1,6 +1,10 @@
 <div class="dock-panel">
   <div class="dock-panel-content">
     <div><span class="dock-panel-title"> Point Clouds </span></div>
-
+    <button class="button hollow expanded tiny">
+      Add
+    </button>
+    <hr>
+    <app-point-cloud-panel-row [pc]="pc" *ngFor="let pc of pointClouds"></app-point-cloud-panel-row>
   </div>
 </div>

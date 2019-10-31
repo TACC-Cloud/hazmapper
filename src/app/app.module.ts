@@ -34,6 +34,7 @@ import { ModalFileBrowserComponent } from './components/modal-file-browser/modal
 import {environment} from '../environments/environment';
 import { ModalCreatePointCloudComponent } from './components/modal-create-point-cloud/modal-create-point-cloud.component';
 import { PointCloudsPanelComponent } from './components/point-clouds-panel/point-clouds-panel.component';
+import { PointCloudPanelRowComponent } from './components/point-cloud-panel-row/point-cloud-panel-row.component';
 
 
 @NgModule({
@@ -54,6 +55,7 @@ import { PointCloudsPanelComponent } from './components/point-clouds-panel/point
     ModalFileBrowserComponent,
     ModalCreatePointCloudComponent,
     PointCloudsPanelComponent,
+    PointCloudPanelRowComponent,
   ],
   imports: [
     // this is for the ng-tapis library
