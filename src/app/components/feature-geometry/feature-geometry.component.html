@@ -1,0 +1,25 @@
+<div class="text-center">
+  <h6 class="">Geometry:{{feature.geometry.type}}</h6>
+  <div [ngSwitch]="feature.geometry.type">
+    <div *ngSwitchCase="'Point'">
+      <table>
+        <thead>
+        <th>Longitude</th>
+        <th>Latitude</th>
+        </thead>
+        <tbody>
+          <tr> <td>{{feature.geometry.coordinates[0]}}</td> <td>{{feature.geometry.coordinates[1]}}</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div *ngSwitchCase="'Polygon'">
+      TODO
+    </div>
+    <div *ngSwitchCase="'MultiPolygon'">
+      TODO
+    </div>
+  </div>
+  <div   *ngIf="feature.geometry.type ==='Polygon' || feature.geometry.type ==='MultiPolygon'">
+    Area: {{area.toFixed(2)}} &#13217;
+  </div>
+</div>

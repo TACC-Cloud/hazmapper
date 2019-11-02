@@ -33,6 +33,7 @@ import {ReactiveFormsModule, FormsModule} from '@angular/forms';
 import { ModalFileBrowserComponent } from './components/modal-file-browser/modal-file-browser.component';
 import {environment} from '../environments/environment';
 import { ModalCreatePointCloudComponent } from './components/modal-create-point-cloud/modal-create-point-cloud.component';
+import { FeatureGeometryComponent } from './components/feature-geometry/feature-geometry.component';
 import { PointCloudsPanelComponent } from './components/point-clouds-panel/point-clouds-panel.component';
 import { PointCloudPanelRowComponent } from './components/point-cloud-panel-row/point-cloud-panel-row.component';
 
@@ -54,6 +55,7 @@ import { PointCloudPanelRowComponent } from './components/point-cloud-panel-row/
     ModalCreateProjectComponent,
     ModalFileBrowserComponent,
     ModalCreatePointCloudComponent,
+    FeatureGeometryComponent,
     PointCloudsPanelComponent,
     PointCloudPanelRowComponent,
   ],

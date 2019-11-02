@@ -13,44 +13,40 @@
     </div>
     <hr>
   </div>
-  <div *ngIf="!feature.assets.length">
-    <ul class="dropdown vertical menu" dropdown>
-      <li class="is-dropdown-submenu-parent">
-        <button dropdownToggle class="dropdown button tiny hollow expanded" aria-controls="dropdown-button">
-          Add asset
-        </button>
-        <ul *dropdownMenu class="menu is-dropdown-submenu" role="menu">
-          <li class="clickable">
-            <label for="upload"> From local file </label>
-            <input type="file" id="upload" style="display: none" (change)="handleAssetFileInput($event.target.files)">
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </div>
-  <div class="cell medium-10 auto asset-detail-content">
+  <div class="cell medium-7 auto asset-detail-content">
+    <div *ngIf="!feature.assets.length" class="text-center">
+      <div data-alert class="alert-box secondary">
+        Feature has no asset.
+      </div>
+      <label for="assetFileUpload" class="button"><i class="fas fa-plus"></i></label>
+      <input type="file" id="assetFileUpload" style="display: none" (change)="handleAssetFileInput($event.target.files)">
+    </div>
+
     <img *ngIf="feature.featureType() ==='image'" [src]="featureSource">
     <video *ngIf="feature.featureType() ==='video'"
            [src]=featureSource
            controls width="100%">
     </video>
-    <app-feature-metadata [feature]="feature"></app-feature-metadata>
+    <div class="cell medium-1 text-center asset-detail-action">
+      <hr>
+      <div *ngIf="feature.featureType() === 'image'">
+        <a [href]="featureSource" download="feature-{{feature.id}}.jpeg">
+          <button class="button small">
+            Download
+          </button>
+        </a>
+      </div>
+      <div *ngIf="feature.featureType() === 'point_cloud'">
+        <a [href]="featureSource+'/index.html'">
+          <button class="button small">
+            View
+          </button>
+        </a>
+      </div>
+    </div>
   </div>
-  <div class="cell medium-1 text-center asset-detail-footer">
-    <hr>
-    <div *ngIf="feature.featureType() === 'image'">
-      <a [href]="featureSource" download="feature-{{feature.id}}.jpeg">
-        <button class="button small">
-          Download
-        </button>
-      </a>
-    </div>
-    <div *ngIf="feature.featureType() === 'point_cloud'">
-      <a [href]="featureSource+'/index.html'">
-        <button class="button small">
-          View
-        </button>
-      </a>
-    </div>
+  <div class="cell medium-4 auto asset-detail-conten">
+    <app-feature-metadata [feature]="feature"></app-feature-metadata>
+    <app-feature-geometry [feature]="feature"></app-feature-geometry>
   </div>
 </div>
