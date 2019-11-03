@@ -34,8 +34,9 @@ export class FeatureGeometryComponent implements OnInit {
 
   calculateArea() {
     return new Promise(resolve => {
-      let area = turf.area(<AllGeoJSON>this.feature.geometry);
-      resolve(area);
+      let value = turf.area(<AllGeoJSON>this.feature.geometry);
+
+      resolve((value) ? value.toFixed(2) : "-----");
     });
   }
 

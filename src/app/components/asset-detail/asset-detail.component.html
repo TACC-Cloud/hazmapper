@@ -14,38 +14,38 @@
     <hr>
   </div>
   <div class="cell medium-7 auto asset-detail-content">
-    <div *ngIf="!feature.assets.length" class="text-center">
-      <div data-alert class="alert-box secondary">
-        Feature has no asset.
-      </div>
-      <label for="assetFileUpload" class="button"><i class="fas fa-plus"></i></label>
-      <input type="file" id="assetFileUpload" style="display: none" (change)="handleAssetFileInput($event.target.files)">
-    </div>
-
     <img *ngIf="feature.featureType() ==='image'" [src]="featureSource">
     <video *ngIf="feature.featureType() ==='video'"
            [src]=featureSource
            controls width="100%">
     </video>
-    <div class="cell medium-1 text-center asset-detail-action">
-      <hr>
-      <div *ngIf="feature.featureType() === 'image'">
-        <a [href]="featureSource" download="feature-{{feature.id}}.jpeg">
-          <button class="button small">
-            Download
-          </button>
-        </a>
-      </div>
-      <div *ngIf="feature.featureType() === 'point_cloud'">
-        <a [href]="featureSource+'/index.html'">
-          <button class="button small">
-            View
-          </button>
-        </a>
-      </div>
-    </div>
   </div>
-  <div class="cell medium-4 auto asset-detail-conten">
+  <div class="cell medium-1 text-center asset-detail-action">
+    <div *ngIf="feature.featureType() === 'image'">
+      <a [href]="featureSource" download="feature-{{feature.id}}.jpeg">
+        <button class="button small">
+          Download
+        </button>
+      </a>
+    </div>
+    <div *ngIf="feature.featureType() === 'point_cloud'">
+      <a [href]="featureSource+'/index.html'">
+        <button class="button small">
+          View
+        </button>
+      </a>
+    </div>
+    <div *ngIf="!feature.assets.length" class="text-center">
+      <div data-alert class="alert-box secondary">
+        Feature has no asset.
+      </div>
+      <label for="assetFileUpload" class="button"><i class="fas fa-plus"></i></label>
+      <input type="file" id="assetFileUpload" style="display: none"
+             (change)="handleAssetFileInput($event.target.files)">
+    </div>
+    <hr>
+  </div>
+  <div class="cell medium-3 asset-detail-content">
     <app-feature-metadata [feature]="feature"></app-feature-metadata>
     <app-feature-geometry [feature]="feature"></app-feature-geometry>
   </div>
