@@ -13,7 +13,16 @@ export class PointCloudPanelRowComponent implements OnInit {
 
   constructor(private geoDataService: GeoDataService) { }
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  addFile(files) {
+    console.log(this.pc);
+    const fileToUpload = files.item(0);
+    this.geoDataService.addFileToPointCloud(this.pc, fileToUpload);
+  }
+
+  delete() {
+    this.geoDataService.deletePointCloud(this.pc);
   }
 
 }

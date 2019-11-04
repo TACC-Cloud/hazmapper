@@ -13,6 +13,7 @@ export interface IPointCloud {
   conversion_parameters: string;
   feature_id?: number;
   task_id?: string;
+  project_id: number;
 }
 
 export class AssetFilters {
@@ -121,6 +122,7 @@ export interface Overlay {
 interface AppGeoJSONFeature extends GeoJSONFeature {
   assets?: Array<IFeatureAsset>;
   styles?: FeatureStyles;
+  project_id?: number;
   // featureType?(): String
 }
 
@@ -137,6 +139,7 @@ export class Feature implements AppGeoJSONFeature {
   type: any;
   assets?: Array<IFeatureAsset>;
   styles?: FeatureStyles;
+  project_id?: number;
 
   constructor(f: AppGeoJSONFeature) {
     this.geometry = f.geometry;
@@ -145,6 +148,7 @@ export class Feature implements AppGeoJSONFeature {
     this.type = f.type;
     this.assets = f.assets;
     this.styles = f.styles;
+    this.project_id = f.project_id;
   }
 
   featureType?(): string {

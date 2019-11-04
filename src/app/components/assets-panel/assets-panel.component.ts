@@ -61,12 +61,7 @@ export class AssetsPanelComponent implements OnInit {
     });
   }
 
-  openPointCloudCreateModal() {
-    const modal: BsModalRef = this.bsModalService.show(ModalCreatePointCloudComponent);
-    // modal.content.onClose.subscribe( (files: Array<RemoteFile>) => {
-    //   this.geoDataService.importFileFromTapis(this.activeProject.id, files);
-    // });
-  }
+
 
 
   handleFileInput(files: FileList) {

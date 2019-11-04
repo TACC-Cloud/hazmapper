@@ -1,2 +1,11 @@
-<app-feature-icon [feature]=feature></app-feature-icon>
-<div > {{feature.properties.label || feature.id}} </div>
+<div class="grid-x flex-child-auto">
+  <div class="cell auto grid-x align-middle" (click)=click()>
+    <app-feature-icon [feature]=feature></app-feature-icon>
+    <div > {{feature.properties.label || feature.id}} </div>
+  </div>
+  <div class="cell large-3 grid-x align-right">
+    <button class="button tiny alert hollow" (click)=delete()>
+      <i class="fas fa-trash"></i>
+    </button>
+  </div>
+</div>

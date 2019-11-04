@@ -1,0 +1,30 @@
+<h4> Create a Point Cloud </h4>
+
+<form [formGroup]="ovCreateForm" (ngSubmit)="submit()">
+  <label> Image:
+    <input type="file" formControlName="image" required="true" (change)="fileSelected($event)">
+  </label>
+  <label> Label:
+    <input type="text" formControlName="label" required="true">
+  </label>
+  <label> Min Lat:
+    <input type="number" formControlName="minLat" required="true">
+  </label>
+  <label> Max Lat:
+    <input type="number" formControlName="maxLat" required="true">
+  </label>
+  <label> Min Lon:
+    <input type="number" formControlName="minLon" required="true">
+  </label>
+  <label> Max Lon:
+    <input type="number" formControlName="maxLon" required="true">
+  </label>
+
+  <hr>
+
+  <div class="button-group small">
+    <button class="button small warning" type="button" (click)="close()">Close</button>
+    <button class="button small align-right" type="submit" [disabled]="!ovCreateForm.valid">Submit</button>
+  </div>
+</form>
+

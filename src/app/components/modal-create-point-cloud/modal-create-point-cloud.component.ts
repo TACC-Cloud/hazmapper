@@ -4,6 +4,7 @@ import {BsModalRef} from 'ngx-foundation';
 import {GeoDataService} from '../../services/geo-data.service';
 import { ProjectsService } from '../../services/projects.service';
 import {Project} from '../../models/models';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-modal-create-point-cloud',
@@ -14,6 +15,7 @@ export class ModalCreatePointCloudComponent implements OnInit {
 
   pcCreateForm: FormGroup;
   project: Project;
+  public readonly onClose: Subject<any> = new Subject<any>();
 
   constructor(private bsModalRef: BsModalRef, private geoDataService: GeoDataService, private projectsService: ProjectsService) { }
 
@@ -32,11 +34,13 @@ export class ModalCreatePointCloudComponent implements OnInit {
   }
 
   submit() {
+
     this.geoDataService.addPointCloud(
       this.project.id,
       this.pcCreateForm.get('description').value,
       this.pcCreateForm.get('conversionParameters').value
     );
+    this.onClose.next(null);
     this.bsModalRef.hide();
   }
 
