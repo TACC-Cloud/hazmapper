@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable, ReplaySubject, Subject} from 'rxjs';
 import {LatLng} from 'leaflet';
-import {AssetFilters, IPointCloud, Overlay} from '../models/models';
+import {AssetFilters, FeatureAsset, IFeatureAsset, IPointCloud, Overlay} from '../models/models';
 import { Feature, FeatureCollection} from '../models/models';
 import { environment } from '../../environments/environment';
 import {Form} from '@angular/forms';
@@ -103,7 +103,6 @@ export class GeoDataService {
       });
   }
 
-
   importFileFromTapis(projectId: number, files: Array<RemoteFile>): void {
 
     const tmp = files.map( f => ({system: f.system, path: f.path}));
@@ -132,7 +131,6 @@ export class GeoDataService {
       });
   }
 
-
   uploadFile(projectId: number, file: File): void {
     const form: FormData = new FormData();
     form.append('file', file, file.name);
@@ -144,6 +142,22 @@ export class GeoDataService {
       }, error => {
         // TODO: Add notification
       });
+  }
+
+  uploadAssetFile(projectId: number, featureId: number, file: File): void {
+    const form: FormData = new FormData();
+    form.append('file', file, file.name);
+    this.http.post<Feature>(environment.apiUrl + `/api/projects/${projectId}/features/${featureId}/assets/`, form)
+        .subscribe( (feature) => {
+          // TODO workaround to update activeFeature
+          let f = this._activeFeature.getValue();
+          if(f && f.id === featureId){
+            this.activeFeature = new Feature(feature);
+            this.getFeatures(projectId);
+          }
+        }, error => {
+          // TODO: Add notification
+        });
   }
 
   getOverlays(projectId: number): void {

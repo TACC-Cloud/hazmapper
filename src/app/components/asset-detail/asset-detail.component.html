@@ -13,16 +13,14 @@
     </div>
     <hr>
   </div>
-  <div class="cell medium-10 auto asset-detail-content">
+  <div class="cell medium-5 auto asset-detail-content">
     <img *ngIf="feature.featureType() ==='image'" [src]="featureSource">
     <video *ngIf="feature.featureType() ==='video'"
            [src]=featureSource
            controls width="100%">
     </video>
-    <app-feature-metadata [feature]="feature"></app-feature-metadata>
   </div>
-  <div class="cell medium-1 text-center asset-detail-footer">
-    <hr>
+  <div class="cell medium-1 text-center asset-detail-action">
     <div *ngIf="feature.featureType() === 'image'">
       <a [href]="featureSource" download="feature-{{feature.id}}.jpeg">
         <button class="button small">
@@ -37,5 +35,18 @@
         </button>
       </a>
     </div>
+    <div *ngIf="!feature.assets.length" class="text-center">
+      <div data-alert class="alert-box secondary">
+        Feature has no asset.
+      </div>
+      <label for="assetFileUpload" class="button"><i class="fas fa-plus"></i></label>
+      <input type="file" id="assetFileUpload" style="display: none"
+             (change)="handleAssetFileInput($event.target.files)">
+    </div>
+    <hr>
+  </div>
+  <div class="cell medium-5 asset-detail-content">
+    <app-feature-metadata [feature]="feature"></app-feature-metadata>
+    <app-feature-geometry [feature]="feature"></app-feature-geometry>
   </div>
 </div>

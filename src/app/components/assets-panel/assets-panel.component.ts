@@ -1,13 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {FeatureCollection} from 'geojson';
 import {GeoDataService} from '../../services/geo-data.service';
-import {AssetFilters, Feature, Project} from '../../models/models';
+import {FeatureAsset, Feature, Project} from '../../models/models';
 import {BsModalRef, BsModalService} from 'ngx-foundation';
 import {ModalFileBrowserComponent} from '../modal-file-browser/modal-file-browser.component';
 import { ModalCreatePointCloudComponent} from '../modal-create-point-cloud/modal-create-point-cloud.component';
 import {ProjectsService} from '../../services/projects.service';
 import {RemoteFile} from 'ng-tapis';
-import {Subject} from 'rxjs';
 import { ScrollableArray } from '../../utils/ScrollableArray';
 
 
@@ -60,7 +59,6 @@ export class AssetsPanelComponent implements OnInit {
       this.geoDataService.importFileFromTapis(this.activeProject.id, files);
     });
   }
-
 
 
 
