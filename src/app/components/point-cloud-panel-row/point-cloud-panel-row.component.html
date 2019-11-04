@@ -3,7 +3,13 @@
     <span>{{pc.description}}</span>
   </div>
   <div class="cell small-6 right">
-    <button class="button success tiny hollow">Add File</button>
+      <label class="button success tiny hollow">
+         Add las/laz
+        <input type="file" accept=".las, .laz" style="display: none" (change)="addFile($event.target.files)">
+      </label>
+    <button class="button alert tiny hollow" (click)="delete()">
+      <i class="fas fa-trash"></i>
+    </button>
   </div>
 </div>
 

@@ -8,6 +8,9 @@
     </div>
     <hr>
     <h6> Overlays </h6>
+    <button class="button expanded hollow tiny success" (click)="openCreateOverlayModal()">
+      <i class="fa fa-plus"></i>
+    </button>
     <div *ngFor="let ov of overlays" class="overlay" (click)="selectOverlay(ov)">
       <div class="grid-x grid-padding-x align-middle">
         <div class="cell small-4 panel-thumbnail">

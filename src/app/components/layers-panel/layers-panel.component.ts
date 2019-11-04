@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {GeoDataService} from "../../services/geo-data.service";
-import {Overlay} from "../../models/models";
-import {AppEnvironment, environment} from "../../../environments/environment";
+import {GeoDataService} from '../../services/geo-data.service';
+import {Overlay} from '../../models/models';
+import {AppEnvironment, environment} from '../../../environments/environment';
+import {BsModalRef, BsModalService} from 'ngx-foundation';
+import {ModalCreateOverlayComponent} from '../modal-create-overlay/modal-create-overlay.component';
 
 @Component({
   selector: 'app-layers-panel',
@@ -10,31 +12,40 @@ import {AppEnvironment, environment} from "../../../environments/environment";
 })
 export class LayersPanelComponent implements OnInit {
 
-  basemap : string;
-  overlays : Array<Overlay>;
+  basemap: string;
+  overlays: Array<Overlay>;
   environment: AppEnvironment;
 
-  constructor(private GeoDataService: GeoDataService) {
+  constructor(private geoDataService: GeoDataService, private bsModalService: BsModalService) {
 
   }
 
   ngOnInit() {
     this.environment = environment;
-    this.GeoDataService.overlays.subscribe((ovs)=>{
+    this.geoDataService.overlays.subscribe((ovs) => {
       this.overlays = ovs;
-    })
-    this.GeoDataService.basemap.subscribe( (next)=>{
+    });
+    this.geoDataService.basemap.subscribe( (next) => {
       this.basemap = next;
-    })
+    });
   }
 
-  selectBasemap(bmap: string) : void {
+  selectBasemap(bmap: string): void {
     this.basemap = bmap;
-    this.GeoDataService.basemap = this.basemap;
+    this.geoDataService.basemap = this.basemap;
   }
 
-  selectOverlay(ov) : void {
-    this.GeoDataService.activeOverlay = ov;
+  selectOverlay(ov): void {
+    this.geoDataService.activeOverlay = ov;
   }
+
+  openCreateOverlayModal() {
+    const modal: BsModalRef = this.bsModalService.show(ModalCreateOverlayComponent);
+    modal.content.onClose.subscribe( (next) => {
+      console.log(next);
+    });
+  }
+
+
 
 }

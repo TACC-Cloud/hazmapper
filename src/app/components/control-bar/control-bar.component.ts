@@ -16,7 +16,7 @@ import {interval, Observable, Subscription} from 'rxjs';
 })
 export class ControlBarComponent implements OnInit {
 
-  private REFRESHTIME = 60000; // 60 secs per reload
+  private REFRESHTIME = 60; // 60 secs per reload
   public projects: Project[];
   public selectedProject: Project;
   public mapMouseLocation: LatLng = new LatLng(0, 0);

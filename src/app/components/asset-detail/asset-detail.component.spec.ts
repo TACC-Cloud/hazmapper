@@ -19,8 +19,8 @@ describe('AssetDetailComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ AssetDetailComponent ],
       providers: [ {
-        provide:GeoDataService,
-        useClass:MockData
+        provide: GeoDataService,
+        useClass: MockData
       }],
       schemas: [NO_ERRORS_SCHEMA]
     })

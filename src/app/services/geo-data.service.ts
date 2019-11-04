@@ -24,7 +24,7 @@ export class GeoDataService {
   private _basemap: BehaviorSubject<any>;
   private _overlays: BehaviorSubject<any>;
   private _activeOverlay: BehaviorSubject<any>;
-  private _pointClouds: ReplaySubject<Array<IPointCloud>> = new ReplaySubject<Array<IPointCloud>>(1);
+  private _pointClouds: BehaviorSubject<Array<IPointCloud>> = new BehaviorSubject<Array<IPointCloud>>(null);
   public readonly pointClouds: Observable<Array<IPointCloud>> = this._pointClouds.asObservable();
 
   constructor(private http: HttpClient) {
@@ -50,9 +50,17 @@ export class GeoDataService {
       });
   }
 
+  deleteFeature(feature: Feature) {
+    this.http.delete(environment.apiUrl + `/projects/${feature.project_id}/features/${feature.id}/`)
+      .subscribe( (resp) => {
+        this.getFeatures(feature.project_id);
+      });
+  }
+
   getPointClouds(projectId: number) {
     this.http.get<Array<IPointCloud>>(environment.apiUrl + `/projects/${projectId}/point-cloud/`)
       .subscribe( (resp ) => {
+        console.log(resp);
         this._pointClouds.next(resp);
       });
   }
@@ -71,9 +79,27 @@ export class GeoDataService {
     };
     this.http.post(environment.apiUrl + `/projects/${projectId}/point-cloud/`, payload)
       .subscribe( (resp) => {
-        console.log(resp);
+        this.getPointClouds(projectId);
       }, error => {
         // TODO: notification
+      });
+  }
+
+  deletePointCloud(pc: IPointCloud): void {
+    console.log(pc);
+    this.http.delete(environment.apiUrl + `/projects/${pc.project_id}/point-cloud/${pc.id}/`)
+      .subscribe( (resp) => {
+        this.getPointClouds(pc.project_id);
+      });
+  }
+
+  addFileToPointCloud(pc: IPointCloud, file: File) {
+    const form = new FormData();
+    form.append('file', file);
+    console.log(pc);
+    this.http.post(environment.apiUrl + `/projects/${pc.project_id}/point-cloud/${pc.id}/`, form)
+      .subscribe( (resp) => {
+        console.log(resp);
       });
   }
 
@@ -108,7 +134,7 @@ export class GeoDataService {
   uploadFile(projectId: number, file: File): void {
     const form: FormData = new FormData();
     form.append('file', file, file.name);
-    this.http.post<Array<Feature>>(environment.apiUrl + `/api/projects/${projectId}/features/files/`, form)
+    this.http.post<Array<Feature>>(environment.apiUrl + `/projects/${projectId}/features/files/`, form)
       .subscribe( (feats) => {
         feats.forEach( (feat) => {
           this.addFeature(new Feature(feat));
@@ -135,9 +161,24 @@ export class GeoDataService {
   }
 
   getOverlays(projectId: number): void {
-    this.http.get(environment.apiUrl + `/api/projects/${projectId}/overlays/`).subscribe( (ovs: Array<Overlay>) => {
+    this.http.get(environment.apiUrl + `/projects/${projectId}/overlays/`).subscribe( (ovs: Array<Overlay>) => {
       this._overlays.next(ovs);
     });
+  }
+
+  addOverlay(projectId: number, file: File, label: string, minLat: number, maxLat: number, minLon: number, maxLon: number) {
+    const payload = new FormData();
+    payload.append('file', file);
+    payload.append('label', label);
+    payload.append('minLat', minLat.toFixed(6));
+    payload.append('maxLat', maxLat.toFixed(6));
+    payload.append('minLon', minLon.toFixed(6));
+    payload.append('maxLon', maxLon.toFixed(6));
+
+    this.http.post(environment.apiUrl + `/projects/${projectId}/overlays/`, payload)
+      .subscribe((resp) => {
+        this.getOverlays(projectId);
+      });
   }
 
   public get overlays(): Observable<Array<Overlay>> {
