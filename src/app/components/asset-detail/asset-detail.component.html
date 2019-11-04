@@ -13,7 +13,7 @@
     </div>
     <hr>
   </div>
-  <div class="cell medium-7 auto asset-detail-content">
+  <div class="cell medium-5 auto asset-detail-content">
     <img *ngIf="feature.featureType() ==='image'" [src]="featureSource">
     <video *ngIf="feature.featureType() ==='video'"
            [src]=featureSource
@@ -45,7 +45,7 @@
     </div>
     <hr>
   </div>
-  <div class="cell medium-3 asset-detail-content">
+  <div class="cell medium-5 asset-detail-content">
     <app-feature-metadata [feature]="feature"></app-feature-metadata>
     <app-feature-geometry [feature]="feature"></app-feature-geometry>
   </div>
