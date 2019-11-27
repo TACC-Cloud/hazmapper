@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable, ReplaySubject, Subject} from 'rxjs';
 import {LatLng} from 'leaflet';
+import {FilterService} from './filter.service';
 import {AssetFilters, FeatureAsset, IFeatureAsset, IPointCloud, Overlay} from '../models/models';
 import { Feature, FeatureCollection} from '../models/models';
 import { environment } from '../../environments/environment';
-import {Form} from '@angular/forms';
 import {take} from 'rxjs/operators';
 import * as querystring from 'querystring';
 import {RemoteFile} from 'ng-tapis';
@@ -25,9 +25,10 @@ export class GeoDataService {
   private _overlays: BehaviorSubject<any>;
   private _activeOverlay: BehaviorSubject<any>;
   private _pointClouds: BehaviorSubject<Array<IPointCloud>> = new BehaviorSubject<Array<IPointCloud>>(null);
+  private _assetFilters: AssetFilters;
   public readonly pointClouds: Observable<Array<IPointCloud>> = this._pointClouds.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private filterService: FilterService) {
     this._features = new BehaviorSubject<FeatureCollection>({type: 'FeatureCollection', features: []});
     this.features$ = this._features.asObservable();
     this._activeFeature = new BehaviorSubject<any>(null);
@@ -39,10 +40,14 @@ export class GeoDataService {
     // Holds all of the overlays on a project
     this._overlays = new BehaviorSubject<any>(null);
     this._activeOverlay = new BehaviorSubject<any>(null);
+
+    this.filterService.assetFilter.subscribe( (next) => {
+      this._assetFilters = next;
+    });
   }
 
-  getFeatures(projectId: number, query: AssetFilters = new AssetFilters()): void {
-    const qstring: string = querystring.stringify(query.toJson());
+  getFeatures(projectId: number): void {
+    const qstring: string = querystring.stringify(this._assetFilters.toJson());
     this.http.get<FeatureCollection>(environment.apiUrl + `/projects/${projectId}/features/` + '?' + qstring)
       .subscribe( (fc: FeatureCollection) => {
         fc.features = fc.features.map( (feat: Feature) => new Feature(feat));
@@ -60,7 +65,6 @@ export class GeoDataService {
   getPointClouds(projectId: number) {
     this.http.get<Array<IPointCloud>>(environment.apiUrl + `/projects/${projectId}/point-cloud/`)
       .subscribe( (resp ) => {
-        console.log(resp);
         this._pointClouds.next(resp);
       });
   }

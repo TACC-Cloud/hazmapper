@@ -22,14 +22,6 @@ export class AssetFilters {
   bbox: Array<number> = [];
   assetType: Set<string> = new Set<string>();
 
-  updateAssetTypes(assetType: string) {
-    this.assetType.has(assetType) ? this.assetType.delete(assetType) : this.assetType.add(assetType);
-  }
-
-  updateBBox(bbox: Array<number>): void {
-    this.bbox = bbox;
-  }
-
   toJson() {
     return {
       assetType: [...this.assetType],
