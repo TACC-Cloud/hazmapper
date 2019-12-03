@@ -6,7 +6,6 @@ import {BehaviorSubject, Observable} from "rxjs";
   providedIn: 'root'
 })
 
-
 export class FilterService {
   private readonly _assetFilter: BehaviorSubject<AssetFilters> = new BehaviorSubject(new AssetFilters);
   public readonly assetFilter: Observable<AssetFilters> = this._assetFilter.asObservable();

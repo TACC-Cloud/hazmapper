@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FilterService} from '../../services/filter.service';
+import {featureTypes, featureTypeLabels} from '../../constants/assets';
 import {GeoDataService} from '../../services/geo-data.service';
 import {AssetFilters, Project} from '../../models/models';
 import {ProjectsService} from '../../services/projects.service';
@@ -13,6 +14,9 @@ export class FiltersPanelComponent implements OnInit {
 
   assetFilters: AssetFilters;
   activeProject: Project;
+
+  readonly featureTypes = featureTypes;
+  readonly featureTypeLabels = featureTypeLabels;
 
   constructor(private filterService: FilterService, private geoDataService: GeoDataService, private projectsService: ProjectsService) { }
 
