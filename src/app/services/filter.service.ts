@@ -16,7 +16,7 @@ export class FilterService {
 
   updateAssetTypes(assetType: string) {
     let updatedAssetFilter = this._assetFilter.getValue();
-    updatedAssetFilter.assetType.has(assetType) ? updatedAssetFilter.assetType.delete(assetType) : updatedAssetFilter.assetType.add(assetType);
+    updatedAssetFilter.assetType = updatedAssetFilter.assetType===assetType ? "": assetType;
     this.setAssetFilter(updatedAssetFilter);
   }
 

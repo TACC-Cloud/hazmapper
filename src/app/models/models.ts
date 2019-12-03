@@ -20,11 +20,11 @@ export class AssetFilters {
 
   // bbox has the following format: [sw_lng, sw_lat, ne_lng, ne_lat], the same as leaflet
   bbox: Array<number> = [];
-  assetType: Set<string> = new Set<string>();
+  assetType: string = '';
 
   toJson() {
     return {
-      assetType: [...this.assetType],
+      assetType: this.assetType,
       bbox: this.bbox
     };
   }

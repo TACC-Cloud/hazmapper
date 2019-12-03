@@ -13,7 +13,7 @@
             <h6>Asset Types</h6>
             <div *ngFor="let ft of featureTypes">
                 <label htmlFor="{{featureTypeLabels[ft]}}Filter">
-                    <input type="checkbox" [id]="featureTypeLabels[ft] +'Filter'" [checked]="assetFilters.assetType.has(ft)"  (change)="updateAssetTypeFilters(ft)">
+                    <input type="checkbox" [id]="featureTypeLabels[ft] +'Filter'" [checked]="assetFilters.assetType === ft"  (change)="updateAssetTypeFilters(ft)">
                     {{featureTypeLabels[ft]}}
                 </label>
             </div>
