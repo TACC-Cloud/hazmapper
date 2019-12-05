@@ -51,6 +51,13 @@ export class GeoDataService {
     this.http.get<FeatureCollection>(environment.apiUrl + `/projects/${projectId}/features/` + '?' + qstring)
       .subscribe( (fc: FeatureCollection) => {
         fc.features = fc.features.map( (feat: Feature) => new Feature(feat));
+
+        // Check if active feature is no longer present (i.e. filtered out, deleted)
+        let f = this._activeFeature.getValue();
+        if(f && !fc.features.some((feat) => feat.id === f.id)) {
+          this.activeFeature = null;
+        }
+
         this._features.next(fc);
       });
   }
