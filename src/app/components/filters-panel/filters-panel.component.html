@@ -4,16 +4,18 @@
         <div>
             <h6>Date Range</h6>
             <div>
-                <label for="todayFilter">Today </label> <input type="checkbox" id="todayFilter">
+                <label for="todayFilter">
+                    <input type="checkbox" id="todayFilter">Today
+                </label>
             </div>
         </div>
         <div>
             <h6>Asset Types</h6>
-            <div>
-                <label for="imageFilter">Images </label> <input type="checkbox" id="imageFilter" (change)="updateAssetTypeFilters('image')">
-            </div>
-            <div>
-                <label for="videoFilter">Videos </label> <input type="checkbox" id="videoFilter" (change)="updateAssetTypeFilters('video')">
+            <div *ngFor="let ft of featureTypes">
+                <label htmlFor="{{featureTypeLabels[ft]}}Filter">
+                    <input type="checkbox" [id]="featureTypeLabels[ft] +'Filter'" [checked]="assetFilters.assetType === ft"  (change)="updateAssetTypeFilters(ft)">
+                    {{featureTypeLabels[ft]}}
+                </label>
             </div>
         </div>
     </div>

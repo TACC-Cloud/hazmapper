@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable, ReplaySubject, Subject} from 'rxjs';
 import {LatLng} from 'leaflet';
+import {FilterService} from './filter.service';
 import {AssetFilters, FeatureAsset, IFeatureAsset, IPointCloud, Overlay} from '../models/models';
 import { Feature, FeatureCollection} from '../models/models';
 import { environment } from '../../environments/environment';
-import {Form} from '@angular/forms';
 import {filter, map, take, toArray} from 'rxjs/operators';
 import * as querystring from 'querystring';
 import {RemoteFile} from 'ng-tapis';
@@ -32,16 +32,28 @@ export class GeoDataService {
   private _selectedOverlays: BehaviorSubject<Array<Overlay>> = new BehaviorSubject<Array<Overlay>>([]);
   public readonly selectedOverlays$: Observable<Array<Overlay>> = this._selectedOverlays.asObservable();
   private _pointClouds: BehaviorSubject<Array<IPointCloud>> = new BehaviorSubject<Array<IPointCloud>>(null);
+  private _assetFilters: AssetFilters;
   public readonly pointClouds: Observable<Array<IPointCloud>> = this._pointClouds.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private filterService: FilterService) {
+
+    this.filterService.assetFilter.subscribe( (next) => {
+      this._assetFilters = next;
+    });
   }
 
-  getFeatures(projectId: number, query: AssetFilters = new AssetFilters()): void {
-    const qstring: string = querystring.stringify(query.toJson());
+  getFeatures(projectId: number): void {
+    const qstring: string = querystring.stringify(this._assetFilters.toJson());
     this.http.get<FeatureCollection>(environment.apiUrl + `/projects/${projectId}/features/` + '?' + qstring)
       .subscribe( (fc: FeatureCollection) => {
         fc.features = fc.features.map( (feat: Feature) => new Feature(feat));
+
+        // Check if active feature is no longer present (i.e. filtered out, deleted)
+        let f = this._activeFeature.getValue();
+        if(f && !fc.features.some((feat) => feat.id === f.id)) {
+          this.activeFeature = null;
+        }
+
         this._features.next(fc);
       });
   }
@@ -56,7 +68,6 @@ export class GeoDataService {
   getPointClouds(projectId: number) {
     this.http.get<Array<IPointCloud>>(environment.apiUrl + `/projects/${projectId}/point-cloud/`)
       .subscribe( (resp ) => {
-        console.log(resp);
         this._pointClouds.next(resp);
       });
   }
