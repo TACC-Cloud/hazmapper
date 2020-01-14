@@ -11,13 +11,21 @@
     <button class="button expanded hollow tiny success" (click)="openCreateOverlayModal()">
       <i class="fa fa-plus"></i>
     </button>
-    <div *ngFor="let ov of overlays" class="overlay" (click)="selectOverlay(ov)">
-      <div class="grid-x grid-padding-x align-middle">
+    <div *ngFor="let ov of overlays" class="overlay">
+      <div class="grid-x align-middle overlay-content" [ngClass]="{'active-overlay': ov.isActive}">
         <div class="cell small-4 panel-thumbnail">
           <img src="{{environment.apiUrl}}/assets/{{ov.project_id}}/{{ov.uuid}}.thumb.jpeg">
         </div>
-        <div class="cell auto">
+        <div class="cell auto" (click)="selectOverlay(ov)">
           <span class="overlay-label"> {{ov.label}} </span>
+        </div>
+        <div class="cell grid-x auto align-right">
+            <button
+              class="button tiny hollow alert button-no-margin"
+              (click)="deleteOverlay(ov)"
+            >
+              <i class="fa fa-trash"></i>
+            </button>
         </div>
       </div>
     </div>

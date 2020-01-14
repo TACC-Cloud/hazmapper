@@ -24,7 +24,6 @@ export class PointCloudsPanelComponent implements OnInit {
     });
 
     this.geoDataService.pointClouds.subscribe( (next: Array<IPointCloud>) => {
-      console.log(next);
       this.pointClouds = next;
     });
   }

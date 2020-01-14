@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {GeoDataService} from '../../services/geo-data.service';
-import {Overlay} from '../../models/models';
+import {Overlay, Project} from '../../models/models';
 import {AppEnvironment, environment} from '../../../environments/environment';
 import {BsModalRef, BsModalService} from 'ngx-foundation';
 import {ModalCreateOverlayComponent} from '../modal-create-overlay/modal-create-overlay.component';
+import {ProjectsService} from '../../services/projects.service';
 
 @Component({
   selector: 'app-layers-panel',
@@ -15,8 +16,11 @@ export class LayersPanelComponent implements OnInit {
   basemap: string;
   overlays: Array<Overlay>;
   environment: AppEnvironment;
+  activeProject: Project;
 
-  constructor(private geoDataService: GeoDataService, private bsModalService: BsModalService) {
+  constructor(private geoDataService: GeoDataService,
+              private bsModalService: BsModalService,
+              private projectsService: ProjectsService) {
 
   }
 
@@ -28,6 +32,9 @@ export class LayersPanelComponent implements OnInit {
     this.geoDataService.basemap.subscribe( (next) => {
       this.basemap = next;
     });
+    this.projectsService.activeProject.subscribe( (next) => {
+      this.activeProject = next;
+    });
   }
 
   selectBasemap(bmap: string): void {
@@ -36,8 +43,15 @@ export class LayersPanelComponent implements OnInit {
   }
 
   selectOverlay(ov): void {
-    this.geoDataService.activeOverlay = ov;
+    ov.isActive = !ov.isActive;
+    this.geoDataService.selectOverlay(ov);
   }
+
+  deleteOverlay(ov: Overlay) {
+    this.geoDataService.deleteOverlay(this.activeProject.id, ov);
+
+  }
+
 
   openCreateOverlayModal() {
     const modal: BsModalRef = this.bsModalService.show(ModalCreateOverlayComponent);
