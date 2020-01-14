@@ -6,7 +6,7 @@ import {FilterService} from './filter.service';
 import {AssetFilters, FeatureAsset, IFeatureAsset, IPointCloud, Overlay} from '../models/models';
 import { Feature, FeatureCollection} from '../models/models';
 import { environment } from '../../environments/environment';
-import {take} from 'rxjs/operators';
+import {filter, map, take, toArray} from 'rxjs/operators';
 import * as querystring from 'querystring';
 import {RemoteFile} from 'ng-tapis';
 
@@ -17,29 +17,25 @@ export class GeoDataService {
 
 
   // TODO: clean this up and put the observables up here. Also look into Replay/Behavior
-  private _features: BehaviorSubject<FeatureCollection>;
-  private features$: Observable<FeatureCollection>;
-  private _activeFeature: BehaviorSubject<any>;
-  private _mapMouseLocation: BehaviorSubject<any>;
-  private _basemap: BehaviorSubject<any>;
-  private _overlays: BehaviorSubject<any>;
-  private _activeOverlay: BehaviorSubject<any>;
+  private _features: BehaviorSubject<FeatureCollection> = new BehaviorSubject<FeatureCollection>({type: 'FeatureCollection', features: []});
+  private features$: Observable<FeatureCollection> = this._features.asObservable();
+  private _activeFeature: BehaviorSubject<Feature> = new BehaviorSubject<Feature>(null);
+  private activeFeature$: Observable<Feature> = this._activeFeature.asObservable();
+  private _mapMouseLocation: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  private mapMouseLocation$ = this._mapMouseLocation.asObservable();
+  private _basemap: BehaviorSubject<string> = new BehaviorSubject<string>('roads');
+  private basemap$ = this._basemap.asObservable();
+  private _overlays: BehaviorSubject<any> = new BehaviorSubject<Array<Overlay>>(null);
+  private overlays$: Observable<Array<Overlay>> = this._overlays.asObservable();
+  private _activeOverlay: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  private activeOverlay$: Observable<Overlay> = this._activeOverlay.asObservable();
+  private _selectedOverlays: BehaviorSubject<Array<Overlay>> = new BehaviorSubject<Array<Overlay>>([]);
+  public readonly selectedOverlays$: Observable<Array<Overlay>> = this._selectedOverlays.asObservable();
   private _pointClouds: BehaviorSubject<Array<IPointCloud>> = new BehaviorSubject<Array<IPointCloud>>(null);
   private _assetFilters: AssetFilters;
   public readonly pointClouds: Observable<Array<IPointCloud>> = this._pointClouds.asObservable();
 
   constructor(private http: HttpClient, private filterService: FilterService) {
-    this._features = new BehaviorSubject<FeatureCollection>({type: 'FeatureCollection', features: []});
-    this.features$ = this._features.asObservable();
-    this._activeFeature = new BehaviorSubject<any>(null);
-    this._mapMouseLocation = new BehaviorSubject<any>(null);
-
-    // For the style of the basemap, defaults to OpenStreetmap
-    this._basemap = new BehaviorSubject<any>('roads');
-
-    // Holds all of the overlays on a project
-    this._overlays = new BehaviorSubject<any>(null);
-    this._activeOverlay = new BehaviorSubject<any>(null);
 
     this.filterService.assetFilter.subscribe( (next) => {
       this._assetFilters = next;
@@ -161,9 +157,9 @@ export class GeoDataService {
     this.http.post<Feature>(environment.apiUrl + `/api/projects/${projectId}/features/${featureId}/assets/`, form)
         .subscribe( (feature) => {
           // TODO workaround to update activeFeature
-          let f = this._activeFeature.getValue();
-          if(f && f.id === featureId){
-            this.activeFeature = new Feature(feature);
+          const f = this._activeFeature.getValue();
+          if (f && f.id === featureId) {
+            this._activeFeature.next(new Feature(feature));
             this.getFeatures(projectId);
           }
         }, error => {
@@ -192,16 +188,42 @@ export class GeoDataService {
       });
   }
 
+  deleteOverlay(projectId: number, overlay: Overlay) {
+    this.http
+      .delete(environment.apiUrl + `/projects/${projectId}/overlays/${overlay.id}/`)
+      .subscribe((resp) => {
+        // Update the list of overlays, remove the one deleted
+        this.overlays$.pipe(
+          take(1),
+          map( (items: Array<Overlay> ) => items.filter( (item: Overlay) => item.id !== overlay.id)),
+        ).subscribe( (results) =>  {
+          this._overlays.next(results);
+        });
+      }, (error => {
+        console.log(error);
+      }));
+  }
+
+  public selectOverlay(ov: Overlay) {
+    this.overlays$.pipe(
+      take(1),
+      map( (items: Array<Overlay> ) => items.filter( (item: Overlay) => item.isActive))
+    ).subscribe( (results) =>  {
+      console.log(results);
+      this._selectedOverlays.next(results);
+    });
+  }
+
   public get overlays(): Observable<Array<Overlay>> {
-    return this._overlays.asObservable();
+    return this.overlays$;
   }
 
   public get features(): Observable<FeatureCollection> {
-    return this._features.asObservable();
+    return this.features$;
   }
 
   public get activeFeature() {
-    return this._activeFeature.asObservable();
+    return this.activeFeature$;
   }
 
   // TODO: This is heinous
@@ -219,7 +241,7 @@ export class GeoDataService {
   }
 
   public get activeOverlay(): Observable<Overlay> {
-    return this._activeOverlay.asObservable();
+    return this.activeOverlay$;
   }
 
   public set activeOverlay(ov) {
@@ -228,7 +250,7 @@ export class GeoDataService {
 
 
   public get mapMouseLocation(): Observable<LatLng> {
-    return this._mapMouseLocation.asObservable();
+    return this.mapMouseLocation$;
   }
 
   public set mapMouseLocation(loc) {
@@ -240,7 +262,7 @@ export class GeoDataService {
   }
 
   public get basemap(): any {
-    return this._basemap.asObservable();
+    return this.basemap$;
   }
 
 

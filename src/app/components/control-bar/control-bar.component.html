@@ -18,26 +18,27 @@
 
         </div>
     </div>
-    <div class="cell auto">
-        <div class="grid-x align-right align-middle">
+    <div class="cell small-8 align-right align-middle grid-x">
+        <div class="grid-x align-middle order-">
             <div style="padding-right: 5px">
                 <span> Live Refresh </span>
             </div>
-            <div class="switch tiny">
-                <input class="switch-input" id="exampleSwitch" type="checkbox"
-                       name="exampleSwitch"
-                       (change)="setLiveRefresh(liveRefresh)"
-                       [(ngModel)]="liveRefresh">
-                <label class="switch-paddle" for="exampleSwitch">
-                    <span class="show-for-sr">Live refresh</span>
-                </label>
-            </div>
-            <div style="padding-right: 5px;padding-left: 5px">
-                <span class="lat-lon-label"> Lat: </span>
-                <span> {{ mapMouseLocation.lat | number:'.4' }}</span>
-                <span class="lat-lon-label"> Lon: </span>
-                <span> {{ mapMouseLocation.lng | number:'.4' }}</span>
-            </div>
+        </div>
+        <div class="switch tiny">
+            <input class="switch-input" id="exampleSwitch" type="checkbox"
+                   name="exampleSwitch"
+                   (change)="setLiveRefresh(liveRefresh)"
+                   [(ngModel)]="liveRefresh">
+            <label class="switch-paddle" for="exampleSwitch">
+                <span class="show-for-sr">Live refresh</span>
+            </label>
+        </div>
+
+        <div class="grid-x align-right align-middle">
+            <span class="lat-lon-label"> Lat: </span>
+            <div class="lat-lon-number"> {{ mapMouseLocation.lat | number:'.4' }}</div>
+            <span class="lat-lon-label"> Lon: </span>
+            <div class="lat-lon-number"> {{ mapMouseLocation.lng | number:'.4' }}</div>
         </div>
     </div>
 </div>

@@ -1,10 +1,18 @@
+@import '../../../variables.styl'
+
 :host
   .overlay
     padding-bottom 5px
     vertical-align bottom
     cursor pointer
     align-items center
-    :hover
-      background-color lightGrey
+    .panel-thumbnail
+      padding-right 5px
     .overlay-label
       font-size 0.8em
+    .active-overlay
+      background-color lightgreen
+    >.overlay-content
+      padding 5px;
+      .button-no-margin
+        margin 0

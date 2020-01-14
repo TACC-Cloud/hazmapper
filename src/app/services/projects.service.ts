@@ -29,6 +29,7 @@ export class ProjectsService {
       p.name = 'test';
       p.description = 'test';
       // Spread operator, just pushes the new project into the array
+      // TODO: Make this a pipe/observable thingy
       this._projects.next([...this._projects.value, proj]);
       // Set the active project to the one just created?
       this._activeProject.next(proj);
