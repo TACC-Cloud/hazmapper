@@ -11,8 +11,9 @@ export interface IPointCloud {
   description: string;
   conversion_parameters: string;
   feature_id?: number;
-  task_id?: string;
+  task_id?: number;
   project_id: number;
+  files_info: string;
 }
 
 export class AssetFilters {

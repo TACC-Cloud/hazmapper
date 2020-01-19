@@ -106,7 +106,7 @@ export class GeoDataService {
     console.log(pc);
     this.http.post(environment.apiUrl + `/projects/${pc.project_id}/point-cloud/${pc.id}/`, form)
       .subscribe( (resp) => {
-        console.log(resp);
+        this.getPointClouds(pc.project_id);
       });
   }
 

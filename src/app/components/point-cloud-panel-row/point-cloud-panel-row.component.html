@@ -1,14 +1,17 @@
 <div class="grid-x">
-  <div class="cell small-6">
+  <div class="cell small-5">
     <span>{{pc.description}}</span>
   </div>
-  <div class="cell small-6 right">
+  <div class="cell small-7 right">
       <label class="button success tiny hollow">
          Add las/laz
         <input type="file" accept=".las, .laz" style="display: none" (change)="addFile($event.target.files)">
       </label>
     <button class="button alert tiny hollow" (click)="delete()">
       <i class="fas fa-trash"></i>
+    </button>
+    <button class="button tiny hollow" (click)="openPointCloudInfoModal()">
+      <i class="fas fa-info-circle"></i>
     </button>
   </div>
 </div>

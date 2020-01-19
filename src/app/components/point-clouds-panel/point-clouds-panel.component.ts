@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import {GeoDataService} from '../../services/geo-data.service';
 import {ProjectsService} from '../../services/projects.service';
 import {IPointCloud, Project} from '../../models/models';
-import {combineAll} from 'rxjs/operators';
 import {BsModalRef, BsModalService} from 'ngx-foundation';
 import {ModalCreatePointCloudComponent} from '../modal-create-point-cloud/modal-create-point-cloud.component';
 
@@ -34,10 +33,6 @@ export class PointCloudsPanelComponent implements OnInit {
       console.log(next);
       this.geoDataService.getPointClouds(this.activeProject.id);
     });
-  }
-
-  addPointCloud() {
-
   }
 
 }
