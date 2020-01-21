@@ -8,6 +8,7 @@ import { ModalCreatePointCloudComponent} from '../modal-create-point-cloud/modal
 import {ProjectsService} from '../../services/projects.service';
 import {RemoteFile} from 'ng-tapis';
 import { ScrollableArray } from '../../utils/ScrollableArray';
+import {PathTree} from '../../models/path-tree';
 
 
 @Component({
@@ -21,6 +22,7 @@ export class AssetsPanelComponent implements OnInit {
   scrollableFeatures: ScrollableArray<Feature> = new ScrollableArray([]);
   displayFeatures: Array<Feature>;
   activeProject: Project;
+  currentTreeListing: PathTree<Feature>;
 
   constructor(private geoDataService: GeoDataService, private bsModalService: BsModalService, private projectsService: ProjectsService) { }
 
@@ -38,6 +40,13 @@ export class AssetsPanelComponent implements OnInit {
     });
     this.projectsService.activeProject.subscribe( (current) => {
       this.activeProject = current;
+    });
+    this.geoDataService.featureTree$.subscribe( (next) => {
+      console.log(next);
+      for (const level of next.getChildren()) {
+        console.log(level);
+      }
+      this.currentTreeListing = next;
     });
   }
 
@@ -59,8 +68,6 @@ export class AssetsPanelComponent implements OnInit {
       this.geoDataService.importFileFromTapis(this.activeProject.id, files);
     });
   }
-
-
 
   handleFileInput(files: FileList) {
     // tslint:disable-next-line:prefer-for-of

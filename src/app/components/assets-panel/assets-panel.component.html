@@ -18,6 +18,28 @@
             </li>
         </ul>
     </div>
+
+    <div *ngIf="currentTreeListing">
+        <h1> WTF </h1>
+        <ng-template #recursiveFileTree let-node>
+            <div *ngFor="let child of node.getChildren()" style="padding-left: 1em">
+                <div *ngIf="child.isDir()">
+                    <i class="fas fa-folder"></i>
+                    {{ child.getPath() }}
+                </div>
+                <div *ngIf="!child.isDir()" >
+                    <i class="fas fa-file-o"></i>
+                    {{ child.getPath() }}
+                </div>
+                <div *ngIf="child.getSize()">
+                    <ng-container *ngTemplateOutlet="recursiveFileTree; context:{ $implicit: child}"></ng-container>
+                </div>
+            </div>
+        </ng-template>
+        <ng-container *ngTemplateOutlet="recursiveFileTree; context:{ $implicit: currentTreeListing }"></ng-container>
+
+    </div>
+
     <div
         class="dock-panel-content"
         infiniteScroll

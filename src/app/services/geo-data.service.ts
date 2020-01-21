@@ -9,6 +9,7 @@ import { environment } from '../../environments/environment';
 import {filter, map, take, toArray} from 'rxjs/operators';
 import * as querystring from 'querystring';
 import {RemoteFile} from 'ng-tapis';
+import {PathTree} from '../models/path-tree';
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +35,8 @@ export class GeoDataService {
   private _pointClouds: BehaviorSubject<Array<IPointCloud>> = new BehaviorSubject<Array<IPointCloud>>(null);
   private _assetFilters: AssetFilters;
   public readonly pointClouds: Observable<Array<IPointCloud>> = this._pointClouds.asObservable();
+  private _featureTree: ReplaySubject<PathTree<Feature>> = new ReplaySubject<PathTree<Feature>>(1);
+  public readonly featureTree$: Observable<PathTree<Feature>> = this._featureTree.asObservable();
 
   constructor(private http: HttpClient, private filterService: FilterService) {
 
@@ -49,10 +52,16 @@ export class GeoDataService {
         fc.features = fc.features.map( (feat: Feature) => new Feature(feat));
 
         // Check if active feature is no longer present (i.e. filtered out, deleted)
-        let f = this._activeFeature.getValue();
-        if(f && !fc.features.some((feat) => feat.id === f.id)) {
+        // TODO: this should be a stream/observable like in deleteOverlay;
+        const f = this._activeFeature.getValue();
+        if (f && !fc.features.some((feat) => feat.id === f.id)) {
           this.activeFeature = null;
         }
+        const tree = new PathTree<Feature>('');
+        fc.features.forEach( (item) => {
+          tree.insert(item.assets[0].display_path, item, null);
+        });
+        this._featureTree.next(tree);
 
         this._features.next(fc);
       });
