@@ -35,6 +35,7 @@ import { FeatureGeometryComponent } from './components/feature-geometry/feature-
 import { PointCloudsPanelComponent } from './components/point-clouds-panel/point-clouds-panel.component';
 import { PointCloudPanelRowComponent } from './components/point-cloud-panel-row/point-cloud-panel-row.component';
 import { ModalCreateOverlayComponent } from './components/modal-create-overlay/modal-create-overlay.component';
+import { FileTreeNodeComponent } from './components/file-tree-node/file-tree-node.component';
 
 
 @NgModule({
@@ -58,6 +59,7 @@ import { ModalCreateOverlayComponent } from './components/modal-create-overlay/m
     PointCloudsPanelComponent,
     PointCloudPanelRowComponent,
     ModalCreateOverlayComponent,
+    FileTreeNodeComponent,
   ],
   imports: [
     // this is for the ng-tapis library

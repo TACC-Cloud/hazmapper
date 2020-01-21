@@ -105,7 +105,7 @@ export class MapComponent implements OnInit {
     return L.imageOverlay(environment.apiUrl + '/assets/' + ov.path, [[ov.minLat, ov.minLon], [ov.maxLat, ov.maxLon]]);
   }
 
-
+  // TODO: Might have to use NgZone with this, I think that any mouse event is triggering change detection.
   mouseEventHandler(ev: any): void {
     this.geoDataService.mapMouseLocation = ev.latlng;
   }

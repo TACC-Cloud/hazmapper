@@ -59,7 +59,15 @@ export class GeoDataService {
         }
         const tree = new PathTree<Feature>('');
         fc.features.forEach( (item) => {
-          tree.insert(item.assets[0].display_path, item, null);
+          let featurePath: string = null;
+          if (item.assets.length) {
+            // If the asset was uploaded, there will be no display path
+            featurePath = item.assets[0].display_path || item.id.toString();
+          } else {
+            featurePath = item.id.toString();
+          }
+          console.log(featurePath);
+          tree.insert(featurePath, item, null);
         });
         this._featureTree.next(tree);
 

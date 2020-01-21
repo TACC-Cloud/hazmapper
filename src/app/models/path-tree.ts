@@ -70,6 +70,13 @@ class PathTree<T> {
     return this.children.size;
   }
 
+  public getPayload(): T {
+    return this._payload;
+  }
+
+  public getChildrenAsArray(): Array<PathTree<T>> {
+    return [...this.getChildren()];
+  }
 
   public insert(path: string, payload: any, metadata: any = null) {
     // TODO: payload can be nulled if the insert is for a directory, i.e. path ends with '/';
@@ -145,8 +152,8 @@ class PathTree<T> {
   }
 
   public * getChildren(): IterableIterator<PathTree<T>> {
+    // console.log("Called getChildren");
     for (const [key, node] of this.children) {
-      console.log(node);
       yield node;
     }
   }

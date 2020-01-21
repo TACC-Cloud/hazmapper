@@ -1,68 +1,69 @@
 <div class="dock-panel">
-    <div class="dock-panel-header">
-        <span class="dock-panel-title"> Assets </span>
-    </div>
-    <div>
-        <ul class="dropdown vertical menu" dropdown>
-            <li class="is-dropdown-submenu-parent">
-                <button dropdownToggle class="dropdown button tiny hollow expanded" aria-controls="dropdown-button">
-                    Add
-                </button>
-                <ul *dropdownMenu class="menu is-dropdown-submenu" role="menu">
-                    <li class="clickable" (click)="openFileBrowserModal()">From DesignSafe</li>
-                    <li class="clickable">
-                        <label for="upload"> From local file </label>
-                        <input type="file" id="upload" style="display: none" (change)="handleFileInput($event.target.files)">
-                    </li>
-                </ul>
-            </li>
+  <div class="dock-panel-header">
+    <span class="dock-panel-title"> Assets </span>
+  </div>
+  <div>
+    <ul class="dropdown vertical menu" dropdown>
+      <li class="is-dropdown-submenu-parent">
+        <button dropdownToggle class="dropdown button tiny hollow expanded" aria-controls="dropdown-button">
+          Add
+        </button>
+        <ul *dropdownMenu class="menu is-dropdown-submenu" role="menu">
+          <li class="clickable" (click)="openFileBrowserModal()">From DesignSafe</li>
+          <li class="clickable">
+            <label for="upload"> From local file </label>
+            <input type="file" id="upload" style="display: none" (change)="handleFileInput($event.target.files)">
+          </li>
         </ul>
-    </div>
+      </li>
+    </ul>
+  </div>
 
-    <div *ngIf="currentTreeListing">
-        <h1> WTF </h1>
-        <ng-template #recursiveFileTree let-node>
-            <div *ngFor="let child of node.getChildren()" style="padding-left: 1em">
-                <div *ngIf="child.isDir()">
-                    <i class="fas fa-folder"></i>
-                    {{ child.getPath() }}
-                </div>
-                <div *ngIf="!child.isDir()" >
-                    <i class="fas fa-file-o"></i>
-                    {{ child.getPath() }}
-                </div>
-                <div *ngIf="child.getSize()">
-                    <ng-container *ngTemplateOutlet="recursiveFileTree; context:{ $implicit: child}"></ng-container>
-                </div>
-            </div>
-        </ng-template>
-        <ng-container *ngTemplateOutlet="recursiveFileTree; context:{ $implicit: currentTreeListing }"></ng-container>
+  <!-- TODO: Dear lord, we now have a recursive template. God help us. <-->
+  <!--    TODO: Create <tree-folder-node> and <tree-file-node> elements that are clickable/hideable-->
+<!--  <div *ngIf="currentTreeListing">-->
+<!--    <h1> WTF </h1>-->
+<!--    <ng-template #recursiveFileTree let-currentNode>-->
+<!--      <div *ngFor="let child of currentNode.getChildren()" style="padding-left: 1em">-->
+<!--        <app-file-tree-node [node]="child" (click)="selectFeature(child.getPayload())"></app-file-tree-node>-->
+<!--        <div *ngIf="child.getSize()">-->
+<!--          <ng-container *ngTemplateOutlet="recursiveFileTree; context:{ $implicit: child}"></ng-container>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </ng-template>-->
+<!--    &lt;!&ndash; This inits the template above with the root of the tree listing   &ndash;&gt;-->
+<!--    <ng-container *ngTemplateOutlet="recursiveFileTree; context:{ $implicit: currentTreeListing }"></ng-container>-->
 
-    </div>
+<!--  </div>-->
 
-    <div
-        class="dock-panel-content"
-        infiniteScroll
-        [infiniteScrollDistance]="1"
-        [infiniteScrollUpDistance]="1"
-        [infiniteScrollThrottle]="100"
-        (scrolled)="scrollDown()"
-        (scrolledUp)="scrollUp()"
-        [alwaysCallback]="true"
-        [scrollWindow]="false"
-    >
-        <app-feature-row
-            *ngFor="let feat of displayFeatures"
-            (clickRequest)="selectFeature($event)"
-            [feature]="feat"
-            [ngClass]="{'active': activeFeature && feat.id == activeFeature.id}"
-        >
-        </app-feature-row>
+
+  <div
+    class="dock-panel-content"
+    infiniteScroll
+    [infiniteScrollDistance]="1"
+    [infiniteScrollUpDistance]="1"
+    [infiniteScrollThrottle]="100"
+    (scrolled)="scrollDown()"
+    (scrolledUp)="scrollUp()"
+    [alwaysCallback]="true"
+    [scrollWindow]="false"
+  >
+<!--    <app-feature-row-->
+<!--      *ngFor="let feat of displayFeatures"-->
+<!--      (clickRequest)="selectFeature($event)"-->
+<!--      [feature]="feat"-->
+<!--      [ngClass]="{'active': activeFeature && feat.id == activeFeature.id}"-->
+<!--    >-->
+<!--    </app-feature-row>-->
+    <app-file-tree-node
+      [node]="currentTreeListing"
+      (clickEvent)="selectTreeNode($event)">
+    </app-file-tree-node>
+  </div>
+  <div class="dock-panel-controls">
+    <div class="expanded button-group tiny">
+      <button class="button hollow" (click)="exportGeoJSON()">Export to GeoJSON</button>
+      <!--            <button class="button hollow">Export to KML</button>-->
     </div>
-    <div class="dock-panel-controls">
-        <div class="expanded button-group tiny">
-            <button class="button hollow" (click)="exportGeoJSON()">Export to GeoJSON</button>
-<!--            <button class="button hollow">Export to KML</button>-->
-        </div>
-    </div>
+  </div>
 </div>

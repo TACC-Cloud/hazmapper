@@ -42,10 +42,6 @@ export class AssetsPanelComponent implements OnInit {
       this.activeProject = current;
     });
     this.geoDataService.featureTree$.subscribe( (next) => {
-      console.log(next);
-      for (const level of next.getChildren()) {
-        console.log(level);
-      }
       this.currentTreeListing = next;
     });
   }
@@ -82,6 +78,10 @@ export class AssetsPanelComponent implements OnInit {
 
   selectFeature(feat) {
     this.geoDataService.activeFeature = feat;
+  }
+
+  selectTreeNode(node: PathTree<Feature>) {
+    this.geoDataService.activeFeature = node.getPayload();
   }
 
 }

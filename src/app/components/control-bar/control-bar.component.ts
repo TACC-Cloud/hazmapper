@@ -20,7 +20,7 @@ export class ControlBarComponent implements OnInit {
   public projects: Project[];
   public selectedProject: Project;
   public mapMouseLocation: LatLng = new LatLng(0, 0);
-  public liveRefresh = true;
+  public liveRefresh = false;
   private timer: Observable<number> = interval(this.REFRESHTIME * 1000);
   private timerSubscription: Subscription;
 
