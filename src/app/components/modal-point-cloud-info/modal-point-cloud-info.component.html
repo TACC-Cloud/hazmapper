@@ -29,15 +29,15 @@
       <span *ngIf="pc.task.status==null"> --------------------- </span>
       <span> {{ pc.task.status }} </span>
     </div>
-  </div>
-  <div class="cell small-5 text-left break">
-    <b>Files</b>
-  </div>
-  <div class="cell small-7 text-left break">
-    <span *ngIf="fileInfo==null"> <i>No Files</i> </span>
-    <ul style="list-style-type:circle;">
-      <li *ngFor="let f of fileInfo;">{{f.name}}</li>
-    </ul>
+    <div class="cell small-5 text-left break">
+      <b>Files</b>
+    </div>
+    <div class="cell small-7 text-left break">
+      <span *ngIf="fileInfo==null"> <i>No Files</i> </span>
+      <ul style="list-style-type:disk">
+        <li *ngFor="let f of fileInfo;">{{f.name}}</li>
+      </ul>
+    </div>
   </div>
 </div>
 
