@@ -1,0 +1,23 @@
+<div [ngClass]="{'active': isActiveFeature()}">
+  <div *ngIf="node.isDir() && node.getPath()" class="clickable" (click)="onClick(node)">
+    <i class="fas fa-folder-open" *ngIf="displayChildren"></i>
+    <i class="fas fa-folder" *ngIf="!displayChildren"></i>
+
+    {{ node.getPath() }}
+  </div>
+  <div *ngIf="!node.isDir()" class="clickable grid-x align-middle tree-file-node" (click)="onClick(node)">
+    <app-feature-icon [feature]="node.getPayload()"></app-feature-icon>
+    {{ node.getPath() }}
+  </div>
+  <div class="children" *ngIf="displayChildren && node.getSize()" [style.padding-left]="node.getPath() ? '1em' : '0px'">
+      <app-file-tree-node
+        *ngFor="let child of node.getChildren()"
+        [node]="child"
+        (clickEvent)="onClickChild($event)">
+      </app-file-tree-node>
+  </div>
+</div>
+
+
+
+

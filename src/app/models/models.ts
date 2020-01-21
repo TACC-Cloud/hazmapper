@@ -19,7 +19,7 @@ export class AssetFilters {
 
   // bbox has the following format: [sw_lng, sw_lat, ne_lng, ne_lat], the same as leaflet
   bbox: Array<number> = [];
-  assetType: string = '';
+  assetType = '';
 
   toJson() {
     return {
@@ -75,7 +75,7 @@ export interface IFeatureAsset {
   uuid: string;
   feature_id: number;
   asset_type: string;
-  assetPath: string;
+  display_path: string;
 }
 
 export class FeatureAsset implements IFeatureAsset {
@@ -84,11 +84,7 @@ export class FeatureAsset implements IFeatureAsset {
   uuid: string;
   feature_id: number;
   asset_type: string;
-
-  // TODO: Implenent this
-  get assetPath(): string {
-    return '';
-  }
+  display_path: string | null;
 
 }
 
