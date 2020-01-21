@@ -5,7 +5,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {APP_BASE_HREF} from '@angular/common';
 
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import {ModalModule, BsDropdownModule} from 'ngx-foundation';
+import {ModalModule, BsDropdownModule, TooltipModule} from 'ngx-foundation';
 import { FileSizeModule } from 'ngx-filesize';
 import { ApiModule} from 'ng-tapis';
 
@@ -76,7 +76,7 @@ import { ModalPointCloudInfoComponent } from './components/modal-point-cloud-inf
     FormsModule,
     FileSizeModule,
     BsDropdownModule.forRoot(),
-
+    TooltipModule.forRoot()
   ],
   providers: [
     AuthService,

@@ -10,7 +10,7 @@
     <button class="button alert tiny hollow" (click)="delete()">
       <i class="fas fa-trash"></i>
     </button>
-    <button class="button tiny hollow" (click)="openPointCloudInfoModal()">
+    <button class="button tiny hollow" tooltip="View additional information" [delay]="500" (click)="openPointCloudInfoModal()">
       <i class="fas fa-info-circle"></i>
     </button>
   </div>
