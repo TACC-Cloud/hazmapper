@@ -12,25 +12,29 @@
       <b> <span> Conversion Parameters </span></b>
     </div>
     <div class="cell small-7 text-left break">
-      <span> '{{ pc.conversion_parameters }}' </span>
+      <span *ngIf="pc.conversion_parameters===''"> --------------------- </span>
+      <span *ngIf="pc.conversion_parameters!=null"> {{ pc.conversion_parameters }} </span>
     </div>
     <div class="cell small-5 text-left break">
       <b> <span> Feature Id </span></b>
     </div>
     <div class="cell small-7 text-left break">
+      <span *ngIf="pc.feature_id==null"> --------------------- </span>
       <span> {{ pc.feature_id }} </span>
     </div>
     <div class="cell small-5 text-left break">
-      <b> <span> Processing Task Id </span></b>
+      <b> <span> Processing Status </span></b>
     </div>
     <div class="cell small-7 text-left break">
-      <span> {{ pc.task_id }} </span>
+      <span *ngIf="pc.task.status==null"> --------------------- </span>
+      <span> {{ pc.task.status }} </span>
     </div>
   </div>
   <div class="cell small-5 text-left break">
     <b>Files</b>
   </div>
   <div class="cell small-7 text-left break">
+    <span *ngIf="fileInfo==null"> <i>No Files</i> </span>
     <ul style="list-style-type:circle;">
       <li *ngFor="let f of fileInfo;">{{f.name}}</li>
     </ul>

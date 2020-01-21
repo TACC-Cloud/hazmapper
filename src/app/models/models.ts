@@ -6,12 +6,18 @@ import {Feature as GeoJSONFeature,
 
 // TODO: break these out into their own files
 
+export interface ITask {
+  id: number;
+  status: string;
+  description: string;
+}
+
 export interface IPointCloud {
   id: number;
   description: string;
   conversion_parameters: string;
   feature_id?: number;
-  task_id?: number;
+  task: ITask;
   project_id: number;
   files_info: string;
 }
