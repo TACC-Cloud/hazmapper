@@ -1,12 +1,7 @@
 <div [ngClass]="{'active': isActiveFeature()}">
   <div *ngIf="node.isDir() && node.getPath()" class="clickable" (click)="onClick(node)">
-<<<<<<< HEAD
     <i class="fas fa-folder-open" *ngIf="displayChildren"></i>
     <i class="fas fa-folder" *ngIf="!displayChildren"></i>
-
-=======
-    <i class="fas fa-folder-open"></i>
->>>>>>> 6a85c1dbcfb014630d3ab020d0449cfcf85f21c7
     {{ node.getPath() }}
   </div>
   <div *ngIf="!node.isDir()" class="clickable grid-x align-middle tree-file-node" (click)="onClick(node)">
