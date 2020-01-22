@@ -3,6 +3,7 @@ import {GeoDataService} from '../../services/geo-data.service';
 import {Feature, Project} from '../../models/models';
 import {AppEnvironment, environment} from '../../../environments/environment';
 import {ProjectsService} from "../../services/projects.service";
+import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-asset-detail',
@@ -15,7 +16,10 @@ export class AssetDetailComponent implements OnInit {
   feature: Feature;
   featureSource: string;
   activeProject: Project;
-  constructor(private geoDataService: GeoDataService, private projectsService: ProjectsService) { }
+  safePointCloudUrl: SafeResourceUrl;
+  constructor(private geoDataService: GeoDataService,
+              private projectsService: ProjectsService,
+              public sanitizer: DomSanitizer) { }
 
   ngOnInit() {
     this.environment = environment;
@@ -26,8 +30,15 @@ export class AssetDetailComponent implements OnInit {
         // Strip out any possible double slashes or wso2 gets messed up
         featureSource = featureSource.replace(/([^:])(\/{2,})/g, '$1/');
         this.featureSource = featureSource;
+
+        if(this.feature.featureType() === 'point_cloud') {
+          this.safePointCloudUrl = this.sanitizer.bypassSecurityTrustResourceUrl(featureSource+'/preview.html')
+        } else {
+          this.safePointCloudUrl = null;
+        }
       } catch (e) {
         this.featureSource = null;
+        this.safePointCloudUrl = null;
       }
     });
     this.projectsService.activeProject.subscribe( (current) => {

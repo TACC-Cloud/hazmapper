@@ -4,7 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {APP_BASE_HREF} from '@angular/common';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import {ModalModule, BsDropdownModule} from 'ngx-foundation';
+import {ModalModule, BsDropdownModule, TooltipModule} from 'ngx-foundation';
 import { FileSizeModule } from 'ngx-filesize';
 import { ApiModule} from 'ng-tapis';
 import { AppRoutingModule } from './app-routing.module';
@@ -36,6 +36,7 @@ import { PointCloudsPanelComponent } from './components/point-clouds-panel/point
 import { PointCloudPanelRowComponent } from './components/point-cloud-panel-row/point-cloud-panel-row.component';
 import { ModalCreateOverlayComponent } from './components/modal-create-overlay/modal-create-overlay.component';
 import { FileTreeNodeComponent } from './components/file-tree-node/file-tree-node.component';
+import { ModalPointCloudInfoComponent } from './components/modal-point-cloud-info/modal-point-cloud-info.component';
 
 
 @NgModule({
@@ -60,6 +61,7 @@ import { FileTreeNodeComponent } from './components/file-tree-node/file-tree-nod
     PointCloudPanelRowComponent,
     ModalCreateOverlayComponent,
     FileTreeNodeComponent,
+    ModalPointCloudInfoComponent,
   ],
   imports: [
     // this is for the ng-tapis library
@@ -74,7 +76,7 @@ import { FileTreeNodeComponent } from './components/file-tree-node/file-tree-nod
     FormsModule,
     FileSizeModule,
     BsDropdownModule.forRoot(),
-
+    TooltipModule.forRoot()
   ],
   providers: [
     AuthService,
@@ -94,7 +96,7 @@ import { FileTreeNodeComponent } from './components/file-tree-node/file-tree-nod
     }
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ModalCreateProjectComponent, ModalFileBrowserComponent, ModalCreatePointCloudComponent, ModalCreateOverlayComponent]
+  entryComponents: [ModalCreateProjectComponent, ModalFileBrowserComponent, ModalCreatePointCloudComponent, ModalCreateOverlayComponent, ModalPointCloudInfoComponent]
 })
 export class AppModule { }
 

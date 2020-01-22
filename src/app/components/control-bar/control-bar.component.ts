@@ -47,16 +47,18 @@ export class ControlBarComponent implements OnInit {
       this.mapMouseLocation = next;
     });
     this.timerSubscription = this.timer.subscribe( () => {
-      this.reloadFeatures();
+      this.reloadProject();
     });
   }
 
-  reloadFeatures() {
+  reloadProject() {
     this.geoDataService.getFeatures(this.selectedProject.id);
+    this.geoDataService.getPointClouds(this.selectedProject.id);
+    this.geoDataService.getOverlays(this.selectedProject.id);
   }
 
   setLiveRefresh(option: boolean) {
-    option ? this.timerSubscription = this.timer.subscribe(() => { this.reloadFeatures(); }) : this.timerSubscription.unsubscribe();
+    option ? this.timerSubscription = this.timer.subscribe(() => { this.reloadProject(); }) : this.timerSubscription.unsubscribe();
   }
 
   selectProject(p: Project): void {
