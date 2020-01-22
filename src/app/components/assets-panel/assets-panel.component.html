@@ -20,23 +20,6 @@
   </div>
 
   <!-- TODO: Dear lord, we now have a recursive template. God help us. <-->
-  <!--    TODO: Create <tree-folder-node> and <tree-file-node> elements that are clickable/hideable-->
-<!--  <div *ngIf="currentTreeListing">-->
-<!--    <h1> WTF </h1>-->
-<!--    <ng-template #recursiveFileTree let-currentNode>-->
-<!--      <div *ngFor="let child of currentNode.getChildren()" style="padding-left: 1em">-->
-<!--        <app-file-tree-node [node]="child" (click)="selectFeature(child.getPayload())"></app-file-tree-node>-->
-<!--        <div *ngIf="child.getSize()">-->
-<!--          <ng-container *ngTemplateOutlet="recursiveFileTree; context:{ $implicit: child}"></ng-container>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </ng-template>-->
-<!--    &lt;!&ndash; This inits the template above with the root of the tree listing   &ndash;&gt;-->
-<!--    <ng-container *ngTemplateOutlet="recursiveFileTree; context:{ $implicit: currentTreeListing }"></ng-container>-->
-
-<!--  </div>-->
-
-
   <div
     class="dock-panel-content"
     infiniteScroll
@@ -48,13 +31,6 @@
     [alwaysCallback]="true"
     [scrollWindow]="false"
   >
-<!--    <app-feature-row-->
-<!--      *ngFor="let feat of displayFeatures"-->
-<!--      (clickRequest)="selectFeature($event)"-->
-<!--      [feature]="feat"-->
-<!--      [ngClass]="{'active': activeFeature && feat.id == activeFeature.id}"-->
-<!--    >-->
-<!--    </app-feature-row>-->
     <app-file-tree-node
       [node]="currentTreeListing"
       (clickEvent)="selectTreeNode($event)">
@@ -63,7 +39,6 @@
   <div class="dock-panel-controls">
     <div class="expanded button-group tiny">
       <button class="button hollow" (click)="exportGeoJSON()">Export to GeoJSON</button>
-      <!--            <button class="button hollow">Export to KML</button>-->
     </div>
   </div>
 </div>

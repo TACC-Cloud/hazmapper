@@ -62,9 +62,6 @@ export class MapComponent implements OnInit {
 
     // Publish the mouse location on the mapMouseLocation stream
     this.map.on('mousemove', (ev: LeafletMouseEvent) => this.mouseEventHandler(ev));
-    // this.geoDataService.activeOverlay.pipe(skip(1)).subscribe((next) => {
-    //   this.addRemoveOverlay(next);
-    // });
 
     // Filter out and display only the active overlays
     this.geoDataService.selectedOverlays$
@@ -72,7 +69,6 @@ export class MapComponent implements OnInit {
         map( (items: Array<Overlay>) => items.filter( (item: Overlay) => item.isActive))
       )
       .subscribe( (filteredOverlays: Array<Overlay>) => {
-        console.log(filteredOverlays)
         this.overlays.clearLayers();
         filteredOverlays.forEach( (item: Overlay) => {
           this.overlays.addLayer(this.createOverlayLayer(item));

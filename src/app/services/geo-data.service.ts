@@ -45,6 +45,17 @@ export class GeoDataService {
     });
   }
 
+  private addFeatureToTree(tree: PathTree<any>, feature: Feature) {
+    let featurePath: string = null;
+    if (feature.assets.length) {
+      // If the asset was uploaded, there will be no display path
+      featurePath = feature.assets[0].display_path || feature.id.toString();
+    } else {
+      featurePath = feature.id.toString();
+    }
+    tree.insert(featurePath, feature, null);
+  }
+
   getFeatures(projectId: number): void {
     const qstring: string = querystring.stringify(this._assetFilters.toJson());
     this.http.get<FeatureCollection>(environment.apiUrl + `/projects/${projectId}/features/` + '?' + qstring)
@@ -59,15 +70,16 @@ export class GeoDataService {
         }
         const tree = new PathTree<Feature>('');
         fc.features.forEach( (item) => {
-          let featurePath: string = null;
-          if (item.assets.length) {
-            // If the asset was uploaded, there will be no display path
-            featurePath = item.assets[0].display_path || item.id.toString();
-          } else {
-            featurePath = item.id.toString();
-          }
-          console.log(featurePath);
-          tree.insert(featurePath, item, null);
+          // let featurePath: string = null;
+          // if (item.assets.length) {
+          //   // If the asset was uploaded, there will be no display path
+          //   featurePath = item.assets[0].display_path || item.id.toString();
+          // } else {
+          //   featurePath = item.id.toString();
+          // }
+          // console.log(featurePath);
+          // tree.insert(featurePath, item, null);
+          this.addFeatureToTree(tree, item);
         });
         this._featureTree.next(tree);
 
@@ -93,6 +105,10 @@ export class GeoDataService {
     this.features$.pipe(take(1)).subscribe( (current: FeatureCollection) => {
       current.features.push(feat);
       this._features.next(current);
+    });
+    this.featureTree$.pipe(take(1)).subscribe( (next) => {
+      this.addFeatureToTree(next, feat);
+      this._featureTree.next(next);
     });
   }
 
@@ -173,7 +189,7 @@ export class GeoDataService {
     form.append('file', file, file.name);
     this.http.post<Feature>(environment.apiUrl + `/api/projects/${projectId}/features/${featureId}/assets/`, form)
         .subscribe( (feature) => {
-          // TODO workaround to update activeFeature
+          // TODO workaround to update activeFeature, this should be done with a subscription like in addFeature()
           const f = this._activeFeature.getValue();
           if (f && f.id === featureId) {
             this._activeFeature.next(new Feature(feature));

@@ -42,6 +42,7 @@ export class AssetsPanelComponent implements OnInit {
       this.activeProject = current;
     });
     this.geoDataService.featureTree$.subscribe( (next) => {
+      console.log(next);
       this.currentTreeListing = next;
     });
   }
