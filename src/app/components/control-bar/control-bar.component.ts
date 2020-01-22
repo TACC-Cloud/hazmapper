@@ -47,9 +47,9 @@ export class ControlBarComponent implements OnInit {
     this.geoDataService.mapMouseLocation.pipe(skip(1)).subscribe( (next) => {
       this.mapMouseLocation = next;
     });
-    this.timerSubscription = this.timer.subscribe( () => {
-      this.reloadProject();
-    });
+    // this.timerSubscription = this.timer.subscribe( () => {
+    //   this.reloadProject();
+    // });
   }
 
   reloadProject() {
@@ -59,7 +59,14 @@ export class ControlBarComponent implements OnInit {
   }
 
   setLiveRefresh(option: boolean) {
-    option ? this.timerSubscription = this.timer.subscribe(() => { this.reloadProject(); }) : this.timerSubscription.unsubscribe();
+    if (option) {
+      this.timerSubscription = this.timer.subscribe(() => {
+        this.reloadProject();
+      });
+    } else {
+      this.timerSubscription.unsubscribe();
+      this.timerSubscription = null;
+    }
   }
 
   selectProject(p: Project): void {
