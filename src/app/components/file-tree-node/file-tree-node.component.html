@@ -10,7 +10,7 @@
   </div>
   <div class="children" *ngIf="displayChildren && node.getSize()" [style.padding-left]="node.getPath() ? '1em' : '0px'">
       <app-file-tree-node
-        *ngFor="let child of node.getChildren()"
+        *ngFor="let child of node.getChildren();let i = index; trackBy: i"
         [node]="child"
         (clickEvent)="onClickChild($event)">
       </app-file-tree-node>

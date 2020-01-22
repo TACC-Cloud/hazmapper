@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {ProjectsService} from '../../services/projects.service';
+import {Project} from '../../models/models';
 
 
 interface IpanelsDisplay {
@@ -18,8 +20,9 @@ interface IpanelsDisplay {
 export class DockComponent implements OnInit {
 
   panelsDisplay: IpanelsDisplay;
+  activeProject: Project;
 
-  constructor() { }
+  constructor(private projectsService: ProjectsService) { }
 
   ngOnInit() {
     this.panelsDisplay = <IpanelsDisplay> {
@@ -30,6 +33,11 @@ export class DockComponent implements OnInit {
       measure: false,
       settings: false
     };
+
+    this.projectsService.activeProject.subscribe( (next)=> {
+      this.activeProject = next;
+    });
+
   }
 
   showPanel(pname: string) {

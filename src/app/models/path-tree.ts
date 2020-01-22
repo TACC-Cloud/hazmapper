@@ -1,3 +1,4 @@
+import * as uuidv4 from 'uuid/v4';
 /**
  * A generic Tree data structure. The type T refers to the data/payload attached to each node.
  * Start with a root element of null, then start adding files/folders:
@@ -5,6 +6,7 @@
  * tree.add('a/b/c.txt', 'payload')
  */
 class PathTree<T> {
+  private uuid: string;
   private path: string;
   private _payload: T | null;
   private _metadata: any;
@@ -21,6 +23,7 @@ class PathTree<T> {
     // and create leaf nodes for the rest of the path
     this.path = this.normalizePath(path);
     this._payload = null;
+    this.uuid = uuidv4();
   }
 
 
@@ -73,6 +76,11 @@ class PathTree<T> {
   public getPayload(): T {
     return this._payload;
   }
+
+  public getId(): string {
+    return this.uuid;
+  }
+
 
   public getChildrenAsArray(): Array<PathTree<T>> {
     return [...this.getChildren()];

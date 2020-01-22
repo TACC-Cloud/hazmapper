@@ -1,36 +1,44 @@
 <div class="grid-x">
-  <div class="cell shrink">
-    <div class="dock-button" (click)="showPanel('assets')" [ngClass]="{'active': panelsDisplay.assets}">
-      <div>
-        <img class="dock-button-icon" src="assets/assets.png" width="32px">
-      </div>
-      <div class="dock-button-label">
-        <span>Assets</span>
-      </div>
+  <div class="cell shrink grid-y">
+    <div class="dock-button" [ngClass]="{'active': panelsDisplay.assets}" >
+      <button (click)="showPanel('assets')" [disabled]="!activeProject">
+        <div>
+          <img class="dock-button-icon" src="assets/assets.png" width="32px">
+        </div>
+        <div class="dock-button-label">
+          <span>Assets</span>
+        </div>
+      </button>
     </div>
-    <div class="dock-button" (click)="showPanel('pointClouds')" [ngClass]="{'active': panelsDisplay.pointClouds}">
-      <div>
-        <img class="dock-button-icon" src="assets/point-clouds.png" width="32px">
-      </div>
-      <div class="dock-button-label">
-        <span>Point Clouds</span>
-      </div>
+    <div class="dock-button" [ngClass]="{'active': panelsDisplay.pointClouds}">
+      <button (click)="showPanel('pointClouds')"  [disabled]="!activeProject">
+        <div>
+          <img class="dock-button-icon" src="assets/point-clouds.png" width="32px">
+        </div>
+        <div class="dock-button-label">
+          <span>Point Clouds</span>
+        </div>
+      </button>
     </div>
-    <div class="dock-button" (click)="showPanel('layers')" [ngClass]="{'active':  panelsDisplay.layers}">
-      <div>
-        <img class="dock-button-icon" src="assets/layers.png" width="32px">
-      </div>
-      <div class="dock-button-label">
-        <span>Layers</span>
-      </div>
+    <div class="dock-button" [ngClass]="{'active':  panelsDisplay.layers}">
+      <button (click)="showPanel('layers')"  [disabled]="!activeProject">
+        <div>
+          <img class="dock-button-icon" src="assets/layers.png" width="32px">
+        </div>
+        <div class="dock-button-label">
+          <span>Layers</span>
+        </div>
+      </button>
     </div>
-    <div class="dock-button" (click)="showPanel('filters')" [ngClass]="{'active': panelsDisplay.filters}">
-      <div>
-        <img class="dock-button-icon" src="assets/filters.png" width="32px">
-      </div>
-      <div class="dock-button-label">
-        <span>Filters</span>
-      </div>
+    <div class="dock-button" [ngClass]="{'active': panelsDisplay.filters}">
+      <button (click)="showPanel('filters')"  [disabled]="!activeProject">
+        <div>
+          <img class="dock-button-icon" src="assets/filters.png" width="32px">
+        </div>
+        <div class="dock-button-label">
+          <span>Filters</span>
+        </div>
+      </button>
     </div>
 
     <!--    <div class="dock-button" (click)="showPanel('settings')" [ngClass]="{'active': panelsDisplay.settings}">-->

@@ -17,12 +17,13 @@ import {interval, Observable, Subscription} from 'rxjs';
 export class ControlBarComponent implements OnInit {
 
   private REFRESHTIME = 60; // 60 secs per reload
-  public projects: Project[];
+  public projects: Project[] = [];
   public selectedProject: Project;
   public mapMouseLocation: LatLng = new LatLng(0, 0);
   public liveRefresh = false;
   private timer: Observable<number> = interval(this.REFRESHTIME * 1000);
   private timerSubscription: Subscription;
+  private loading = true;
 
   constructor(private projectsService: ProjectsService,
               private geoDataService: GeoDataService,
@@ -32,7 +33,7 @@ export class ControlBarComponent implements OnInit {
     this.projectsService.getProjects();
     this.projectsService.projects.subscribe( (projects) => {
       this.projects = projects;
-
+      this.loading = false;
       if (this.projects.length) {
         this.projectsService.setActiveProject(this.projects[0]);
       }
