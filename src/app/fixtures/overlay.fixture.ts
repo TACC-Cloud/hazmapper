@@ -1,4 +1,4 @@
-import {Overlay} from "../models/models";
+import {Overlay} from '../models/models';
 
 let overlayFixture: Overlay;
 overlayFixture = <Overlay>{

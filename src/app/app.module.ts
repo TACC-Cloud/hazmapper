@@ -3,12 +3,10 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {APP_BASE_HREF} from '@angular/common';
-
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import {ModalModule, BsDropdownModule, TooltipModule} from 'ngx-foundation';
 import { FileSizeModule } from 'ngx-filesize';
 import { ApiModule} from 'ng-tapis';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MapComponent} from './components/map/map.component';
@@ -37,6 +35,7 @@ import { FeatureGeometryComponent } from './components/feature-geometry/feature-
 import { PointCloudsPanelComponent } from './components/point-clouds-panel/point-clouds-panel.component';
 import { PointCloudPanelRowComponent } from './components/point-cloud-panel-row/point-cloud-panel-row.component';
 import { ModalCreateOverlayComponent } from './components/modal-create-overlay/modal-create-overlay.component';
+import { FileTreeNodeComponent } from './components/file-tree-node/file-tree-node.component';
 import { ModalPointCloudInfoComponent } from './components/modal-point-cloud-info/modal-point-cloud-info.component';
 
 
@@ -61,6 +60,7 @@ import { ModalPointCloudInfoComponent } from './components/modal-point-cloud-inf
     PointCloudsPanelComponent,
     PointCloudPanelRowComponent,
     ModalCreateOverlayComponent,
+    FileTreeNodeComponent,
     ModalPointCloudInfoComponent,
   ],
   imports: [

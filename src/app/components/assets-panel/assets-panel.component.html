@@ -1,46 +1,44 @@
 <div class="dock-panel">
-    <div class="dock-panel-header">
-        <span class="dock-panel-title"> Assets </span>
-    </div>
-    <div>
-        <ul class="dropdown vertical menu" dropdown>
-            <li class="is-dropdown-submenu-parent">
-                <button dropdownToggle class="dropdown button tiny hollow expanded" aria-controls="dropdown-button">
-                    Add
-                </button>
-                <ul *dropdownMenu class="menu is-dropdown-submenu" role="menu">
-                    <li class="clickable" (click)="openFileBrowserModal()">From DesignSafe</li>
-                    <li class="clickable">
-                        <label for="upload"> From local file </label>
-                        <input type="file" id="upload" style="display: none" (change)="handleFileInput($event.target.files)">
-                    </li>
-                </ul>
-            </li>
+  <div class="dock-panel-header">
+    <span class="dock-panel-title"> Assets </span>
+  </div>
+  <div>
+    <ul class="dropdown vertical menu" dropdown>
+      <li class="is-dropdown-submenu-parent">
+        <button dropdownToggle class="dropdown button tiny hollow expanded" aria-controls="dropdown-button">
+          Add
+        </button>
+        <ul *dropdownMenu class="menu is-dropdown-submenu" role="menu">
+          <li class="clickable" (click)="openFileBrowserModal()">From DesignSafe</li>
+          <li class="clickable">
+            <label for="upload"> From local file </label>
+            <input type="file" id="upload" style="display: none" (change)="handleFileInput($event.target.files)">
+          </li>
         </ul>
+      </li>
+    </ul>
+  </div>
+
+  <!-- TODO: Dear lord, we now have a recursive template. God help us. <-->
+  <div
+    class="dock-panel-content"
+    infiniteScroll
+    [infiniteScrollDistance]="1"
+    [infiniteScrollUpDistance]="1"
+    [infiniteScrollThrottle]="100"
+    (scrolled)="scrollDown()"
+    (scrolledUp)="scrollUp()"
+    [alwaysCallback]="true"
+    [scrollWindow]="false"
+  >
+    <app-file-tree-node
+      [node]="currentTreeListing"
+      (clickEvent)="selectTreeNode($event)">
+    </app-file-tree-node>
+  </div>
+  <div class="dock-panel-controls">
+    <div class="expanded button-group tiny">
+      <button class="button hollow" (click)="exportGeoJSON()">Export to GeoJSON</button>
     </div>
-    <div
-        class="dock-panel-content"
-        infiniteScroll
-        [infiniteScrollDistance]="1"
-        [infiniteScrollUpDistance]="1"
-        [infiniteScrollThrottle]="100"
-        (scrolled)="scrollDown()"
-        (scrolledUp)="scrollUp()"
-        [alwaysCallback]="true"
-        [scrollWindow]="false"
-    >
-        <app-feature-row
-            *ngFor="let feat of displayFeatures"
-            (clickRequest)="selectFeature($event)"
-            [feature]="feat"
-            [ngClass]="{'active': activeFeature && feat.id == activeFeature.id}"
-        >
-        </app-feature-row>
-    </div>
-    <div class="dock-panel-controls">
-        <div class="expanded button-group tiny">
-            <button class="button hollow" (click)="exportGeoJSON()">Export to GeoJSON</button>
-<!--            <button class="button hollow">Export to KML</button>-->
-        </div>
-    </div>
+  </div>
 </div>
