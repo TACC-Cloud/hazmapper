@@ -4,9 +4,16 @@
     <i class="fas fa-folder" *ngIf="!displayChildren"></i>
     {{ node.getPath() }}
   </div>
-  <div *ngIf="!node.isDir()" class="clickable grid-x align-middle tree-file-node" (click)="onClick(node)">
-    <app-feature-icon [feature]="node.getPayload()"></app-feature-icon>
-    {{ node.getPath() }}
+  <div *ngIf="!node.isDir()" class=" grid-x align-justify align-middle tree-file-node" >
+    <div (click)="onClick(node)" class="grid-x cell auto clickable align-middle">
+      <app-feature-icon [feature]="node.getPayload()"></app-feature-icon>
+      {{ node.getPath() }}
+    </div>
+    <div class="grid-x align-middle" *ngIf="isActiveFeature()">
+      <button class="button tiny alert hollow" (click)="delete(node)">
+        <i class="fas fa-trash"></i>
+      </button>
+    </div>
   </div>
   <div class="children" *ngIf="displayChildren && node.getSize()" [style.padding-left]="node.getPath() ? '1em' : '0px'">
       <app-file-tree-node

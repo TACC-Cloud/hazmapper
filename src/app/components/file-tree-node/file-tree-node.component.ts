@@ -71,7 +71,8 @@ export class FileTreeNodeComponent implements OnInit, OnDestroy {
     this.clickEvent.emit(item);
   }
 
-  trackByIndex(index, item: PathTree<Feature>) {
-    return item.getId();
+  delete(item: PathTree<Feature>) {
+    this.geoDataService.deleteFeature(item.getPayload());
   }
+
 }
