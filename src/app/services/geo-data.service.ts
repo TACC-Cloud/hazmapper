@@ -62,6 +62,7 @@ export class GeoDataService {
     this.http.delete(environment.apiUrl + `/projects/${feature.project_id}/features/${feature.id}/`)
       .subscribe( (resp) => {
         this.getFeatures(feature.project_id);
+        this.getPointClouds(feature.project_id);
       });
   }
 
@@ -106,7 +107,7 @@ export class GeoDataService {
     console.log(pc);
     this.http.post(environment.apiUrl + `/projects/${pc.project_id}/point-cloud/${pc.id}/`, form)
       .subscribe( (resp) => {
-        console.log(resp);
+        this.getPointClouds(pc.project_id);
       });
   }
 

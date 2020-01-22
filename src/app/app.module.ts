@@ -5,7 +5,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {APP_BASE_HREF} from '@angular/common';
 
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import {ModalModule, BsDropdownModule} from 'ngx-foundation';
+import {ModalModule, BsDropdownModule, TooltipModule} from 'ngx-foundation';
 import { FileSizeModule } from 'ngx-filesize';
 import { ApiModule} from 'ng-tapis';
 
@@ -37,6 +37,7 @@ import { FeatureGeometryComponent } from './components/feature-geometry/feature-
 import { PointCloudsPanelComponent } from './components/point-clouds-panel/point-clouds-panel.component';
 import { PointCloudPanelRowComponent } from './components/point-cloud-panel-row/point-cloud-panel-row.component';
 import { ModalCreateOverlayComponent } from './components/modal-create-overlay/modal-create-overlay.component';
+import { ModalPointCloudInfoComponent } from './components/modal-point-cloud-info/modal-point-cloud-info.component';
 
 
 @NgModule({
@@ -60,6 +61,7 @@ import { ModalCreateOverlayComponent } from './components/modal-create-overlay/m
     PointCloudsPanelComponent,
     PointCloudPanelRowComponent,
     ModalCreateOverlayComponent,
+    ModalPointCloudInfoComponent,
   ],
   imports: [
     // this is for the ng-tapis library
@@ -74,7 +76,7 @@ import { ModalCreateOverlayComponent } from './components/modal-create-overlay/m
     FormsModule,
     FileSizeModule,
     BsDropdownModule.forRoot(),
-
+    TooltipModule.forRoot()
   ],
   providers: [
     AuthService,
@@ -94,7 +96,7 @@ import { ModalCreateOverlayComponent } from './components/modal-create-overlay/m
     }
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ModalCreateProjectComponent, ModalFileBrowserComponent, ModalCreatePointCloudComponent, ModalCreateOverlayComponent]
+  entryComponents: [ModalCreateProjectComponent, ModalFileBrowserComponent, ModalCreatePointCloudComponent, ModalCreateOverlayComponent, ModalPointCloudInfoComponent]
 })
 export class AppModule { }
 

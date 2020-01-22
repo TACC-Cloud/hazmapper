@@ -1,6 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {GeoDataService} from '../../services/geo-data.service';
 import {IPointCloud} from '../../models/models';
+import {BsModalRef, BsModalService} from 'ngx-foundation';
+import {ModalPointCloudInfoComponent} from "../modal-point-cloud-info/modal-point-cloud-info.component";
 
 @Component({
   selector: 'app-point-cloud-panel-row',
@@ -11,7 +13,7 @@ export class PointCloudPanelRowComponent implements OnInit {
 
   @Input() pc: IPointCloud;
 
-  constructor(private geoDataService: GeoDataService) { }
+  constructor(private geoDataService: GeoDataService, private bsModalService: BsModalService) { }
 
   ngOnInit() {}
 
@@ -23,6 +25,13 @@ export class PointCloudPanelRowComponent implements OnInit {
 
   delete() {
     this.geoDataService.deletePointCloud(this.pc);
+  }
+
+  openPointCloudInfoModal() {
+    const initialState = {
+      pc: this.pc
+    };
+    const modal: BsModalRef = this.bsModalService.show(ModalPointCloudInfoComponent, { initialState });
   }
 
 }
