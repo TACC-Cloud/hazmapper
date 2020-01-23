@@ -1,17 +1,38 @@
 <h4> Create a new Map </h4>
 
-<form [formGroup]="projCreateForm" (ngSubmit)="submit()">
-    <label> Name:
-        <input type="text" formControlName="name" required="true">
-    </label>
+<tabset>
+    <tab heading="Standard">
+        <form [formGroup]="projCreateForm" (ngSubmit)="submit()">
+            <label> Name:
+                <input type="text" formControlName="name" required="true">
+            </label>
 
-    <label> Description
-        <textarea formControlName="description" required="true"></textarea>
-    </label>
-    <div class="button-group small">
-        <button class="button small warning" type="button" (click)="close()">Close</button>
-        <button class="button small align-right" type="submit" [disabled]="!projCreateForm.valid">Submit</button>
-    </div>
-</form>
+            <label> Description
+                <textarea formControlName="description" required="true"></textarea>
+            </label>
+            <div class="button-group small">
+                <button class="button small warning" type="button" (click)="close()">Close</button>
+                <button class="button small align-right" type="submit" [disabled]="!projCreateForm.valid">Submit</button>
+            </div>
+        </form>
+    </tab>
+    <tab heading="From Designsafe project / RApp">
+        <app-file-browser
+          [onlyFolder]="true"
+          [single]="true"
+          [heading]="'Select a RApp Folder'"
+          [helpText]="'All files inside this folder (that can be) will be imported. ' +
+           'This folder will also be periodically scraped for new data.'"
+          (selection)="onFolderSelection($event)"
+        >
+        </app-file-browser>
+        <div *ngIf="errorMessage"> <span class="label warning"> {{ errorMessage }} </span> </div>
+        <div class="button-group small">
+            <button class="button small warning" type="button" (click)="close()">Close</button>
+            <button class="button small align-right" type="submit" [disabled]="!rapidFolder" (click)="createRapidProject()">Submit</button>
+        </div>
+    </tab>
+</tabset>
+
 
 

@@ -9,11 +9,10 @@ import {share} from 'rxjs/operators';
 })
 export class TapisFilesService {
 
-  private baseUrl = 'https://agave.designsafe-ci.org/files/v2/';
-  public currentListing: Array<RemoteFile>;
   private _listing: BehaviorSubject<RemoteFile[]> = new BehaviorSubject<RemoteFile[]>([]);
   public readonly listing: Observable<RemoteFile[]> = this._listing.asObservable();
-  public readonly IMPORTABLE_TYPES: Array<string> = ['jpg', 'las', 'laz', 'json', 'geojson', 'geotiff', 'tiff', 'gpx'];
+  public readonly IMPORTABLE_FEATURE_TYPES: Array<string> = ['jpg', 'json', 'geojson', 'gpx'];
+  public readonly IMPORTABLE_TYPES: Array<string> = ['las', 'laz', 'geotiff', 'tiff', ...this.IMPORTABLE_FEATURE_TYPES];
 
   constructor(private tapis: ApiService) { }
 
@@ -23,7 +22,7 @@ export class TapisFilesService {
     return this.IMPORTABLE_TYPES.includes(ext);
   }
 
-  private getFileExtension(file: RemoteFile): string {
+  public getFileExtension(file: RemoteFile): string {
     return file.name.split('.').pop();
   }
 

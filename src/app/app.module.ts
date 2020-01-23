@@ -4,7 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {APP_BASE_HREF} from '@angular/common';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import {ModalModule, BsDropdownModule, TooltipModule} from 'ngx-foundation';
+import {ModalModule, BsDropdownModule, TooltipModule, TabsModule} from 'ngx-foundation';
 import { FileSizeModule } from 'ngx-filesize';
 import { ApiModule} from 'ng-tapis';
 import { AppRoutingModule } from './app-routing.module';
@@ -37,6 +37,7 @@ import { PointCloudPanelRowComponent } from './components/point-cloud-panel-row/
 import { ModalCreateOverlayComponent } from './components/modal-create-overlay/modal-create-overlay.component';
 import { FileTreeNodeComponent } from './components/file-tree-node/file-tree-node.component';
 import { ModalPointCloudInfoComponent } from './components/modal-point-cloud-info/modal-point-cloud-info.component';
+import { FileBrowserComponent } from './components/file-browser/file-browser.component';
 
 
 @NgModule({
@@ -62,6 +63,7 @@ import { ModalPointCloudInfoComponent } from './components/modal-point-cloud-inf
     ModalCreateOverlayComponent,
     FileTreeNodeComponent,
     ModalPointCloudInfoComponent,
+    FileBrowserComponent,
   ],
   imports: [
     // this is for the ng-tapis library
@@ -76,7 +78,8 @@ import { ModalPointCloudInfoComponent } from './components/modal-point-cloud-inf
     FormsModule,
     FileSizeModule,
     BsDropdownModule.forRoot(),
-    TooltipModule.forRoot()
+    TooltipModule.forRoot(),
+    TabsModule.forRoot(),
   ],
   providers: [
     AuthService,
