@@ -48,7 +48,7 @@ export class MapComponent implements OnInit {
     this.environment = environment;
     this.map = new L.Map('map', {
      center: [40, -80],
-     zoom: 9
+     zoom: 3
     });
 
     const baseOSM = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
