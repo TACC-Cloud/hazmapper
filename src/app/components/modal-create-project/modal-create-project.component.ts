@@ -49,7 +49,11 @@ export class ModalCreateProjectComponent implements OnInit {
     const p = new Project();
     p.description = this.projCreateForm.get('description').value;
     p.name = this.projCreateForm.get('name').value;
-    this.projectsService.create(p);
+    this.projectsService.create(p).subscribe( (next) => {
+      this.close();
+    }, (err => {
+      this.errorMessage = err.toString();
+    }));
 
   }
 
