@@ -4,13 +4,15 @@ import * as L from 'leaflet';
 import 'types.leaflet.heat';
 import 'leaflet.markercluster';
 
+import { ProjectsService} from '../../services/projects.service';
 import { GeoDataService} from '../../services/geo-data.service';
 import { createMarker } from '../../utils/leafletUtils';
 import {Feature} from 'geojson';
 import {FeatureGroup, ImageOverlay, LatLng, Layer, LayerGroup, LeafletMouseEvent} from 'leaflet';
 import * as turf from '@turf/turf';
 import { AllGeoJSON } from '@turf/helpers';
-import {filter, skip, map, take} from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
+import {filter, map} from 'rxjs/operators';
 import {Overlay} from '../../models/models';
 import {AppEnvironment, environment} from '../../../environments/environment';
 
@@ -24,11 +26,13 @@ export class MapComponent implements OnInit {
   map: L.Map;
   mapType = 'normal';
   activeFeature: Feature;
+  _activeProjectId: number;
   features: FeatureGroup = new FeatureGroup();
   overlays: LayerGroup = new LayerGroup<any>();
   environment: AppEnvironment;
 
-  constructor(private geoDataService: GeoDataService,
+  constructor(private projectsService: ProjectsService,
+              private geoDataService: GeoDataService,
               private route: ActivatedRoute,
               ) {
 
@@ -44,7 +48,7 @@ export class MapComponent implements OnInit {
     this.environment = environment;
     this.map = new L.Map('map', {
      center: [40, -80],
-     zoom: 9
+     zoom: 3
     });
 
     const baseOSM = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -114,30 +118,37 @@ export class MapComponent implements OnInit {
     const geojsonOptions = {
       pointToLayer: createMarker
     };
-    this.geoDataService.features.subscribe(collection => {
-      this.features.clearLayers();
-      this.overlays.clearLayers();
-      const markers = L.markerClusterGroup({
-        iconCreateFunction: (cluster) => {
-          return L.divIcon({html: `<div><b>${cluster.getChildCount()}</b></div>`, className: 'marker-cluster'});
-        }
-      });
-      collection.features.forEach( d => {
-        const feat = L.geoJSON(d, geojsonOptions);
-        feat.on('click', (ev) => { this.featureClickHandler(ev); } );
 
-        if (d.geometry.type === 'Point') {
-          markers.addLayer(feat);
-        } else {
-          this.features.addLayer(feat);
-        }
-      });
-      this.features.addLayer(markers);
-      this.map.addLayer(this.features);
-      try {
-        this.map.fitBounds(this.features.getBounds());
-      } catch (e) {}
-    });
+    combineLatest(this.projectsService.activeProject, this.geoDataService.features).subscribe(
+      ([activeProject, collection]) => {
+        this.features.clearLayers();
+        this.overlays.clearLayers();
+        const markers = L.markerClusterGroup({
+          iconCreateFunction: (cluster) => {
+            return L.divIcon({html: `<div><b>${cluster.getChildCount()}</b></div>`, className: 'marker-cluster'});
+          }
+        });
+        collection.features.forEach( d => {
+          const feat = L.geoJSON(d, geojsonOptions);
+          feat.on('click', (ev) => { this.featureClickHandler(ev); } );
+
+          if (d.geometry.type === 'Point') {
+            markers.addLayer(feat);
+          } else {
+            this.features.addLayer(feat);
+          }
+        });
+        this.features.addLayer(markers);
+        this.map.addLayer(this.features);
+        try {
+          // fit to bounds if this is a new project
+          if (this._activeProjectId != activeProject.id) {
+            this.map.fitBounds(this.features.getBounds());
+          }
+        } catch (e) {}
+        this._activeProjectId = activeProject.id;
+      }
+    );
 
   }
 
