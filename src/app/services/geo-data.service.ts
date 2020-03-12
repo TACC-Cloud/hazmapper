@@ -10,6 +10,7 @@ import {filter, map, take, toArray} from 'rxjs/operators';
 import * as querystring from 'querystring';
 import {RemoteFile} from 'ng-tapis';
 import {PathTree} from '../models/path-tree';
+import {NotificationsService} from './notifications.service';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +39,7 @@ export class GeoDataService {
   private _featureTree: ReplaySubject<PathTree<Feature>> = new ReplaySubject<PathTree<Feature>>(1);
   public readonly featureTree$: Observable<PathTree<Feature>> = this._featureTree.asObservable();
 
-  constructor(private http: HttpClient, private filterService: FilterService) {
+  constructor(private http: HttpClient, private filterService: FilterService, private notificationsService: NotificationsService) {
 
     this.filterService.assetFilter.subscribe( (next) => {
       this._assetFilters = next;
@@ -122,7 +123,7 @@ export class GeoDataService {
       .subscribe( (resp) => {
         this.getPointClouds(projectId);
       }, error => {
-        // TODO: notification
+        this.notificationsService.showErrorToast('Could not create point cloud!');
       });
   }
 
@@ -141,6 +142,7 @@ export class GeoDataService {
     this.http.post(environment.apiUrl + `/projects/${pc.project_id}/point-cloud/${pc.id}/`, form)
       .subscribe( (resp) => {
         this.getPointClouds(pc.project_id);
+        this.notificationsService.showSuccessToast('Point cloud file uploaded!');
       });
   }
 
@@ -177,6 +179,7 @@ export class GeoDataService {
     form.append('file', file, file.name);
     this.http.post<Array<Feature>>(environment.apiUrl + `/projects/${projectId}/features/files/`, form)
       .subscribe( (feats) => {
+        this.notificationsService.showSuccessToast('Success!');
         feats.forEach( (feat) => {
           this.addFeature(new Feature(feat));
         });
