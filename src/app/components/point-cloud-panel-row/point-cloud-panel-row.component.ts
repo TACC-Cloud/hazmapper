@@ -3,6 +3,9 @@ import {GeoDataService} from '../../services/geo-data.service';
 import {IPointCloud} from '../../models/models';
 import {BsModalRef, BsModalService} from 'ngx-foundation';
 import {ModalPointCloudInfoComponent} from "../modal-point-cloud-info/modal-point-cloud-info.component";
+import {ModalFileBrowserComponent} from "../modal-file-browser/modal-file-browser.component";
+import {RemoteFile} from "ng-tapis";
+import {TapisFilesService} from "../../services/tapis-files.service";
 
 @Component({
   selector: 'app-point-cloud-panel-row',
@@ -13,14 +16,24 @@ export class PointCloudPanelRowComponent implements OnInit {
 
   @Input() pc: IPointCloud;
 
-  constructor(private geoDataService: GeoDataService, private bsModalService: BsModalService) { }
+  constructor(private geoDataService: GeoDataService, private bsModalService: BsModalService, private tapisFilesService: TapisFilesService) { }
 
   ngOnInit() {}
 
-  addFile(files) {
-    console.log(this.pc);
-    const fileToUpload = files.item(0);
-    this.geoDataService.addFileToPointCloud(this.pc, fileToUpload);
+  openFileBrowserModal() {
+    const initialState = {
+      allowedExtensions: this.tapisFilesService.IMPORTABLE_POINT_CLOUD_TYPES
+    };
+    const modal: BsModalRef = this.bsModalService.show(ModalFileBrowserComponent, { initialState });
+    modal.content.onClose.subscribe( (files: Array<RemoteFile>) => {
+      this.geoDataService.importPointCloudFileFromTapis(this.pc.project_id, this.pc.id, files);
+    });
+  }
+
+  addFile(files: FileList) {
+    for (let i = 0; i < files.length; i++) {
+      this.geoDataService.addFileToPointCloud(this.pc, files[i]);
+    }
   }
 
   delete() {

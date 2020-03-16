@@ -12,6 +12,7 @@ export class TapisFilesService {
   private _listing: BehaviorSubject<RemoteFile[]> = new BehaviorSubject<RemoteFile[]>([]);
   public readonly listing: Observable<RemoteFile[]> = this._listing.asObservable();
   public readonly IMPORTABLE_FEATURE_TYPES: Array<string> = ['jpg', 'json', 'geojson', 'gpx'];
+  public readonly IMPORTABLE_POINT_CLOUD_TYPES: Array<string> = ['las', 'laz'];
   public readonly IMPORTABLE_TYPES: Array<string> = ['las', 'laz', 'geotiff', 'tiff', ...this.IMPORTABLE_FEATURE_TYPES];
 
   constructor(private tapis: ApiService) { }

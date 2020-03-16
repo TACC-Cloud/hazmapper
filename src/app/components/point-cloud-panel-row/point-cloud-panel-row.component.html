@@ -3,10 +3,20 @@
     <span>{{pc.description}}</span>
   </div>
   <div class="cell small-7 right">
-      <label class="button success tiny hollow">
-         Add las/laz
-        <input type="file" accept=".las, .laz" style="display: none" (change)="addFile($event.target.files)">
-      </label>
+    <ul class="dropdown vertical menu" dropdown>
+      <li class="is-dropdown-submenu-parent">
+        <button dropdownToggle class="dropdown button tiny hollow expanded" aria-controls="dropdown-button">
+          Add
+        </button>
+        <ul *dropdownMenu class="menu is-dropdown-submenu" role="menu">
+          <li class="clickable" (click)="openFileBrowserModal()">From DesignSafe</li>
+          <li class="clickable">
+            <label for="upload"> From local file </label>
+            <input type="file" id="upload" style="display: none" (change)="addFile($event.target.files)">
+          </li>
+        </ul>
+      </li>
+    </ul>
     <button class="button alert tiny hollow" (click)="delete()">
       <i class="fas fa-trash"></i>
     </button>
