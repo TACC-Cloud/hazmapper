@@ -102,7 +102,12 @@ import { ToastrModule } from 'ngx-toastr';
     }
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ModalCreateProjectComponent, ModalFileBrowserComponent, ModalCreatePointCloudComponent, ModalCreateOverlayComponent, ModalPointCloudInfoComponent]
+  entryComponents: [
+    ModalCreateProjectComponent,
+    ModalFileBrowserComponent,
+    ModalCreatePointCloudComponent,
+    ModalCreateOverlayComponent,
+    ModalPointCloudInfoComponent]
 })
 export class AppModule { }
 

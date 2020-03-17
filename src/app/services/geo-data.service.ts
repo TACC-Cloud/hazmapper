@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpEventType} from '@angular/common/http';
 import {BehaviorSubject, Observable, ReplaySubject, Subject} from 'rxjs';
 import {LatLng} from 'leaflet';
 import {FilterService} from './filter.service';
@@ -71,15 +71,6 @@ export class GeoDataService {
         }
         const tree = new PathTree<Feature>('');
         fc.features.forEach( (item) => {
-          // let featurePath: string = null;
-          // if (item.assets.length) {
-          //   // If the asset was uploaded, there will be no display path
-          //   featurePath = item.assets[0].display_path || item.id.toString();
-          // } else {
-          //   featurePath = item.id.toString();
-          // }
-          // console.log(featurePath);
-          // tree.insert(featurePath, item, null);
           this.addFeatureToTree(tree, item);
         });
         this._featureTree.next(tree);
@@ -143,7 +134,9 @@ export class GeoDataService {
       .subscribe( (resp) => {
         this.getPointClouds(pc.project_id);
         this.notificationsService.showSuccessToast('Point cloud file uploaded!');
-      });
+      }, (error => {
+        this.notificationsService.showErrorToast('Could not import point cloud file!');
+      }));
   }
 
   importFileFromTapis(projectId: number, files: Array<RemoteFile>): void {
@@ -154,8 +147,9 @@ export class GeoDataService {
     };
     this.http.post(environment.apiUrl + `/projects/${projectId}/features/files/import/`, payload)
       .subscribe( (resp) => {
+        this.notificationsService.showSuccessToast('Import started!');
       }, error => {
-        // TODO: Add notification / toast
+        this.notificationsService.showErrorToast('Import failed! Try again?');
       });
   }
 
@@ -177,15 +171,28 @@ export class GeoDataService {
   uploadFile(projectId: number, file: File): void {
     const form: FormData = new FormData();
     form.append('file', file, file.name);
-    this.http.post<Array<Feature>>(environment.apiUrl + `/projects/${projectId}/features/files/`, form)
-      .subscribe( (feats) => {
-        this.notificationsService.showSuccessToast('Success!');
-        feats.forEach( (feat) => {
-          this.addFeature(new Feature(feat));
-        });
-      }, error => {
-        // TODO: Add notification
-      });
+    this.http.post<Array<Feature>>(environment.apiUrl + `/projects/${projectId}/features/files/`, form,  {
+      reportProgress: true,
+      observe: 'events'
+    }).pipe(map((event) => {
+      switch (event.type) {
+        case HttpEventType.UploadProgress:
+          const progress = Math.round(100 * event.loaded / event.total);
+          // TODO: Remove that, but keep it in until kube networking issues resolved.
+          console.log(progress);
+          return { status: 'progress', message: progress };
+
+        case HttpEventType.Response:
+          this.notificationsService.showSuccessToast('Success!');
+          const feats = event.body;
+          feats.forEach( (feat) => {
+            this.addFeature(new Feature(feat));
+          });
+          break;
+        default:
+          return `Unhandled event: ${event.type}`;
+      }
+    })).subscribe();
   }
 
   uploadAssetFile(projectId: number, featureId: number, file: File): void {
