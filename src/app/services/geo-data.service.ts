@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpEventType} from '@angular/common/http';
 import {BehaviorSubject, Observable, ReplaySubject, Subject} from 'rxjs';
 import {LatLng} from 'leaflet';
 import {FilterService} from './filter.service';
@@ -10,6 +10,7 @@ import {filter, map, take, toArray} from 'rxjs/operators';
 import * as querystring from 'querystring';
 import {RemoteFile} from 'ng-tapis';
 import {PathTree} from '../models/path-tree';
+import {NotificationsService} from './notifications.service';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +39,7 @@ export class GeoDataService {
   private _featureTree: ReplaySubject<PathTree<Feature>> = new ReplaySubject<PathTree<Feature>>(1);
   public readonly featureTree$: Observable<PathTree<Feature>> = this._featureTree.asObservable();
 
-  constructor(private http: HttpClient, private filterService: FilterService) {
+  constructor(private http: HttpClient, private filterService: FilterService, private notificationsService: NotificationsService) {
 
     this.filterService.assetFilter.subscribe( (next) => {
       this._assetFilters = next;
@@ -70,15 +71,6 @@ export class GeoDataService {
         }
         const tree = new PathTree<Feature>('');
         fc.features.forEach( (item) => {
-          // let featurePath: string = null;
-          // if (item.assets.length) {
-          //   // If the asset was uploaded, there will be no display path
-          //   featurePath = item.assets[0].display_path || item.id.toString();
-          // } else {
-          //   featurePath = item.id.toString();
-          // }
-          // console.log(featurePath);
-          // tree.insert(featurePath, item, null);
           this.addFeatureToTree(tree, item);
         });
         this._featureTree.next(tree);
@@ -122,7 +114,7 @@ export class GeoDataService {
       .subscribe( (resp) => {
         this.getPointClouds(projectId);
       }, error => {
-        // TODO: notification
+        this.notificationsService.showErrorToast('Could not create point cloud!');
       });
   }
 
@@ -141,7 +133,10 @@ export class GeoDataService {
     this.http.post(environment.apiUrl + `/projects/${pc.project_id}/point-cloud/${pc.id}/`, form)
       .subscribe( (resp) => {
         this.getPointClouds(pc.project_id);
-      });
+        this.notificationsService.showSuccessToast('Point cloud file uploaded!');
+      }, (error => {
+        this.notificationsService.showErrorToast('Could not import point cloud file!');
+      }));
   }
 
   importPointCloudFileFromTapis(projectId: number, pointCloudId: number, files: Array<RemoteFile>): void {
@@ -165,8 +160,9 @@ export class GeoDataService {
     };
     this.http.post(environment.apiUrl + `/projects/${projectId}/features/files/import/`, payload)
       .subscribe( (resp) => {
+        this.notificationsService.showSuccessToast('Import started!');
       }, error => {
-        // TODO: Add notification / toast
+        this.notificationsService.showErrorToast('Import failed! Try again?');
       });
   }
 
@@ -188,14 +184,28 @@ export class GeoDataService {
   uploadFile(projectId: number, file: File): void {
     const form: FormData = new FormData();
     form.append('file', file, file.name);
-    this.http.post<Array<Feature>>(environment.apiUrl + `/projects/${projectId}/features/files/`, form)
-      .subscribe( (feats) => {
-        feats.forEach( (feat) => {
-          this.addFeature(new Feature(feat));
-        });
-      }, error => {
-        // TODO: Add notification
-      });
+    this.http.post<Array<Feature>>(environment.apiUrl + `/projects/${projectId}/features/files/`, form,  {
+      reportProgress: true,
+      observe: 'events'
+    }).pipe(map((event) => {
+      switch (event.type) {
+        case HttpEventType.UploadProgress:
+          const progress = Math.round(100 * event.loaded / event.total);
+          // TODO: Remove that, but keep it in until kube networking issues resolved.
+          console.log(progress);
+          return { status: 'progress', message: progress };
+
+        case HttpEventType.Response:
+          this.notificationsService.showSuccessToast('Success!');
+          const feats = event.body;
+          feats.forEach( (feat) => {
+            this.addFeature(new Feature(feat));
+          });
+          break;
+        default:
+          return `Unhandled event: ${event.type}`;
+      }
+    })).subscribe();
   }
 
   uploadAssetFile(projectId: number, featureId: number, file: File): void {

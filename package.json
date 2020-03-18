@@ -31,6 +31,7 @@
     "leaflet": "^1.4.0",
     "leaflet.markercluster": "^1.4.1",
     "ng-tapis": "^2.1.5",
+    "ngx-toastr": "^11.3.3",
     "rxjs": "~6.5.3",
     "service": "^0.1.4",
     "ts-mocks": "^2.5.0",
