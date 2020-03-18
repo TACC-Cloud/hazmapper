@@ -38,6 +38,7 @@ import { ModalCreateOverlayComponent } from './components/modal-create-overlay/m
 import { FileTreeNodeComponent } from './components/file-tree-node/file-tree-node.component';
 import { ModalPointCloudInfoComponent } from './components/modal-point-cloud-info/modal-point-cloud-info.component';
 import { FileBrowserComponent } from './components/file-browser/file-browser.component';
+import { UsersPanelComponent } from './components/users-panel/users-panel.component';
 
 
 @NgModule({
@@ -64,6 +65,7 @@ import { FileBrowserComponent } from './components/file-browser/file-browser.com
     FileTreeNodeComponent,
     ModalPointCloudInfoComponent,
     FileBrowserComponent,
+    UsersPanelComponent,
   ],
   imports: [
     // this is for the ng-tapis library

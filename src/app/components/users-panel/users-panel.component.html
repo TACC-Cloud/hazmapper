@@ -1,0 +1,16 @@
+<div class="dock-panel">
+  <div class="dock-panel-header">
+    <span class="dock-panel-title"> Team Members </span>
+  </div>
+
+  <div class="dock-panel-content">
+    <div>
+      <form [formGroup]="addUserForm" (ngSubmit)="addUser()">
+        <input type="text" formControlName="username" required="true">
+        <button class="button success" type="submit" [disabled]="!addUserForm.valid">Add</button>
+      </form>
+    </div>
+    <h4> Current Members </h4>
+    <p *ngFor="let user of projectUsers">{{user.username}}</p>
+  </div>
+</div>

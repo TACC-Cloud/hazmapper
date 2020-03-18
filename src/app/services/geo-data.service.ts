@@ -38,6 +38,7 @@ export class GeoDataService {
   private _featureTree: ReplaySubject<PathTree<Feature>> = new ReplaySubject<PathTree<Feature>>(1);
   public readonly featureTree$: Observable<PathTree<Feature>> = this._featureTree.asObservable();
 
+
   constructor(private http: HttpClient, private filterService: FilterService) {
 
     this.filterService.assetFilter.subscribe( (next) => {
