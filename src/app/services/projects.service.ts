@@ -5,6 +5,7 @@ import {Project} from '../models/models';
 import { environment } from '../../environments/environment';
 import { RapidProjectRequest } from '../models/rapid-project-request';
 import {catchError, map} from 'rxjs/operators';
+import {IProjectUser} from '../models/project-user';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,8 @@ export class ProjectsService {
   public readonly projects: Observable<Project[]> = this._projects.asObservable();
   private _activeProject: ReplaySubject<Project> = new ReplaySubject<Project>(1);
   public readonly  activeProject: Observable<Project> = this._activeProject.asObservable();
+  private _projectUsers: ReplaySubject<Array<IProjectUser>> = new ReplaySubject<Array<IProjectUser>>(1);
+  public readonly projectUsers$: Observable<Array<IProjectUser>> = this._projectUsers.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -23,6 +26,24 @@ export class ProjectsService {
      this._projects.next(resp);
    });
   }
+
+  getProjectUsers(proj: Project): void {
+    this.http.get<Array<IProjectUser>>(environment.apiUrl + `/projects/${proj.id}/users/`)
+      .subscribe( (resp) => {
+        this._projectUsers.next(resp);
+      });
+  }
+
+  addUserToProject(proj: Project, uname: string): void {
+    const payload = {
+      username: uname
+    };
+    this.http.post(environment.apiUrl + `/projects/${proj.id}/users/`, payload)
+      .subscribe( (resp) => {
+        this.getProjectUsers(proj);
+      });
+  }
+
 
   create(data: Project): Observable<Project> {
     const prom = this.http.post<Project>(environment.apiUrl + `/projects/`, data);
@@ -55,6 +76,7 @@ export class ProjectsService {
 
   setActiveProject(proj: Project): void {
     this._activeProject.next(proj);
+    this.getProjectUsers(proj);
   }
 
 }

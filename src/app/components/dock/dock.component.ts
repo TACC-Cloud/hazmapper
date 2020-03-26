@@ -10,6 +10,7 @@ interface IpanelsDisplay {
   measure: boolean;
   settings: boolean;
   pointClouds: boolean;
+  users: boolean;
 }
 
 @Component({
@@ -31,10 +32,11 @@ export class DockComponent implements OnInit {
       filters: false,
       pointClouds: false,
       measure: false,
-      settings: false
+      settings: false,
+      users: false,
     };
 
-    this.projectsService.activeProject.subscribe( (next)=> {
+    this.projectsService.activeProject.subscribe( (next) => {
       this.activeProject = next;
     });
 
