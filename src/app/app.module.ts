@@ -39,7 +39,8 @@ import { FileTreeNodeComponent } from './components/file-tree-node/file-tree-nod
 import { ModalPointCloudInfoComponent } from './components/modal-point-cloud-info/modal-point-cloud-info.component';
 import { FileBrowserComponent } from './components/file-browser/file-browser.component';
 import { UsersPanelComponent } from './components/users-panel/users-panel.component';
-
+import { CommonModule } from '@angular/common';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { UsersPanelComponent } from './components/users-panel/users-panel.compon
     UsersPanelComponent,
   ],
   imports: [
+    CommonModule,
     // this is for the ng-tapis library
     ApiModule.forRoot({rootUrl: 'https://agave.designsafe-ci.org/'}),
     BrowserModule,
@@ -82,6 +84,7 @@ import { UsersPanelComponent } from './components/users-panel/users-panel.compon
     BsDropdownModule.forRoot(),
     TooltipModule.forRoot(),
     TabsModule.forRoot(),
+    ToastrModule.forRoot()
   ],
   providers: [
     AuthService,
@@ -101,7 +104,12 @@ import { UsersPanelComponent } from './components/users-panel/users-panel.compon
     }
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ModalCreateProjectComponent, ModalFileBrowserComponent, ModalCreatePointCloudComponent, ModalCreateOverlayComponent, ModalPointCloudInfoComponent]
+  entryComponents: [
+    ModalCreateProjectComponent,
+    ModalFileBrowserComponent,
+    ModalCreatePointCloudComponent,
+    ModalCreateOverlayComponent,
+    ModalPointCloudInfoComponent]
 })
 export class AppModule { }
 
