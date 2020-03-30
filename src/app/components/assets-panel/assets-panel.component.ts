@@ -1,10 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {FeatureCollection} from 'geojson';
 import {GeoDataService} from '../../services/geo-data.service';
-import {FeatureAsset, Feature, Project} from '../../models/models';
+import {Feature, Project} from '../../models/models';
 import {BsModalRef, BsModalService} from 'ngx-foundation';
 import {ModalFileBrowserComponent} from '../modal-file-browser/modal-file-browser.component';
-import { ModalCreatePointCloudComponent} from '../modal-create-point-cloud/modal-create-point-cloud.component';
 import {ProjectsService} from '../../services/projects.service';
 import {RemoteFile} from 'ng-tapis';
 import { ScrollableArray } from '../../utils/ScrollableArray';
