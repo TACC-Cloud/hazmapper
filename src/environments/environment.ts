@@ -10,13 +10,15 @@ export interface AppEnvironment {
   jwt?: string;
   clientId: string;
   baseHref: string;
+  designSafeUrl: string;
 }
 
 export const  environment: AppEnvironment =  {
   production: false,
   apiUrl: 'https://agave.designsafe-ci.org/geo/v2',
   clientId: 'RMCJHgW9CwJ6mKjhLTDnUYBo9Hka',
-  baseHref: '/'
+  baseHref: '/',
+  designSafeUrl: 'https://agave.designsafe-ci.org/',
 };
 
 /*
