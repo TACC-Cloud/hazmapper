@@ -4,11 +4,12 @@ import { ApiService } from 'ng-tapis';
 import {Observable, ReplaySubject} from 'rxjs';
 import {HttpClient} from "@angular/common/http";
 import { environment } from '../../environments/environment';
-import { DSProjectCollection } from '../models/models';
+import { DesignSafeProjectCollection } from '../models/models';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class AgaveSystemsService {
 
   private _systems: ReplaySubject<SystemSummary[]> = new ReplaySubject<SystemSummary[]>(1);
@@ -24,7 +25,7 @@ export class AgaveSystemsService {
       }, error => {
         this._systems.next(null);
       });
-    this.http.get<DSProjectCollection>(environment.designSafeUrl +`/projects/v2/`)
+    this.http.get<DesignSafeProjectCollection>(environment.designSafeUrl +`/projects/v2/`)
       .subscribe( resp => {
         let projectSystems = resp.projects.map((project) => {
           return {

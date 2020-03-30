@@ -166,6 +166,11 @@ export class Feature implements AppGeoJSONFeature {
   }
 }
 
-export interface DSProjectCollection {
-  projects: any[];
+export interface DesignSafeProject {
+  uuid: string;
+  value: any;
+}
+
+export interface DesignSafeProjectCollection {
+  projects: DesignSafeProject[];
 }
