@@ -1,26 +1,15 @@
 <div class="grid-x">
-  <div class="cell small-5">
-    <span>{{pc.description}}</span>
+  <div class="cell auto">
+    <span class="pointcloud-description" [tooltip]="pc.description" [delay]="700">{{pc.description}}</span>
   </div>
-  <div class="cell small-7 right">
-    <ul class="dropdown vertical menu" dropdown>
-      <li class="is-dropdown-submenu-parent">
-        <button dropdownToggle class="dropdown button tiny hollow expanded" aria-controls="dropdown-button">
-          Add
-        </button>
-        <ul *dropdownMenu class="menu is-dropdown-submenu" role="menu">
-          <li class="clickable" (click)="openFileBrowserModal()">From DesignSafe</li>
-          <li class="clickable">
-            <label for="upload"> From local file </label>
-            <input type="file" id="upload" style="display: none" (change)="addFile($event.target.files)">
-          </li>
-        </ul>
-      </li>
-    </ul>
+  <div class="cell large-7 grid-x align-right">
+    <button dropdownToggle class="button tiny hollow" aria-controls="dropdown-button" (click)="openFileBrowserModal()">
+      Add las/laz
+    </button>
     <button class="button alert tiny hollow" (click)="delete()">
       <i class="fas fa-trash"></i>
     </button>
-    <button class="button tiny hollow" tooltip="View additional information" [delay]="500" (click)="openPointCloudInfoModal()">
+    <button class="button tiny hollow" tooltip="View additional information" [delay]="700" (click)="openPointCloudInfoModal()">
       <i class="fas fa-info-circle"></i>
     </button>
   </div>
