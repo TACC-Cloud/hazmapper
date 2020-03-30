@@ -165,3 +165,7 @@ export class Feature implements AppGeoJSONFeature {
 
   }
 }
+
+export interface DSProjectCollection {
+  projects: any[];
+}
