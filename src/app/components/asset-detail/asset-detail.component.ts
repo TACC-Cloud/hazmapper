@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {GeoDataService} from '../../services/geo-data.service';
 import {Feature, Project} from '../../models/models';
 import {AppEnvironment, environment} from '../../../environments/environment';
-import {ProjectsService} from "../../services/projects.service";
+import {ProjectsService} from '../../services/projects.service';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 
 @Component({
@@ -31,8 +31,8 @@ export class AssetDetailComponent implements OnInit {
         featureSource = featureSource.replace(/([^:])(\/{2,})/g, '$1/');
         this.featureSource = featureSource;
 
-        if(this.feature.featureType() === 'point_cloud') {
-          this.safePointCloudUrl = this.sanitizer.bypassSecurityTrustResourceUrl(featureSource+'/preview.html')
+        if (this.feature.featureType() === 'point_cloud') {
+          this.safePointCloudUrl = this.sanitizer.bypassSecurityTrustResourceUrl(featureSource + '/preview.html');
         } else {
           this.safePointCloudUrl = null;
         }
