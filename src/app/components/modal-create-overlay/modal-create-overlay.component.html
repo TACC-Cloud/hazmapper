@@ -43,7 +43,7 @@
 
   <div class="button-group small">
     <button class="button small warning" type="button" (click)="close()">Close</button>
-    <button class="button small align-right" type="submit" [disabled]="!ovCreateForm.valid && !remoteFileData">Submit</button>
+    <button class="button small align-right" type="submit" [disabled]="!ovCreateForm.valid || (this.remoteFileData.length === 0)">Submit</button>
   </div>
 </form>
 

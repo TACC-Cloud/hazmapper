@@ -14,7 +14,7 @@ import {RemoteFile} from "ng-tapis";
   styleUrls: ['./modal-create-overlay.component.styl']
 })
 export class ModalCreateOverlayComponent implements OnInit {
-  remoteFileData: Array<RemoteFile>;
+  remoteFileData: Array<RemoteFile> = new Array<RemoteFile>();
   ovCreateForm: FormGroup;
   project: Project;
   public readonly onClose: Subject<any> = new Subject<any>();
@@ -26,6 +26,7 @@ export class ModalCreateOverlayComponent implements OnInit {
               private tapisFilesService: TapisFilesService) { }
 
   ngOnInit() {
+    this.remoteFileData = Array<RemoteFile>();
     this.projectsService.activeProject.subscribe( (next) => {
       this.project = next;
     });
