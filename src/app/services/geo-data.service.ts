@@ -258,9 +258,9 @@ export class GeoDataService {
     }
     this.http.post(environment.apiUrl + `/projects/${projectId}/overlays/import/`, payload)
       .subscribe( (resp) => {
-        this.notificationsService.showSuccessToast('Import started!');
+        this.getOverlays(projectId);
       }, error => {
-        this.notificationsService.showErrorToast('Import failed! Try again?');
+        this.notificationsService.showErrorToast('Overlay import failed! Try again?');
       });
   }
 
