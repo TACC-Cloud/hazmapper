@@ -245,6 +245,25 @@ export class GeoDataService {
       });
   }
 
+  importOverlayFileFromTapis(projectId: number, file: RemoteFile, label: string,
+                             minLat: number, maxLat: number, minLon: number, maxLon: number): void {
+    const payload = {
+      label: label,
+      system_id: file.system,
+      path: file.path,
+      minLat: minLat,
+      maxLat: maxLat,
+      minLon: minLon,
+      maxLon: maxLon
+    }
+    this.http.post(environment.apiUrl + `/projects/${projectId}/overlays/import/`, payload)
+      .subscribe( (resp) => {
+        this.notificationsService.showSuccessToast('Import started!');
+      }, error => {
+        this.notificationsService.showErrorToast('Import failed! Try again?');
+      });
+  }
+
   deleteOverlay(projectId: number, overlay: Overlay) {
     this.http
       .delete(environment.apiUrl + `/projects/${projectId}/overlays/${overlay.id}/`)
