@@ -322,6 +322,9 @@ export class GeoDataService {
     return this.basemap$;
   }
 
-
-
+  getDataForProject(projectId): void {
+    this.getFeatures(projectId);
+    this.getPointClouds(projectId);
+    this.getOverlays(projectId);
+  }
 }
