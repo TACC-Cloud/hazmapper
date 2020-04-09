@@ -44,9 +44,10 @@
       <div data-alert class="alert-box secondary">
         Feature has no asset.
       </div>
-      <label for="assetFileUpload" class="button"><i class="fas fa-plus"></i></label>
-      <input type="file" id="assetFileUpload" style="display: none"
-             (change)="handleAssetFileInput($event.target.files)">
+<!--      <label for="assetFileUpload" class="button"><i class="fas fa-plus"></i></label>-->
+<!--      <input type="file" id="assetFileUpload" style="display: none"-->
+<!--             (change)="handleAssetFileInput($event.target.files)">-->
+      <button class="button expanded hollow" (click)="openFileBrowserModal()">Add asset from DesignSafe </button>
     </div>
     <hr>
   </div>

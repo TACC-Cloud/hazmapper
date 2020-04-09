@@ -11,6 +11,8 @@ import { TapisFilesService } from '../../services/tapis-files.service';
 })
 export class ModalFileBrowserComponent implements OnInit {
   @Input() allowedExtensions: Array<string> = this.tapisFilesService.IMPORTABLE_FEATURE_TYPES;
+  @Input() single: false;
+  @Input() allowFolders: false;
   selectedFiles: Array<RemoteFile> = [];
   public onClose: Subject<Array<RemoteFile>> = new Subject<Array<RemoteFile>>();
   constructor(private modalRef: BsModalRef, private tapisFilesService: TapisFilesService) { }

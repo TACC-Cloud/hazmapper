@@ -6,6 +6,11 @@ import {Feature as GeoJSONFeature,
 
 // TODO: break these out into their own files
 
+export interface IFileImportRequest {
+  system_id: string;
+  path: string;
+}
+
 export interface ITask {
   id: number;
   status: string;
