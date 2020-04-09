@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {Project} from '../../models/models';
 import {Subject} from 'rxjs';
-import {BsModalRef} from 'ngx-foundation';
+import {BsModalRef, BsModalService} from 'ngx-foundation';
 import {GeoDataService} from '../../services/geo-data.service';
 import {ProjectsService} from '../../services/projects.service';
+import {TapisFilesService} from "../../services/tapis-files.service";
+import {RemoteFile} from "ng-tapis";
 
 @Component({
   selector: 'app-modal-create-overlay',
@@ -12,20 +14,23 @@ import {ProjectsService} from '../../services/projects.service';
   styleUrls: ['./modal-create-overlay.component.styl']
 })
 export class ModalCreateOverlayComponent implements OnInit {
-
-  fileData: File;
+  remoteFileData: Array<RemoteFile> = new Array<RemoteFile>();
   ovCreateForm: FormGroup;
   project: Project;
   public readonly onClose: Subject<any> = new Subject<any>();
 
-  constructor(private bsModalRef: BsModalRef, private geoDataService: GeoDataService, private projectsService: ProjectsService) { }
+  constructor(private bsModalRef: BsModalRef,
+              private geoDataService: GeoDataService,
+              private projectsService: ProjectsService,
+              private bsModalService: BsModalService,
+              private tapisFilesService: TapisFilesService) { }
 
   ngOnInit() {
+    this.remoteFileData = Array<RemoteFile>();
     this.projectsService.activeProject.subscribe( (next) => {
       this.project = next;
     });
     this.ovCreateForm = new FormGroup( {
-      image: new FormControl(''),
       label: new FormControl(''),
       minLat: new FormControl(''),
       maxLat: new FormControl(''),
@@ -34,8 +39,8 @@ export class ModalCreateOverlayComponent implements OnInit {
     });
   }
 
-  fileSelected(ev) {
-    this.fileData = ev.target.files[0];
+  onDSFileSelection(files: Array<RemoteFile>) {
+    this.remoteFileData = files;
   }
 
   close() {
@@ -43,10 +48,9 @@ export class ModalCreateOverlayComponent implements OnInit {
   }
 
   submit() {
-
-    this.geoDataService.addOverlay(
+    this.geoDataService.importOverlayFileFromTapis(
       this.project.id,
-      this.fileData,
+      this.remoteFileData[0],
       this.ovCreateForm.get('label').value,
       this.ovCreateForm.get('minLat').value,
       this.ovCreateForm.get('maxLat').value,
@@ -56,7 +60,6 @@ export class ModalCreateOverlayComponent implements OnInit {
     this.onClose.next(null);
     this.bsModalRef.hide();
   }
-
 }
 
 

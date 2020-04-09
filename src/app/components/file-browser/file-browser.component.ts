@@ -76,6 +76,7 @@ export class FileBrowserComponent implements OnInit {
     if (file.type !== 'dir') { return; }
     this.inProgress = true;
     this.selectedFiles.clear();
+    this.selection.next(Array<RemoteFile>());
     this.tapisFilesService.listFiles(file.system, file.path);
     this.tapisFilesService.listing.subscribe(listing => {
       this.inProgress = false;

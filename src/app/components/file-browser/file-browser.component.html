@@ -1,6 +1,6 @@
-<h4> {{heading}} </h4>
-<small><em>{{ helpText }} </em></small>
-<hr>
+<h4 *ngIf="heading"> {{heading}} </h4>
+<small *ngIf="helpText"><em>{{ helpText }} </em></small>
+<hr *ngIf="heading || helpText">
 <select (ngModelChange)="selectSystem($event)" [(ngModel)]="selectedSystem">
   <option [ngValue]="myDataSystem"> My Data </option>
   <option [ngValue]="communityDataSystem"> Community Data</option>
