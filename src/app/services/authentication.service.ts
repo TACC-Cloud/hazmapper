@@ -84,7 +84,7 @@ export class AuthService {
     const userStr = localStorage.getItem(this.LS_USER_KEY);
     const user = JSON.parse(userStr);
     if (user !== null) {
-q      this._currentUser.next(
+      this._currentUser.next(
         new AuthenticatedUser(user.username, user.email)
       );
     } else {
