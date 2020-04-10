@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {SystemSummary} from 'ng-tapis';
 import { ApiService } from 'ng-tapis';
 import {Observable, ReplaySubject} from 'rxjs';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient} from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { DesignSafeProjectCollection } from '../models/models';
 
@@ -25,14 +25,14 @@ export class AgaveSystemsService {
       }, error => {
         this._systems.next(null);
       });
-    this.http.get<DesignSafeProjectCollection>(environment.designSafeUrl +`/projects/v2/`)
+    this.http.get<DesignSafeProjectCollection>(environment.designSafeUrl + `/projects/v2/`)
       .subscribe( resp => {
-        let projectSystems = resp.projects.map((project) => {
+        const projectSystems = resp.projects.map((project) => {
           return {
-            id: "project-" + project.uuid,
+            id: 'project-' + project.uuid,
             name: project.uuid,
             description: project.value.title,
-          }
+          };
         });
         this._projects.next(projectSystems);
       }, error => {

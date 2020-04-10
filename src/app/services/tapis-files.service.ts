@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
 import { ApiService} from 'ng-tapis';
 import {RemoteFile} from 'ng-tapis';
 import {share} from 'rxjs/operators';
@@ -9,7 +9,7 @@ import {share} from 'rxjs/operators';
 })
 export class TapisFilesService {
 
-  private _listing: BehaviorSubject<RemoteFile[]> = new BehaviorSubject<RemoteFile[]>([]);
+  private _listing: ReplaySubject<RemoteFile[]> = new ReplaySubject<RemoteFile[]>(1);
   public readonly listing: Observable<RemoteFile[]> = this._listing.asObservable();
   public readonly IMPORTABLE_FEATURE_ASSET_TYPES: Array<string> = ['jpeg', 'jpg', 'png'];
   public readonly IMPORTABLE_FEATURE_TYPES: Array<string> = ['jpg', 'json', 'geojson', 'gpx'];

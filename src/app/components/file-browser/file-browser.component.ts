@@ -1,11 +1,12 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {AuthenticatedUser, AuthService} from '../../services/authentication.service';
 import {RemoteFile} from 'ng-tapis/models/remote-file';
-import {combineLatest} from 'rxjs';
+import {combineLatest, forkJoin, Subscription} from 'rxjs';
 import {SystemSummary} from 'ng-tapis';
 import {TapisFilesService} from '../../services/tapis-files.service';
 import {BsModalRef} from 'ngx-foundation/modal/bs-modal-ref.service';
 import {AgaveSystemsService} from '../../services/agave-systems.service';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-file-browser',
@@ -41,8 +42,15 @@ export class FileBrowserComponent implements OnInit {
     this.agaveSystemsService.list();
 
     // TODO: change those hard coded systemIds to environment vars or some sort of config
-    // wait on the currentUser and systems to resolve
-    combineLatest([this.authService.currentUser, this.agaveSystemsService.systems, this.agaveSystemsService.projects])
+    // wait on the currentUser, systems and projects to resolve
+    combineLatest(
+        this.authService.currentUser,
+        this.agaveSystemsService.systems,
+        this.agaveSystemsService.projects
+    )
+      .pipe(
+        take(1)
+      )
       .subscribe( ([user, systems, projects]) => {
         this.myDataSystem = systems.find( (sys) => sys.id === 'designsafe.storage.default');
         this.communityDataSystem = systems.find( (sys) => sys.id === 'designsafe.storage.community');
