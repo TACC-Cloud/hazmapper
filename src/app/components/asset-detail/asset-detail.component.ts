@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import {GeoDataService} from '../../services/geo-data.service';
-import {Feature, Project} from '../../models/models';
+import {Feature, IFileImportRequest, Project} from '../../models/models';
 import {AppEnvironment, environment} from '../../../environments/environment';
 import {ProjectsService} from '../../services/projects.service';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
+import {BsModalRef, BsModalService, ModalOptions} from 'ngx-foundation';
+import {ModalFileBrowserComponent} from '../modal-file-browser/modal-file-browser.component';
+import {RemoteFile} from 'ng-tapis';
+import {TapisFilesService} from '../../services/tapis-files.service';
 
 @Component({
   selector: 'app-asset-detail',
@@ -18,7 +22,9 @@ export class AssetDetailComponent implements OnInit {
   activeProject: Project;
   safePointCloudUrl: SafeResourceUrl;
   constructor(private geoDataService: GeoDataService,
+              private tapisFilesService: TapisFilesService,
               private projectsService: ProjectsService,
+              private bsModalService: BsModalService,
               public sanitizer: DomSanitizer) { }
 
   ngOnInit() {
@@ -46,11 +52,28 @@ export class AssetDetailComponent implements OnInit {
     });
   }
 
-  handleAssetFileInput(files: FileList) {
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < files.length; i++) {
-      this.geoDataService.uploadAssetFile(this.activeProject.id, Number(this.feature.id), files[i]);
-    }
+  // handleAssetFileInput(files: FileList) {
+  //   // tslint:disable-next-line:prefer-for-of
+  //   for (let i = 0; i < files.length; i++) {
+  //     this.geoDataService.uploadAssetFile(this.activeProject.id, Number(this.feature.id), files[i]);
+  //   }
+  // }
+
+  openFileBrowserModal() {
+    const modalConfig: ModalOptions = {
+      initialState: {
+        single: true,
+        allowedExtensions: this.tapisFilesService.IMPORTABLE_FEATURE_ASSET_TYPES
+      }
+    };
+    const modal: BsModalRef = this.bsModalService.show(ModalFileBrowserComponent, modalConfig);
+    modal.content.onClose.subscribe( (file: RemoteFile) => {
+      const payload: IFileImportRequest = {
+        system_id: file[0].system,
+        path: file[0].path
+      };
+      this.geoDataService.importFeatureAsset(this.activeProject.id, Number(this.feature.id), payload);
+    });
   }
 
   close() {

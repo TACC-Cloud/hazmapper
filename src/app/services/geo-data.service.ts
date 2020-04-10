@@ -3,7 +3,7 @@ import {HttpClient, HttpEventType} from '@angular/common/http';
 import {BehaviorSubject, Observable, ReplaySubject, Subject} from 'rxjs';
 import {LatLng} from 'leaflet';
 import {FilterService} from './filter.service';
-import {AssetFilters, FeatureAsset, IFeatureAsset, IPointCloud, Overlay} from '../models/models';
+import {AssetFilters, FeatureAsset, IFeatureAsset, IFileImportRequest, IPointCloud, Overlay} from '../models/models';
 import { Feature, FeatureCollection} from '../models/models';
 import { environment } from '../../environments/environment';
 import {filter, map, take, toArray} from 'rxjs/operators';
@@ -208,10 +208,25 @@ export class GeoDataService {
     })).subscribe();
   }
 
+  importFeatureAsset(projectId: number, featureId: number, payload: IFileImportRequest): void {
+    this.http.post<Feature>(environment.apiUrl + `/projects/${projectId}/features/${featureId}/assets/`, payload)
+      .subscribe( (feature) => {
+        // TODO workaround to update activeFeature, this should be done with a subscription like in addFeature()
+        const f = this._activeFeature.getValue();
+        if (f && f.id === featureId) {
+          this._activeFeature.next(new Feature(feature));
+          this.getFeatures(projectId);
+        }
+      }, error => {
+        this.notificationsService.showErrorToast(`Error importing ${payload.path}`);
+      });
+  }
+
+
   uploadAssetFile(projectId: number, featureId: number, file: File): void {
     const form: FormData = new FormData();
     form.append('file', file, file.name);
-    this.http.post<Feature>(environment.apiUrl + `/api/projects/${projectId}/features/${featureId}/assets/`, form)
+    this.http.post<Feature>(environment.apiUrl + `/projects/${projectId}/features/${featureId}/assets/`, form)
         .subscribe( (feature) => {
           // TODO workaround to update activeFeature, this should be done with a subscription like in addFeature()
           const f = this._activeFeature.getValue();
