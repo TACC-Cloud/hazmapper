@@ -209,7 +209,7 @@ export class GeoDataService {
   }
 
   importFeatureAsset(projectId: number, featureId: number, payload: IFileImportRequest): void {
-    this.http.post<Feature>(environment.apiUrl + `/api/projects/${projectId}/features/${featureId}/assets/`, payload)
+    this.http.post<Feature>(environment.apiUrl + `/projects/${projectId}/features/${featureId}/assets/`, payload)
       .subscribe( (feature) => {
         // TODO workaround to update activeFeature, this should be done with a subscription like in addFeature()
         const f = this._activeFeature.getValue();
@@ -226,7 +226,7 @@ export class GeoDataService {
   uploadAssetFile(projectId: number, featureId: number, file: File): void {
     const form: FormData = new FormData();
     form.append('file', file, file.name);
-    this.http.post<Feature>(environment.apiUrl + `/api/projects/${projectId}/features/${featureId}/assets/`, form)
+    this.http.post<Feature>(environment.apiUrl + `/projects/${projectId}/features/${featureId}/assets/`, form)
         .subscribe( (feature) => {
           // TODO workaround to update activeFeature, this should be done with a subscription like in addFeature()
           const f = this._activeFeature.getValue();

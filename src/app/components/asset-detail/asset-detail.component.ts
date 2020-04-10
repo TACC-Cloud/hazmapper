@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {GeoDataService} from '../../services/geo-data.service';
-import {Feature, Project} from '../../models/models';
+import {Feature, IFileImportRequest, Project} from '../../models/models';
 import {AppEnvironment, environment} from '../../../environments/environment';
 import {ProjectsService} from '../../services/projects.service';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
@@ -67,8 +67,12 @@ export class AssetDetailComponent implements OnInit {
       }
     };
     const modal: BsModalRef = this.bsModalService.show(ModalFileBrowserComponent, modalConfig);
-    modal.content.onClose.subscribe( (files: Array<RemoteFile>) => {
-      this.geoDataService.importFileFromTapis(this.activeProject.id, files);
+    modal.content.onClose.subscribe( (file: RemoteFile) => {
+      const payload: IFileImportRequest = {
+        system_id: file[0].system,
+        path: file[0].path
+      };
+      this.geoDataService.importFeatureAsset(this.activeProject.id, Number(this.feature.id), payload);
     });
   }
 
