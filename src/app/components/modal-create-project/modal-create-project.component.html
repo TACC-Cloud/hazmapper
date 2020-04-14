@@ -12,7 +12,7 @@
             </label>
             <div class="button-group small">
                 <button class="button small warning" type="button" (click)="close()">Close</button>
-                <button class="button small align-right" type="submit" [disabled]="!projCreateForm.valid">Submit</button>
+                <button class="button small align-right" type="submit" [disabled]="!projCreateForm.valid || submitting">Submit</button>
             </div>
         </form>
     </tab>

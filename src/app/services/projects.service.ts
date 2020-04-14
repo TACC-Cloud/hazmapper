@@ -4,7 +4,7 @@ import {BehaviorSubject, Observable, ReplaySubject, of} from 'rxjs';
 import {Project} from '../models/models';
 import { environment } from '../../environments/environment';
 import { RapidProjectRequest } from '../models/rapid-project-request';
-import {catchError, map} from 'rxjs/operators';
+import {catchError, map, tap} from 'rxjs/operators';
 import {IProjectUser} from '../models/project-user';
 
 @Injectable({
@@ -46,15 +46,15 @@ export class ProjectsService {
 
 
   create(data: Project): Observable<Project> {
-    const prom = this.http.post<Project>(environment.apiUrl + `/projects/`, data);
-    prom.subscribe(proj => {
-      // Spread operator, just pushes the new project into the array
-      // TODO: Make this a pipe/observable thingy
-      this._projects.next([...this._projects.value, proj]);
-      // Set the active project to the one just created?
-      this._activeProject.next(proj);
-    });
-    return prom;
+    return this.http.post<Project>(environment.apiUrl + `/projects/`, data)
+      .pipe(
+        tap(proj => {
+          // Spread operator, just pushes the new project into the array
+          this._projects.next([...this._projects.value, proj]);
+          // Set the active project to the one just created?
+          this._activeProject.next(proj);
+        }),
+      );
   }
 
   createRapidProject(data: RapidProjectRequest) {

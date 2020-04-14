@@ -15,11 +15,13 @@ export class ModalCreateProjectComponent implements OnInit {
 
   projCreateForm: FormGroup;
   rapidFolder: RemoteFile;
+  submitting: boolean;
   errorMessage = '';
 
   constructor(private bsModalRef: BsModalRef, private projectsService: ProjectsService) { }
 
   ngOnInit() {
+    this.submitting = false;
     this.projCreateForm = new FormGroup( {
       name: new FormControl(''),
       description: new FormControl('')
@@ -46,6 +48,7 @@ export class ModalCreateProjectComponent implements OnInit {
   }
 
   submit() {
+    this.submitting = true;
     const p = new Project();
     p.description = this.projCreateForm.get('description').value;
     p.name = this.projCreateForm.get('name').value;
@@ -54,7 +57,7 @@ export class ModalCreateProjectComponent implements OnInit {
     }, err => {
       this.errorMessage = err.toString();
     });
-
+    this.submitting = true;
   }
 
 }
