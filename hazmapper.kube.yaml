@@ -2,36 +2,40 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: hazmapper
+  name: hazmapper
 spec:
-    selector:
-        matchLabels:
-            run: hazmapper
-    replicas: 1
-    template:
-        metadata:
-            labels:
-                run: hazmapper
-        spec:
-            containers:
-                -   name: hazmapper
-                    image: taccaci/hazmapper:latest
-                    ports:
-                        -   containerPort: 80
+  selector:
+    matchLabels:
+      run: hazmapper
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: hazmapper
+    spec:
+      containers:
+      - name: hazmapper
+        image: taccaci/hazmapper:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: '256M'
+          limits:
+            memory: '512M'
 ---
 apiVersion: v1
 kind: Service
 metadata:
-    name: hazmapper
-    labels:
-        run: hazmapper
+  name: hazmapper
+  labels:
+    run: hazmapper
 spec:
-    type: NodePort
-    ports:
-        -   port: 80
-            targetPort: 80
-            nodePort: 31260
-            protocol: TCP
-    selector:
-        run: hazmapper
-
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 32351
+    protocol: TCP
+  selector:
+    run: hazmapper
