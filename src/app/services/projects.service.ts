@@ -6,6 +6,8 @@ import { environment } from '../../environments/environment';
 import { RapidProjectRequest } from '../models/rapid-project-request';
 import {catchError, map, tap} from 'rxjs/operators';
 import {IProjectUser} from '../models/project-user';
+import {NotificationsService} from './notifications.service';
+import {FilterService} from "./filter.service";
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +21,7 @@ export class ProjectsService {
   private _projectUsers: ReplaySubject<Array<IProjectUser>> = new ReplaySubject<Array<IProjectUser>>(1);
   public readonly projectUsers$: Observable<Array<IProjectUser>> = this._projectUsers.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private notificationsService: NotificationsService) { }
 
   getProjects(): void {
    this.http.get<Project[]>(environment.apiUrl + `/projects/`).subscribe( resp => {
@@ -77,6 +79,15 @@ export class ProjectsService {
   setActiveProject(proj: Project): void {
     this._activeProject.next(proj);
     this.getProjectUsers(proj);
+  }
+
+  deleteProject(proj: Project): void {
+    this.http.delete(environment.apiUrl + `/projects/${proj.id}/`)
+      .subscribe( (resp) => {
+        this.getProjects();
+      }, error => {
+        this.notificationsService.showErrorToast('Could not delete project!');
+      });
   }
 
 }

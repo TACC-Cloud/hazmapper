@@ -32,6 +32,10 @@ export class UsersPanelComponent implements OnInit {
     });
   }
 
+  deleteProject() {
+    this.projectsService.deleteProject(this.activeProject);
+  }
+
   addUser() {
     console.log(this.addUserForm);
     this.projectsService.addUserToProject(this.activeProject, this.addUserForm.get('username').value);

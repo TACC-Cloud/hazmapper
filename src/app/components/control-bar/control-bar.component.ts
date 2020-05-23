@@ -33,14 +33,21 @@ export class ControlBarComponent implements OnInit {
     this.projectsService.projects.subscribe( (projects) => {
       this.projects = projects;
       this.loading = false;
-      if (this.projects.length) {
+      const validSelectedProject = this.selectedProject && projects.some(proj => proj.id === this.selectedProject.id);
+      if (!validSelectedProject && this.projects.length) {
         this.selectProject(this.projects[0]);
+      } else if (!validSelectedProject && this.selectedProject) {
+        this.selectProject(null);
       }
     });
 
     this.projectsService.activeProject.subscribe(next => {
       this.selectedProject = next;
-      this.geoDataService.getDataForProject(next.id);
+      if (this.selectedProject) {
+        this.geoDataService.getDataForProject(next.id);
+      } else {
+        this.geoDataService.clearData();
+      }
     });
 
     this.notificationsService.notifications.subscribe(next => {

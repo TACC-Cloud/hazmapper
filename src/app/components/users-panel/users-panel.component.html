@@ -12,5 +12,15 @@
     </div>
     <h4> Current Members </h4>
     <p *ngFor="let user of projectUsers">{{user.username}}</p>
+    <div class="">
+      <h4> Map </h4>
+      <h6>Name:</h6>
+      <p>{{activeProject.name}}</p>
+      <h6>Description:</h6>
+      <p>{{activeProject.description}}</p>
+      <button class="button warning alert hollow" (click)=deleteProject()>
+        <i class="fas fa-trash"></i>  Delete Map
+      </button>
+    </div>
   </div>
 </div>

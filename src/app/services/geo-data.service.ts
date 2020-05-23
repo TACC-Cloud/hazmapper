@@ -361,4 +361,12 @@ export class GeoDataService {
     this.getPointClouds(projectId);
     this.getOverlays(projectId);
   }
+
+  clearData(): void {
+    //this._activeFeature.next(null);
+    this._features.next(null);
+    this._pointClouds.next(null);
+    this._overlays.next(null);
+  }
+
 }
