@@ -8,6 +8,7 @@ import {ProjectsService} from '../../services/projects.service';
 import {RemoteFile} from 'ng-tapis';
 import { ScrollableArray } from '../../utils/ScrollableArray';
 import {PathTree} from '../../models/path-tree';
+import {TapisFilesService} from "../../services/tapis-files.service";
 
 
 @Component({
@@ -23,7 +24,7 @@ export class AssetsPanelComponent implements OnInit {
   activeProject: Project;
   currentTreeListing: PathTree<Feature>;
 
-  constructor(private geoDataService: GeoDataService, private bsModalService: BsModalService, private projectsService: ProjectsService) { }
+  constructor(private geoDataService: GeoDataService, private bsModalService: BsModalService, private projectsService: ProjectsService, private tapisFilesService: TapisFilesService) { }
 
   ngOnInit() {
     this.scrollableFeatures.currentSelection.subscribe( (next: Array<Feature>) => {
@@ -58,7 +59,10 @@ export class AssetsPanelComponent implements OnInit {
   }
 
   openFileBrowserModal() {
-    const modal: BsModalRef = this.bsModalService.show(ModalFileBrowserComponent);
+    const initialState = {
+      allowedExtensions: this.tapisFilesService.IMPORTABLE_FEATURE_TYPES
+    };
+    const modal: BsModalRef = this.bsModalService.show(ModalFileBrowserComponent, {initialState});
     modal.content.onClose.subscribe( (files: Array<RemoteFile>) => {
       this.geoDataService.importFileFromTapis(this.activeProject.id, files);
     });
