@@ -13,7 +13,7 @@ import * as turf from '@turf/turf';
 import { AllGeoJSON } from '@turf/helpers';
 import { combineLatest } from 'rxjs';
 import {filter, map} from 'rxjs/operators';
-import {Overlay} from '../../models/models';
+import {Overlay, Project} from '../../models/models';
 import {AppEnvironment, environment} from '../../../environments/environment';
 
 @Component({
@@ -30,6 +30,7 @@ export class MapComponent implements OnInit {
   features: FeatureGroup = new FeatureGroup();
   overlays: LayerGroup = new LayerGroup<any>();
   environment: AppEnvironment;
+  fitToFeatureExtent: boolean = true;
 
   constructor(private projectsService: ProjectsService,
               private geoDataService: GeoDataService,
@@ -119,8 +120,7 @@ export class MapComponent implements OnInit {
       pointToLayer: createMarker
     };
 
-    combineLatest(this.projectsService.activeProject, this.geoDataService.features).subscribe(
-      ([activeProject, collection]) => {
+    this.geoDataService.features.subscribe((collection) => {
         this.features.clearLayers();
         this.overlays.clearLayers();
         const markers = L.markerClusterGroup({
@@ -141,15 +141,21 @@ export class MapComponent implements OnInit {
         this.features.addLayer(markers);
         this.map.addLayer(this.features);
         try {
-          // fit to bounds if this is a new project
-          if (this._activeProjectId != activeProject.id) {
+          if (this.fitToFeatureExtent) {
+            this.fitToFeatureExtent = false;
             this.map.fitBounds(this.features.getBounds());
           }
         } catch (e) {}
-        this._activeProjectId = activeProject ? activeProject.id: null;
       }
     );
 
+    this.projectsService.activeProject.subscribe((next: Project) => {
+      // fit to bounds if this is a new project
+      if (next && this._activeProjectId != next.id) {
+        this.fitToFeatureExtent = true;
+      }
+      this._activeProjectId = next ? next.id: null;
+    });
   }
 
   /**
