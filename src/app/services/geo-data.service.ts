@@ -364,7 +364,7 @@ export class GeoDataService {
 
   clearData(): void {
     //this._activeFeature.next(null);
-    this._features.next(null);
+    this._features.next({type: 'FeatureCollection', features: []});
     this._pointClouds.next(null);
     this._overlays.next(null);
   }

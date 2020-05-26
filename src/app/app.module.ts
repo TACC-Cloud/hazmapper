@@ -24,6 +24,7 @@ import { FeatureIconComponent } from './components/feature-icon/feature-icon.com
 import { FeatureRowComponent } from './components/feature-row/feature-row.component';
 import { FeatureMetadataComponent } from './components/feature-metadata/feature-metadata.component';
 import { AuthService } from './services/authentication.service';
+import { ModalService } from './services/modal.service';
 import { CallbackComponent } from './components/callback/callback.component';
 import {AuthInterceptor, JwtInterceptor} from './app.interceptors';
 import { ModalCreateProjectComponent } from './components/modal-create-project/modal-create-project.component';
@@ -41,6 +42,7 @@ import { FileBrowserComponent } from './components/file-browser/file-browser.com
 import { UsersPanelComponent } from './components/users-panel/users-panel.component';
 import { CommonModule } from '@angular/common';
 import { ToastrModule } from 'ngx-toastr';
+import { ModalConfirmationBodyComponent } from './components/modal-confirmation-body/modal-confirmation-body.component';
 
 @NgModule({
   declarations: [
@@ -67,6 +69,7 @@ import { ToastrModule } from 'ngx-toastr';
     ModalPointCloudInfoComponent,
     FileBrowserComponent,
     UsersPanelComponent,
+    ModalConfirmationBodyComponent,
   ],
   imports: [
     CommonModule,
@@ -88,6 +91,7 @@ import { ToastrModule } from 'ngx-toastr';
   ],
   providers: [
     AuthService,
+    ModalService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
@@ -105,6 +109,7 @@ import { ToastrModule } from 'ngx-toastr';
   ],
   bootstrap: [AppComponent],
   entryComponents: [
+    ModalConfirmationBodyComponent,
     ModalCreateProjectComponent,
     ModalFileBrowserComponent,
     ModalCreatePointCloudComponent,

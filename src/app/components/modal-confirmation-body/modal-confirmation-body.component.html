@@ -1,0 +1,13 @@
+<h4>{{title}}</h4>
+<button class="close-button" (click)="closeModal(false)" aria-label="Close modal" type="button">
+  <span aria-hidden="true">&times;</span>
+</button>
+<hr>
+<p>{{message}}</p>
+
+<div *ngIf="options.length">
+  <div class="button-group">
+    <button type="button" class="button secondary" (click)="closeModal(options[0])">{{options[0]}}</button>
+    <button type="button" class="button primary" (click)="closeModal(options[1])">{{options[1]}}</button>
+  </div>
+</div>

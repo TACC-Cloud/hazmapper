@@ -146,7 +146,7 @@ export class MapComponent implements OnInit {
             this.map.fitBounds(this.features.getBounds());
           }
         } catch (e) {}
-        this._activeProjectId = activeProject.id;
+        this._activeProjectId = activeProject ? activeProject.id: null;
       }
     );
 

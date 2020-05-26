@@ -78,7 +78,9 @@ export class ProjectsService {
 
   setActiveProject(proj: Project): void {
     this._activeProject.next(proj);
-    this.getProjectUsers(proj);
+    if (proj) {
+      this.getProjectUsers(proj);
+    }
   }
 
   deleteProject(proj: Project): void {
