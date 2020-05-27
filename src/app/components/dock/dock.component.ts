@@ -38,6 +38,11 @@ export class DockComponent implements OnInit {
 
     this.projectsService.activeProject.subscribe( (next) => {
       this.activeProject = next;
+      if (!this.activeProject) {
+        for (const key in this.panelsDisplay) {
+          this.panelsDisplay[key] = false;
+        }
+      }
     });
 
   }

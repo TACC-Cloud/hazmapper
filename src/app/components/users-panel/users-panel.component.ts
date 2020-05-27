@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ProjectsService} from '../../services/projects.service';
+import {ModalService} from '../../services/modal.service';
 import {IProjectUser} from '../../models/project-user';
 import {FormGroup, FormControl} from '@angular/forms';
 import {Project} from '../../models/models';
@@ -15,7 +16,7 @@ export class UsersPanelComponent implements OnInit {
   addUserForm: FormGroup;
   activeProject: Project;
 
-  constructor(private projectsService: ProjectsService) { }
+  constructor(private projectsService: ProjectsService, private modalService: ModalService) { }
 
   ngOnInit() {
 
@@ -31,9 +32,18 @@ export class UsersPanelComponent implements OnInit {
     });
   }
 
+  deleteProject() {
+    this.modalService.confirm(
+      'Delete map',
+      'Are you sure you want to delete this map?  All associated features and metadata will be deleted. THIS CANNOT BE UNDONE.',
+      ['Cancel', 'Delete']).subscribe( (answer) => {
+        if(answer === 'Delete') {
+          this.projectsService.deleteProject(this.activeProject);
+        }
+    });
+  }
+
   addUser() {
     this.projectsService.addUserToProject(this.activeProject, this.addUserForm.get('username').value);
   }
-
-
 }

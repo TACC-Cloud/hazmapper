@@ -7,6 +7,7 @@ import { RapidProjectRequest } from '../models/rapid-project-request';
 import {catchError, map, tap} from 'rxjs/operators';
 import {IProjectUser} from '../models/project-user';
 import {NotificationsService} from './notifications.service';
+import {FilterService} from "./filter.service";
 
 @Injectable({
   providedIn: 'root'
@@ -85,7 +86,18 @@ export class ProjectsService {
 
   setActiveProject(proj: Project): void {
     this._activeProject.next(proj);
-    this.getProjectUsers(proj);
+    if (proj) {
+      this.getProjectUsers(proj);
+    }
+  }
+
+  deleteProject(proj: Project): void {
+    this.http.delete(environment.apiUrl + `/projects/${proj.id}/`)
+      .subscribe( (resp) => {
+        this.getProjects();
+      }, error => {
+        this.notificationsService.showErrorToast('Could not delete project!');
+      });
   }
 
 }

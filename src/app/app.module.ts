@@ -24,6 +24,7 @@ import { FeatureIconComponent } from './components/feature-icon/feature-icon.com
 import { FeatureRowComponent } from './components/feature-row/feature-row.component';
 import { FeatureMetadataComponent } from './components/feature-metadata/feature-metadata.component';
 import { AuthService } from './services/authentication.service';
+import { ModalService } from './services/modal.service';
 import { CallbackComponent } from './components/callback/callback.component';
 import {AuthInterceptor, JwtInterceptor} from './app.interceptors';
 import { ModalCreateProjectComponent } from './components/modal-create-project/modal-create-project.component';
@@ -41,6 +42,7 @@ import { FileBrowserComponent } from './components/file-browser/file-browser.com
 import { UsersPanelComponent } from './components/users-panel/users-panel.component';
 import { CommonModule } from '@angular/common';
 import { ToastrModule } from 'ngx-toastr';
+import { ModalConfirmationBodyComponent } from './components/modal-confirmation-body/modal-confirmation-body.component';
 import { UserRowComponent } from './components/user-row/user-row.component';
 
 @NgModule({
@@ -68,6 +70,7 @@ import { UserRowComponent } from './components/user-row/user-row.component';
     ModalPointCloudInfoComponent,
     FileBrowserComponent,
     UsersPanelComponent,
+    ModalConfirmationBodyComponent,
     UserRowComponent,
   ],
   imports: [
@@ -90,6 +93,7 @@ import { UserRowComponent } from './components/user-row/user-row.component';
   ],
   providers: [
     AuthService,
+    ModalService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
@@ -107,6 +111,7 @@ import { UserRowComponent } from './components/user-row/user-row.component';
   ],
   bootstrap: [AppComponent],
   entryComponents: [
+    ModalConfirmationBodyComponent,
     ModalCreateProjectComponent,
     ModalFileBrowserComponent,
     ModalCreatePointCloudComponent,
