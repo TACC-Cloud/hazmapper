@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {GeoDataService} from '../../services/geo-data.service';
 import {ProjectsService} from '../../services/projects.service';
 import {IProjectUser} from '../../models/project-user';
 import {FormGroup, FormControl} from '@angular/forms';
@@ -33,7 +32,6 @@ export class UsersPanelComponent implements OnInit {
   }
 
   addUser() {
-    console.log(this.addUserForm);
     this.projectsService.addUserToProject(this.activeProject, this.addUserForm.get('username').value);
   }
 

@@ -41,6 +41,7 @@ import { FileBrowserComponent } from './components/file-browser/file-browser.com
 import { UsersPanelComponent } from './components/users-panel/users-panel.component';
 import { CommonModule } from '@angular/common';
 import { ToastrModule } from 'ngx-toastr';
+import { UserRowComponent } from './components/user-row/user-row.component';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { ToastrModule } from 'ngx-toastr';
     ModalPointCloudInfoComponent,
     FileBrowserComponent,
     UsersPanelComponent,
+    UserRowComponent,
   ],
   imports: [
     CommonModule,
