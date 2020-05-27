@@ -52,13 +52,6 @@ export class AssetDetailComponent implements OnInit {
     });
   }
 
-  // handleAssetFileInput(files: FileList) {
-  //   // tslint:disable-next-line:prefer-for-of
-  //   for (let i = 0; i < files.length; i++) {
-  //     this.geoDataService.uploadAssetFile(this.activeProject.id, Number(this.feature.id), files[i]);
-  //   }
-  // }
-
   openFileBrowserModal() {
     const modalConfig: ModalOptions = {
       initialState: {

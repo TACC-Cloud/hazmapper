@@ -20,7 +20,7 @@ export class FileBrowserComponent implements OnInit {
   @Input() onlyFolder = false;
   @Input() heading = 'Select Files';
   @Input() helpText = 'Note: Only files are selectable, not folders. Double click on a folder to navigate into it.';
-  @Input() allowedExtensions: Array<string> = this.tapisFilesService.IMPORTABLE_TYPES;
+  @Input() allowedExtensions: Array<string> = [];
   @Output() selection: EventEmitter<Array<RemoteFile>> = new EventEmitter<Array<RemoteFile>>();
 
   private currentUser: AuthenticatedUser;

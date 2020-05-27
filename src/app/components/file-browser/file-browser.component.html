@@ -1,6 +1,7 @@
 <h4 *ngIf="heading"> {{heading}} </h4>
+<small *ngIf="allowedExtensions && allowedExtensions.length"><em>Allowed file types: {{ allowedExtensions.join(', ') }} </em><br></small>
 <small *ngIf="helpText"><em>{{ helpText }} </em></small>
-<hr *ngIf="heading || helpText">
+<hr *ngIf="heading || helpText || allowedExtensions">
 <select (ngModelChange)="selectSystem($event)" [(ngModel)]="selectedSystem">
   <option [ngValue]="myDataSystem"> My Data </option>
   <option [ngValue]="communityDataSystem"> Community Data</option>
