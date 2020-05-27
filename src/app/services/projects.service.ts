@@ -46,6 +46,14 @@ export class ProjectsService {
       });
   }
 
+  deleteUserFromProject(proj: Project, uname: string): void {
+    this.http.delete(environment.apiUrl + `/projects/${proj.id}/users/${uname}/`)
+      .subscribe( (resp) => {
+        this.getProjectUsers(proj);
+      },error => {
+      this.notificationsService.showErrorToast('Unable to delete user');
+    });
+  }
 
   create(data: Project): Observable<Project> {
     return this.http.post<Project>(environment.apiUrl + `/projects/`, data)

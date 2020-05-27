@@ -43,6 +43,7 @@ import { UsersPanelComponent } from './components/users-panel/users-panel.compon
 import { CommonModule } from '@angular/common';
 import { ToastrModule } from 'ngx-toastr';
 import { ModalConfirmationBodyComponent } from './components/modal-confirmation-body/modal-confirmation-body.component';
+import { UserRowComponent } from './components/user-row/user-row.component';
 
 @NgModule({
   declarations: [
@@ -70,6 +71,7 @@ import { ModalConfirmationBodyComponent } from './components/modal-confirmation-
     FileBrowserComponent,
     UsersPanelComponent,
     ModalConfirmationBodyComponent,
+    UserRowComponent,
   ],
   imports: [
     CommonModule,
