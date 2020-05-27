@@ -222,23 +222,6 @@ export class GeoDataService {
       });
   }
 
-
-  uploadAssetFile(projectId: number, featureId: number, file: File): void {
-    const form: FormData = new FormData();
-    form.append('file', file, file.name);
-    this.http.post<Feature>(environment.apiUrl + `/projects/${projectId}/features/${featureId}/assets/`, form)
-        .subscribe( (feature) => {
-          // TODO workaround to update activeFeature, this should be done with a subscription like in addFeature()
-          const f = this._activeFeature.getValue();
-          if (f && f.id === featureId) {
-            this._activeFeature.next(new Feature(feature));
-            this.getFeatures(projectId);
-          }
-        }, error => {
-          // TODO: Add notification
-        });
-  }
-
   getOverlays(projectId: number): void {
     this.http.get(environment.apiUrl + `/projects/${projectId}/overlays/`).subscribe( (ovs: Array<Overlay>) => {
       this._overlays.next(ovs);
