@@ -8,7 +8,7 @@ import {ProjectsService} from '../../services/projects.service';
 import {RemoteFile} from 'ng-tapis';
 import { ScrollableArray } from '../../utils/ScrollableArray';
 import {PathTree} from '../../models/path-tree';
-import {TapisFilesService} from "../../services/tapis-files.service";
+import {TapisFilesService} from '../../services/tapis-files.service';
 
 
 @Component({
