@@ -1,7 +1,7 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AuthenticatedUser, AuthService} from '../../services/authentication.service';
 import {RemoteFile} from 'ng-tapis/models/remote-file';
-import {combineLatest, forkJoin, Subscription} from 'rxjs';
+import {combineLatest} from 'rxjs';
 import {SystemSummary} from 'ng-tapis';
 import {TapisFilesService} from '../../services/tapis-files.service';
 import {BsModalRef} from 'ngx-foundation/modal/bs-modal-ref.service';
@@ -15,6 +15,8 @@ import {take} from 'rxjs/operators';
 })
 export class FileBrowserComponent implements OnInit {
 
+  static limit = 200;
+
   @Input() single = false;
   @Input() allowFolders = false;
   @Input() onlyFolder = false;
@@ -24,8 +26,11 @@ export class FileBrowserComponent implements OnInit {
   @Output() selection: EventEmitter<Array<RemoteFile>> = new EventEmitter<Array<RemoteFile>>();
 
   private currentUser: AuthenticatedUser;
-  public filesList: Array<RemoteFile>;
-  public inProgress: boolean;
+  private currentDirectory: RemoteFile;
+  public filesList: Array<RemoteFile> = [];
+  public inProgress = true;
+  public hasError: boolean;
+  private offset = 0;
   public selectedFiles: Map<string, RemoteFile> = new Map();
   public projects: Array<SystemSummary>;
   private selectedSystem: SystemSummary;
@@ -82,14 +87,47 @@ export class FileBrowserComponent implements OnInit {
 
   browse(file: RemoteFile) {
     if (file.type !== 'dir') { return; }
-    this.inProgress = true;
+    this.currentDirectory = file;
     this.selectedFiles.clear();
     this.selection.next(Array<RemoteFile>());
-    this.tapisFilesService.listFiles(file.system, file.path);
-    this.tapisFilesService.listing.subscribe(listing => {
-      this.inProgress = false;
-      this.filesList = listing;
-    });
+    this.filesList = [];
+    this.offset = 0;
+    this.inProgress = false;
+    this.hasError = false;
+    this.getFiles();
+  }
+
+  getFiles() {
+    const hasMoreFiles = (this.offset % FileBrowserComponent.limit) === 0;
+
+    if (this.inProgress || !hasMoreFiles) {
+      return;
+    }
+
+    this.inProgress = true;
+    this.tapisFilesService.listFiles(this.currentDirectory.system, this.currentDirectory.path, this.offset, FileBrowserComponent.limit)
+      .subscribe(
+        response => {
+                const files = response.result;
+
+                if (files.length && files[0].name === '.') {
+                  // This removes the first item in the listing, which in Agave
+                  // is always a reference to self '.' and replaces with '..'
+                  const current = files.shift();
+                  current.path = this.tapisFilesService.getParentPath(current.path);
+                  current.name = '..';
+                  files.unshift(current);
+                }
+
+                this.inProgress = false;
+                this.filesList = this.filesList.concat(files);
+                this.offset = this.offset + files.length;
+              },
+          error => {
+            this.inProgress = false;
+            this.hasError = true;
+          }
+      );
   }
 
   select(file: RemoteFile) {
