@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, Observable, ReplaySubject, of} from 'rxjs';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
 import {Project} from '../models/models';
 import { environment } from '../../environments/environment';
 import { RapidProjectRequest } from '../models/rapid-project-request';
 import {catchError, map, tap} from 'rxjs/operators';
 import {IProjectUser} from '../models/project-user';
 import {NotificationsService} from './notifications.service';
-import {FilterService} from "./filter.service";
 
 @Injectable({
   providedIn: 'root'
@@ -72,16 +71,17 @@ export class ProjectsService {
       .pipe(
         map( (proj) => {
           this._projects.next([proj, ...this._projects.value]);
-          // Set the active project to the one just created?
+          // Set the active project to the one just created
           this._activeProject.next(proj);
           return proj;
-        })
-      ).pipe(
-        catchError( (err) =>  {
-          throw new Error('This project/folder is already a map project!');
+        }),
+       catchError( (err: any) =>  {
+          if (err instanceof HttpErrorResponse && err.status === 409) {
+            throw new Error('This project/folder is already a map project.');
+          }
+          throw new Error('Unable to create project.');
         })
       );
-
   }
 
   setActiveProject(proj: Project): void {
