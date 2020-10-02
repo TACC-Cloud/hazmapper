@@ -7,7 +7,7 @@ import {RemoteFile} from 'ng-tapis';
 })
 export class TapisFilesService {
   public readonly IMPORTABLE_FEATURE_ASSET_TYPES: Array<string> = ['jpeg', 'jpg', 'png', 'mp4', 'mov', 'mpeg4', 'webm'];
-  public readonly IMPORTABLE_FEATURE_TYPES: Array<string> = ['jpg', 'json', 'geojson', 'gpx'];
+  public readonly IMPORTABLE_FEATURE_TYPES: Array<string> = ['shp', 'jpg', 'json', 'geojson', 'gpx'];
   public readonly IMPORTABLE_POINT_CLOUD_TYPES: Array<string> = ['las', 'laz'];
   public readonly IMPORTABLE_OVERLAY_TYPES: Array<string> = ['jpg'];
 
