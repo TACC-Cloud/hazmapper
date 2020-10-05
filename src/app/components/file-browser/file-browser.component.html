@@ -4,8 +4,8 @@
 <hr *ngIf="heading || helpText || allowedExtensions">
 <select (ngModelChange)="selectSystem($event)" [(ngModel)]="selectedSystem">
   <option [ngValue]="myDataSystem"> My Data </option>
-  <option [ngValue]="communityDataSystem"> Community Data</option>
-  <option [ngValue]="publishedDataSystem"> Published Data</option>
+  <option *ngIf="showPublicSystems" [ngValue]="communityDataSystem"> Community Data</option>
+  <option *ngIf="showPublicSystems" [ngValue]="publishedDataSystem"> Published Data</option>
   <optgroup label="My Projects">
     <option *ngFor="let project of projects" [ngValue]="project">{{project.description}}</option>
   </optgroup>

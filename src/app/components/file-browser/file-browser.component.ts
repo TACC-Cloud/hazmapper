@@ -20,6 +20,7 @@ export class FileBrowserComponent implements OnInit {
   @Input() single = false;
   @Input() allowFolders = false;
   @Input() onlyFolder = false;
+  @Input() showPublicSystems = true;
   @Input() heading = 'Select Files';
   @Input() helpText = 'Note: Only files are selectable, not folders. Double click on a folder to navigate into it.';
   @Input() allowedExtensions: Array<string> = [];
