@@ -2,11 +2,12 @@
   <div class="cell auto">
     <span class="pointcloud-description" [tooltip]="pc.description" [delay]="700">{{pc.description}}</span>
   </div>
-  <div class="cell large-7 grid-x align-right">
-    <button dropdownToggle class="button tiny hollow" aria-controls="dropdown-button" (click)="openFileBrowserModal()">
+  <div class="cell large-8 grid-x align-right">
+    <span *ngIf="pc.task.status != null && pc.task.status !== 'FAILED' && pc.task.status !== 'FINISHED'"><i class="fas fa-spin fa-spinner"></i></span>
+    <button class="button tiny hollow" [disabled]="pc.task.status != null && pc.task.status !== 'FAILED' && pc.task.status !== 'FINISHED'" (click)="openFileBrowserModal()">
       Add las/laz
     </button>
-    <button class="button alert tiny hollow" (click)="delete()">
+    <button class="button alert tiny hollow" (click)="delete()" [disabled]="pc.task.status != null && pc.task.status !== 'FAILED' && pc.task.status !== 'FINISHED'">
       <i class="fas fa-trash"></i>
     </button>
     <button class="button tiny hollow" tooltip="View additional information" [delay]="700" (click)="openPointCloudInfoModal()">

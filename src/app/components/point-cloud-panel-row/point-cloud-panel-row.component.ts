@@ -42,9 +42,9 @@ export class PointCloudPanelRowComponent implements OnInit {
 
   openPointCloudInfoModal() {
     const initialState = {
-      pc: this.pc
+      pc:  this.pc,
     };
-    const modal: BsModalRef = this.bsModalService.show(ModalPointCloudInfoComponent, { initialState });
+    const modal: BsModalRef = this.bsModalService.show(ModalPointCloudInfoComponent, { initialState } );
   }
 
 }

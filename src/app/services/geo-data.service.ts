@@ -148,7 +148,7 @@ export class GeoDataService {
     this.http.post(environment.apiUrl + `/projects/${projectId}/point-cloud/${pointCloudId}/import/`, payload)
       .subscribe( (resp) => {
       }, error => {
-        // TODO: Add notification / toast
+        this.notificationsService.showErrorToast('Could not import point cloud file!');
       });
   }
 
