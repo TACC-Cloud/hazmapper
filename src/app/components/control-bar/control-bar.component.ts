@@ -21,6 +21,7 @@ export class ControlBarComponent implements OnInit {
   public selectedProject: Project;
   public mapMouseLocation: LatLng = new LatLng(0, 0);
   private loading = true;
+  private loadingData: boolean = false;
 
   constructor(private projectsService: ProjectsService,
               private geoDataService: GeoDataService,
@@ -41,6 +42,10 @@ export class ControlBarComponent implements OnInit {
       }
     });
 
+    this.notificationsService.loadingData.subscribe(next => {
+      this.loadingData = next;
+    });
+
     this.projectsService.activeProject.subscribe(next => {
       this.selectedProject = next;
       if (this.selectedProject) {
@@ -53,6 +58,7 @@ export class ControlBarComponent implements OnInit {
     this.notificationsService.notifications.subscribe(next => {
       const hasSuccessNotification = next.some(note => note.status === 'success');
       if (hasSuccessNotification) {
+        this.notificationsService.setLoadData(false);
         this.geoDataService.getDataForProject(this.selectedProject.id);
       }
     });

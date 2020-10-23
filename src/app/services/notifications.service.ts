@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import {HttpClient} from '@angular/common/http';
 import {INotification} from '../models/notification';
-import {interval, Observable, ReplaySubject} from 'rxjs';
+import {interval, Observable, ReplaySubject, BehaviorSubject} from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -15,6 +15,8 @@ export class NotificationsService {
   private environment = environment;
   private _notifications: ReplaySubject<Array<INotification>> = new ReplaySubject<Array<INotification>>(1);
   public readonly  notifications: Observable<Array<INotification>> = this._notifications.asObservable();
+  private _loadingData: BehaviorSubject<boolean> = new BehaviorSubject(null);
+  public loadingData: Observable<boolean> = this._loadingData.asObservable();
 
   constructor(private toastr: ToastrService, private http: HttpClient) {
     const timer = interval(this.TIMEOUT);
@@ -52,6 +54,10 @@ export class NotificationsService {
 
   showErrorToast(message: string): void {
     this.toastr.error(message);
+  }
+
+  setLoadData(isLoading: boolean): void {
+    this._loadingData.next(isLoading);
   }
 
 }
