@@ -1,5 +1,7 @@
 # Hazmapper
 
+[![Build Status](https://travis-ci.org/TACC-Cloud/hazmapper.svg?branch=master)](https://travis-ci.org/TACC-Cloud/hazmapper)
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.3.
 
 
