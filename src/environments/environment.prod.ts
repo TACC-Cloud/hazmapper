@@ -1,5 +1,3 @@
-import {jwt} from './jwt';
-
 export interface AppEnvironment {
   production: boolean;
   apiUrl: string;
