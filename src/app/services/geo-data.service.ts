@@ -59,6 +59,7 @@ export class GeoDataService {
 
   getFeatures(projectId: number): void {
     const qstring: string = querystring.stringify(this._assetFilters.toJson());
+    this.notificationsService.setLoadFeatureData(true);
     this.http.get<FeatureCollection>(environment.apiUrl + `/projects/${projectId}/features/` + '?' + qstring)
       .subscribe( (fc: FeatureCollection) => {
         fc.features = fc.features.map( (feat: Feature) => new Feature(feat));
@@ -76,6 +77,7 @@ export class GeoDataService {
         this._featureTree.next(tree);
 
         this._features.next(fc);
+        this.notificationsService.setLoadFeatureData(false);
       });
   }
 
@@ -88,8 +90,10 @@ export class GeoDataService {
   }
 
   getPointClouds(projectId: number) {
+    this.notificationsService.setLoadPointCloudData(true);
     this.http.get<Array<IPointCloud>>(environment.apiUrl + `/projects/${projectId}/point-cloud/`)
       .subscribe( (resp ) => {
+        this.notificationsService.setLoadPointCloudData(false);
         this._pointClouds.next(resp);
       });
   }
@@ -140,7 +144,6 @@ export class GeoDataService {
   }
 
   importPointCloudFileFromTapis(projectId: number, pointCloudId: number, files: Array<RemoteFile>): void {
-    this.notificationsService.setLoadData(true);
     const tmp = files.map( f => ({system: f.system, path: f.path}));
     const payload = {
       files: tmp
@@ -153,7 +156,6 @@ export class GeoDataService {
   }
 
   importFileFromTapis(projectId: number, files: Array<RemoteFile>): void {
-    this.notificationsService.setLoadData(true);
     const tmp = files.map( f => ({system: f.system, path: f.path}));
     const payload = {
       files: tmp
@@ -209,7 +211,6 @@ export class GeoDataService {
   }
 
   importFeatureAsset(projectId: number, featureId: number, payload: IFileImportRequest): void {
-    this.notificationsService.setLoadData(true);
     this.http.post<Feature>(environment.apiUrl + `/projects/${projectId}/features/${featureId}/assets/`, payload)
       .subscribe( (feature) => {
         // TODO workaround to update activeFeature, this should be done with a subscription like in addFeature()
@@ -224,8 +225,10 @@ export class GeoDataService {
   }
 
   getOverlays(projectId: number): void {
+    this.notificationsService.setLoadOverlayData(true);
     this.http.get(environment.apiUrl + `/projects/${projectId}/overlays/`).subscribe( (ovs: Array<Overlay>) => {
       this._overlays.next(ovs);
+      this.notificationsService.setLoadOverlayData(false);
     });
   }
 
@@ -246,7 +249,6 @@ export class GeoDataService {
 
   importOverlayFileFromTapis(projectId: number, file: RemoteFile, label: string,
                              minLat: number, maxLat: number, minLon: number, maxLon: number): void {
-    this.notificationsService.setLoadData(true);
     const payload = {
       label: label,
       system_id: file.system,

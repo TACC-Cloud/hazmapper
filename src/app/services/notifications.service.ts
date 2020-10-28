@@ -15,8 +15,12 @@ export class NotificationsService {
   private environment = environment;
   private _notifications: ReplaySubject<Array<INotification>> = new ReplaySubject<Array<INotification>>(1);
   public readonly  notifications: Observable<Array<INotification>> = this._notifications.asObservable();
-  private _loadingData: BehaviorSubject<boolean> = new BehaviorSubject(null);
-  public loadingData: Observable<boolean> = this._loadingData.asObservable();
+  private _loadingFeatureData: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public loadingFeatureData: Observable<boolean> = this._loadingFeatureData.asObservable();
+  private _loadingPointCloudData: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public loadingPointCloudData: Observable<boolean> = this._loadingPointCloudData.asObservable();
+  private _loadingOverlayData: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public loadingOverlayData: Observable<boolean> = this._loadingOverlayData.asObservable();
 
   constructor(private toastr: ToastrService, private http: HttpClient) {
     const timer = interval(this.TIMEOUT);
@@ -56,8 +60,16 @@ export class NotificationsService {
     this.toastr.error(message);
   }
 
-  setLoadData(isLoading: boolean): void {
-    this._loadingData.next(isLoading);
+  setLoadFeatureData(isLoading: boolean): void {
+    this._loadingFeatureData.next(isLoading);
+  }
+
+  setLoadPointCloudData(isLoading: boolean): void {
+    this._loadingPointCloudData.next(isLoading);
+  }
+
+  setLoadOverlayData(isLoading: boolean): void {
+    this._loadingOverlayData.next(isLoading);
   }
 
 }

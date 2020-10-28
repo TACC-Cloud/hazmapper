@@ -7,7 +7,7 @@ import {skip} from 'rxjs/operators';
 import {BsModalRef, BsModalService} from 'ngx-foundation';
 import {ModalCreateProjectComponent} from '../modal-create-project/modal-create-project.component';
 import {ModalFileBrowserComponent} from '../modal-file-browser/modal-file-browser.component';
-import {interval, Observable, Subscription} from 'rxjs';
+import {interval, Observable, Subscription, combineLatest} from 'rxjs';
 import {NotificationsService} from "../../services/notifications.service";
 
 @Component({
@@ -42,9 +42,17 @@ export class ControlBarComponent implements OnInit {
       }
     });
 
-    this.notificationsService.loadingData.subscribe(next => {
-      this.loadingData = next;
-    });
+    combineLatest(this.notificationsService.loadingOverlayData,
+                  this.notificationsService.loadingPointCloudData,
+                  this.notificationsService.loadingFeatureData)
+      .subscribe(([loadingOverlay, loadingPointCloud, loadingFeature]) => {
+        // They are running
+        if (!loadingOverlay && !loadingPointCloud && !loadingFeature) {
+          this.loadingData = false;
+        } else {
+          this.loadingData = true;
+        }
+      });
 
     this.projectsService.activeProject.subscribe(next => {
       this.selectedProject = next;
@@ -58,7 +66,6 @@ export class ControlBarComponent implements OnInit {
     this.notificationsService.notifications.subscribe(next => {
       const hasSuccessNotification = next.some(note => note.status === 'success');
       if (hasSuccessNotification) {
-        this.notificationsService.setLoadData(false);
         this.geoDataService.getDataForProject(this.selectedProject.id);
       }
     });
