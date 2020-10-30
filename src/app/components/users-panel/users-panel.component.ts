@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild} from '@angular/core';
 import {ProjectsService} from '../../services/projects.service';
 import {ModalService} from '../../services/modal.service';
 import {IProjectUser} from '../../models/project-user';
@@ -15,19 +15,29 @@ export class UsersPanelComponent implements OnInit {
   public projectUsers: Array<IProjectUser>;
   addUserForm: FormGroup;
   activeProject: Project;
+  nameInputShown: boolean = false;
+  descriptionInputShown: boolean = false;
+  nameInputError: boolean = false;
+  descriptionInputError: boolean = false;
+  nameErrorMessage: string = "Project name must be under 512 characters!";
+  descriptionErrorMessage: string = "Project description must be under 4096 characters!";
+  @ViewChild('activeProjectName', {static: false}) projectNameInput: ElementRef<HTMLInputElement>;
+  @ViewChild('activeProjectDescription', {static: false}) projectDescriptionInput: ElementRef<HTMLInputElement>;
 
   constructor(private projectsService: ProjectsService, private modalService: ModalService) { }
+
 
   ngOnInit() {
 
     this.addUserForm = new FormGroup( {
       username: new FormControl()
     });
+
     this.projectsService.activeProject.subscribe( (next) => {
       this.activeProject = next;
     });
+
     this.projectsService.projectUsers$.subscribe( (next) => {
-      console.log(next);
       this.projectUsers = next;
     });
   }
@@ -46,4 +56,76 @@ export class UsersPanelComponent implements OnInit {
   addUser() {
     this.projectsService.addUserToProject(this.activeProject, this.addUserForm.get('username').value);
   }
+
+  changeProjectName(name: string) {
+    if (name.length < 512) {
+      this.nameInputError = false;
+      this.activeProject.name = name;
+      this.projectsService.updateProject(this.activeProject, name, undefined);
+
+    } else {
+      this.nameInputError = true;
+    }
+  }
+
+  changeProjectDescription(description: string) {
+    console.log(this.activeProject.description.length)
+    console.log(this.activeProject.description.length < 4096)
+    if (description.length < 4096) {
+      this.descriptionInputError = false;
+      this.activeProject.description = description;
+      this.projectsService.updateProject(this.activeProject, undefined, description);
+    } else {
+      this.descriptionInputError = true;
+    }
+  }
+
+  hideNameInput() {
+    this.nameInputShown = false;
+  }
+
+  // NOTE: Unless we have the delay, the input is not drawn
+  //       in time for the focusmethod.
+  showNameInput() {
+    this.nameInputShown = true;
+    setTimeout(() => {
+      this.projectNameInput.nativeElement.value = this.activeProject.name;
+      this.projectNameInput.nativeElement.focus()
+      this.projectNameInput.nativeElement.select()
+    }, 1);
+  }
+
+  hideDescriptionInput() {
+    this.descriptionInputShown = false;
+  }
+
+  // NOTE: Unless we have the delay, the input is not drawn
+  //       in time for the focusmethod.
+  showDescriptionInput() {
+    this.descriptionInputShown = true;
+    setTimeout(() => {
+      this.projectDescriptionInput.nativeElement.value = this.activeProject.description;
+      this.projectDescriptionInput.nativeElement.focus()
+      this.projectDescriptionInput.nativeElement.select()
+    }, 1);
+  }
+
+  onEnterName(value: string) {
+    value = value.trim();
+    if (value && value != this.activeProject.name) {
+      this.changeProjectName(value);
+    }
+
+    this.hideNameInput();
+  }
+
+  onEnterDescription(value: string) {
+    value = value.trim();
+    if (value && value != this.activeProject.description) {
+      this.changeProjectDescription(value);
+    }
+
+    this.hideDescriptionInput();
+  }
+
 }
