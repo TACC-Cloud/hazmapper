@@ -42,12 +42,12 @@ export class ControlBarComponent implements OnInit {
       }
     });
 
-    combineLatest(this.notificationsService.loadingOverlayData,
-                  this.notificationsService.loadingPointCloudData,
-                  this.notificationsService.loadingFeatureData)
+    combineLatest(this.geoDataService.loadingOverlayData,
+                  this.geoDataService.loadingPointCloudData,
+                  this.geoDataService.loadingFeatureData)
       .subscribe(([loadingOverlay, loadingPointCloud, loadingFeature]) => {
         // They are running
-        if (!loadingOverlay && !loadingPointCloud && !loadingFeature) {
+        if (!(loadingOverlay || loadingPointCloud || loadingFeature)) {
           this.loadingData = false;
         } else {
           this.loadingData = true;

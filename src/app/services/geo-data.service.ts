@@ -38,6 +38,12 @@ export class GeoDataService {
   public readonly pointClouds: Observable<Array<IPointCloud>> = this._pointClouds.asObservable();
   private _featureTree: ReplaySubject<PathTree<Feature>> = new ReplaySubject<PathTree<Feature>>(1);
   public readonly featureTree$: Observable<PathTree<Feature>> = this._featureTree.asObservable();
+  private _loadingFeatureData: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public loadingFeatureData: Observable<boolean> = this._loadingFeatureData.asObservable();
+  private _loadingPointCloudData: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public loadingPointCloudData: Observable<boolean> = this._loadingPointCloudData.asObservable();
+  private _loadingOverlayData: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public loadingOverlayData: Observable<boolean> = this._loadingOverlayData.asObservable();
 
   constructor(private http: HttpClient, private filterService: FilterService, private notificationsService: NotificationsService) {
 
@@ -59,7 +65,7 @@ export class GeoDataService {
 
   getFeatures(projectId: number): void {
     const qstring: string = querystring.stringify(this._assetFilters.toJson());
-    this.notificationsService.setLoadFeatureData(true);
+    this.setLoadFeatureData(true);
     this.http.get<FeatureCollection>(environment.apiUrl + `/projects/${projectId}/features/` + '?' + qstring)
       .subscribe( (fc: FeatureCollection) => {
         fc.features = fc.features.map( (feat: Feature) => new Feature(feat));
@@ -77,7 +83,7 @@ export class GeoDataService {
         this._featureTree.next(tree);
 
         this._features.next(fc);
-        this.notificationsService.setLoadFeatureData(false);
+        this.setLoadFeatureData(false);
       });
   }
 
@@ -90,10 +96,10 @@ export class GeoDataService {
   }
 
   getPointClouds(projectId: number) {
-    this.notificationsService.setLoadPointCloudData(true);
+    this.setLoadPointCloudData(true);
     this.http.get<Array<IPointCloud>>(environment.apiUrl + `/projects/${projectId}/point-cloud/`)
       .subscribe( (resp ) => {
-        this.notificationsService.setLoadPointCloudData(false);
+        this.setLoadPointCloudData(false);
         this._pointClouds.next(resp);
       });
   }
@@ -225,10 +231,10 @@ export class GeoDataService {
   }
 
   getOverlays(projectId: number): void {
-    this.notificationsService.setLoadOverlayData(true);
+    this.setLoadOverlayData(true);
     this.http.get(environment.apiUrl + `/projects/${projectId}/overlays/`).subscribe( (ovs: Array<Overlay>) => {
       this._overlays.next(ovs);
-      this.notificationsService.setLoadOverlayData(false);
+      this.setLoadOverlayData(false);
     });
   }
 
@@ -356,4 +362,15 @@ export class GeoDataService {
     this._overlays.next(null);
   }
 
+  setLoadFeatureData(isLoading: boolean): void {
+    this._loadingFeatureData.next(isLoading);
+  }
+
+  setLoadPointCloudData(isLoading: boolean): void {
+    this._loadingPointCloudData.next(isLoading);
+  }
+
+  setLoadOverlayData(isLoading: boolean): void {
+    this._loadingOverlayData.next(isLoading);
+  }
 }
