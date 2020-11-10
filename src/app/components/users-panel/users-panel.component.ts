@@ -69,8 +69,6 @@ export class UsersPanelComponent implements OnInit {
   }
 
   changeProjectDescription(description: string) {
-    console.log(this.activeProject.description.length)
-    console.log(this.activeProject.description.length < 4096)
     if (description.length < 4096) {
       this.descriptionInputError = false;
       this.activeProject.description = description;
