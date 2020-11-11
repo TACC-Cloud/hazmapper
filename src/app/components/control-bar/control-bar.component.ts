@@ -7,7 +7,7 @@ import {skip} from 'rxjs/operators';
 import {BsModalRef, BsModalService} from 'ngx-foundation';
 import {ModalCreateProjectComponent} from '../modal-create-project/modal-create-project.component';
 import {ModalFileBrowserComponent} from '../modal-file-browser/modal-file-browser.component';
-import {interval, Observable, Subscription} from 'rxjs';
+import {interval, Observable, Subscription, combineLatest} from 'rxjs';
 import {NotificationsService} from "../../services/notifications.service";
 
 @Component({
@@ -21,6 +21,7 @@ export class ControlBarComponent implements OnInit {
   public selectedProject: Project;
   public mapMouseLocation: LatLng = new LatLng(0, 0);
   private loading = true;
+  private loadingData: boolean = false;
 
   constructor(private projectsService: ProjectsService,
               private geoDataService: GeoDataService,
@@ -40,6 +41,18 @@ export class ControlBarComponent implements OnInit {
         this.selectProject(null);
       }
     });
+
+    combineLatest(this.geoDataService.loadingOverlayData,
+                  this.geoDataService.loadingPointCloudData,
+                  this.geoDataService.loadingFeatureData)
+      .subscribe(([loadingOverlay, loadingPointCloud, loadingFeature]) => {
+        // They are running
+        if (!(loadingOverlay || loadingPointCloud || loadingFeature)) {
+          this.loadingData = false;
+        } else {
+          this.loadingData = true;
+        }
+      });
 
     this.projectsService.activeProject.subscribe(next => {
       this.selectedProject = next;
