@@ -36,6 +36,7 @@ import { FeatureGeometryComponent } from './components/feature-geometry/feature-
 import { PointCloudsPanelComponent } from './components/point-clouds-panel/point-clouds-panel.component';
 import { PointCloudPanelRowComponent } from './components/point-cloud-panel-row/point-cloud-panel-row.component';
 import { ModalCreateOverlayComponent } from './components/modal-create-overlay/modal-create-overlay.component';
+import { ModalCreateTileServerComponent } from './components/modal-create-tile-server/modal-create-tile-server.component';
 import { FileTreeNodeComponent } from './components/file-tree-node/file-tree-node.component';
 import { ModalPointCloudInfoComponent } from './components/modal-point-cloud-info/modal-point-cloud-info.component';
 import { FileBrowserComponent } from './components/file-browser/file-browser.component';
@@ -66,12 +67,14 @@ import { UserRowComponent } from './components/user-row/user-row.component';
     PointCloudsPanelComponent,
     PointCloudPanelRowComponent,
     ModalCreateOverlayComponent,
+    ModalCreateTileServerComponent,
     FileTreeNodeComponent,
     ModalPointCloudInfoComponent,
     FileBrowserComponent,
     UsersPanelComponent,
     ModalConfirmationBodyComponent,
     UserRowComponent,
+    ModalCreateTileServerComponent,
   ],
   imports: [
     CommonModule,
@@ -116,7 +119,7 @@ import { UserRowComponent } from './components/user-row/user-row.component';
     ModalFileBrowserComponent,
     ModalCreatePointCloudComponent,
     ModalCreateOverlayComponent,
+    ModalCreateTileServerComponent,
     ModalPointCloudInfoComponent]
 })
 export class AppModule { }
-

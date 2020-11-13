@@ -119,6 +119,17 @@ export interface Overlay {
   isActive?: boolean;
 }
 
+export interface TileServer {
+  name: string;
+  id: number;
+  url: string;
+  attribution: string;
+  default: boolean;
+  zIndex: number;
+  maxZoom?: number;
+  isActive?: boolean;
+}
+
 interface AppGeoJSONFeature extends GeoJSONFeature {
   assets?: Array<IFeatureAsset>;
   styles?: FeatureStyles;

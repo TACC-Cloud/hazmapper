@@ -1,0 +1,19 @@
+[8:48:25.801] Global cache location '/home/duckonomy/.cache/typescript/4.0', safe file path '/home/duckonomy/.emacs.d/var/lsp/server/npm/typescript/lib/node_modules/typescript/lib/typingSafeList.json', types map path /home/duckonomy/.emacs.d/var/lsp/server/npm/typescript/lib/node_modules/typescript/lib/typesMap.json
+[8:48:25.802] Processing cache location '/home/duckonomy/.cache/typescript/4.0'
+[8:48:25.802] Trying to find '/home/duckonomy/.cache/typescript/4.0/package.json'...
+[8:48:25.803] Loaded content of '/home/duckonomy/.cache/typescript/4.0/package.json': {"private":true,"dependencies":{"types-registry":"^0.1.515"}}
+[8:48:25.803] Loaded content of '/home/duckonomy/.cache/typescript/4.0/package-lock.json'
+[8:48:25.803] Finished processing cache location '/home/duckonomy/.cache/typescript/4.0'
+[8:48:25.803] Process id: 11050
+[8:48:25.803] NPM location: /usr/bin/npm (explicit '--npmLocation' not  provided)
+[8:48:25.803] validateDefaultNpmLocation: false
+[8:48:25.803] Npm config file: /home/duckonomy/.cache/typescript/4.0/package.json
+[8:48:25.803] Updating types-registry npm package...
+[8:48:25.804] Exec: /usr/bin/npm install --ignore-scripts types-registry@latest
+[8:48:26.941]     Succeeded. stdout:
+    + types-registry@0.1.515
+    updated 1 package and audited 1 package in 0.398s
+found 0 vulnerabilities
+
+
+[8:48:26.942] Updated types-registry npm package

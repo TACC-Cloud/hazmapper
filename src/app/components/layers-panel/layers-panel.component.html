@@ -1,11 +1,38 @@
 <div class="dock-panel">
   <div class="dock-panel-content">
     <p class="dock-panel-title"> Layers </p>
-    <h6> Basemap</h6>
-    <div class="button-group small expanded">
-      <button [ngClass]="{'success': basemap=='sat', 'hollow': basemap!='sat'}" class="button" (click)="selectBasemap('sat')">Satellite</button>
-      <button [ngClass]="{'success': basemap=='roads', 'hollow': basemap!='roads'}"class="button" (click)="selectBasemap('roads')">Roads</button>
+    <h6>Tile Layers</h6>
+    <button class="button expanded hollow tiny success" (click)="openCreateTileServerModal()">
+      <i class="fa fa-plus"></i>
+    </button>
+    <div *ngFor="let ts of tileServers" class="tile-servers">
+      <div class="grid-x" (drag)="setDragElement(ts.name)" (dragover)="setDragOverElement($event, ts.name)" (drop)="dropElement()" draggable=true>
+        <div class="cell auto">
+          <input name="" type="checkbox" [checked]="ts.isActive" (change)="toggleLayerActivate(ts.name)"/>
+          {{ts.name}}
+        </div>
+        <div class="cell auto grid-x align-right">
+          <div *ngIf="ts.default; else delete_icon">
+            <i data-tooltip tabindex="1" title="Default Layer" class="fas fa-asterisk"></i>
+          </div>
+
+          <ng-template #delete_icon>
+            <button
+              class="button tiny hollow alert button-no-margin"
+              (click)="deleteLayer(ts.name)"
+            >
+              <i class="fa fa-trash"></i>
+          </button>
+          </ng-template>
+
+        </div>
+      </div>
     </div>
+    <!-- <h6> Basemap</h6>
+         <div class="button-group small expanded">
+         <button [ngClass]="{'success': basemap=='sat', 'hollow': basemap!='sat'}" class="button" (click)="selectBasemap('sat')">Satellite</button>
+         <button [ngClass]="{'success': basemap=='roads', 'hollow': basemap!='roads'}"class="button" (click)="selectBasemap('roads')">Roads</button>
+         </div> -->
     <hr>
     <h6> Overlays </h6>
     <button class="button expanded hollow tiny success" (click)="openCreateOverlayModal()">
@@ -29,7 +56,6 @@
         </div>
       </div>
     </div>
+
   </div>
-
 </div>
-

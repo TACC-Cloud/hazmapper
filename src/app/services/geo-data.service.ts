@@ -3,7 +3,7 @@ import {HttpClient, HttpEventType} from '@angular/common/http';
 import {BehaviorSubject, Observable, ReplaySubject, Subject} from 'rxjs';
 import {LatLng} from 'leaflet';
 import {FilterService} from './filter.service';
-import {AssetFilters, FeatureAsset, IFeatureAsset, IFileImportRequest, IPointCloud, Overlay} from '../models/models';
+import {AssetFilters, FeatureAsset, IFeatureAsset, IFileImportRequest, IPointCloud, Overlay, TileServer} from '../models/models';
 import { Feature, FeatureCollection} from '../models/models';
 import { environment } from '../../environments/environment';
 import {filter, map, take, toArray} from 'rxjs/operators';
@@ -33,6 +33,8 @@ export class GeoDataService {
   private activeOverlay$: Observable<Overlay> = this._activeOverlay.asObservable();
   private _selectedOverlays: BehaviorSubject<Array<Overlay>> = new BehaviorSubject<Array<Overlay>>([]);
   public readonly selectedOverlays$: Observable<Array<Overlay>> = this._selectedOverlays.asObservable();
+  private _tileServers: BehaviorSubject<any> = new BehaviorSubject<Array<TileServer>>(null);
+  private tileServers$: Observable<Array<TileServer>> = this._tileServers.asObservable();
   private _pointClouds: BehaviorSubject<Array<IPointCloud>> = new BehaviorSubject<Array<IPointCloud>>(null);
   private _assetFilters: AssetFilters;
   public readonly pointClouds: Observable<Array<IPointCloud>> = this._pointClouds.asObservable();
@@ -288,8 +290,85 @@ export class GeoDataService {
     });
   }
 
+  // TODO needs backend implementation
+  // public getTileServer() {
+  // }
+
+  // TODO: Should be handled in the backend
+  public deleteTileServer(name: string) {
+    this.tileServers$.pipe(take(1)).subscribe(tileServerList => {
+      this._tileServers.next(tileServerList.filter(tileServer => {
+        return tileServer.name != name;
+      }));
+    });
+  }
+
+  public updateTileServer(newTileServers: Array<TileServer>) {
+    this._tileServers.next(newTileServers);
+  }
+
+  // TODO: Should be handled in the backend
+  public toggleTileServer(name: string) {
+    this.tileServers$.pipe(
+      take(1)).subscribe( (results) => {
+        results.map(tileServer => {
+          if (tileServer.name == name) {
+            tileServer.isActive = !tileServer.isActive;
+          }
+        })
+        this._tileServers.next(results);
+    });
+    // this.tileServers$.pipe(take(1)).subscribe(tileServerList => {
+    //   this._tileServers.next(tileServerList.map(tileServer => {
+    //     if (name == tileServer.name) {
+    //       tileServer.isActive = !tileServer.isActive;
+    //     } else {
+    //       tileServer.isActive = tileServer.isActive;
+    //     }
+    //   }));
+    // });
+    // this.tileServers$.pipe(take(1),
+    //                        map(tileServer => {
+    //                          tileServer.map(ts => {
+    //                          if (name == ts.name) {
+    //                            ts.isActive = !ts.isActive;
+    //                          }
+    //                          }
+    //                          )
+
+    //                        }));
+  }
+
+  // Add a tile server (from each server)
+  public addTileServer(tileServer: TileServer) {
+    this.tileServers$.pipe(take(1)).subscribe(tileServerList => {
+      let newTileServerList: Array<TileServer>;
+      if (tileServerList) {
+        tileServer.zIndex = tileServerList.length;
+        newTileServerList = [...tileServerList, tileServer];
+      } else {
+        tileServer.zIndex = 0;
+        newTileServerList = [tileServer];
+      }
+      console.log(newTileServerList);
+      this._tileServers.next(newTileServerList);
+    })
+      // map((tileServerList) => {
+      //   tileServerList.push(tileServer);
+      //   return tileServerList;
+      // }));
+  }
+
+  // From QMS
+  public searchTileServer() {
+  }
+
   public get overlays(): Observable<Array<Overlay>> {
     return this.overlays$;
+  }
+
+  public get tileServers(): Observable<Array<TileServer>> {
+    return this.tileServers$;
   }
 
   public get features(): Observable<FeatureCollection> {
