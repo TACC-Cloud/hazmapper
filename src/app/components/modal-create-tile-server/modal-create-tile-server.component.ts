@@ -2,6 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {BsModalRef, BsModalService} from 'ngx-foundation';
 import {Subject} from 'rxjs';
+import {filter, first, map, take, toArray} from 'rxjs/operators';
+import {TapisFilesService} from "../../services/tapis-files.service";
+import {TileServer} from '../../models/models';
+import { GeoDataService} from '../../services/geo-data.service';
+import {RemoteFile} from "ng-tapis";
 
 @Component({
   selector: 'app-modal-create-tile-server',
@@ -9,28 +14,100 @@ import {Subject} from 'rxjs';
   styleUrls: ['./modal-create-tile-server.component.styl']
 })
 export class ModalCreateTileServerComponent implements OnInit {
-  ovCreateForm: FormGroup;
+  remoteFileData: Array<RemoteFile> = new Array<RemoteFile>();
+  tsCreateForm: FormGroup;
+  importMethod: string = 'manual';
+  serverType: string = 'tms';
+  qmsSearchResults: Array<any>;
+  qmsServerResult: any = {};
+  qmsOrdering: string = 'name';
+  qmsOrder: string = '';
   public readonly onClose: Subject<any> = new Subject<any>();
   constructor(private bsModalRef: BsModalRef,
+              private tapisFilesService: TapisFilesService,
+              private geoDataService: GeoDataService,
               private bsModalService: BsModalService) { }
 
 
   ngOnInit() {
-    this.ovCreateForm = new FormGroup( {
-      label: new FormControl(''),
-      minLat: new FormControl(''),
-      maxLat: new FormControl(''),
-      minLon: new FormControl(''),
-      maxLon: new FormControl( '')
+    this.geoDataService.qmsSearchResults.subscribe((next) => {
+      if (next) {
+        this.qmsSearchResults = next;
+        this.qmsSearchResults.map(n => n.show = false);
+      }
     });
+
+    this.geoDataService.qmsServerResult.subscribe((next) => {
+      if (next) {
+        this.qmsSearchResults = null;
+        this.bsModalRef.hide();
+      }
+    });
+
+
+    this.tsCreateForm = new FormGroup( {
+      method: new FormControl('manual'),
+      type: new FormControl('tms'),
+      name: new FormControl(''),
+      ordering: new FormControl('name'),
+      order: new FormControl(''),
+      url: new FormControl(''),
+      layers: new FormControl(''),
+      maxZoom: new FormControl(18),
+      minZoom: new FormControl(0),
+      attribution: new FormControl('')
+    });
+  }
+
+  onDSFileSelection(files: Array<RemoteFile>) {
+    this.remoteFileData = files;
+  }
+
+  setMethod() {
+    this.importMethod = this.tsCreateForm.get('method').value;
+  }
+
+  setServer() {
+    this.serverType = this.tsCreateForm.get('type').value;
   }
 
   close() {
     this.bsModalRef.hide();
   }
+
+  searchQMS(ev: any, query: string) {
+    ev.preventDefault();
+    let qmsQueryOptions = {
+      type: this.serverType,
+      ordering: this.qmsOrdering,
+      order: this.qmsOrder
+    }
+    this.geoDataService.getQMS(query, qmsQueryOptions);
+  }
+
+  addQMSServer(qs: any) {
+    this.qmsSearchResults = null;
+    console.log(this.qmsSearchResults);
+    this.geoDataService.getQMSTileServer(qs.id);
+  }
+
   submit() {
+    const tileServer: TileServer = {
+      name: this.tsCreateForm.get('name').value,
+      id: 0,
+      url: this.tsCreateForm.get('url').value,
+      attribution: this.tsCreateForm.get('attribution').value,
+      type: this.tsCreateForm.get('type').value,
+      layers: this.tsCreateForm.get('layers').value,
+      default: false,
+      zIndex: 0,
+      maxZoom: this.tsCreateForm.get("maxZoom").value,
+      minZoom: this.tsCreateForm.get("minZoom").value,
+      isActive: false
+    };
+
+    this.geoDataService.addTileServer(tileServer);
     this.onClose.next(null);
     this.bsModalRef.hide();
   }
-
 }

@@ -123,9 +123,13 @@ export interface TileServer {
   name: string;
   id: number;
   url: string;
+  type: string;
   attribution: string;
   default: boolean;
   zIndex: number;
+  opacity?: number;
+  layers?: string;
+  minZoom?: number;
   maxZoom?: number;
   isActive?: boolean;
 }

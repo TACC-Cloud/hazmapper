@@ -30,7 +30,6 @@ export class MapComponent implements OnInit {
   features: FeatureGroup = new FeatureGroup();
   overlays: LayerGroup = new LayerGroup<any>();
   tileServers: Array<TileServer>;
-  // layers: Array<Layer> = new Array<Layer>();
   layers: any = {};
   environment: AppEnvironment;
   fitToFeatureExtent: boolean = true;
@@ -57,10 +56,12 @@ export class MapComponent implements OnInit {
     const baseOSMObject: TileServer = {
       name: 'Base OSM',
       id: 1,
+      type: 'tms',
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       default: true,
       zIndex: 0,
+      minZoom: 0,
       maxZoom: 19,
       isActive: true
     }
@@ -68,6 +69,7 @@ export class MapComponent implements OnInit {
     const satelliteObject: TileServer = {
       name: 'Satellite',
       id: 1,
+      type: 'tms',
       url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
       attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
       default: true,
@@ -76,19 +78,21 @@ export class MapComponent implements OnInit {
       isActive: false
     }
 
-    // const baseOSM = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    //   maxZoom: 19,
-    //   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    // });
-    // const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    //   // tslint:disable-next-line:max-line-length
-    //   attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-    // });
-    // default to streetmap view;
-    // this.map.addLayer(baseOSM)
+    // const wmsObject: TileServer = {
+    //   name: 'Geology of Quebec: Bedrock Geology',
+    //   id: 1,
+    //   type: 'wms',
+    //   url: 'https://servicesvectoriels.atlas.gouv.qc.ca/IDS_SGM_WMS/service.svc/get',
+    //   attribution: 'temporary',
+    //   layers: 'SGM:Contacts_discordants,SGM:Plis_regionaux,SGM:Failles_regionales,SGM:Geologie_regionale,SGM:Geologie_generale',
+    //   default: true,
+    //   zIndex: 1,
+    //   isActive: false
+    // }
 
     this.geoDataService.addTileServer(baseOSMObject);
     this.geoDataService.addTileServer(satelliteObject);
+    // this.geoDataService.addTileServer(wmsObject);
 
     this.loadFeatures();
 
@@ -114,18 +118,6 @@ export class MapComponent implements OnInit {
       const bbox = turf.bbox(<AllGeoJSON> next);
       this.map.fitBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]]);
     });
-
-    // Listen for changes to the basemap
-    // this.geoDataService.basemap.subscribe((next: string) => {
-    //   if (next === 'sat') {
-    //     this.map.removeLayer(baseOSM);
-    //     this.map.addLayer(satellite);
-    //   }
-    //   if (next === 'roads') {
-    //     this.map.removeLayer(satellite);
-    //     this.map.addLayer(baseOSM);
-    //   }
-    // });
   }
 
   createOverlayLayer(ov: Overlay): Layer {
@@ -138,17 +130,22 @@ export class MapComponent implements OnInit {
   }
 
   tileServerToLayer(tileServer: TileServer) {
-    let mapConfiguration = {
-      attribution: tileServer.attribution,
-      // zIndex: -1
-    };
-
-    // if (tileServer.hasOwnProperty('maxZoom')) {
-    //   console.log("cool");
-    //   mapConfiguration.maxZoom = tileServer.maxZoom;
-    // }
-
-    return L.tileLayer(tileServer.url, mapConfiguration);
+    if (tileServer.type == 'tms') {
+      return L.tileLayer(tileServer.url, {
+        minZoom: tileServer.minZoom,
+        maxZoom: tileServer.maxZoom,
+        attribution: tileServer.attribution,
+      });
+    } else if (tileServer.type == 'wms') {
+      let mapConfiguration = {
+        attribution: tileServer.attribution,
+        layers: tileServer.layers,
+        opacity: 0.5,
+        format: 'image/jpeg'
+      };
+      mapConfiguration.layers = tileServer.layers;
+      return L.tileLayer.wms(tileServer.url, mapConfiguration);
+    }
   }
 
   /**
@@ -160,8 +157,6 @@ export class MapComponent implements OnInit {
     };
 
     this.geoDataService.tileServers.subscribe((next: Array<TileServer>) => {
-      // TODO: Remove
-      console.log(next);
       // TODO: refactor
       if (next) {
 
@@ -169,8 +164,6 @@ export class MapComponent implements OnInit {
         if (this.tileServers) {
           this.tileServers.forEach(tileServer => {
             if (!next.some(ts => ts.name == tileServer.name)) {
-              console.log("Deletion")
-              console.log(tileServer.name);
               this.map.removeLayer(this.layers[tileServer.name]);
             }
           });

@@ -1,8 +1,111 @@
-<h4> Create a Overlay </h4>
-<form [formGroup]="ovCreateForm" (ngSubmit)="submit()">
+<h4> Create a Tile Layer </h4>
+<form [formGroup]="tsCreateForm" (ngSubmit)="submit()">
+  <label> Import Method:
+    <select formControlName="method" required="true" (change)="setMethod()">
+      <option value="manual">Manual</option>
+      <option value="ini">INI File</option>
+      <option value="online">Online</option>
+      <option value="qms">QMS Search</option>
+    </select>
+  </label>
+
+  <div *ngIf="importMethod == 'manual'">
+    <label> Server Type:
+      <select formControlName="type" required="true" (change)="setServer()">
+        <option value="tms">TMS</option>
+        <option value="wms">WMS</option>
+      </select>
+    </label>
+    <label> Name:
+      <input type="text" formControlName="name" required="true">
+    </label>
+    <label> URL:
+      <input type="text" formControlName="url" required="true">
+    </label>
+    <label> Attribution:
+      <input type="text" formControlName="attribution" required="false">
+    </label>
+    <label *ngIf="serverType == 'tms'"> Zoom Max:
+      <input type="number" formControlName="maxZoom" required="false">
+    </label>
+    <label *ngIf="serverType == 'tms'"> Zoom Min:
+      <input type="number" formControlName="minZoom" required="false">
+    </label>
+    <label *ngIf="serverType == 'wms'"> Layers (comma-separated):
+      <input type="text" formControlName="layers" required="false">
+    </label>
+  </div>
+
+  <div *ngIf="importMethod == 'ini'">
+    <app-file-browser
+      [allowFolders]="false"
+      [allowedExtensions]="tapisFilesService.IMPORTABLE_TILE_TYPES"
+      [single]="true"
+      [helpText]=null
+      [heading]=null
+      (selection)="onDSFileSelection($event)"
+    >
+    </app-file-browser>
+  </div>
+  <div *ngIf="importMethod == 'qms'">
+    <div class="grid-x">
+      <input class="cell auto" style="display:inline-block;" #qmsSearch name="" type="text" value="" />
+      <button class="button small cell large-1" style="display:inline-block; margin-bottom: 1.3em" (click)="searchQMS($event, qmsSearch.value)"><i class="fas fa-search"></i></button>
+    </div>
+    <div className="qms-options">
+      <select #servers formControlName="type" required="true" (change)="serverType=servers.value">
+        <option value="">All</option>
+        <option value="tms">TMS</option>
+        <option value="wms">WMS</option>
+      </select>
+
+      <select #ordering formControlName="ordering" required="true" (change)="qmsOrdering=ordering.value">
+        <option value="name">Name</option>
+        <option value="id">ID</option>
+        <option value="created_at">Created At</option>
+        <option value="updated_at">Updated At</option>
+      </select>
+
+      <select #order formControlName="order" required="true" (change)="qmsOrder=order.value">
+        <option value="">Ascending</option>
+        <option value="-">Descending</option>
+      </select>
+
+    </div>
+    <div style="overflow-y: scroll; max-height: 300px">
+      <div *ngFor="let qs of qmsSearchResults">
+        <div style="margin: 20px;" class="grid-x">
+          <div class="qmsName cell auto grid-y">
+            <div style="width: 400px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
+              {{qs.name}}
+            </div>
+            <div>
+              <span *ngIf="qs.show; else openDescription" (click)="qs.show = !qs.show">
+                {{qs.type}}
+                <i class="fas fa-angle-down"></i>
+                <div style="font-size: 12px; font-style: italic;">
+                  {{qs.desc}}
+                </div>
+              </span>
+              <ng-template #openDescription>
+                {{qs.type}}
+                <span (click)="qs.show = !qs.show">
+                  <i class="fas fa-angle-right"></i>
+                </span>
+
+              </ng-template>
+            </div>
+          </div>
+          <button style="height: 40px" class="button success small cell large-1 align-right" (click)="addQMSServer(qs)"><i class="fas fa-plus"></i></button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
 
   <div class="button-group small">
     <button class="button small warning" type="button" (click)="close()">Close</button>
-    <button class="button small align-right" type="submit" [disabled]="!ovCreateForm.valid">Submit</button>
+    <button class="button small align-right" type="submit" [disabled]="!tsCreateForm.valid">Submit</button>
   </div>
 </form>

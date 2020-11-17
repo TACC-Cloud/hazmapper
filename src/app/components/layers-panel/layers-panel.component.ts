@@ -58,7 +58,6 @@ export class LayersPanelComponent implements OnInit {
 
   deleteOverlay(ov: Overlay) {
     this.geoDataService.deleteOverlay(this.activeProject.id, ov);
-
   }
 
   deleteLayer(name: string): void {

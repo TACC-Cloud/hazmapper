@@ -40,6 +40,10 @@ export class GeoDataService {
   public readonly pointClouds: Observable<Array<IPointCloud>> = this._pointClouds.asObservable();
   private _featureTree: ReplaySubject<PathTree<Feature>> = new ReplaySubject<PathTree<Feature>>(1);
   public readonly featureTree$: Observable<PathTree<Feature>> = this._featureTree.asObservable();
+  private _qmsSearchResults: BehaviorSubject<any> = new BehaviorSubject<Array<any>>(null);
+  private qmsSearchResults$: Observable<Array<any>> = this._qmsSearchResults.asObservable();
+  private _qmsServerResult: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  private qmsServerResult$: Observable<any> = this._qmsServerResult.asObservable();
 
   constructor(private http: HttpClient, private filterService: FilterService, private notificationsService: NotificationsService) {
 
@@ -318,25 +322,6 @@ export class GeoDataService {
         })
         this._tileServers.next(results);
     });
-    // this.tileServers$.pipe(take(1)).subscribe(tileServerList => {
-    //   this._tileServers.next(tileServerList.map(tileServer => {
-    //     if (name == tileServer.name) {
-    //       tileServer.isActive = !tileServer.isActive;
-    //     } else {
-    //       tileServer.isActive = tileServer.isActive;
-    //     }
-    //   }));
-    // });
-    // this.tileServers$.pipe(take(1),
-    //                        map(tileServer => {
-    //                          tileServer.map(ts => {
-    //                          if (name == ts.name) {
-    //                            ts.isActive = !ts.isActive;
-    //                          }
-    //                          }
-    //                          )
-
-    //                        }));
   }
 
   // Add a tile server (from each server)
@@ -350,17 +335,50 @@ export class GeoDataService {
         tileServer.zIndex = 0;
         newTileServerList = [tileServer];
       }
-      console.log(newTileServerList);
       this._tileServers.next(newTileServerList);
     })
-      // map((tileServerList) => {
-      //   tileServerList.push(tileServer);
-      //   return tileServerList;
-      // }));
   }
 
-  // From QMS
-  public searchTileServer() {
+  getQMS(query: string, queryOptions: any): void {
+    const url = "https://qms.nextgis.com/api/v1/geoservices/";
+    const request = url +
+      "?search=" + query +
+      "&type=" + queryOptions['type'] +
+      "&ordering=" + queryOptions['order'] +
+      queryOptions['ordering'] +
+      "&cumulative_status=works";
+
+    this.http.get(request).subscribe((q) => {
+      this._qmsSearchResults.next(q);
+    });
+  }
+
+  getQMSTileServer(id: number) {
+    const request = "https://qms.nextgis.com/api/v1/geoservices/" + id;
+    this.http.get(request).subscribe((q) => {
+      const newServer: TileServer = {
+        name: q['name'],
+        id: 1,
+        type: q['type'],
+        url: q['url'],
+        attribution: q['desc'],
+        default: false,
+        zIndex: 1,
+        maxZoom: q['z_max'],
+        minZoom: q['z_min'],
+        isActive: false
+      }
+      this.addTileServer(newServer);
+      this._qmsServerResult.next(q);
+    });
+  }
+
+  public get qmsSearchResults(): Observable<Array<any>> {
+    return this.qmsSearchResults$;
+  }
+
+  public get qmsServerResult(): Observable<any> {
+    return this.qmsServerResult$;
   }
 
   public get overlays(): Observable<Array<Overlay>> {
