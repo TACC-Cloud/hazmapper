@@ -4,7 +4,7 @@
     <select formControlName="method" required="true" (change)="setMethod()">
       <option value="manual">Manual</option>
       <option value="ini">INI File</option>
-      <option value="online">Online</option>
+      <option value="online">Online Suggestions</option>
       <option value="qms">QMS Search</option>
     </select>
   </label>
@@ -72,7 +72,7 @@
       </select>
 
     </div>
-    <div style="overflow-y: scroll; max-height: 300px">
+    <div style="overflow-y: scroll; max-height: 300px; background-color: #eeeeee; margin-bottom: 1rem">
       <div *ngFor="let qs of qmsSearchResults">
         <div style="margin: 20px;" class="grid-x">
           <div class="qmsName cell auto grid-y">
@@ -104,8 +104,12 @@
 
   </div>
 
+
   <div class="button-group small">
     <button class="button small warning" type="button" (click)="close()">Close</button>
-    <button class="button small align-right" type="submit" [disabled]="!tsCreateForm.valid">Submit</button>
+    <ng-container *ngIf="importMethod != 'qms'">
+      <button class="button small align-right" type="submit" [disabled]="!tsCreateForm.valid">Submit</button>
+    </ng-container>
   </div>
+
 </form>

@@ -7,7 +7,7 @@
     </button>
     <div *ngFor="let ts of tileServers" class="tile-servers">
       <div class="grid-x" (drag)="setDragElement(ts.name)" (dragover)="setDragOverElement($event, ts.name)" (drop)="dropElement()" draggable=true>
-        <div class="cell auto">
+        <div style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap" class="cell">
           <input name="" type="checkbox" [checked]="ts.isActive" (change)="toggleLayerActivate(ts.name)"/>
           {{ts.name}}
         </div>
