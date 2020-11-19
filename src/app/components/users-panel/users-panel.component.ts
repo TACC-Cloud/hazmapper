@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {ProjectsService} from '../../services/projects.service';
 import {ModalService} from '../../services/modal.service';
 import {IProjectUser} from '../../models/project-user';
@@ -11,24 +11,17 @@ import {Project} from '../../models/models';
   styleUrls: ['./users-panel.component.styl']
 })
 export class UsersPanelComponent implements OnInit {
-
   public projectUsers: Array<IProjectUser>;
   addUserForm: FormGroup;
   activeProject: Project;
-  nameInputShown: boolean = false;
-  descriptionInputShown: boolean = false;
   nameInputError: boolean = false;
   descriptionInputError: boolean = false;
   nameErrorMessage: string = "Project name must be under 512 characters!";
   descriptionErrorMessage: string = "Project description must be under 4096 characters!";
-  @ViewChild('activeProjectName', {static: false}) projectNameInput: ElementRef<HTMLInputElement>;
-  @ViewChild('activeProjectDescription', {static: false}) projectDescriptionInput: ElementRef<HTMLInputElement>;
 
   constructor(private projectsService: ProjectsService, private modalService: ModalService) { }
 
-
   ngOnInit() {
-
     this.addUserForm = new FormGroup( {
       username: new FormControl()
     });
@@ -62,7 +55,6 @@ export class UsersPanelComponent implements OnInit {
       this.nameInputError = false;
       this.activeProject.name = name;
       this.projectsService.updateProject(this.activeProject, name, undefined);
-
     } else {
       this.nameInputError = true;
     }
@@ -77,53 +69,4 @@ export class UsersPanelComponent implements OnInit {
       this.descriptionInputError = true;
     }
   }
-
-  hideNameInput() {
-    this.nameInputShown = false;
-  }
-
-  // NOTE: Unless we have the delay, the input is not drawn
-  //       in time for the focusmethod.
-  showNameInput() {
-    this.nameInputShown = true;
-    setTimeout(() => {
-      this.projectNameInput.nativeElement.value = this.activeProject.name;
-      this.projectNameInput.nativeElement.focus()
-      this.projectNameInput.nativeElement.select()
-    }, 1);
-  }
-
-  hideDescriptionInput() {
-    this.descriptionInputShown = false;
-  }
-
-  // NOTE: Unless we have the delay, the input is not drawn
-  //       in time for the focusmethod.
-  showDescriptionInput() {
-    this.descriptionInputShown = true;
-    setTimeout(() => {
-      this.projectDescriptionInput.nativeElement.value = this.activeProject.description;
-      this.projectDescriptionInput.nativeElement.focus()
-      this.projectDescriptionInput.nativeElement.select()
-    }, 1);
-  }
-
-  onEnterName(value: string) {
-    value = value.trim();
-    if (value && value != this.activeProject.name) {
-      this.changeProjectName(value);
-    }
-
-    this.hideNameInput();
-  }
-
-  onEnterDescription(value: string) {
-    value = value.trim();
-    if (value && value != this.activeProject.description) {
-      this.changeProjectDescription(value);
-    }
-
-    this.hideDescriptionInput();
-  }
-
 }
