@@ -14,7 +14,7 @@
     <app-user-row [user]="user" *ngFor="let user of projectUsers"></app-user-row>
     <div class="">
       <h4> Map </h4>
-      <h6>Name:</h6>
+      <h6 id="property-title">Name:</h6>
       <app-edit-name-input
         [inputType]="'text'"
         [currentName]="activeProject.name"
@@ -24,7 +24,7 @@
       >
       </app-edit-name-input>
 
-      <h6>Description:</h6>
+      <h6 id="property-title">Description:</h6>
       <app-edit-name-input
         [inputType]="'textarea'"
         [currentName]="activeProject.description"
