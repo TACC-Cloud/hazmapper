@@ -74,7 +74,7 @@ import { UserRowComponent } from './components/user-row/user-row.component';
     UsersPanelComponent,
     ModalConfirmationBodyComponent,
     UserRowComponent,
-    ModalCreateTileServerComponent,
+    EditNameInputComponent,
   ],
   imports: [
     CommonModule,
