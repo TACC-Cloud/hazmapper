@@ -103,6 +103,4 @@ export class LayersPanelComponent implements OnInit {
       console.log(next);
     });
   }
-
-
 }

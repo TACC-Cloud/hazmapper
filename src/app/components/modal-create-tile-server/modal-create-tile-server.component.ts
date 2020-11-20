@@ -44,7 +44,6 @@ export class ModalCreateTileServerComponent implements OnInit {
       }
     });
 
-
     this.tsCreateForm = new FormGroup( {
       method: new FormControl('manual'),
       type: new FormControl('tms'),
@@ -55,7 +54,9 @@ export class ModalCreateTileServerComponent implements OnInit {
       layers: new FormControl(''),
       maxZoom: new FormControl(18),
       minZoom: new FormControl(0),
-      attribution: new FormControl('')
+      attribution: new FormControl(''),
+      attributionLink: new FormControl(''),
+      attributionExtra: new FormControl('')
     });
   }
 
@@ -92,11 +93,28 @@ export class ModalCreateTileServerComponent implements OnInit {
   }
 
   submit() {
+    // TODO: Refactor this to be less ugly.
+    let copyright = '';
+    if (this.tsCreateForm.get('attribution').value) {
+      copyright = '&copy; '
+      if (this.tsCreateForm.get('attributionLink').value) {
+        copyright = copyright + "<a href=\"" +
+          this.tsCreateForm.get('attributionLink').value +
+          ">" + copyright + this.tsCreateForm.get('attribution').value + "</a>";
+      } else {
+        copyright += copyright + this.tsCreateForm.get('attribution').value;
+      }
+
+      if (this.tsCreateForm.get('attributionExtra').value) {
+        copyright += this.tsCreateForm.get('attributionExtra').value;
+      }
+    }
+
     const tileServer: TileServer = {
       name: this.tsCreateForm.get('name').value,
       id: 0,
       url: this.tsCreateForm.get('url').value,
-      attribution: this.tsCreateForm.get('attribution').value,
+      attribution: copyright,
       type: this.tsCreateForm.get('type').value,
       layers: this.tsCreateForm.get('layers').value,
       default: false,
