@@ -100,4 +100,18 @@ export class ProjectsService {
       });
   }
 
+  updateProject(proj: Project, name: string, description: string): void {
+    name = name ? name : proj.name;
+    description = description ? description : proj.description;
+
+    const payload = {
+      name: name,
+      description: description
+    };
+
+    this.http.put(environment.apiUrl + `/projects/${proj.id}/`, payload)
+      .subscribe( (resp) => {
+        proj.name = name;
+      });
+  }
 }

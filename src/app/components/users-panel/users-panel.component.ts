@@ -11,23 +11,26 @@ import {Project} from '../../models/models';
   styleUrls: ['./users-panel.component.styl']
 })
 export class UsersPanelComponent implements OnInit {
-
   public projectUsers: Array<IProjectUser>;
   addUserForm: FormGroup;
   activeProject: Project;
+  nameInputError: boolean = false;
+  descriptionInputError: boolean = false;
+  nameErrorMessage: string = "Project name must be under 512 characters!";
+  descriptionErrorMessage: string = "Project description must be under 4096 characters!";
 
   constructor(private projectsService: ProjectsService, private modalService: ModalService) { }
 
   ngOnInit() {
-
     this.addUserForm = new FormGroup( {
       username: new FormControl()
     });
+
     this.projectsService.activeProject.subscribe( (next) => {
       this.activeProject = next;
     });
+
     this.projectsService.projectUsers$.subscribe( (next) => {
-      console.log(next);
       this.projectUsers = next;
     });
   }
@@ -45,5 +48,25 @@ export class UsersPanelComponent implements OnInit {
 
   addUser() {
     this.projectsService.addUserToProject(this.activeProject, this.addUserForm.get('username').value);
+  }
+
+  changeProjectName(name: string) {
+    if (name.length < 512) {
+      this.nameInputError = false;
+      this.activeProject.name = name;
+      this.projectsService.updateProject(this.activeProject, name, undefined);
+    } else {
+      this.nameInputError = true;
+    }
+  }
+
+  changeProjectDescription(description: string) {
+    if (description.length < 4096) {
+      this.descriptionInputError = false;
+      this.activeProject.description = description;
+      this.projectsService.updateProject(this.activeProject, undefined, description);
+    } else {
+      this.descriptionInputError = true;
+    }
   }
 }
