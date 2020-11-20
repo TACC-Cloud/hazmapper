@@ -16,7 +16,10 @@
                 </li>
             </ul>
             <div *ngIf="!projects.length && !loading"> <span class="label alert"> No maps! Create one to get started. </span></div>
-
+            <div *ngIf="loadingData" style="margin-left: 1rem">
+                <span>Loading Data</span>
+                <i class="fas fa-spin fa-spinner ml-4" style="margin-left: 0.5rem"></i>
+            </div>
         </div>
     </div>
     <div class="cell small-8 align-right align-middle grid-x">

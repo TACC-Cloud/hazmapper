@@ -67,6 +67,7 @@ export class GeoDataService {
 
   getFeatures(projectId: number): void {
     const qstring: string = querystring.stringify(this._assetFilters.toJson());
+    this.setLoadFeatureData(true);
     this.http.get<FeatureCollection>(environment.apiUrl + `/projects/${projectId}/features/` + '?' + qstring)
       .subscribe( (fc: FeatureCollection) => {
         fc.features = fc.features.map( (feat: Feature) => new Feature(feat));
@@ -84,6 +85,7 @@ export class GeoDataService {
         this._featureTree.next(tree);
 
         this._features.next(fc);
+        this.setLoadFeatureData(false);
       });
   }
 
@@ -96,8 +98,10 @@ export class GeoDataService {
   }
 
   getPointClouds(projectId: number) {
+    this.setLoadPointCloudData(true);
     this.http.get<Array<IPointCloud>>(environment.apiUrl + `/projects/${projectId}/point-cloud/`)
       .subscribe( (resp ) => {
+        this.setLoadPointCloudData(false);
         this._pointClouds.next(resp);
       });
   }
@@ -148,7 +152,6 @@ export class GeoDataService {
   }
 
   importPointCloudFileFromTapis(projectId: number, pointCloudId: number, files: Array<RemoteFile>): void {
-
     const tmp = files.map( f => ({system: f.system, path: f.path}));
     const payload = {
       files: tmp
@@ -161,7 +164,6 @@ export class GeoDataService {
   }
 
   importFileFromTapis(projectId: number, files: Array<RemoteFile>): void {
-
     const tmp = files.map( f => ({system: f.system, path: f.path}));
     const payload = {
       files: tmp
@@ -231,8 +233,10 @@ export class GeoDataService {
   }
 
   getOverlays(projectId: number): void {
+    this.setLoadOverlayData(true);
     this.http.get(environment.apiUrl + `/projects/${projectId}/overlays/`).subscribe( (ovs: Array<Overlay>) => {
       this._overlays.next(ovs);
+      this.setLoadOverlayData(false);
     });
   }
 
@@ -451,4 +455,15 @@ export class GeoDataService {
     this._overlays.next(null);
   }
 
+  setLoadFeatureData(isLoading: boolean): void {
+    this._loadingFeatureData.next(isLoading);
+  }
+
+  setLoadPointCloudData(isLoading: boolean): void {
+    this._loadingPointCloudData.next(isLoading);
+  }
+
+  setLoadOverlayData(isLoading: boolean): void {
+    this._loadingOverlayData.next(isLoading);
+  }
 }
