@@ -45,6 +45,7 @@ import { CommonModule } from '@angular/common';
 import { ToastrModule } from 'ngx-toastr';
 import { ModalConfirmationBodyComponent } from './components/modal-confirmation-body/modal-confirmation-body.component';
 import { UserRowComponent } from './components/user-row/user-row.component';
+import { EditNameInputComponent } from './components/edit-name-input/edit-name-input.component';
 
 @NgModule({
   declarations: [
