@@ -46,10 +46,6 @@ export class GeoDataService {
   public loadingPointCloudData: Observable<boolean> = this._loadingPointCloudData.asObservable();
   private _loadingOverlayData: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public loadingOverlayData: Observable<boolean> = this._loadingOverlayData.asObservable();
-  private _qmsSearchResults: BehaviorSubject<any> = new BehaviorSubject<Array<any>>(null);
-  private qmsSearchResults$: Observable<Array<any>> = this._qmsSearchResults.asObservable();
-  private _qmsServerResult: BehaviorSubject<any> = new BehaviorSubject<any>(null);
-  private qmsServerResult$: Observable<any> = this._qmsServerResult.asObservable();
 
   constructor(private http: HttpClient, private filterService: FilterService, private notificationsService: NotificationsService) {
 
