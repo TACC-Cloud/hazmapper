@@ -9,5 +9,8 @@ if (environment.production) {
   enableProdMode();
 }
 
+window['CESIUM_BASE_URL'] = 'src/assets/cesium/';
+
+
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.error(err));

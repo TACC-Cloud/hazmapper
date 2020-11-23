@@ -12,6 +12,7 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "es2015",
+    "types": ["cesium"],
     "typeRoots": [
       "node_modules/@types"
     ],

@@ -23,13 +23,20 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
+	      {
+               "glob": "**/*",
+               "input": "node_modules/cesium/Build/Cesium",
+               "output": "./src/assets/cesium"
+              },
               "src/favicon.ico",
               "src/assets"
             ],
             "styles": [
+	      "node_modules/ol/ol.css",
+              "node_modules/cesium/Build/Cesium/Widgets/widgets.css",
               "src/styles.styl"
             ],
-            "scripts": [],
+            "scripts": ["node_modules/cesium/Build/Cesium/Cesium.js"],
             "es5BrowserSupport": true
           },
           "configurations": {

@@ -44,6 +44,8 @@ import { CommonModule } from '@angular/common';
 import { ToastrModule } from 'ngx-toastr';
 import { ModalConfirmationBodyComponent } from './components/modal-confirmation-body/modal-confirmation-body.component';
 import { UserRowComponent } from './components/user-row/user-row.component';
+import { MainGlobeComponent } from './components/main-globe/main-globe.component';
+import { Map3dComponent } from './components/map3d/map3d.component';
 
 @NgModule({
   declarations: [
@@ -72,6 +74,8 @@ import { UserRowComponent } from './components/user-row/user-row.component';
     UsersPanelComponent,
     ModalConfirmationBodyComponent,
     UserRowComponent,
+    Map3dComponent,
+    MainGlobeComponent,
   ],
   imports: [
     CommonModule,
