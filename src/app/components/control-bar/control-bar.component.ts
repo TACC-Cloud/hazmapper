@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProjectsService } from '../../services/projects.service';
 import { Project } from '../../models/models';
 import { GeoDataService } from '../../services/geo-data.service';
-import {LatLng} from 'leaflet';
+import {LngLat} from 'mapbox-gl';
 import {skip} from 'rxjs/operators';
 import {BsModalRef, BsModalService} from 'ngx-foundation';
 import {ModalCreateProjectComponent} from '../modal-create-project/modal-create-project.component';
@@ -19,7 +19,7 @@ export class ControlBarComponent implements OnInit {
 
   public projects: Project[] = [];
   public selectedProject: Project;
-  public mapMouseLocation: LatLng = new LatLng(0, 0);
+  public mapMouseLocation: LngLat = new LngLat(0, 0);
   private loading = true;
   private loadingData: boolean = false;
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpEventType} from '@angular/common/http';
 import {BehaviorSubject, Observable, ReplaySubject, Subject} from 'rxjs';
-import {LatLng} from 'leaflet';
+import {LngLat} from 'mapbox-gl';
 import {FilterService} from './filter.service';
 import {AssetFilters, FeatureAsset, IFeatureAsset, IFileImportRequest, IPointCloud, Overlay} from '../models/models';
 import { Feature, FeatureCollection} from '../models/models';
@@ -332,8 +332,7 @@ export class GeoDataService {
     this._activeOverlay.next(ov);
   }
 
-
-  public get mapMouseLocation(): Observable<LatLng> {
+  public get mapMouseLocation(): Observable<LngLat> {
     return this.mapMouseLocation$;
   }
 
