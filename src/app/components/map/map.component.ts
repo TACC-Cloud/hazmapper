@@ -5,7 +5,7 @@ import {ScatterplotLayer, BitmapLayer} from '@deck.gl/layers';
 import {Tile3DLayer} from '@deck.gl/geo-layers';
 import mapboxgl from 'mapbox-gl';
 import {MapboxLayer} from '@deck.gl/mapbox';
-import {TileLayer} from '@deck.gl/geo-layers';
+import {TileLayer, TerrainLayer} from '@deck.gl/geo-layers';
 import {CesiumIonLoader} from '@loaders.gl/3d-tiles';
 import * as L from 'leaflet';
 import 'types.leaflet.heat';
@@ -78,9 +78,37 @@ export class MapComponent implements OnInit {
 
     mapboxgl.accessToken = 'pk.eyJ1Ijoic290bHBhcmsiLCJhIjoiY2todjE3M2IzMTFiczJ0cGdmOW9veGJtdyJ9.ZaGwR31atjWTDnEbTcFKGA';
 
+    const TERRAIN_IMAGE = `https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}.png?access_token=${mapboxgl.accessToken}`;
+    const SURFACE_IMAGE = `https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}@2x.png?access_token=${mapboxgl.accessToken}`;
+
+    const ELEVATION_DECODER = {
+      rScaler: 6553.6,
+      gScaler: 25.6,
+      bScaler: 0.1,
+      offset: -10000
+    };
+
+    let texture = SURFACE_IMAGE;
+    let wireframe = false;
+
+    const myTerrainLayer = new MapboxLayer({
+      id: 'terrainlayertest',
+      type: TerrainLayer,
+      minZoom: 0,
+      maxZoom: 23,
+      strategy: 'no-overlap',
+      elevationDecoder: ELEVATION_DECODER,
+      elevationData: TERRAIN_IMAGE,
+      texture,
+      wireframe,
+      color: [255, 255, 255]
+    });
+
+
     this.map = new mapboxgl.Map({
       sources: [],
       layers: {},
+      // style: mystyle,
       container: 'map',
       center: [-80, 40],
       maxZoom: 19,
@@ -90,51 +118,70 @@ export class MapComponent implements OnInit {
     });
 
     this.map.on('load', () => {
-      this.map.addLayer(myDeckLayer);
+
+      // this.map.addLayer(myDeckLayer);
+      this.map.addLayer(myTerrainLayer);
     });
 
     this.environment = environment;
 
-    const baseOSMLayer = {
-      'id': 'base-osm-layer',
-      'version': 8,
-      "glyphs": "mapbox://fonts/mapbox/{fontstack}/{range}.pbf",
-      'type': 'raster',
-      'source': {
-        'type': 'raster',
-        'tiles': [
-          'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
-          'https://b.tile.openstreetmap.org/{z}/{x}/{y}.png',
-          'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png'
-        ],
-        'tileSize': 256,
-        'attribution':
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    const baseOSMStyle = {
+      "version": 8,
+      'glyphs': 'http://fonts.openmaptiles.org/{fontstack}/{range}.pbf',
+      "sources": {
+        "osm": {
+          'type': 'raster',
+          'tiles': [
+            'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            'https://b.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png'
+          ],
+          'tileSize': 256,
+          'attribution':
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }
       },
-      'minzoom': 0,
-      'maxzoom': 19
-    }
+      "layers": [
+        {
+          "id": "osm",
+          "type": "raster",
+          "source": "osm",
+          "minzoom": 0,
+          "maxzoom": 19
+        }
+      ]
+    };
 
-    const satelliteLayer = {
-      'id': 'satellite-layer',
-      'version': 8,
-      "glyphs": "mapbox://fonts/mapbox/{fontstack}/{range}.pbf",
-      'type': 'raster',
-      'source': {
-        'type': 'raster',
-        'tiles': [
-          'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-        ],
-        'tileSize': 256,
-        'attribution':
-        'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    const satelliteStyle = {
+      "version": 8,
+      'glyphs': 'http://fonts.openmaptiles.org/{fontstack}/{range}.pbf',
+      "sources": {
+        "osm": {
+          'type': 'raster',
+          'tiles': [
+            'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+          ],
+          'tileSize': 256,
+          'attribution':
+          'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+        }
       },
-      'minzoom': 0,
-      'maxzoom': 19
-    }
+      "layers": [
+        {
+          "id": "osm",
+          "type": "raster",
+          "source": "osm",
+          "minzoom": 0,
+          "maxzoom": 19
+        }
+      ]
+    };
 
-    this.map.addLayer(baseOSMLayer);
-    this.map.addLayer(satelliteLayer);
+    // this.map.addLayer(baseOSMLayer);
+    // this.map.setStyle(baseOSMStyle);
+    // this.map.setStyle(satelliteStyle);
+    // this.map.addLayer(satelliteLayer);
+    // this.map.setLayoutProperty('osm', 'visibility', 'none');
 
     this.loadFeatures();
 
@@ -168,12 +215,15 @@ export class MapComponent implements OnInit {
     // Listen for changes to the basemap
     this.geoDataService.basemap.subscribe((next: string) => {
       if (next === 'sat') {
-        this.map.setLayoutProperty(baseOSMLayer.id, 'visibility', 'none');
-        this.map.setLayoutProperty(satelliteLayer.id, 'visibility', 'visible');
+        this.map.setStyle(satelliteStyle);
+        this.map.setLayoutProperty('osm', 'visibility', 'none');
+        // this.map.setLayoutProperty(baseOSMLayer.id, 'visibility', 'none');
+        // this.map.setLayoutProperty(satelliteLayer.id, 'visibility', 'visible');
       }
       if (next === 'roads') {
-        this.map.setLayoutProperty(satelliteLayer.id, 'visibility', 'none');
-        this.map.setLayoutProperty(baseOSMLayer.id, 'visibility', 'visible');
+        this.map.setStyle(baseOSMStyle);
+        // this.map.setLayoutProperty(satelliteLayer.id, 'visibility', 'none');
+        // this.map.setLayoutProperty(baseOSMLayer.id, 'visibility', 'visible');
       }
     });
   }
@@ -246,7 +296,8 @@ export class MapComponent implements OnInit {
               filter: ['has', 'point_count'],
               layout: {
                 'text-field': '{point_count_abbreviated}',
-                'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                // 'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                'text-font': ['Open Sans Bold'],
                 'text-size': 12
               }
             });
