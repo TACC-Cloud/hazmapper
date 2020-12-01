@@ -61,6 +61,8 @@ export class MapComponent implements OnInit {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       default: true,
       zIndex: 0,
+      showDescription: false,
+      opacity: 1,
       minZoom: 0,
       maxZoom: 19,
       isActive: true
@@ -73,6 +75,8 @@ export class MapComponent implements OnInit {
       url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
       attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
       default: true,
+      showDescription: false,
+      opacity: 1,
       zIndex: 1,
       maxZoom: 19,
       isActive: false
@@ -163,7 +167,7 @@ export class MapComponent implements OnInit {
         // Handle Deletion before new tileserver is set
         if (this.tileServers) {
           this.tileServers.forEach(tileServer => {
-            if (!next.some(ts => ts.name == tileServer.name)) {
+            if (!next.some(ts => ts.id == tileServer.id)) {
               this.map.removeLayer(this.layers[tileServer.name]);
             }
           });
@@ -176,6 +180,7 @@ export class MapComponent implements OnInit {
             this.layers[ts.name] = this.tileServerToLayer(ts);
           }
           this.layers[ts.name].setZIndex(ts.zIndex);
+          this.layers[ts.name].setOpacity(ts.opacity);
           if (ts.isActive) {
             this.map.addLayer(this.layers[ts.name]);
           } else {

@@ -60,24 +60,22 @@ export class LayersPanelComponent implements OnInit {
     this.geoDataService.deleteOverlay(this.activeProject.id, ov);
   }
 
-  deleteLayer(name: string): void {
-    this.geoDataService.deleteTileServer(name);
+  deleteLayer(tileServerId: number): void {
+    this.geoDataService.deleteTileServer(this.activeProject.id, tileServerId);
   }
 
-  toggleLayerActivate(name: string): void {
-    this.geoDataService.toggleTileServer(name);
+  toggleLayerActivate(id: number): void {
+    this.geoDataService.toggleTileServer(id);
   }
 
   // TODO (for setDragElement, setDragOverElement, dropEleemnt): change name to tileserver related things
-  // TODO: Change to ID
-  setDragElement(name: string): void {
-    this.dragging = this.tileServers.filter(ts => ts.name == name)[0];
+  setDragElement(id: number): void {
+    this.dragging = this.tileServers.filter(ts => ts.id == id)[0];
   }
 
-  // TODO: Change to ID
-  setDragOverElement(e: any, name: string): void {
+  setDragOverElement(e: any, id: number): void {
     e.preventDefault();
-    this.draggedOver = this.tileServers.filter(ts => ts.name == name)[0];
+    this.draggedOver = this.tileServers.filter(ts => ts.id == id)[0];
   }
 
   dropElement() {
@@ -88,6 +86,25 @@ export class LayersPanelComponent implements OnInit {
     this.tileServers.splice(index1, 1)
     this.tileServers.splice(index2, 0, this.dragging)
     this.geoDataService.updateTileServer(this.tileServers);
+  }
+
+  doThisThing() {
+    const baseOSMObject: TileServer = {
+      name: 'Base OSM',
+      id: 1,
+      type: 'tms',
+      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      default: true,
+      zIndex: 0,
+      showDescription: false,
+      opacity: 1,
+      minZoom: 0,
+      maxZoom: 19,
+      isActive: true
+    }
+    
+    this.geoDataService.addTileServerUpload(this.activeProject.id, baseOSMObject);
   }
 
   openCreateOverlayModal() {
@@ -102,5 +119,15 @@ export class LayersPanelComponent implements OnInit {
     modal.content.onClose.subscribe( (next) => {
       console.log(next);
     });
+  }
+
+  setLayerOpacity(id: number, tileOpacity: number) {
+    this.tileServers.map(e => {
+      if (e.id == id) {
+        e.opacity = tileOpacity;
+      }
+    });
+
+    this.geoDataService.updateTileServer(this.tileServers);
   }
 }

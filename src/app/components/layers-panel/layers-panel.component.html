@@ -1,15 +1,25 @@
 <div class="dock-panel">
   <div class="dock-panel-content">
+    <button (click)="doThisThing()">Try this</button>
     <p class="dock-panel-title"> Layers </p>
     <h6>Tile Layers</h6>
     <button class="button expanded hollow tiny success" (click)="openCreateTileServerModal()">
       <i class="fa fa-plus"></i>
     </button>
     <div *ngFor="let ts of tileServers" class="tile-servers">
-      <div class="grid-x" (drag)="setDragElement(ts.name)" (dragover)="setDragOverElement($event, ts.name)" (drop)="dropElement()" draggable=true>
-        <div style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap" class="cell">
-          <input name="" type="checkbox" [checked]="ts.isActive" (change)="toggleLayerActivate(ts.name)"/>
+      <div class="grid-x" (drag)="setDragElement(ts.id)" (dragover)="setDragOverElement($event, ts.id)" (drop)="dropElement()" draggable=true>
+        <div style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap" class="cell small-10">
+          <input name="" type="checkbox" [checked]="ts.isActive" (change)="toggleLayerActivate(ts.id)"/>
           {{ts.name}}
+        </div>
+        <div class="cell auto grid-x">
+          <div class="cell" *ngIf="ts.showDescription; else openOptions">
+            <i class="fas fa-angle-down" style="line-height: 22px" (click)="ts.showDescription=false"></i>
+          </div>
+
+          <ng-template class="cell" #openOptions>
+            <i class="fas fa-angle-right" style="line-height: 22px" (click)="ts.showDescription=true"></i>
+          </ng-template>
         </div>
         <div class="cell auto grid-x align-right">
           <div *ngIf="ts.default; else delete_icon">
@@ -19,14 +29,22 @@
           <ng-template #delete_icon>
             <button
               class="button tiny hollow alert button-no-margin"
-              (click)="deleteLayer(ts.name)"
+              (click)="deleteLayer(ts.id)"
             >
               <i class="fa fa-trash"></i>
-          </button>
+            </button>
           </ng-template>
 
         </div>
       </div>
+
+      <div *ngIf="ts.showDescription">
+        <div class="slidecontainer">
+          <label>Opacity:</label>
+          <input #slider type="range" min="0" max="1" step="0.1" [value]="ts.opacity" class="slider" id="myRange" (change)="setLayerOpacity(ts.id, slider.value)">
+        </div>
+      </div>
+
     </div>
     <hr>
     <h6> Overlays </h6>

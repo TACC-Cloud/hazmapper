@@ -127,6 +127,7 @@ export interface TileServer {
   attribution: string;
   default: boolean;
   zIndex: number;
+  showDescription?: boolean;
   opacity?: number;
   layers?: string;
   minZoom?: number;

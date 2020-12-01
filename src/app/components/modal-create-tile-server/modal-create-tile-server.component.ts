@@ -4,8 +4,9 @@ import {BsModalRef, BsModalService} from 'ngx-foundation';
 import {Subject} from 'rxjs';
 import {filter, first, map, take, toArray} from 'rxjs/operators';
 import {TapisFilesService} from "../../services/tapis-files.service";
-import {TileServer} from '../../models/models';
+import {TileServer, Project} from '../../models/models';
 import { GeoDataService} from '../../services/geo-data.service';
+import {ProjectsService} from '../../services/projects.service';
 import {RemoteFile} from "ng-tapis";
 
 @Component({
@@ -16,6 +17,7 @@ import {RemoteFile} from "ng-tapis";
 export class ModalCreateTileServerComponent implements OnInit {
   remoteFileData: Array<RemoteFile> = new Array<RemoteFile>();
   tsCreateForm: FormGroup;
+  activeProject: Project;  
   importMethod: string = 'manual';
   serverType: string = 'tms';
   qmsSearchResults: Array<any>;
@@ -26,6 +28,7 @@ export class ModalCreateTileServerComponent implements OnInit {
   constructor(private bsModalRef: BsModalRef,
               private tapisFilesService: TapisFilesService,
               private geoDataService: GeoDataService,
+              private projectsService: ProjectsService,
               private bsModalService: BsModalService) { }
 
 
@@ -36,6 +39,10 @@ export class ModalCreateTileServerComponent implements OnInit {
         this.qmsSearchResults.map(n => n.show = false);
       }
     });
+    
+    this.projectsService.activeProject.subscribe( (next) => {
+      this.activeProject = next;
+    });    
 
     this.geoDataService.qmsServerResult.subscribe((next) => {
       if (next) {
@@ -89,7 +96,7 @@ export class ModalCreateTileServerComponent implements OnInit {
   addQMSServer(qs: any) {
     this.qmsSearchResults = null;
     console.log(this.qmsSearchResults);
-    this.geoDataService.getQMSTileServer(qs.id);
+    this.geoDataService.getQMSTileServer(this.activeProject.id, qs.id);
   }
 
   submit() {
@@ -119,12 +126,14 @@ export class ModalCreateTileServerComponent implements OnInit {
       layers: this.tsCreateForm.get('layers').value,
       default: false,
       zIndex: 0,
+      showDescription: false,
       maxZoom: this.tsCreateForm.get("maxZoom").value,
       minZoom: this.tsCreateForm.get("minZoom").value,
       isActive: false
     };
 
-    this.geoDataService.addTileServer(tileServer);
+    this.geoDataService.addTileServerUpload(this.activeProject.id, tileServer);
+    
     this.onClose.next(null);
     this.bsModalRef.hide();
   }

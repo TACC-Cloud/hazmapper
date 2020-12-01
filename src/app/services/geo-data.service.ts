@@ -304,17 +304,19 @@ export class GeoDataService {
     });
   }
 
-  // TODO needs backend implementation
-  // public getTileServer() {
-  // }
-
-  // TODO: Should be handled in the backend
-  public deleteTileServer(name: string) {
-    this.tileServers$.pipe(take(1)).subscribe(tileServerList => {
-      this._tileServers.next(tileServerList.filter(tileServer => {
-        return tileServer.name != name;
+  deleteTileServer(projectId: number, tileServerId: number) {
+    this.http
+      .delete(environment.apiUrl + `/projects/${projectId}/tile-servers/${tileServerId}/`)
+      .subscribe((resp) => {
+        this.tileServers$.pipe(
+          take(1),
+          map( (items: Array<TileServer> ) => items.filter( (item: TileServer) => item.id !== tileServerId)),
+        ).subscribe( (results) =>  {
+          this._tileServers.next(results);
+        });
+      }, (error => {
+        console.log(error);
       }));
-    });
   }
 
   public updateTileServer(newTileServers: Array<TileServer>) {
@@ -322,11 +324,11 @@ export class GeoDataService {
   }
 
   // TODO: Should be handled in the backend
-  public toggleTileServer(name: string) {
+  public toggleTileServer(id: number) {
     this.tileServers$.pipe(
       take(1)).subscribe( (results) => {
         results.map(tileServer => {
-          if (tileServer.name == name) {
+          if (tileServer.id == id) {
             tileServer.isActive = !tileServer.isActive;
           }
         })
@@ -349,6 +351,30 @@ export class GeoDataService {
     })
   }
 
+  getTileServers(projectId: number): void {
+    this.http.get(environment.apiUrl + `/projects/${projectId}/tile-servers/`).subscribe( (tsv: Array<TileServer>) => {
+      this._tileServers.next(tsv);
+    });
+  }
+
+  addTileServerUpload(projectId: number, tileServer: TileServer) {
+    const payload = new FormData();
+    payload.append('name', tileServer.name);
+    payload.append('type', tileServer.type);
+    payload.append('url', tileServer.url);
+    payload.append('attribution', tileServer.attribution);
+    payload.append('opacity', tileServer.opacity.toFixed(6));
+    payload.append('zIndex', tileServer.zIndex.toString());
+    payload.append('maxZoom', tileServer.maxZoom.toFixed(6));
+    payload.append('minZoom', tileServer.minZoom.toFixed(6));
+    payload.append('isActive', tileServer.isActive.toString());
+
+    this.http.post(environment.apiUrl + `/projects/${projectId}/tile-servers/`, payload)
+      .subscribe((resp) => {
+        this.getTileServers(projectId);
+      });
+  }  
+
   getQMS(query: string, queryOptions: any): void {
     const url = "https://qms.nextgis.com/api/v1/geoservices/";
     const request = url +
@@ -363,7 +389,7 @@ export class GeoDataService {
     });
   }
 
-  getQMSTileServer(id: number) {
+  getQMSTileServer(projectId: number, id: number) {
     const request = "https://qms.nextgis.com/api/v1/geoservices/" + id;
     this.http.get(request).subscribe((q) => {
       const newServer: TileServer = {
@@ -374,11 +400,12 @@ export class GeoDataService {
         attribution: q['desc'],
         default: false,
         zIndex: 1,
+        opacity: 0.5,
         maxZoom: q['z_max'],
         minZoom: q['z_min'],
         isActive: false
       }
-      this.addTileServer(newServer);
+      this.addTileServerUpload(projectId, newServer);
       this._qmsServerResult.next(q);
     });
   }
@@ -450,6 +477,7 @@ export class GeoDataService {
     this.getFeatures(projectId);
     this.getPointClouds(projectId);
     this.getOverlays(projectId);
+    this.getTileServers(projectId);
   }
 
   clearData(): void {
