@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild} from '@angular/core';
 import {GeoDataService} from '../../services/geo-data.service';
 import {Overlay, Project, TileServer} from '../../models/models';
 import {AppEnvironment, environment} from '../../../environments/environment';
@@ -13,6 +13,7 @@ import {ProjectsService} from '../../services/projects.service';
   styleUrls: ['./layers-panel.component.styl']
 })
 export class LayersPanelComponent implements OnInit {
+  @ViewChild('activeText', {static: false}) activeInput: ElementRef<HTMLInputElement>;  
 
   basemap: string;
   overlays: Array<Overlay>;
@@ -21,6 +22,7 @@ export class LayersPanelComponent implements OnInit {
   activeProject: Project;
   dragging: TileServer;
   draggedOver: TileServer;
+  inputShown: boolean = false;  
 
   constructor(private geoDataService: GeoDataService,
               private bsModalService: BsModalService,
@@ -85,26 +87,10 @@ export class LayersPanelComponent implements OnInit {
     this.draggedOver.zIndex = index1;
     this.tileServers.splice(index1, 1)
     this.tileServers.splice(index2, 0, this.dragging)
-    this.geoDataService.updateTileServer(this.tileServers);
-  }
-
-  doThisThing() {
-    const baseOSMObject: TileServer = {
-      name: 'Base OSM',
-      id: 1,
-      type: 'tms',
-      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      default: true,
-      zIndex: 0,
-      showDescription: false,
-      opacity: 1,
-      minZoom: 0,
-      maxZoom: 19,
-      isActive: true
-    }
+    this.geoDataService.updateTileServers(this.activeProject.id, this.tileServers);
     
-    this.geoDataService.addTileServerUpload(this.activeProject.id, baseOSMObject);
+    // this.geoDataService.updateTileServer(this.activeProject.id, ts[0]);
+    // this.geoDataService.updateTileServer(this.activeProject.id, ts[0]);
   }
 
   openCreateOverlayModal() {
@@ -120,14 +106,49 @@ export class LayersPanelComponent implements OnInit {
       console.log(next);
     });
   }
+  
+  onEnter(value: string, ts: TileServer) {
+    value = value.trim();
+    if (value && value != ts.name) {
+      // this.nameChange = value;
+      this.tileServers.map(e => {
+        if (e.id == ts.id) {
+          e.name = value;
+        }
+      });
+      let newTs = this.tileServers.filter(e => e.id == ts.id);
 
+      // this.geoDataService.updateTileServers(this.activeProject.id, this.tileServers);
+      this.geoDataService.updateTileServer(this.activeProject.id, newTs[0]);      
+    }
+
+    this.hideInput();
+  }
+
+  showInput(newName: string) {
+    this.inputShown = true;
+    setTimeout(() => {
+      this.activeInput.nativeElement.value = newName;
+      this.activeInput.nativeElement.focus()
+      this.activeInput.nativeElement.select()
+    }, 1);
+  }
+
+  hideInput() {
+    this.inputShown = false;
+  }  
+  
+
+  // TODO: Refactor
   setLayerOpacity(id: number, tileOpacity: number) {
     this.tileServers.map(e => {
       if (e.id == id) {
         e.opacity = tileOpacity;
       }
     });
+    let ts = this.tileServers.filter(e => e.id == id);
 
-    this.geoDataService.updateTileServer(this.tileServers);
+    // this.geoDataService.updateTileServers(this.activeProject.id, this.tileServers);
+    this.geoDataService.updateTileServer(this.activeProject.id, ts[0]);
   }
 }

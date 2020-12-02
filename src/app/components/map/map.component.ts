@@ -49,8 +49,9 @@ export class MapComponent implements OnInit {
     // this.cluster = this.route.snapshot.queryParamMap.get('mapType');
     this.environment = environment;
     this.map = new L.Map('map', {
-     center: [40, -80],
-     zoom: 3
+      center: [40, -80],
+      zoom: 3,
+      maxZoom: 19
     });
 
     const baseOSMObject: TileServer = {
@@ -94,8 +95,8 @@ export class MapComponent implements OnInit {
     //   isActive: false
     // }
 
-    this.geoDataService.addTileServer(baseOSMObject);
-    this.geoDataService.addTileServer(satelliteObject);
+    // this.geoDataService.addTileServer(baseOSMObject);
+    // this.geoDataService.addTileServer(satelliteObject);
     // this.geoDataService.addTileServer(wmsObject);
 
     this.loadFeatures();
@@ -135,6 +136,7 @@ export class MapComponent implements OnInit {
 
   tileServerToLayer(tileServer: TileServer) {
     if (tileServer.type == 'tms') {
+
       return L.tileLayer(tileServer.url, {
         minZoom: tileServer.minZoom,
         maxZoom: tileServer.maxZoom,
@@ -198,7 +200,7 @@ export class MapComponent implements OnInit {
             return L.divIcon({html: `<div><b>${cluster.getChildCount()}</b></div>`, className: 'marker-cluster'});
           }
         });
-        markers.setZIndex(this.tileServers.length + 1);
+        // markers.setZIndex(this.tileServers.length + 1);
 
         collection.features.forEach( d => {
           const feat = L.geoJSON(d, geojsonOptions);

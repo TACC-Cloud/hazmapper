@@ -319,9 +319,47 @@ export class GeoDataService {
       }));
   }
 
-  public updateTileServer(newTileServers: Array<TileServer>) {
-    this._tileServers.next(newTileServers);
+  public updateTileServers(projectId: number, newTileServers: Array<TileServer>) {
+    let payload = []
+
+    for (let pay of newTileServers) {
+      let myPay = {
+        id: pay.id.toString(),
+        name: pay.name,
+        opacity: pay.opacity,
+        isActive: pay.isActive.toString(),
+        zIndex: pay.zIndex.toString()
+      }
+      payload.push(myPay);
+    }
+    // const payload = {
+    //   name: tileServer.name,
+    //   opacity: tileServer.opacity,
+    //   isActive: tileServer.isActive.toString(),
+    //   // zIndex: tileServer.zIndex.toString(),
+    // };    
+
+    
+    // this._tileServers.next(newTileServers);
+    this.http.put(environment.apiUrl + `/projects/${projectId}/tile-servers/`, payload)
+      .subscribe( (resp) => {
+        this.getTileServers(projectId);
+      });    
   }
+  
+  updateTileServer(projectId: number, tileServer: TileServer): void {
+    const payload = {
+      name: tileServer.name,
+      opacity: tileServer.opacity,
+      isActive: tileServer.isActive.toString(),
+      zIndex: tileServer.zIndex.toString()
+    };
+
+    this.http.put(environment.apiUrl + `/projects/${projectId}/tile-servers/${tileServer.id}/`, payload)
+      .subscribe( (resp) => {
+        this.getTileServers(projectId);
+      });
+  }  
 
   // TODO: Should be handled in the backend
   public toggleTileServer(id: number) {
@@ -353,12 +391,43 @@ export class GeoDataService {
 
   getTileServers(projectId: number): void {
     this.http.get(environment.apiUrl + `/projects/${projectId}/tile-servers/`).subscribe( (tsv: Array<TileServer>) => {
-      this._tileServers.next(tsv);
+      this.tileServers$.pipe(take(1)).subscribe(tileServerList => {
+        tsv.sort((a, b) => {
+          return a.zIndex - b.zIndex;
+        });
+        
+        if (tileServerList) {
+          for (let i = 0; i < tileServerList.length; i++) {
+            tsv[i].showDescription = tileServerList[i].showDescription;
+            console.log(tsv[i].zIndex);
+          }
+          // tileServer.zIndex = tileServerList.length;
+          // newTileServerList = [...tileServerList, tileServer];
+        }
+        // else {
+          // tileServer.zIndex = 0;
+          // newTileServerList = [tileServer];
+        // }
+        
+        this._tileServers.next(tsv);
+      });
+
     });
   }
 
   addTileServerUpload(projectId: number, tileServer: TileServer) {
+    this.tileServers$.pipe(take(1)).subscribe(tileServerList => {
+      if (tileServerList) {
+        tileServer.zIndex = tileServerList.length;
+      } else {
+        tileServer.zIndex = 0;
+      }
+    })
+    
     const payload = new FormData();
+    // for (tis in tileServer) {
+      // payload.append(prop, JSON.stringify(tileServer[prop]));
+    // }      
     payload.append('name', tileServer.name);
     payload.append('type', tileServer.type);
     payload.append('url', tileServer.url);
@@ -402,12 +471,46 @@ export class GeoDataService {
         zIndex: 1,
         opacity: 0.5,
         maxZoom: q['z_max'],
-        minZoom: q['z_min'],
+        minZoom: q['z_min'] ? q['z_min'] : 0,
         isActive: false
       }
       this.addTileServerUpload(projectId, newServer);
       this._qmsServerResult.next(q);
     });
+  }
+
+  initializeMaps(projectId: number) {
+    const baseOSMObject: TileServer = {
+      name: 'Base OSM',
+      id: 1,
+      type: 'tms',
+      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      default: true,
+      zIndex: 0,
+      showDescription: false,
+      opacity: 1,
+      minZoom: 0,
+      maxZoom: 19,
+      isActive: true
+    }
+
+    const satelliteObject: TileServer = {
+      name: 'Satellite',
+      id: 1,
+      type: 'tms',
+      url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+      default: true,
+      showDescription: false,
+      opacity: 1,
+      zIndex: 1,
+      maxZoom: 19,
+      minZoom: 0,
+      isActive: false
+    }
+    this.addTileServerUpload(projectId, baseOSMObject);
+    this.addTileServerUpload(projectId, satelliteObject);
   }
 
   public get qmsSearchResults(): Observable<Array<any>> {
@@ -447,6 +550,7 @@ export class GeoDataService {
     }
 
   }
+  
 
   public get activeOverlay(): Observable<Overlay> {
     return this.activeOverlay$;

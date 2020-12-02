@@ -1,6 +1,5 @@
 <div class="dock-panel">
   <div class="dock-panel-content">
-    <button (click)="doThisThing()">Try this</button>
     <p class="dock-panel-title"> Layers </p>
     <h6>Tile Layers</h6>
     <button class="button expanded hollow tiny success" (click)="openCreateTileServerModal()">
@@ -8,40 +7,59 @@
     </button>
     <div *ngFor="let ts of tileServers" class="tile-servers">
       <div class="grid-x" (drag)="setDragElement(ts.id)" (dragover)="setDragOverElement($event, ts.id)" (drop)="dropElement()" draggable=true>
-        <div style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap" class="cell small-10">
+        <label style="max-width: 200px; overflow: hidden; line-height: 3; text-overflow: ellipsis; white-space: nowrap" class="cell small-10 map-visibility">
           <input name="" type="checkbox" [checked]="ts.isActive" (change)="toggleLayerActivate(ts.id)"/>
-          {{ts.name}}
-        </div>
-        <div class="cell auto grid-x">
-          <div class="cell" *ngIf="ts.showDescription; else openOptions">
-            <i class="fas fa-angle-down" style="line-height: 22px" (click)="ts.showDescription=false"></i>
+          <i class="fas fa-eye-slash unchecked"></i>
+          <i class="fas fa-eye checked"></i>
+          <div id="tile-server-name"
+               data-tooltip
+               tabindex="1"
+               title="{{ts.name}}"
+               data-position="top"
+               data-alignment="left"
+               *ngIf="!inputShown"
+               (dblclick)="showInput(ts.name)">
+            {{ts.name}}            
           </div>
 
-          <ng-template class="cell" #openOptions>
-            <i class="fas fa-angle-right" style="line-height: 22px" (click)="ts.showDescription=true"></i>
-          </ng-template>
-        </div>
+          <input #activeText
+                 id=property-input
+                 type="text"
+                 *ngIf="inputShown"
+                 (blur)="onEnter(activeText.value, ts)"
+                 (keyup.enter)="onEnter(activeText.value, ts)">
+        </label>
+
         <div class="cell auto grid-x align-right">
-          <div *ngIf="ts.default; else delete_icon">
-            <i data-tooltip tabindex="1" title="Default Layer" class="fas fa-asterisk"></i>
-          </div>
+          <button class="button secondary clear"  style="padding: 0px 3px; margin: 0; line-height: 0">
+            <i class="fas fa-edit" (click)="showInput()" *ngIf="!inputShown"></i>
+            <i class="fas fa-check" (click)="hideInput()" *ngIf="inputShown"></i>                      
+          </button>
 
-          <ng-template #delete_icon>
+          <button class="button secondary clear"  style="padding: 0px 3px; margin: 0; line-height: 0" >
+            <i class="fas fa-sliders-h" (click)="ts.showDescription=!ts.showDescription"></i>
+          </button>          
+          <!-- <div *ngIf="ts.default; else delete_icon">
+               <i data-tooltip tabindex="1" title="Default Layer" class="fas fa-asterisk"></i>
+               </div> -->
+
+          <!-- <ng-template #delete_icon> -->
             <button
-              class="button tiny hollow alert button-no-margin"
+              class="button alert clear button-no-margin"
+              style="padding: 0; margin: 0; line-height: 0"
               (click)="deleteLayer(ts.id)"
             >
               <i class="fa fa-trash"></i>
             </button>
-          </ng-template>
+            <!-- </ng-template> -->
 
         </div>
       </div>
 
       <div *ngIf="ts.showDescription">
-        <div class="slidecontainer">
-          <label>Opacity:</label>
-          <input #slider type="range" min="0" max="1" step="0.1" [value]="ts.opacity" class="slider" id="myRange" (change)="setLayerOpacity(ts.id, slider.value)">
+        <div class="grid-x row" style="padding: 15px 10px;">
+          <label class="small-4 align-self-middle">Opacity</label>
+          <input #slider type="range" min="0" max="1" step="0.1" [value]="ts.opacity" class="slider small-8 align-self-middle" id="myRange" style="margin: 0" (change)="setLayerOpacity(ts.id, slider.value)">
         </div>
       </div>
 
@@ -61,7 +79,7 @@
         </div>
         <div class="cell grid-x auto align-right">
             <button
-              class="button tiny hollow alert button-no-margin"
+              class="button hollow tiny alert button-no-margin"
               (click)="deleteOverlay(ov)"
             >
               <i class="fa fa-trash"></i>

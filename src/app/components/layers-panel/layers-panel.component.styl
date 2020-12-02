@@ -1,6 +1,13 @@
 @import '../../../variables.styl'
 
 :host
+  .map-visibility input[type="checkbox"],
+  .map-visibility .checked
+    display: none
+  .map-visibility input[type="checkbox"]:checked ~ .checked
+    display: inline-block
+  .map-visibility input[type="checkbox"]:checked ~ .unchecked
+    display: none;
   .overlay
     padding-bottom 5px
     vertical-align bottom
