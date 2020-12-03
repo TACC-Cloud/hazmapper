@@ -91,6 +91,14 @@ export class ProjectsService {
     }
   }
 
+  setActiveProjectId(projectId): void {
+      this.http.get<Project>(environment.apiUrl + `/projects/${projectId}/`).subscribe( resp => {
+        this._activeProject.next(resp);
+      }, error => {
+        // TODO
+      });
+  }
+
   deleteProject(proj: Project): void {
     this.http.delete(environment.apiUrl + `/projects/${proj.id}/`)
       .subscribe( (resp) => {

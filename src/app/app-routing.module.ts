@@ -3,6 +3,7 @@ import {Routes, RouterModule, CanActivate, ActivatedRouteSnapshot, RouterStateSn
 import { NotFoundComponent} from './components/notfound/notfound.component';
 import {AuthService} from './services/authentication.service';
 import {MainComponent} from './components/main/main.component';
+import {MainPublicComponent} from './components/main-public/main-public.component';
 import { CallbackComponent } from './components/callback/callback.component';
 
 @Injectable()
@@ -19,9 +20,11 @@ export class Activate implements CanActivate {
 
 
 const routes: Routes = [
-  {path: '', component: MainComponent, canActivate: [Activate]},
+  {path: 'maps', component: MainComponent, canActivate: [Activate]},
+  {path: 'maps-public/:id', component: MainPublicComponent},
   {path: 'callback', component: CallbackComponent},
-  {path: '404', component: NotFoundComponent }];
+  {path: '404', component: NotFoundComponent },
+  {path: '', redirectTo: '/maps', pathMatch: 'full' }];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

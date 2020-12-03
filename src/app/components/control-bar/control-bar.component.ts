@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import { ProjectsService } from '../../services/projects.service';
 import { Project } from '../../models/models';
 import { GeoDataService } from '../../services/geo-data.service';
@@ -8,6 +8,7 @@ import {BsModalService} from 'ngx-foundation';
 import {ModalCreateProjectComponent} from '../modal-create-project/modal-create-project.component';
 import { combineLatest } from 'rxjs';
 import {NotificationsService} from '../../services/notifications.service';
+import {Router, ActivatedRoute, ParamMap} from '@angular/router';
 
 @Component({
   selector: 'app-control-bar',
@@ -15,7 +16,7 @@ import {NotificationsService} from '../../services/notifications.service';
   styleUrls: ['./control-bar.component.styl']
 })
 export class ControlBarComponent implements OnInit {
-
+  @Input() publicMap = false;
   public projects: Project[] = [];
   public selectedProject: Project;
   public mapMouseLocation: LatLng = new LatLng(0, 0);
@@ -26,20 +27,30 @@ export class ControlBarComponent implements OnInit {
               private geoDataService: GeoDataService,
               private notificationsService: NotificationsService,
               private bsModalService: BsModalService,
+              private route: ActivatedRoute,
+              private router: Router
               ) { }
 
   ngOnInit() {
-    this.projectsService.getProjects();
-    this.projectsService.projects.subscribe( (projects) => {
-      this.projects = projects;
-      this.loading = false;
-      const validSelectedProject = this.selectedProject && projects.some(proj => proj.id === this.selectedProject.id);
-      if (!validSelectedProject && this.projects.length) {
-        this.selectProject(this.projects[0]);
-      } else if (!validSelectedProject && this.selectedProject) {
-        this.selectProject(null);
-      }
-    });
+    const activeProjectId = this.route.snapshot.paramMap.get('id');
+
+    if (this.publicMap) {
+      this.projectsService.setActiveProjectId(activeProjectId);
+    } else {
+      // TODO add suport for map route for non-public maps
+
+      this.projectsService.getProjects();
+      this.projectsService.projects.subscribe((projects) => {
+        this.projects = projects;
+        this.loading = false;
+        const validSelectedProject = this.selectedProject && projects.some(proj => proj.id === this.selectedProject.id);
+        if (!validSelectedProject && this.projects.length) {
+          this.selectProject(this.projects[0]);
+        } else if (!validSelectedProject && this.selectedProject) {
+          this.selectProject(null);
+        }
+      });
+    }
 
     combineLatest(this.geoDataService.loadingOverlayData,
                   this.geoDataService.loadingPointCloudData,
