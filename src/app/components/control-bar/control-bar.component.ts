@@ -4,11 +4,10 @@ import { Project } from '../../models/models';
 import { GeoDataService } from '../../services/geo-data.service';
 import {LatLng} from 'leaflet';
 import {skip} from 'rxjs/operators';
-import {BsModalRef, BsModalService} from 'ngx-foundation';
+import {BsModalService} from 'ngx-foundation';
 import {ModalCreateProjectComponent} from '../modal-create-project/modal-create-project.component';
-import {ModalFileBrowserComponent} from '../modal-file-browser/modal-file-browser.component';
-import {interval, Observable, Subscription, combineLatest} from 'rxjs';
-import {NotificationsService} from "../../services/notifications.service";
+import { combineLatest } from 'rxjs';
+import {NotificationsService} from '../../services/notifications.service';
 
 @Component({
   selector: 'app-control-bar',
@@ -21,7 +20,7 @@ export class ControlBarComponent implements OnInit {
   public selectedProject: Project;
   public mapMouseLocation: LatLng = new LatLng(0, 0);
   private loading = true;
-  private loadingData: boolean = false;
+  private loadingData = false;
 
   constructor(private projectsService: ProjectsService,
               private geoDataService: GeoDataService,

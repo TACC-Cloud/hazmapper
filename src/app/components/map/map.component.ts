@@ -151,7 +151,7 @@ export class MapComponent implements OnInit {
 
     this.projectsService.activeProject.subscribe((next: Project) => {
       // fit to bounds if this is a new project
-      if (next && this._activeProjectId != next.id) {
+      if (next && this._activeProjectId !== next.id) {
         this.fitToFeatureExtent = true;
       }
       this._activeProjectId = next ? next.id: null;
