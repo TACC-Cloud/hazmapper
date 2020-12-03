@@ -10,7 +10,7 @@ export interface AppEnvironment {
 export const environment: AppEnvironment = {
   production: true,
   apiUrl: 'https://agave.designsafe-ci.org/geo/v2',
-  clientId: 'niyXUtUixEVUsGLrtEg5ZuAH1gYa',
+  clientId: 'tMvAiRdcsZ52S_89lCkO4x3d6VMa',
   baseHref: '/hazmapper/',
   designSafeUrl: 'https://agave.designsafe-ci.org/'
 };
