@@ -332,15 +332,7 @@ export class GeoDataService {
       }
       payload.push(myPay);
     }
-    // const payload = {
-    //   name: tileServer.name,
-    //   opacity: tileServer.opacity,
-    //   isActive: tileServer.isActive.toString(),
-    //   // zIndex: tileServer.zIndex.toString(),
-    // };    
 
-    
-    // this._tileServers.next(newTileServers);
     this.http.put(environment.apiUrl + `/projects/${projectId}/tile-servers/`, payload)
       .subscribe( (resp) => {
         this.getTileServers(projectId);
@@ -399,16 +391,9 @@ export class GeoDataService {
         if (tileServerList) {
           for (let i = 0; i < tileServerList.length; i++) {
             tsv[i].showDescription = tileServerList[i].showDescription;
-            console.log(tsv[i].zIndex);
+            tsv[i].showInput = false;
           }
-          // tileServer.zIndex = tileServerList.length;
-          // newTileServerList = [...tileServerList, tileServer];
         }
-        // else {
-          // tileServer.zIndex = 0;
-          // newTileServerList = [tileServer];
-        // }
-        
         this._tileServers.next(tsv);
       });
 

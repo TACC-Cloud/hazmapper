@@ -5,53 +5,54 @@
     <button class="button expanded hollow tiny success" (click)="openCreateTileServerModal()">
       <i class="fa fa-plus"></i>
     </button>
-    <div *ngFor="let ts of tileServers" class="tile-servers">
+    <div *ngFor="let ts of tileServers; let i = index;" class="tile-servers" style="padding: 10px">
       <div class="grid-x" (drag)="setDragElement(ts.id)" (dragover)="setDragOverElement($event, ts.id)" (drop)="dropElement()" draggable=true>
-        <label style="max-width: 200px; overflow: hidden; line-height: 3; text-overflow: ellipsis; white-space: nowrap" class="cell small-10 map-visibility">
-          <input name="" type="checkbox" [checked]="ts.isActive" (change)="toggleLayerActivate(ts.id)"/>
-          <i class="fas fa-eye-slash unchecked"></i>
-          <i class="fas fa-eye checked"></i>
-          <div id="tile-server-name"
-               data-tooltip
-               tabindex="1"
-               title="{{ts.name}}"
-               data-position="top"
-               data-alignment="left"
-               *ngIf="!inputShown"
-               (dblclick)="showInput(ts.name)">
-            {{ts.name}}            
-          </div>
+        <div class="grid-x small-8" style="align-items: center; padding-left: 5px;">
+          <label class="map-visibility" style="width: 20px">
+            <input name="" type="checkbox" [checked]="ts.isActive" (change)="toggleLayerActivate(ts.id)"/>
+            <i class="fas fa-eye-slash unchecked"></i>
+            <i class="fas fa-eye checked"></i>
+          </label>
 
-          <input #activeText
-                 id=property-input
-                 type="text"
-                 *ngIf="inputShown"
-                 (blur)="onEnter(activeText.value, ts)"
-                 (keyup.enter)="onEnter(activeText.value, ts)">
-        </label>
+          <div style="max-width: 110px">
 
-        <div class="cell auto grid-x align-right">
-          <button class="button secondary clear"  style="padding: 0px 3px; margin: 0; line-height: 0">
-            <i class="fas fa-edit" (click)="showInput()" *ngIf="!inputShown"></i>
-            <i class="fas fa-check" (click)="hideInput()" *ngIf="inputShown"></i>                      
+            <input #activeText
+                   id=property-input
+                   type="text"
+                   *ngIf="ts.showInput"
+                   (blur)="onEnter(activeText.value, ts)"
+                   (keyup.enter)="onEnter(activeText.value, ts)"
+                   [value]="ts.name"
+            >
+            <div id="tile-server-name"
+                 data-tooltip
+                 tabindex="1"
+                 title="{{ts.name}}"
+                 data-position="top"
+                 data-alignment="left"
+                 *ngIf="!ts.showInput"
+                 (dblclick)="showInput(ts.name, ts, awesome)">
+              {{ts.name}}            
+            </div>            
+          </div>          
+        </div>        
+
+        <div class="cell small-4 grid-x" style="justify-content: center">
+          <button class="button secondary clear" style="padding: 0px 0px; margin: 0; line-height: 0">
+            <i class="fas fa-edit" (click)="showInput(ts.name, ts, awesome)" *ngIf="!ts.showInput" style="width: 17px"></i>
+            <i class="fas fa-check" (click)="hideInput(ts)" *ngIf="ts.showInput" style="width: 17px"></i>                      
           </button>
 
-          <button class="button secondary clear"  style="padding: 0px 3px; margin: 0; line-height: 0" >
+          <button class="button secondary clear" style="padding: 0px 3px; margin: 0; line-height: 0" >
             <i class="fas fa-sliders-h" (click)="ts.showDescription=!ts.showDescription"></i>
           </button>          
-          <!-- <div *ngIf="ts.default; else delete_icon">
-               <i data-tooltip tabindex="1" title="Default Layer" class="fas fa-asterisk"></i>
-               </div> -->
-
-          <!-- <ng-template #delete_icon> -->
-            <button
-              class="button alert clear button-no-margin"
-              style="padding: 0; margin: 0; line-height: 0"
-              (click)="deleteLayer(ts.id)"
-            >
-              <i class="fa fa-trash"></i>
-            </button>
-            <!-- </ng-template> -->
+          <button
+            class="button alert clear button-no-margin"
+            style="padding: 0; margin: 0; line-height: 0"
+            (click)="deleteLayer(ts.id)"
+          >
+            <i class="fa fa-trash"></i>
+          </button>
 
         </div>
       </div>

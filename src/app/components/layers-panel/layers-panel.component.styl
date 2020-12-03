@@ -1,13 +1,33 @@
 @import '../../../variables.styl'
 
 :host
+  #tile-server-name
+      max-width: 110px
+      overflow: hidden
+      text-overflow: ellipsis
+      white-space: nowrap
+      padding-left: 5px      
+      display: inline-block
+      font-size: 16px
+      height: 18px
+  #property-input
+      display: inline-block
+      width: 100%
+      font-size: 16px
+      padding: 0px
+      padding-left: 5px
+      margin: 0px
+      border: 0px solid #f0f0f0
+      -webkit-border-radius: 0px
+      border-radius: 0px
+      height: 18px
   .map-visibility input[type="checkbox"],
   .map-visibility .checked
     display: none
   .map-visibility input[type="checkbox"]:checked ~ .checked
-    display: inline-block
+    display: inline
   .map-visibility input[type="checkbox"]:checked ~ .unchecked
-    display: none;
+    display: none
   .overlay
     padding-bottom 5px
     vertical-align bottom

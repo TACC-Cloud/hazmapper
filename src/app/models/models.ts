@@ -132,6 +132,7 @@ export interface TileServer {
   layers?: string;
   minZoom?: number;
   maxZoom?: number;
+  showInput?: boolean;
   isActive?: boolean;
 }
 

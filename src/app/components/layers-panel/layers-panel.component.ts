@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild} from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChildren, QueryList} from '@angular/core';
 import {GeoDataService} from '../../services/geo-data.service';
 import {Overlay, Project, TileServer} from '../../models/models';
 import {AppEnvironment, environment} from '../../../environments/environment';
@@ -13,8 +13,9 @@ import {ProjectsService} from '../../services/projects.service';
   styleUrls: ['./layers-panel.component.styl']
 })
 export class LayersPanelComponent implements OnInit {
-  @ViewChild('activeText', {static: false}) activeInput: ElementRef<HTMLInputElement>;  
-
+  @ViewChildren('activeText') activeInputs: QueryList<ElementRef>;
+  
+  
   basemap: string;
   overlays: Array<Overlay>;
   tileServers: Array<TileServer>;
@@ -119,25 +120,31 @@ export class LayersPanelComponent implements OnInit {
       let newTs = this.tileServers.filter(e => e.id == ts.id);
 
       // this.geoDataService.updateTileServers(this.activeProject.id, this.tileServers);
-      this.geoDataService.updateTileServer(this.activeProject.id, newTs[0]);      
+      this.geoDataService.updateTileServer(this.activeProject.id, newTs[0]);
     }
 
-    this.hideInput();
+    this.hideInput(ts);
   }
 
-  showInput(newName: string) {
+  // TODO: Refactor this and make a more abstract component to handle focus/select events
+  // This is inefficient
+  showInput(newName: string, ts: TileServer, inner: HTMLInputElement) {
     this.inputShown = true;
+    ts.showInput = true;
     setTimeout(() => {
-      this.activeInput.nativeElement.value = newName;
-      this.activeInput.nativeElement.focus()
-      this.activeInput.nativeElement.select()
+      this.activeInputs.forEach((cools: any ) => {
+        if (cools.nativeElement.value == ts.name) {
+          cools.nativeElement.focus();
+          cools.nativeElement.select();          
+        }
+      });
     }, 1);
   }
 
-  hideInput() {
+  hideInput(ts: TileServer) {
     this.inputShown = false;
+    ts.showInput = false;
   }  
-  
 
   // TODO: Refactor
   setLayerOpacity(id: number, tileOpacity: number) {
@@ -147,8 +154,6 @@ export class LayersPanelComponent implements OnInit {
       }
     });
     let ts = this.tileServers.filter(e => e.id == id);
-
-    // this.geoDataService.updateTileServers(this.activeProject.id, this.tileServers);
     this.geoDataService.updateTileServer(this.activeProject.id, ts[0]);
   }
 }
