@@ -8,12 +8,12 @@
 </div>
 <div class="grid-x">
   <div class="cell control-bar">
-    <app-control-bar [publicMap]=true></app-control-bar>
+    <app-control-bar [isPublicView]="true"></app-control-bar>
   </div>
 </div>
 <div class="grid-x">
   <div class="cell shrink">
-    <app-dock></app-dock>
+    <app-dock [isPublicView]="true"></app-dock>
   </div>
   <div class="cell auto">
     <app-map></app-map>

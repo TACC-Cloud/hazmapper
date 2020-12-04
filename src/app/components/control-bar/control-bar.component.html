@@ -1,8 +1,8 @@
 <div class="grid-x align-justify align-middle">
     <div class="cell small-4 no-padding">
         <div class="grid-x align-middle">
-            <button *ngIf="!publicMap" class="button tiny success" (click)="openCreateProjectModal()"> <i class="fas fa-plus"></i></button>
-            <ul *ngIf="!publicMap"  class="dropdown vertical menu" dropdown>
+            <button *ngIf="!isPublicView" class="button tiny success" (click)="openCreateProjectModal()"> <i class="fas fa-plus"></i></button>
+            <ul *ngIf="!isPublicView" class="dropdown vertical menu" dropdown>
                 <li class="is-dropdown-submenu-parent">
                     <button dropdownToggle  class="dropdown button tiny hollow">
                         Maps
@@ -15,8 +15,8 @@
                     </ul>
                 </li>
             </ul>
-            <span *ngIf="publicMap">Map: {{selectedProject.name}}</span>
-            <div *ngIf="!projects.length && !loading && !publicMap"> <span class="label alert"> No maps! Create one to get started. </span></div>
+            <span *ngIf="isPublicView">Map: {{selectedProject.name}}</span>
+            <div *ngIf="!projects.length && !loading && !isPublicView"> <span class="label alert"> No maps! Create one to get started. </span></div>
             <div *ngIf="loadingData" style="margin-left: 1rem">
                 <span>Loading Data</span>
                 <i class="fas fa-spin fa-spinner ml-4" style="margin-left: 0.5rem"></i>

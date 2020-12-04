@@ -10,7 +10,7 @@
         </div>
       </button>
     </div>
-    <div class="dock-button" [ngClass]="{'active': panelsDisplay.pointClouds}">
+    <div class="dock-button" [ngClass]="{'active': panelsDisplay.pointClouds}" *ngIf="!isPublicView">
       <button (click)="showPanel('pointClouds')"  [disabled]="!activeProject">
         <div>
           <img class="dock-button-icon" src="assets/point-clouds.png" width="32px">
@@ -20,7 +20,7 @@
         </div>
       </button>
     </div>
-    <div class="dock-button" [ngClass]="{'active':  panelsDisplay.layers}">
+    <div class="dock-button" [ngClass]="{'active':  panelsDisplay.layers}" *ngIf="!isPublicView">
       <button (click)="showPanel('layers')"  [disabled]="!activeProject">
         <div>
           <img class="dock-button-icon" src="assets/layers.png" width="32px">
@@ -40,7 +40,7 @@
         </div>
       </button>
     </div>
-    <div class="dock-button" [ngClass]="{'active': panelsDisplay.users}">
+    <div class="dock-button" [ngClass]="{'active': panelsDisplay.users}" *ngIf="!isPublicView">
       <button (click)="showPanel('users')"  [disabled]="!activeProject">
         <div>
           <img class="dock-button-icon" src="assets/users-solid.png" width="32px">

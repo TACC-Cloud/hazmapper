@@ -16,7 +16,7 @@ import {Router, ActivatedRoute, ParamMap} from '@angular/router';
   styleUrls: ['./control-bar.component.styl']
 })
 export class ControlBarComponent implements OnInit {
-  @Input() publicMap = false;
+  @Input() isPublicView = false;
   public projects: Project[] = [];
   public selectedProject: Project;
   public mapMouseLocation: LatLng = new LatLng(0, 0);
@@ -34,7 +34,7 @@ export class ControlBarComponent implements OnInit {
   ngOnInit() {
     const activeProjectId = this.route.snapshot.paramMap.get('id');
 
-    if (this.publicMap) {
+    if (this.isPublicView) {
       this.projectsService.setActiveProjectId(activeProjectId);
     } else {
       // TODO add suport for map route for non-public maps
