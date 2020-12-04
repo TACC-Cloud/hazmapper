@@ -46,6 +46,7 @@ import { ModalConfirmationBodyComponent } from './components/modal-confirmation-
 import { UserRowComponent } from './components/user-row/user-row.component';
 import { EditNameInputComponent } from './components/edit-name-input/edit-name-input.component';
 import { MainPublicComponent } from './components/main-public/main-public.component';
+import { PublicMapInfoPanelComponent } from './components/public-map-info-panel/public-map-info-panel.component';
 
 @NgModule({
   declarations: [
@@ -76,6 +77,7 @@ import { MainPublicComponent } from './components/main-public/main-public.compon
     UserRowComponent,
     EditNameInputComponent,
     MainPublicComponent,
+    PublicMapInfoPanelComponent,
   ],
   imports: [
     CommonModule,
