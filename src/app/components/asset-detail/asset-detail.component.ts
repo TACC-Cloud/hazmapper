@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {GeoDataService} from '../../services/geo-data.service';
 import {Feature, IFileImportRequest, Project} from '../../models/models';
 import {AppEnvironment, environment} from '../../../environments/environment';
@@ -15,7 +15,7 @@ import {TapisFilesService} from '../../services/tapis-files.service';
   styleUrls: ['./asset-detail.component.styl']
 })
 export class AssetDetailComponent implements OnInit {
-
+  @Input() isPublicView = false;
   environment: AppEnvironment;
   feature: Feature;
   featureSource: string;
