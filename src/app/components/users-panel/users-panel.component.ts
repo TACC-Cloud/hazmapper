@@ -4,7 +4,7 @@ import {ModalService} from '../../services/modal.service';
 import {IProjectUser} from '../../models/project-user';
 import {FormGroup, FormControl} from '@angular/forms';
 import {Project} from '../../models/models';
-import {environment} from "../../../environments/environment";
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-users-panel',
@@ -15,10 +15,12 @@ export class UsersPanelComponent implements OnInit {
   public projectUsers: Array<IProjectUser>;
   addUserForm: FormGroup;
   activeProject: Project;
-  nameInputError: boolean = false;
-  descriptionInputError: boolean = false;
-  nameErrorMessage: string = "Project name must be under 512 characters!";
-  descriptionErrorMessage: string = "Project description must be under 4096 characters!";
+  nameInputError = false;
+  descriptionInputError = false;
+  nameErrorMessage = 'Project name must be under 512 characters!';
+  descriptionErrorMessage = 'Project description must be under 4096 characters!';
+  publicStatusChanging = false;
+  publicStatusChangingError = false;
 
   constructor(private projectsService: ProjectsService, private modalService: ModalService) { }
 
@@ -41,26 +43,28 @@ export class UsersPanelComponent implements OnInit {
    return publicUrl;
   }
 
-  makeMapPublic() {
+  updateMapPublicAccess(makePublic: boolean) {
+    const title = makePublic ? 'Make map public' : 'Make map private';
+    const message = makePublic ? 'Are you sure you want to make this map public?'
+      : 'Are you sure you want to make this map private? This map will no longer be viewable by the public.';
+    const action = makePublic ? 'Make public' : 'Make private';
     this.modalService.confirm(
-      'Make map public',
-      'Are you sure you want to make this map public?',
-      ['Cancel', 'Make public']).subscribe( (answer) => {
-      if (answer === 'Make public') {
-        this.projectsService.updateProject(this.activeProject, undefined, undefined, true);
+      title,
+      message,
+      ['Cancel', action]).subscribe( (answer) => {
+      if (answer === action) {
+        this.publicStatusChanging = true;
+        this.publicStatusChangingError = false;
+        this.projectsService.updateActiveProject(undefined, undefined, makePublic).subscribe( (resp) => {
+          this.publicStatusChanging = false;
+        }, (err) => {
+          this.publicStatusChanging = false;
+          this.publicStatusChangingError = true;
+        });
       }
     });
-  }
 
-  makeMapPrivate() {
-    this.modalService.confirm(
-      'Make map private',
-      'Are you sure you want to make this map private? This map will no longer be viewable by the public.',
-      ['Cancel', 'Make private']).subscribe( (answer) => {
-      if (answer === 'Make private') {
-        this.projectsService.updateProject(this.activeProject, undefined, undefined, false);
-      }
-    });
+
   }
 
   deleteProject() {

@@ -15,8 +15,8 @@ export class ProjectsService {
 
   private _projects: BehaviorSubject<Project[]> = new BehaviorSubject([]);
   public readonly projects: Observable<Project[]> = this._projects.asObservable();
-  private _activeProject: ReplaySubject<Project> = new ReplaySubject<Project>(1);
-  public readonly  activeProject: Observable<Project> = this._activeProject.asObservable();
+  private _activeProject: BehaviorSubject<Project> = new BehaviorSubject<Project>(null);
+  public readonly activeProject: Observable<Project> = this._activeProject.asObservable();
   private _projectUsers: ReplaySubject<Array<IProjectUser>> = new ReplaySubject<Array<IProjectUser>>(1);
   public readonly projectUsers$: Observable<Array<IProjectUser>> = this._projectUsers.asObservable();
 
@@ -124,4 +124,32 @@ export class ProjectsService {
         proj.name = name;
       });
   }
+
+  updateActiveProject(name: string, description: string, isPublic: boolean) {
+    name = name ? name : this._activeProject.value.name;
+    description = description ? description : this._activeProject.value.description;
+    isPublic = isPublic !== undefined ? isPublic : this._activeProject.value.public;
+
+    const payload = {
+      name,
+      description,
+      public: isPublic
+    };
+
+    return this.http.put<Project>(environment.apiUrl + `/projects/${this._activeProject.value.id}/`, payload)
+      .pipe(
+        map((updatedProject) => {
+          // Update the project list
+          const projects = this._projects.value.map(proj => proj.id === this._activeProject.value.id ? updatedProject : proj);
+          this._projects.next(projects);
+          // Update the active project
+          this._activeProject.next(updatedProject);
+          return updatedProject;
+        }),
+        catchError((err: any) => {
+          throw new Error('Unable to update project.');
+        })
+      );
+  }
+
 }
