@@ -29,7 +29,7 @@ export class MapComponent implements OnInit {
   _activeProjectId: number;
   features: FeatureGroup = new FeatureGroup();
   overlays: LayerGroup = new LayerGroup<any>();
-  tileServers: Array<TileServer>;
+  tileServers: Array<TileServer> = new Array<TileServer>();
   layers: any = {};
   environment: AppEnvironment;
   fitToFeatureExtent: boolean = true;

@@ -336,9 +336,9 @@ export class GeoDataService {
     this.http.put(environment.apiUrl + `/projects/${projectId}/tile-servers/`, payload)
       .subscribe( (resp) => {
         this.getTileServers(projectId);
-      });    
+      });
   }
-  
+
   updateTileServer(projectId: number, tileServer: TileServer): void {
     const payload = {
       name: tileServer.name,
@@ -351,7 +351,7 @@ export class GeoDataService {
       .subscribe( (resp) => {
         this.getTileServers(projectId);
       });
-  }  
+  }
 
   // TODO: Should be handled in the backend
   public toggleTileServer(id: number) {
@@ -387,11 +387,12 @@ export class GeoDataService {
         tsv.sort((a, b) => {
           return a.zIndex - b.zIndex;
         });
-        
+
         if (tileServerList) {
           for (let i = 0; i < tileServerList.length; i++) {
             tsv[i].showDescription = tileServerList[i].showDescription;
             tsv[i].showInput = false;
+            tsv[i].isDraggable = true;
           }
         }
         this._tileServers.next(tsv);
@@ -408,11 +409,11 @@ export class GeoDataService {
         tileServer.zIndex = 0;
       }
     })
-    
+
     const payload = new FormData();
     // for (tis in tileServer) {
       // payload.append(prop, JSON.stringify(tileServer[prop]));
-    // }      
+    // }
     payload.append('name', tileServer.name);
     payload.append('type', tileServer.type);
     payload.append('url', tileServer.url);
@@ -427,7 +428,7 @@ export class GeoDataService {
       .subscribe((resp) => {
         this.getTileServers(projectId);
       });
-  }  
+  }
 
   getQMS(query: string, queryOptions: any): void {
     const url = "https://qms.nextgis.com/api/v1/geoservices/";
@@ -535,7 +536,7 @@ export class GeoDataService {
     }
 
   }
-  
+
 
   public get activeOverlay(): Observable<Overlay> {
     return this.activeOverlay$;

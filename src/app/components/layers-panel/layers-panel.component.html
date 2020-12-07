@@ -5,67 +5,81 @@
     <button class="button expanded hollow tiny success" (click)="openCreateTileServerModal()">
       <i class="fa fa-plus"></i>
     </button>
-    <div *ngFor="let ts of tileServers; let i = index;" class="tile-servers" style="padding: 10px">
-      <div class="grid-x" (drag)="setDragElement(ts.id)" (dragover)="setDragOverElement($event, ts.id)" (drop)="dropElement()" draggable=true>
-        <div class="grid-x small-8" style="align-items: center; padding-left: 5px;">
-          <label class="map-visibility" style="width: 20px">
-            <input name="" type="checkbox" [checked]="ts.isActive" (change)="toggleLayerActivate(ts.id)"/>
-            <i class="fas fa-eye-slash unchecked"></i>
-            <i class="fas fa-eye checked"></i>
-          </label>
 
-          <div style="max-width: 110px">
+    <div cdkDropList class="tile-servers-list" (cdkDropListDropped)="drop($event)">
+      <div *ngFor="let ts of tileServers"
+           class="tile-servers"
+           cdkDragLockAxis="y"
+           cdkDragBoundary=".tile-servers-list"
+           [cdkDragDisabled]="disableDragging"
+           cdkDrag>
 
-            <input #activeText
-                   id=property-input
-                   type="text"
-                   *ngIf="ts.showInput"
-                   (blur)="onEnter(activeText.value, ts)"
-                   (keyup.enter)="onEnter(activeText.value, ts)"
-                   [value]="ts.name"
+        <div class="grid-x tile-server-container">
+          <div class="grid-x small-8 tile-server-left">
+            <label class="tile-server-visibility">
+              <input name="" type="checkbox" [checked]="ts.isActive" (change)="toggleLayerActivate(ts.id)"/>
+              <i class="fas fa-eye-slash unchecked"></i>
+              <i class="fas fa-eye checked"></i>
+            </label>
+
+            <div class="tile-server-name-container">
+              <input #activeText
+                     id=property-input
+                     type="text"
+                     *ngIf="ts.showInput"
+                     (blur)="onEnter(activeText.value, ts)"
+                     (keyup.enter)="onEnter(activeText.value, ts)"
+                     [value]="ts.name"
+              >
+              <div id="tile-server-name"
+                   class="tile-server-name"
+                   data-tooltip
+                   tabindex="1"
+                   title="{{ts.name}}"
+                   data-position="top"
+                   data-alignment="left"
+                   *ngIf="!ts.showInput"
+                   (dblclick)="showInput(ts.name, ts, awesome)">
+                {{ts.name}}
+              </div>
+            </div>
+          </div>
+
+          <div class="cell small-4 grid-x tile-server-right">
+            <button class="button secondary clear edit-buttons">
+              <i class="fas fa-edit edit-button" (click)="showInput(ts.name, ts, awesome)" *ngIf="!ts.showInput"></i>
+              <i class="fas fa-check edit-button" (click)="hideInput(ts)" *ngIf="ts.showInput"></i>
+            </button>
+            <div *ngIf="ts.showDescription; else nonShow">
+              <button class="button secondary clear option-button">
+                <i class="fas fa-sliders-h" (click)="hideDescription(ts)"></i>
+              </button>
+            </div>
+            <ng-template #nonShow>
+              <button class="button secondary clear option-button">
+                <i class="fas fa-sliders-h" (click)="showDescription(ts)"></i>
+              </button>
+            </ng-template>
+            <button
+              class="button alert clear button-no-margin delete-button"
+              (click)="deleteLayer(ts.id)"
             >
-            <div id="tile-server-name"
-                 data-tooltip
-                 tabindex="1"
-                 title="{{ts.name}}"
-                 data-position="top"
-                 data-alignment="left"
-                 *ngIf="!ts.showInput"
-                 (dblclick)="showInput(ts.name, ts, awesome)">
-              {{ts.name}}            
-            </div>            
-          </div>          
-        </div>        
+              <i class="fa fa-trash"></i>
+            </button>
+          </div>
+        </div>
 
-        <div class="cell small-4 grid-x" style="justify-content: center">
-          <button class="button secondary clear" style="padding: 0px 0px; margin: 0; line-height: 0">
-            <i class="fas fa-edit" (click)="showInput(ts.name, ts, awesome)" *ngIf="!ts.showInput" style="width: 17px"></i>
-            <i class="fas fa-check" (click)="hideInput(ts)" *ngIf="ts.showInput" style="width: 17px"></i>                      
-          </button>
-
-          <button class="button secondary clear" style="padding: 0px 3px; margin: 0; line-height: 0" >
-            <i class="fas fa-sliders-h" (click)="ts.showDescription=!ts.showDescription"></i>
-          </button>          
-          <button
-            class="button alert clear button-no-margin"
-            style="padding: 0; margin: 0; line-height: 0"
-            (click)="deleteLayer(ts.id)"
-          >
-            <i class="fa fa-trash"></i>
-          </button>
-
+        <div *ngIf="ts.showDescription">
+          <div class="grid-x row tile-server-description">
+            <label class="small-4 align-self-middle">Opacity</label>
+            <input #slider type="range" min="0" max="1" step="0.1" [value]="ts.opacity" class="slider small-8 align-self-middle tile-server-slider" id="myRange" (change)="setLayerOpacity(ts.id, slider.value)">
+          </div>
         </div>
       </div>
-
-      <div *ngIf="ts.showDescription">
-        <div class="grid-x row" style="padding: 15px 10px;">
-          <label class="small-4 align-self-middle">Opacity</label>
-          <input #slider type="range" min="0" max="1" step="0.1" [value]="ts.opacity" class="slider small-8 align-self-middle" id="myRange" style="margin: 0" (change)="setLayerOpacity(ts.id, slider.value)">
-        </div>
-      </div>
-
     </div>
+
     <hr>
+
     <h6> Overlays </h6>
     <button class="button expanded hollow tiny success" (click)="openCreateOverlayModal()">
       <i class="fa fa-plus"></i>
@@ -88,6 +102,5 @@
         </div>
       </div>
     </div>
-
   </div>
 </div>

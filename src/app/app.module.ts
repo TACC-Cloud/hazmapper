@@ -46,6 +46,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { ModalConfirmationBodyComponent } from './components/modal-confirmation-body/modal-confirmation-body.component';
 import { UserRowComponent } from './components/user-row/user-row.component';
 import { EditNameInputComponent } from './components/edit-name-input/edit-name-input.component';
+import {DragDropModule, CDK_DRAG_CONFIG} from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -93,7 +94,8 @@ import { EditNameInputComponent } from './components/edit-name-input/edit-name-i
     BsDropdownModule.forRoot(),
     TooltipModule.forRoot(),
     TabsModule.forRoot(),
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    DragDropModule
   ],
   providers: [
     AuthService,
@@ -111,6 +113,14 @@ import { EditNameInputComponent } from './components/edit-name-input/edit-name-i
     {
       provide: APP_BASE_HREF,
       useValue: environment.baseHref
+    },
+    {
+      provide: CDK_DRAG_CONFIG,
+      useValue: {
+        dragStartThreshold: 30,
+        pointerDirectionChangeThreshold: 5,
+        zIndex: 10000
+      }
     }
   ],
   bootstrap: [AppComponent],

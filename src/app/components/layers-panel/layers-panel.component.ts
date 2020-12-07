@@ -6,6 +6,7 @@ import {BsModalRef, BsModalService} from 'ngx-foundation';
 import {ModalCreateOverlayComponent} from '../modal-create-overlay/modal-create-overlay.component';
 import {ModalCreateTileServerComponent} from '../modal-create-tile-server/modal-create-tile-server.component';
 import {ProjectsService} from '../../services/projects.service';
+import {CdkDragDrop, CdkDragStart, moveItemInArray} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-layers-panel',
@@ -14,20 +15,19 @@ import {ProjectsService} from '../../services/projects.service';
 })
 export class LayersPanelComponent implements OnInit {
   @ViewChildren('activeText') activeInputs: QueryList<ElementRef>;
-  
-  
+
   basemap: string;
   overlays: Array<Overlay>;
   tileServers: Array<TileServer>;
   environment: AppEnvironment;
   activeProject: Project;
-  dragging: TileServer;
-  draggedOver: TileServer;
-  inputShown: boolean = false;  
+  disableDragging: boolean = false;
+  inputShown: boolean = false;
 
   constructor(private geoDataService: GeoDataService,
               private bsModalService: BsModalService,
-              private projectsService: ProjectsService) {
+              private projectsService: ProjectsService,
+             ) {
 
   }
 
@@ -38,6 +38,11 @@ export class LayersPanelComponent implements OnInit {
     });
 
     this.geoDataService.tileServers.subscribe((tsv) => {
+      if (tsv) {
+        tsv.forEach(e => {
+          e.isDraggable = true;
+        });
+      }
       this.tileServers = tsv;
     });
 
@@ -47,6 +52,7 @@ export class LayersPanelComponent implements OnInit {
     this.projectsService.activeProject.subscribe( (next) => {
       this.activeProject = next;
     });
+
   }
 
   selectBasemap(bmap: string): void {
@@ -71,27 +77,14 @@ export class LayersPanelComponent implements OnInit {
     this.geoDataService.toggleTileServer(id);
   }
 
-  // TODO (for setDragElement, setDragOverElement, dropEleemnt): change name to tileserver related things
-  setDragElement(id: number): void {
-    this.dragging = this.tileServers.filter(ts => ts.id == id)[0];
-  }
-
-  setDragOverElement(e: any, id: number): void {
-    e.preventDefault();
-    this.draggedOver = this.tileServers.filter(ts => ts.id == id)[0];
-  }
-
-  dropElement() {
-    let index1 = this.tileServers.indexOf(this.dragging);
-    let index2 = this.tileServers.indexOf(this.draggedOver);
-    this.dragging.zIndex = index2;
-    this.draggedOver.zIndex = index1;
-    this.tileServers.splice(index1, 1)
-    this.tileServers.splice(index2, 0, this.dragging)
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.tileServers, event.previousIndex, event.currentIndex);
+    let zIndexMax = -(this.tileServers.length);
+    this.tileServers.forEach(e => {
+      e.zIndex = zIndexMax;
+      zIndexMax += 1;
+    });
     this.geoDataService.updateTileServers(this.activeProject.id, this.tileServers);
-    
-    // this.geoDataService.updateTileServer(this.activeProject.id, ts[0]);
-    // this.geoDataService.updateTileServer(this.activeProject.id, ts[0]);
   }
 
   openCreateOverlayModal() {
@@ -104,14 +97,12 @@ export class LayersPanelComponent implements OnInit {
   openCreateTileServerModal() {
     const modal: BsModalRef = this.bsModalService.show(ModalCreateTileServerComponent);
     modal.content.onClose.subscribe( (next) => {
-      console.log(next);
     });
   }
-  
+
   onEnter(value: string, ts: TileServer) {
     value = value.trim();
     if (value && value != ts.name) {
-      // this.nameChange = value;
       this.tileServers.map(e => {
         if (e.id == ts.id) {
           e.name = value;
@@ -131,11 +122,13 @@ export class LayersPanelComponent implements OnInit {
   showInput(newName: string, ts: TileServer, inner: HTMLInputElement) {
     this.inputShown = true;
     ts.showInput = true;
+    ts.isDraggable = false;
+    this.disableDragging = true;
     setTimeout(() => {
-      this.activeInputs.forEach((cools: any ) => {
+      this.activeInputs.forEach((cools: ElementRef) => {
         if (cools.nativeElement.value == ts.name) {
           cools.nativeElement.focus();
-          cools.nativeElement.select();          
+          cools.nativeElement.select();
         }
       });
     }, 1);
@@ -144,7 +137,9 @@ export class LayersPanelComponent implements OnInit {
   hideInput(ts: TileServer) {
     this.inputShown = false;
     ts.showInput = false;
-  }  
+    ts.isDraggable = true;
+    this.disableDragging = false;
+  }
 
   // TODO: Refactor
   setLayerOpacity(id: number, tileOpacity: number) {
@@ -155,5 +150,19 @@ export class LayersPanelComponent implements OnInit {
     });
     let ts = this.tileServers.filter(e => e.id == id);
     this.geoDataService.updateTileServer(this.activeProject.id, ts[0]);
+  }
+
+  toggleDescription(ts: TileServer) {
+    ts.showDescription = true;
+  }
+
+  showDescription(ts: TileServer) {
+    ts.showDescription = true;
+    this.disableDragging = true;
+  }
+
+  hideDescription(ts: TileServer) {
+    ts.showDescription = false;
+    this.disableDragging = false;
   }
 }

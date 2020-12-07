@@ -129,6 +129,7 @@ export interface TileServer {
   zIndex: number;
   showDescription?: boolean;
   opacity?: number;
+  isDraggable?: boolean;
   layers?: string;
   minZoom?: number;
   maxZoom?: number;
