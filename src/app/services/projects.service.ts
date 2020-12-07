@@ -108,13 +108,15 @@ export class ProjectsService {
       });
   }
 
-  updateProject(proj: Project, name: string, description: string): void {
+  updateProject(proj: Project, name: string, description: string, isPublic: boolean): void {
     name = name ? name : proj.name;
     description = description ? description : proj.description;
+    isPublic = isPublic !== undefined ? isPublic : proj.public;
 
     const payload = {
-      name: name,
-      description: description
+      name,
+      description,
+      public: isPublic
     };
 
     this.http.put(environment.apiUrl + `/projects/${proj.id}/`, payload)
