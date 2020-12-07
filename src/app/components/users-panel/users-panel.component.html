@@ -41,14 +41,14 @@
         <a  [href]="getPublicUrl()" target="_blank">
           {{getPublicUrl()}}
         </a>
-        <span *ngIf="this.publicStatusChangingError" class="label alert"> Unable to make map private. </span>
+        <span *ngIf="this.publicStatusChangingError" class="label alert">Unable to make map private.</span>
         <button class="button hollow right" [disabled]="this.publicStatusChanging" (click)=updateMapPublicAccess(false)>
           <i class="fas fa-lock"></i>  Make map private
         </button>
       </div>
       <div *ngIf="!activeProject.public" class="public-status-container">
         <span class="public-status-message">This map is private and can only be viewed by team members.</span>
-        <span *ngIf="this.publicStatusChangingError" class="label alert"> Unable to make map public. </span>
+        <span *ngIf="this.publicStatusChangingError" class="label alert">Unable to make map public.</span>
         <button class="button hollow right" [disabled]="this.publicStatusChanging" (click)=updateMapPublicAccess(true)>
           <i class="fas fa-globe"></i>  Make map public
         </button>
