@@ -5,6 +5,7 @@ import { ProjectsService } from '../../services/projects.service';
 import { Project } from '../../models/models';
 import {RemoteFile} from 'ng-tapis';
 import {RapidProjectRequest} from '../../models/rapid-project-request';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-modal-create-project',
@@ -12,6 +13,8 @@ import {RapidProjectRequest} from '../../models/rapid-project-request';
   styleUrls: ['./modal-create-project.component.styl']
 })
 export class ModalCreateProjectComponent implements OnInit {
+
+  public readonly onClose: Subject<any> = new Subject<any>();
 
   projCreateForm: FormGroup;
   rapidFolder: RemoteFile;
@@ -41,6 +44,7 @@ export class ModalCreateProjectComponent implements OnInit {
     this.errorMessage = '';
     const req: RapidProjectRequest = new RapidProjectRequest(this.rapidFolder.system, this.rapidFolder.path)
     this.projectsService.createRapidProject(req).subscribe( (resp) => {
+      this.onClose.next(null);
       this.bsModalRef.hide();
     }, (err) => {
      this.errorMessage = err.toString();
@@ -53,6 +57,7 @@ export class ModalCreateProjectComponent implements OnInit {
     p.description = this.projCreateForm.get('description').value;
     p.name = this.projCreateForm.get('name').value;
     this.projectsService.create(p).subscribe( (next) => {
+      this.onClose.next(null);
       this.close();
     }, err => {
       this.errorMessage = err.toString();

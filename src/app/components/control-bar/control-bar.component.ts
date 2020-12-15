@@ -9,6 +9,7 @@ import {ModalCreateProjectComponent} from '../modal-create-project/modal-create-
 import {ModalFileBrowserComponent} from '../modal-file-browser/modal-file-browser.component';
 import {interval, Observable, Subscription, combineLatest} from 'rxjs';
 import {NotificationsService} from "../../services/notifications.service";
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-control-bar',
@@ -27,6 +28,8 @@ export class ControlBarComponent implements OnInit {
               private geoDataService: GeoDataService,
               private notificationsService: NotificationsService,
               private bsModalService: BsModalService,
+              private route: ActivatedRoute,
+              private router: Router,
               ) { }
 
   ngOnInit() {
@@ -75,12 +78,23 @@ export class ControlBarComponent implements OnInit {
     });
   }
 
+  routeToProject(projectId: number) {
+    this.router.navigate(['project', projectId]);
+  }
+
   selectProject(p: Project): void {
     this.projectsService.setActiveProject(p);
+    if (p) {
+      this.routeToProject(p.id);
+    }
   }
 
   openCreateProjectModal() {
-    this.bsModalService.show(ModalCreateProjectComponent);
+    const modal = this.bsModalService.show(ModalCreateProjectComponent);
+    modal.content.onClose.subscribe( (next) => {
+      this.routeToProject(this.selectedProject.id);
+    });
   }
+
 
 }

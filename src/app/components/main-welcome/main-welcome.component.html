@@ -1,0 +1,73 @@
+<div id=welcome-background class="grid-x">
+
+  <div id=welcome-projects-list class="grid-y align-justify">
+    <div *ngIf="projects.length > 0; else noProject">
+      <div class="welcome-project grid-x align-justify" *ngFor="let p of projects">
+        {{p.name}}
+        <button (click)="routeToProject(p.id)" style="cursor: pointer">
+          <i class="fas fa-folder-open"></i>
+        </button>
+      </div>
+    </div>
+
+    <ng-template #noProject>
+      <div id="welcome-no-project">
+        <div>
+          No Map Exists!
+        </div>
+        <div>
+          <a (click)="openCreateProjectModal()">
+            Create a New Map.
+          </a>
+        </div>
+      </div>
+
+    </ng-template>
+
+  </div>
+
+  <div id="welcome-information" class="grid-y">
+    <div id="welcome-logo">
+      <h1>
+        Hazmapper
+      </h1>
+      <i>Awesome Mapping Tool</i>
+    </div>
+
+
+    <div id="welcome-container" class="grid-x align-justify">
+
+      <div id="welcome-information-left" class="grid-y">
+        <div id="welcome-start">
+          <h3>
+            Start
+          </h3>
+          <a (click)="openCreateProjectModal()">
+            <i class="fas fa-plus"></i>
+            Create a New Map
+          </a>
+        </div>
+
+
+      </div>
+
+      <div id="welcome-information-right" class="grid-y">
+        <div id="welcome-release">
+          <h3>Release Notes
+          </h3>
+          <p>Item1 changed</p>
+          <p>Item2 changed</p>
+          <p>Item3 changed</p>
+        </div>
+        <div id="welcome-learn">
+          <h3>Learn
+          </h3>
+          <a href="https://www.designsafe-ci.org/rw/user-guide/workspace/hazmapper/">
+            User Guide
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
