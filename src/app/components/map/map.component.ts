@@ -30,7 +30,7 @@ export class MapComponent implements OnInit {
   features: FeatureGroup = new FeatureGroup();
   overlays: LayerGroup = new LayerGroup<any>();
   tileServers: Array<TileServer> = new Array<TileServer>();
-  layers: any = {};
+  activeLayers: any = {};
   environment: AppEnvironment;
   fitToFeatureExtent: boolean = true;
 
@@ -53,51 +53,6 @@ export class MapComponent implements OnInit {
       zoom: 3,
       maxZoom: 19
     });
-
-    const baseOSMObject: TileServer = {
-      name: 'Base OSM',
-      id: 1,
-      type: 'tms',
-      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      default: true,
-      zIndex: 0,
-      showDescription: false,
-      opacity: 1,
-      minZoom: 0,
-      maxZoom: 19,
-      isActive: true
-    }
-
-    const satelliteObject: TileServer = {
-      name: 'Satellite',
-      id: 1,
-      type: 'tms',
-      url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
-      default: true,
-      showDescription: false,
-      opacity: 1,
-      zIndex: 1,
-      maxZoom: 19,
-      isActive: false
-    }
-
-    // const wmsObject: TileServer = {
-    //   name: 'Geology of Quebec: Bedrock Geology',
-    //   id: 1,
-    //   type: 'wms',
-    //   url: 'https://servicesvectoriels.atlas.gouv.qc.ca/IDS_SGM_WMS/service.svc/get',
-    //   attribution: 'temporary',
-    //   layers: 'SGM:Contacts_discordants,SGM:Plis_regionaux,SGM:Failles_regionales,SGM:Geologie_regionale,SGM:Geologie_generale',
-    //   default: true,
-    //   zIndex: 1,
-    //   isActive: false
-    // }
-
-    // this.geoDataService.addTileServer(baseOSMObject);
-    // this.geoDataService.addTileServer(satelliteObject);
-    // this.geoDataService.addTileServer(wmsObject);
 
     this.loadFeatures();
 
@@ -134,23 +89,23 @@ export class MapComponent implements OnInit {
     this.geoDataService.mapMouseLocation = ev.latlng;
   }
 
-  tileServerToLayer(tileServer: TileServer) {
-    if (tileServer.type == 'tms') {
+  tileServerToLayer(ts: TileServer) {
+    let mapConfiguration: any = null;
 
-      return L.tileLayer(tileServer.url, {
-        minZoom: tileServer.minZoom,
-        maxZoom: tileServer.maxZoom,
-        attribution: tileServer.attribution,
+    if (ts.type == 'tms') {
+      return L.tileLayer(ts.url, {
+        minZoom: ts.minZoom ? ts.minZoom : 19,
+        maxZoom: ts.maxZoom ? ts.maxZoom : 0,
+        opacity: ts.opacity,
+        attribution: ts.attribution,
       });
-    } else if (tileServer.type == 'wms') {
-      let mapConfiguration = {
-        attribution: tileServer.attribution,
-        layers: tileServer.layers,
-        opacity: 0.5,
+    } else if (ts.type == 'wms') {
+      return L.tileLayer.wms(ts.url, {
+        attribution: ts.attribution,
+        layers: ts.wmsLayers,
+        opacity: ts.opacity ? ts.opacity : 0.5,
         format: 'image/jpeg'
-      };
-      mapConfiguration.layers = tileServer.layers;
-      return L.tileLayer.wms(tileServer.url, mapConfiguration);
+      });
     }
   }
 
@@ -165,12 +120,11 @@ export class MapComponent implements OnInit {
     this.geoDataService.tileServers.subscribe((next: Array<TileServer>) => {
       // TODO: refactor
       if (next) {
-
         // Handle Deletion before new tileserver is set
         if (this.tileServers) {
           this.tileServers.forEach(tileServer => {
             if (!next.some(ts => ts.id == tileServer.id)) {
-              this.map.removeLayer(this.layers[tileServer.name]);
+              this.map.removeLayer(this.activeLayers[tileServer.id]);
             }
           });
         }
@@ -178,15 +132,15 @@ export class MapComponent implements OnInit {
         this.tileServers = next;
 
         next.forEach((ts) => {
-          if (!this.layers[ts.name]) {
-            this.layers[ts.name] = this.tileServerToLayer(ts);
+          if (!this.activeLayers[ts.id]) {
+            this.activeLayers[ts.id] = this.tileServerToLayer(ts);
           }
-          this.layers[ts.name].setZIndex(ts.zIndex);
-          this.layers[ts.name].setOpacity(ts.opacity);
+          this.activeLayers[ts.id].setZIndex(ts.zIndex);
+          this.activeLayers[ts.id].setOpacity(ts.opacity);
           if (ts.isActive) {
-            this.map.addLayer(this.layers[ts.name]);
+            this.map.addLayer(this.activeLayers[ts.id]);
           } else {
-            this.map.removeLayer(this.layers[ts.name]);
+            this.map.removeLayer(this.activeLayers[ts.id]);
           }
         });
       }
@@ -200,7 +154,6 @@ export class MapComponent implements OnInit {
             return L.divIcon({html: `<div><b>${cluster.getChildCount()}</b></div>`, className: 'marker-cluster'});
           }
         });
-        // markers.setZIndex(this.tileServers.length + 1);
 
         collection.features.forEach( d => {
           const feat = L.geoJSON(d, geojsonOptions);

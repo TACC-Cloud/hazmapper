@@ -4,9 +4,11 @@ import {Overlay, Project, TileServer} from '../../models/models';
 import {AppEnvironment, environment} from '../../../environments/environment';
 import {BsModalRef, BsModalService} from 'ngx-foundation';
 import {ModalCreateOverlayComponent} from '../modal-create-overlay/modal-create-overlay.component';
+import {RemoteFile} from 'ng-tapis';
 import {ModalCreateTileServerComponent} from '../modal-create-tile-server/modal-create-tile-server.component';
 import {ProjectsService} from '../../services/projects.service';
-import {CdkDragDrop, CdkDragStart, moveItemInArray} from '@angular/cdk/drag-drop';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import {TapisFilesService} from '../../services/tapis-files.service';
 
 @Component({
   selector: 'app-layers-panel',
@@ -21,14 +23,11 @@ export class LayersPanelComponent implements OnInit {
   tileServers: Array<TileServer>;
   environment: AppEnvironment;
   activeProject: Project;
-  disableDragging: boolean = false;
-  inputShown: boolean = false;
 
   constructor(private geoDataService: GeoDataService,
               private bsModalService: BsModalService,
               private projectsService: ProjectsService,
-             ) {
-
+              private tapisFilesService: TapisFilesService) {
   }
 
   ngOnInit() {
@@ -38,11 +37,6 @@ export class LayersPanelComponent implements OnInit {
     });
 
     this.geoDataService.tileServers.subscribe((tsv) => {
-      if (tsv) {
-        tsv.forEach(e => {
-          e.isDraggable = true;
-        });
-      }
       this.tileServers = tsv;
     });
 
@@ -52,7 +46,6 @@ export class LayersPanelComponent implements OnInit {
     this.projectsService.activeProject.subscribe( (next) => {
       this.activeProject = next;
     });
-
   }
 
   selectBasemap(bmap: string): void {
@@ -73,15 +66,15 @@ export class LayersPanelComponent implements OnInit {
     this.geoDataService.deleteTileServer(this.activeProject.id, tileServerId);
   }
 
-  toggleLayerActivate(id: number): void {
-    this.geoDataService.toggleTileServer(id);
+  toggleTileServer(ts: TileServer): void {
+    this.geoDataService.toggleTileServer(this.activeProject.id, ts);
   }
 
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.tileServers, event.previousIndex, event.currentIndex);
     let zIndexMax = -(this.tileServers.length);
-    this.tileServers.forEach(e => {
-      e.zIndex = zIndexMax;
+    this.tileServers.forEach(ts => {
+      ts.zIndex = zIndexMax;
       zIndexMax += 1;
     });
     this.geoDataService.updateTileServers(this.activeProject.id, this.tileServers);
@@ -95,74 +88,52 @@ export class LayersPanelComponent implements OnInit {
   }
 
   openCreateTileServerModal() {
-    const modal: BsModalRef = this.bsModalService.show(ModalCreateTileServerComponent);
-    modal.content.onClose.subscribe( (next) => {
-    });
-  }
+    const initialState = {
+      allowedExtensions: this.tapisFilesService.IMPORTABLE_TILE_TYPES
+    };
 
-  onEnter(value: string, ts: TileServer) {
-    value = value.trim();
-    if (value && value != ts.name) {
-      this.tileServers.map(e => {
-        if (e.id == ts.id) {
-          e.name = value;
-        }
-      });
-      let newTs = this.tileServers.filter(e => e.id == ts.id);
-
-      // this.geoDataService.updateTileServers(this.activeProject.id, this.tileServers);
-      this.geoDataService.updateTileServer(this.activeProject.id, newTs[0]);
-    }
-
-    this.hideInput(ts);
-  }
-
-  // TODO: Refactor this and make a more abstract component to handle focus/select events
-  // This is inefficient
-  showInput(newName: string, ts: TileServer, inner: HTMLInputElement) {
-    this.inputShown = true;
-    ts.showInput = true;
-    ts.isDraggable = false;
-    this.disableDragging = true;
-    setTimeout(() => {
-      this.activeInputs.forEach((cools: ElementRef) => {
-        if (cools.nativeElement.value == ts.name) {
-          cools.nativeElement.focus();
-          cools.nativeElement.select();
-        }
-      });
-    }, 1);
-  }
-
-  hideInput(ts: TileServer) {
-    this.inputShown = false;
-    ts.showInput = false;
-    ts.isDraggable = true;
-    this.disableDragging = false;
-  }
-
-  // TODO: Refactor
-  setLayerOpacity(id: number, tileOpacity: number) {
-    this.tileServers.map(e => {
-      if (e.id == id) {
-        e.opacity = tileOpacity;
+    const modal: BsModalRef = this.bsModalService.show(ModalCreateTileServerComponent, {initialState});
+    modal.content.onClose.subscribe( (files: Array<RemoteFile>) => {
+      if (files != null) {
+        this.geoDataService.importFileFromTapis(this.activeProject.id, files);
       }
     });
-    let ts = this.tileServers.filter(e => e.id == id);
-    this.geoDataService.updateTileServer(this.activeProject.id, ts[0]);
+  }
+
+  updateName(name: string, ts: TileServer) {
+    // TODO: Handle longer names
+    name = name.trim();
+    if (name.length < 512) {
+      if (name && name != ts.name) {
+        ts.name = name;
+        this.geoDataService.updateTileServer(this.activeProject.id, ts);
+      }
+    }
+    this.showInput(ts, false);
+  }
+
+  showInput(ts: TileServer, show: boolean) {
+    ts.showInput = show;
+
+    // NOTE: Assumes only single active input at a time (due to blur)
+    if (show) {
+      setTimeout(() => {
+        this.activeInputs.first.nativeElement.focus();
+        this.activeInputs.first.nativeElement.select();
+      }, 1);
+    }
+  }
+
+  setLayerOpacity(ts: TileServer, opacity: number) {
+    ts.opacity = opacity;
+    this.geoDataService.updateTileServer(this.activeProject.id, ts);
   }
 
   toggleDescription(ts: TileServer) {
-    ts.showDescription = true;
+    ts.showDescription = !ts.showDescription;
   }
 
-  showDescription(ts: TileServer) {
-    ts.showDescription = true;
-    this.disableDragging = true;
-  }
-
-  hideDescription(ts: TileServer) {
-    ts.showDescription = false;
-    this.disableDragging = false;
+  changeMovePointer(gripHandle: any, what: boolean) {
+    gripHandle.style.cursor = what ? 'move' : 'auto';
   }
 }

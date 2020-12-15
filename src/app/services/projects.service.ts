@@ -8,6 +8,7 @@ import {catchError, map, tap} from 'rxjs/operators';
 import {IProjectUser} from '../models/project-user';
 import {NotificationsService} from './notifications.service';
 import {GeoDataService} from './geo-data.service';
+import {defaultTileServers} from '../constants/tile-servers';
 
 @Injectable({
   providedIn: 'root'
@@ -65,7 +66,12 @@ export class ProjectsService {
           this._projects.next([...this._projects.value, proj]);
           // Set the active project to the one just created?
           this._activeProject.next(proj);
-          this.geoDataService.initializeMaps(proj.id);
+
+          // Add default servers
+          defaultTileServers.forEach(ts => {
+            this.geoDataService.addTileServerUpload(proj.id, ts);
+          });
+
         }),
       );
   }

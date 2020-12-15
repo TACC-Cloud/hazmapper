@@ -2,35 +2,43 @@
   <div class="dock-panel-content">
     <p class="dock-panel-title"> Layers </p>
     <h6>Tile Layers</h6>
-    <button class="button expanded hollow tiny success" (click)="openCreateTileServerModal()">
+    <button class="button expanded hollow tiny success"
+            (click)="openCreateTileServerModal()">
       <i class="fa fa-plus"></i>
     </button>
-
-    <div cdkDropList class="tile-servers-list" (cdkDropListDropped)="drop($event)">
+    <div #cdkList
+         cdkDropList class="tile-servers-list"
+         (cdkDropListDropped)="drop($event)">
       <div *ngFor="let ts of tileServers"
            class="tile-servers"
            cdkDragLockAxis="y"
            cdkDragBoundary=".tile-servers-list"
-           [cdkDragDisabled]="disableDragging"
+           (cdkDragStarted)="changeMovePointer(cdkList, true)"
+           (cdkDragReleased)="changeMovePointer(cdkList, false)"
            cdkDrag>
-
         <div class="grid-x tile-server-container">
           <div class="grid-x small-8 tile-server-left">
+            <div #gripHandle
+                 cdkDragHandle
+                 class="tile-server-move">
+              <i class="fas fa-grip-vertical"></i>
+            </div>
             <label class="tile-server-visibility">
-              <input name="" type="checkbox" [checked]="ts.isActive" (change)="toggleLayerActivate(ts.id)"/>
+              <input name=""
+                     type="checkbox"
+                     [checked]="ts.isActive"
+                     (change)="toggleTileServer(ts)"/>
               <i class="fas fa-eye-slash unchecked"></i>
               <i class="fas fa-eye checked"></i>
             </label>
-
             <div class="tile-server-name-container">
               <input #activeText
                      id=property-input
                      type="text"
                      *ngIf="ts.showInput"
-                     (blur)="onEnter(activeText.value, ts)"
-                     (keyup.enter)="onEnter(activeText.value, ts)"
-                     [value]="ts.name"
-              >
+                     (blur)="updateName(activeText.value, ts)"
+                     (keyup.enter)="updateName(activeText.value, ts)"
+                     [value]="ts.name">
               <div id="tile-server-name"
                    class="tile-server-name"
                    data-tooltip
@@ -39,7 +47,7 @@
                    data-position="top"
                    data-alignment="left"
                    *ngIf="!ts.showInput"
-                   (dblclick)="showInput(ts.name, ts, awesome)">
+                   (dblclick)="showInput(ts, true)">
                 {{ts.name}}
               </div>
             </div>
@@ -47,32 +55,27 @@
 
           <div class="cell small-4 grid-x tile-server-right">
             <button class="button secondary clear edit-buttons">
-              <i class="fas fa-edit edit-button" (click)="showInput(ts.name, ts, awesome)" *ngIf="!ts.showInput"></i>
-              <i class="fas fa-check edit-button" (click)="hideInput(ts)" *ngIf="ts.showInput"></i>
+              <i class="fas fa-edit edit-button"
+                 (click)="showInput(ts, true)"
+                 *ngIf="!ts.showInput"></i>
+              <i class="fas fa-check edit-button"
+                 (click)="showInput(ts, false)"
+                 *ngIf="ts.showInput"></i>
             </button>
-            <div *ngIf="ts.showDescription; else nonShow">
-              <button class="button secondary clear option-button">
-                <i class="fas fa-sliders-h" (click)="hideDescription(ts)"></i>
-              </button>
-            </div>
-            <ng-template #nonShow>
-              <button class="button secondary clear option-button">
-                <i class="fas fa-sliders-h" (click)="showDescription(ts)"></i>
-              </button>
-            </ng-template>
-            <button
-              class="button alert clear button-no-margin delete-button"
-              (click)="deleteLayer(ts.id)"
-            >
+            <button class="button secondary clear option-button"
+                    (click)="toggleDescription(ts)">
+              <i class="fas fa-sliders-h" ></i>
+            </button>
+            <button class="button secondary clear button-no-margin delete-button"
+                    (click)="deleteLayer(ts.id)">
               <i class="fa fa-trash"></i>
             </button>
           </div>
         </div>
-
         <div *ngIf="ts.showDescription">
           <div class="grid-x row tile-server-description">
             <label class="small-4 align-self-middle">Opacity</label>
-            <input #slider type="range" min="0" max="1" step="0.1" [value]="ts.opacity" class="slider small-8 align-self-middle tile-server-slider" id="myRange" (change)="setLayerOpacity(ts.id, slider.value)">
+            <input #slider type="range" min="0" max="1" step="0.1" [value]="ts.opacity" class="slider small-8 align-self-middle tile-server-slider" id="myRange" (change)="setLayerOpacity(ts, slider.value)">
           </div>
         </div>
       </div>

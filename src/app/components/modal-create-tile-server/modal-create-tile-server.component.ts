@@ -5,9 +5,10 @@ import {Subject} from 'rxjs';
 import {filter, first, map, take, toArray} from 'rxjs/operators';
 import {TapisFilesService} from "../../services/tapis-files.service";
 import {TileServer, Project} from '../../models/models';
-import { GeoDataService} from '../../services/geo-data.service';
+import {GeoDataService} from '../../services/geo-data.service';
 import {ProjectsService} from '../../services/projects.service';
 import {RemoteFile} from "ng-tapis";
+import {defaultTileServers, suggestedTileServers} from "../../constants/tile-servers";
 
 @Component({
   selector: 'app-modal-create-tile-server',
@@ -17,14 +18,12 @@ import {RemoteFile} from "ng-tapis";
 export class ModalCreateTileServerComponent implements OnInit {
   remoteFileData: Array<RemoteFile> = new Array<RemoteFile>();
   tsCreateForm: FormGroup;
-  activeProject: Project;  
-  importMethod: string = 'manual';
-  serverType: string = 'tms';
+  activeProject: Project;
+  defaultServers: ReadonlyArray<TileServer> = defaultTileServers;
+  suggestedServers: ReadonlyArray<TileServer> = suggestedTileServers;
   qmsSearchResults: Array<any>;
-  qmsServerResult: any = {};
-  qmsOrdering: string = 'name';
-  qmsOrder: string = '';
   public readonly onClose: Subject<any> = new Subject<any>();
+
   constructor(private bsModalRef: BsModalRef,
               private tapisFilesService: TapisFilesService,
               private geoDataService: GeoDataService,
@@ -39,10 +38,10 @@ export class ModalCreateTileServerComponent implements OnInit {
         this.qmsSearchResults.map(n => n.show = false);
       }
     });
-    
+
     this.projectsService.activeProject.subscribe( (next) => {
       this.activeProject = next;
-    });    
+    });
 
     this.geoDataService.qmsServerResult.subscribe((next) => {
       if (next) {
@@ -52,13 +51,13 @@ export class ModalCreateTileServerComponent implements OnInit {
     });
 
     this.tsCreateForm = new FormGroup( {
-      method: new FormControl('manual'),
+      method: new FormControl('suggestions'),
       type: new FormControl('tms'),
       name: new FormControl(''),
       ordering: new FormControl('name'),
       order: new FormControl(''),
       url: new FormControl(''),
-      layers: new FormControl(''),
+      wmsLayers: new FormControl(''),
       maxZoom: new FormControl(18),
       minZoom: new FormControl(0),
       attribution: new FormControl(''),
@@ -71,14 +70,6 @@ export class ModalCreateTileServerComponent implements OnInit {
     this.remoteFileData = files;
   }
 
-  setMethod() {
-    this.importMethod = this.tsCreateForm.get('method').value;
-  }
-
-  setServer() {
-    this.serverType = this.tsCreateForm.get('type').value;
-  }
-
   close() {
     this.bsModalRef.hide();
   }
@@ -86,55 +77,85 @@ export class ModalCreateTileServerComponent implements OnInit {
   searchQMS(ev: any, query: string) {
     ev.preventDefault();
     let qmsQueryOptions = {
-      type: this.serverType,
-      ordering: this.qmsOrdering,
-      order: this.qmsOrder
+      type: this.tsCreateForm.get('type').value,
+      ordering: this.tsCreateForm.get('ordering').value,
+      order: this.tsCreateForm.get('order').value,
     }
-    this.geoDataService.getQMS(query, qmsQueryOptions);
+    this.geoDataService.searchQMS(query, qmsQueryOptions);
   }
 
   addQMSServer(qs: any) {
     this.qmsSearchResults = null;
-    console.log(this.qmsSearchResults);
     this.geoDataService.getQMSTileServer(this.activeProject.id, qs.id);
   }
 
-  submit() {
-    // TODO: Refactor this to be less ugly.
+  addSuggestedServer(ev: any, ts: TileServer) {
+    ev.preventDefault();
+    this.geoDataService.addTileServerUpload(this.activeProject.id, ts);
+    this.onClose.next(null);
+    this.bsModalRef.hide();
+  }
+
+  removeTags(str: string) {
+    return str.replace( /(<([^>]+)>)/ig, '');
+  };
+
+  generateAttribution() {
     let copyright = '';
-    if (this.tsCreateForm.get('attribution').value) {
+
+    const attributionText = this.removeTags(this.tsCreateForm.get('attribution').value);
+    const attributionLink = this.removeTags(this.tsCreateForm.get('attributionLink').value);
+    const attributionExtra = this.removeTags(this.tsCreateForm.get('attributionExtra').value);
+
+    if (attributionText) {
       copyright = '&copy; '
-      if (this.tsCreateForm.get('attributionLink').value) {
-        copyright = copyright + "<a href=\"" +
-          this.tsCreateForm.get('attributionLink').value +
-          ">" + copyright + this.tsCreateForm.get('attribution').value + "</a>";
+      if (attributionLink) {
+        copyright += "<a href=\"" + attributionLink + "\">";
+        copyright += attributionText + "</a>";
       } else {
-        copyright += copyright + this.tsCreateForm.get('attribution').value;
+        copyright += copyright + attributionText;
       }
 
-      if (this.tsCreateForm.get('attributionExtra').value) {
-        copyright += this.tsCreateForm.get('attributionExtra').value;
+      if (attributionExtra) {
+        copyright += attributionExtra;
       }
     }
 
+    return copyright;
+  }
+
+  tileServerFromForm() {
     const tileServer: TileServer = {
       name: this.tsCreateForm.get('name').value,
       id: 0,
-      url: this.tsCreateForm.get('url').value,
-      attribution: copyright,
       type: this.tsCreateForm.get('type').value,
-      layers: this.tsCreateForm.get('layers').value,
-      default: false,
-      zIndex: 0,
-      showDescription: false,
+      url: this.tsCreateForm.get('url').value,
+      attribution: this.generateAttribution(),
+      wmsLayers: this.tsCreateForm.get('wmsLayers').value,
       maxZoom: this.tsCreateForm.get("maxZoom").value,
       minZoom: this.tsCreateForm.get("minZoom").value,
-      isActive: false
+      zIndex: 0,
+      opacity: 0.5,
+      isActive: true,
+      showDescription: false
     };
 
-    this.geoDataService.addTileServerUpload(this.activeProject.id, tileServer);
-    
-    this.onClose.next(null);
+    return tileServer;
+  }
+
+  submit() {
+    let importMethod = this.tsCreateForm.get('method').value;
+    if (importMethod == 'manual') {
+      let tileServer = this.tileServerFromForm();
+
+      this.geoDataService.addTileServerUpload(this.activeProject.id, tileServer);
+
+      this.onClose.next(null);
+    } else if (importMethod == 'ini') {
+      this.onClose.next(this.remoteFileData);
+    }
+
     this.bsModalRef.hide();
+
   }
 }

@@ -310,8 +310,10 @@ export class GeoDataService {
       .subscribe((resp) => {
         this.tileServers$.pipe(
           take(1),
-          map( (items: Array<TileServer> ) => items.filter( (item: TileServer) => item.id !== tileServerId)),
-        ).subscribe( (results) =>  {
+          map((items: Array<TileServer>) =>
+            items.filter((item: TileServer) =>
+              item.id !== tileServerId)),
+        ).subscribe((results) =>  {
           this._tileServers.next(results);
         });
       }, (error => {
@@ -319,51 +321,23 @@ export class GeoDataService {
       }));
   }
 
-  public updateTileServers(projectId: number, newTileServers: Array<TileServer>) {
-    let payload = []
-
-    for (let pay of newTileServers) {
-      let myPay = {
-        id: pay.id.toString(),
-        name: pay.name,
-        opacity: pay.opacity,
-        isActive: pay.isActive.toString(),
-        zIndex: pay.zIndex.toString()
-      }
-      payload.push(myPay);
-    }
-
-    this.http.put(environment.apiUrl + `/projects/${projectId}/tile-servers/`, payload)
+  public updateTileServers(projectId: number, tileServers: Array<TileServer>) {
+    this.http.put(environment.apiUrl + `/projects/${projectId}/tile-servers/`, tileServers)
       .subscribe( (resp) => {
         this.getTileServers(projectId);
       });
   }
 
   updateTileServer(projectId: number, tileServer: TileServer): void {
-    const payload = {
-      name: tileServer.name,
-      opacity: tileServer.opacity,
-      isActive: tileServer.isActive.toString(),
-      zIndex: tileServer.zIndex.toString()
-    };
-
-    this.http.put(environment.apiUrl + `/projects/${projectId}/tile-servers/${tileServer.id}/`, payload)
+    this.http.put(environment.apiUrl + `/projects/${projectId}/tile-servers/${tileServer.id}/`, tileServer)
       .subscribe( (resp) => {
         this.getTileServers(projectId);
       });
   }
 
-  // TODO: Should be handled in the backend
-  public toggleTileServer(id: number) {
-    this.tileServers$.pipe(
-      take(1)).subscribe( (results) => {
-        results.map(tileServer => {
-          if (tileServer.id == id) {
-            tileServer.isActive = !tileServer.isActive;
-          }
-        })
-        this._tileServers.next(results);
-    });
+  public toggleTileServer(projectId: number, ts: TileServer) {
+    ts.isActive = !ts.isActive;
+    this.updateTileServer(projectId, ts);
   }
 
   // Add a tile server (from each server)
@@ -382,22 +356,24 @@ export class GeoDataService {
   }
 
   getTileServers(projectId: number): void {
-    this.http.get(environment.apiUrl + `/projects/${projectId}/tile-servers/`).subscribe( (tsv: Array<TileServer>) => {
+    this.http.get(environment.apiUrl + `/projects/${projectId}/tile-servers/`).subscribe((tsv: Array<TileServer>) => {
       this.tileServers$.pipe(take(1)).subscribe(tileServerList => {
         tsv.sort((a, b) => {
           return a.zIndex - b.zIndex;
         });
 
-        if (tileServerList) {
+        // TODO Doesn't catch edge-case of switching project (with same amount of maps)
+        // and having show description open.
+        // NOTE: This is for persisting local UI data without implementing it on the backend.
+        if (tileServerList && tileServerList.length == tsv.length) {
           for (let i = 0; i < tileServerList.length; i++) {
             tsv[i].showDescription = tileServerList[i].showDescription;
             tsv[i].showInput = false;
-            tsv[i].isDraggable = true;
           }
         }
+
         this._tileServers.next(tsv);
       });
-
     });
   }
 
@@ -408,29 +384,15 @@ export class GeoDataService {
       } else {
         tileServer.zIndex = 0;
       }
-    })
+    });
 
-    const payload = new FormData();
-    // for (tis in tileServer) {
-      // payload.append(prop, JSON.stringify(tileServer[prop]));
-    // }
-    payload.append('name', tileServer.name);
-    payload.append('type', tileServer.type);
-    payload.append('url', tileServer.url);
-    payload.append('attribution', tileServer.attribution);
-    payload.append('opacity', tileServer.opacity.toFixed(6));
-    payload.append('zIndex', tileServer.zIndex.toString());
-    payload.append('maxZoom', tileServer.maxZoom.toFixed(6));
-    payload.append('minZoom', tileServer.minZoom.toFixed(6));
-    payload.append('isActive', tileServer.isActive.toString());
-
-    this.http.post(environment.apiUrl + `/projects/${projectId}/tile-servers/`, payload)
+    this.http.post(environment.apiUrl + `/projects/${projectId}/tile-servers/`, tileServer)
       .subscribe((resp) => {
         this.getTileServers(projectId);
       });
   }
 
-  getQMS(query: string, queryOptions: any): void {
+  searchQMS(query: string, queryOptions: any): void {
     const url = "https://qms.nextgis.com/api/v1/geoservices/";
     const request = url +
       "?search=" + query +
@@ -453,7 +415,6 @@ export class GeoDataService {
         type: q['type'],
         url: q['url'],
         attribution: q['desc'],
-        default: false,
         zIndex: 1,
         opacity: 0.5,
         maxZoom: q['z_max'],
@@ -463,40 +424,6 @@ export class GeoDataService {
       this.addTileServerUpload(projectId, newServer);
       this._qmsServerResult.next(q);
     });
-  }
-
-  initializeMaps(projectId: number) {
-    const baseOSMObject: TileServer = {
-      name: 'Base OSM',
-      id: 1,
-      type: 'tms',
-      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      default: true,
-      zIndex: 0,
-      showDescription: false,
-      opacity: 1,
-      minZoom: 0,
-      maxZoom: 19,
-      isActive: true
-    }
-
-    const satelliteObject: TileServer = {
-      name: 'Satellite',
-      id: 1,
-      type: 'tms',
-      url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
-      default: true,
-      showDescription: false,
-      opacity: 1,
-      zIndex: 1,
-      maxZoom: 19,
-      minZoom: 0,
-      isActive: false
-    }
-    this.addTileServerUpload(projectId, baseOSMObject);
-    this.addTileServerUpload(projectId, satelliteObject);
   }
 
   public get qmsSearchResults(): Observable<Array<any>> {

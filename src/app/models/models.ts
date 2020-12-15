@@ -120,21 +120,30 @@ export interface Overlay {
 }
 
 export interface TileServer {
+  // General tile servers
   name: string;
   id: number;
-  url: string;
   type: string;
+  url: string;
   attribution: string;
-  default: boolean;
-  zIndex: number;
-  showDescription?: boolean;
-  opacity?: number;
-  isDraggable?: boolean;
-  layers?: string;
+
+  // TMS specfic
   minZoom?: number;
   maxZoom?: number;
+
+  // WMS specific
+  wmsLayers?: string;
+  wmsFormat?: string;
+  wmsParams?: string;
+
+  // UI that has to persist
+  zIndex: number;
+  opacity: number;
+  isActive: boolean;
+
+  // UI that does not have to persist
+  showDescription?: boolean;
   showInput?: boolean;
-  isActive?: boolean;
 }
 
 interface AppGeoJSONFeature extends GeoJSONFeature {

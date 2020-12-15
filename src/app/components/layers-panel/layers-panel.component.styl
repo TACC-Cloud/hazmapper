@@ -1,89 +1,106 @@
 @import '../../../variables.styl'
 
 :host
-  .cdk-drag-placeholder
-      opacity: 0
-
-  .cdk-drag-animating
-      transition: transform 250ms cubic-bezier(0, 0, 0.2, 1)
-
-  .tile-servers-list
-      padding-bottom: 44px
   .overlay
-      padding-bottom 5px
-      vertical-align bottom
-      cursor pointer
-      align-items center
-      .panel-thumbnail
-          padding-right 5px
-      .overlay-label
-          font-size 0.8em
-      .active-overlay
-          background-color lightgreen
-      >.overlay-content
-          padding 5px
-          .button-no-margin
-              margin 0
+    padding-bottom 5px
+    vertical-align bottom
+    cursor pointer
+    align-items center
+    .panel-thumbnail
+      padding-right 5px
+    .overlay-label
+      font-size 0.8em
+    .active-overlay
+      background-color lightgreen
+    >.overlay-content
+      padding 5px
+      .button-no-margin
+        margin 0
               
-::ng-deep .tile-servers
+  .tile-servers-list
+    padding-bottom: 44px
+    .tile-servers
+      background-color: #fff;
       padding: 10px
       .tile-server-container
-          .tile-server-left
+        .tile-server-left
+          padding-left: 5px
+          .tile-server-move
+            width: 20px
+            opacity: 0
+            transition: 0.2s
+            cursor: move
+          .tile-server-visibility
+            cursor: pointer
+            width: 20px
+            input[type="checkbox"],
+            .checked
+              display: none
+            input[type="checkbox"]:checked ~ .checked
+              display: inline
+            input[type="checkbox"]:checked ~ .unchecked
+              display: none
+          .tile-server-name-container
+            max-width: 90px
+            #property-input
+              display: inline-block
+              width: 100%
+              font-size: 16px
+              padding: 0px
               padding-left: 5px
-              .tile-server-visibility
-                  width: 20px
-                  input[type="checkbox"],
-                  .checked
-                      display: none
-                  input[type="checkbox"]:checked ~ .checked
-                      display: inline
-                  input[type="checkbox"]:checked ~ .unchecked
-                      display: none
-              .tile-server-name-container
-                  max-width: 110px
-                  #property-input
-                      display: inline-block
-                      width: 100%
-                      font-size: 16px
-                      padding: 0px
-                      padding-left: 5px
-                      margin: 0px
-                      border: 0px solid #f0f0f0
-                      -webkit-border-radius: 0px
-                      border-radius: 0px
-                      border: 1px solid #888      
-                      box-shadow: 0px 0px;
-                      height: 100%
-                  .tile-server-name
-                      max-width: 110px
-                      width: 110px
-                      overflow: hidden
-                      text-overflow: ellipsis
-                      white-space: nowrap
-                      padding-left: 5px
-                      font-size: 16px
-                      height: 100%
-                      border: 1px solid #fff
-                      transition: 0.5s
-                  #tile-server-name:hover
-                      border: 1px solid #ccc
-          .tile-server-right
-              justify-content: center
-              .edit-buttons
-                  padding: 0px 0px
-                  margin: 0
-                  line-height: 0              
-                  .edit-button
-                      width: 17px
-              .option-button
-                  padding: 0px 3px
-                  margin: 0
-                  line-height: 0
-              .delete-button
-                  padding: 0
-                  margin: 0
-                  line-height: 0
+              margin: 0px
+              border: 0px solid #f0f0f0
+              -webkit-border-radius: 0px
+              border-radius: 0px
+              border: 1px solid #888
+              box-shadow: 0px 0px;
+              height: 100%
+            .tile-server-name
+              max-width: 90px
+              width: 90px
+              overflow: hidden
+              text-overflow: ellipsis
+              white-space: nowrap
+              padding-left: 5px
+              font-size: 16px
+              height: 100%
+              border: 1px solid #fff
+              transition: 0.5s
+            #tile-server-name:hover
+              border: 1px solid #ccc
+        .tile-server-right
+          justify-content: center
+          .edit-buttons
+            padding: 0px 0px
+            margin: 0
+            line-height: 0
+            .edit-button
+              width: 17px
+          .option-button
+            padding: 0px 3px
+            margin: 0
+            line-height: 0
+          .delete-button
+            padding: 0
+            margin: 0
+            line-height: 0
+      .tile-server-container:hover
+        .tile-server-left
+          .tile-server-move
+            opacity: 1
       .tile-server-description
-          padding: 15px 10px
-          .tile-server-slider
-              margin: 0
+        padding: 15px 10px
+        .tile-server-slider
+          margin: 0
+
+::ng-deep
+  .cdk-drag-placeholder
+    opacity: 0
+  .cdk-drag-animating
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1)
+  .cdk-drag-preview
+    @extends :host .tile-servers-list .tile-servers
+    .tile-server-container
+      .tile-server-left
+        .tile-server-move
+          opacity: 1
