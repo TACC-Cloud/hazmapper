@@ -10,12 +10,19 @@
   </label>
 
   <div *ngIf="tsCreateForm.get('method').value == 'suggestions'">
-    <div *ngFor="let ts of defaultServers">
-      {{ts.name}}
-      <button class="button success small cell large-1 align-right add-button"
-              (click)="addSuggestedServer($event, ts)">
-        <i class="fas fa-plus"></i>
-      </button>
+    <h4>Default Layers</h4>
+    <div id="tile-server-suggestions">
+      <div *ngFor="let ts of defaultServers">
+        <div class="grid-x align-justify">
+          <div id="tile-server-suggestion-name">
+            {{ts.name}}
+          </div>
+          <button class="button success small cell large-1 align-right add-button"
+                  (click)="addSuggestedServer($event, ts)">
+            <i class="fas fa-plus"></i>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
