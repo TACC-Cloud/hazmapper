@@ -26,7 +26,7 @@
             <label class="tile-server-visibility">
               <input name=""
                      type="checkbox"
-                     [checked]="ts.isActive"
+                     [checked]="ts.uiOptions.isActive"
                      (change)="toggleTileServer(ts)"/>
               <i class="fas fa-eye-slash unchecked"></i>
               <i class="fas fa-eye checked"></i>
@@ -35,7 +35,7 @@
               <input #activeText
                      id=property-input
                      type="text"
-                     *ngIf="ts.showInput"
+                     *ngIf="ts.uiOptions.showInput"
                      (blur)="updateName(activeText.value, ts)"
                      (keyup.enter)="updateName(activeText.value, ts)"
                      [value]="ts.name">
@@ -46,7 +46,7 @@
                    title="{{ts.name}}"
                    data-position="top"
                    data-alignment="left"
-                   *ngIf="!ts.showInput"
+                   *ngIf="!ts.uiOptions.showInput"
                    (dblclick)="showInput(ts, true)">
                 {{ts.name}}
               </div>
@@ -57,25 +57,25 @@
             <button class="button secondary clear edit-buttons">
               <i class="fas fa-edit edit-button"
                  (click)="showInput(ts, true)"
-                 *ngIf="!ts.showInput"></i>
+                 *ngIf="!ts.uiOptions.showInput"></i>
               <i class="fas fa-check edit-button"
                  (click)="showInput(ts, false)"
-                 *ngIf="ts.showInput"></i>
+                 *ngIf="ts.uiOptions.showInput"></i>
             </button>
             <button class="button secondary clear option-button"
                     (click)="toggleDescription(ts)">
               <i class="fas fa-sliders-h" ></i>
             </button>
             <button class="button secondary clear button-no-margin delete-button"
-                    (click)="deleteLayer(ts.id)">
+                    (click)="deleteTileServer(ts)">
               <i class="fa fa-trash"></i>
             </button>
           </div>
         </div>
-        <div *ngIf="ts.showDescription">
+        <div *ngIf="ts.uiOptions.showDescription">
           <div class="grid-x row tile-server-description">
             <label class="small-4 align-self-middle">Opacity</label>
-            <input #slider type="range" min="0" max="1" step="0.1" [value]="ts.opacity" class="slider small-8 align-self-middle tile-server-slider" id="myRange" (change)="setLayerOpacity(ts, slider.value)">
+            <input #slider type="range" min="0" max="1" step="0.1" [value]="ts.uiOptions.opacity" class="slider small-8 align-self-middle tile-server-slider" id="myRange" (change)="setLayerOpacity(ts, slider.value)">
           </div>
         </div>
       </div>

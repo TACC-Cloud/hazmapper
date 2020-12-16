@@ -69,7 +69,7 @@ export class ProjectsService {
 
           // Add default servers
           defaultTileServers.forEach(ts => {
-            this.geoDataService.addTileServerUpload(proj.id, ts);
+            this.geoDataService.addTileServer(proj.id, ts);
           });
 
         }),

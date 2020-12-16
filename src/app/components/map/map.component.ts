@@ -30,7 +30,7 @@ export class MapComponent implements OnInit {
   features: FeatureGroup = new FeatureGroup();
   overlays: LayerGroup = new LayerGroup<any>();
   tileServers: Array<TileServer> = new Array<TileServer>();
-  activeLayers: any = {};
+  tileServerLayers: any = {};
   environment: AppEnvironment;
   fitToFeatureExtent: boolean = true;
 
@@ -52,6 +52,33 @@ export class MapComponent implements OnInit {
       center: [40, -80],
       zoom: 3,
       maxZoom: 19
+    });
+
+    this.geoDataService.tileServers.subscribe((next: Array<TileServer>) => {
+      if (next) {
+        this.tileServers = next;
+
+        next.forEach((ts) => {
+          if (!this.tileServerLayers[ts.id]) {
+            this.tileServerLayers[ts.id] = this.tileServerToLayer(ts);
+          }
+
+          this.tileServerLayers[ts.id].setZIndex(ts.uiOptions.zIndex);
+          this.tileServerLayers[ts.id].setOpacity(ts.uiOptions.opacity);
+
+          if (ts.uiOptions.isActive) {
+            this.map.addLayer(this.tileServerLayers[ts.id]);
+          } else {
+            this.map.removeLayer(this.tileServerLayers[ts.id]);
+          }
+        });
+      }
+    });
+
+    this.geoDataService.selectedTileServer.subscribe((ts: TileServer) => {
+      if (ts) {
+        this.map.removeLayer(this.tileServerLayers[ts.id]);
+      }
     });
 
     this.loadFeatures();
@@ -90,22 +117,15 @@ export class MapComponent implements OnInit {
   }
 
   tileServerToLayer(ts: TileServer) {
-    let mapConfiguration: any = null;
+    let layerOptions = {
+      attribution: ts.attribution,
+      ...ts.tileOptions
+    }
 
     if (ts.type == 'tms') {
-      return L.tileLayer(ts.url, {
-        minZoom: ts.minZoom ? ts.minZoom : 19,
-        maxZoom: ts.maxZoom ? ts.maxZoom : 0,
-        opacity: ts.opacity,
-        attribution: ts.attribution,
-      });
+      return L.tileLayer(ts.url, layerOptions);
     } else if (ts.type == 'wms') {
-      return L.tileLayer.wms(ts.url, {
-        attribution: ts.attribution,
-        layers: ts.wmsLayers,
-        opacity: ts.opacity ? ts.opacity : 0.5,
-        format: 'image/jpeg'
-      });
+      return L.tileLayer.wms(ts.url, layerOptions);
     }
   }
 
@@ -116,35 +136,6 @@ export class MapComponent implements OnInit {
     const geojsonOptions = {
       pointToLayer: createMarker
     };
-
-    this.geoDataService.tileServers.subscribe((next: Array<TileServer>) => {
-      // TODO: refactor
-      if (next) {
-        // Handle Deletion before new tileserver is set
-        if (this.tileServers) {
-          this.tileServers.forEach(tileServer => {
-            if (!next.some(ts => ts.id == tileServer.id)) {
-              this.map.removeLayer(this.activeLayers[tileServer.id]);
-            }
-          });
-        }
-
-        this.tileServers = next;
-
-        next.forEach((ts) => {
-          if (!this.activeLayers[ts.id]) {
-            this.activeLayers[ts.id] = this.tileServerToLayer(ts);
-          }
-          this.activeLayers[ts.id].setZIndex(ts.zIndex);
-          this.activeLayers[ts.id].setOpacity(ts.opacity);
-          if (ts.isActive) {
-            this.map.addLayer(this.activeLayers[ts.id]);
-          } else {
-            this.map.removeLayer(this.activeLayers[ts.id]);
-          }
-        });
-      }
-    });
 
     this.geoDataService.features.subscribe((collection) => {
         this.features.clearLayers();

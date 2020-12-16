@@ -62,8 +62,9 @@ export class LayersPanelComponent implements OnInit {
     this.geoDataService.deleteOverlay(this.activeProject.id, ov);
   }
 
-  deleteLayer(tileServerId: number): void {
-    this.geoDataService.deleteTileServer(this.activeProject.id, tileServerId);
+  deleteTileServer(ts: TileServer): void {
+    this.geoDataService.selectedTileServer = ts;
+    this.geoDataService.deleteTileServer(this.activeProject.id, ts.id);
   }
 
   toggleTileServer(ts: TileServer): void {
@@ -72,10 +73,11 @@ export class LayersPanelComponent implements OnInit {
 
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.tileServers, event.previousIndex, event.currentIndex);
+    // TODO: Figure out a better way to handle ZIndex
     let zIndexMax = -(this.tileServers.length);
     this.tileServers.forEach(ts => {
-      ts.zIndex = zIndexMax;
-      zIndexMax += 1;
+      ts.uiOptions.zIndex = zIndexMax;
+      zIndexMax++;
     });
     this.geoDataService.updateTileServers(this.activeProject.id, this.tileServers);
   }
@@ -102,6 +104,7 @@ export class LayersPanelComponent implements OnInit {
 
   updateName(name: string, ts: TileServer) {
     // TODO: Handle longer names
+    this.showInput(ts, false);
     name = name.trim();
     if (name.length < 512) {
       if (name && name != ts.name) {
@@ -109,11 +112,10 @@ export class LayersPanelComponent implements OnInit {
         this.geoDataService.updateTileServer(this.activeProject.id, ts);
       }
     }
-    this.showInput(ts, false);
   }
 
   showInput(ts: TileServer, show: boolean) {
-    ts.showInput = show;
+    ts.uiOptions.showInput = show;
 
     // NOTE: Assumes only single active input at a time (due to blur)
     if (show) {
@@ -125,12 +127,12 @@ export class LayersPanelComponent implements OnInit {
   }
 
   setLayerOpacity(ts: TileServer, opacity: number) {
-    ts.opacity = opacity;
+    ts.uiOptions.opacity = opacity;
     this.geoDataService.updateTileServer(this.activeProject.id, ts);
   }
 
   toggleDescription(ts: TileServer) {
-    ts.showDescription = !ts.showDescription;
+    ts.uiOptions.showDescription = !ts.uiOptions.showDescription;
   }
 
   changeMovePointer(gripHandle: any, what: boolean) {

@@ -50,6 +50,8 @@ export class GeoDataService {
   private qmsSearchResults$: Observable<Array<any>> = this._qmsSearchResults.asObservable();
   private _qmsServerResult: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   private qmsServerResult$: Observable<any> = this._qmsServerResult.asObservable();
+  private _selectedTileServer: BehaviorSubject<TileServer> = new BehaviorSubject<TileServer>(null);
+  public readonly selectedTileServer$: Observable<TileServer> = this._selectedTileServer.asObservable();
 
   constructor(private http: HttpClient, private filterService: FilterService, private notificationsService: NotificationsService) {
 
@@ -336,54 +338,35 @@ export class GeoDataService {
   }
 
   public toggleTileServer(projectId: number, ts: TileServer) {
-    ts.isActive = !ts.isActive;
+    ts.uiOptions.isActive = !ts.uiOptions.isActive;
     this.updateTileServer(projectId, ts);
-  }
-
-  // Add a tile server (from each server)
-  public addTileServer(tileServer: TileServer) {
-    this.tileServers$.pipe(take(1)).subscribe(tileServerList => {
-      let newTileServerList: Array<TileServer>;
-      if (tileServerList) {
-        tileServer.zIndex = tileServerList.length;
-        newTileServerList = [...tileServerList, tileServer];
-      } else {
-        tileServer.zIndex = 0;
-        newTileServerList = [tileServer];
-      }
-      this._tileServers.next(newTileServerList);
-    })
   }
 
   getTileServers(projectId: number): void {
     this.http.get(environment.apiUrl + `/projects/${projectId}/tile-servers/`).subscribe((tsv: Array<TileServer>) => {
-      this.tileServers$.pipe(take(1)).subscribe(tileServerList => {
-        tsv.sort((a, b) => {
-          return a.zIndex - b.zIndex;
-        });
-
-        // TODO Doesn't catch edge-case of switching project (with same amount of maps)
-        // and having show description open.
-        // NOTE: This is for persisting local UI data without implementing it on the backend.
-        if (tileServerList && tileServerList.length == tsv.length) {
-          for (let i = 0; i < tileServerList.length; i++) {
-            tsv[i].showDescription = tileServerList[i].showDescription;
-            tsv[i].showInput = false;
-          }
-        }
-
-        this._tileServers.next(tsv);
+      tsv.sort((a, b) => {
+        return a.uiOptions.zIndex - b.uiOptions.zIndex;
       });
+
+      console.log(tsv);
+
+      this._tileServers.next(tsv);
     });
   }
 
-  addTileServerUpload(projectId: number, tileServer: TileServer) {
+  addTileServer(projectId: number, tileServer: TileServer) {
     this.tileServers$.pipe(take(1)).subscribe(tileServerList => {
       if (tileServerList) {
-        tileServer.zIndex = tileServerList.length;
-      } else {
-        tileServer.zIndex = 0;
+        // TODO: Figure out a better way to handle ZIndex
+        let zIndexMax = -(tileServerList.length + 1);
+        tileServerList.forEach(ts => {
+          ts.uiOptions.zIndex = zIndexMax;
+          zIndexMax++;
+        });
+        this.updateTileServers(projectId, tileServerList);
       }
+
+      tileServer.uiOptions.zIndex = -1;
     });
 
     this.http.post(environment.apiUrl + `/projects/${projectId}/tile-servers/`, tileServer)
@@ -411,17 +394,22 @@ export class GeoDataService {
     this.http.get(request).subscribe((q) => {
       const newServer: TileServer = {
         name: q['name'],
-        id: 1,
         type: q['type'],
         url: q['url'],
         attribution: q['desc'],
-        zIndex: 1,
-        opacity: 0.5,
-        maxZoom: q['z_max'],
-        minZoom: q['z_min'] ? q['z_min'] : 0,
-        isActive: false
+        tileOptions: {
+          maxZoom: q['z_max'] ? q['z_max'] : null,
+          minZoom: q['z_min'] ? q['z_min'] : null,
+          layers: q['layers'] ? q['layers'] : null,
+          params: q['params'] ? q['params'] : null,
+          format: q['format'] ? q['format'] : null
+        },
+        uiOptions: {
+          opacity: 0.5,
+          isActive: false
+        }
       }
-      this.addTileServerUpload(projectId, newServer);
+      this.addTileServer(projectId, newServer);
       this._qmsServerResult.next(q);
     });
   }
@@ -440,6 +428,14 @@ export class GeoDataService {
 
   public get tileServers(): Observable<Array<TileServer>> {
     return this.tileServers$;
+  }
+
+  public get selectedTileServer(): any {
+    return this.selectedTileServer$;
+  }
+
+  public set selectedTileServer(ts) {
+    this._selectedTileServer.next(ts);
   }
 
   public get features(): Observable<FeatureCollection> {
@@ -461,9 +457,7 @@ export class GeoDataService {
     } else {
       this._activeFeature.next(null);
     }
-
   }
-
 
   public get activeOverlay(): Observable<Overlay> {
     return this.activeOverlay$;

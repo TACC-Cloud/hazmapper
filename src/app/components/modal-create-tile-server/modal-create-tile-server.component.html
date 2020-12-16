@@ -41,26 +41,18 @@
     </label>
 
     <div class="grid-x grid-margin-x">
-      <div class="small-4 cell">
+      <div class="small-6 cell">
         <label> Attribution:
           <input type="text"
                  formControlName="attribution"
                  required="false">
         </label>
       </div>
-      <!-- TODO: This should require attribution -->
-      <div class="small-4 cell">
+      <div class="small-6 cell">
         <label> Attribution Link:
           <input type="url"
                  pattern="https?://.+"
                  formControlName="attributionLink"
-                 required="false">
-        </label>
-      </div>
-      <div class="small-4 cell">
-        <label> Extra Attribution:
-          <input type="url"
-                 formControlName="attributionExtra"
                  required="false">
         </label>
       </div>
@@ -77,8 +69,19 @@
     </label>
     <label *ngIf="tsCreateForm.get('type').value == 'wms'"> Layers (comma-separated):
       <input type="text"
-             formControlName="wmsLayers"
+             formControlName="layers"
              required="false">
+    </label>
+    <label *ngIf="tsCreateForm.get('type').value == 'wms'"> Params:
+      <input type="text"
+             formControlName="params"
+             required="false">
+    </label>
+    <label *ngIf="tsCreateForm.get('type').value == 'wms'"> Format:
+      <select formControlName="format" required="false">
+        <option value="image/png">png</option>
+        <option value="image/jpeg">jpeg</option>
+      </select>
     </label>
   </div>
 

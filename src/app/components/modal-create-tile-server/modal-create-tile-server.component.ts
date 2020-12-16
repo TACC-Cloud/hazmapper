@@ -3,12 +3,12 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {BsModalRef, BsModalService} from 'ngx-foundation';
 import {Subject} from 'rxjs';
 import {filter, first, map, take, toArray} from 'rxjs/operators';
-import {TapisFilesService} from "../../services/tapis-files.service";
+import {TapisFilesService} from '../../services/tapis-files.service';
 import {TileServer, Project} from '../../models/models';
 import {GeoDataService} from '../../services/geo-data.service';
 import {ProjectsService} from '../../services/projects.service';
-import {RemoteFile} from "ng-tapis";
-import {defaultTileServers, suggestedTileServers} from "../../constants/tile-servers";
+import {RemoteFile} from 'ng-tapis';
+import {defaultTileServers, suggestedTileServers} from '../../constants/tile-servers';
 
 @Component({
   selector: 'app-modal-create-tile-server',
@@ -57,12 +57,13 @@ export class ModalCreateTileServerComponent implements OnInit {
       ordering: new FormControl('name'),
       order: new FormControl(''),
       url: new FormControl(''),
-      wmsLayers: new FormControl(''),
-      maxZoom: new FormControl(18),
-      minZoom: new FormControl(0),
+      layers: new FormControl(null),
+      params: new FormControl(null),
+      format: new FormControl(null),
+      maxZoom: new FormControl(null),
+      minZoom: new FormControl(null),
       attribution: new FormControl(''),
       attributionLink: new FormControl(''),
-      attributionExtra: new FormControl('')
     });
   }
 
@@ -91,7 +92,7 @@ export class ModalCreateTileServerComponent implements OnInit {
 
   addSuggestedServer(ev: any, ts: TileServer) {
     ev.preventDefault();
-    this.geoDataService.addTileServerUpload(this.activeProject.id, ts);
+    this.geoDataService.addTileServer(this.activeProject.id, ts);
     this.onClose.next(null);
     this.bsModalRef.hide();
   }
@@ -105,19 +106,14 @@ export class ModalCreateTileServerComponent implements OnInit {
 
     const attributionText = this.removeTags(this.tsCreateForm.get('attribution').value);
     const attributionLink = this.removeTags(this.tsCreateForm.get('attributionLink').value);
-    const attributionExtra = this.removeTags(this.tsCreateForm.get('attributionExtra').value);
 
     if (attributionText) {
       copyright = '&copy; '
       if (attributionLink) {
-        copyright += "<a href=\"" + attributionLink + "\">";
-        copyright += attributionText + "</a>";
+        copyright += '<a href=\"' + attributionLink + '\">';
+        copyright += attributionText + '</a>';
       } else {
         copyright += copyright + attributionText;
-      }
-
-      if (attributionExtra) {
-        copyright += attributionExtra;
       }
     }
 
@@ -127,17 +123,24 @@ export class ModalCreateTileServerComponent implements OnInit {
   tileServerFromForm() {
     const tileServer: TileServer = {
       name: this.tsCreateForm.get('name').value,
-      id: 0,
       type: this.tsCreateForm.get('type').value,
       url: this.tsCreateForm.get('url').value,
       attribution: this.generateAttribution(),
-      wmsLayers: this.tsCreateForm.get('wmsLayers').value,
-      maxZoom: this.tsCreateForm.get("maxZoom").value,
-      minZoom: this.tsCreateForm.get("minZoom").value,
-      zIndex: 0,
-      opacity: 0.5,
-      isActive: true,
-      showDescription: false
+
+      tileOptions: {
+        maxZoom: this.tsCreateForm.get('maxZoom').value,
+        minZoom: this.tsCreateForm.get('minZoom').value,
+        layers: this.tsCreateForm.get('layers').value,
+        params: this.tsCreateForm.get('params').value,
+        format: this.tsCreateForm.get('format').value,
+      },
+
+      uiOptions: {
+        opacity: 0.5,
+        isActive: true,
+        showDescription: false,
+        showInput: false
+      }
     };
 
     return tileServer;
@@ -147,15 +150,12 @@ export class ModalCreateTileServerComponent implements OnInit {
     let importMethod = this.tsCreateForm.get('method').value;
     if (importMethod == 'manual') {
       let tileServer = this.tileServerFromForm();
-
-      this.geoDataService.addTileServerUpload(this.activeProject.id, tileServer);
-
+      this.geoDataService.addTileServer(this.activeProject.id, tileServer);
       this.onClose.next(null);
     } else if (importMethod == 'ini') {
       this.onClose.next(this.remoteFileData);
     }
 
     this.bsModalRef.hide();
-
   }
 }
