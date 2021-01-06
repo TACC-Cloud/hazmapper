@@ -52,6 +52,8 @@ export class GeoDataService {
   private qmsServerResult$: Observable<any> = this._qmsServerResult.asObservable();
   private _selectedTileServer: BehaviorSubject<TileServer> = new BehaviorSubject<TileServer>(null);
   public readonly selectedTileServer$: Observable<TileServer> = this._selectedTileServer.asObservable();
+  private _dirtyTileOptions: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public readonly dirtyTileOptions$: Observable<boolean> = this._dirtyTileOptions.asObservable();
 
   constructor(private http: HttpClient, private filterService: FilterService, private notificationsService: NotificationsService) {
 
@@ -317,24 +319,46 @@ export class GeoDataService {
               item.id !== tileServerId)),
         ).subscribe((results) =>  {
           this._tileServers.next(results);
+          this.notificationsService.showSuccessToast('Tile layer deleted!');
         });
       }, (error => {
         console.log(error);
+        this.notificationsService.showErrorToast('Tile layer could not be deleted!');
       }));
   }
 
   public updateTileServers(projectId: number, tileServers: Array<TileServer>) {
-    this.http.put(environment.apiUrl + `/projects/${projectId}/tile-servers/`, tileServers)
-      .subscribe( (resp) => {
-        this.getTileServers(projectId);
-      });
+    this._tileServers.next(tileServers);
+    this._dirtyTileOptions.next(true);
   }
 
-  updateTileServer(projectId: number, tileServer: TileServer): void {
-    this.http.put(environment.apiUrl + `/projects/${projectId}/tile-servers/${tileServer.id}/`, tileServer)
-      .subscribe( (resp) => {
-        this.getTileServers(projectId);
-      });
+  public updateTileServer(projectId: number, tileServer: TileServer): void {
+    this.tileServers$.pipe(
+      take(1),
+      map((tss: Array<TileServer>) =>
+        tss.map((ts: TileServer) =>
+          ts.id == tileServer.id ? tileServer : ts)),
+    ).subscribe((results) =>  {
+      this._tileServers.next(results);
+      this._dirtyTileOptions.next(true);
+    });
+  }
+
+  public saveTileServers(projectId: number, tileServers: Array<TileServer>): void {
+    if (this._dirtyTileOptions.value) {
+      this.http.put(environment.apiUrl + `/projects/${projectId}/tile-servers/`, tileServers)
+        .subscribe( (resp) => {
+          this.getTileServers(projectId);
+          this.notificationsService.showSuccessToast('Tile layer options saved!');
+        }, (error => {
+          this.notificationsService.showErrorToast('Tile layer options could not be saved!');
+        }));
+    } else {
+      this.http.put(environment.apiUrl + `/projects/${projectId}/tile-servers/`, tileServers)
+        .subscribe( (resp) => {
+          this.getTileServers(projectId);
+        });
+    }
   }
 
   public toggleTileServer(projectId: number, ts: TileServer) {
@@ -348,9 +372,8 @@ export class GeoDataService {
         return a.uiOptions.zIndex - b.uiOptions.zIndex;
       });
 
-      console.log(tsv);
-
       this._tileServers.next(tsv);
+      this._dirtyTileOptions.next(false);
     });
   }
 
@@ -363,7 +386,7 @@ export class GeoDataService {
           ts.uiOptions.zIndex = zIndexMax;
           zIndexMax++;
         });
-        this.updateTileServers(projectId, tileServerList);
+        this.saveTileServers(projectId, tileServerList);
       }
 
       tileServer.uiOptions.zIndex = -1;
@@ -372,7 +395,10 @@ export class GeoDataService {
     this.http.post(environment.apiUrl + `/projects/${projectId}/tile-servers/`, tileServer)
       .subscribe((resp) => {
         this.getTileServers(projectId);
-      });
+        this.notificationsService.showSuccessToast('Tile server ' + tileServer.name + ' added!');
+      }, (error => {
+        this.notificationsService.showErrorToast('Could not add tile server!');
+      }));
   }
 
   searchQMS(query: string, queryOptions: any): void {
@@ -385,6 +411,7 @@ export class GeoDataService {
       "&cumulative_status=works";
 
     this.http.get(request).subscribe((q) => {
+      console.log('loaded');
       this._qmsSearchResults.next(q);
     });
   }
@@ -406,7 +433,7 @@ export class GeoDataService {
         },
         uiOptions: {
           opacity: 0.5,
-          isActive: false
+          isActive: true
         }
       }
       this.addTileServer(projectId, newServer);
@@ -424,6 +451,10 @@ export class GeoDataService {
 
   public get overlays(): Observable<Array<Overlay>> {
     return this.overlays$;
+  }
+
+  public get dirtyTileOptions(): Observable<boolean> {
+    return this.dirtyTileOptions$;
   }
 
   public get tileServers(): Observable<Array<TileServer>> {

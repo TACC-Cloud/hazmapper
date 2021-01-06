@@ -19,6 +19,7 @@ export class LayersPanelComponent implements OnInit {
   @ViewChildren('activeText') activeInputs: QueryList<ElementRef>;
 
   basemap: string;
+  dirtyOptions: boolean;
   overlays: Array<Overlay>;
   tileServers: Array<TileServer>;
   environment: AppEnvironment;
@@ -43,6 +44,11 @@ export class LayersPanelComponent implements OnInit {
     this.geoDataService.basemap.subscribe( (next) => {
       this.basemap = next;
     });
+
+    this.geoDataService.dirtyTileOptions.subscribe( (next) => {
+      this.dirtyOptions = next;
+    });
+
     this.projectsService.activeProject.subscribe( (next) => {
       this.activeProject = next;
     });
@@ -79,6 +85,7 @@ export class LayersPanelComponent implements OnInit {
       ts.uiOptions.zIndex = zIndexMax;
       zIndexMax++;
     });
+
     this.geoDataService.updateTileServers(this.activeProject.id, this.tileServers);
   }
 
@@ -90,11 +97,7 @@ export class LayersPanelComponent implements OnInit {
   }
 
   openCreateTileServerModal() {
-    const initialState = {
-      allowedExtensions: this.tapisFilesService.IMPORTABLE_TILE_TYPES
-    };
-
-    const modal: BsModalRef = this.bsModalService.show(ModalCreateTileServerComponent, {initialState});
+    const modal: BsModalRef = this.bsModalService.show(ModalCreateTileServerComponent);
     modal.content.onClose.subscribe( (files: Array<RemoteFile>) => {
       if (files != null) {
         this.geoDataService.importFileFromTapis(this.activeProject.id, files);
@@ -137,5 +140,9 @@ export class LayersPanelComponent implements OnInit {
 
   changeMovePointer(gripHandle: any, what: boolean) {
     gripHandle.style.cursor = what ? 'move' : 'auto';
+  }
+
+  saveTileOptions() {
+    this.geoDataService.saveTileServers(this.activeProject.id, this.tileServers);
   }
 }

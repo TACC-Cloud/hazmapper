@@ -81,6 +81,17 @@
       </div>
     </div>
 
+    <div *ngIf="dirtyOptions" class="tile-server-dirty-options">
+      <i class="tile-server-dirty-options-warning">
+        Layer options have been changed!
+        <br>
+        Save to persist changes.
+      </i>
+    </div>
+
+    <div class="tile-server-save-button">
+      <button class="button small success" (click)="saveTileOptions()">Save Layer Options</button>
+    </div>
     <hr>
 
     <h6> Overlays </h6>

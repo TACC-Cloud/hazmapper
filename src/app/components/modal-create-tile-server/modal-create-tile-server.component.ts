@@ -22,6 +22,8 @@ export class ModalCreateTileServerComponent implements OnInit {
   defaultServers: ReadonlyArray<TileServer> = defaultTileServers;
   suggestedServers: ReadonlyArray<TileServer> = suggestedTileServers;
   qmsSearchResults: Array<any>;
+  loadingSearch: boolean = false;
+
   public readonly onClose: Subject<any> = new Subject<any>();
 
   constructor(private bsModalRef: BsModalRef,
@@ -30,24 +32,25 @@ export class ModalCreateTileServerComponent implements OnInit {
               private projectsService: ProjectsService,
               private bsModalService: BsModalService) { }
 
-
   ngOnInit() {
     this.geoDataService.qmsSearchResults.subscribe((next) => {
       if (next) {
         this.qmsSearchResults = next;
         this.qmsSearchResults.map(n => n.show = false);
+        this.loadingSearch = false;
       }
     });
 
-    this.projectsService.activeProject.subscribe( (next) => {
-      this.activeProject = next;
-    });
 
     this.geoDataService.qmsServerResult.subscribe((next) => {
       if (next) {
         this.qmsSearchResults = null;
         this.bsModalRef.hide();
       }
+    });
+
+    this.projectsService.activeProject.subscribe( (next) => {
+      this.activeProject = next;
     });
 
     this.tsCreateForm = new FormGroup( {
@@ -77,11 +80,13 @@ export class ModalCreateTileServerComponent implements OnInit {
 
   searchQMS(ev: any, query: string) {
     ev.preventDefault();
+    this.loadingSearch = true;
     let qmsQueryOptions = {
       type: this.tsCreateForm.get('type').value,
       ordering: this.tsCreateForm.get('ordering').value,
       order: this.tsCreateForm.get('order').value,
     }
+
     this.geoDataService.searchQMS(query, qmsQueryOptions);
   }
 
