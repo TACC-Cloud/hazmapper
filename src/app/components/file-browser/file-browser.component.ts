@@ -35,7 +35,6 @@ export class FileBrowserComponent implements OnInit {
   public selectedFiles: Map<string, RemoteFile> = new Map();
 
   public firstFileIndex: number;
-  public lastFileIndex: number;
   public fileDeselectMode: boolean = false;
 
   public projects: Array<SystemSummary>;
@@ -141,53 +140,42 @@ export class FileBrowserComponent implements OnInit {
     let minIndex = Math.min(firstFileIndex, lastFileIndex);
 
     for (let i = minIndex; i < maxIndex + 1; ++i) {
-      if (this.checkIfSelectable(this.filesList[i])) {
-        this.addSelectedFile(this.filesList[i]);
-      }
+      this.addSelectedFile(this.filesList[i], -1);
     }
 
     if (again) {
-        if (this.checkIfSelectable(this.filesList[firstFileIndex])) {
-          this.addSelectedFile(this.filesList[firstFileIndex]);
-        }
+      this.addSelectedFile(this.filesList[firstFileIndex], -1);
+    }
+  }
+
+  selectShift(index: number, file: RemoteFile) {
+    if (this.firstFileIndex != undefined && this.firstFileIndex != index) {
+      this.addRangeFiles(this.firstFileIndex, index, true);
+    } else {
+      this.addSelectedFile(file, index);
     }
   }
 
   selectFilesShiftCtrlClick(index: number, file: RemoteFile) {
     if (this.selectedFiles.has(this.filesList[index].path)) {
+      // Deselecting file among selected files
       this.selectedFiles.delete(this.filesList[index].path);
       this.fileDeselectMode = true;
+      this.firstFileIndex = undefined;
     } else {
       if (!this.fileDeselectMode) {
-        if (this.firstFileIndex != undefined && this.firstFileIndex != index) {
-          this.lastFileIndex = index;
-          this.addRangeFiles(this.firstFileIndex, index, true);
-        } else {
-          if (this.checkIfSelectable(file)) {
-            this.firstFileIndex = index;
-            this.addSelectedFile(file);
-          }
-        }
+        this.selectShift(index, file);
       } else {
-        if (this.checkIfSelectable(file)) {
-          this.addSelectedFile(file);
-        }
+        // Selecting unselected after deselected is true to allow indexing
+        this.fileDeselectMode = false;
+        this.addSelectedFile(file, index);
       }
     }
   }
 
   selectFilesShiftClick(index: number, file: RemoteFile) {
-    if (this.firstFileIndex != undefined && this.firstFileIndex != index && !this.fileDeselectMode) {
-      this.selectedFiles.clear()
-      this.addRangeFiles(this.firstFileIndex, index, false);
-    } else {
-      if (this.checkIfSelectable(file)) {
-        this.fileDeselectMode = false;
-        this.selectedFiles.clear()
-        this.firstFileIndex = index;
-        this.addSelectedFile(file);
-      }
-    }
+    this.selectedFiles.clear();
+    this.selectShift(index, file);
   }
 
   selectFilesCtrlClick(index: number, file: RemoteFile) {
@@ -195,20 +183,14 @@ export class FileBrowserComponent implements OnInit {
     if (this.selectedFiles.has(file.path)) {
       this.selectedFiles.delete(file.path);
     } else {
-      if (this.checkIfSelectable(file)) {
-        this.firstFileIndex = index;
-        this.addSelectedFile(file);
-      }
+      this.addSelectedFile(file, index);
     }
   }
 
   selectFilesClick(index: number, file: RemoteFile) {
     this.fileDeselectMode = false;
     this.selectedFiles.clear();
-    if (this.checkIfSelectable(file)) {
-      this.firstFileIndex = index;
-      this.addSelectedFile(file);
-    }
+    this.addSelectedFile(file, index);
   }
 
   select(event: any, index: number, file: RemoteFile) {
@@ -235,13 +217,19 @@ export class FileBrowserComponent implements OnInit {
     }
   }
 
-  addSelectedFile(file: RemoteFile) {
-    if (this.single) {
-      this.selectedFiles.clear();
+  addSelectedFile(file: RemoteFile, index: number) {
+    if (index != -1) {
+      this.firstFileIndex = index;
     }
-    this.selectedFiles.set(file.path, file);
-    const tmp = Array.from(this.selectedFiles.values());
-    this.selection.next(tmp);
+
+    if (this.checkIfSelectable(file)) {
+      if (this.single) {
+        this.selectedFiles.clear();
+      }
+      this.selectedFiles.set(file.path, file);
+      const tmp = Array.from(this.selectedFiles.values());
+      this.selection.next(tmp);
+    }
   }
 
 }
