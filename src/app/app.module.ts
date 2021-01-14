@@ -45,6 +45,10 @@ import { ToastrModule } from 'ngx-toastr';
 import { ModalConfirmationBodyComponent } from './components/modal-confirmation-body/modal-confirmation-body.component';
 import { UserRowComponent } from './components/user-row/user-row.component';
 import { EditNameInputComponent } from './components/edit-name-input/edit-name-input.component';
+import { StreetviewPanelComponent } from './components/streetview-panel/streetview-panel.component';
+import { ModalStreetviewPublishComponent } from './components/modal-streetview-publish/modal-streetview-publish.component';
+import { StreetviewMapillaryCallbackComponent } from './components/streetview-mapillary-callback/streetview-mapillary-callback.component';
+import { StreetviewGoogleCallbackComponent } from './components/streetview-google-callback/streetview-google-callback.component';
 
 @NgModule({
   declarations: [
@@ -74,6 +78,10 @@ import { EditNameInputComponent } from './components/edit-name-input/edit-name-i
     ModalConfirmationBodyComponent,
     UserRowComponent,
     EditNameInputComponent,
+    StreetviewPanelComponent,
+    ModalStreetviewPublishComponent,
+    StreetviewMapillaryCallbackComponent,
+    StreetviewGoogleCallbackComponent,
   ],
   imports: [
     CommonModule,
@@ -118,7 +126,7 @@ import { EditNameInputComponent } from './components/edit-name-input/edit-name-i
     ModalFileBrowserComponent,
     ModalCreatePointCloudComponent,
     ModalCreateOverlayComponent,
+    ModalStreetviewPublishComponent,
     ModalPointCloudInfoComponent]
 })
 export class AppModule { }
-

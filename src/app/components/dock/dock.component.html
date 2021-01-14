@@ -40,6 +40,16 @@
         </div>
       </button>
     </div>
+    <div class="dock-button" [ngClass]="{'active': panelsDisplay.streetview}">
+      <button (click)="showPanel('streetview')"  [disabled]="!activeProject">
+        <div>
+          <img class="dock-button-icon" src="assets/streetview.png" width="32px">
+        </div>
+        <div class="dock-button-label">
+          <span>Streetview</span>
+        </div>
+      </button>
+    </div>
     <div class="dock-button" [ngClass]="{'active': panelsDisplay.users}">
       <button (click)="showPanel('users')"  [disabled]="!activeProject">
         <div>
@@ -67,6 +77,7 @@
     <app-measure-panel *ngIf="panelsDisplay.measure" ></app-measure-panel>
     <app-settings-panel *ngIf="panelsDisplay.settings" ></app-settings-panel>
     <app-point-clouds-panel *ngIf="panelsDisplay.pointClouds"></app-point-clouds-panel>
+    <app-streetview-panel *ngIf="panelsDisplay.streetview"></app-streetview-panel>
     <app-users-panel *ngIf="panelsDisplay.users"></app-users-panel>
   </div>
 </div>

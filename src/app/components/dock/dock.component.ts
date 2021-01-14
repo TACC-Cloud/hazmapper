@@ -10,6 +10,7 @@ interface IpanelsDisplay {
   measure: boolean;
   settings: boolean;
   pointClouds: boolean;
+  streetview: boolean;
   users: boolean;
 }
 
@@ -33,6 +34,7 @@ export class DockComponent implements OnInit {
       pointClouds: false,
       measure: false,
       settings: false,
+      streetview: false,
       users: false,
     };
 
@@ -56,4 +58,3 @@ export class DockComponent implements OnInit {
   }
 
 }
-

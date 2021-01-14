@@ -1,0 +1,36 @@
+<h4>Select Where to Publish</h4>
+<small><em>Can select both</em></small>
+<div class="select-publish-server grid-x align-center">
+  <div class="publish-container">
+    <label for="publishMapillary">
+      <input id="publishMapillary"
+             class="hidden-checkbox"
+             [(ngModel)]="publishToMapillary"
+             [disabled]="!streetviewAuth.mapillary"
+             type="checkbox"/>
+      <span [tooltip]="!streetviewAuth.mapillary ? 'Not authenticated to Mapillary!' : ''">Mapillary</span>
+    </label>
+  </div>
+  <div class="publish-container">
+    <label for="publishGoogle">
+      <input id="publishGoogle"
+             class="hidden-checkbox"
+             [(ngModel)]="publishToGoogle"
+             [disabled]="!streetviewAuth.google"
+             type="checkbox"/>
+      <span [tooltip]="!streetviewAuth.google ? 'Not authenticated to Google!' : ''">Google</span>
+    </label>
+  </div>
+</div>
+
+<app-file-browser
+  [single]=single
+  [allowFolders]=allowFolders
+  [allowedExtensions]=allowedExtensions
+  (selection)="onSelect($event)">
+</app-file-browser>
+
+<div>
+  <button class="button warning" (click)="cancel()">Cancel</button>
+  <button class="button" [disabled]="!(selectedFiles.length && (publishToGoogle || publishToMapillary))" (click)="publish()">Publish</button>
+</div>
