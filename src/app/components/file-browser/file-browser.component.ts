@@ -6,7 +6,7 @@ import {SystemSummary} from 'ng-tapis';
 import {TapisFilesService} from '../../services/tapis-files.service';
 import {BsModalRef} from 'ngx-foundation/modal/bs-modal-ref.service';
 import {AgaveSystemsService} from '../../services/agave-systems.service';
-import {take} from 'rxjs/operators';
+import {max, take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-file-browser',
@@ -33,6 +33,10 @@ export class FileBrowserComponent implements OnInit {
   public hasError: boolean;
   private offset = 0;
   public selectedFiles: Map<string, RemoteFile> = new Map();
+
+  public firstFileIndex: number;
+  public fileDeselectMode: boolean = false;
+
   public projects: Array<SystemSummary>;
   private selectedSystem: SystemSummary;
   public myDataSystem: SystemSummary;
@@ -131,10 +135,75 @@ export class FileBrowserComponent implements OnInit {
       );
   }
 
-  select(file: RemoteFile) {
-    // make sure the extension is selectable
-    if (this.checkIfSelectable(file)) {
-      this.addSelectedFile(file);
+  addRangeFiles(firstFileIndex: number, lastFileIndex: number, again: boolean) {
+    let maxIndex = Math.max(firstFileIndex, lastFileIndex);
+    let minIndex = Math.min(firstFileIndex, lastFileIndex);
+
+    for (let i = minIndex; i < maxIndex + 1; ++i) {
+      this.addSelectedFile(this.filesList[i], -1);
+    }
+
+    if (again) {
+      this.addSelectedFile(this.filesList[firstFileIndex], -1);
+    }
+  }
+
+  selectShift(index: number, file: RemoteFile) {
+    if (this.firstFileIndex != undefined && this.firstFileIndex != index) {
+      this.addRangeFiles(this.firstFileIndex, index, true);
+    } else {
+      this.addSelectedFile(file, index);
+    }
+  }
+
+  selectFilesShiftCtrlClick(index: number, file: RemoteFile) {
+    if (this.selectedFiles.has(this.filesList[index].path)) {
+      // Deselecting file among selected files
+      this.selectedFiles.delete(this.filesList[index].path);
+      this.fileDeselectMode = true;
+      this.firstFileIndex = undefined;
+    } else {
+      if (!this.fileDeselectMode) {
+        this.selectShift(index, file);
+      } else {
+        // Selecting unselected after deselected is true to allow indexing
+        this.fileDeselectMode = false;
+        this.addSelectedFile(file, index);
+      }
+    }
+  }
+
+  selectFilesShiftClick(index: number, file: RemoteFile) {
+    this.selectedFiles.clear();
+    this.selectShift(index, file);
+  }
+
+  selectFilesCtrlClick(index: number, file: RemoteFile) {
+    this.fileDeselectMode = false;
+    if (this.selectedFiles.has(file.path)) {
+      this.selectedFiles.delete(file.path);
+    } else {
+      this.addSelectedFile(file, index);
+    }
+  }
+
+  selectFilesClick(index: number, file: RemoteFile) {
+    this.fileDeselectMode = false;
+    this.selectedFiles.clear();
+    this.addSelectedFile(file, index);
+  }
+
+  select(event: any, index: number, file: RemoteFile) {
+    event.stopPropagation();
+
+    if (event.shiftKey && event.ctrlKey) {
+      this.selectFilesShiftCtrlClick(index, file);
+    } else if (event.shiftKey) {
+      this.selectFilesShiftClick(index, file);
+    } else if(event.ctrlKey) {
+      this.selectFilesCtrlClick(index, file);
+    } else {
+      this.selectFilesClick(index, file)
     }
   }
 
@@ -148,18 +217,19 @@ export class FileBrowserComponent implements OnInit {
     }
   }
 
-  addSelectedFile(file: RemoteFile) {
+  addSelectedFile(file: RemoteFile, index: number) {
+    if (index != -1) {
+      this.firstFileIndex = index;
+    }
 
-    if (this.selectedFiles.has(file.path)) {
-      this.selectedFiles.delete(file.path);
-    } else {
+    if (this.checkIfSelectable(file)) {
       if (this.single) {
         this.selectedFiles.clear();
       }
       this.selectedFiles.set(file.path, file);
+      const tmp = Array.from(this.selectedFiles.values());
+      this.selection.next(tmp);
     }
-    const tmp = Array.from(this.selectedFiles.values());
-    this.selection.next(tmp);
   }
 
 }
