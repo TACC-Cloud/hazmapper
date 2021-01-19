@@ -366,7 +366,7 @@ export class GeoDataService {
   getTileServers(projectId: number): void {
     this.http.get(environment.apiUrl + `/projects/${projectId}/tile-servers/`).subscribe((tsv: Array<TileServer>) => {
       tsv.sort((a, b) => {
-        return a.uiOptions.zIndex - b.uiOptions.zIndex;
+        return b.uiOptions.zIndex - a.uiOptions.zIndex;
       });
 
       this._tileServers.next(tsv);
@@ -375,18 +375,18 @@ export class GeoDataService {
   }
 
   addTileServer(projectId: number, tileServer: TileServer) {
+    // NOTE: Here to give new layers zIndices without affecting previous order
     this.tileServers$.pipe(take(1)).subscribe(tileServerList => {
       if (tileServerList) {
         // TODO: Figure out a better way to handle ZIndex
-        let zIndexMax = -(tileServerList.length + 1);
+        let zIndexMax = -1;
         tileServerList.forEach(ts => {
           ts.uiOptions.zIndex = zIndexMax;
-          zIndexMax++;
+          zIndexMax--;
         });
         this.saveTileServers(projectId, tileServerList);
       }
-
-      tileServer.uiOptions.zIndex = -1;
+      tileServer.uiOptions.zIndex = 0;
     });
 
     this.http.post(environment.apiUrl + `/projects/${projectId}/tile-servers/`, tileServer)

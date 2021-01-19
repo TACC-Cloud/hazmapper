@@ -150,7 +150,7 @@ export class MapComponent implements OnInit {
           const feat = L.geoJSON(d, geojsonOptions);
           feat.on('click', (ev) => { this.featureClickHandler(ev); } );
 
-          feat.setZIndex(this.tileServers.length + 1);
+          feat.setZIndex(1);
 
           if (d.geometry.type === 'Point') {
             markers.addLayer(feat);

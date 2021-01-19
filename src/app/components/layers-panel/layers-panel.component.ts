@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChildren, QueryList, TemplateRef} from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChildren, QueryList, TemplateRef } from '@angular/core';
 import {GeoDataService} from '../../services/geo-data.service';
 import {Overlay, Project, TileServer} from '../../models/models';
 import {AppEnvironment, environment} from '../../../environments/environment';
@@ -81,10 +81,11 @@ export class LayersPanelComponent implements OnInit {
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.tileServers, event.previousIndex, event.currentIndex);
     // TODO: Figure out a better way to handle ZIndex
-    let zIndexMax = -(this.tileServers.length);
+    // let zIndexMax = this.tileServers.length;
+    let zIndexMax = 0;
     this.tileServers.forEach(ts => {
       ts.uiOptions.zIndex = zIndexMax;
-      zIndexMax++;
+      zIndexMax--;
     });
 
     this.geoDataService.updateTileServers(this.activeProject.id, this.tileServers);

@@ -99,7 +99,7 @@
     </div>
 
     <div class="tile-server-save-button">
-      <button class="button small success" [disabled]="dirtyOptions" (click)="saveTileOptions()">Save Layer Options</button>
+      <button class="button small success" [disabled]="!dirtyOptions" (click)="saveTileOptions()">Save Layer Options</button>
     </div>
     <hr>
 
