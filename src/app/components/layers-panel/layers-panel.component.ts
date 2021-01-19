@@ -18,6 +18,8 @@ import {TapisFilesService} from '../../services/tapis-files.service';
 export class LayersPanelComponent implements OnInit {
   @ViewChildren('activeText') activeInputs: QueryList<ElementRef>;
 
+  dragHeight: number;
+  releaseHeight: number;
   basemap: string;
   dirtyOptions: boolean;
   overlays: Array<Overlay>;
@@ -144,8 +146,10 @@ export class LayersPanelComponent implements OnInit {
     ts.uiOptions.showDescription = !ts.uiOptions.showDescription;
   }
 
-  changeMovePointer(gripHandle: any, what: boolean) {
-    gripHandle.style.cursor = what ? 'move' : 'auto';
+  changeMovePointer(ev: any, gripHandle: any, moving: boolean) {
+    gripHandle.style.cursor = moving ? 'move' : 'auto';
+    this.dragHeight = moving ? ev.source.element.nativeElement.offsetHeight : this.releaseHeight;
+    this.releaseHeight = ev.source.element.nativeElement.offsetHeight;
   }
 
   saveTileOptions() {

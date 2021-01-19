@@ -13,9 +13,10 @@
            class="tile-servers"
            cdkDragLockAxis="y"
            cdkDragBoundary=".tile-servers-list"
-           (cdkDragStarted)="changeMovePointer(cdkList, true)"
-           (cdkDragReleased)="changeMovePointer(cdkList, false)"
+           (cdkDragStarted)="changeMovePointer($event, cdkList, true)"
+           (cdkDragReleased)="changeMovePointer($event, cdkList, false)"
            cdkDrag>
+        <div [ngStyle]="{'min-height.px': height}" class="drag-list-placeholder" *cdkDragPlaceholder></div>
         <div class="grid-x tile-server-container">
           <div class="grid-x small-8 tile-server-left">
             <div #gripHandle
