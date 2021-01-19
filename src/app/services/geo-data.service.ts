@@ -345,20 +345,17 @@ export class GeoDataService {
   }
 
   public saveTileServers(projectId: number, tileServers: Array<TileServer>): void {
-    if (this._dirtyTileOptions.value) {
-      this.http.put(environment.apiUrl + `/projects/${projectId}/tile-servers/`, tileServers)
-        .subscribe( (resp) => {
-          this.getTileServers(projectId);
+    this.http.put(environment.apiUrl + `/projects/${projectId}/tile-servers/`, tileServers)
+      .subscribe( (resp) => {
+        this.getTileServers(projectId);
+        if (this._dirtyTileOptions.value) {
           this.notificationsService.showSuccessToast('Tile layer options saved!');
-        }, (error => {
+        }
+      }, (error => {
+        if (this._dirtyTileOptions.value) {
           this.notificationsService.showErrorToast('Tile layer options could not be saved!');
-        }));
-    } else {
-      this.http.put(environment.apiUrl + `/projects/${projectId}/tile-servers/`, tileServers)
-        .subscribe( (resp) => {
-          this.getTileServers(projectId);
-        });
-    }
+        }
+      }));
   }
 
   public toggleTileServer(projectId: number, ts: TileServer) {
