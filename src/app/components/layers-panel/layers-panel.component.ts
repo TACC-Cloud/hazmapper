@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChildren, QueryList} from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChildren, QueryList, TemplateRef} from '@angular/core';
 import {GeoDataService} from '../../services/geo-data.service';
 import {Overlay, Project, TileServer} from '../../models/models';
 import {AppEnvironment, environment} from '../../../environments/environment';
@@ -24,6 +24,7 @@ export class LayersPanelComponent implements OnInit {
   tileServers: Array<TileServer>;
   environment: AppEnvironment;
   activeProject: Project;
+  modalRef: BsModalRef;
 
   constructor(private geoDataService: GeoDataService,
               private bsModalService: BsModalService,
@@ -103,6 +104,10 @@ export class LayersPanelComponent implements OnInit {
         this.geoDataService.importFileFromTapis(this.activeProject.id, files);
       }
     });
+  }
+
+  openDeleteTileServerModal(template: TemplateRef<any>) {
+    this.modalRef = this.bsModalService.show(template, {class: 'tiny'});
   }
 
   updateName(name: string, ts: TileServer) {
