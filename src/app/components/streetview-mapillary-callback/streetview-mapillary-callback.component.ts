@@ -15,6 +15,7 @@ export class StreetviewMapillaryCallbackComponent implements OnInit {
   ngOnInit() {
     const params = this.route.snapshot.queryParams;
     this.streetviewService.getToken(params, 'mapillary');
-  }
+    // this.streetviewService.getUserStreetviewTokens('test');
 
+  }
 }

@@ -4,7 +4,8 @@
   </div>
   <div class="dock-panel-content">
 
-    <div *ngIf="(streetviewAuth.google || streetviewAuth.mapillary); else notAuthenticated">
+    <!-- <div *ngIf="(streetviewTokens.google != '' || streetviewTokens.mapillary != ''); else notAuthenticated"> -->
+    <div *ngIf="(isLoggedIn('google') || isLoggedIn('mapillary')); else notAuthenticated">
       <!-- You are Authenticated to Mapillary as Username! -->
       <!-- TODO https://get.foundation/sites/docs/tabs.html -->
       <div class="publish-container grid-x align-right">
@@ -50,7 +51,8 @@
 
         <tab heading="Accounts">
           <h4>Google</h4>
-          <div *ngIf="streetviewAuth.google; else authGoogle">
+          <!-- <div *ngIf="streetviewTokens.google != ''; else authGoogle"> -->
+          <div *ngIf="isLoggedIn('google'); else authGoogle">
             Account information
             <button class="button" (click)="logout('google')">Logout</button>
           </div>
@@ -63,7 +65,8 @@
 
 
           <h4>Mapillary</h4>
-          <div *ngIf="streetviewAuth.mapillary; else authMapillary">
+          <!-- <div *ngIf="streetviewTokens.mapillary != ''; else authMapillary"> -->
+          <div *ngIf="isLoggedIn('mapillary'); else authMapillary">
             Account information
             <button class="button" (click)="logout('mapillary')">Logout</button>
           </div>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProjectsService } from '../../services/projects.service';
 import { Project } from '../../models/models';
 import { GeoDataService } from '../../services/geo-data.service';
+import {StreetviewService} from '../../services/streetview.service';
 import {LatLng} from 'leaflet';
 import {skip} from 'rxjs/operators';
 import {BsModalRef, BsModalService} from 'ngx-foundation';
@@ -16,7 +17,6 @@ import {NotificationsService} from "../../services/notifications.service";
   styleUrls: ['./control-bar.component.styl']
 })
 export class ControlBarComponent implements OnInit {
-
   public projects: Project[] = [];
   public selectedProject: Project;
   public mapMouseLocation: LatLng = new LatLng(0, 0);
@@ -26,11 +26,13 @@ export class ControlBarComponent implements OnInit {
   constructor(private projectsService: ProjectsService,
               private geoDataService: GeoDataService,
               private notificationsService: NotificationsService,
+              private streetviewService: StreetviewService,
               private bsModalService: BsModalService,
               ) { }
 
   ngOnInit() {
     this.projectsService.getProjects();
+    this.streetviewService.getUserStreetviewTokens();
     this.projectsService.projects.subscribe( (projects) => {
       this.projects = projects;
       this.loading = false;

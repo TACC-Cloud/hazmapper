@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {BsModalRef, BsModalService} from 'ngx-foundation';
 import {AuthenticatedUser, AuthService} from '../../services/authentication.service';
 import {StreetviewService} from '../../services/streetview.service';
-import {StreetviewAuthentication} from '../../models/streetview';
+import {StreetviewAuthentication, StreetviewTokens} from '../../models/streetview';
 import {ModalStreetviewPublishComponent} from '../modal-streetview-publish/modal-streetview-publish.component';
 
 @Component({
@@ -85,7 +85,8 @@ export class StreetviewPanelComponent implements OnInit {
     },
   ];
 
-  streetviewAuth: StreetviewAuthentication;
+  // streetviewAuth: StreetviewAuthentication;
+  // streetviewTokens: StreetviewTokens;
 
   constructor(private bsModalService: BsModalService,
               private streetviewService: StreetviewService,
@@ -96,9 +97,13 @@ export class StreetviewPanelComponent implements OnInit {
       this.currentUser = next;
     });
 
-    this.streetviewService.streetviewAuthStatus.subscribe( (next: StreetviewAuthentication) => {
-      this.streetviewAuth = next;
-    });
+    // this.streetviewService.streetviewAuthStatus.subscribe( (next: StreetviewAuthentication) => {
+    //   this.streetviewAuth = next;
+    // });
+
+    // this.streetviewService.streetviewTokens.subscribe( (next: StreetvieTokens) => {
+    //   this.streetviewTokens = next;
+    // });
   }
 
   openStreetviewPublishModal() {
@@ -115,4 +120,9 @@ export class StreetviewPanelComponent implements OnInit {
   logout(svService: string) {
     this.streetviewService.logout(svService);
   }
+
+  isLoggedIn(svService: string) {
+    return this.streetviewService.isLoggedIn(svService);
+  }
+
 }
