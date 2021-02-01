@@ -32,7 +32,6 @@ export class ControlBarComponent implements OnInit {
 
   ngOnInit() {
     this.projectsService.getProjects();
-    this.streetviewService.getUserStreetviewTokens();
     this.projectsService.projects.subscribe( (projects) => {
       this.projects = projects;
       this.loading = false;

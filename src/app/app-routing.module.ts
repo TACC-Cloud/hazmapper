@@ -4,8 +4,6 @@ import { NotFoundComponent} from './components/notfound/notfound.component';
 import {AuthService} from './services/authentication.service';
 import {MainComponent} from './components/main/main.component';
 import { CallbackComponent } from './components/callback/callback.component';
-import { StreetviewGoogleCallbackComponent } from './components/streetview-google-callback/streetview-google-callback.component';
-import { StreetviewMapillaryCallbackComponent } from './components/streetview-mapillary-callback/streetview-mapillary-callback.component';
 
 @Injectable()
 export class Activate implements CanActivate {
@@ -23,8 +21,6 @@ export class Activate implements CanActivate {
 const routes: Routes = [
   {path: '', component: MainComponent, canActivate: [Activate]},
   {path: 'callback', component: CallbackComponent},
-  {path: 'streetview/mapillary', component: StreetviewMapillaryCallbackComponent},
-  {path: 'streetview/google', component: StreetviewGoogleCallbackComponent},
   {path: '404', component: NotFoundComponent }];
 
 @NgModule({

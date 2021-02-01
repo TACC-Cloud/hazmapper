@@ -6,9 +6,9 @@
       <input id="publishMapillary"
              class="hidden-checkbox"
              [(ngModel)]="publishToMapillary"
-             [disabled]="!streetviewAuth.mapillary"
+             [disabled]="!isLoggedIn('mapillary')"
              type="checkbox"/>
-      <span [tooltip]="!streetviewAuth.mapillary ? 'Not authenticated to Mapillary!' : ''">Mapillary</span>
+      <span [tooltip]="!isLoggedIn('mapillary') ? 'Not authenticated to Mapillary!' : ''">Mapillary</span>
     </label>
   </div>
   <div class="publish-container">
@@ -16,9 +16,9 @@
       <input id="publishGoogle"
              class="hidden-checkbox"
              [(ngModel)]="publishToGoogle"
-             [disabled]="!streetviewAuth.google"
+             [disabled]="!isLoggedIn('google')"
              type="checkbox"/>
-      <span [tooltip]="!streetviewAuth.google ? 'Not authenticated to Google!' : ''">Google</span>
+      <span [tooltip]="!isLoggedIn('google') ? 'Not authenticated to Google!' : ''">Google</span>
     </label>
   </div>
 </div>

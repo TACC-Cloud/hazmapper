@@ -3,7 +3,6 @@ import { BsModalRef, BsModalService } from 'ngx-foundation/modal';
 import { RemoteFile} from 'ng-tapis/models/remote-file';
 import { Subject } from 'rxjs';
 import { StreetviewService } from '../../services/streetview.service';
-import { StreetviewAuthentication } from '../../models/streetview';
 import { TapisFilesService } from '../../services/tapis-files.service';
 
 @Component({
@@ -18,8 +17,6 @@ export class ModalStreetviewPublishComponent implements OnInit {
   selectedFiles: Array<RemoteFile> = [];
   // TODO Type
   public onClose: Subject<any> = new Subject<any>();
-
-  streetviewAuth: StreetviewAuthentication;
 
   publishToMapillary: boolean = false;
   publishToGoogle: boolean = false;
@@ -51,5 +48,9 @@ export class ModalStreetviewPublishComponent implements OnInit {
       publishToGoogle: this.publishToGoogle
     });
     this.bsModalRef.hide();
+  }
+
+  isLoggedIn(svService: string) {
+    return this.streetviewService.getLocalToken(svService);
   }
 }

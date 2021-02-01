@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {BsModalRef, BsModalService} from 'ngx-foundation';
+import { Project } from '../../models/models';
 import {AuthenticatedUser, AuthService} from '../../services/authentication.service';
 import {StreetviewService} from '../../services/streetview.service';
 import {StreetviewAuthentication, StreetviewTokens} from '../../models/streetview';
+import {ProjectsService} from '../../services/projects.service'
 import {ModalStreetviewPublishComponent} from '../modal-streetview-publish/modal-streetview-publish.component';
 
 @Component({
@@ -12,6 +14,7 @@ import {ModalStreetviewPublishComponent} from '../modal-streetview-publish/modal
 })
 export class StreetviewPanelComponent implements OnInit {
 
+  private activeProject: Project;
   private currentUser: AuthenticatedUser;
   uploadLogs: any = [
     {
@@ -85,25 +88,21 @@ export class StreetviewPanelComponent implements OnInit {
     },
   ];
 
-  // streetviewAuth: StreetviewAuthentication;
-  // streetviewTokens: StreetviewTokens;
-
   constructor(private bsModalService: BsModalService,
               private streetviewService: StreetviewService,
+              private projectsService: ProjectsService,
               private authService: AuthService,) { }
 
   ngOnInit() {
     this.authService.currentUser.subscribe( (next) => {
       this.currentUser = next;
     });
+    this.projectsService.activeProject.subscribe( (next) => {
+      this.activeProject = next;
+    });
 
-    // this.streetviewService.streetviewAuthStatus.subscribe( (next: StreetviewAuthentication) => {
-    //   this.streetviewAuth = next;
-    // });
-
-    // this.streetviewService.streetviewTokens.subscribe( (next: StreetvieTokens) => {
-    //   this.streetviewTokens = next;
-    // });
+    this.streetviewService.login('google', this.activeProject.id, this.currentUser.username, false);
+    this.streetviewService.login('mapillary', this.activeProject.id, this.currentUser.username, false);
   }
 
   openStreetviewPublishModal() {
@@ -114,15 +113,14 @@ export class StreetviewPanelComponent implements OnInit {
   }
 
   login(svService: string) {
-    this.streetviewService.login(svService);
+    this.streetviewService.login(svService, this.activeProject.id, this.currentUser.username, true);
   }
 
   logout(svService: string) {
-    this.streetviewService.logout(svService);
+    this.streetviewService.logout(svService, this.activeProject.id, this.currentUser.username);
   }
 
   isLoggedIn(svService: string) {
-    return this.streetviewService.isLoggedIn(svService);
+    return this.streetviewService.getLocalToken(svService);
   }
-
 }

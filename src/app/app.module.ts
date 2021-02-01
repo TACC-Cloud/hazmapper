@@ -47,8 +47,6 @@ import { UserRowComponent } from './components/user-row/user-row.component';
 import { EditNameInputComponent } from './components/edit-name-input/edit-name-input.component';
 import { StreetviewPanelComponent } from './components/streetview-panel/streetview-panel.component';
 import { ModalStreetviewPublishComponent } from './components/modal-streetview-publish/modal-streetview-publish.component';
-import { StreetviewMapillaryCallbackComponent } from './components/streetview-mapillary-callback/streetview-mapillary-callback.component';
-import { StreetviewGoogleCallbackComponent } from './components/streetview-google-callback/streetview-google-callback.component';
 
 @NgModule({
   declarations: [
@@ -80,8 +78,6 @@ import { StreetviewGoogleCallbackComponent } from './components/streetview-googl
     EditNameInputComponent,
     StreetviewPanelComponent,
     ModalStreetviewPublishComponent,
-    StreetviewMapillaryCallbackComponent,
-    StreetviewGoogleCallbackComponent,
   ],
   imports: [
     CommonModule,
