@@ -36,6 +36,7 @@ import { FeatureGeometryComponent } from './components/feature-geometry/feature-
 import { PointCloudsPanelComponent } from './components/point-clouds-panel/point-clouds-panel.component';
 import { PointCloudPanelRowComponent } from './components/point-cloud-panel-row/point-cloud-panel-row.component';
 import { ModalCreateOverlayComponent } from './components/modal-create-overlay/modal-create-overlay.component';
+import { ModalCreateTileServerComponent } from './components/modal-create-tile-server/modal-create-tile-server.component';
 import { FileTreeNodeComponent } from './components/file-tree-node/file-tree-node.component';
 import { ModalPointCloudInfoComponent } from './components/modal-point-cloud-info/modal-point-cloud-info.component';
 import { FileBrowserComponent } from './components/file-browser/file-browser.component';
@@ -45,6 +46,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { ModalConfirmationBodyComponent } from './components/modal-confirmation-body/modal-confirmation-body.component';
 import { UserRowComponent } from './components/user-row/user-row.component';
 import { EditNameInputComponent } from './components/edit-name-input/edit-name-input.component';
+import {DragDropModule, CDK_DRAG_CONFIG} from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -67,6 +69,7 @@ import { EditNameInputComponent } from './components/edit-name-input/edit-name-i
     PointCloudsPanelComponent,
     PointCloudPanelRowComponent,
     ModalCreateOverlayComponent,
+    ModalCreateTileServerComponent,
     FileTreeNodeComponent,
     ModalPointCloudInfoComponent,
     FileBrowserComponent,
@@ -91,7 +94,8 @@ import { EditNameInputComponent } from './components/edit-name-input/edit-name-i
     BsDropdownModule.forRoot(),
     TooltipModule.forRoot(),
     TabsModule.forRoot(),
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    DragDropModule
   ],
   providers: [
     AuthService,
@@ -109,6 +113,14 @@ import { EditNameInputComponent } from './components/edit-name-input/edit-name-i
     {
       provide: APP_BASE_HREF,
       useValue: environment.baseHref
+    },
+    {
+      provide: CDK_DRAG_CONFIG,
+      useValue: {
+        dragStartThreshold: 30,
+        pointerDirectionChangeThreshold: 5,
+        zIndex: 10000
+      }
     }
   ],
   bootstrap: [AppComponent],
@@ -118,7 +130,7 @@ import { EditNameInputComponent } from './components/edit-name-input/edit-name-i
     ModalFileBrowserComponent,
     ModalCreatePointCloudComponent,
     ModalCreateOverlayComponent,
+    ModalCreateTileServerComponent,
     ModalPointCloudInfoComponent]
 })
 export class AppModule { }
-
