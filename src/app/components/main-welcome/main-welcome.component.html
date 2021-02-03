@@ -6,8 +6,7 @@
         <h1>
           Hazmapper
         </h1>
-        <i>Version 2.3D (<a href="https://github.com/TACC-cloud/hazmapper">Release Notes</a>)</i>
-
+        <div id="release-version">Version 2.3D (<a href="https://github.com/TACC-cloud/hazmapper">Release Notes</a>)</div>
       </div>
     </div>
 
@@ -18,7 +17,7 @@
             <b>Maps</b>
           </div>
           <div>
-            <div (click)="openCreateProjectModal()" style="cursor: pointer">
+            <div id="new-map" (click)="openCreateProjectModal()" style="cursor: pointer">
               <i class="fas fa-plus"></i>
               Create a New Map
             </div>
@@ -69,4 +68,8 @@
     </div>
 
   </div>
+</div>
+
+<div class="grid-x" id="sponsor" style="height: 50px padding-bottom: 10px">Powered by
+  <img src="assets/nsf.png" style="padding-left: 5px" width="50px">
 </div>
