@@ -23,7 +23,7 @@ export class Activate implements CanActivate {
 const routes: Routes = [
   {path: '', component: MainComponent, canActivate: [Activate], children: [
     {path: '', component: MainWelcomeComponent, canActivateChild: [Activate]},
-    {path: 'project/:projectId', component: MainProjectComponent},
+    {path: 'project/:projectUUID', component: MainProjectComponent},
   ]},
 
   {path: 'callback', component: CallbackComponent},

@@ -32,8 +32,8 @@ export class MainProjectComponent implements OnInit {
       }
     });
 
-    let activeProject = this.projects.find((p) => {
-      return parseInt(this.route.snapshot.paramMap.get('projectId')) == p.id;
+    const activeProject = this.projects.find((p) => {
+      return this.route.snapshot.paramMap.get('projectUUID') === p.uuid;
     });
 
     this.projectsService.setActiveProject(activeProject);

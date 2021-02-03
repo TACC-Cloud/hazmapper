@@ -1,71 +1,70 @@
-<div id=welcome-background class="grid-x">
+<div id=welcome-background class="grid-x align-center">
+  <div class="grid-y align-center">
+    <div id="welcome-information" class="grid-y">
+      <div id="welcome-logo">
+        <img src="assets/icon.png" width="100px">
+        <h1>
+          Hazmapper
+        </h1>
+        <i>Version 2.3D (<a href="https://github.com/TACC-cloud/hazmapper">Release Notes</a>)</i>
 
-  <div id=welcome-projects-list class="grid-y align-justify">
-    <div *ngIf="projects.length > 0; else noProject">
-      <div class="welcome-project grid-x align-justify" *ngFor="let p of projects">
-        {{p.name}}
-        <button (click)="routeToProject(p.id)" style="cursor: pointer">
-          <i class="fas fa-folder-open"></i>
-        </button>
       </div>
     </div>
 
-    <ng-template #noProject>
-      <div id="welcome-no-project">
-        <div>
-          No Map Exists!
+    <div class="grid-x align-center">
+      <div id=welcome-projects-list class="grid-y align-center" style="width: 600px">
+        <div class="welcome-project-header grid-x align-justify">
+          <div>
+            <b>Maps</b>
+          </div>
+          <div>
+            <div (click)="openCreateProjectModal()" style="cursor: pointer">
+              <i class="fas fa-plus"></i>
+              Create a New Map
+            </div>
+          </div>
         </div>
-        <div>
-          <a (click)="openCreateProjectModal()">
-            Create a New Map.
-          </a>
+
+        <div *ngIf="projects.length > 0; else noProject" class="project-list-container">
+          <div *ngFor="let p of projects; let indexOfelement=index;">
+            <div style="cursor: pointer; font-size: 14pz; padding: 12px; display: flex; jusitfy-content: space-between;"
+                 [ngClass]="{'welcome-project-light': (indexOfelement % 2) == 0, 'welcome-project-dark': (indexOfelement % 2) == 1, 'welcome-project': true, 'grid-x': true, 'align-justify' :true}">
+              {{p.name}}
+              <div>
+                <!-- <button style="cursor: pointer; padding: 0px 10px" (click)="routeToProject(p.id)"> -->
+                <!-- <button style="cursor: pointer; padding: 0px 10px" (click)="routeToProject(p.id)"> -->
+                <button style="cursor: pointer; padding: 0px 10px" (click)="routeToProject(p.uuid)">
+                  <i style="cursor: pointer" class="fas fa-folder-open"></i>
+                </button>
+                <button style="cursor: pointer; padding: 0px 10px" (click)=deleteProject(p)>
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <ng-template #noProject>
+          <div id="welcome-no-project">
+            <div>
+              No Map Exists!
+            </div>
+            <div>
+              Create a New Map.
+            </div>
+          </div>
+
+        </ng-template>
+
       </div>
 
-    </ng-template>
-
-  </div>
-
-  <div id="welcome-information" class="grid-y">
-    <div id="welcome-logo">
-      <h1>
-        Hazmapper
-      </h1>
-      <i>Awesome Mapping Tool</i>
     </div>
-
-
-    <div id="welcome-container" class="grid-x align-justify">
-
-      <div id="welcome-information-left" class="grid-y">
-        <div id="welcome-start">
-          <h3>
-            Start
-          </h3>
-          <a (click)="openCreateProjectModal()">
-            <i class="fas fa-plus"></i>
-            Create a New Map
-          </a>
-        </div>
-
-
-      </div>
-
-      <div id="welcome-information-right" class="grid-y">
-        <div id="welcome-release">
-          <h3>Release Notes
-          </h3>
-          <p>Item1 changed</p>
-          <p>Item2 changed</p>
-          <p>Item3 changed</p>
-        </div>
-        <div id="welcome-learn">
-          <h3>Learn
-          </h3>
-          <a href="https://www.designsafe-ci.org/rw/user-guide/workspace/hazmapper/">
-            User Guide
-          </a>
-        </div>
+    <div class="grid-x align-center" style="padding: 20px">
+      <div style="width: 550px; text-align: right">
+        <a href="https://www.designsafe-ci.org/rw/user-guide/workspace/hazmapper/">
+          <i class="fas fa-info-circle"></i>
+          User Guide
+        </a>
       </div>
     </div>
 

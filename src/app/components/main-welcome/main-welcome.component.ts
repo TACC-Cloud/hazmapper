@@ -52,4 +52,8 @@ export class MainWelcomeComponent implements OnInit {
   selectProject(p: Project): void {
     this.projectsService.setActiveProject(p);
   }
+
+  deleteProject(p: Project) {
+    this.projectsService.deleteProject(p);
+  }
 }

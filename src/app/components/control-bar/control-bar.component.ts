@@ -82,10 +82,14 @@ export class ControlBarComponent implements OnInit {
     this.router.navigate(['project', projectId]);
   }
 
+  routeToProjectUUID(projectUUID: string) {
+    this.router.navigate(['project', projectUUID]);
+  }
+
   selectProject(p: Project): void {
     this.projectsService.setActiveProject(p);
     if (p) {
-      this.routeToProject(p.id);
+      this.routeToProjectUUID(p.uuid);
     }
   }
 

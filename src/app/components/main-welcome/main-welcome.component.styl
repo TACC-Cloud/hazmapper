@@ -1,13 +1,27 @@
 :host
+  p
+    margin-bottom: 0px
   #welcome-background
     background-color: #f7f7f7
     height: calc(100% - 40px)
     #welcome-projects-list
       background-color: #ffffff
       width: 400px
-    .welcome-project
-      font-size: 24px
-      padding: 20px
+    .project-list-container
+      height: 270px
+      overflow-y: scroll
+    .welcome-project-header
+      font-size: 14px
+      padding: 12px
+      background-color: #d0d0d0
+    .welcome-project-light
+      font-size: 14px
+      padding: 12px
+      background-color: #ffffff
+    .welcome-project-dark
+      font-size: 14px
+      padding: 12px
+      background-color: #eeeeee
     .welcome-project:hover
       color: #ffffff
       background-color: #3c6fdb
@@ -16,16 +30,22 @@
       display: flex
       flex-direction: column
       font-size: 24px
-      padding-top: 150px
+      padding: 90px
+      height: 270px
       align-items: center
     #welcome-information
-      background-color: #f7f7f7    
+      background-color: #f7f7f7
       // padding: 150px 300px
-      padding: 150px
-      width: calc(100% - 400px)
+      // padding: 50px
+      // margin-bottom: 20px
+      width: 800px
+      // width: calc(100% - 400px)
       #welcome-logo
         display: flex
         flex-direction: column
         padding-bottom: 50px
+        justify-content: center
+        align-items: center
       #welcome-learn
         padding-top: 30px
+        
