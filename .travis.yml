@@ -3,11 +3,22 @@ node_js:
     - "12"
 sudo: true
 
+services:
+    - docker
+
 addons:
     chrome: stable
 
 before_script:
     - npm install
-
 script:
     - ng test --watch=false --browsers=ChromeHeadless --prod
+before_deploy:
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    - export GIT_HASH=$(git log --format=%h -1)
+    - docker build -t taccaci/hazmapper:$GIT_HASH .
+deploy:
+    provider: script
+    script: docker push taccaci/hazmapper:$GIT_HASH
+    on:
+        branch: master
