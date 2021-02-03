@@ -20,5 +20,3 @@ before_deploy:
 deploy:
     provider: script
     script: docker push taccaci/hazmapper:$GIT_HASH
-    on:
-        branch: master
