@@ -3,7 +3,7 @@ import {HttpClient, HttpEventType} from '@angular/common/http';
 import {BehaviorSubject, Observable, ReplaySubject, Subject} from 'rxjs';
 import {LatLng} from 'leaflet';
 import {FilterService} from './filter.service';
-import {AssetFilters, FeatureAsset, IFeatureAsset, IFileImportRequest, IPointCloud, Overlay} from '../models/models';
+import {AssetFilters, FeatureAsset, IFeatureAsset, IFileImportRequest, IPointCloud, Overlay, TileServer} from '../models/models';
 import { Feature, FeatureCollection} from '../models/models';
 import { environment } from '../../environments/environment';
 import {filter, map, take, toArray} from 'rxjs/operators';
@@ -33,6 +33,8 @@ export class GeoDataService {
   private activeOverlay$: Observable<Overlay> = this._activeOverlay.asObservable();
   private _selectedOverlays: BehaviorSubject<Array<Overlay>> = new BehaviorSubject<Array<Overlay>>([]);
   public readonly selectedOverlays$: Observable<Array<Overlay>> = this._selectedOverlays.asObservable();
+  private _tileServers: BehaviorSubject<any> = new BehaviorSubject<Array<TileServer>>(null);
+  private tileServers$: Observable<Array<TileServer>> = this._tileServers.asObservable();
   private _pointClouds: BehaviorSubject<Array<IPointCloud>> = new BehaviorSubject<Array<IPointCloud>>(null);
   private _assetFilters: AssetFilters;
   public readonly pointClouds: Observable<Array<IPointCloud>> = this._pointClouds.asObservable();
@@ -44,6 +46,14 @@ export class GeoDataService {
   public loadingPointCloudData: Observable<boolean> = this._loadingPointCloudData.asObservable();
   private _loadingOverlayData: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public loadingOverlayData: Observable<boolean> = this._loadingOverlayData.asObservable();
+  private _qmsSearchResults: BehaviorSubject<any> = new BehaviorSubject<Array<any>>(null);
+  private qmsSearchResults$: Observable<Array<any>> = this._qmsSearchResults.asObservable();
+  private _qmsServerResult: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  private qmsServerResult$: Observable<any> = this._qmsServerResult.asObservable();
+  private _selectedTileServer: BehaviorSubject<TileServer> = new BehaviorSubject<TileServer>(null);
+  public readonly selectedTileServer$: Observable<TileServer> = this._selectedTileServer.asObservable();
+  private _dirtyTileOptions: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public readonly dirtyTileOptions$: Observable<boolean> = this._dirtyTileOptions.asObservable();
 
   constructor(private http: HttpClient, private filterService: FilterService, private notificationsService: NotificationsService) {
 
@@ -298,8 +308,162 @@ export class GeoDataService {
     });
   }
 
+  deleteTileServer(projectId: number, tileServerId: number) {
+    this.http
+      .delete(environment.apiUrl + `/projects/${projectId}/tile-servers/${tileServerId}/`)
+      .subscribe((resp) => {
+        this.tileServers$.pipe(
+          take(1),
+          map((items: Array<TileServer>) =>
+            items.filter((item: TileServer) =>
+              item.id !== tileServerId)),
+        ).subscribe((results) =>  {
+          this._tileServers.next(results);
+          this.notificationsService.showSuccessToast('Tile layer deleted!');
+        });
+      }, (error => {
+        console.log(error);
+        this.notificationsService.showErrorToast('Tile layer could not be deleted!');
+      }));
+  }
+
+  public updateTileServers(projectId: number, tileServers: Array<TileServer>) {
+    this._tileServers.next(tileServers);
+    this._dirtyTileOptions.next(true);
+  }
+
+  public updateTileServer(projectId: number, tileServer: TileServer): void {
+    this.tileServers$.pipe(
+      take(1),
+      map((tss: Array<TileServer>) =>
+        tss.map((ts: TileServer) =>
+          ts.id == tileServer.id ? tileServer : ts)),
+    ).subscribe((results) =>  {
+      this._tileServers.next(results);
+      this._dirtyTileOptions.next(true);
+    });
+  }
+
+  public saveTileServers(projectId: number, tileServers: Array<TileServer>): void {
+    this.http.put(environment.apiUrl + `/projects/${projectId}/tile-servers/`, tileServers)
+      .subscribe( (resp) => {
+        this.getTileServers(projectId);
+        if (this._dirtyTileOptions.value) {
+          this.notificationsService.showSuccessToast('Tile layer options saved!');
+        }
+      }, (error => {
+        if (this._dirtyTileOptions.value) {
+          this.notificationsService.showErrorToast('Tile layer options could not be saved!');
+        }
+      }));
+  }
+
+  public toggleTileServer(projectId: number, ts: TileServer) {
+    ts.uiOptions.isActive = !ts.uiOptions.isActive;
+    this.updateTileServer(projectId, ts);
+  }
+
+  getTileServers(projectId: number): void {
+    this.http.get(environment.apiUrl + `/projects/${projectId}/tile-servers/`).subscribe((tsv: Array<TileServer>) => {
+      tsv.sort((a, b) => {
+        return b.uiOptions.zIndex - a.uiOptions.zIndex;
+      });
+
+      this._tileServers.next(tsv);
+      this._dirtyTileOptions.next(false);
+    });
+  }
+
+  addTileServer(projectId: number, tileServer: TileServer) {
+    // NOTE: Here to give new layers zIndices without affecting previous order
+    this.tileServers$.pipe(take(1)).subscribe(tileServerList => {
+      if (tileServerList) {
+        // TODO: Figure out a better way to handle ZIndex
+        let zIndexMax = -1;
+        tileServerList.forEach(ts => {
+          ts.uiOptions.zIndex = zIndexMax;
+          zIndexMax--;
+        });
+        this.saveTileServers(projectId, tileServerList);
+      }
+      tileServer.uiOptions.zIndex = 0;
+    });
+
+    this.http.post(environment.apiUrl + `/projects/${projectId}/tile-servers/`, tileServer)
+      .subscribe((resp) => {
+        this.getTileServers(projectId);
+        this.notificationsService.showSuccessToast('Tile server ' + tileServer.name + ' added!');
+      }, (error => {
+        this.notificationsService.showErrorToast('Could not add tile server!');
+      }));
+  }
+
+  searchQMS(query: string, queryOptions: any): void {
+    const url = "https://qms.nextgis.com/api/v1/geoservices/";
+    const request = url +
+      "?search=" + query +
+      "&type=" + queryOptions['type'] +
+      "&ordering=" + queryOptions['order'] +
+      queryOptions['ordering'] +
+      "&cumulative_status=works";
+
+    this.http.get(request).subscribe((q) => {
+      console.log('loaded');
+      this._qmsSearchResults.next(q);
+    });
+  }
+
+  getQMSTileServer(projectId: number, id: number) {
+    const request = "https://qms.nextgis.com/api/v1/geoservices/" + id;
+    this.http.get(request).subscribe((q) => {
+      const newServer: TileServer = {
+        name: q['name'],
+        type: q['type'],
+        url: q['url'],
+        attribution: q['desc'],
+        tileOptions: {
+          maxZoom: q['z_max'] ? q['z_max'] : null,
+          minZoom: q['z_min'] ? q['z_min'] : null,
+          layers: q['layers'] ? q['layers'] : null,
+          params: q['params'] ? q['params'] : null,
+          format: q['format'] ? q['format'] : null
+        },
+        uiOptions: {
+          opacity: 0.5,
+          isActive: true
+        }
+      }
+      this.addTileServer(projectId, newServer);
+      this._qmsServerResult.next(q);
+    });
+  }
+
+  public get qmsSearchResults(): Observable<Array<any>> {
+    return this.qmsSearchResults$;
+  }
+
+  public get qmsServerResult(): Observable<any> {
+    return this.qmsServerResult$;
+  }
+
   public get overlays(): Observable<Array<Overlay>> {
     return this.overlays$;
+  }
+
+  public get dirtyTileOptions(): Observable<boolean> {
+    return this.dirtyTileOptions$;
+  }
+
+  public get tileServers(): Observable<Array<TileServer>> {
+    return this.tileServers$;
+  }
+
+  public get selectedTileServer(): any {
+    return this.selectedTileServer$;
+  }
+
+  public set selectedTileServer(ts) {
+    this._selectedTileServer.next(ts);
   }
 
   public get features(): Observable<FeatureCollection> {
@@ -321,7 +485,6 @@ export class GeoDataService {
     } else {
       this._activeFeature.next(null);
     }
-
   }
 
   public get activeOverlay(): Observable<Overlay> {
@@ -353,6 +516,7 @@ export class GeoDataService {
     this.getFeatures(projectId);
     this.getPointClouds(projectId);
     this.getOverlays(projectId);
+    this.getTileServers(projectId);
   }
 
   clearData(): void {

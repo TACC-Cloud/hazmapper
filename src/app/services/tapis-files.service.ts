@@ -10,6 +10,7 @@ export class TapisFilesService {
   public readonly IMPORTABLE_FEATURE_TYPES: Array<string> = ['shp', 'jpg', 'json', 'geojson', 'gpx'];
   public readonly IMPORTABLE_POINT_CLOUD_TYPES: Array<string> = ['las', 'laz'];
   public readonly IMPORTABLE_OVERLAY_TYPES: Array<string> = ['jpg'];
+  public readonly IMPORTABLE_TILE_TYPES: Array<string> = ['ini'];
 
   constructor(private tapis: ApiService) { }
 

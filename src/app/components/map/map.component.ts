@@ -13,7 +13,7 @@ import * as turf from '@turf/turf';
 import { AllGeoJSON } from '@turf/helpers';
 import { combineLatest } from 'rxjs';
 import {filter, map} from 'rxjs/operators';
-import {Overlay, Project} from '../../models/models';
+import {Overlay, Project, TileServer} from '../../models/models';
 import {AppEnvironment, environment} from '../../../environments/environment';
 
 @Component({
@@ -29,14 +29,15 @@ export class MapComponent implements OnInit {
   _activeProjectId: number;
   features: FeatureGroup = new FeatureGroup();
   overlays: LayerGroup = new LayerGroup<any>();
+  tileServers: Array<TileServer> = new Array<TileServer>();
+  tileServerLayers: any = {};
   environment: AppEnvironment;
   fitToFeatureExtent: boolean = true;
 
   constructor(private projectsService: ProjectsService,
               private geoDataService: GeoDataService,
               private route: ActivatedRoute,
-              ) {
-
+             ) {
     // Have to bind these to keep this being this
     this.featureClickHandler.bind(this);
     this.mouseEventHandler.bind(this);
@@ -48,20 +49,37 @@ export class MapComponent implements OnInit {
     // this.cluster = this.route.snapshot.queryParamMap.get('mapType');
     this.environment = environment;
     this.map = new L.Map('map', {
-     center: [40, -80],
-     zoom: 3
+      center: [40, -80],
+      zoom: 3,
+      maxZoom: 19
     });
 
-    const baseOSM = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    this.geoDataService.tileServers.subscribe((next: Array<TileServer>) => {
+      if (next) {
+        this.tileServers = next;
+
+        next.forEach((ts) => {
+          if (!this.tileServerLayers[ts.id]) {
+            this.tileServerLayers[ts.id] = this.tileServerToLayer(ts);
+          }
+
+          this.tileServerLayers[ts.id].setZIndex(ts.uiOptions.zIndex);
+          this.tileServerLayers[ts.id].setOpacity(ts.uiOptions.opacity);
+
+          if (ts.uiOptions.isActive) {
+            this.map.addLayer(this.tileServerLayers[ts.id]);
+          } else {
+            this.map.removeLayer(this.tileServerLayers[ts.id]);
+          }
+        });
+      }
     });
-    const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      // tslint:disable-next-line:max-line-length
-      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+
+    this.geoDataService.selectedTileServer.subscribe((ts: TileServer) => {
+      if (ts) {
+        this.map.removeLayer(this.tileServerLayers[ts.id]);
+      }
     });
-    // default to streetmap view;
-    this.map.addLayer(baseOSM);
 
     this.loadFeatures();
 
@@ -81,24 +99,11 @@ export class MapComponent implements OnInit {
         this.overlays.addTo(this.map);
     });
 
-
     // Listen on the activeFeature stream and zoom map to that feature when it changes
     this.geoDataService.activeFeature.pipe(filter(n => n != null)).subscribe( (next) => {
       this.activeFeature = next;
       const bbox = turf.bbox(<AllGeoJSON> next);
       this.map.fitBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]]);
-    });
-
-    // Listen for changes to the basemap
-    this.geoDataService.basemap.subscribe((next: string) => {
-      if (next === 'sat') {
-        this.map.removeLayer(baseOSM);
-        this.map.addLayer(satellite);
-      }
-      if (next === 'roads') {
-        this.map.removeLayer(satellite);
-        this.map.addLayer(baseOSM);
-      }
     });
   }
 
@@ -111,6 +116,18 @@ export class MapComponent implements OnInit {
     this.geoDataService.mapMouseLocation = ev.latlng;
   }
 
+  tileServerToLayer(ts: TileServer) {
+    let layerOptions = {
+      attribution: ts.attribution,
+      ...ts.tileOptions
+    }
+
+    if (ts.type == 'tms') {
+      return L.tileLayer(ts.url, layerOptions);
+    } else if (ts.type == 'wms') {
+      return L.tileLayer.wms(ts.url, layerOptions);
+    }
+  }
 
   /**
    * Load Features for a project.
@@ -128,9 +145,12 @@ export class MapComponent implements OnInit {
             return L.divIcon({html: `<div><b>${cluster.getChildCount()}</b></div>`, className: 'marker-cluster'});
           }
         });
+
         collection.features.forEach( d => {
           const feat = L.geoJSON(d, geojsonOptions);
           feat.on('click', (ev) => { this.featureClickHandler(ev); } );
+
+          feat.setZIndex(1);
 
           if (d.geometry.type === 'Point') {
             markers.addLayer(feat);

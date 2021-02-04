@@ -7,6 +7,8 @@ import { RapidProjectRequest } from '../models/rapid-project-request';
 import {catchError, map, tap} from 'rxjs/operators';
 import {IProjectUser} from '../models/project-user';
 import {NotificationsService} from './notifications.service';
+import {GeoDataService} from './geo-data.service';
+import {defaultTileServers} from '../constants/tile-servers';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +22,9 @@ export class ProjectsService {
   private _projectUsers: ReplaySubject<Array<IProjectUser>> = new ReplaySubject<Array<IProjectUser>>(1);
   public readonly projectUsers$: Observable<Array<IProjectUser>> = this._projectUsers.asObservable();
 
-  constructor(private http: HttpClient, private notificationsService: NotificationsService) { }
+  constructor(private http: HttpClient,
+              private notificationsService: NotificationsService,
+              private geoDataService: GeoDataService) { }
 
   getProjects(): void {
    this.http.get<Project[]>(environment.apiUrl + `/projects/`).subscribe( resp => {
@@ -62,6 +66,12 @@ export class ProjectsService {
           this._projects.next([...this._projects.value, proj]);
           // Set the active project to the one just created?
           this._activeProject.next(proj);
+
+          // Add default servers
+          defaultTileServers.forEach(ts => {
+            this.geoDataService.addTileServer(proj.id, ts);
+          });
+
         }),
       );
   }
