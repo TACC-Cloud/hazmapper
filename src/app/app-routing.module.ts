@@ -3,6 +3,8 @@ import {Routes, RouterModule, CanActivate, ActivatedRouteSnapshot, RouterStateSn
 import { NotFoundComponent} from './components/notfound/notfound.component';
 import {AuthService} from './services/authentication.service';
 import {MainComponent} from './components/main/main.component';
+import {MainProjectComponent} from './components/main-project/main-project.component';
+import {MainWelcomeComponent} from './components/main-welcome/main-welcome.component';
 import { CallbackComponent } from './components/callback/callback.component';
 
 @Injectable()
@@ -19,7 +21,11 @@ export class Activate implements CanActivate {
 
 
 const routes: Routes = [
-  {path: '', component: MainComponent, canActivate: [Activate]},
+  {path: '', component: MainComponent, canActivate: [Activate], children: [
+    {path: '', component: MainWelcomeComponent, canActivateChild: [Activate]},
+    {path: 'project/:projectUUID', component: MainProjectComponent},
+  ]},
+
   {path: 'callback', component: CallbackComponent},
   {path: '404', component: NotFoundComponent }];
 
@@ -29,5 +35,3 @@ const routes: Routes = [
   providers: [Activate]
 })
 export class AppRoutingModule { }
-
-

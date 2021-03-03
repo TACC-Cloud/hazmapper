@@ -46,6 +46,8 @@ import { ToastrModule } from 'ngx-toastr';
 import { ModalConfirmationBodyComponent } from './components/modal-confirmation-body/modal-confirmation-body.component';
 import { UserRowComponent } from './components/user-row/user-row.component';
 import { EditNameInputComponent } from './components/edit-name-input/edit-name-input.component';
+import { MainWelcomeComponent } from './components/main-welcome/main-welcome.component';
+import { MainProjectComponent } from './components/main-project/main-project.component';
 import {DragDropModule, CDK_DRAG_CONFIG} from '@angular/cdk/drag-drop';
 
 @NgModule({
@@ -77,6 +79,8 @@ import {DragDropModule, CDK_DRAG_CONFIG} from '@angular/cdk/drag-drop';
     ModalConfirmationBodyComponent,
     UserRowComponent,
     EditNameInputComponent,
+    MainWelcomeComponent,
+    MainProjectComponent,
   ],
   imports: [
     CommonModule,

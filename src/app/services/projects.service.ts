@@ -22,14 +22,28 @@ export class ProjectsService {
   private _projectUsers: ReplaySubject<Array<IProjectUser>> = new ReplaySubject<Array<IProjectUser>>(1);
   public readonly projectUsers$: Observable<Array<IProjectUser>> = this._projectUsers.asObservable();
 
+  private _loadingProjects: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public loadingProjects: Observable<boolean> = this._loadingProjects.asObservable();
+
+  private _loadingFailed: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public loadingFailed: Observable<boolean> = this._loadingFailed.asObservable();
+
   constructor(private http: HttpClient,
               private notificationsService: NotificationsService,
               private geoDataService: GeoDataService) { }
 
   getProjects(): void {
-   this.http.get<Project[]>(environment.apiUrl + `/projects/`).subscribe( resp => {
-     this._projects.next(resp);
-   });
+    this._loadingProjects.next(true);
+    this._loadingFailed.next(false);
+    this.http.get<Project[]>(environment.apiUrl + `/projects/`).subscribe( resp => {
+      this._projects.next(resp);
+      this._loadingProjects.next(false);
+      this._loadingFailed.next(false);
+    }, error => {
+      this._loadingProjects.next(false);
+      this._loadingFailed.next(true);
+      this.notificationsService.showErrorToast('Failed to retrieve project data! Geoapi might be down.');
+    });
   }
 
   getProjectUsers(proj: Project): void {
