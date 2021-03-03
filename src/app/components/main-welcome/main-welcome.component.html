@@ -33,15 +33,15 @@
         </div>
 
         <ng-template #projectLoaded>
-          <div *ngIf="connected; else unconnected">
+          <div *ngIf="connected; else projectDisconnected">
             <div id="welcome-no-information">
               <div>
-                Failed to Connect!
+                Failed to Connect to Server!
               </div>
             </div>
           </div>
 
-          <ng-template #unconnected>
+          <ng-template #projectDisconnected>
             <div *ngIf="projects.length > 0; else noProject" class="project-list-container">
               <div *ngFor="let p of projects; let indexOfelement=index;">
                 <div (dblclick)="routeToProject(p.uuid)"
