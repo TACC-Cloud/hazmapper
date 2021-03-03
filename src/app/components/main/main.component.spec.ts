@@ -14,7 +14,6 @@ import {userFixture} from '../../fixtures/user.fixture';
 describe('MainComponent', () => {
   let component: MainComponent;
   let fixture: ComponentFixture<MainComponent>;
-  // const MockData: GeoDataService = mock(GeoDataService);
   const MockAuth: AuthService = mock(AuthService);
 
   beforeEach(async(() => {
@@ -35,7 +34,6 @@ describe('MainComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(MainComponent);
     component = fixture.componentInstance;
-    // when(MockData.activeFeature).thenReturn(of(featureFixture));
     when(MockAuth.currentUser).thenReturn(of(userFixture));
     fixture.detectChanges();
   });

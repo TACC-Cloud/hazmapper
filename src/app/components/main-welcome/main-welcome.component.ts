@@ -17,6 +17,12 @@ import { switchMap } from 'rxjs/operators';
 })
 
 export class MainWelcomeComponent implements OnInit {
+  release_url = 'https://github.com/TACC-cloud/hazmapper';
+  guide_url = 'https://www.designsafe-ci.org/rw/user-guide/workspace/hazmapper/';
+
+  spinner: boolean;
+  connected: boolean;
+
   public projects: Project[] = [];
   public activeProject: Project;
 
@@ -29,13 +35,23 @@ export class MainWelcomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.projectsService.getProjects();
+    this.projectsService.loadingProjects.subscribe((isLoading) => {
+      this.spinner = isLoading;
+    });
+
+    this.projectsService.loadingFailed.subscribe((connected) => {
+      this.connected = connected;
+    });
+
     this.projectsService.projects.subscribe( (projects) => {
       this.projects = projects;
     });
+
     this.projectsService.activeProject.subscribe( (next) => {
       this.activeProject = next;
     });
+
+    this.projectsService.getProjects();
   }
 
   routeToProject(projectId: number) {
