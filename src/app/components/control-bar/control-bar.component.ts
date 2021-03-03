@@ -96,7 +96,7 @@ export class ControlBarComponent implements OnInit {
   openCreateProjectModal() {
     const modal = this.bsModalService.show(ModalCreateProjectComponent);
     modal.content.onClose.subscribe( (next) => {
-      this.routeToProject(this.selectedProject.uuid);
+      this.routeToProjectUUID(this.selectedProject.uuid);
     });
   }
 
