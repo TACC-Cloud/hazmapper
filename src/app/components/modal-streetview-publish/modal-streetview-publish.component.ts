@@ -11,9 +11,9 @@ import { TapisFilesService } from '../../services/tapis-files.service';
   styleUrls: ['./modal-streetview-publish.component.styl']
 })
 export class ModalStreetviewPublishComponent implements OnInit {
-  @Input() allowedExtensions: Array<string> = this.tapisFilesService.IMPORTABLE_FEATURE_TYPES;
-  @Input() single: false;
-  @Input() allowFolders: false;
+  // @Input() allowedExtensions: Array<string> = this.tapisFilesService.IMPORTABLE_FEATURE_TYPES;
+  @Input() single: true;
+  @Input() allowFolders: true;
   selectedFiles: Array<RemoteFile> = [];
   // TODO Type
   public onClose: Subject<any> = new Subject<any>();
@@ -43,7 +43,7 @@ export class ModalStreetviewPublishComponent implements OnInit {
 
   publish() {
     this.onClose.next({
-      selectedFiles: this.selectedFiles,
+      selectedPath: this.selectedFiles[0],
       publishToMapillary: this.publishToMapillary,
       publishToGoogle: this.publishToGoogle
     });

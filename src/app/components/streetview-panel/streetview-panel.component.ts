@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {BsModalRef, BsModalService} from 'ngx-foundation';
 import { Project } from '../../models/models';
 import {AuthenticatedUser, AuthService} from '../../services/authentication.service';
+import {NotificationsService} from '../../services/notifications.service';
 import {StreetviewService} from '../../services/streetview.service';
 import {StreetviewAuthentication, StreetviewTokens} from '../../models/streetview';
 import {ProjectsService} from '../../services/projects.service'
@@ -12,10 +13,11 @@ import {ModalStreetviewPublishComponent} from '../modal-streetview-publish/modal
   templateUrl: './streetview-panel.component.html',
   styleUrls: ['./streetview-panel.component.styl']
 })
-export class StreetviewPanelComponent implements OnInit {
+export class StreetviewPanelComponent implements OnInit, OnDestroy {
 
   private activeProject: Project;
   private currentUser: AuthenticatedUser;
+  private timer: any;
   uploadLogs: any = [
     {
       name: "Name1",
@@ -91,6 +93,7 @@ export class StreetviewPanelComponent implements OnInit {
   constructor(private bsModalService: BsModalService,
               private streetviewService: StreetviewService,
               private projectsService: ProjectsService,
+              private notificationsService: NotificationsService,
               private authService: AuthService,) { }
 
   ngOnInit() {
@@ -101,15 +104,18 @@ export class StreetviewPanelComponent implements OnInit {
       this.activeProject = next;
     });
 
+    // TODO: Maybe move this somehwere else since it is triggered every switch
+    // Or maybe this is necessary...
     this.streetviewService.login('google', this.activeProject.id, this.currentUser.username, false);
     this.streetviewService.login('mapillary', this.activeProject.id, this.currentUser.username, false);
+    this.timer = this.notificationsService.initProgressPoll();
   }
 
   openStreetviewPublishModal() {
     const modal: BsModalRef = this.bsModalService.show(ModalStreetviewPublishComponent);
-    // modal.content.onClose.subscribe( (publishData: any) => {
-    //   this.streetviewService.publishToStreetview(this.activeProject.id, this.currentUser.username, this.publishData);
-    // });
+    modal.content.onClose.subscribe( (publishData: any) => {
+      this.streetviewService.uploadPathToStreetviewService(this.activeProject.id, this.currentUser.username, publishData.selectedPath, publishData.publishToMapillary, publishData.publishToGoogle);
+    });
   }
 
   login(svService: string) {
@@ -122,5 +128,9 @@ export class StreetviewPanelComponent implements OnInit {
 
   isLoggedIn(svService: string) {
     return this.streetviewService.getLocalToken(svService);
+  }
+
+  ngOnDestroy() {
+    this.timer.unsubscribe();
   }
 }

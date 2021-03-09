@@ -24,9 +24,11 @@
 </div>
 
 <app-file-browser
-  [single]=single
+  [single]="true"
   [allowFolders]=allowFolders
-  [allowedExtensions]=allowedExtensions
+  [onlyFolder]="true"
+  [heading]="'Select a Folder Contaning Streetview Images'"
+  [helpText]="'Streetview image files (with gpano metadata) inside this folder will be imported (only single level).'"
   (selection)="onSelect($event)">
 </app-file-browser>
 

@@ -32,6 +32,7 @@ export class StreetviewService {
 
   login(sv: string, projectId: number, uname: string, active: boolean) {
     this.getRemoteToken(sv, projectId, uname).subscribe(resp => {
+      console.log(resp)
       let authorized = resp.authorized;
       if (authorized) {
         this.setLocalToken(sv, authorized);
@@ -70,6 +71,28 @@ export class StreetviewService {
     this.http.delete<any>(environment.apiUrl + `/projects/${projectId}/users/${uname}/streetview/${sv}`)
       .subscribe((resp) => {
         console.log("cool");
+      });
+  }
+
+  uploadPathToStreetviewService(projectId: number, username: string, dir: RemoteFile, toMapillary: boolean, toGoogle: boolean): void {
+    const tmp = {
+      system: dir.system,
+      path: dir.path
+    };
+
+    const payload = {
+      folder: tmp,
+      mapillary: toMapillary,
+      google: toGoogle,
+      retry: false
+    };
+
+    console.log(payload);
+
+    this.http.post(environment.apiUrl + `/projects/${projectId}/users/${username}/streetview/upload/`, payload)
+      .subscribe( (resp) => {
+      }, error => {
+        // TODO: Add notification / toast
       });
   }
 
