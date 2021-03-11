@@ -19,4 +19,4 @@ deploy:
     provider: script
     script: make image && make deploy
     on:
-        branch: master
+        all_branches: true
