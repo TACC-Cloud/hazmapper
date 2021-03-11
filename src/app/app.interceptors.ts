@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
-import {Observable, throwError} from 'rxjs';
+import { Observable } from 'rxjs';
 import { AuthService} from './services/authentication.service';
-import { environment } from '../environments/environment';
-import {catchError} from 'rxjs/operators';
+import { EnvService} from './services/env.service';
+import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-  constructor(private authSvc: AuthService) {}
+  constructor(private authSvc: AuthService, private envService: EnvService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
@@ -23,13 +23,12 @@ export class JwtInterceptor implements HttpInterceptor {
 
     // This is only for local development, we put the JWT on the request
     // because it is not behind ws02
-    if (request.url.indexOf(environment.apiUrl) > -1)  {
-
-      if (environment.jwt) {
+    if (request.url.indexOf(this.envService.apiUrl) > -1)  {
+      if (this.envService.jwt) {
         // add header
         request = request.clone({
           setHeaders: {
-            'X-JWT-Assertion-designsafe': environment.jwt
+            'X-JWT-Assertion-designsafe': this.envService.jwt
           }
         });
       }
