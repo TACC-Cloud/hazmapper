@@ -26,12 +26,12 @@ checkfortag:
 .PHONY: create
 create: checkforcontext checkfortag
 	@echo "Creating hazmapper deployment/services/migration-job in '$(KUBE_CONTEXT)' context"
-	source ${ENV_FILE} && cat kube.yaml | envsubst '$${HAZMAPPER_TAG} $${NODEPORT}' | kubectl apply -f - 
+	source ${ENV_FILE} && cat hazmapper.kube.yaml | envsubst '$${HAZMAPPER_TAG} $${NODEPORT}' | kubectl apply -f - 
 
 .PHONY: delete
 delete: checkforcontext
 	@echo "Deleting hazmapper deployment in '$(KUBE_CONTEXT)' context"
-	kubectl delete --context $(KUBE_CONTEXT) --ignore-not-found=true hazmapper 
+	kubectl delete --context $(KUBE_CONTEXT) --ignore-not-found=true deployment hazmapper 
 
 .PHONY: delete-staging
 delete-staging: KUBE_CONTEXT=geoapi-dev
