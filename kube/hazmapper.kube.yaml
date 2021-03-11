@@ -35,7 +35,7 @@ spec:
   ports:
   - port: 80
     targetPort: 80
-    nodePort: 32351
+    nodePort: ${NODE_PORT}
     protocol: TCP
   selector:
     run: hazmapper
