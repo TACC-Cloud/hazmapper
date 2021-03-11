@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import {APP_BASE_HREF} from '@angular/common';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import {ModalModule, BsDropdownModule, TooltipModule, TabsModule} from 'ngx-foundation';
 import { FileSizeModule } from 'ngx-filesize';
@@ -126,6 +127,14 @@ import {DragDropModule, CDK_DRAG_CONFIG} from '@angular/cdk/drag-drop';
       useFactory: (envService: EnvService) => () => envService.init(),
       deps: [EnvService],
       multi: true
+    },
+    {
+      provide: APP_BASE_HREF,
+      useFactory: (envService: EnvService) => {
+        envService.init();
+        return envService.baseHref;
+      },
+      deps: [EnvService],
     }
   ],
   bootstrap: [AppComponent],
