@@ -7,6 +7,7 @@ import {StreetviewService} from '../../services/streetview.service';
 import {StreetviewAuthentication, StreetviewTokens} from '../../models/streetview';
 import {ProjectsService} from '../../services/projects.service'
 import {ModalStreetviewPublishComponent} from '../modal-streetview-publish/modal-streetview-publish.component';
+import { IProgressNotification } from 'src/app/models/notification';
 
 @Component({
   selector: 'app-streetview-panel',
@@ -17,76 +18,179 @@ export class StreetviewPanelComponent implements OnInit, OnDestroy {
 
   private activeProject: Project;
   private currentUser: AuthenticatedUser;
-  private timer: any;
-  uploadLogs: any = [
-    {
-      name: "Name1",
-      dateAdded: "2019-01-01",
-      dateDone: "2019-01-02",
-      hours: "4",
-      user: "Amy",
-      status: "failed"
-    },
-    {
-      name: "Name1",
-      dateAdded: "2019-01-01",
-      dateDone: "2019-01-02",
-      hours: "4",
-      user: "Amy",
-      status: "success"
-    },
-    {
-      name: "Name1",
-      dateAdded: "2019-01-01",
-      dateDone: "2019-01-02",
-      hours: "4",
-      user: "Amy",
-      status: "success"
-    },
-    {
-      name: "Name1",
-      dateAdded: "2019-01-01",
-      dateDone: "2019-01-02",
-      hours: "4",
-      user: "Amy",
-      status: "success"
-    },
-    {
-      name: "Name1",
-      dateAdded: "2019-01-01",
-      dateDone: "2019-01-02",
-      hours: "4",
-      user: "Amy",
-      status: "progress"
-    }
-  ];
+  private timerSub: any;
+  private progressNotifications: Array<IProgressNotification> = [];
+  // uploadLogs: any = [
+  //   {
+  //     name: "/designsafe",
+  //     dateAdded: "2019-01-01",
+  //     dateDone: "2019-01-02",
+  //     hours: "4",
+  //     user: "Amy",
+  //     status: "failed"
+  //   },
+  //   {
+  //     name: "Name1",
+  //     dateAdded: "2019-01-01",
+  //     dateDone: "2019-01-02",
+  //     hours: "4",
+  //     user: "Amy",
+  //     status: "success"
+  //   },
+  //   {
+  //     name: "Name1",
+  //     dateAdded: "2019-01-01",
+  //     dateDone: "2019-01-02",
+  //     hours: "4",
+  //     user: "Amy",
+  //     status: "success"
+  //   },
+  //   {
+  //     name: "Name1",
+  //     dateAdded: "2019-01-01",
+  //     dateDone: "2019-01-02",
+  //     hours: "4",
+  //     user: "Amy",
+  //     status: "success"
+  //   },
+  //   {
+  //     name: "Name1",
+  //     dateAdded: "2019-01-01",
+  //     dateDone: "2019-01-02",
+  //     hours: "4",
+  //     user: "Amy",
+  //     status: "progress"
+  //   }
+  // ];
 
 
-  uploadedImages: any = [
+
+  // TODO Allow each user to decide the display name of the sequence (in backend as well?)
+  mapillarySequences: any = [
     {
       name: "Name1",
+      id: 1,
+      uuid: "3829-28394-239842-348923",
       from: "mapillary",
-      geo: "lon: 10; lat: 10"
+      geo: "lon: 10; lat: 10",
+      open: false,
+      images: [
+        {
+          name: "cool",
+        },
+        {
+          name: "cool",
+        },
+        {
+          name: "cool",
+        },
+        {
+          name: "cool",
+        },
+        {
+          name: "cool",
+        },
+      ]
+    },
+    {
+      name: "Name1",
+      id: 2,
+      uuid: "839 -2348972-3479-23874-23",
+      from: "mapillary",
+      geo: "lon: 10; lat: 10",
+      open: false,
+      images: [
+        {
+          name: "cool",
+        },
+        {
+          name: "cool",
+        },
+        {
+          name: "cool",
+        },
+        {
+          name: "cool",
+        },
+        {
+          name: "cool",
+        },
+      ]
+    },
+    {
+      name: "Name1",
+      id: 3,
+      from: "mapillary",
+      uuid: "839 -2348972-3479-23874-23",
+      geo: "lon: 10; lat: 10",
+      open: false,
+      images: [
+        {
+          name: "cool",
+        },
+        {
+          name: "cool",
+        },
+        {
+          name: "cool",
+        },
+        {
+          name: "cool",
+        },
+        {
+          name: "cool",
+        },
+      ]
+    },
+    {
+      name: "Name1",
+      id: 4,
+      uuid: "839 -2348972-3479-23874-23",
+      from: "mapillary",
+      geo: "lon: 10; lat: 10",
+      open: false,
+      images: [
+        {
+          name: "cool",
+        },
+        {
+          name: "cool",
+        },
+        {
+          name: "cool",
+        },
+        {
+          name: "cool",
+        },
+        {
+          name: "cool",
+        },
+      ]
     },
     {
       name: "Name1",
       from: "mapillary",
-      geo: "lon: 10; lat: 10"
-    },
-    {
-      name: "Name1",
-      from: "mapillary",
-      geo: "lon: 10; lat: 10"
-    },
-    {
-      name: "Name1",
-      from: "mapillary",
-      geo: "lon: 10; lat: 10"
-    },
-    {
-      name: "Name1",
-      from: "mapillary",
-      geo: "lon: 10; lat: 10"
+      id: 5,
+      uuid: "839 -2348972-3479-23874-23",
+      geo: "lon: 10; lat: 10",
+      open: false,
+      images: [
+        {
+          name: "cool",
+        },
+        {
+          name: "cool",
+        },
+        {
+          name: "cool",
+        },
+        {
+          name: "cool",
+        },
+        {
+          name: "cool",
+        },
+      ]
     },
   ];
 
@@ -97,9 +201,15 @@ export class StreetviewPanelComponent implements OnInit, OnDestroy {
               private authService: AuthService,) { }
 
   ngOnInit() {
+    this.notificationsService.getRecentProgress();
     this.authService.currentUser.subscribe( (next) => {
       this.currentUser = next;
     });
+
+    this.notificationsService.progressNotifications.subscribe((next: Array<IProgressNotification>) => {
+      this.progressNotifications = next;
+    });
+
     this.projectsService.activeProject.subscribe( (next) => {
       this.activeProject = next;
     });
@@ -108,7 +218,7 @@ export class StreetviewPanelComponent implements OnInit, OnDestroy {
     // Or maybe this is necessary...
     this.streetviewService.login('google', this.activeProject.id, this.currentUser.username, false);
     this.streetviewService.login('mapillary', this.activeProject.id, this.currentUser.username, false);
-    this.timer = this.notificationsService.initProgressPoll();
+    this.timerSub = this.notificationsService.initProgressPoll();
   }
 
   openStreetviewPublishModal() {
@@ -130,7 +240,20 @@ export class StreetviewPanelComponent implements OnInit, OnDestroy {
     return this.streetviewService.getLocalToken(svService);
   }
 
+  toggleSequence(seqId: number) {
+    // let seq = this.mapillarySequences.find(e => e.id = seqId);
+    let seq = this.mapillarySequences[seqId];
+    seq.open = !seq.open;
+  }
+
+  deleteDoneLog(pn: IProgressNotification) {
+    this.notificationsService.deleteProgress(pn);
+  }
+
   ngOnDestroy() {
-    this.timer.unsubscribe();
+    // FIXME doesn't work..
+    if (this.timerSub) {
+      this.timerSub.unsubscribe();
+    }
   }
 }

@@ -4,6 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {INotification, IProgressNotification} from '../models/notification';
 import {interval, Observable, ReplaySubject} from 'rxjs';
 import { environment } from '../../environments/environment';
+import { take, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -39,6 +40,9 @@ export class NotificationsService {
             case 'success':
               this.showSuccessToast(note.message);
               break;
+            case 'warning':
+              this.showWarningToast(note.message);
+              break;
             case 'error':
               this.showErrorToast(note.message);
               break;
@@ -53,42 +57,67 @@ export class NotificationsService {
     this.toastr.success(message);
   }
 
+  showWarningToast(message: string): void {
+    this.toastr.warning(message);
+  }
+
   showErrorToast(message: string): void {
     this.toastr.error(message);
   }
 
   initProgressPoll() {
     const timer = interval(this.TIMEOUT);
-    console.log("Hey there");
-    console.log(this.TIMEOUT);
-    timer.subscribe( (next) => {
+    const timerSub = timer.subscribe( (next) => {
       this.getRecentProgress();
     });
-    return timer;
+    return timerSub;
   }
 
   getRecentProgress(): void {
     const baseUrl = this.environment.apiUrl + '/notifications/progress';
-    const now = new Date();
-    const then = new Date(now.getTime() - this.TIMEOUT);
-    console.log("Hey there")
-
-    this.http.get<Array<IProgressNotification>>(baseUrl + `?startDate=${then.toISOString()}`)
-      .subscribe( (notes) => {
+    this.http.get<Array<IProgressNotification>>(baseUrl)
+      .subscribe((notes) => {
+        console.log(notes);
         this._progressNotifications.next(notes);
-        // notes.forEach( (note) => {
-        //   switch (note.status) {
-        //     case 'success':
-        //       this.showSuccessToast(note.message);
-        //       break;
-        //     case 'error':
-        //       this.showErrorToast(note.message);
-        //       break;
-        //     default:
-        //       break;
-        //   }
+      });
+  }
 
-        // });
+  deleteAllDoneProgress(): void {
+    const baseUrl = this.environment.apiUrl + '/notifications/progress';
+
+    // this._progressNotifications.next([]);
+
+    this.http.delete<Array<IProgressNotification>>(baseUrl)
+      .subscribe((notes) => {
+        // FIXME: Don't need
+        this._progressNotifications.next(notes);
+      });
+  }
+
+  // NOTE: Shouldn't be able to do this.. unless done (maybe set condition)
+  // NOTE: Error ones and in-progress ones should gracefully be deleted during backend sequence
+  deleteProgress(pn: IProgressNotification): void {
+    const baseUrl = this.environment.apiUrl + '/notifications/progress';
+
+    // TODO: maybe just get it from server
+    this.progressNotifications
+      .pipe(take(1)).subscribe((progressList) => {
+        progressList = progressList.filter(n => n.uuid != pn.uuid);
+        this._progressNotifications.next(progressList)
+      });
+
+    this.http.delete<Array<IProgressNotification>>(baseUrl + '/' + pn.uuid)
+      .subscribe(() => {
+        this.showSuccessToast("Deleted progress: " + pn.uuid);
+      });
+  }
+
+  // TODO: Fix type
+  getProgressByUUID(pn: IProgressNotification): any {
+    const baseUrl = this.environment.apiUrl + '/notifications/progress';
+    this.http.get<Array<IProgressNotification>>(baseUrl + '/' + pn.uuid)
+      .subscribe((note) => {
+        return note;
       });
   }
 

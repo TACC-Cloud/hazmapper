@@ -11,68 +11,175 @@
         <a class="publish-button" (click)="openStreetviewPublishModal()">
           <small>
             <i class="fas fa-plus"></i>
-            Publish Images
+            Publish Image Sequence
           </small>
         </a>
       </div>
 
       <tabset>
-        <tab heading="Images">
-          <div *ngFor="let img of uploadedImages">
-            <div *ngIf="img.from == 'mapillary'">
-              From Mapillary
-            </div>
-            <div *ngIf="img.from == 'google'">
-              From Google
+        <tab heading="Assets">
+
+          <!-- TODO: Should order this in each service, then each sequence, and then image -->
+          <!-- TODO: Get this info directly from mapillary -->
+          <!-- TODO: Get this info directly from mapillary (only those linked with geoapi) [geoapi should have sequence key] -->
+          <!-- TODO: Should display as UUID but in detail should display system path -->
+          <!-- TODO: Should be able to sort by sequences -->
+          <!-- <div *ngIf="img.from == 'mapillary'">
+               From Mapillary
+               </div>
+               <div *ngIf="img.from == 'google'">
+               From Google
+               </div> -->
+          <div *ngFor="let seq of mapillarySequences; let i = index">
+            <div class="sequence-container">
+              <div (click)="toggleSequence(i)" class="sequence-name">
+                <i class="fas fa-list" style="padding-left: 8px; padding-top: 5px; padding-top: 5px; padding-bottom: 5px; padding-bottom: 5px; padding-top: 5px; padding-bottom: 5px"></i>
+                <span style="margin-left: 5px; padding-top: 5px; padding-bottom: 5px">
+                  {{seq.uuid}}
+                </span>
+
+              </div>
+              <div *ngIf="seq.open">
+                <app-streetview-sequence
+                  [sequence]=seq
+                >
+                </app-streetview-sequence>
+              </div>
             </div>
           </div>
         </tab>
 
-        <tab heading="Upload Status">
+        <tab heading="Upload Log">
           <div>
-            <div *ngFor="let uploads of uploadLogs">
-              {{uploads.name}}
-              <p *ngIf="uploads.status == 'failed'">
-                failed retry?
-                <button class="button">
-                  retry
-                </button>
-              </p>
-              <p *ngIf="uploads.status == 'success'">
-                success!
-              </p>
-              <p *ngIf="uploads.status == 'progress'">
-                spinner
-              </p>
+            <div *ngIf="progressNotifications == undefined || progressNotifications.length == 0; else showLogs">
+              No tasks are in progress!
             </div>
+
+            <ng-template #showLogs>
+              <div *ngFor="let uploads of progressNotifications">
+                <div class="upload-box">
+                  <div class="upload-box-name">
+                    {{uploads.uuid}}
+                  </div>
+
+                  <div class="upload-info-box" *ngIf="uploads.status == 'error'">
+                    <div class="upload-info-status">
+                      <span class="upload-info-message">
+                        Failed to upload!
+                      </span>
+                      <span>
+                        <!-- TODO: Should show button to open list of errors here -->
+                        <i class="fas fa-exclamation-triangle" style="color: #DB3A42"></i>
+                      </span>
+                    </div>
+                    <div class="upload-info-button-container">
+                      <button class="button tiny upload-info-button">
+                        Retry
+                      </button>
+
+                      <button class="button tiny upload-info-button">
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                  <div class="upload-info-box" *ngIf="uploads.status == 'success'">
+                    <div class="upload-info-status">
+                      <span class="upload-info-message">
+                        Upload sucess!
+                      </span>
+
+                      <span>
+                        <!-- TODO: Should show button to open list of images sequence-->
+                        <i class="fas fa-check" style="color: #3ADB76"></i>
+                      </span>
+                    </div>
+                    <div class="upload-info-button-container">
+                      <button class="button tiny upload-info-button" (click)="deleteDoneLog(uploads)">
+                        Delete Log
+                      </button>
+                    </div>
+                  </div>
+                  <div class="upload-info-box" *ngIf="uploads.status == 'in_progress'">
+                    <div class="upload-info-status">
+                      <div class="progress"
+                           style="width: 100%"
+                           role="progressbar"
+                           tabindex="0"
+                           [attr.aria-valuenow]="uploads.progress"
+                           aria-valuemin="0"
+                           [attr.aria-valuetext]="uploads.progress + ' percent'"
+                           aria-valuemax="100">
+                        <!-- <div class="progress"
+                             style="width: 100%"
+                             role="progressbar"
+                             tabindex="0"
+                             aria-valuenow="50"
+                             aria-valuemin="0"
+                             aria-valuetext="50 percent"
+                             aria-valuemax="100"> -->
+                        <span class="progress-meter" [style.width.%]="uploads.progress">
+                          <!-- <span class="progress-meter-text">
+                               </span> -->
+                        </span>
+                      </div>
+                    </div>
+                    <div class="upload-info-button-container" style="justify-content: space-between">
+                      <div style="font-size: 12px; padding-top: 5px; padding-top: 5px; padding-bottom: 5px">
+                        <i class="fas fa-circle-notch fa-spin"></i>
+                        From Tapis
+                      </div>
+                      <button class="button tiny upload-info-button">
+                        Abort
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </ng-template>
           </div>
         </tab>
 
         <tab heading="Accounts">
-          <h4>Google</h4>
-          <div *ngIf="isLoggedIn('google'); else authGoogle">
-            Account information
-            <button class="button" (click)="logout('google')">Logout</button>
-          </div>
-          <ng-template #authGoogle>
-            <div>
-              Not Authenticated to Google!
+          <div class="accounts-box">
+            <h4>Google</h4>
+            <div *ngIf="isLoggedIn('google'); else authGoogle">
+              <div class="auth-info">
+                Account information
+              </div>
+              <div class="auth-info-button-container">
+                <button class="button small" (click)="logout('google')">Logout</button>
+              </div>
             </div>
-            <button class="button" (click)="login('google')">Login</button>
-          </ng-template>
-
-
-          <h4>Mapillary</h4>
-          <div *ngIf="isLoggedIn('mapillary'); else authMapillary">
-            Account information
-            <button class="button" (click)="logout('mapillary')">Logout</button>
+            <ng-template #authGoogle>
+              <div class="auth-info">
+                Not logged in to Google!
+              </div>
+              <div class="auth-info-button-container">
+                <button class="button small" (click)="login('google')">Login</button>
+              </div>
+            </ng-template>
           </div>
-          <ng-template #authMapillary>
-            <div>
-              Not Authenticated to Mapillary!
+
+          <div class="accounts-box">
+            <h4>Mapillary</h4>
+            <div *ngIf="isLoggedIn('mapillary'); else authMapillary">
+              <div class="auth-info">
+                Account information
+              </div>
+              <div class="auth-info-button-container">
+                <button class="button small" (click)="logout('mapillary')">Logout</button>
+              </div>
             </div>
-            <button class="button" (click)="login('mapillary')">Login</button>
-          </ng-template>
+            <ng-template #authMapillary>
+              <div class="auth-info">
+                Not logged in to Mapillary!
+              </div>
+              <div class="auth-info-button-container">
+                <button class="button small" (click)="login('mapillary')">Login</button>
+              </div>
+            </ng-template>
+          </div>
         </tab>
 
       </tabset>
@@ -82,8 +189,8 @@
       <div style="margin-top: 8rem; height:100%" class="not-authenticated grid-y align-start text-center">
         <h5 style="margin-bottom: 2rem">
           <b>You are not<br>
-          Authenticated to any<br>
-          mapping service!</b>
+            Authenticated to any<br>
+            mapping service!</b>
         </h5>
         <div class="grid-y align-center">
           <button class="button auth-button" (click)="login('mapillary')">

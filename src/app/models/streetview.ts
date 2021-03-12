@@ -7,3 +7,7 @@ export interface StreetviewTokens {
   google: string;
   mapillary: string;
 };
+
+export interface StreetviewUser {
+  username: string;
+};

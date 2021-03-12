@@ -47,6 +47,7 @@ import { UserRowComponent } from './components/user-row/user-row.component';
 import { EditNameInputComponent } from './components/edit-name-input/edit-name-input.component';
 import { StreetviewPanelComponent } from './components/streetview-panel/streetview-panel.component';
 import { ModalStreetviewPublishComponent } from './components/modal-streetview-publish/modal-streetview-publish.component';
+import { StreetviewSequenceComponent } from './components/streetview-sequence/streetview-sequence.component';
 
 @NgModule({
   declarations: [
@@ -78,6 +79,7 @@ import { ModalStreetviewPublishComponent } from './components/modal-streetview-p
     EditNameInputComponent,
     StreetviewPanelComponent,
     ModalStreetviewPublishComponent,
+    StreetviewSequenceComponent,
   ],
   imports: [
     CommonModule,
