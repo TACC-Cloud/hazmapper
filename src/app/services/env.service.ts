@@ -72,7 +72,7 @@ export class EnvService {
       }
       this._baseHref = '/';
       this._clientId = 'RMCJHgW9CwJ6mKjhLTDnUYBo9Hka';
-    } else if (/^hazmapper.tacc.utexas.edu/.test(hostname) && pathname.startsWith('staging')) {
+    } else if (/^hazmapper.tacc.utexas.edu/.test(hostname) && pathname.startsWith('/staging')) {
       this._env = EnvironmentType.Staging;
       this._apiUrl = this.getApiUrl(this.env);
       this._clientId = 'foitdqFcimPzKZuMhbQ1oyh3Anka';
