@@ -63,10 +63,10 @@ export class EnvService {
     const hostname = window && window.location && window.location.hostname;
     const pathname = window && window.location && window.location.pathname;
 
-    if (/^.*localhost.*/.test(hostname)) {
+    if (/^localhost/.test(hostname)) {
       this._env = EnvironmentType.Local;
       this._apiUrl = this.getApiUrl(environment.backend);
-      // for backend local, we need to have a jwt
+      // when we are using the local backend, a jwt is required
       if (environment.backend === EnvironmentType.Local) {
         this._jwt = environment.jwt;
       }
