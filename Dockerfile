@@ -9,7 +9,7 @@ RUN npm install
 WORKDIR /
 COPY . /www
 WORKDIR /www
-RUN ng build --prod
+RUN ng build --prod --base-href "./"
 RUN ls
 
 
