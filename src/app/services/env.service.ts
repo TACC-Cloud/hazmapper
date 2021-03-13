@@ -83,7 +83,7 @@ export class EnvService {
       this._clientId = 'tMvAiRdcsZ52S_89lCkO4x3d6VMa';
       this._baseHref = '/hazmapper/';
     } else {
-      console.warn('Cannot find environment for host name ${hostname}');
+      console.error('Cannot find environment for host name ${hostname}');
     }
   }
 }
