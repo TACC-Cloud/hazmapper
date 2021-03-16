@@ -18,6 +18,17 @@ See https://github.com/TACC-Cloud/geoapi which is an associated restful API.
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
+### Configuring geoapi backend
+
+The `backend` in [src/environments/environment.ts](src/environments/environment.ts) can be used to select which backend `geoapi` is used by the app:
+
+* `EnvironmentType.Production`
+* `EnvironmentType.Staging`
+* `EnvironmentType.Local`\*
+
+\*See https://github.com/TACC-Cloud/geoapi for more details on running geoapi locally.
+
+
 ### Code scaffolding
 
 Run `ng generate component components/component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
