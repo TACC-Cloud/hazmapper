@@ -26,6 +26,12 @@ export class StreetviewService {
   private GOOGLE_TOKEN_KEY: string = "googleToken";
   userToken: AuthToken;
 
+  private _streetviewSequences: BehaviorSubject<Array<any>> = new BehaviorSubject([]);
+  public streetviewSequences: Observable<Array<any>> = this._streetviewSequences.asObservable();
+
+  private _currentImage: BehaviorSubject<any> = new BehaviorSubject({});
+  public currentImage: Observable<any> = this._currentImage.asObservable();
+
   constructor(private http: HttpClient,
               private notificationsService: NotificationsService,
               private router: Router) { }
@@ -63,6 +69,20 @@ export class StreetviewService {
     }
   }
 
+  getStreetviewSequences(sv: string, projectId: number, uname: string) {
+    this.http.get<any>(environment.apiUrl + `/projects/${projectId}/users/${uname}/streetview/${sv}/sequences`)
+      .subscribe((resp: Array<any>) => {
+        this._streetviewSequences.next(resp);
+      });
+  }
+
+  getStreetviewImages(sv: string, projectId: number, uname: string, sequenceKey: string) {
+    this.http.get<any>(environment.apiUrl + `/projects/${projectId}/users/${uname}/streetview/${sv}/sequences/${sequenceKey}`)
+      .subscribe((resp: any) => {
+        this._currentImage.next(resp);
+      });
+  }
+
   getRemoteToken(sv: string, projectId: number, uname: string) {
     return this.http.get<any>(environment.apiUrl + `/projects/${projectId}/users/${uname}/streetview/${sv}`);
   }
@@ -74,7 +94,7 @@ export class StreetviewService {
       });
   }
 
-  uploadPathToStreetviewService(projectId: number, username: string, dir: RemoteFile, toMapillary: boolean, toGoogle: boolean): void {
+  uploadPathToStreetviewService(projectId: number, username: string, dir: RemoteFile, toMapillary: boolean, toGoogle: boolean, retry: boolean = false): void {
     const tmp = {
       system: dir.system,
       path: dir.path
@@ -84,7 +104,7 @@ export class StreetviewService {
       folder: tmp,
       mapillary: toMapillary,
       google: toGoogle,
-      retry: false
+      retry: retry
     };
 
     console.log(payload);

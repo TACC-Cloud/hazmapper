@@ -30,23 +30,28 @@
                <div *ngIf="img.from == 'google'">
                From Google
                </div> -->
-          <div *ngFor="let seq of mapillarySequences; let i = index">
-            <div class="sequence-container">
-              <div (click)="toggleSequence(i)" class="sequence-name">
-                <i class="fas fa-list" style="padding-left: 8px; padding-top: 5px; padding-top: 5px; padding-bottom: 5px; padding-bottom: 5px; padding-top: 5px; padding-bottom: 5px"></i>
-                <span style="margin-left: 5px; padding-top: 5px; padding-bottom: 5px">
-                  {{seq.uuid}}
-                </span>
-
-              </div>
-              <div *ngIf="seq.open">
-                <app-streetview-sequence
-                  [sequence]=seq
-                >
-                </app-streetview-sequence>
+          <div *ngIf="mapillarySequences.length <= 0; else showSequences">
+            No Sequences
+          </div>
+          <ng-template #showSequences>
+            <div *ngFor="let seq of mapillarySequences; let i = index">
+              <div class="sequence-container">
+                <div (click)="toggleSequence(i)" class="sequence-name" style="display: flex"
+                     [tooltip]="seq.systemPath[0] + seq.systemPath[1]">
+                  <i class="fas fa-list" style="padding-left: 8px; padding-bottom: 5px; padding-bottom: 5px; padding-top: 9px; padding-bottom: 5px; margin-bottom: 0px"></i>
+                  <span style="margin-left: 5px; padding-top: 5px; width: 150px; display: inline-block; padding-bottom: 5px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap">
+                    {{seq.systemPath[0] + seq.systemPath[1]}}
+                  </span>
+                </div>
+                <div *ngIf="seq.open">
+                  <app-streetview-sequence
+                    [sequence]=seq
+                  >
+                  </app-streetview-sequence>
+                </div>
               </div>
             </div>
-          </div>
+          </ng-template>
         </tab>
 
         <tab heading="Upload Log">
@@ -56,33 +61,48 @@
             </div>
 
             <ng-template #showLogs>
-              <div *ngFor="let uploads of progressNotifications">
+              <div *ngFor="let notification of progressNotifications">
                 <div class="upload-box">
-                  <div class="upload-box-name">
-                    {{uploads.uuid}}
+                  <div class="upload-box-name"
+                       style="max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis"
+                       [tooltip]="notification.uuid">
+                    {{notification.uuid}}
                   </div>
 
-                  <div class="upload-info-box" *ngIf="uploads.status == 'error'">
+                  <div class="upload-info-box" *ngIf="notification.status == 'error'">
                     <div class="upload-info-status">
                       <span class="upload-info-message">
-                        Failed to upload!
+                        Upload failed!
                       </span>
                       <span>
                         <!-- TODO: Should show button to open list of errors here -->
-                        <i class="fas fa-exclamation-triangle" style="color: #DB3A42"></i>
+                        <i class="fas fa-exclamation-triangle" style="color: #DB3A42; cursor: pointer" (click)="openDetailLogModal(notification)"></i>
                       </span>
                     </div>
                     <div class="upload-info-button-container">
-                      <button class="button tiny upload-info-button">
+                      <button class="button tiny upload-info-button" (click)="retryPublish(notification)">
                         Retry
                       </button>
 
-                      <button class="button tiny upload-info-button">
+                      <button class="button tiny upload-info-button" (click)="deleteErrorLog(notification)">
                         Cancel
                       </button>
                     </div>
                   </div>
-                  <div class="upload-info-box" *ngIf="uploads.status == 'success'">
+
+                  <div class="upload-info-box" *ngIf="notification.status == 'created'">
+                    <div class="upload-info-status">
+                      <span class="upload-info-message">
+                        Preparing upload process...
+                      </span>
+
+                      <span>
+                        <i class="fas fa-circle-notch fa-spin"></i>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="upload-info-box" *ngIf="notification.status == 'success'">
                     <div class="upload-info-status">
                       <span class="upload-info-message">
                         Upload sucess!
@@ -90,24 +110,25 @@
 
                       <span>
                         <!-- TODO: Should show button to open list of images sequence-->
-                        <i class="fas fa-check" style="color: #3ADB76"></i>
+                        <i class="fas fa-check" style="color: #3ADB76; cursor: pointer" (click)="openDetailLogModal(notification)"></i>
                       </span>
                     </div>
                     <div class="upload-info-button-container">
-                      <button class="button tiny upload-info-button" (click)="deleteDoneLog(uploads)">
+                      <button class="button tiny upload-info-button" (click)="deleteDoneLog(notification)">
                         Delete Log
                       </button>
                     </div>
                   </div>
-                  <div class="upload-info-box" *ngIf="uploads.status == 'in_progress'">
+
+                  <div class="upload-info-box" *ngIf="notification.status == 'in_progress'">
                     <div class="upload-info-status">
                       <div class="progress"
                            style="width: 100%"
                            role="progressbar"
                            tabindex="0"
-                           [attr.aria-valuenow]="uploads.progress"
+                           [attr.aria-valuenow]="notification.progress"
                            aria-valuemin="0"
-                           [attr.aria-valuetext]="uploads.progress + ' percent'"
+                           [attr.aria-valuetext]="notification.progress + ' percent'"
                            aria-valuemax="100">
                         <!-- <div class="progress"
                              style="width: 100%"
@@ -117,7 +138,7 @@
                              aria-valuemin="0"
                              aria-valuetext="50 percent"
                              aria-valuemax="100"> -->
-                        <span class="progress-meter" [style.width.%]="uploads.progress">
+                        <span class="progress-meter" [style.width.%]="notification.progress">
                           <!-- <span class="progress-meter-text">
                                </span> -->
                         </span>
@@ -126,9 +147,9 @@
                     <div class="upload-info-button-container" style="justify-content: space-between">
                       <div style="font-size: 12px; padding-top: 5px; padding-top: 5px; padding-bottom: 5px">
                         <i class="fas fa-circle-notch fa-spin"></i>
-                        From Tapis
+                        {{notification.message}}
                       </div>
-                      <button class="button tiny upload-info-button">
+                      <button class="button tiny upload-info-button" (click)="deleteErrorLog(notification)">
                         Abort
                       </button>
                     </div>

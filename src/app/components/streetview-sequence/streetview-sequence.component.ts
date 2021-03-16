@@ -20,7 +20,12 @@ export class StreetviewSequenceComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.sequenceImages = this.sequence.images;
+    // console.log(this.sequence)
+    // if (this.sequence.feature.features.length == 0) {
+
+    // }
+    // this.sequenceImages = this.sequence.coordinateProperties.image_keys;
+    this.sequenceImages = this.sequence.feature.features;
     // Need Spinner here
     // this.streetviewService.sequenceImages.subscribe(i => {
     //   this.sequenceImages = i;

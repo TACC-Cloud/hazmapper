@@ -15,6 +15,7 @@ import { combineLatest } from 'rxjs';
 import {filter, map} from 'rxjs/operators';
 import {Overlay, Project} from '../../models/models';
 import {AppEnvironment, environment} from '../../../environments/environment';
+import { StreetviewService } from 'src/app/services/streetview.service';
 
 @Component({
   selector: 'app-map',
@@ -29,12 +30,14 @@ export class MapComponent implements OnInit {
   _activeProjectId: number;
   features: FeatureGroup = new FeatureGroup();
   overlays: LayerGroup = new LayerGroup<any>();
+  streetviewFeatures: FeatureGroup = new FeatureGroup();
   environment: AppEnvironment;
   fitToFeatureExtent: boolean = true;
 
   constructor(private projectsService: ProjectsService,
               private geoDataService: GeoDataService,
               private route: ActivatedRoute,
+              private streetviewService: StreetviewService,
               ) {
 
     // Have to bind these to keep this being this
@@ -149,6 +152,41 @@ export class MapComponent implements OnInit {
       }
     );
 
+    this.streetviewService.streetviewSequences.subscribe((sequences) => {
+      this.streetviewFeatures.clearLayers();
+      const markers = L.markerClusterGroup({
+        iconCreateFunction: (cluster) => {
+          return L.divIcon({html: `<div><b>${cluster.getChildCount()}</b></div>`, className: 'marker-cluster'})
+        }
+      });
+      sequences.forEach(seq => {
+        let featureList = seq.feature.features;
+        if (featureList.length > 0) {
+          featureList.forEach(d => {
+            const feat = L.geoJSON(d, geojsonOptions);
+            feat.on('click', (ev) => { console.log(ev, d.properties.key); });
+
+            // TODO: This has to be LineString...
+            if (d.geometry.type === 'Point') {
+              markers.addLayer(feat);
+            } else {
+              this.streetviewFeatures.addLayer(feat);
+            }
+          });
+        }
+      });
+      this.streetviewFeatures.addLayer(markers);
+      this.map.addLayer(this.streetviewFeatures);
+      // try {
+      //   if (this.fitToFeatureExtent) {
+      //     this.fitToFeatureExtent = false;
+      //     this.map.fitBounds(this.streetviewFeatures.getBounds());
+      //   }
+      // } catch (e) {}
+    });
+
+
+
     this.projectsService.activeProject.subscribe((next: Project) => {
       // fit to bounds if this is a new project
       if (next && this._activeProjectId != next.id) {
@@ -163,6 +201,12 @@ export class MapComponent implements OnInit {
    * @param ev
    */
   featureClickHandler(ev: any): void {
+    const f = ev.layer.feature;
+    this.geoDataService.activeFeature = f;
+  }
+
+  // TODO: Need actual images for this to work properly
+  streetviewFeatureClickHandler(ev: any): void {
     const f = ev.layer.feature;
     this.geoDataService.activeFeature = f;
   }

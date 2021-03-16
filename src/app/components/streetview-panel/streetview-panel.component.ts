@@ -8,6 +8,7 @@ import {StreetviewAuthentication, StreetviewTokens} from '../../models/streetvie
 import {ProjectsService} from '../../services/projects.service'
 import {ModalStreetviewPublishComponent} from '../modal-streetview-publish/modal-streetview-publish.component';
 import { IProgressNotification } from 'src/app/models/notification';
+import { ModalStreetviewLogComponent } from '../modal-streetview-log/modal-streetview-log.component';
 
 @Component({
   selector: 'app-streetview-panel',
@@ -20,180 +21,7 @@ export class StreetviewPanelComponent implements OnInit, OnDestroy {
   private currentUser: AuthenticatedUser;
   private timerSub: any;
   private progressNotifications: Array<IProgressNotification> = [];
-  // uploadLogs: any = [
-  //   {
-  //     name: "/designsafe",
-  //     dateAdded: "2019-01-01",
-  //     dateDone: "2019-01-02",
-  //     hours: "4",
-  //     user: "Amy",
-  //     status: "failed"
-  //   },
-  //   {
-  //     name: "Name1",
-  //     dateAdded: "2019-01-01",
-  //     dateDone: "2019-01-02",
-  //     hours: "4",
-  //     user: "Amy",
-  //     status: "success"
-  //   },
-  //   {
-  //     name: "Name1",
-  //     dateAdded: "2019-01-01",
-  //     dateDone: "2019-01-02",
-  //     hours: "4",
-  //     user: "Amy",
-  //     status: "success"
-  //   },
-  //   {
-  //     name: "Name1",
-  //     dateAdded: "2019-01-01",
-  //     dateDone: "2019-01-02",
-  //     hours: "4",
-  //     user: "Amy",
-  //     status: "success"
-  //   },
-  //   {
-  //     name: "Name1",
-  //     dateAdded: "2019-01-01",
-  //     dateDone: "2019-01-02",
-  //     hours: "4",
-  //     user: "Amy",
-  //     status: "progress"
-  //   }
-  // ];
-
-
-
-  // TODO Allow each user to decide the display name of the sequence (in backend as well?)
-  mapillarySequences: any = [
-    {
-      name: "Name1",
-      id: 1,
-      uuid: "3829-28394-239842-348923",
-      from: "mapillary",
-      geo: "lon: 10; lat: 10",
-      open: false,
-      images: [
-        {
-          name: "cool",
-        },
-        {
-          name: "cool",
-        },
-        {
-          name: "cool",
-        },
-        {
-          name: "cool",
-        },
-        {
-          name: "cool",
-        },
-      ]
-    },
-    {
-      name: "Name1",
-      id: 2,
-      uuid: "839 -2348972-3479-23874-23",
-      from: "mapillary",
-      geo: "lon: 10; lat: 10",
-      open: false,
-      images: [
-        {
-          name: "cool",
-        },
-        {
-          name: "cool",
-        },
-        {
-          name: "cool",
-        },
-        {
-          name: "cool",
-        },
-        {
-          name: "cool",
-        },
-      ]
-    },
-    {
-      name: "Name1",
-      id: 3,
-      from: "mapillary",
-      uuid: "839 -2348972-3479-23874-23",
-      geo: "lon: 10; lat: 10",
-      open: false,
-      images: [
-        {
-          name: "cool",
-        },
-        {
-          name: "cool",
-        },
-        {
-          name: "cool",
-        },
-        {
-          name: "cool",
-        },
-        {
-          name: "cool",
-        },
-      ]
-    },
-    {
-      name: "Name1",
-      id: 4,
-      uuid: "839 -2348972-3479-23874-23",
-      from: "mapillary",
-      geo: "lon: 10; lat: 10",
-      open: false,
-      images: [
-        {
-          name: "cool",
-        },
-        {
-          name: "cool",
-        },
-        {
-          name: "cool",
-        },
-        {
-          name: "cool",
-        },
-        {
-          name: "cool",
-        },
-      ]
-    },
-    {
-      name: "Name1",
-      from: "mapillary",
-      id: 5,
-      uuid: "839 -2348972-3479-23874-23",
-      geo: "lon: 10; lat: 10",
-      open: false,
-      images: [
-        {
-          name: "cool",
-        },
-        {
-          name: "cool",
-        },
-        {
-          name: "cool",
-        },
-        {
-          name: "cool",
-        },
-        {
-          name: "cool",
-        },
-      ]
-    },
-  ];
-
+  private mapillarySequences: Array<any> = [];
   constructor(private bsModalService: BsModalService,
               private streetviewService: StreetviewService,
               private projectsService: ProjectsService,
@@ -201,7 +29,12 @@ export class StreetviewPanelComponent implements OnInit, OnDestroy {
               private authService: AuthService,) { }
 
   ngOnInit() {
-    this.notificationsService.getRecentProgress();
+    this.streetviewService.streetviewSequences.subscribe((next) => {
+      // TODO Fix this to be more elegant (way to toggle switch)
+      next.forEach(x => x.open = false);
+      this.mapillarySequences = next;
+    })
+
     this.authService.currentUser.subscribe( (next) => {
       this.currentUser = next;
     });
@@ -218,6 +51,8 @@ export class StreetviewPanelComponent implements OnInit, OnDestroy {
     // Or maybe this is necessary...
     this.streetviewService.login('google', this.activeProject.id, this.currentUser.username, false);
     this.streetviewService.login('mapillary', this.activeProject.id, this.currentUser.username, false);
+    this.streetviewService.getStreetviewSequences('mapillary', this.activeProject.id, this.currentUser.username);
+    this.notificationsService.getRecentProgress();
     this.timerSub = this.notificationsService.initProgressPoll();
   }
 
@@ -226,6 +61,20 @@ export class StreetviewPanelComponent implements OnInit, OnDestroy {
     modal.content.onClose.subscribe( (publishData: any) => {
       this.streetviewService.uploadPathToStreetviewService(this.activeProject.id, this.currentUser.username, publishData.selectedPath, publishData.publishToMapillary, publishData.publishToGoogle);
     });
+  }
+
+  // TODO: Fix so that it is considers incremental retry
+  retryPublish(pn: IProgressNotification) {
+    let retry = pn.message == "From tapis" ? false : true
+    this.streetviewService.uploadPathToStreetviewService(this.activeProject.id,
+                                                         this.currentUser.username,
+                                                         {
+                                                           system: pn.extraData.publishInfo.system,
+                                                           path: pn.extraData.publishInfo.path
+                                                         },
+                                                         pn.extraData.publishInfo.mapillary,
+                                                         pn.extraData.publishInfo.google,
+                                                         retry);
   }
 
   login(svService: string) {
@@ -250,8 +99,19 @@ export class StreetviewPanelComponent implements OnInit, OnDestroy {
     this.notificationsService.deleteProgress(pn);
   }
 
+  // This should also delete files (maybe it should automatically be handled[in geoapi].. idk)
+  deleteErrorLog(pn: IProgressNotification) {
+    this.notificationsService.deleteProgress(pn);
+  }
+
+  openDetailLogModal(pn: IProgressNotification) {
+    const initialState = {
+      notification: pn
+    };
+    const modal: BsModalRef = this.bsModalService.show(ModalStreetviewLogComponent, {initialState});
+  }
+
   ngOnDestroy() {
-    // FIXME doesn't work..
     if (this.timerSub) {
       this.timerSub.unsubscribe();
     }

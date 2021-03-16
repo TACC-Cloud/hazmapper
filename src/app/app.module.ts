@@ -48,6 +48,7 @@ import { EditNameInputComponent } from './components/edit-name-input/edit-name-i
 import { StreetviewPanelComponent } from './components/streetview-panel/streetview-panel.component';
 import { ModalStreetviewPublishComponent } from './components/modal-streetview-publish/modal-streetview-publish.component';
 import { StreetviewSequenceComponent } from './components/streetview-sequence/streetview-sequence.component';
+import { ModalStreetviewLogComponent } from './components/modal-streetview-log/modal-streetview-log.component';
 
 @NgModule({
   declarations: [
@@ -80,6 +81,7 @@ import { StreetviewSequenceComponent } from './components/streetview-sequence/st
     StreetviewPanelComponent,
     ModalStreetviewPublishComponent,
     StreetviewSequenceComponent,
+    ModalStreetviewLogComponent,
   ],
   imports: [
     CommonModule,
@@ -125,6 +127,7 @@ import { StreetviewSequenceComponent } from './components/streetview-sequence/st
     ModalCreatePointCloudComponent,
     ModalCreateOverlayComponent,
     ModalStreetviewPublishComponent,
+    ModalStreetviewLogComponent,
     ModalPointCloudInfoComponent]
 })
 export class AppModule { }
