@@ -1,14 +1,13 @@
 import { Component, OnInit, ElementRef, ViewChildren, QueryList, TemplateRef } from '@angular/core';
 import {GeoDataService} from '../../services/geo-data.service';
 import {Overlay, Project, TileServer} from '../../models/models';
-import {AppEnvironment, environment} from '../../../environments/environment';
 import {BsModalRef, BsModalService} from 'ngx-foundation';
 import {ModalCreateOverlayComponent} from '../modal-create-overlay/modal-create-overlay.component';
 import {RemoteFile} from 'ng-tapis';
 import {ModalCreateTileServerComponent} from '../modal-create-tile-server/modal-create-tile-server.component';
 import {ProjectsService} from '../../services/projects.service';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
-import {TapisFilesService} from '../../services/tapis-files.service';
+import {EnvService} from '../../services/env.service';
 
 @Component({
   selector: 'app-layers-panel',
@@ -24,18 +23,16 @@ export class LayersPanelComponent implements OnInit {
   dirtyOptions: boolean;
   overlays: Array<Overlay>;
   tileServers: Array<TileServer>;
-  environment: AppEnvironment;
   activeProject: Project;
   modalRef: BsModalRef;
 
   constructor(private geoDataService: GeoDataService,
               private bsModalService: BsModalService,
               private projectsService: ProjectsService,
-              private tapisFilesService: TapisFilesService) {
+              private envService: EnvService) {
   }
 
   ngOnInit() {
-    this.environment = environment;
     this.geoDataService.overlays.subscribe((ovs) => {
       this.overlays = ovs;
     });

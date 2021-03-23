@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {APP_BASE_HREF} from '@angular/common';
@@ -25,12 +25,12 @@ import { FeatureRowComponent } from './components/feature-row/feature-row.compon
 import { FeatureMetadataComponent } from './components/feature-metadata/feature-metadata.component';
 import { AuthService } from './services/authentication.service';
 import { ModalService } from './services/modal.service';
+import { EnvService } from './services/env.service';
 import { CallbackComponent } from './components/callback/callback.component';
 import {AuthInterceptor, JwtInterceptor} from './app.interceptors';
 import { ModalCreateProjectComponent } from './components/modal-create-project/modal-create-project.component';
 import {ReactiveFormsModule, FormsModule} from '@angular/forms';
 import { ModalFileBrowserComponent } from './components/modal-file-browser/modal-file-browser.component';
-import {environment} from '../environments/environment';
 import { ModalCreatePointCloudComponent } from './components/modal-create-point-cloud/modal-create-point-cloud.component';
 import { FeatureGeometryComponent } from './components/feature-geometry/feature-geometry.component';
 import { PointCloudsPanelComponent } from './components/point-clouds-panel/point-clouds-panel.component';
@@ -115,16 +115,26 @@ import {DragDropModule, CDK_DRAG_CONFIG} from '@angular/cdk/drag-drop';
       useClass: AuthInterceptor
     },
     {
-      provide: APP_BASE_HREF,
-      useValue: environment.baseHref
-    },
-    {
       provide: CDK_DRAG_CONFIG,
       useValue: {
         dragStartThreshold: 30,
         pointerDirectionChangeThreshold: 5,
         zIndex: 10000
       }
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (envService: EnvService) => () => envService.init(),
+      deps: [EnvService],
+      multi: true
+    },
+    {
+      provide: APP_BASE_HREF,
+      useFactory: (envService: EnvService) => {
+        envService.init();
+        return envService.baseHref;
+      },
+      deps: [EnvService],
     }
   ],
   bootstrap: [AppComponent],
