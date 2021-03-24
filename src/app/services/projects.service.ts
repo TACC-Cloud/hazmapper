@@ -117,6 +117,7 @@ export class ProjectsService {
   setActiveProjectUUID(uuid: string): void {
     this._loadingProject.next(true);
     this._loadingProjectFailed.next(false);
+    this.setActiveProject(null);
 
     this.http.get<Project[]>(environment.apiUrl + `/projects/?uuid=` + uuid)
       .subscribe( (resp) => {

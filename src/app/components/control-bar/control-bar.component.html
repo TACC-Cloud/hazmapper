@@ -12,7 +12,7 @@
         </div>
     </div>
     <div class="cell small-8 align-right align-middle grid-x">
-        <div class="grid-x align-right align-middle">
+        <div *ngIf="!loadingProjectFailed && !loadingProject" class="grid-x align-right align-middle">
             <span class="lat-lon-label"> Lat: </span>
             <div class="lat-lon-number"> {{ mapMouseLocation.lat | number:'.4' }}</div>
             <span class="lat-lon-label"> Lon: </span>
