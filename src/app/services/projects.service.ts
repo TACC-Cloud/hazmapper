@@ -25,8 +25,14 @@ export class ProjectsService {
   private _loadingProjects: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public loadingProjects: Observable<boolean> = this._loadingProjects.asObservable();
 
-  private _loadingFailed: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  public loadingFailed: Observable<boolean> = this._loadingFailed.asObservable();
+  private _loadingProjectsFailed: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public loadingProjectsFailed: Observable<boolean> = this._loadingProjectsFailed.asObservable();
+
+  private _loadingProject: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public loadingProject: Observable<boolean> = this._loadingProjects.asObservable();
+
+  private _loadingProjectFailed: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public loadingProjectFailed: Observable<boolean> = this._loadingProjectsFailed.asObservable();
 
   constructor(private http: HttpClient,
               private notificationsService: NotificationsService,
@@ -34,14 +40,14 @@ export class ProjectsService {
 
   getProjects(): void {
     this._loadingProjects.next(true);
-    this._loadingFailed.next(false);
+    this._loadingProjectsFailed.next(false);
     this.http.get<Project[]>(environment.apiUrl + `/projects/`).subscribe( resp => {
       this._projects.next(resp);
       this._loadingProjects.next(false);
-      this._loadingFailed.next(false);
+      this._loadingProjectsFailed.next(false);
     }, error => {
       this._loadingProjects.next(false);
-      this._loadingFailed.next(true);
+      this._loadingProjectsFailed.next(true);
       this.notificationsService.showErrorToast('Failed to retrieve project data! Geoapi might be down.');
     });
   }
@@ -67,7 +73,7 @@ export class ProjectsService {
     this.http.delete(environment.apiUrl + `/projects/${proj.id}/users/${uname}/`)
       .subscribe( (resp) => {
         this.getProjectUsers(proj);
-      },error => {
+      }, error => {
       this.notificationsService.showErrorToast('Unable to delete user');
     });
   }
@@ -105,6 +111,21 @@ export class ProjectsService {
           }
           throw new Error('Unable to create project.');
         })
+      );
+  }
+
+  setActiveProjectUUID(uuid: string): void {
+    this._loadingProject.next(true);
+    this._loadingProjectFailed.next(false);
+
+    this.http.get<Project[]>(environment.apiUrl + `/projects/?uuid=` + uuid)
+      .subscribe( (resp) => {
+        this._loadingProject.next(false);
+        this.setActiveProject(resp[0]);
+        }, error => {
+        this._loadingProject.next(false);
+        this._loadingProjectFailed.next(true);
+        }
       );
   }
 

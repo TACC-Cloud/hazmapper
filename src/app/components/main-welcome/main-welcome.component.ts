@@ -39,7 +39,7 @@ export class MainWelcomeComponent implements OnInit {
       this.spinner = isLoading;
     });
 
-    this.projectsService.loadingFailed.subscribe((connected) => {
+    this.projectsService.loadingProjectsFailed.subscribe((connected) => {
       this.connected = connected;
     });
 

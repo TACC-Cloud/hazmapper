@@ -1,25 +1,14 @@
 <div class="grid-x align-justify align-middle">
     <div class="cell small-4 no-padding">
-        <div class="grid-x align-middle">
-            <button class="button tiny success" (click)="openCreateProjectModal()"> <i class="fas fa-plus"></i></button>
-            <ul class="dropdown vertical menu" dropdown>
-                <li class="is-dropdown-submenu-parent">
-                    <button dropdownToggle  class="dropdown button tiny hollow">
-                        Maps
-                        <span class="" *ngIf="selectedProject"> : {{selectedProject.name}}</span>
-                    </button>
-                    <ul *dropdownMenu class="menu is-dropdown-submenu">
-                        <li class="clickable" *ngFor="let p of projects" (click)="selectProject(p)" [ngClass]="{'active-project': p === selectedProject}">
-                            {{ p.name }}
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-            <div *ngIf="!projects.length && !loading"> <span class="label alert"> No maps! Create one to get started. </span></div>
-            <div *ngIf="loadingData" style="margin-left: 1rem">
-                <span>Loading Data</span>
+        <div *ngIf="!loadingProjectFailed" class="grid-x align-middle">
+            <span >Map: {{activeProject ? activeProject.name: '--------'}}</span>
+            <div *ngIf="loadingProject || loadingData" style="margin-left: 1rem">
                 <i class="fas fa-spin fa-spinner ml-4" style="margin-left: 0.5rem"></i>
+                <span *ngIf="loadingData">Loading Data</span>
             </div>
+        </div>
+        <div *ngIf="loadingProjectFailed" class="grid-x align-middle">
+            <span class="label alert"> No maps! Create one to get started. </span>
         </div>
     </div>
     <div class="cell small-8 align-right align-middle grid-x">
