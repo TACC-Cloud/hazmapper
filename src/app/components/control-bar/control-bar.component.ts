@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ProjectsService } from '../../services/projects.service';
 import { Project } from '../../models/models';
 import { GeoDataService } from '../../services/geo-data.service';
@@ -6,7 +6,6 @@ import {LatLng} from 'leaflet';
 import {skip} from 'rxjs/operators';
 import {combineLatest} from 'rxjs';
 import {NotificationsService} from '../../services/notifications.service';
-import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-control-bar',
@@ -14,22 +13,20 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./control-bar.component.styl']
 })
 export class ControlBarComponent implements OnInit {
-  public activeProject: Project;
-  public mapMouseLocation: LatLng = new LatLng(0, 0);
-  public loadingProject = false;
-  public loadingProjectFailed = false;
+  private activeProject: Project;
+  private mapMouseLocation: LatLng = new LatLng(0, 0);
+  private loadingActiveProject = true;
+  private loadingActiveProjectFailed = false;
   private loadingData = false;
 
   constructor(private projectsService: ProjectsService,
               private geoDataService: GeoDataService,
               private notificationsService: NotificationsService,
-              private route: ActivatedRoute,
-              private router: Router,
               ) { }
 
   ngOnInit() {
-    this.projectsService.loadingProject.subscribe(value => this.loadingProject = value);
-    this.projectsService.loadingProjectFailed.subscribe(value => this.loadingProjectFailed = value);
+    this.projectsService.loadingActiveProject.subscribe(value => this.loadingActiveProject = value);
+    this.projectsService.loadingActiveProjectFailed.subscribe(value => this.loadingActiveProjectFailed = value);
 
     combineLatest(this.geoDataService.loadingOverlayData,
                   this.geoDataService.loadingPointCloudData,

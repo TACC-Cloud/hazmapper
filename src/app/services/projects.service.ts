@@ -28,11 +28,11 @@ export class ProjectsService {
   private _loadingProjectsFailed: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public loadingProjectsFailed: Observable<boolean> = this._loadingProjectsFailed.asObservable();
 
-  private _loadingProject: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  public loadingProject: Observable<boolean> = this._loadingProjects.asObservable();
+  private _loadingActiveProject: BehaviorSubject<boolean> = new BehaviorSubject(true);
+  public loadingActiveProject: Observable<boolean> = this._loadingActiveProject.asObservable();
 
-  private _loadingProjectFailed: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  public loadingProjectFailed: Observable<boolean> = this._loadingProjectsFailed.asObservable();
+  private _loadingActiveProjectFailed: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public loadingActiveProjectFailed: Observable<boolean> = this._loadingActiveProjectFailed.asObservable();
 
   constructor(private http: HttpClient,
               private notificationsService: NotificationsService,
@@ -115,17 +115,17 @@ export class ProjectsService {
   }
 
   setActiveProjectUUID(uuid: string): void {
-    this._loadingProject.next(true);
-    this._loadingProjectFailed.next(false);
+    this._loadingActiveProject.next(true);
+    this._loadingActiveProjectFailed.next(false);
     this.setActiveProject(null);
 
     this.http.get<Project[]>(environment.apiUrl + `/projects/?uuid=` + uuid)
       .subscribe( (resp) => {
-        this._loadingProject.next(false);
+        this._loadingActiveProject.next(false);
         this.setActiveProject(resp[0]);
         }, error => {
-        this._loadingProject.next(false);
-        this._loadingProjectFailed.next(true);
+        this._loadingActiveProject.next(false);
+        this._loadingActiveProjectFailed.next(true);
         }
       );
   }

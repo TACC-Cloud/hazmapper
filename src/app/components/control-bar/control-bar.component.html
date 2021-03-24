@@ -1,18 +1,18 @@
 <div class="grid-x align-justify align-middle">
     <div class="cell small-4 no-padding">
-        <div *ngIf="!loadingProjectFailed" class="grid-x align-middle">
+        <div *ngIf="!loadingActiveProjectFailed" class="grid-x align-middle">
             <span >Map: {{activeProject ? activeProject.name: '--------'}}</span>
-            <div *ngIf="loadingProject || loadingData" style="margin-left: 1rem">
+            <div *ngIf="loadingActiveProject || loadingData" style="margin-left: 1rem">
                 <i class="fas fa-spin fa-spinner ml-4" style="margin-left: 0.5rem"></i>
                 <span *ngIf="loadingData">Loading Data</span>
             </div>
         </div>
-        <div *ngIf="loadingProjectFailed" class="grid-x align-middle">
-            <span class="label alert"> No maps! Create one to get started. </span>
+        <div *ngIf="loadingActiveProjectFailed" class="grid-x align-middle">
+            <span class="label alert"> Unable to access this map </span>
         </div>
     </div>
     <div class="cell small-8 align-right align-middle grid-x">
-        <div *ngIf="!loadingProjectFailed && !loadingProject" class="grid-x align-right align-middle">
+        <div *ngIf="!loadingActiveProjectFailed && !loadingActiveProjectFailed" class="grid-x align-right align-middle">
             <span class="lat-lon-label"> Lat: </span>
             <div class="lat-lon-number"> {{ mapMouseLocation.lat | number:'.4' }}</div>
             <span class="lat-lon-label"> Lon: </span>
