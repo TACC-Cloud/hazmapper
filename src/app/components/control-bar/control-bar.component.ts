@@ -28,7 +28,6 @@ export class ControlBarComponent implements OnInit {
               ) { }
 
   ngOnInit() {
-    this.projectsService.getProjects();
     this.projectsService.loadingProject.subscribe(value => this.loadingProject = value);
     this.projectsService.loadingProjectFailed.subscribe(value => this.loadingProjectFailed = value);
 
