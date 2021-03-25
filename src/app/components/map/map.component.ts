@@ -8,10 +8,9 @@ import { ProjectsService} from '../../services/projects.service';
 import { GeoDataService} from '../../services/geo-data.service';
 import { createMarker } from '../../utils/leafletUtils';
 import {Feature} from 'geojson';
-import {FeatureGroup, ImageOverlay, LatLng, Layer, LayerGroup, LeafletMouseEvent} from 'leaflet';
+import {FeatureGroup, Layer, LayerGroup, LeafletMouseEvent} from 'leaflet';
 import * as turf from '@turf/turf';
 import { AllGeoJSON } from '@turf/helpers';
-import { combineLatest } from 'rxjs';
 import {filter, map} from 'rxjs/operators';
 import {Overlay, Project, TileServer} from '../../models/models';
 import {AppEnvironment, environment} from '../../../environments/environment';
@@ -24,7 +23,6 @@ import {AppEnvironment, environment} from '../../../environments/environment';
 export class MapComponent implements OnInit {
 
   map: L.Map;
-  mapType = 'normal';
   activeFeature: Feature;
   _activeProjectId: number;
   features: FeatureGroup = new FeatureGroup();
