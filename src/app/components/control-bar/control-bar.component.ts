@@ -33,11 +33,7 @@ export class ControlBarComponent implements OnInit {
                   this.geoDataService.loadingFeatureData)
       .subscribe(([loadingOverlay, loadingPointCloud, loadingFeature]) => {
         // They are running
-        if (!(loadingOverlay || loadingPointCloud || loadingFeature)) {
-          this.loadingData = false;
-        } else {
-          this.loadingData = true;
-        }
+        this.loadingData = (loadingOverlay || loadingPointCloud || loadingFeature);
       });
 
     this.projectsService.activeProject.subscribe(next => {
