@@ -25,6 +25,6 @@ export class MainProjectComponent implements OnInit {
     });
 
     // FIXME: There's a bug related to switching projects and the tile-servers implementation
-    //        Tiles don't hide on switch
+    //        Tiles don't hide on switch (https://jira.tacc.utexas.edu/browse/DES-1906)
   }
 }
