@@ -85,12 +85,9 @@ export class ProjectsService {
         tap(proj => {
           // Spread operator, just pushes the new project into the array
           this._projects.next([...this._projects.value, proj]);
-          // Set the active project to the one just created?
-          this._activeProject.next(proj);
-
           // Add default servers
           defaultTileServers.forEach(ts => {
-            this.geoDataService.addTileServer(proj.id, ts);
+            this.geoDataService.addTileServer(proj.id, ts, true);
           });
 
         }),

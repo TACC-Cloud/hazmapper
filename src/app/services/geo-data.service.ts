@@ -372,7 +372,12 @@ export class GeoDataService {
     });
   }
 
-  addTileServer(projectId: number, tileServer: TileServer) {
+  /**
+   * Add tile server
+   *
+   * @param quiet if set to true then toasts notifying of creation are skipped
+   */
+  addTileServer(projectId: number, tileServer: TileServer, quiet: boolean = false) {
     // NOTE: Here to give new layers zIndices without affecting previous order
     this.tileServers$.pipe(take(1)).subscribe(tileServerList => {
       if (tileServerList) {
@@ -390,7 +395,9 @@ export class GeoDataService {
     this.http.post(this.envService.apiUrl + `/projects/${projectId}/tile-servers/`, tileServer)
       .subscribe((resp) => {
         this.getTileServers(projectId);
-        this.notificationsService.showSuccessToast('Tile server ' + tileServer.name + ' added!');
+        if (!quiet) {
+          this.notificationsService.showSuccessToast('Tile server ' + tileServer.name + ' added!');
+        }
       }, (error => {
         this.notificationsService.showErrorToast('Could not add tile server!');
       }));
