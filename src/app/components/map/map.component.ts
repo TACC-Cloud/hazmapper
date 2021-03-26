@@ -23,7 +23,6 @@ import {EnvService} from '../../services/env.service';
 export class MapComponent implements OnInit {
 
   map: L.Map;
-  mapType = 'normal';
   activeFeature: Feature;
   _activeProjectId: number;
   features: FeatureGroup = new FeatureGroup();
