@@ -120,7 +120,7 @@ export class ProjectsService {
     this._loadingActiveProjectFailed.next(false);
     this.setActiveProject(null);
 
-    this.http.get<Project[]>(environment.apiUrl + `/projects/?uuid=` + uuid)
+    this.http.get<Project[]>(this.envService.apiUrl + `/projects/?uuid=` + uuid)
       .subscribe( (resp) => {
         this._loadingActiveProject.next(false);
         this.setActiveProject(resp[0]);
