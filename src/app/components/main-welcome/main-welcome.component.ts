@@ -2,13 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Project } from '../../models/models';
 import {GeoDataService} from '../../services/geo-data.service';
 import {ProjectsService} from '../../services/projects.service';
-import {BsModalRef, BsModalService} from 'ngx-foundation';
+import {BsModalService} from 'ngx-foundation';
 import {ModalCreateProjectComponent} from '../modal-create-project/modal-create-project.component';
 import { Router, ActivatedRoute } from '@angular/router';
-import {Feature} from '../../models/models';
-import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-
 
 @Component({
   selector: 'app-main-welcome',
@@ -47,10 +43,6 @@ export class MainWelcomeComponent implements OnInit {
       this.projects = projects;
     });
 
-    this.projectsService.activeProject.subscribe( (next) => {
-      this.activeProject = next;
-    });
-
     this.projectsService.getProjects();
   }
 
@@ -60,8 +52,8 @@ export class MainWelcomeComponent implements OnInit {
 
   openCreateProjectModal() {
     const modal = this.bsModalService.show(ModalCreateProjectComponent);
-    modal.content.onClose.subscribe( (next) => {
-      this.routeToProject(this.activeProject.id);
+    modal.content.onClose.subscribe( (project) => {
+      this.routeToProject(project.uuid);
     });
   }
 

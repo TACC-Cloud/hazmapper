@@ -32,7 +32,8 @@ export class ModalCreateProjectComponent implements OnInit {
 
   }
 
-  close() {
+  close(project: Project) {
+    this.onClose.next(project);
     this.bsModalRef.hide();
   }
 
@@ -43,9 +44,8 @@ export class ModalCreateProjectComponent implements OnInit {
   createRapidProject() {
     this.errorMessage = '';
     const req: RapidProjectRequest = new RapidProjectRequest(this.rapidFolder.system, this.rapidFolder.path)
-    this.projectsService.createRapidProject(req).subscribe( (resp) => {
-      this.onClose.next(null);
-      this.bsModalRef.hide();
+    this.projectsService.createRapidProject(req).subscribe( (project) => {
+      this.close(project);
     }, (err) => {
      this.errorMessage = err.toString();
     });
@@ -56,9 +56,8 @@ export class ModalCreateProjectComponent implements OnInit {
     const p = new Project();
     p.description = this.projCreateForm.get('description').value;
     p.name = this.projCreateForm.get('name').value;
-    this.projectsService.create(p).subscribe( (next) => {
-      this.onClose.next(null);
-      this.close();
+    this.projectsService.create(p).subscribe( (project) => {
+      this.close(project);
     }, err => {
       this.errorMessage = err.toString();
     });
