@@ -5,14 +5,14 @@
     <div *ngIf="loadingActiveProject" style="margin-left:1rem" class="align-middle">
         <i class="fas fa-spin fa-spinner"></i>
     </div>
-    <div *ngIf="!loadingActiveProject && !loadingActiveProjectFailed" class="cell small-4 align-middle grid-x">
+    <div *ngIf="!loadingActiveProject && !loadingActiveProjectFailed" class="cell small-8 align-middle grid-x">
         <span style="margin-left: 1rem">Map: {{ activeProject.name }}</span>
         <div *ngIf="loadingData" style="margin-left: 1rem">
             <i class="fas fa-spin fa-spinner" style="margin-right: 0.3rem"></i>
             <span>Loading Data</span>
         </div>
     </div>
-    <div *ngIf="!loadingActiveProject && !loadingActiveProjectFailed" class="cell small-8 align-right align-middle grid-x">
+    <div *ngIf="!loadingActiveProject && !loadingActiveProjectFailed" class="cell small-4 align-right align-middle grid-x">
         <div class="grid-x align-right align-middle">
             <span class="lat-lon-label"> Lat: </span>
             <div class="lat-lon-number"> {{ mapMouseLocation.lat | number:'.4' }}</div>
