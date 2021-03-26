@@ -1,23 +1,21 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpEventType} from '@angular/common/http';
-import {BehaviorSubject, Observable, ReplaySubject, Subject} from 'rxjs';
+import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
 import {LatLng} from 'leaflet';
 import {FilterService} from './filter.service';
-import {AssetFilters, FeatureAsset, IFeatureAsset, IFileImportRequest, IPointCloud, Overlay, TileServer} from '../models/models';
+import {AssetFilters, IFileImportRequest, IPointCloud, Overlay, TileServer} from '../models/models';
 import { Feature, FeatureCollection} from '../models/models';
-import { environment } from '../../environments/environment';
-import {filter, map, take, toArray} from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import * as querystring from 'querystring';
 import {RemoteFile} from 'ng-tapis';
 import {PathTree} from '../models/path-tree';
 import {NotificationsService} from './notifications.service';
+import {EnvService} from '../services/env.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GeoDataService {
-
-
   // TODO: clean this up and put the observables up here. Also look into Replay/Behavior
   private _features: BehaviorSubject<FeatureCollection> = new BehaviorSubject<FeatureCollection>({type: 'FeatureCollection', features: []});
   private features$: Observable<FeatureCollection> = this._features.asObservable();
@@ -55,8 +53,8 @@ export class GeoDataService {
   private _dirtyTileOptions: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public readonly dirtyTileOptions$: Observable<boolean> = this._dirtyTileOptions.asObservable();
 
-  constructor(private http: HttpClient, private filterService: FilterService, private notificationsService: NotificationsService) {
-
+  constructor(private http: HttpClient, private filterService: FilterService,
+              private notificationsService: NotificationsService, private envService: EnvService) {
     this.filterService.assetFilter.subscribe( (next) => {
       this._assetFilters = next;
     });
@@ -76,7 +74,7 @@ export class GeoDataService {
   getFeatures(projectId: number): void {
     const qstring: string = querystring.stringify(this._assetFilters.toJson());
     this.setLoadFeatureData(true);
-    this.http.get<FeatureCollection>(environment.apiUrl + `/projects/${projectId}/features/` + '?' + qstring)
+    this.http.get<FeatureCollection>(this.envService.apiUrl + `/projects/${projectId}/features/` + '?' + qstring)
       .subscribe( (fc: FeatureCollection) => {
         fc.features = fc.features.map( (feat: Feature) => new Feature(feat));
 
@@ -98,7 +96,7 @@ export class GeoDataService {
   }
 
   deleteFeature(feature: Feature) {
-    this.http.delete(environment.apiUrl + `/projects/${feature.project_id}/features/${feature.id}/`)
+    this.http.delete(this.envService.apiUrl + `/projects/${feature.project_id}/features/${feature.id}/`)
       .subscribe( (resp) => {
         this.getFeatures(feature.project_id);
         this.getPointClouds(feature.project_id);
@@ -107,7 +105,7 @@ export class GeoDataService {
 
   getPointClouds(projectId: number) {
     this.setLoadPointCloudData(true);
-    this.http.get<Array<IPointCloud>>(environment.apiUrl + `/projects/${projectId}/point-cloud/`)
+    this.http.get<Array<IPointCloud>>(this.envService.apiUrl + `/projects/${projectId}/point-cloud/`)
       .subscribe( (resp ) => {
         this.setLoadPointCloudData(false);
         this._pointClouds.next(resp);
@@ -130,7 +128,7 @@ export class GeoDataService {
       description: title,
       conversion_parameters: conversionParams
     };
-    this.http.post(environment.apiUrl + `/projects/${projectId}/point-cloud/`, payload)
+    this.http.post(this.envService.apiUrl + `/projects/${projectId}/point-cloud/`, payload)
       .subscribe( (resp) => {
         this.getPointClouds(projectId);
       }, error => {
@@ -140,7 +138,7 @@ export class GeoDataService {
 
   deletePointCloud(pc: IPointCloud): void {
     console.log(pc);
-    this.http.delete(environment.apiUrl + `/projects/${pc.project_id}/point-cloud/${pc.id}/`)
+    this.http.delete(this.envService.apiUrl + `/projects/${pc.project_id}/point-cloud/${pc.id}/`)
       .subscribe( (resp) => {
         this.getPointClouds(pc.project_id);
       });
@@ -150,7 +148,7 @@ export class GeoDataService {
     const form = new FormData();
     form.append('file', file);
     console.log(pc);
-    this.http.post(environment.apiUrl + `/projects/${pc.project_id}/point-cloud/${pc.id}/`, form)
+    this.http.post(this.envService.apiUrl + `/projects/${pc.project_id}/point-cloud/${pc.id}/`, form)
       .subscribe( (resp) => {
         this.getPointClouds(pc.project_id);
         this.notificationsService.showSuccessToast('Point cloud file uploaded!');
@@ -164,7 +162,7 @@ export class GeoDataService {
     const payload = {
       files: tmp
     };
-    this.http.post(environment.apiUrl + `/projects/${projectId}/point-cloud/${pointCloudId}/import/`, payload)
+    this.http.post(this.envService.apiUrl + `/projects/${projectId}/point-cloud/${pointCloudId}/import/`, payload)
       .subscribe( (resp) => {
       }, error => {
         // TODO: Add notification / toast
@@ -176,7 +174,7 @@ export class GeoDataService {
     const payload = {
       files: tmp
     };
-    this.http.post(environment.apiUrl + `/projects/${projectId}/features/files/import/`, payload)
+    this.http.post(this.envService.apiUrl + `/projects/${projectId}/features/files/import/`, payload)
       .subscribe( (resp) => {
         this.notificationsService.showSuccessToast('Import started!');
       }, error => {
@@ -188,7 +186,7 @@ export class GeoDataService {
     const qstring: string = querystring.stringify(query.toJson());
     const downloadLink = document.createElement('a');
 
-    this.http.get<FeatureCollection>(environment.apiUrl + `/projects/${projectId}/features/` + '?' + qstring)
+    this.http.get<FeatureCollection>(this.envService.apiUrl + `/projects/${projectId}/features/` + '?' + qstring)
       .subscribe( (resp) => {
         const blob = new Blob([JSON.stringify(resp)], {type: 'application/json'});
         downloadLink.href = URL.createObjectURL(blob);
@@ -202,7 +200,7 @@ export class GeoDataService {
   uploadFile(projectId: number, file: File): void {
     const form: FormData = new FormData();
     form.append('file', file, file.name);
-    this.http.post<Array<Feature>>(environment.apiUrl + `/projects/${projectId}/features/files/`, form,  {
+    this.http.post<Array<Feature>>(this.envService.apiUrl + `/projects/${projectId}/features/files/`, form,  {
       reportProgress: true,
       observe: 'events'
     }).pipe(map((event) => {
@@ -227,7 +225,7 @@ export class GeoDataService {
   }
 
   importFeatureAsset(projectId: number, featureId: number, payload: IFileImportRequest): void {
-    this.http.post<Feature>(environment.apiUrl + `/projects/${projectId}/features/${featureId}/assets/`, payload)
+    this.http.post<Feature>(this.envService.apiUrl + `/projects/${projectId}/features/${featureId}/assets/`, payload)
       .subscribe( (feature) => {
         // TODO workaround to update activeFeature, this should be done with a subscription like in addFeature()
         const f = this._activeFeature.getValue();
@@ -242,7 +240,7 @@ export class GeoDataService {
 
   getOverlays(projectId: number): void {
     this.setLoadOverlayData(true);
-    this.http.get(environment.apiUrl + `/projects/${projectId}/overlays/`).subscribe( (ovs: Array<Overlay>) => {
+    this.http.get(this.envService.apiUrl + `/projects/${projectId}/overlays/`).subscribe( (ovs: Array<Overlay>) => {
       this._overlays.next(ovs);
       this.setLoadOverlayData(false);
     });
@@ -257,7 +255,7 @@ export class GeoDataService {
     payload.append('minLon', minLon.toFixed(6));
     payload.append('maxLon', maxLon.toFixed(6));
 
-    this.http.post(environment.apiUrl + `/projects/${projectId}/overlays/`, payload)
+    this.http.post(this.envService.apiUrl + `/projects/${projectId}/overlays/`, payload)
       .subscribe((resp) => {
         this.getOverlays(projectId);
       });
@@ -274,7 +272,7 @@ export class GeoDataService {
       minLon: minLon,
       maxLon: maxLon
     }
-    this.http.post(environment.apiUrl + `/projects/${projectId}/overlays/import/`, payload)
+    this.http.post(this.envService.apiUrl + `/projects/${projectId}/overlays/import/`, payload)
       .subscribe( (resp) => {
         this.getOverlays(projectId);
       }, error => {
@@ -284,7 +282,7 @@ export class GeoDataService {
 
   deleteOverlay(projectId: number, overlay: Overlay) {
     this.http
-      .delete(environment.apiUrl + `/projects/${projectId}/overlays/${overlay.id}/`)
+      .delete(this.envService.apiUrl + `/projects/${projectId}/overlays/${overlay.id}/`)
       .subscribe((resp) => {
         // Update the list of overlays, remove the one deleted
         this.overlays$.pipe(
@@ -310,7 +308,7 @@ export class GeoDataService {
 
   deleteTileServer(projectId: number, tileServerId: number) {
     this.http
-      .delete(environment.apiUrl + `/projects/${projectId}/tile-servers/${tileServerId}/`)
+      .delete(this.envService.apiUrl + `/projects/${projectId}/tile-servers/${tileServerId}/`)
       .subscribe((resp) => {
         this.tileServers$.pipe(
           take(1),
@@ -345,7 +343,7 @@ export class GeoDataService {
   }
 
   public saveTileServers(projectId: number, tileServers: Array<TileServer>): void {
-    this.http.put(environment.apiUrl + `/projects/${projectId}/tile-servers/`, tileServers)
+    this.http.put(this.envService.apiUrl + `/projects/${projectId}/tile-servers/`, tileServers)
       .subscribe( (resp) => {
         this.getTileServers(projectId);
         if (this._dirtyTileOptions.value) {
@@ -364,7 +362,7 @@ export class GeoDataService {
   }
 
   getTileServers(projectId: number): void {
-    this.http.get(environment.apiUrl + `/projects/${projectId}/tile-servers/`).subscribe((tsv: Array<TileServer>) => {
+    this.http.get(this.envService.apiUrl + `/projects/${projectId}/tile-servers/`).subscribe((tsv: Array<TileServer>) => {
       tsv.sort((a, b) => {
         return b.uiOptions.zIndex - a.uiOptions.zIndex;
       });
@@ -389,7 +387,7 @@ export class GeoDataService {
       tileServer.uiOptions.zIndex = 0;
     });
 
-    this.http.post(environment.apiUrl + `/projects/${projectId}/tile-servers/`, tileServer)
+    this.http.post(this.envService.apiUrl + `/projects/${projectId}/tile-servers/`, tileServer)
       .subscribe((resp) => {
         this.getTileServers(projectId);
         this.notificationsService.showSuccessToast('Tile server ' + tileServer.name + ' added!');

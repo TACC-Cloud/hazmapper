@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
 import {Project} from '../models/models';
-import { environment } from '../../environments/environment';
 import { RapidProjectRequest } from '../models/rapid-project-request';
 import {catchError, map, tap} from 'rxjs/operators';
 import {IProjectUser} from '../models/project-user';
 import {NotificationsService} from './notifications.service';
 import {GeoDataService} from './geo-data.service';
+import { EnvService } from '../services/env.service';
 import {defaultTileServers} from '../constants/tile-servers';
 
 @Injectable({
@@ -36,12 +36,13 @@ export class ProjectsService {
 
   constructor(private http: HttpClient,
               private notificationsService: NotificationsService,
-              private geoDataService: GeoDataService) { }
+              private geoDataService: GeoDataService,
+              private envService: EnvService) { }
 
   getProjects(): void {
     this._loadingProjects.next(true);
     this._loadingProjectsFailed.next(false);
-    this.http.get<Project[]>(environment.apiUrl + `/projects/`).subscribe( resp => {
+    this.http.get<Project[]>(this.envService.apiUrl + `/projects/`).subscribe( resp => {
       this._projects.next(resp);
       this._loadingProjects.next(false);
       this._loadingProjectsFailed.next(false);
@@ -53,7 +54,7 @@ export class ProjectsService {
   }
 
   getProjectUsers(proj: Project): void {
-    this.http.get<Array<IProjectUser>>(environment.apiUrl + `/projects/${proj.id}/users/`)
+    this.http.get<Array<IProjectUser>>(this.envService.apiUrl + `/projects/${proj.id}/users/`)
       .subscribe( (resp) => {
         this._projectUsers.next(resp);
       });
@@ -63,14 +64,14 @@ export class ProjectsService {
     const payload = {
       username: uname
     };
-    this.http.post(environment.apiUrl + `/projects/${proj.id}/users/`, payload)
+    this.http.post(this.envService.apiUrl + `/projects/${proj.id}/users/`, payload)
       .subscribe( (resp) => {
         this.getProjectUsers(proj);
       });
   }
 
   deleteUserFromProject(proj: Project, uname: string): void {
-    this.http.delete(environment.apiUrl + `/projects/${proj.id}/users/${uname}/`)
+    this.http.delete(this.envService.apiUrl + `/projects/${proj.id}/users/${uname}/`)
       .subscribe( (resp) => {
         this.getProjectUsers(proj);
       }, error => {
@@ -79,7 +80,7 @@ export class ProjectsService {
   }
 
   create(data: Project): Observable<Project> {
-    return this.http.post<Project>(environment.apiUrl + `/projects/`, data)
+    return this.http.post<Project>(this.envService.apiUrl + `/projects/`, data)
       .pipe(
         tap(proj => {
           // Spread operator, just pushes the new project into the array
@@ -97,7 +98,7 @@ export class ProjectsService {
   }
 
   createRapidProject(data: RapidProjectRequest) {
-    return this.http.post<Project>(environment.apiUrl + `/projects/rapid/`, data)
+    return this.http.post<Project>(this.envService.apiUrl + `/projects/rapid/`, data)
       .pipe(
         map( (proj) => {
           this._projects.next([proj, ...this._projects.value]);
@@ -138,7 +139,7 @@ export class ProjectsService {
   }
 
   deleteProject(proj: Project): void {
-    this.http.delete(environment.apiUrl + `/projects/${proj.id}/`)
+    this.http.delete(this.envService.apiUrl + `/projects/${proj.id}/`)
       .subscribe( (resp) => {
         this.getProjects();
       }, error => {
@@ -155,7 +156,7 @@ export class ProjectsService {
       description: description
     };
 
-    this.http.put(environment.apiUrl + `/projects/${proj.id}/`, payload)
+    this.http.put(this.envService.apiUrl + `/projects/${proj.id}/`, payload)
       .subscribe( (resp) => {
         proj.name = name;
       });

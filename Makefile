@@ -6,4 +6,5 @@ image:
 	docker build -t $(IMAGE) .
 
 .PHONY: deploy
+deploy:
 	docker push $(IMAGE)

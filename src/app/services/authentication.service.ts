@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthToken } from '../models/models';
-import {environment} from '../../environments/environment';
-import {Observable, ReplaySubject} from 'rxjs';
-import {Router} from '@angular/router';
+import { EnvService } from '../services/env.service';
+import { Observable, ReplaySubject } from 'rxjs';
+import { Router } from '@angular/router';
 
 export class AuthenticatedUser {
   public readonly username: string;
@@ -32,7 +32,7 @@ export class AuthService {
   private LS_TOKEN_KEY = 'hazmapperToken';
   private LS_USER_KEY = 'hazmapperUser';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private envService: EnvService, private router: Router) {}
 
   public login() {
     // First, check if the user has a token in localStorage
@@ -51,8 +51,8 @@ export class AuthService {
   }
 
   private redirectToauthenticaor() {
-    const client_id = environment.clientId;
-    const callback = location.origin + environment.baseHref + 'callback';
+    const client_id = this.envService.clientId;
+    const callback = location.origin + this.envService.baseHref + 'callback';
     const state = Math.random().toString(36);
     const AUTH_URL = `https://agave.designsafe-ci.org/authorize?scope=openid&client_id=${client_id}&response_type=token&redirect_uri=${callback}&state=${state}`;
     window.location.href = AUTH_URL;

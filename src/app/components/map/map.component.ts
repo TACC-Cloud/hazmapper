@@ -13,7 +13,7 @@ import * as turf from '@turf/turf';
 import { AllGeoJSON } from '@turf/helpers';
 import {filter, map} from 'rxjs/operators';
 import {Overlay, Project, TileServer} from '../../models/models';
-import {AppEnvironment, environment} from '../../../environments/environment';
+import {EnvService} from '../../services/env.service';
 
 @Component({
   selector: 'app-map',
@@ -29,11 +29,11 @@ export class MapComponent implements OnInit {
   overlays: LayerGroup = new LayerGroup<any>();
   tileServers: Array<TileServer> = new Array<TileServer>();
   tileServerLayers: any = {};
-  environment: AppEnvironment;
   fitToFeatureExtent: boolean = true;
 
   constructor(private projectsService: ProjectsService,
               private geoDataService: GeoDataService,
+              private envService: EnvService,
               private route: ActivatedRoute,
              ) {
     // Have to bind these to keep this being this
@@ -45,7 +45,6 @@ export class MapComponent implements OnInit {
     // const mapType: string = this.route.snapshot.queryParamMap.get('mapType');
     // this.projectId = +this.route.snapshot.paramMap.get("projectId");
     // this.cluster = this.route.snapshot.queryParamMap.get('mapType');
-    this.environment = environment;
     this.map = new L.Map('map', {
       center: [40, -80],
       zoom: 3,
@@ -106,7 +105,7 @@ export class MapComponent implements OnInit {
   }
 
   createOverlayLayer(ov: Overlay): Layer {
-    return L.imageOverlay(environment.apiUrl + '/assets/' + ov.path, [[ov.minLat, ov.minLon], [ov.maxLat, ov.maxLon]]);
+    return L.imageOverlay(this.envService.apiUrl + '/assets/' + ov.path, [[ov.minLat, ov.minLon], [ov.maxLat, ov.maxLon]]);
   }
 
   // TODO: Might have to use NgZone with this, I think that any mouse event is triggering change detection.
