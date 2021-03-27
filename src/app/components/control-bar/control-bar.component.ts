@@ -28,7 +28,7 @@ export class ControlBarComponent implements OnInit {
     this.projectsService.loadingActiveProject.subscribe(value => this.loadingActiveProject = value);
     this.projectsService.loadingActiveProjectFailed.subscribe(value => this.loadingActiveProjectFailed = value);
 
-    combineLatest(this.geoDataService.loadingOverlayData,
+    combineLatest([this.geoDataService.loadingOverlayData,
                   this.geoDataService.loadingPointCloudData,
                   this.geoDataService.loadingFeatureData)
       .subscribe(([loadingOverlay, loadingPointCloud, loadingFeature]) => {
