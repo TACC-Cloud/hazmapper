@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ProjectsService } from '../../services/projects.service';
 import { Project } from '../../models/models';
 import { GeoDataService } from '../../services/geo-data.service';
 import {LatLng} from 'leaflet';
 import {skip} from 'rxjs/operators';
-import {combineLatest} from 'rxjs';
+import {combineLatest, Subscription} from 'rxjs';
 import {NotificationsService} from '../../services/notifications.service';
 
 @Component({
@@ -12,7 +12,8 @@ import {NotificationsService} from '../../services/notifications.service';
   templateUrl: './control-bar.component.html',
   styleUrls: ['./control-bar.component.styl']
 })
-export class ControlBarComponent implements OnInit {
+export class ControlBarComponent implements OnInit, OnDestroy {
+  private subscription: Subscription = new Subscription();
   private activeProject: Project;
   private mapMouseLocation: LatLng = new LatLng(0, 0);
   private loadingActiveProject = true;
@@ -25,35 +26,40 @@ export class ControlBarComponent implements OnInit {
               ) { }
 
   ngOnInit() {
-    this.projectsService.loadingActiveProject.subscribe(value => this.loadingActiveProject = value);
-    this.projectsService.loadingActiveProjectFailed.subscribe(value => this.loadingActiveProjectFailed = value);
+    this.subscription.add(this.projectsService.loadingActiveProject.subscribe(
+      value => this.loadingActiveProject = value));
+    this.subscription.add(this.projectsService.loadingActiveProjectFailed.subscribe(value => this.loadingActiveProjectFailed = value));
 
-    combineLatest([this.geoDataService.loadingOverlayData,
+    this.subscription.add(combineLatest([this.geoDataService.loadingOverlayData,
                   this.geoDataService.loadingPointCloudData,
-                  this.geoDataService.loadingFeatureData)
+                  this.geoDataService.loadingFeatureData])
       .subscribe(([loadingOverlay, loadingPointCloud, loadingFeature]) => {
         // They are running
         this.loadingData = (loadingOverlay || loadingPointCloud || loadingFeature);
-      });
+      }));
 
-    this.projectsService.activeProject.subscribe(next => {
+    this.subscription.add(this.projectsService.activeProject.subscribe(next => {
       this.activeProject = next;
       if (this.activeProject) {
         this.geoDataService.getDataForProject(next.id);
       } else {
         this.geoDataService.clearData();
       }
-    });
+    }));
 
-    this.notificationsService.notifications.subscribe(next => {
+    this.subscription.add(this.notificationsService.notifications.subscribe(next => {
       const hasSuccessNotification = next.some(note => note.status === 'success');
       if (hasSuccessNotification) {
         this.geoDataService.getDataForProject(this.activeProject.id);
       }
-    });
+    }));
 
-    this.geoDataService.mapMouseLocation.pipe(skip(1)).subscribe( (next) => {
+    this.subscription.add(this.geoDataService.mapMouseLocation.pipe(skip(1)).subscribe( (next) => {
       this.mapMouseLocation = next;
-    });
+    }));
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
