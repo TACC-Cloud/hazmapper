@@ -99,8 +99,6 @@ export class ProjectsService {
       .pipe(
         map( (proj) => {
           this._projects.next([proj, ...this._projects.value]);
-          // Set the active project to the one just created
-          this._activeProject.next(proj);
           return proj;
         }),
        catchError( (err: any) =>  {
