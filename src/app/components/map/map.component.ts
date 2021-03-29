@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as L from 'leaflet';
 import 'types.leaflet.heat';
@@ -12,6 +12,7 @@ import {FeatureGroup, Layer, LayerGroup, LeafletMouseEvent} from 'leaflet';
 import * as turf from '@turf/turf';
 import { AllGeoJSON } from '@turf/helpers';
 import {filter, map} from 'rxjs/operators';
+import {Subscription} from 'rxjs';
 import {Overlay, Project, TileServer} from '../../models/models';
 import {EnvService} from '../../services/env.service';
 
@@ -20,8 +21,7 @@ import {EnvService} from '../../services/env.service';
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.styl']
 })
-export class MapComponent implements OnInit {
-
+export class MapComponent implements OnInit, OnDestroy {
   map: L.Map;
   activeFeature: Feature;
   _activeProjectId: number;
@@ -29,7 +29,8 @@ export class MapComponent implements OnInit {
   overlays: LayerGroup = new LayerGroup<any>();
   tileServers: Array<TileServer> = new Array<TileServer>();
   tileServerLayers: any = {};
-  fitToFeatureExtent: boolean = true;
+  fitToFeatureExtent = true;
+  private subscription: Subscription = new Subscription();
 
   constructor(private projectsService: ProjectsService,
               private geoDataService: GeoDataService,
@@ -51,7 +52,7 @@ export class MapComponent implements OnInit {
       maxZoom: 19
     });
 
-    this.geoDataService.tileServers.subscribe((next: Array<TileServer>) => {
+    this.subscription.add(this.geoDataService.tileServers.subscribe((next: Array<TileServer>) => {
       if (next) {
         this.tileServers = next;
 
@@ -70,21 +71,21 @@ export class MapComponent implements OnInit {
           }
         });
       }
-    });
+    }));
 
-    this.geoDataService.selectedTileServer.subscribe((ts: TileServer) => {
+    this.subscription.add(this.geoDataService.selectedTileServer.subscribe((ts: TileServer) => {
       if (ts) {
         this.map.removeLayer(this.tileServerLayers[ts.id]);
       }
-    });
+    }));
 
-    this.loadFeatures();
+    this.subscription.add(this.loadFeatures());
 
     // Publish the mouse location on the mapMouseLocation stream
     this.map.on('mousemove', (ev: LeafletMouseEvent) => this.mouseEventHandler(ev));
 
     // Filter out and display only the active overlays
-    this.geoDataService.selectedOverlays$
+    this.subscription.add(this.geoDataService.selectedOverlays$
       .pipe(
         map( (items: Array<Overlay>) => items.filter( (item: Overlay) => item.isActive))
       )
@@ -94,14 +95,18 @@ export class MapComponent implements OnInit {
           this.overlays.addLayer(this.createOverlayLayer(item));
         });
         this.overlays.addTo(this.map);
-    });
+    }));
 
     // Listen on the activeFeature stream and zoom map to that feature when it changes
-    this.geoDataService.activeFeature.pipe(filter(n => n != null)).subscribe( (next) => {
+    this.subscription.add(this.geoDataService.activeFeature.pipe(filter(n => n != null)).subscribe( (next) => {
       this.activeFeature = next;
       const bbox = turf.bbox(<AllGeoJSON> next);
       this.map.fitBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]]);
-    });
+    }));
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   createOverlayLayer(ov: Overlay): Layer {
@@ -128,13 +133,15 @@ export class MapComponent implements OnInit {
 
   /**
    * Load Features for a project.
+   *
+   * @returns Subscription subscription created
    */
   loadFeatures() {
     const geojsonOptions = {
       pointToLayer: createMarker
     };
 
-    this.geoDataService.features.subscribe((collection) => {
+    const subscription = this.geoDataService.features.subscribe((collection) => {
         this.features.clearLayers();
         this.overlays.clearLayers();
         const markers = L.markerClusterGroup({
@@ -166,13 +173,15 @@ export class MapComponent implements OnInit {
       }
     );
 
-    this.projectsService.activeProject.subscribe((next: Project) => {
+    subscription.add(this.projectsService.activeProject.subscribe((next: Project) => {
       // fit to bounds if this is a new project
-      if (next && this._activeProjectId != next.id) {
+      if (next && this._activeProjectId !== next.id) {
         this.fitToFeatureExtent = true;
       }
       this._activeProjectId = next ? next.id: null;
-    });
+    }));
+
+    return subscription;
   }
 
   /**
