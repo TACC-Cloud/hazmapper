@@ -313,7 +313,14 @@ export class GeoDataService {
           map((items: Array<TileServer>) =>
             items.filter((item: TileServer) =>
               item.id !== tileServerId)),
-        ).subscribe((results) =>  {
+        ).subscribe((results) => {
+
+          if (!Array.isArray(results) || !results.length) {
+            // if empty, then we should set dirty flag to false
+            // (see https://jira.tacc.utexas.edu/browse/DES-1910 for additional improvement)
+            this._dirtyTileOptions.next(false);
+          }
+
           this._tileServers.next(results);
           this.notificationsService.showSuccessToast('Tile layer deleted!');
         });
