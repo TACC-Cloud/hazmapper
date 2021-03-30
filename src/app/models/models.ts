@@ -120,6 +120,37 @@ export interface Overlay {
   isActive?: boolean;
 }
 
+interface TileServerUI {
+  opacity: number;
+  isActive: boolean;
+  zIndex?: number;
+  showDescription?: boolean;
+  showInput?: boolean;
+}
+
+interface TileServerOptions {
+  // TMS options
+  minZoom?: number;
+  maxZoom?: number;
+
+  // WMS options
+  layers?: string;
+  params?: string;
+  format?: string;
+}
+
+export interface TileServer {
+  name: string;
+  id?: number;
+  project_id?: number;
+  type: string;
+  url: string;
+  attribution: string;
+
+  tileOptions?: TileServerOptions;
+  uiOptions?: TileServerUI;
+}
+
 interface AppGeoJSONFeature extends GeoJSONFeature {
   assets?: Array<IFeatureAsset>;
   styles?: FeatureStyles;

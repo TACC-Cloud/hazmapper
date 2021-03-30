@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {APP_BASE_HREF} from '@angular/common';
@@ -25,17 +25,18 @@ import { FeatureRowComponent } from './components/feature-row/feature-row.compon
 import { FeatureMetadataComponent } from './components/feature-metadata/feature-metadata.component';
 import { AuthService } from './services/authentication.service';
 import { ModalService } from './services/modal.service';
+import { EnvService } from './services/env.service';
 import { CallbackComponent } from './components/callback/callback.component';
 import {AuthInterceptor, JwtInterceptor} from './app.interceptors';
 import { ModalCreateProjectComponent } from './components/modal-create-project/modal-create-project.component';
 import {ReactiveFormsModule, FormsModule} from '@angular/forms';
 import { ModalFileBrowserComponent } from './components/modal-file-browser/modal-file-browser.component';
-import {environment} from '../environments/environment';
 import { ModalCreatePointCloudComponent } from './components/modal-create-point-cloud/modal-create-point-cloud.component';
 import { FeatureGeometryComponent } from './components/feature-geometry/feature-geometry.component';
 import { PointCloudsPanelComponent } from './components/point-clouds-panel/point-clouds-panel.component';
 import { PointCloudPanelRowComponent } from './components/point-cloud-panel-row/point-cloud-panel-row.component';
 import { ModalCreateOverlayComponent } from './components/modal-create-overlay/modal-create-overlay.component';
+import { ModalCreateTileServerComponent } from './components/modal-create-tile-server/modal-create-tile-server.component';
 import { FileTreeNodeComponent } from './components/file-tree-node/file-tree-node.component';
 import { ModalPointCloudInfoComponent } from './components/modal-point-cloud-info/modal-point-cloud-info.component';
 import { FileBrowserComponent } from './components/file-browser/file-browser.component';
@@ -47,6 +48,9 @@ import { UserRowComponent } from './components/user-row/user-row.component';
 import { EditNameInputComponent } from './components/edit-name-input/edit-name-input.component';
 import { MainPublicComponent } from './components/main-public/main-public.component';
 import { PublicMapInfoPanelComponent } from './components/public-map-info-panel/public-map-info-panel.component';
+import { MainWelcomeComponent } from './components/main-welcome/main-welcome.component';
+import { MainProjectComponent } from './components/main-project/main-project.component';
+import {DragDropModule, CDK_DRAG_CONFIG} from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -69,6 +73,7 @@ import { PublicMapInfoPanelComponent } from './components/public-map-info-panel/
     PointCloudsPanelComponent,
     PointCloudPanelRowComponent,
     ModalCreateOverlayComponent,
+    ModalCreateTileServerComponent,
     FileTreeNodeComponent,
     ModalPointCloudInfoComponent,
     FileBrowserComponent,
@@ -78,6 +83,8 @@ import { PublicMapInfoPanelComponent } from './components/public-map-info-panel/
     EditNameInputComponent,
     MainPublicComponent,
     PublicMapInfoPanelComponent,
+    MainWelcomeComponent,
+    MainProjectComponent,
   ],
   imports: [
     CommonModule,
@@ -95,7 +102,8 @@ import { PublicMapInfoPanelComponent } from './components/public-map-info-panel/
     BsDropdownModule.forRoot(),
     TooltipModule.forRoot(),
     TabsModule.forRoot(),
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    DragDropModule
   ],
   providers: [
     AuthService,
@@ -111,8 +119,26 @@ import { PublicMapInfoPanelComponent } from './components/public-map-info-panel/
       useClass: AuthInterceptor
     },
     {
+      provide: CDK_DRAG_CONFIG,
+      useValue: {
+        dragStartThreshold: 30,
+        pointerDirectionChangeThreshold: 5,
+        zIndex: 10000
+      }
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (envService: EnvService) => () => envService.init(),
+      deps: [EnvService],
+      multi: true
+    },
+    {
       provide: APP_BASE_HREF,
-      useValue: environment.baseHref
+      useFactory: (envService: EnvService) => {
+        envService.init();
+        return envService.baseHref;
+      },
+      deps: [EnvService],
     }
   ],
   bootstrap: [AppComponent],
@@ -122,7 +148,7 @@ import { PublicMapInfoPanelComponent } from './components/public-map-info-panel/
     ModalFileBrowserComponent,
     ModalCreatePointCloudComponent,
     ModalCreateOverlayComponent,
+    ModalCreateTileServerComponent,
     ModalPointCloudInfoComponent]
 })
 export class AppModule { }
-

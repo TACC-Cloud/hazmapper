@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: hazmapper
-        image: taccaci/hazmapper:latest
+        image: taccaci/hazmapper:${HAZMAPPER_TAG}
         ports:
         - containerPort: 80
         resources:
@@ -35,7 +35,7 @@ spec:
   ports:
   - port: 80
     targetPort: 80
-    nodePort: 32351
+    nodePort: ${NODEPORT}
     protocol: TCP
   selector:
     run: hazmapper

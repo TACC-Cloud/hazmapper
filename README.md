@@ -2,36 +2,46 @@
 
 [![Build Status](https://travis-ci.org/TACC-Cloud/hazmapper.svg?branch=master)](https://travis-ci.org/TACC-Cloud/hazmapper)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.3.
+Hazmapper is an application for creating, visualizing, and analyzing geospatial data in a variety of formats.
 
+See https://github.com/TACC-Cloud/geoapi which is an associated restful API.
 
-## Getting started
+## Local Development
+### Getting started
 - Get a JWT from Joe M or someone on the CIC team
 - GOTO jwt.io and edit that JWT to have your username/details
 - Create a file in src/environments called jwt.ts that has this in it: 
         
         export const jwt = "YOUR JWT FROM ABOVE"
 
-## Development server
+### Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Code scaffolding
+### Configuring geoapi backend
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+The `backend` in [src/environments/environment.ts](src/environments/environment.ts) can be used to select which backend `geoapi` is used by the app:
 
-## Build
+* `EnvironmentType.Production`
+* `EnvironmentType.Staging`
+* `EnvironmentType.Local`\*
+
+\*See https://github.com/TACC-Cloud/geoapi for more details on running geoapi locally.
+
+
+### Code scaffolding
+
+Run `ng generate component components/component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+
+### Build
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-## Running unit tests
+### Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Running end-to-end tests
+## Kubernetes (Production/Staging environments)
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Information on Kubernetes configuration for production and staging environments can be found in the [kube/README.md](kube/README.md) including information
+on kube commands and Jenkins deployment workflows.

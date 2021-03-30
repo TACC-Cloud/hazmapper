@@ -1,22 +1,11 @@
 <div class="top-bar" style="background-color: black" id="navbar">
-  <div class="top-bar-left">
+  <div class="top-bar-left" (click)="routeToWelcome()" style="cursor: pointer">
     <img src="assets/hazmapper-header-logo.png" width="150px">
   </div>
     <div class="top-bar-right">
         <div class="light-blue" *ngIf="currentUser">{{ currentUser.username }}</div>
     </div>
 </div>
-<div class="grid-x">
-  <div class="cell control-bar">
-    <app-control-bar></app-control-bar>
-  </div>
-</div>
-<div class="grid-x">
-  <div class="cell shrink">
-   <app-dock></app-dock>
-  </div>
-  <div class="cell auto">
-    <app-map></app-map>
-  </div>
-  <app-asset-detail *ngIf="activeFeature"></app-asset-detail>
-</div>
+
+<router-outlet>
+</router-outlet>

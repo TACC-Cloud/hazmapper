@@ -3,7 +3,7 @@ import {SystemSummary} from 'ng-tapis';
 import { ApiService } from 'ng-tapis';
 import {Observable, ReplaySubject} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-import { environment } from '../../environments/environment';
+import { EnvService } from '../services/env.service';
 import { DesignSafeProjectCollection } from '../models/models';
 
 @Injectable({
@@ -16,7 +16,7 @@ export class AgaveSystemsService {
   public readonly systems: Observable<SystemSummary[]> = this._systems.asObservable();
   private _projects: ReplaySubject<SystemSummary[]> = new ReplaySubject<SystemSummary[]>(1);
   public readonly projects: Observable<SystemSummary[]> = this._projects.asObservable();
-  constructor(private tapis: ApiService, private http: HttpClient) { }
+  constructor(private tapis: ApiService, private envService: EnvService, private http: HttpClient) { }
 
   list() {
     this.tapis.systemsList({type: 'STORAGE'})
@@ -25,7 +25,7 @@ export class AgaveSystemsService {
       }, error => {
         this._systems.next(null);
       });
-    this.http.get<DesignSafeProjectCollection>(environment.designSafeUrl + `/projects/v2/`)
+    this.http.get<DesignSafeProjectCollection>(this.envService.designSafeUrl + `/projects/v2/`)
       .subscribe( resp => {
         const projectSystems = resp.projects.map((project) => {
           return {

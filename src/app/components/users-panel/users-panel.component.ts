@@ -4,7 +4,7 @@ import {ModalService} from '../../services/modal.service';
 import {IProjectUser} from '../../models/project-user';
 import {FormGroup, FormControl} from '@angular/forms';
 import {Project} from '../../models/models';
-import {environment} from '../../../environments/environment';
+import {EnvService} from '../../services/env.service';
 
 @Component({
   selector: 'app-users-panel',
@@ -22,7 +22,9 @@ export class UsersPanelComponent implements OnInit {
   publicStatusChanging = false;
   publicStatusChangingError = false;
 
-  constructor(private projectsService: ProjectsService, private modalService: ModalService) { }
+  constructor(private projectsService: ProjectsService,
+              private modalService: ModalService,
+              private envService: EnvService) { }
 
   ngOnInit() {
     this.addUserForm = new FormGroup( {
@@ -39,7 +41,7 @@ export class UsersPanelComponent implements OnInit {
   }
 
   getPublicUrl() {
-   const publicUrl = location.origin + environment.baseHref + `maps-public/${this.activeProject.id}/`;
+   const publicUrl = location.origin + this.envService.baseHref + `maps-public/${this.activeProject.id}/`;
    return publicUrl;
   }
 

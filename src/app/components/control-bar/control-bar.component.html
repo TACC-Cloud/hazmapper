@@ -1,29 +1,18 @@
-<div class="grid-x align-justify align-middle">
-    <div class="cell small-4 no-padding">
-        <div class="grid-x align-middle">
-            <button *ngIf="!isPublicView" class="button tiny success" (click)="openCreateProjectModal()"> <i class="fas fa-plus"></i></button>
-            <ul *ngIf="!isPublicView" class="dropdown vertical menu" dropdown>
-                <li class="is-dropdown-submenu-parent">
-                    <button dropdownToggle  class="dropdown button tiny hollow">
-                        Maps
-                        <span class="" *ngIf="selectedProject"> : {{selectedProject.name}}</span>
-                    </button>
-                    <ul *dropdownMenu class="menu is-dropdown-submenu">
-                        <li class="clickable" *ngFor="let p of projects" (click)="selectProject(p)" [ngClass]="{'active-project': p === selectedProject}">
-                            {{ p.name }}
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-            <span *ngIf="isPublicView">Map: {{selectedProject.name}}</span>
-            <div *ngIf="!projects.length && !loading && !isPublicView"> <span class="label alert"> No maps! Create one to get started. </span></div>
-            <div *ngIf="loadingData" style="margin-left: 1rem">
-                <span>Loading Data</span>
-                <i class="fas fa-spin fa-spinner ml-4" style="margin-left: 0.5rem"></i>
-            </div>
+<div class="grid-x align-justify" style="height:100%">
+    <div *ngIf="loadingActiveProjectFailed" class="cell label alert" >
+        Unable to access this map
+    </div>
+    <div *ngIf="loadingActiveProject" style="margin-left:1rem" class="align-middle">
+        <i class="fas fa-spin fa-spinner"></i>
+    </div>
+    <div *ngIf="!loadingActiveProject && !loadingActiveProjectFailed" class="cell small-8 align-middle grid-x">
+        <span style="margin-left: 1rem">Map: {{ activeProject.name }}</span>
+        <div *ngIf="loadingData" style="margin-left: 1rem">
+            <i class="fas fa-spin fa-spinner" style="margin-right: 0.3rem"></i>
+            <span>Loading Data</span>
         </div>
     </div>
-    <div class="cell small-8 align-right align-middle grid-x">
+    <div *ngIf="!loadingActiveProject && !loadingActiveProjectFailed" class="cell small-4 align-right align-middle grid-x">
         <div class="grid-x align-right align-middle">
             <span class="lat-lon-label"> Lat: </span>
             <div class="lat-lon-number"> {{ mapMouseLocation.lat | number:'.4' }}</div>

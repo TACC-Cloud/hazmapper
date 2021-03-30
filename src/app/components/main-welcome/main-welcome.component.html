@@ -1,0 +1,99 @@
+<div id=welcome-background class="grid-x align-center">
+  <div class="grid-y align-center">
+    <div id="welcome-information" class="grid-y">
+      <div id="welcome-logo">
+        <img src="assets/icon.png" width="100px">
+        <h1>
+          HazMapper
+        </h1>
+        <div id="release-version">Version 2.3D (<a href={{release_url}}>Release Notes</a>)</div>
+      </div>
+    </div>
+
+    <div class="grid-x align-center">
+      <div id=welcome-projects-list class="grid-y align-center">
+        <div class="welcome-project-header grid-x align-justify">
+          <div>
+            <b>Maps</b>
+          </div>
+          <div>
+            <div id="new-map" (click)="openCreateProjectModal()">
+              <i class="fas fa-plus"></i>
+              Create a New Map
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="spinner; else projectLoaded">
+          <div id="welcome-no-information">
+            <div>
+              Loading Projects <i class="fas fa-spin fa-spinner ml-4"></i>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #projectLoaded>
+          <div *ngIf="connected; else projectDisconnected">
+            <div id="welcome-no-information">
+              <div>
+                Failed to Connect to Server!
+              </div>
+            </div>
+          </div>
+
+          <ng-template #projectDisconnected>
+            <div *ngIf="projects.length > 0; else noProject" class="project-list-container">
+              <div *ngFor="let p of projects; let indexOfelement=index;">
+                <div (dblclick)="routeToProject(p.uuid)"
+                     class="project-list-item"
+                     [ngClass]="{
+                                 'welcome-project-light': (indexOfelement % 2) == 0,
+                                 'welcome-project-dark': (indexOfelement % 2) == 1,
+                                 'welcome-project': true,
+                                 'grid-x': true,
+                                 'align-justify' :true
+                                 }">
+                  {{p.name}}
+                  <div>
+                    <button class="project-list-item-button" (click)="routeToProject(p.uuid)">
+                      <i class="fas fa-folder-open"></i>
+                    </button>
+                    <button class="project-list-item-button" (click)=deleteProject(p)>
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <ng-template #noProject>
+              <div id="welcome-no-information">
+                <div>
+                  No Map Exists!
+                </div>
+                <a (click)="openCreateProjectModal()">
+                  Create a New Map.
+                </a>
+              </div>
+            </ng-template>
+          </ng-template>
+        </ng-template>
+      </div>
+
+
+    </div>
+    <div class="grid-x align-center" id="user-guide-container">
+      <div id="user-guide">
+        <a href={{guide_url}}>
+          <i class="fas fa-info-circle"></i>
+          User Guide
+        </a>
+      </div>
+    </div>
+
+    <div class="grid-x" id="sponsor">Powered by
+      <img src="assets/nsf.png" width="50px">
+    </div>
+
+  </div>
+</div>
