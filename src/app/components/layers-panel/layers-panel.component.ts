@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChildren, QueryList, TemplateRef } from '@angular/core';
+import {Component, OnInit, ElementRef, ViewChildren, QueryList, TemplateRef, OnDestroy} from '@angular/core';
 import {GeoDataService} from '../../services/geo-data.service';
 import {Overlay, Project, TileServer} from '../../models/models';
 import {BsModalRef, BsModalService} from 'ngx-foundation';
@@ -8,13 +8,14 @@ import {ModalCreateTileServerComponent} from '../modal-create-tile-server/modal-
 import {ProjectsService} from '../../services/projects.service';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import {EnvService} from '../../services/env.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-layers-panel',
   templateUrl: './layers-panel.component.html',
   styleUrls: ['./layers-panel.component.styl']
 })
-export class LayersPanelComponent implements OnInit {
+export class LayersPanelComponent implements OnInit, OnDestroy {
   @ViewChildren('activeText') activeInputs: QueryList<ElementRef>;
 
   dragHeight: number;
@@ -25,6 +26,7 @@ export class LayersPanelComponent implements OnInit {
   tileServers: Array<TileServer>;
   activeProject: Project;
   modalRef: BsModalRef;
+  private subscription: Subscription = new Subscription();
 
   constructor(private geoDataService: GeoDataService,
               private bsModalService: BsModalService,
@@ -33,30 +35,29 @@ export class LayersPanelComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.geoDataService.overlays.subscribe((ovs) => {
+    this.subscription.add(this.geoDataService.overlays.subscribe((ovs) => {
       this.overlays = ovs;
-    });
+    }));
 
-    this.geoDataService.tileServers.subscribe((tsv) => {
+    this.subscription.add(this.geoDataService.tileServers.subscribe((tsv) => {
       this.tileServers = tsv;
-    });
+    }));
 
-    this.geoDataService.basemap.subscribe( (next) => {
+    this.subscription.add(this.geoDataService.basemap.subscribe( (next) => {
       this.basemap = next;
-    });
+    }));
 
-    this.geoDataService.dirtyTileOptions.subscribe( (next) => {
+    this.subscription.add(this.geoDataService.dirtyTileOptions.subscribe( (next) => {
       this.dirtyOptions = next;
-    });
+    }));
 
-    this.projectsService.activeProject.subscribe( (next) => {
+    this.subscription.add(this.projectsService.activeProject.subscribe( (next) => {
       this.activeProject = next;
-    });
+    }));
   }
 
-  selectBasemap(bmap: string): void {
-    this.basemap = bmap;
-    this.geoDataService.basemap = this.basemap;
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   selectOverlay(ov): void {
@@ -69,7 +70,6 @@ export class LayersPanelComponent implements OnInit {
   }
 
   deleteTileServer(ts: TileServer): void {
-    this.geoDataService.selectedTileServer = ts;
     this.geoDataService.deleteTileServer(this.activeProject.id, ts.id);
   }
 
@@ -115,7 +115,7 @@ export class LayersPanelComponent implements OnInit {
     this.showInput(ts, false);
     name = name.trim();
     if (name.length < 512) {
-      if (name && name != ts.name) {
+      if (name && name !== ts.name) {
         ts.name = name;
         this.geoDataService.updateTileServer(this.activeProject.id, ts);
       }

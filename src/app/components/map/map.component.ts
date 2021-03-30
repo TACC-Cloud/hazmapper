@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as L from 'leaflet';
 import 'types.leaflet.heat';
@@ -8,10 +8,11 @@ import { ProjectsService} from '../../services/projects.service';
 import { GeoDataService} from '../../services/geo-data.service';
 import { createMarker } from '../../utils/leafletUtils';
 import {Feature} from 'geojson';
-import {FeatureGroup, Layer, LayerGroup, LeafletMouseEvent} from 'leaflet';
+import {FeatureGroup, Layer, LayerGroup, LeafletMouseEvent, TileLayer} from 'leaflet';
 import * as turf from '@turf/turf';
 import { AllGeoJSON } from '@turf/helpers';
 import {filter, map} from 'rxjs/operators';
+import {Subscription} from 'rxjs';
 import {Overlay, Project, TileServer} from '../../models/models';
 import {EnvService} from '../../services/env.service';
 
@@ -20,16 +21,15 @@ import {EnvService} from '../../services/env.service';
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.styl']
 })
-export class MapComponent implements OnInit {
-
+export class MapComponent implements OnInit, OnDestroy {
   map: L.Map;
   activeFeature: Feature;
   _activeProjectId: number;
   features: FeatureGroup = new FeatureGroup();
   overlays: LayerGroup = new LayerGroup<any>();
-  tileServers: Array<TileServer> = new Array<TileServer>();
-  tileServerLayers: any = {};
-  fitToFeatureExtent: boolean = true;
+  tileServerLayers: Map<number, TileLayer> = new Map<number, TileLayer>();
+  fitToFeatureExtent = true;
+  private subscription: Subscription = new Subscription();
 
   constructor(private projectsService: ProjectsService,
               private geoDataService: GeoDataService,
@@ -42,49 +42,49 @@ export class MapComponent implements OnInit {
   }
 
   ngOnInit() {
-    // const mapType: string = this.route.snapshot.queryParamMap.get('mapType');
-    // this.projectId = +this.route.snapshot.paramMap.get("projectId");
-    // this.cluster = this.route.snapshot.queryParamMap.get('mapType');
     this.map = new L.Map('map', {
       center: [40, -80],
       zoom: 3,
       maxZoom: 19
     });
 
-    this.geoDataService.tileServers.subscribe((next: Array<TileServer>) => {
-      if (next) {
-        this.tileServers = next;
+    this.subscription.add(this.geoDataService.tileServers.subscribe((next: Array<TileServer>) => {
+      // remove any layers that no longer exist from tileServerLayers
+      const currentTileLayerIds = new Set<number>(next.map(l => l.id));
+      for (const tileLayerId of this.tileServerLayers.keys()) {
+        if (!currentTileLayerIds.has(tileLayerId)) {
+          if (this.map.hasLayer(this.tileServerLayers.get(tileLayerId))) {
+            this.map.removeLayer(this.tileServerLayers.get(tileLayerId));
+          }
+          this.tileServerLayers.delete(tileLayerId);
+        }
+      }
 
-        next.forEach((ts) => {
-          if (!this.tileServerLayers[ts.id]) {
-            this.tileServerLayers[ts.id] = this.tileServerToLayer(ts);
+      // update/add layers
+      next.forEach((ts) => {
+          if (!this.tileServerLayers.has(ts.id)) {
+            this.tileServerLayers.set(ts.id, this.tileServerToLayer(ts));
           }
 
-          this.tileServerLayers[ts.id].setZIndex(ts.uiOptions.zIndex);
-          this.tileServerLayers[ts.id].setOpacity(ts.uiOptions.opacity);
+          this.tileServerLayers.get(ts.id).setZIndex(ts.uiOptions.zIndex);
+          this.tileServerLayers.get(ts.id).setOpacity(ts.uiOptions.opacity);
 
           if (ts.uiOptions.isActive) {
-            this.map.addLayer(this.tileServerLayers[ts.id]);
+            this.map.addLayer(this.tileServerLayers.get(ts.id));
           } else {
-            this.map.removeLayer(this.tileServerLayers[ts.id]);
+            this.map.removeLayer(this.tileServerLayers.get(ts.id));
           }
         });
-      }
-    });
+    }));
 
-    this.geoDataService.selectedTileServer.subscribe((ts: TileServer) => {
-      if (ts) {
-        this.map.removeLayer(this.tileServerLayers[ts.id]);
-      }
-    });
-
-    this.loadFeatures();
+    // Subscribe to active project and features
+    this.subscription.add(this.loadFeatures());
 
     // Publish the mouse location on the mapMouseLocation stream
     this.map.on('mousemove', (ev: LeafletMouseEvent) => this.mouseEventHandler(ev));
 
     // Filter out and display only the active overlays
-    this.geoDataService.selectedOverlays$
+    this.subscription.add(this.geoDataService.selectedOverlays$
       .pipe(
         map( (items: Array<Overlay>) => items.filter( (item: Overlay) => item.isActive))
       )
@@ -94,14 +94,18 @@ export class MapComponent implements OnInit {
           this.overlays.addLayer(this.createOverlayLayer(item));
         });
         this.overlays.addTo(this.map);
-    });
+    }));
 
     // Listen on the activeFeature stream and zoom map to that feature when it changes
-    this.geoDataService.activeFeature.pipe(filter(n => n != null)).subscribe( (next) => {
+    this.subscription.add(this.geoDataService.activeFeature.pipe(filter(n => n != null)).subscribe( (next) => {
       this.activeFeature = next;
       const bbox = turf.bbox(<AllGeoJSON> next);
       this.map.fitBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]]);
-    });
+    }));
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   createOverlayLayer(ov: Overlay): Layer {
@@ -113,28 +117,30 @@ export class MapComponent implements OnInit {
     this.geoDataService.mapMouseLocation = ev.latlng;
   }
 
-  tileServerToLayer(ts: TileServer) {
-    let layerOptions = {
+  tileServerToLayer(ts: TileServer): TileLayer {
+    const layerOptions = {
       attribution: ts.attribution,
       ...ts.tileOptions
     }
 
-    if (ts.type == 'tms') {
+    if (ts.type === 'tms') {
       return L.tileLayer(ts.url, layerOptions);
-    } else if (ts.type == 'wms') {
+    } else if (ts.type === 'wms') {
       return L.tileLayer.wms(ts.url, layerOptions);
     }
   }
 
   /**
    * Load Features for a project.
+   *
+   * @returns Subscription subscription created
    */
   loadFeatures() {
     const geojsonOptions = {
       pointToLayer: createMarker
     };
 
-    this.geoDataService.features.subscribe((collection) => {
+    const subscription = this.geoDataService.features.subscribe((collection) => {
         this.features.clearLayers();
         this.overlays.clearLayers();
         const markers = L.markerClusterGroup({
@@ -166,13 +172,15 @@ export class MapComponent implements OnInit {
       }
     );
 
-    this.projectsService.activeProject.subscribe((next: Project) => {
+    subscription.add(this.projectsService.activeProject.subscribe((next: Project) => {
       // fit to bounds if this is a new project
-      if (next && this._activeProjectId != next.id) {
+      if (next && this._activeProjectId !== next.id) {
         this.fitToFeatureExtent = true;
       }
       this._activeProjectId = next ? next.id: null;
-    });
+    }));
+
+    return subscription;
   }
 
   /**
