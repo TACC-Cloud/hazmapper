@@ -54,11 +54,6 @@ export class LayersPanelComponent implements OnInit {
     });
   }
 
-  selectBasemap(bmap: string): void {
-    this.basemap = bmap;
-    this.geoDataService.basemap = this.basemap;
-  }
-
   selectOverlay(ov): void {
     ov.isActive = !ov.isActive;
     this.geoDataService.selectOverlay(ov);
