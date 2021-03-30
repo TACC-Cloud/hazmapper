@@ -123,9 +123,9 @@ export class MapComponent implements OnInit, OnDestroy {
       ...ts.tileOptions
     }
 
-    if (ts.type == 'tms') {
+    if (ts.type === 'tms') {
       return L.tileLayer(ts.url, layerOptions);
-    } else if (ts.type == 'wms') {
+    } else if (ts.type === 'wms') {
       return L.tileLayer.wms(ts.url, layerOptions);
     }
   }
