@@ -333,7 +333,7 @@ export class GeoDataService {
       take(1),
       map((tss: Array<TileServer>) =>
         tss.map((ts: TileServer) =>
-          ts.id == tileServer.id ? tileServer : ts)),
+          ts.id === tileServer.id ? tileServer : ts)),
     ).subscribe((results) =>  {
       this._tileServers.next(results);
       this._dirtyTileOptions.next(true);

@@ -115,7 +115,7 @@ export class LayersPanelComponent implements OnInit, OnDestroy {
     this.showInput(ts, false);
     name = name.trim();
     if (name.length < 512) {
-      if (name && name != ts.name) {
+      if (name && name !== ts.name) {
         ts.name = name;
         this.geoDataService.updateTileServer(this.activeProject.id, ts);
       }
