@@ -42,9 +42,6 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // const mapType: string = this.route.snapshot.queryParamMap.get('mapType');
-    // this.projectId = +this.route.snapshot.paramMap.get("projectId");
-    // this.cluster = this.route.snapshot.queryParamMap.get('mapType');
     this.map = new L.Map('map', {
       center: [40, -80],
       zoom: 3,
