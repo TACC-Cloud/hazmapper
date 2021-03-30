@@ -69,7 +69,6 @@ export class LayersPanelComponent implements OnInit {
   }
 
   deleteTileServer(ts: TileServer): void {
-    this.geoDataService.selectedTileServer = ts;
     this.geoDataService.deleteTileServer(this.activeProject.id, ts.id);
   }
 

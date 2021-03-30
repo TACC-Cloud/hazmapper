@@ -31,7 +31,7 @@ export class GeoDataService {
   private activeOverlay$: Observable<Overlay> = this._activeOverlay.asObservable();
   private _selectedOverlays: BehaviorSubject<Array<Overlay>> = new BehaviorSubject<Array<Overlay>>([]);
   public readonly selectedOverlays$: Observable<Array<Overlay>> = this._selectedOverlays.asObservable();
-  private _tileServers: BehaviorSubject<any> = new BehaviorSubject<Array<TileServer>>(null);
+  private _tileServers: BehaviorSubject<any> = new BehaviorSubject<Array<TileServer>>([]);
   private tileServers$: Observable<Array<TileServer>> = this._tileServers.asObservable();
   private _pointClouds: BehaviorSubject<Array<IPointCloud>> = new BehaviorSubject<Array<IPointCloud>>(null);
   private _assetFilters: AssetFilters;
@@ -48,8 +48,6 @@ export class GeoDataService {
   private qmsSearchResults$: Observable<Array<any>> = this._qmsSearchResults.asObservable();
   private _qmsServerResult: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   private qmsServerResult$: Observable<any> = this._qmsServerResult.asObservable();
-  private _selectedTileServer: BehaviorSubject<TileServer> = new BehaviorSubject<TileServer>(null);
-  public readonly selectedTileServer$: Observable<TileServer> = this._selectedTileServer.asObservable();
   private _dirtyTileOptions: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public readonly dirtyTileOptions$: Observable<boolean> = this._dirtyTileOptions.asObservable();
 
@@ -463,14 +461,6 @@ export class GeoDataService {
     return this.tileServers$;
   }
 
-  public get selectedTileServer(): any {
-    return this.selectedTileServer$;
-  }
-
-  public set selectedTileServer(ts) {
-    this._selectedTileServer.next(ts);
-  }
-
   public get features(): Observable<FeatureCollection> {
     return this.features$;
   }
@@ -528,7 +518,8 @@ export class GeoDataService {
     //this._activeFeature.next(null);
     this._features.next({type: 'FeatureCollection', features: []});
     this._pointClouds.next(null);
-    this._overlays.next(null);
+    this._overlays.next([]);
+    this._tileServers.next([]);
   }
 
   setLoadFeatureData(isLoading: boolean): void {

@@ -8,7 +8,7 @@ import { ProjectsService} from '../../services/projects.service';
 import { GeoDataService} from '../../services/geo-data.service';
 import { createMarker } from '../../utils/leafletUtils';
 import {Feature} from 'geojson';
-import {FeatureGroup, Layer, LayerGroup, LeafletMouseEvent} from 'leaflet';
+import {FeatureGroup, Layer, LayerGroup, LeafletMouseEvent, TileLayer} from 'leaflet';
 import * as turf from '@turf/turf';
 import { AllGeoJSON } from '@turf/helpers';
 import {filter, map} from 'rxjs/operators';
@@ -27,8 +27,7 @@ export class MapComponent implements OnInit, OnDestroy {
   _activeProjectId: number;
   features: FeatureGroup = new FeatureGroup();
   overlays: LayerGroup = new LayerGroup<any>();
-  tileServers: Array<TileServer> = new Array<TileServer>();
-  tileServerLayers: any = {};
+  tileServerLayers: Map<number, TileLayer> = new Map<number, TileLayer>();
   fitToFeatureExtent = true;
   private subscription: Subscription = new Subscription();
 
@@ -53,32 +52,35 @@ export class MapComponent implements OnInit, OnDestroy {
     });
 
     this.subscription.add(this.geoDataService.tileServers.subscribe((next: Array<TileServer>) => {
-      if (next) {
-        this.tileServers = next;
+      // remove any layers that no longer exist from tileServerLayers
+      const currentTileLayerIds = new Set<number>(next.map(l => l.id));
+      for (const tileLayerId of this.tileServerLayers.keys()) {
+        if (!currentTileLayerIds.has(tileLayerId)) {
+          if (this.map.hasLayer(this.tileServerLayers.get(tileLayerId))) {
+            this.map.removeLayer(this.tileServerLayers.get(tileLayerId));
+          }
+          this.tileServerLayers.delete(tileLayerId);
+        }
+      }
 
-        next.forEach((ts) => {
-          if (!this.tileServerLayers[ts.id]) {
-            this.tileServerLayers[ts.id] = this.tileServerToLayer(ts);
+      // update/add layers
+      next.forEach((ts) => {
+          if (!this.tileServerLayers.has(ts.id)) {
+            this.tileServerLayers.set(ts.id, this.tileServerToLayer(ts));
           }
 
-          this.tileServerLayers[ts.id].setZIndex(ts.uiOptions.zIndex);
-          this.tileServerLayers[ts.id].setOpacity(ts.uiOptions.opacity);
+          this.tileServerLayers.get(ts.id).setZIndex(ts.uiOptions.zIndex);
+          this.tileServerLayers.get(ts.id).setOpacity(ts.uiOptions.opacity);
 
           if (ts.uiOptions.isActive) {
-            this.map.addLayer(this.tileServerLayers[ts.id]);
+            this.map.addLayer(this.tileServerLayers.get(ts.id));
           } else {
-            this.map.removeLayer(this.tileServerLayers[ts.id]);
+            this.map.removeLayer(this.tileServerLayers.get(ts.id));
           }
         });
-      }
     }));
 
-    this.subscription.add(this.geoDataService.selectedTileServer.subscribe((ts: TileServer) => {
-      if (ts) {
-        this.map.removeLayer(this.tileServerLayers[ts.id]);
-      }
-    }));
-
+    // Subscribe to active project and features
     this.subscription.add(this.loadFeatures());
 
     // Publish the mouse location on the mapMouseLocation stream
@@ -118,8 +120,8 @@ export class MapComponent implements OnInit, OnDestroy {
     this.geoDataService.mapMouseLocation = ev.latlng;
   }
 
-  tileServerToLayer(ts: TileServer) {
-    let layerOptions = {
+  tileServerToLayer(ts: TileServer): TileLayer {
+    const layerOptions = {
       attribution: ts.attribution,
       ...ts.tileOptions
     }
