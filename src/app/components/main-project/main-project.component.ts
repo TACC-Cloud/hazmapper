@@ -26,8 +26,5 @@ export class MainProjectComponent implements OnInit {
     this.geoDataService.activeFeature.subscribe(next => {
       this.activeFeature = next;
     });
-
-    // FIXME: There's a bug related to switching projects and the tile-servers implementation
-    //        Tiles don't hide on switch (https://jira.tacc.utexas.edu/browse/DES-1906)
   }
 }

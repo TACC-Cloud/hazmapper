@@ -1,15 +1,15 @@
 <div class="grid-x">
   <div class="cell control-bar">
-    <app-control-bar [isPublicView]=isPublicView></app-control-bar>
+    <app-control-bar></app-control-bar>
   </div>
 </div>
 
 <div class="grid-x">
   <div class="cell shrink">
-   <app-dock [isPublicView]=isPublicView></app-dock>
+   <app-dock></app-dock>
   </div>
   <div class="cell auto">
     <app-map></app-map>
   </div>
-  <app-asset-detail *ngIf="activeFeature" [isPublicView]=isPublicView></app-asset-detail>
+  <app-asset-detail *ngIf="activeFeature"></app-asset-detail>
 </div>
