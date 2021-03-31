@@ -70,19 +70,8 @@ export class AssetsPanelComponent implements OnInit {
     });
   }
 
-  handleFileInput(files: FileList) {
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < files.length; i++) {
-      this.geoDataService.uploadFile(this.activeProject.id, files[i]);
-    }
-  }
-
   exportGeoJSON() {
     this.geoDataService.downloadGeoJSON(this.activeProject.id);
-  }
-
-  selectFeature(feat) {
-    this.geoDataService.activeFeature = feat;
   }
 
   selectTreeNode(node: PathTree<Feature>) {
