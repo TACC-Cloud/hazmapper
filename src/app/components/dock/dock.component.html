@@ -53,7 +53,7 @@
     </div>
   </div>
   <div class="cell auto dock-panel">
-    <app-assets-panel *ngIf="panelsDisplay.assets" ></app-assets-panel>
+    <app-assets-panel *ngIf="panelsDisplay.assets" [isPublicView]=isPublicView></app-assets-panel>
     <app-layers-panel *ngIf="panelsDisplay.layers" ></app-layers-panel>
     <app-filters-panel *ngIf="panelsDisplay.filters" ></app-filters-panel>
     <app-measure-panel *ngIf="panelsDisplay.measure" ></app-measure-panel>

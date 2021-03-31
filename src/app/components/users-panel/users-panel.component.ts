@@ -41,7 +41,7 @@ export class UsersPanelComponent implements OnInit {
   }
 
   getPublicUrl() {
-   const publicUrl = location.origin + this.envService.baseHref + `maps-public/${this.activeProject.id}/`;
+   const publicUrl = location.origin + this.envService.baseHref + `project-public/${this.activeProject.uuid}/`;
    return publicUrl;
   }
 

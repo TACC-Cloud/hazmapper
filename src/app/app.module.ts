@@ -46,7 +46,6 @@ import { ToastrModule } from 'ngx-toastr';
 import { ModalConfirmationBodyComponent } from './components/modal-confirmation-body/modal-confirmation-body.component';
 import { UserRowComponent } from './components/user-row/user-row.component';
 import { EditNameInputComponent } from './components/edit-name-input/edit-name-input.component';
-import { MainPublicComponent } from './components/main-public/main-public.component';
 import { PublicMapInfoPanelComponent } from './components/public-map-info-panel/public-map-info-panel.component';
 import { MainWelcomeComponent } from './components/main-welcome/main-welcome.component';
 import { MainProjectComponent } from './components/main-project/main-project.component';
@@ -81,7 +80,6 @@ import {DragDropModule, CDK_DRAG_CONFIG} from '@angular/cdk/drag-drop';
     ModalConfirmationBodyComponent,
     UserRowComponent,
     EditNameInputComponent,
-    MainPublicComponent,
     PublicMapInfoPanelComponent,
     MainWelcomeComponent,
     MainProjectComponent,

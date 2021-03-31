@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import {Feature} from '../../models/models';
+import {Router, ActivatedRoute, UrlSegment} from '@angular/router';
+import {Feature, Overlay} from '../../models/models';
 import {ProjectsService} from '../../services/projects.service';
 import {GeoDataService} from '../../services/geo-data.service';
 
@@ -11,6 +11,7 @@ import {GeoDataService} from '../../services/geo-data.service';
 })
 export class MainProjectComponent implements OnInit {
   public activeFeature: Feature;
+  private isPublicView = false;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -19,6 +20,8 @@ export class MainProjectComponent implements OnInit {
 
   ngOnInit() {
     const projectUUID = this.route.snapshot.paramMap.get('projectUUID');
+    const publicProjectURlSegment = this.route.snapshot.url.filter( (segment: UrlSegment) => segment.path === 'project-public');
+    this.isPublicView = Array.isArray(publicProjectURlSegment) && publicProjectURlSegment.length >= 1;
     this.projectsService.setActiveProjectUUID(projectUUID);
     this.geoDataService.activeFeature.subscribe(next => {
       this.activeFeature = next;
