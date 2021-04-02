@@ -2,11 +2,12 @@
   <div *ngIf="sequenceImages.length != 0; else pendingApproval">
     <div *ngFor="let img of sequenceImages">
       <div class="img-item" (click)="focusToImageLocation(img)">
-        {{img}}
+        what
       </div>
     </div>
   </div>
   <ng-template #pendingApproval>
-    Pending Approval
+    <div (click)="getSequences()">
+    </div>
   </ng-template>
 </div>

@@ -77,7 +77,6 @@ export class NotificationsService {
     const baseUrl = this.environment.apiUrl + '/notifications/progress';
     this.http.get<Array<IProgressNotification>>(baseUrl)
       .subscribe((notes) => {
-        console.log(notes);
         this._progressNotifications.next(notes);
       });
   }

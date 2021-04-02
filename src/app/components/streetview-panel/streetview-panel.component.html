@@ -3,206 +3,39 @@
     <span class="dock-panel-title"> Streetview </span>
   </div>
   <div class="dock-panel-content">
-
     <div *ngIf="isLoggedIn('google') || isLoggedIn('mapillary'); else notAuthenticated">
-      <!-- You are Authenticated to Mapillary as Username! -->
-      <!-- TODO https://get.foundation/sites/docs/tabs.html -->
       <div class="publish-container grid-x align-right">
         <a class="publish-button" (click)="openStreetviewPublishModal()">
           <small>
             <i class="fas fa-plus"></i>
-            Publish Image Sequence
+            Publish
+          </small>
+        </a>
+        <a class="publish-button" (click)="openStreetviewLinkModal()">
+          <small>
+            <!-- <i class="fas fa-plus"></i> -->
+            <!-- <i class="fas fa-link"></i> -->
+            <i class="fas fa-exchange-alt"></i>
+            Link
           </small>
         </a>
       </div>
 
       <tabset>
         <tab heading="Assets">
-
-          <!-- TODO: Should order this in each service, then each sequence, and then image -->
-          <!-- TODO: Get this info directly from mapillary -->
-          <!-- TODO: Get this info directly from mapillary (only those linked with geoapi) [geoapi should have sequence key] -->
-          <!-- TODO: Should display as UUID but in detail should display system path -->
-          <!-- TODO: Should be able to sort by sequences -->
-          <!-- <div *ngIf="img.from == 'mapillary'">
-               From Mapillary
-               </div>
-               <div *ngIf="img.from == 'google'">
-               From Google
-               </div> -->
-          <div *ngIf="mapillarySequences.length <= 0; else showSequences">
-            No Sequences
-          </div>
-          <ng-template #showSequences>
-            <div *ngFor="let seq of mapillarySequences; let i = index">
-              <div class="sequence-container">
-                <div (click)="toggleSequence(i)" class="sequence-name" style="display: flex"
-                     [tooltip]="seq.systemPath[0] + seq.systemPath[1]">
-                  <i class="fas fa-list" style="padding-left: 8px; padding-bottom: 5px; padding-bottom: 5px; padding-top: 9px; padding-bottom: 5px; margin-bottom: 0px"></i>
-                  <span style="margin-left: 5px; padding-top: 5px; width: 150px; display: inline-block; padding-bottom: 5px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap">
-                    {{seq.systemPath[0] + seq.systemPath[1]}}
-                  </span>
-                </div>
-                <div *ngIf="seq.open">
-                  <app-streetview-sequence
-                    [sequence]=seq
-                  >
-                  </app-streetview-sequence>
-                </div>
-              </div>
-            </div>
-          </ng-template>
+          <app-streetview-assets>
+          </app-streetview-assets>
         </tab>
 
         <tab heading="Upload Log">
-          <div>
-            <div *ngIf="progressNotifications == undefined || progressNotifications.length == 0; else showLogs">
-              No tasks are in progress!
-            </div>
-
-            <ng-template #showLogs>
-              <div *ngFor="let notification of progressNotifications">
-                <div class="upload-box">
-                  <div class="upload-box-name"
-                       style="max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis"
-                       [tooltip]="notification.uuid">
-                    {{notification.uuid}}
-                  </div>
-
-                  <div class="upload-info-box" *ngIf="notification.status == 'error'">
-                    <div class="upload-info-status">
-                      <span class="upload-info-message">
-                        Upload failed!
-                      </span>
-                      <span>
-                        <!-- TODO: Should show button to open list of errors here -->
-                        <i class="fas fa-exclamation-triangle" style="color: #DB3A42; cursor: pointer" (click)="openDetailLogModal(notification)"></i>
-                      </span>
-                    </div>
-                    <div class="upload-info-button-container">
-                      <button class="button tiny upload-info-button" (click)="retryPublish(notification)">
-                        Retry
-                      </button>
-
-                      <button class="button tiny upload-info-button" (click)="deleteErrorLog(notification)">
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-
-                  <div class="upload-info-box" *ngIf="notification.status == 'created'">
-                    <div class="upload-info-status">
-                      <span class="upload-info-message">
-                        Preparing upload process...
-                      </span>
-
-                      <span>
-                        <i class="fas fa-circle-notch fa-spin"></i>
-                      </span>
-                    </div>
-                  </div>
-
-                  <div class="upload-info-box" *ngIf="notification.status == 'success'">
-                    <div class="upload-info-status">
-                      <span class="upload-info-message">
-                        Upload sucess!
-                      </span>
-
-                      <span>
-                        <!-- TODO: Should show button to open list of images sequence-->
-                        <i class="fas fa-check" style="color: #3ADB76; cursor: pointer" (click)="openDetailLogModal(notification)"></i>
-                      </span>
-                    </div>
-                    <div class="upload-info-button-container">
-                      <button class="button tiny upload-info-button" (click)="deleteDoneLog(notification)">
-                        Delete Log
-                      </button>
-                    </div>
-                  </div>
-
-                  <div class="upload-info-box" *ngIf="notification.status == 'in_progress'">
-                    <div class="upload-info-status">
-                      <div class="progress"
-                           style="width: 100%"
-                           role="progressbar"
-                           tabindex="0"
-                           [attr.aria-valuenow]="notification.progress"
-                           aria-valuemin="0"
-                           [attr.aria-valuetext]="notification.progress + ' percent'"
-                           aria-valuemax="100">
-                        <!-- <div class="progress"
-                             style="width: 100%"
-                             role="progressbar"
-                             tabindex="0"
-                             aria-valuenow="50"
-                             aria-valuemin="0"
-                             aria-valuetext="50 percent"
-                             aria-valuemax="100"> -->
-                        <span class="progress-meter" [style.width.%]="notification.progress">
-                          <!-- <span class="progress-meter-text">
-                               </span> -->
-                        </span>
-                      </div>
-                    </div>
-                    <div class="upload-info-button-container" style="justify-content: space-between">
-                      <div style="font-size: 12px; padding-top: 5px; padding-top: 5px; padding-bottom: 5px">
-                        <i class="fas fa-circle-notch fa-spin"></i>
-                        {{notification.message}}
-                      </div>
-                      <button class="button tiny upload-info-button" (click)="deleteErrorLog(notification)">
-                        Abort
-                      </button>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </ng-template>
-          </div>
+          <app-streetview-logs>
+          </app-streetview-logs>
         </tab>
 
         <tab heading="Accounts">
-          <div class="accounts-box">
-            <h4>Google</h4>
-            <div *ngIf="isLoggedIn('google'); else authGoogle">
-              <div class="auth-info">
-                Account information
-              </div>
-              <div class="auth-info-button-container">
-                <button class="button small" (click)="logout('google')">Logout</button>
-              </div>
-            </div>
-            <ng-template #authGoogle>
-              <div class="auth-info">
-                Not logged in to Google!
-              </div>
-              <div class="auth-info-button-container">
-                <button class="button small" (click)="login('google')">Login</button>
-              </div>
-            </ng-template>
-          </div>
-
-          <div class="accounts-box">
-            <h4>Mapillary</h4>
-            <div *ngIf="isLoggedIn('mapillary'); else authMapillary">
-              <div class="auth-info">
-                Account information
-              </div>
-              <div class="auth-info-button-container">
-                <button class="button small" (click)="logout('mapillary')">Logout</button>
-              </div>
-            </div>
-            <ng-template #authMapillary>
-              <div class="auth-info">
-                Not logged in to Mapillary!
-              </div>
-              <div class="auth-info-button-container">
-                <button class="button small" (click)="login('mapillary')">Login</button>
-              </div>
-            </ng-template>
-          </div>
+          <app-streetview-accounts>
+          </app-streetview-accounts>
         </tab>
-
       </tabset>
     </div>
 
@@ -217,10 +50,9 @@
           <button class="button auth-button" (click)="login('mapillary')">
             Login to Mapillary
           </button>
-          <button class="button auth-button" (click)="login('google')">
-            Login to Google Streetview
-          </button>
-          <button class="button" (click)="logout('mapillary')">Logout</button>
+          <!-- <button class="button auth-button" (click)="login('google')">
+               Login to Google Streetview
+               </button> -->
         </div>
       </div>
     </ng-template>

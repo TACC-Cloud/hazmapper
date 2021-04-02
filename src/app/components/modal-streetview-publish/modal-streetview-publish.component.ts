@@ -3,6 +3,7 @@ import { BsModalRef, BsModalService } from 'ngx-foundation/modal';
 import { RemoteFile} from 'ng-tapis/models/remote-file';
 import { Subject } from 'rxjs';
 import { StreetviewService } from '../../services/streetview.service';
+import { StreetviewAuthenticationService } from '../../services/streetview-authentication.service';
 import { TapisFilesService } from '../../services/tapis-files.service';
 
 @Component({
@@ -24,6 +25,7 @@ export class ModalStreetviewPublishComponent implements OnInit {
 
   constructor(public bsModalRef: BsModalRef,
               private streetviewService: StreetviewService,
+              private streetviewAuthenticationService: StreetviewAuthenticationService,
               private tapisFilesService: TapisFilesService) { }
 
   ngOnInit() {
@@ -51,6 +53,6 @@ export class ModalStreetviewPublishComponent implements OnInit {
   }
 
   isLoggedIn(svService: string) {
-    return this.streetviewService.getLocalToken(svService);
+    return this.streetviewAuthenticationService.isLoggedIn(svService);
   }
 }

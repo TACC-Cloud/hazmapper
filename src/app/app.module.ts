@@ -4,7 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {APP_BASE_HREF} from '@angular/common';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import {ModalModule, BsDropdownModule, TooltipModule, TabsModule} from 'ngx-foundation';
+import {ModalModule, BsDropdownModule, TooltipModule, TabsModule, PaginationModule} from 'ngx-foundation';
 import { FileSizeModule } from 'ngx-filesize';
 import { ApiModule} from 'ng-tapis';
 import { AppRoutingModule } from './app-routing.module';
@@ -49,6 +49,11 @@ import { StreetviewPanelComponent } from './components/streetview-panel/streetvi
 import { ModalStreetviewPublishComponent } from './components/modal-streetview-publish/modal-streetview-publish.component';
 import { StreetviewSequenceComponent } from './components/streetview-sequence/streetview-sequence.component';
 import { ModalStreetviewLogComponent } from './components/modal-streetview-log/modal-streetview-log.component';
+import { StreetviewCallbackComponent } from './components/streetview-callback/streetview-callback.component';
+import { StreetviewAccountsComponent } from './components/streetview-accounts/streetview-accounts.component';
+import { StreetviewLogsComponent } from './components/streetview-logs/streetview-logs.component';
+import { StreetviewAssetsComponent } from './components/streetview-assets/streetview-assets.component';
+import { ModalStreetviewLinkComponent } from './components/modal-streetview-link/modal-streetview-link.component';
 
 @NgModule({
   declarations: [
@@ -82,6 +87,11 @@ import { ModalStreetviewLogComponent } from './components/modal-streetview-log/m
     ModalStreetviewPublishComponent,
     StreetviewSequenceComponent,
     ModalStreetviewLogComponent,
+    StreetviewCallbackComponent,
+    StreetviewAccountsComponent,
+    StreetviewLogsComponent,
+    StreetviewAssetsComponent,
+    ModalStreetviewLinkComponent,
   ],
   imports: [
     CommonModule,
@@ -99,7 +109,8 @@ import { ModalStreetviewLogComponent } from './components/modal-streetview-log/m
     BsDropdownModule.forRoot(),
     TooltipModule.forRoot(),
     TabsModule.forRoot(),
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    PaginationModule.forRoot()
   ],
   providers: [
     AuthService,
@@ -128,6 +139,7 @@ import { ModalStreetviewLogComponent } from './components/modal-streetview-log/m
     ModalCreateOverlayComponent,
     ModalStreetviewPublishComponent,
     ModalStreetviewLogComponent,
+    ModalStreetviewLinkComponent,
     ModalPointCloudInfoComponent]
 })
 export class AppModule { }

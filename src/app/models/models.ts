@@ -62,7 +62,7 @@ export class AuthToken {
    * @param token : String
    * @param expires: Date
    */
-  constructor(token: string, expires: Date) {
+  constructor(token: string, expires?: Date) {
     this.token = token;
     this.expires = new Date(expires);
   }
@@ -76,7 +76,11 @@ export class AuthToken {
    * Checks if the token is expired or not
    */
   public isExpired(): boolean {
-    return new Date().getTime() > this.expires.getTime();
+    if (this.expires) {
+      return new Date().getTime() > this.expires.getTime();
+    } else {
+      return false;
+    }
   }
 }
 
@@ -162,7 +166,8 @@ export class Feature implements AppGeoJSONFeature {
       return 'collection';
     }
 
-    if (!this.assets.length) {
+    if (this.assets &&
+      !this.assets.length) {
       return this.geometry.type;
     }
 
