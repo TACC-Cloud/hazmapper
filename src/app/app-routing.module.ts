@@ -3,6 +3,8 @@ import {Routes, RouterModule, CanActivate, ActivatedRouteSnapshot, RouterStateSn
 import { NotFoundComponent} from './components/notfound/notfound.component';
 import {AuthService} from './services/authentication.service';
 import {MainComponent} from './components/main/main.component';
+import {MainProjectComponent} from './components/main-project/main-project.component';
+import {MainWelcomeComponent} from './components/main-welcome/main-welcome.component';
 import { CallbackComponent } from './components/callback/callback.component';
 import { StreetviewGoogleCallbackComponent } from './components/streetview-google-callback/streetview-google-callback.component';
 import { StreetviewMapillaryCallbackComponent } from './components/streetview-mapillary-callback/streetview-mapillary-callback.component';
@@ -21,7 +23,11 @@ export class Activate implements CanActivate {
 
 
 const routes: Routes = [
-  {path: '', component: MainComponent, canActivate: [Activate]},
+  {path: '', component: MainComponent, canActivate: [Activate], children: [
+    {path: '', component: MainWelcomeComponent, canActivateChild: [Activate]},
+    {path: 'project/:projectUUID', component: MainProjectComponent},
+  ]},
+
   {path: 'callback', component: CallbackComponent},
   {path: 'streetview/mapillary', component: StreetviewMapillaryCallbackComponent},
   {path: 'streetview/google', component: StreetviewGoogleCallbackComponent},

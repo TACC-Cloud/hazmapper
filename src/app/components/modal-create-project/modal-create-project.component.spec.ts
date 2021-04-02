@@ -1,12 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ModalCreateProjectComponent } from './modal-create-project.component';
-import {anything, instance, mock, reset, spy, when} from 'ts-mockito';
+import {instance, mock, reset} from 'ts-mockito';
 import {BsModalRef, ModalModule} from 'ngx-foundation';
 import {ProjectsService} from '../../services/projects.service';
 import {ReactiveFormsModule} from '@angular/forms';
-import {featureFixture} from '../../fixtures/feature.fixture';
-import {Test} from 'tslint';
+import {projectFixture} from '../../fixtures/project.fixture';
 
 class MockModal {
   hide() {}
@@ -15,7 +14,8 @@ class MockModal {
 describe('ModalCreateProjectComponent', () => {
   let component: ModalCreateProjectComponent;
   let fixture: ComponentFixture<ModalCreateProjectComponent>;
-  const MockProjects: ProjectsService = mock(ProjectsService);
+  const MockProjectsService: ProjectsService = mock(ProjectsService);
+
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -23,7 +23,7 @@ describe('ModalCreateProjectComponent', () => {
       imports: [ReactiveFormsModule, ModalModule],
       providers: [
         {
-          provide: ProjectsService, useFactory: () => instance(MockProjects)
+          provide: ProjectsService, useFactory: () => instance(ProjectsService)
         },
         {
           provide: BsModalRef, useClass: MockModal
@@ -36,7 +36,7 @@ describe('ModalCreateProjectComponent', () => {
   });
 
   afterEach(() => {
-    reset(MockProjects);
+    reset(MockProjectsService);
   });
 
   it('should create', () => {
@@ -48,7 +48,7 @@ describe('ModalCreateProjectComponent', () => {
     spyOn(modals, 'hide').and.returnValue('');
     const spySubmit = spyOn(component, 'submit');
     fixture.detectChanges();
-    component.close();
+    component.close(projectFixture);
     expect(spySubmit).not.toHaveBeenCalled();
   });
 });
