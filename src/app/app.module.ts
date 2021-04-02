@@ -4,7 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {APP_BASE_HREF} from '@angular/common';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import {ModalModule, BsDropdownModule, TooltipModule, TabsModule} from 'ngx-foundation';
+import {ModalModule, BsDropdownModule, TooltipModule, TabsModule, PaginationModule} from 'ngx-foundation';
 import { FileSizeModule } from 'ngx-filesize';
 import { ApiModule} from 'ng-tapis';
 import { AppRoutingModule } from './app-routing.module';
@@ -48,11 +48,16 @@ import { UserRowComponent } from './components/user-row/user-row.component';
 import { EditNameInputComponent } from './components/edit-name-input/edit-name-input.component';
 import { StreetviewPanelComponent } from './components/streetview-panel/streetview-panel.component';
 import { ModalStreetviewPublishComponent } from './components/modal-streetview-publish/modal-streetview-publish.component';
-import { StreetviewMapillaryCallbackComponent } from './components/streetview-mapillary-callback/streetview-mapillary-callback.component';
-import { StreetviewGoogleCallbackComponent } from './components/streetview-google-callback/streetview-google-callback.component';
 import { MainWelcomeComponent } from './components/main-welcome/main-welcome.component';
 import { MainProjectComponent } from './components/main-project/main-project.component';
 import {DragDropModule, CDK_DRAG_CONFIG} from '@angular/cdk/drag-drop';
+import { StreetviewSequenceComponent } from './components/streetview-sequence/streetview-sequence.component';
+import { ModalStreetviewLogComponent } from './components/modal-streetview-log/modal-streetview-log.component';
+import { StreetviewCallbackComponent } from './components/streetview-callback/streetview-callback.component';
+import { StreetviewAccountsComponent } from './components/streetview-accounts/streetview-accounts.component';
+import { StreetviewLogsComponent } from './components/streetview-logs/streetview-logs.component';
+import { StreetviewAssetsComponent } from './components/streetview-assets/streetview-assets.component';
+import { ModalStreetviewLinkComponent } from './components/modal-streetview-link/modal-streetview-link.component';
 
 @NgModule({
   declarations: [
@@ -85,10 +90,15 @@ import {DragDropModule, CDK_DRAG_CONFIG} from '@angular/cdk/drag-drop';
     EditNameInputComponent,
     StreetviewPanelComponent,
     ModalStreetviewPublishComponent,
-    StreetviewMapillaryCallbackComponent,
-    StreetviewGoogleCallbackComponent,
     MainWelcomeComponent,
     MainProjectComponent,
+    StreetviewSequenceComponent,
+    ModalStreetviewLogComponent,
+    StreetviewCallbackComponent,
+    StreetviewAccountsComponent,
+    StreetviewLogsComponent,
+    StreetviewAssetsComponent,
+    ModalStreetviewLinkComponent,
   ],
   imports: [
     CommonModule,
@@ -107,7 +117,8 @@ import {DragDropModule, CDK_DRAG_CONFIG} from '@angular/cdk/drag-drop';
     TooltipModule.forRoot(),
     TabsModule.forRoot(),
     ToastrModule.forRoot(),
-    DragDropModule
+    DragDropModule,
+    PaginationModule.forRoot()
   ],
   providers: [
     AuthService,
@@ -154,6 +165,8 @@ import {DragDropModule, CDK_DRAG_CONFIG} from '@angular/cdk/drag-drop';
     ModalCreateOverlayComponent,
     ModalStreetviewPublishComponent,
     ModalCreateTileServerComponent,
+    ModalStreetviewLogComponent,
+    ModalStreetviewLinkComponent,
     ModalPointCloudInfoComponent]
 })
 export class AppModule { }

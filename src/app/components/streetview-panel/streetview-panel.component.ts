@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import {BsModalRef, BsModalService} from 'ngx-foundation';
-import {AuthenticatedUser, AuthService} from '../../services/authentication.service';
-import {StreetviewService} from '../../services/streetview.service';
-import {StreetviewAuthentication} from '../../models/streetview';
-import {ModalStreetviewPublishComponent} from '../modal-streetview-publish/modal-streetview-publish.component';
+import { BsModalRef, BsModalService } from 'ngx-foundation';
+import { Project } from '../../models/models';
+import { AuthenticatedUser, AuthService } from '../../services/authentication.service';
+import { StreetviewService } from '../../services/streetview.service';
+import { StreetviewAuthenticationService } from 'src/app/services/streetview-authentication.service';
+import { ProjectsService} from '../../services/projects.service'
+import { ModalStreetviewPublishComponent } from '../modal-streetview-publish/modal-streetview-publish.component';
+import { ModalStreetviewLinkComponent } from '../modal-streetview-link/modal-streetview-link.component';
+
 
 @Component({
   selector: 'app-streetview-panel',
@@ -12,107 +16,53 @@ import {ModalStreetviewPublishComponent} from '../modal-streetview-publish/modal
 })
 export class StreetviewPanelComponent implements OnInit {
 
+  private activeProject: Project;
   private currentUser: AuthenticatedUser;
-  uploadLogs: any = [
-    {
-      name: "Name1",
-      dateAdded: "2019-01-01",
-      dateDone: "2019-01-02",
-      hours: "4",
-      user: "Amy",
-      status: "failed"
-    },
-    {
-      name: "Name1",
-      dateAdded: "2019-01-01",
-      dateDone: "2019-01-02",
-      hours: "4",
-      user: "Amy",
-      status: "success"
-    },
-    {
-      name: "Name1",
-      dateAdded: "2019-01-01",
-      dateDone: "2019-01-02",
-      hours: "4",
-      user: "Amy",
-      status: "success"
-    },
-    {
-      name: "Name1",
-      dateAdded: "2019-01-01",
-      dateDone: "2019-01-02",
-      hours: "4",
-      user: "Amy",
-      status: "success"
-    },
-    {
-      name: "Name1",
-      dateAdded: "2019-01-01",
-      dateDone: "2019-01-02",
-      hours: "4",
-      user: "Amy",
-      status: "progress"
-    }
-  ];
-
-
-  uploadedImages: any = [
-    {
-      name: "Name1",
-      from: "mapillary",
-      geo: "lon: 10; lat: 10"
-    },
-    {
-      name: "Name1",
-      from: "mapillary",
-      geo: "lon: 10; lat: 10"
-    },
-    {
-      name: "Name1",
-      from: "mapillary",
-      geo: "lon: 10; lat: 10"
-    },
-    {
-      name: "Name1",
-      from: "mapillary",
-      geo: "lon: 10; lat: 10"
-    },
-    {
-      name: "Name1",
-      from: "mapillary",
-      geo: "lon: 10; lat: 10"
-    },
-  ];
-
-  streetviewAuth: StreetviewAuthentication;
 
   constructor(private bsModalService: BsModalService,
               private streetviewService: StreetviewService,
-              private authService: AuthService,) { }
+              private streetviewAuthenticationService: StreetviewAuthenticationService,
+              private projectsService: ProjectsService,
+              private authService: AuthService
+             ) { }
 
   ngOnInit() {
     this.authService.currentUser.subscribe( (next) => {
       this.currentUser = next;
     });
 
-    this.streetviewService.streetviewAuthStatus.subscribe( (next: StreetviewAuthentication) => {
-      this.streetviewAuth = next;
+    this.projectsService.activeProject.subscribe( (next) => {
+      this.activeProject = next;
     });
   }
 
   openStreetviewPublishModal() {
     const modal: BsModalRef = this.bsModalService.show(ModalStreetviewPublishComponent);
-    // modal.content.onClose.subscribe( (publishData: any) => {
-    //   this.streetviewService.publishToStreetview(this.activeProject.id, this.currentUser.username, this.publishData);
-    // });
+    modal.content.onClose.subscribe( (publishData: any) => {
+      this.streetviewService.uploadPathToStreetviewService(publishData.selectedPath,
+                                                           publishData.publishToMapillary,
+                                                           publishData.publishToGoogle);
+    });
+  }
+
+  openStreetviewLinkModal() {
+    const modal: BsModalRef = this.bsModalService.show(ModalStreetviewLinkComponent);
+    modal.content.onClose.subscribe( (linkData: any) => {
+      this.streetviewService.addSequenceToPath(linkData.service,
+                                               linkData.sequences,
+                                               linkData.selectedPath);
+    });
   }
 
   login(svService: string) {
-    this.streetviewService.login(svService);
+    this.streetviewAuthenticationService.login(svService);
   }
 
   logout(svService: string) {
-    this.streetviewService.logout(svService);
+    this.streetviewAuthenticationService.logout(svService);
+  }
+
+  isLoggedIn(svService: string) {
+    return this.streetviewAuthenticationService.isLoggedIn(svService);
   }
 }

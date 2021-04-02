@@ -1,1 +1,13 @@
-<div id="map" style="min-height: calc(100vh - 67px)"></div>
+<!-- <div *ngIf="mapillaryStreetview && streetviewDisplaySequences.features.length; else withMapillary"> -->
+<div *ngIf="!mapillaryStreetview; else withMapillary">
+  <div id="map" style="min-height: calc(100vh - 67px)"></div>
+</div>
+<ng-template #withMapillary>
+  <div style="display: flex; flex-direction: row">
+    <div id="map" style="min-height: calc(100vh - 67px); width: 50%"></div>
+    <div id="mapillary" style="width: 50%; min-height: calc(100vh - 67px)"></div>
+  </div>
+</ng-template>
+<button class="button" (click)="closeStreetview()">
+  close streetview
+</button>

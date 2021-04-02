@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ProjectsService } from '../../services/projects.service';
 import { Project } from '../../models/models';
 import { GeoDataService } from '../../services/geo-data.service';
+import {StreetviewService} from '../../services/streetview.service';
 import {LatLng} from 'leaflet';
 import {skip} from 'rxjs/operators';
 import {combineLatest, Subscription} from 'rxjs';
@@ -12,6 +13,7 @@ import {NotificationsService} from '../../services/notifications.service';
   templateUrl: './control-bar.component.html',
   styleUrls: ['./control-bar.component.styl']
 })
+
 export class ControlBarComponent implements OnInit, OnDestroy {
   private subscription: Subscription = new Subscription();
   private activeProject: Project;
@@ -19,10 +21,10 @@ export class ControlBarComponent implements OnInit, OnDestroy {
   private loadingActiveProject = true;
   private loadingActiveProjectFailed = false;
   private loadingData = false;
-
   constructor(private projectsService: ProjectsService,
               private geoDataService: GeoDataService,
               private notificationsService: NotificationsService,
+              private streetviewService: StreetviewService,
               ) { }
 
   ngOnInit() {

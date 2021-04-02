@@ -1,0 +1,82 @@
+<h4>Select Service</h4>
+<!-- <small><em>Only one</em></small> -->
+<div class="select-publish-server grid-x align-center">
+  <div class="publish-container">
+    <label for="publishMapillary">
+      <input id="publishMapillary"
+             class="hidden-checkbox"
+             [value]="'mapillary'"
+             (change)="onChooseService('mapillary')"
+             [(ngModel)]="currentService"
+             [disabled]="!isLoggedIn('mapillary')"
+             type="radio"/>
+      <span [tooltip]="!isLoggedIn('mapillary') ? 'Not authenticated to Mapillary!' : ''">Mapillary</span>
+    </label>
+  </div>
+  <!-- <div class="publish-container">
+       <label for="publishGoogle">
+       <input id="publishGoogle"
+       class="hidden-checkbox"
+       [value]="'google'"
+       (change)="onChooseService('google')"
+       [(ngModel)]="currentService"
+       [disabled]="!isLoggedIn('google')"
+       type="radio"/>
+       <span [tooltip]="!isLoggedIn('google') ? 'Not authenticated to Google!' : ''">Google</span>
+       </label>
+       </div> -->
+</div>
+
+<h4>Select sequence to link</h4>
+<hr>
+
+<div style="height: 250px" *ngIf="loadingSequences; else displaySequences">
+  <i class="fas fa-spinner fa-spin"></i>
+</div>
+
+<ng-template #displaySequences>
+  <div id="sequence-container">
+    <div *ngFor="let seq of userSequences">
+      <div id="sequence-selection"
+           (click)="addSequenceToList(seq.properties.key)"
+           [ngClass]="{'selected':containsSequence(seq.properties.key)}">
+        {{seq.properties.key}}
+        <div>
+          <a [href]="'https://www.mapillary.com/map/s/' + seq.properties.key">
+            <i class="fas fa-external-link-alt"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="loadingMoreSequences; else moreSequenceLoader" style="padding: 5px; text-align: center">
+      <i class="fas fa-spinner fa-spin"></i>
+    </div>
+    <ng-template #moreSequenceLoader>
+      <div id="sequence-update" *ngIf="nextPageLink; else doneLoading" (click)="loadMoreSequences()">
+        Load more sequences...
+      </div>
+      <ng-template #doneLoading>
+        <div id="sequence-update-done">
+          Loaded all sequences!
+        </div>
+      </ng-template>
+    </ng-template>
+
+  </div>
+</ng-template>
+
+
+
+<app-file-browser
+  [single]="true"
+  [allowFolders]=allowFolders
+  [onlyFolder]="true"
+  [heading]="'Select a Folder to link Sequence'"
+  [helpText]="'Streetview Sequence'"
+  (selection)="onSelect($event)">
+</app-file-browser>
+
+<div>
+  <button class="button warning" (click)="cancel()">Cancel</button>
+  <button class="button" [disabled]="!(selectedFiles.length && selectedSequences.length)" (click)="publish()">Publish</button>
+</div>

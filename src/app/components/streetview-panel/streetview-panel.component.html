@@ -3,78 +3,39 @@
     <span class="dock-panel-title"> Streetview </span>
   </div>
   <div class="dock-panel-content">
-
-    <div *ngIf="(streetviewAuth.google || streetviewAuth.mapillary); else notAuthenticated">
-      <!-- You are Authenticated to Mapillary as Username! -->
-      <!-- TODO https://get.foundation/sites/docs/tabs.html -->
+    <div *ngIf="isLoggedIn('google') || isLoggedIn('mapillary'); else notAuthenticated">
       <div class="publish-container grid-x align-right">
         <a class="publish-button" (click)="openStreetviewPublishModal()">
           <small>
             <i class="fas fa-plus"></i>
-            Publish Images
+            Publish
+          </small>
+        </a>
+        <a class="publish-button" (click)="openStreetviewLinkModal()">
+          <small>
+            <!-- <i class="fas fa-plus"></i> -->
+            <!-- <i class="fas fa-link"></i> -->
+            <i class="fas fa-exchange-alt"></i>
+            Link
           </small>
         </a>
       </div>
 
       <tabset>
-        <tab heading="Images">
-          <div *ngFor="let img of uploadedImages">
-            <div *ngIf="img.from == 'mapillary'">
-              From Mapillary
-            </div>
-            <div *ngIf="img.from == 'google'">
-              From Google
-            </div>
-          </div>
+        <tab heading="Assets">
+          <app-streetview-assets>
+          </app-streetview-assets>
         </tab>
 
-        <tab heading="Upload Status">
-          <div>
-            <div *ngFor="let uploads of uploadLogs">
-              {{uploads.name}}
-              <p *ngIf="uploads.status == 'failed'">
-                failed retry?
-                <button class="button">
-                  retry
-                </button>
-              </p>
-              <p *ngIf="uploads.status == 'success'">
-                success!
-              </p>
-              <p *ngIf="uploads.status == 'progress'">
-                spinner
-              </p>
-            </div>
-          </div>
+        <tab heading="Upload Log">
+          <app-streetview-logs>
+          </app-streetview-logs>
         </tab>
 
         <tab heading="Accounts">
-          <h4>Google</h4>
-          <div *ngIf="streetviewAuth.google; else authGoogle">
-            Account information
-            <button class="button" (click)="logout('google')">Logout</button>
-          </div>
-          <ng-template #authGoogle>
-            <div>
-              Not Authenticated to Google!
-            </div>
-            <button class="button" (click)="login('google')">Login</button>
-          </ng-template>
-
-
-          <h4>Mapillary</h4>
-          <div *ngIf="streetviewAuth.mapillary; else authMapillary">
-            Account information
-            <button class="button" (click)="logout('mapillary')">Logout</button>
-          </div>
-          <ng-template #authMapillary>
-            <div>
-              Not Authenticated to Mapillary!
-            </div>
-            <button class="button" (click)="login('mapillary')">Login</button>
-          </ng-template>
+          <app-streetview-accounts>
+          </app-streetview-accounts>
         </tab>
-
       </tabset>
     </div>
 
@@ -82,16 +43,16 @@
       <div style="margin-top: 8rem; height:100%" class="not-authenticated grid-y align-start text-center">
         <h5 style="margin-bottom: 2rem">
           <b>You are not<br>
-          Authenticated to any<br>
-          mapping service!</b>
+            Authenticated to any<br>
+            mapping service!</b>
         </h5>
         <div class="grid-y align-center">
           <button class="button auth-button" (click)="login('mapillary')">
             Login to Mapillary
           </button>
-          <button class="button auth-button" (click)="login('google')">
-            Login to Google Streetview
-          </button>
+          <!-- <button class="button auth-button" (click)="login('google')">
+               Login to Google Streetview
+               </button> -->
         </div>
       </div>
     </ng-template>

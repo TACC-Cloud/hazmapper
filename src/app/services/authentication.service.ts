@@ -25,7 +25,6 @@ interface OpenIDUser {
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
-
   private _currentUser: ReplaySubject<AuthenticatedUser> = new ReplaySubject<AuthenticatedUser>(1);
   public readonly currentUser: Observable<AuthenticatedUser> = this._currentUser.asObservable();
   userToken: AuthToken;

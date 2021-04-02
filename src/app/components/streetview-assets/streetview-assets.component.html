@@ -1,0 +1,42 @@
+<div *ngIf="mapillarySequences.length <= 0; else showSequences">
+  No Sequences
+</div>
+<ng-template #showSequences>
+  <div *ngFor="let sv of mapillarySequences; let i = index">
+    <div class="sequence-container">
+      <div (click)="toggleStreetview(i)" class="sequence-name" style="display: flex">
+        <i class="fas fa-list" style="padding-left: 8px; padding-bottom: 5px; padding-bottom: 5px; padding-top: 9px; padding-bottom: 5px; margin-bottom: 0px"></i>
+        <span [tooltip]="sv.system_id + sv.path"
+              style="margin-left: 5px; padding-top: 5px; width: 150px; display: inline-block; padding-bottom: 5px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap">
+          {{sv.path}}
+        </span>
+      </div>
+      <div *ngIf="sv.open">
+        <div *ngIf="sv.sequences.length == 0">
+          Uploading...
+        </div>
+        <div *ngFor="let seq of sv.sequences; let q = index">
+          <div (click)="toggleSequence(q, sv.sequences)" style="display: flex; flex-direction: row; justify-content: space-between">
+            <div style="margin-left: 20px; width: 100px; padding-bottom: 5px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap">
+              <div *ngIf="seq.sequence_key; else pendingApproval">
+                {{seq.sequence_key}}
+              </div>
+              <ng-template #pendingApproval>
+                <div>
+                  Pending Approval
+                </div>
+              </ng-template>
+            </div>
+            <div style="cursor: pointer; margin-right: 30px">
+              <i class="fas fa-trash" (click)="deleteSequence(seq.service, seq.id)"></i>
+            </div>
+          </div>
+          <div *ngIf="seq.open">
+            <app-streetview-sequence [sequence]=seq>
+            </app-streetview-sequence>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

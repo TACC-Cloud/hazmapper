@@ -6,8 +6,7 @@ import {MainComponent} from './components/main/main.component';
 import {MainProjectComponent} from './components/main-project/main-project.component';
 import {MainWelcomeComponent} from './components/main-welcome/main-welcome.component';
 import { CallbackComponent } from './components/callback/callback.component';
-import { StreetviewGoogleCallbackComponent } from './components/streetview-google-callback/streetview-google-callback.component';
-import { StreetviewMapillaryCallbackComponent } from './components/streetview-mapillary-callback/streetview-mapillary-callback.component';
+import { StreetviewCallbackComponent } from './components/streetview-callback/streetview-callback.component';
 
 @Injectable()
 export class Activate implements CanActivate {
@@ -29,8 +28,7 @@ const routes: Routes = [
   ]},
 
   {path: 'callback', component: CallbackComponent},
-  {path: 'streetview/mapillary', component: StreetviewMapillaryCallbackComponent},
-  {path: 'streetview/google', component: StreetviewGoogleCallbackComponent},
+  {path: 'streetview/callback', component: StreetviewCallbackComponent},
   {path: '404', component: NotFoundComponent }];
 
 @NgModule({
