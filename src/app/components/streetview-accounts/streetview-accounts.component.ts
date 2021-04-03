@@ -7,24 +7,22 @@ import { StreetviewAuthenticationService } from 'src/app/services/streetview-aut
   styleUrls: ['./streetview-accounts.component.styl']
 })
 export class StreetviewAccountsComponent implements OnInit {
-
-  constructor(private streetviewAuthenticationService: StreetviewAuthenticationService) { }
+  constructor(
+    private streetviewAuthenticationService: StreetviewAuthenticationService) { }
 
   ngOnInit() {
   }
 
-  isLoggedIn(svService: string) {
-    return this.streetviewAuthenticationService.isLoggedIn(svService);
+  isLoggedIn(service: string) {
+    return this.streetviewAuthenticationService.isLoggedIn(service);
   }
 
-  login(svService: string) {
-    // this.streetviewAuthenticationService.login(svService, this.activeProject.id, this.currentUser.username, true);
-    this.streetviewAuthenticationService.login(svService);
+  login(service: string) {
+    this.streetviewAuthenticationService.login(service);
   }
 
-  logout(svService: string) {
-    // this.streetviewService.logout(svService, this.activeProject.id, this.currentUser.username);
-    this.streetviewAuthenticationService.logout(svService);
+  logout(service: string) {
+    this.streetviewAuthenticationService.logout(service);
   }
 
 }

@@ -7,16 +7,16 @@ import { StreetviewService } from '../../services/streetview.service';
   styleUrls: ['./streetview-sequence.component.styl']
 })
 export class StreetviewSequenceComponent implements OnInit {
-
   @Input() sequence;
 
   sequenceImages: Array<any> = [];
 
-  constructor(private streetviewService: StreetviewService) {
+  constructor(
+    private streetviewService: StreetviewService) {
   }
 
   ngOnInit() {
-    this.streetviewService.getMapillaryImages(this.sequence);
+    this.streetviewService.getMapillaryImages(this.sequence.id);
   }
 
   focusToImageLocation(img) {

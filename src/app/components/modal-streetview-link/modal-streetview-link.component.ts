@@ -17,6 +17,8 @@ export class ModalStreetviewLinkComponent implements OnInit {
   @Input() allowFolders: true;
   selectedFiles: Array<RemoteFile> = [];
   selectedSequences: Array<string> = [];
+  private projectId: number;
+  private username: string;
 
   userSequences: Array<any> = [];
   loadingSequences = true;

@@ -1,7 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Project } from '../../models/models';
-import {AuthenticatedUser, AuthService} from '../../services/authentication.service';
-import {ProjectsService} from '../../services/projects.service'
 import { StreetviewService } from 'src/app/services/streetview.service';
 
 @Component({
@@ -10,25 +7,15 @@ import { StreetviewService } from 'src/app/services/streetview.service';
   styleUrls: ['./streetview-assets.component.styl']
 })
 export class StreetviewAssetsComponent implements OnInit {
-  private activeProject: Project;
-  private currentUser: AuthenticatedUser;
   private mapillarySequences: Array<any> = [];
-  // private mapillaryDisplaySequences: Array<any> = [];
 
-  constructor(private streetviewService: StreetviewService,
-              private projectsService: ProjectsService,
-              private authService: AuthService) { }
-
+  constructor(private streetviewService: StreetviewService) { }
 
   ngOnInit() {
     this.streetviewService.getStreetviewSequences('mapillary');
 
     this.streetviewService.streetviewSequences.subscribe((next) => {
-      // TODO: Fix this to be more elegant (way to toggle switch)
-      // TODO: Create a separate list of active panels and filter out that locally
-      // next.forEach(x => x.open = false);
       this.mapillarySequences = next;
-      console.log(next);
     })
   }
 

@@ -4,6 +4,7 @@ import * as L from 'leaflet';
 import 'types.leaflet.heat';
 import 'leaflet.markercluster';
 import 'leaflet-contextmenu';
+import { LatLng } from 'leaflet';
 import * as Mapillary from 'mapillary-js';
 import { ProjectsService} from '../../services/projects.service';
 import { GeoDataService} from '../../services/geo-data.service';
@@ -16,7 +17,6 @@ import {filter, map} from 'rxjs/operators';
 import {Subscription} from 'rxjs';
 import {Overlay, Project, TileServer} from '../../models/models';
 import {EnvService} from '../../services/env.service';
-// import {AppEnvironment, environment} from '../../../environments/environment';
 import { StreetviewService } from 'src/app/services/streetview.service';
 
 @Component({
@@ -37,7 +37,6 @@ export class MapComponent implements OnInit, OnDestroy {
   fitToFeatureExtent = true;
   private subscription: Subscription = new Subscription();
   streetviewFeatures: FeatureGroup = new FeatureGroup();
-  // environment: AppEnvironment;
   mapillaryStreetview: boolean = false;
   streetviewMarker: any;
 
@@ -56,61 +55,11 @@ export class MapComponent implements OnInit, OnDestroy {
     // const mapType: string = this.route.snapshot.queryParamMap.get('mapType');
     // this.projectId = +this.route.snapshot.paramMap.get("projectId");
     // this.cluster = this.route.snapshot.queryParamMap.get('mapType');
-    // this.environment = environment;
     this.loadMap();
   }
 
   loadMap() {
     setTimeout(() => {
-      // this.mapillaryViewer = new Mapillary.Viewer({
-      //   apiClient: 'VDRaeGFzMEtzRnJrMFZwdVYzckd6cjo0ZWY3ZDEzZGIyMWJkZjNi',
-      //   container: 'mapillary',
-      //   imageKey: 'Qm9WROXi1LV37FgjTNUPZQ',
-      // });
-      // window.addEventListener('resize', () => { this.mapillaryViewer.resize(); });
-
-      // this.map = new L.Map('map', {
-      //   center: [40, -80],
-      //   zoom: 3
-      // });
-
-      // this.loadFeatures();
-
-      // // Publish the mouse location on the mapMouseLocation stream
-      // this.map.on('mousemove', (ev: LeafletMouseEvent) => this.mouseEventHandler(ev));
-
-      // // Filter out and display only the active overlays
-      // this.geoDataService.selectedOverlays$
-      //   .pipe(
-      //     map( (items: Array<Overlay>) => items.filter( (item: Overlay) => item.isActive))
-      //   )
-      //   .subscribe( (filteredOverlays: Array<Overlay>) => {
-      //     this.overlays.clearLayers();
-      //     filteredOverlays.forEach( (item: Overlay) => {
-      //       this.overlays.addLayer(this.createOverlayLayer(item));
-      //     });
-      //     this.overlays.addTo(this.map);
-      //   });
-
-
-      // // Listen on the activeFeature stream and zoom map to that feature when it changes
-      // this.geoDataService.activeFeature.pipe(filter(n => n != null)).subscribe( (next) => {
-      //   this.activeFeature = next;
-      //   const bbox = turf.bbox(<AllGeoJSON> next);
-      //   this.map.fitBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]]);
-      // });
-
-      // // Listen for changes to the basemap
-      // this.geoDataService.basemap.subscribe((next: string) => {
-      //   if (next === 'sat') {
-      //     this.map.removeLayer(baseOSM);
-      //     this.map.addLayer(satellite);
-      //   }
-      //   if (next === 'roads') {
-      //     this.map.removeLayer(satellite);
-      //     this.map.addLayer(baseOSM);
-      //   }
-      // })}, 10);
       this.map = new L.Map('map', {
         center: [40, -80],
         zoom: 3,
@@ -265,8 +214,7 @@ export class MapComponent implements OnInit, OnDestroy {
           this.map.fitBounds(this.features.getBounds());
         }
       } catch (e) {}
-    }
-                                                               );
+    });
 
     subscription.add(this.projectsService.activeProject.subscribe((next: Project) => {
       // fit to bounds if this is a new project
@@ -305,23 +253,10 @@ export class MapComponent implements OnInit, OnDestroy {
         window.open("https://www.mapillary.com/map/im/" + resp.features[0].properties.key);
       }
     })
-
-
-    // if (this.mapillaryStreetview) {
-    //   if (this.openStreetview) {
-    //     this.mapillaryViewer.moveCloseTo(lat, lon);
-    //   }
-    // } else {
-    //   this.streetviewService.mapillaryOpenLatLng(lat, lon).subscribe(resp => {
-    //     window.open("https://www.mapillary.com/map.im/" + resp.features[0].properties.key);
-    //   });
-    // }
   }
 
   sequenceRightClickHandler(ev: any): void {
     if (!this.mapillaryStreetview) {
-      //   this.closeStreetview();
-      // } else {
       this.openStreetview(ev.latlng);
     } else {
       this.sequenceClickHandler(ev);
@@ -347,7 +282,7 @@ export class MapComponent implements OnInit, OnDestroy {
         'lookat': query
       }, (resp) => {
         this.mapillaryViewer = new Mapillary.Viewer({
-          apiClient: 'VDRaeGFzMEtzRnJrMFZwdVYzckd6cjo0ZWY3ZDEzZGIyMWJkZjNi',
+          apiClient: this.envService.mapillaryClientId,
           container: 'mapillary',
           imageKey: resp.features[0].properties.key,
         });

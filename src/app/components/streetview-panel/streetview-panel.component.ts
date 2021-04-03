@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-foundation';
 import { Project } from '../../models/models';
-import { AuthenticatedUser, AuthService } from '../../services/authentication.service';
 import { StreetviewService } from '../../services/streetview.service';
 import { StreetviewAuthenticationService } from 'src/app/services/streetview-authentication.service';
-import { ProjectsService} from '../../services/projects.service'
 import { ModalStreetviewPublishComponent } from '../modal-streetview-publish/modal-streetview-publish.component';
 import { ModalStreetviewLinkComponent } from '../modal-streetview-link/modal-streetview-link.component';
 
@@ -16,24 +14,19 @@ import { ModalStreetviewLinkComponent } from '../modal-streetview-link/modal-str
 })
 export class StreetviewPanelComponent implements OnInit {
 
-  private activeProject: Project;
-  private currentUser: AuthenticatedUser;
+  private _activeProjectId: number;
+  private username: string;
 
   constructor(private bsModalService: BsModalService,
               private streetviewService: StreetviewService,
               private streetviewAuthenticationService: StreetviewAuthenticationService,
-              private projectsService: ProjectsService,
-              private authService: AuthService
              ) { }
 
   ngOnInit() {
-    this.authService.currentUser.subscribe( (next) => {
-      this.currentUser = next;
-    });
-
-    this.projectsService.activeProject.subscribe( (next) => {
-      this.activeProject = next;
-    });
+    // TODO Maybe put this in control-bar
+    if (this.streetviewAuthenticationService.isLoggedIn('mapillary')) {
+      this.streetviewAuthenticationService.setRemoteToken('mapillary');
+    }
   }
 
   openStreetviewPublishModal() {

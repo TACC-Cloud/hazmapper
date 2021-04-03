@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { HttpClient } from '@angular/common/http';
-import { INotification } from '../models/notification';
+import { INotification, IProgressNotification } from '../models/notification';
 import { interval, Observable, ReplaySubject } from 'rxjs';
 import { EnvService } from '../services/env.service';
 import { take, map } from 'rxjs/operators';
@@ -72,7 +72,7 @@ export class NotificationsService {
   }
 
   getRecentProgress(): void {
-    const baseUrl = this.environment.apiUrl + '/notifications/progress';
+    const baseUrl = this.envService.apiUrl + '/notifications/progress';
     this.http.get<Array<IProgressNotification>>(baseUrl)
       .subscribe((notes) => {
         this._progressNotifications.next(notes);
@@ -80,7 +80,7 @@ export class NotificationsService {
   }
 
   deleteAllDoneProgress(): void {
-    const baseUrl = this.environment.apiUrl + '/notifications/progress';
+    const baseUrl = this.envService.apiUrl + '/notifications/progress';
 
     // this._progressNotifications.next([]);
 
@@ -91,12 +91,9 @@ export class NotificationsService {
       });
   }
 
-  // NOTE: Shouldn't be able to do this.. unless done (maybe set condition)
-  // NOTE: Error ones and in-progress ones should gracefully be deleted during backend sequence
   deleteProgress(pn: IProgressNotification): void {
-    const baseUrl = this.environment.apiUrl + '/notifications/progress';
+    const baseUrl = this.envService.apiUrl + '/notifications/progress';
 
-    // TODO: maybe just get it from server
     this.progressNotifications
       .pipe(take(1)).subscribe((progressList) => {
         progressList = progressList.filter(n => n.uuid != pn.uuid);
@@ -109,9 +106,8 @@ export class NotificationsService {
       });
   }
 
-  // TODO: Fix type
   getProgressByUUID(pn: IProgressNotification): any {
-    const baseUrl = this.environment.apiUrl + '/notifications/progress';
+    const baseUrl = this.envService.apiUrl + '/notifications/progress';
     this.http.get<Array<IProgressNotification>>(baseUrl + '/' + pn.uuid)
       .subscribe((note) => {
         return note;

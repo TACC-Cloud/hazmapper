@@ -147,8 +147,8 @@ export class ProjectsService {
     description = description ? description : proj.description;
 
     const payload = {
-      name: name,
-      description: description
+      name,
+      description
     };
 
     this.http.put(this.envService.apiUrl + `/projects/${proj.id}/`, payload)

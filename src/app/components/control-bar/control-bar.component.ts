@@ -2,11 +2,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ProjectsService } from '../../services/projects.service';
 import { Project } from '../../models/models';
 import { GeoDataService } from '../../services/geo-data.service';
-import {StreetviewService} from '../../services/streetview.service';
-import {LatLng} from 'leaflet';
-import {skip} from 'rxjs/operators';
-import {combineLatest, Subscription} from 'rxjs';
-import {NotificationsService} from '../../services/notifications.service';
+import { StreetviewService } from '../../services/streetview.service';
+import { LatLng } from 'leaflet';
+import { skip } from 'rxjs/operators';
+import { combineLatest, Subscription } from 'rxjs';
+import { NotificationsService } from '../../services/notifications.service';
 
 @Component({
   selector: 'app-control-bar',

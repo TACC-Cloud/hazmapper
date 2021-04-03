@@ -7,8 +7,14 @@ export class EnvService {
   private _env: EnvironmentType;
   private _apiUrl: string;
   private _jwt?: string;
+  private _googleClientId?: string;
+  // TODO Move to somewhere else...
+  private _googleClientSecret?: string;
+  private _mapillaryClientId?: string;
+  private _mapillaryApiUrl?: string;
   private _clientId: string;
   private _baseHref: string;
+  private _rootUrl: string;
 
   private getApiUrl(backend: EnvironmentType): string {
     if (backend === EnvironmentType.Local) {
@@ -34,12 +40,32 @@ export class EnvService {
     return this._apiUrl;
   }
 
+  get rootUrl(): string {
+    return this._rootUrl;
+  }
+
   get jwt(): string {
     return this._jwt;
   }
 
   get clientId(): string {
     return this._clientId;
+  }
+
+  get googleClientId(): string {
+    return this._googleClientId;
+  }
+
+  get googleClientSecret(): string {
+    return this._googleClientSecret;
+  }
+
+  get mapillaryClientId(): string {
+    return this._mapillaryClientId;
+  }
+
+  get mapillaryApiUrl(): string {
+    return this._mapillaryApiUrl;
   }
 
   get baseHref(): string {
@@ -63,6 +89,12 @@ export class EnvService {
     const hostname = window && window.location && window.location.hostname;
     const pathname = window && window.location && window.location.pathname;
 
+    this._googleClientSecret = '';
+    this._googleClientId = '573001329633-1p0k8rko13s6n2p2cugp3timji3ip9f0.apps.googleusercontent.com';
+    this._mapillaryClientId = 'VDRaeGFzMEtzRnJrMFZwdVYzckd6cjo0ZWY3ZDEzZGIyMWJkZjNi';
+    this._mapillaryApiUrl = 'https://a.mapillary.com/v3';
+    this._rootUrl = 'https://hazmapper.tacc.utexas.edu';
+
     if (/^localhost/.test(hostname)) {
       this._env = EnvironmentType.Local;
       this._apiUrl = this.getApiUrl(environment.backend);
@@ -72,6 +104,7 @@ export class EnvService {
       }
       this._baseHref = '/';
       this._clientId = 'RMCJHgW9CwJ6mKjhLTDnUYBo9Hka';
+      this._rootUrl = 'https://hazmapper.tacc.utexas.edu';
     } else if (/^hazmapper.tacc.utexas.edu/.test(hostname) && pathname.startsWith('/staging')) {
       this._env = EnvironmentType.Staging;
       this._apiUrl = this.getApiUrl(this.env);
