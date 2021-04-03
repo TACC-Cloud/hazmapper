@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, AfterContentInit } from '@angular/core';
 import {AuthenticatedUser, AuthService} from '../../services/authentication.service';
+import {MAIN} from '../../constants/routes';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -7,7 +8,7 @@ import { Router, ActivatedRoute } from '@angular/router';
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.styl']
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements AfterContentInit {
   public currentUser: AuthenticatedUser;
 
   constructor(
@@ -15,11 +16,11 @@ export class MainComponent implements OnInit {
     private router: Router,
     private authService: AuthService) {}
 
-  ngOnInit() {
+  ngAfterContentInit() {
     this.authService.currentUser.subscribe(next => this.currentUser = next);
   }
 
   routeToWelcome() {
-    this.router.navigate([''], { relativeTo: this.route });
+    this.router.navigate([MAIN]);
   }
 }

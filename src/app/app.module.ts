@@ -50,6 +50,8 @@ import { PublicMapInfoPanelComponent } from './components/public-map-info-panel/
 import { MainWelcomeComponent } from './components/main-welcome/main-welcome.component';
 import { MainProjectComponent } from './components/main-project/main-project.component';
 import {DragDropModule, CDK_DRAG_CONFIG} from '@angular/cdk/drag-drop';
+import { LoginComponent } from './components/login/login.component';
+import { LogoutComponent } from './components/logout/logout.component';
 
 @NgModule({
   declarations: [
@@ -83,6 +85,8 @@ import {DragDropModule, CDK_DRAG_CONFIG} from '@angular/cdk/drag-drop';
     PublicMapInfoPanelComponent,
     MainWelcomeComponent,
     MainProjectComponent,
+    LoginComponent,
+    LogoutComponent,
   ],
   imports: [
     CommonModule,

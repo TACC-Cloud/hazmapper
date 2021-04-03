@@ -1,5 +1,5 @@
-import {Component, NgZone, OnInit} from '@angular/core';
-import {ActivatedRoute, Router, Route} from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import {AuthService} from '../../services/authentication.service';
 
 @Component({
