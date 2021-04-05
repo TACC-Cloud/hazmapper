@@ -100,7 +100,7 @@ export class StreetviewService {
           for (const seq of streetviews.sequences) {
             if (!seq.sequence_key) {
               this.getMapillarySequenceKeys(seq).subscribe(sequence => {
-                if (sequence.features) {
+                if (sequence.body.features.length) {
                   const sequenceKey = sequence.features[0].sequence_key;
                   this.setMapillarySequenceKeys(seq.id, sequenceKey);
                   this._streetviewDisplaySequences.next({
