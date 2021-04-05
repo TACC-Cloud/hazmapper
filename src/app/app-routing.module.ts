@@ -8,6 +8,8 @@ import {MainWelcomeComponent} from './components/main-welcome/main-welcome.compo
 import {CallbackComponent} from './components/callback/callback.component';
 import {LoginComponent} from './components/login/login.component';
 import {LogoutComponent} from './components/logout/logout.component';
+import {LOGIN} from './constants/routes';
+
 
 @Injectable()
 export class Activate implements CanActivate {
@@ -17,7 +19,7 @@ export class Activate implements CanActivate {
      if (this.authSvc.isLoggedIn()) {
        return true;
      }
-     this.router.navigateByUrl('/login?to=' + encodeURIComponent(state.url));
+     this.router.navigateByUrl(LOGIN + '?to=' + encodeURIComponent(state.url));
      return false;
   }
 }
@@ -27,10 +29,10 @@ const routes: Routes = [
   {path: '', component: MainComponent, children: [
       {path: 'login', component: LoginComponent},
       {path: 'logout', component: LogoutComponent},
-      {path: '', pathMatch: 'full', component: MainWelcomeComponent, canActivate: [Activate]},
-      {path: 'project/:projectUUID', component: MainProjectComponent, canActivate: [Activate]},
       {path: 'project-public/:projectUUID', component: MainProjectComponent},
-      ]},
+      {path: 'project/:projectUUID', component: MainProjectComponent, canActivate: [Activate]},
+      {path: '', pathMatch: 'full', component: MainWelcomeComponent, canActivate: [Activate]},
+    ]},
   {path: 'callback', component: CallbackComponent},
   {path: '404', component: NotFoundComponent},
   {path: '**', redirectTo: '', pathMatch: 'full'}

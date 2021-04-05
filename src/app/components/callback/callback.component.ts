@@ -8,7 +8,6 @@ import {AuthService} from '../../services/authentication.service';
   styleUrls: ['./callback.component.styl']
 })
 export class CallbackComponent implements OnInit {
-
   constructor(private route: ActivatedRoute, private auth: AuthService) { }
 
   ngOnInit() {

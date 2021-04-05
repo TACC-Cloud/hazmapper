@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Router, ActivatedRoute, UrlSegment} from '@angular/router';
-import {Feature, Overlay} from '../../models/models';
+import {Feature} from '../../models/models';
 import {ProjectsService} from '../../services/projects.service';
 import {GeoDataService} from '../../services/geo-data.service';
 
