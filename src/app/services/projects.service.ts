@@ -8,6 +8,7 @@ import {IProjectUser} from '../models/project-user';
 import {NotificationsService} from './notifications.service';
 import {GeoDataService} from './geo-data.service';
 import { EnvService } from '../services/env.service';
+import { AuthService } from '../services/authentication.service';
 import {defaultTileServers} from '../constants/tile-servers';
 
 @Injectable({
@@ -37,6 +38,7 @@ export class ProjectsService {
   constructor(private http: HttpClient,
               private notificationsService: NotificationsService,
               private geoDataService: GeoDataService,
+              private authService: AuthService,
               private envService: EnvService) { }
 
   getProjects(): void {
@@ -128,7 +130,7 @@ export class ProjectsService {
 
   setActiveProject(proj: Project): void {
     this._activeProject.next(proj);
-    if (proj) {
+    if (proj && this.authService.isLoggedIn()) {
       this.getProjectUsers(proj);
     }
   }
