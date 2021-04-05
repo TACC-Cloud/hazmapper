@@ -23,7 +23,6 @@ interface OpenIDUser {
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
-  dummy = "foo"
   private _currentUser: ReplaySubject<AuthenticatedUser> = new ReplaySubject<AuthenticatedUser>(1);
   public readonly currentUser: Observable<AuthenticatedUser> = this._currentUser.asObservable();
   userToken: AuthToken;
@@ -34,7 +33,6 @@ export class AuthService {
   constructor(private http: HttpClient, private envService: EnvService, private router: Router) {}
 
   public login(requestedUrl: string) {
-    this.dummy = requestedUrl;
     localStorage.setItem(this.LS_REDIRECT_KEY, requestedUrl);
 
     // First, check if the user has a token in localStorage
@@ -79,6 +77,7 @@ export class AuthService {
     this.userToken = null;
     localStorage.removeItem(this.LS_TOKEN_KEY);
     localStorage.removeItem(this.LS_USER_KEY);
+    this._currentUser.next(null);
   }
 
   public setToken(token: string, expires: number): void {
