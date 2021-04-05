@@ -100,7 +100,7 @@ export class StreetviewService {
             if (!seq.sequence_key) {
               this.getMapillarySequenceKeys(seq).subscribe(sequence => {
                 if (sequence.body.features.length) {
-                  const sequenceKey = sequence.body.features[0].sequence_key;
+                  const sequenceKey = sequence.body.features[0].properties.key;
                   this.setMapillarySequenceKeys(seq.id, sequenceKey);
                   this._streetviewDisplaySequences.next({
                     type: 'FeatureCollection',
@@ -134,14 +134,15 @@ export class StreetviewService {
   }
 
   // NOTE To geoapi
-  public setMapillarySequenceKeys(sequenceId: number, sequence_key: string) {
+  public setMapillarySequenceKeys(sequenceId: number, sequenceKey: string) {
     const payload = {
-      sequenceKey: sequence_key
+      sequence_key: sequenceKey
     };
     const service = 'mapillary';
-    return this.http.put<any>(this.envService.apiUrl +
+    this.http.put<any>(this.envService.apiUrl +
       `/projects/${this._projectId}/users/${this._username}/streetview/${service}/sequences/${sequenceId}`,
-                              payload);
+                       payload)
+      .subscribe(resp => console.log(resp));
   }
 
   public getStreetviewImages(service: string, sequenceKey: string) {
