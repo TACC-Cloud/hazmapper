@@ -1,15 +1,16 @@
-import { Component, AfterContentInit } from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {AuthenticatedUser, AuthService} from '../../services/authentication.service';
-import {MAIN, LOGIN} from '../../constants/routes';
+import {MAIN} from '../../constants/routes';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
-  styleUrls: ['./main.component.styl']
+  styleUrls: ['./main.component.styl'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MainComponent implements AfterContentInit {
-  public currentUser: AuthenticatedUser;
+export class MainComponent implements OnInit {
+  public currentUser: AuthenticatedUser = null;
   private afterLoginRoute: string;
 
   constructor(
@@ -21,7 +22,7 @@ export class MainComponent implements AfterContentInit {
     this.afterLoginRoute = MAIN;
   }
 
-  ngAfterContentInit() {
+  ngOnInit() {
     if (this.authService.isLoggedIn()) {
       this.authService.getUserInfo();
     }
