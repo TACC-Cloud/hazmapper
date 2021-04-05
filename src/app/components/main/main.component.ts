@@ -17,6 +17,9 @@ export class MainComponent implements AfterContentInit {
     private authService: AuthService) {}
 
   ngAfterContentInit() {
+    if(this.authService.isLoggedIn()) {
+      this.authService.getUserInfo();
+    }
     this.authService.currentUser.subscribe(next => this.currentUser = next);
   }
 

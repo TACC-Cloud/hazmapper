@@ -6,7 +6,6 @@ import {ActivatedRoute, Router} from "@angular/router";
 
 class MockAuth {
   setToken(){}
-  getUserInfo(){}
 }
 class MockRouter {
   navigate(){}

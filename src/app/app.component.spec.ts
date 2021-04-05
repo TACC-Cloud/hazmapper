@@ -6,7 +6,6 @@ import {AuthService} from "./services/authentication.service";
 
 class MockAuth {
   setToken(){}
-  getUserInfo(){}
   login(){}
 }
 

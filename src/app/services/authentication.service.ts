@@ -84,6 +84,9 @@ export class AuthService {
   public setToken(token: string, expires: number): void {
     this.userToken = AuthToken.fromExpiresIn(token, expires);
     localStorage.setItem(this.LS_TOKEN_KEY, JSON.stringify(this.userToken));
+
+    this.getUserInfo();
+
     const redirectedPath = localStorage.getItem(this.LS_REDIRECT_KEY);
     this.router.navigate([redirectedPath]);
   }
