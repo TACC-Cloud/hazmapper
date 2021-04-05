@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import * as L from 'leaflet';
 import 'types.leaflet.heat';
 import 'leaflet.markercluster';
@@ -34,7 +33,6 @@ export class MapComponent implements OnInit, OnDestroy {
   constructor(private projectsService: ProjectsService,
               private geoDataService: GeoDataService,
               private envService: EnvService,
-              private route: ActivatedRoute,
              ) {
     // Have to bind these to keep this being this
     this.featureClickHandler.bind(this);
