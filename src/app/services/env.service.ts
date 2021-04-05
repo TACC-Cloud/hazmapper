@@ -104,7 +104,7 @@ export class EnvService {
       }
       this._baseHref = '/';
       this._clientId = 'RMCJHgW9CwJ6mKjhLTDnUYBo9Hka';
-      this._rootUrl = 'https://hazmapper.tacc.utexas.edu';
+      this._rootUrl = 'http://localhost:4200';
     } else if (/^hazmapper.tacc.utexas.edu/.test(hostname) && pathname.startsWith('/staging')) {
       this._env = EnvironmentType.Staging;
       this._apiUrl = this.getApiUrl(this.env);

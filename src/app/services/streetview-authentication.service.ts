@@ -33,7 +33,9 @@ export class StreetviewAuthenticationService {
 
     const payload = {token};
 
-    this.http.post<any>(this.envService.apiUrl + `/projects/${projId}/users/${uname}/streetview/${service}`, payload);
+    this.http.post<any>(this.envService.apiUrl + `/projects/${projId}/users/${uname}/streetview/${service}`, payload).subscribe(resp => {
+      console.log(resp);
+    });
   }
 
   private deleteRemoteToken(service: string) {
@@ -99,7 +101,7 @@ export class StreetviewAuthenticationService {
     window.location.href = url;
   }
 
-  private setGoogleToken(code: string) {
+  private setGoogleToken(code: string, projectId: number, username: string) {
     const googleTokenUrl = 'https://oauth2.googleapis.com/token';
 
     const payload = new FormData();
@@ -118,6 +120,7 @@ export class StreetviewAuthenticationService {
           expiration_date: resp.expiration_date
         };
         this.setLocalToken('google', token);
+        this.setRemoteToken('google', projectId, username);
       });
   }
 
@@ -131,19 +134,19 @@ export class StreetviewAuthenticationService {
 
   public setStreetviewToken(projectId: number, username: string, service: string, authStr: string) {
     if (service === 'google') {
-      this.setGoogleToken(authStr);
+      this.setGoogleToken(authStr, projectId, username);
     } else {
-      this.setMapillaryToken(authStr);
+      this.setMapillaryToken(authStr, projectId, username);
       this.setMapillaryUserKey();
     }
-    this.setRemoteToken(service, projectId, username);
   }
 
-  private setMapillaryToken(accessToken: string) {
+  private setMapillaryToken(accessToken: string, projectId: number, username: string) {
     const token = {
       access_token: accessToken
     };
     this.setLocalToken('mapillary', token);
+    this.setRemoteToken('mapillary', projectId, username);
   }
 
   private deleteLocalToken(service: string) {

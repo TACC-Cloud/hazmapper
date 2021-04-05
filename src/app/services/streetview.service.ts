@@ -178,9 +178,7 @@ export class StreetviewService {
     this.http.post(this.envService.apiUrl + `/projects/${this._projectId}/users/${this._username}/streetview/upload/`, payload)
       .subscribe( (resp) => {
       }, error => {
-        if (error instanceof HttpErrorResponse && error.status === 403) {
-          this.notificationsService.showErrorToast('Not authenticated to the service.');
-        }
+        console.log(error);
       });
   }
 
