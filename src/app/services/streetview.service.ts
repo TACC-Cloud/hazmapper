@@ -95,17 +95,16 @@ export class StreetviewService {
     this.http.get<any>(this.envService.apiUrl +
       `/projects/${this._projectId}/users/${this._username}/streetview/${service}/sequences`)
       .subscribe((resp: Array<any>) => {
-        const sequenceKeys = [];
         for (const streetviews of resp) {
           for (const seq of streetviews.sequences) {
             if (!seq.sequence_key) {
               this.getMapillarySequenceKeys(seq).subscribe(sequence => {
                 if (sequence.body.features.length) {
-                  const sequenceKey = sequence.features[0].sequence_key;
+                  const sequenceKey = sequence.body.features[0].sequence_key;
                   this.setMapillarySequenceKeys(seq.id, sequenceKey);
                   this._streetviewDisplaySequences.next({
                     type: 'FeatureCollection',
-                    features: [...this._streetviewDisplaySequences.getValue().features, sequence.features[0]]
+                    features: [...this._streetviewDisplaySequences.getValue().features, sequence.body.features[0]]
                   });
                 }
               });
