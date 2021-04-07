@@ -8,6 +8,7 @@ import {IProjectUser} from '../models/project-user';
 import {NotificationsService} from './notifications.service';
 import {GeoDataService} from './geo-data.service';
 import { EnvService } from '../services/env.service';
+import { AuthService } from '../services/authentication.service';
 import {defaultTileServers} from '../constants/tile-servers';
 
 @Injectable({
@@ -17,8 +18,8 @@ export class ProjectsService {
 
   private _projects: BehaviorSubject<Project[]> = new BehaviorSubject([]);
   public readonly projects: Observable<Project[]> = this._projects.asObservable();
-  private _activeProject: ReplaySubject<Project> = new ReplaySubject<Project>(1);
-  public readonly  activeProject: Observable<Project> = this._activeProject.asObservable();
+  private _activeProject: BehaviorSubject<Project> = new BehaviorSubject<Project>(null);
+  public readonly activeProject: Observable<Project> = this._activeProject.asObservable();
   private _projectUsers: ReplaySubject<Array<IProjectUser>> = new ReplaySubject<Array<IProjectUser>>(1);
   public readonly projectUsers$: Observable<Array<IProjectUser>> = this._projectUsers.asObservable();
 
@@ -37,6 +38,7 @@ export class ProjectsService {
   constructor(private http: HttpClient,
               private notificationsService: NotificationsService,
               private geoDataService: GeoDataService,
+              private authService: AuthService,
               private envService: EnvService) { }
 
   getProjects(): void {
@@ -127,8 +129,13 @@ export class ProjectsService {
   }
 
   setActiveProject(proj: Project): void {
+    // TODO needs to be extended with a parameter (checkIfHasPrivateAccess)
+    //  to check if we need to set _loadingActiveProjectFailed to False
+    //  in cases where we have a private view but despite the map being public, the user
+    //  is not a member of the project.  https://jira.tacc.utexas.edu/browse/DES-1927
+
     this._activeProject.next(proj);
-    if (proj) {
+    if (proj && this.authService.isLoggedIn()) {
       this.getProjectUsers(proj);
     }
   }
@@ -142,13 +149,15 @@ export class ProjectsService {
       });
   }
 
-  updateProject(proj: Project, name: string, description: string): void {
+  updateProject(proj: Project, name: string, description: string, isPublic: boolean): void {
     name = name ? name : proj.name;
     description = description ? description : proj.description;
+    isPublic = isPublic !== undefined ? isPublic : proj.public;
 
     const payload = {
       name,
-      description
+      description,
+      public: isPublic
     };
 
     this.http.put(this.envService.apiUrl + `/projects/${proj.id}/`, payload)
@@ -156,4 +165,32 @@ export class ProjectsService {
         proj.name = name;
       });
   }
+
+  updateActiveProject(name: string, description: string, isPublic: boolean) {
+    name = name ? name : this._activeProject.value.name;
+    description = description ? description : this._activeProject.value.description;
+    isPublic = isPublic !== undefined ? isPublic : this._activeProject.value.public;
+
+    const payload = {
+      name,
+      description,
+      public: isPublic
+    };
+
+    return this.http.put<Project>(this.envService.apiUrl + `/projects/${this._activeProject.value.id}/`, payload)
+      .pipe(
+        map((updatedProject) => {
+          // Update the project list
+          const projects = this._projects.value.map(proj => proj.id === this._activeProject.value.id ? updatedProject : proj);
+          this._projects.next(projects);
+          // Update the active project
+          this._activeProject.next(updatedProject);
+          return updatedProject;
+        }),
+        catchError((err: any) => {
+          throw new Error('Unable to update project.');
+        })
+      );
+  }
+
 }

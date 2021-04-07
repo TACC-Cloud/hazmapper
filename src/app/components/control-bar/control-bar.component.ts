@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {Component, OnInit, OnDestroy, Input} from '@angular/core';
 import { ProjectsService } from '../../services/projects.service';
 import { Project } from '../../models/models';
 import { GeoDataService } from '../../services/geo-data.service';
@@ -15,6 +15,7 @@ import { NotificationsService } from '../../services/notifications.service';
 })
 
 export class ControlBarComponent implements OnInit, OnDestroy {
+  @Input() isPublicView = false;
   private subscription: Subscription = new Subscription();
   private activeProject: Project;
   private mapMouseLocation: LatLng = new LatLng(0, 0);

@@ -48,6 +48,7 @@ export interface Project {
   id?: number;
   name: string;
   uuid?: string;
+  public?: boolean;
 }
 
 export class Project implements Project {

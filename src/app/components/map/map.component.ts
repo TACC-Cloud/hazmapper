@@ -1,9 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import * as L from 'leaflet';
 import 'types.leaflet.heat';
 import 'leaflet.markercluster';
-import 'leaflet-contextmenu';
 import { LatLng } from 'leaflet';
 import * as Mapillary from 'mapillary-js';
 import { ProjectsService} from '../../services/projects.service';
@@ -18,6 +16,7 @@ import {Subscription} from 'rxjs';
 import {Overlay, Project, TileServer} from '../../models/models';
 import {EnvService} from '../../services/env.service';
 import { StreetviewService } from 'src/app/services/streetview.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-map',
@@ -37,8 +36,9 @@ export class MapComponent implements OnInit, OnDestroy {
   fitToFeatureExtent = true;
   private subscription: Subscription = new Subscription();
   streetviewFeatures: FeatureGroup = new FeatureGroup();
-  mapillaryStreetview: boolean = false;
+  mapillaryStreetview = false;
   streetviewMarker: any;
+  mapWidth = 100;
 
   constructor(private projectsService: ProjectsService,
               private geoDataService: GeoDataService,
@@ -55,10 +55,6 @@ export class MapComponent implements OnInit, OnDestroy {
     // const mapType: string = this.route.snapshot.queryParamMap.get('mapType');
     // this.projectId = +this.route.snapshot.paramMap.get("projectId");
     // this.cluster = this.route.snapshot.queryParamMap.get('mapType');
-    this.loadMap();
-  }
-
-  loadMap() {
     setTimeout(() => {
       this.map = new L.Map('map', {
         center: [40, -80],
@@ -94,7 +90,6 @@ export class MapComponent implements OnInit, OnDestroy {
           }
         });
       }));
-
 
       this.subscription.add(this.streetviewService.streetviewDisplaySequences.subscribe((collection) => {
         this.mapillarySequences.clearLayers();
@@ -150,7 +145,7 @@ export class MapComponent implements OnInit, OnDestroy {
         const bbox = turf.bbox(<AllGeoJSON> next);
         this.map.fitBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]]);
       }));
-    })
+    });
   }
 
   createOverlayLayer(ov: Overlay): Layer {
@@ -166,7 +161,7 @@ export class MapComponent implements OnInit, OnDestroy {
     const layerOptions = {
       attribution: ts.attribution,
       ...ts.tileOptions
-    }
+    };
 
     if (ts.type === 'tms') {
       return L.tileLayer(ts.url, layerOptions);
@@ -221,7 +216,7 @@ export class MapComponent implements OnInit, OnDestroy {
       if (next && this._activeProjectId !== next.id) {
         this.fitToFeatureExtent = true;
       }
-      this._activeProjectId = next ? next.id: null;
+      this._activeProjectId = next ? next.id : null;
     }));
 
     return subscription;
@@ -243,16 +238,16 @@ export class MapComponent implements OnInit, OnDestroy {
     const query = lon + ',' + lat;
 
     this.streetviewService.searchMapillaryImages({
-      'closeto': query,
-      'lookat': query
+      closeto: query,
+      lookat: query
     }, (resp) => {
       if (this.mapillaryStreetview) {
         this.mapillaryViewer.moveToKey(resp.features[0].properties.key);
         this.focusMarker(ev.latlng);
       } else {
-        window.open("https://www.mapillary.com/map/im/" + resp.features[0].properties.key);
+        window.open('https://www.mapillary.com/map/im/' + resp.features[0].properties.key);
       }
-    })
+    });
   }
 
   sequenceRightClickHandler(ev: any): void {
@@ -266,20 +261,21 @@ export class MapComponent implements OnInit, OnDestroy {
   closeStreetview() {
     this.mapillaryStreetview = false;
     this.mapillaryViewer.remove();
-    this.loadMap();
+    this.mapWidth = 100;
   }
 
   openStreetview(latlng: LatLng) {
     this.mapillaryStreetview = true;
     setTimeout(() => {
-      if (this.mapillaryViewer && this.mapillaryStreetview)
+      if (this.mapillaryViewer && this.mapillaryStreetview) {
         this.mapillaryViewer.remove();
+      }
 
       const query = latlng.lng + ',' + latlng.lat;
 
       this.streetviewService.searchMapillaryImages({
-        'closeto': query,
-        'lookat': query
+        closeto: query,
+        lookat: query
       }, (resp) => {
         this.mapillaryViewer = new Mapillary.Viewer({
           apiClient: this.envService.mapillaryClientId,
@@ -288,39 +284,39 @@ export class MapComponent implements OnInit, OnDestroy {
         });
 
         this.mapillaryViewer.on(Mapillary.Viewer.nodechanged, (node) => {
-          if (node) {
-            if (node.latLon) {
-              if (node.latLon.lat) {
-                if (node.latLon.lon) {
-                  this.map.setView({lat: node.latLon.lat, lng: node.latLon.lon}, 15)
-                }
-              }
-            }
-          }
+          // if (node) {
+          //   if (node.latLon) {
+          //     if (node.latLon.lat) {
+          //       if (node.latLon.lon) {
+          //         this.map.setView({lat: node.latLon.lat, lng: node.latLon.lon}, 15)
+          //       }
+          //     }
+          //   }
+          // }
 
           if (!this.streetviewMarker) {
-            this.streetviewMarker = L.marker(node.latLon).addTo(this.map)
-            this.streetviewMarker.setZIndex(1000)
+            this.streetviewMarker = L.marker(node.latLon).addTo(this.map);
+            this.streetviewMarker.setZIndex(1000);
           } else {
-            this.streetviewMarker.setLatLng(node.latLon)
+            this.streetviewMarker.setLatLng(node.latLon);
           }
-        })
+        });
 
         window.addEventListener('resize', () => this.mapillaryViewer.resize());
         this.focusMarker(latlng);
-      })
-    }, 10)
-    this.loadMap();
+      });
+    }, 10);
+    this.mapWidth = 50;
   }
 
   focusMarker(latlng: LatLng) {
     if (this.mapillaryStreetview) {
-      this.map.setView(latlng, 15)
+      this.map.setView(latlng, 15);
       if (!this.streetviewMarker) {
-        this.streetviewMarker = L.marker(latlng).addTo(this.map)
-        this.streetviewMarker.setZIndex(1000)
+        this.streetviewMarker = L.marker(latlng).addTo(this.map);
+        this.streetviewMarker.setZIndex(1000);
       } else {
-        this.streetviewMarker.setLatLng(latlng)
+        this.streetviewMarker.setLatLng(latlng);
       }
     }
   }

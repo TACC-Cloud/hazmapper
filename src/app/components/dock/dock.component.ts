@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ProjectsService} from '../../services/projects.service';
 import {Project} from '../../models/models';
 
@@ -20,7 +20,7 @@ interface IpanelsDisplay {
   styleUrls: ['./dock.component.styl']
 })
 export class DockComponent implements OnInit {
-
+  @Input() isPublicView = false;
   panelsDisplay: IpanelsDisplay;
   activeProject: Project;
 

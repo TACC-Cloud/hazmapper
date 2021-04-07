@@ -4,6 +4,7 @@
   </div>
     <div class="top-bar-right">
         <div class="light-blue" *ngIf="currentUser">{{ currentUser.username }}</div>
+        <div class="light-blue" *ngIf="!currentUser"><a [routerLink]="[afterLoginRoute]">Login</a></div>
     </div>
 </div>
 
