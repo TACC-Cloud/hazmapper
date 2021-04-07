@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {FeatureCollection} from 'geojson';
 import {GeoDataService} from '../../services/geo-data.service';
 import {Feature, Project} from '../../models/models';
@@ -17,6 +17,7 @@ import {TapisFilesService} from '../../services/tapis-files.service';
   styleUrls: ['./assets-panel.component.styl']
 })
 export class AssetsPanelComponent implements OnInit {
+  @Input() isPublicView = false;
   features: FeatureCollection;
   activeFeature: Feature;
   scrollableFeatures: ScrollableArray<Feature> = new ScrollableArray([]);
@@ -24,7 +25,8 @@ export class AssetsPanelComponent implements OnInit {
   activeProject: Project;
   currentTreeListing: PathTree<Feature>;
 
-  constructor(private geoDataService: GeoDataService, private bsModalService: BsModalService, private projectsService: ProjectsService, private tapisFilesService: TapisFilesService) { }
+  constructor(private geoDataService: GeoDataService, private bsModalService: BsModalService,
+              private projectsService: ProjectsService, private tapisFilesService: TapisFilesService) { }
 
   ngOnInit() {
     this.scrollableFeatures.currentSelection.subscribe( (next: Array<Feature>) => {
@@ -68,19 +70,8 @@ export class AssetsPanelComponent implements OnInit {
     });
   }
 
-  handleFileInput(files: FileList) {
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < files.length; i++) {
-      this.geoDataService.uploadFile(this.activeProject.id, files[i]);
-    }
-  }
-
   exportGeoJSON() {
     this.geoDataService.downloadGeoJSON(this.activeProject.id);
-  }
-
-  selectFeature(feat) {
-    this.geoDataService.activeFeature = feat;
   }
 
   selectTreeNode(node: PathTree<Feature>) {

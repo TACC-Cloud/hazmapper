@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { INotification } from '../models/notification';
 import { interval, Observable, ReplaySubject } from 'rxjs';
 import { EnvService } from '../services/env.service';
+import { AuthService } from '../services/authentication.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +16,16 @@ export class NotificationsService {
   private _notifications: ReplaySubject<Array<INotification>> = new ReplaySubject<Array<INotification>>(1);
   public readonly  notifications: Observable<Array<INotification>> = this._notifications.asObservable();
 
-  constructor(private toastr: ToastrService, private envService: EnvService, private http: HttpClient) {
-    const timer = interval(this.TIMEOUT);
-    timer.subscribe( (next) => {
-      this.getRecent();
-    });
+  constructor(private toastr: ToastrService,
+              private envService: EnvService,
+              private http: HttpClient,
+              private authService: AuthService ) {
+    if (authService.isLoggedIn()) {
+      const timer = interval(this.TIMEOUT);
+      timer.subscribe((next) => {
+        this.getRecent();
+      });
+    }
   }
 
   getRecent(): void {
