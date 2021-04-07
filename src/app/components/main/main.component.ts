@@ -25,7 +25,13 @@ export class MainComponent implements AfterContentInit {
     if (this.authService.isLoggedIn()) {
       this.authService.getUserInfo();
     }
-    this.authService.currentUser.subscribe(next => this.currentUser = next);
+    this.authService.currentUser.subscribe(next => {
+      // to avoid ExpressionChangedAfterItHasBeenCheckedError during /logout
+        setTimeout(() => {
+          this.currentUser = next;
+        }, 0);
+      }
+    );
   }
 
   routeToWelcome() {
