@@ -129,6 +129,11 @@ export class ProjectsService {
   }
 
   setActiveProject(proj: Project): void {
+    // TODO needs to be extended with a parameter (checkIfHasPrivateAccess)
+    //  to check if we need to set _loadingActiveProjectFailed to False
+    //  in cases where we have a private view but despite the map being public, the user
+    //  is not a member of the project.  https://jira.tacc.utexas.edu/browse/DES-1927
+
     this._activeProject.next(proj);
     if (proj && this.authService.isLoggedIn()) {
       this.getProjectUsers(proj);
