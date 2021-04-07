@@ -29,6 +29,9 @@ export class StreetviewService {
   private _googleUser: BehaviorSubject<any> = new BehaviorSubject(null);
   public googleUser: Observable<any> = this._googleUser.asObservable();
 
+  private _mapillaryUserOrganizations: BehaviorSubject<any> = new BehaviorSubject([]);
+  public mapillaryUserOrganizations: Observable<any> = this._mapillaryUserOrganizations.asObservable();
+
   private _mapillaryUserSequences: BehaviorSubject<any> = new BehaviorSubject([]);
   public mapillaryUserSequences: Observable<any> = this._mapillaryUserSequences.asObservable();
 
@@ -63,8 +66,6 @@ export class StreetviewService {
   // Upload Backend
 
   public addSequenceToPath(service: string, sequences: Array<string>, dir: RemoteFile) {
-    this.streetviewAuthenticationService.checkExpiration(service);
-
     const payload = {
       sequences,
       dir
@@ -88,7 +89,6 @@ export class StreetviewService {
   }
 
   public getStreetviewSequences(service: string) {
-    this.streetviewAuthenticationService.checkExpiration(service);
     const userKey = localStorage.getItem('mapillaryUser');
 
     this._streetviewDisplaySequences.next({type: 'FeatureCollection', features: []});
@@ -146,7 +146,6 @@ export class StreetviewService {
   }
 
   public getStreetviewImages(service: string, sequenceKey: string) {
-    this.streetviewAuthenticationService.checkExpiration(service);
     this.http.get<any>(this.envService.apiUrl +
       `/projects/${this._projectId}/users/${this._username}/streetview/${service}/sequences/${sequenceKey}`)
       .subscribe((resp: any) => {
@@ -154,15 +153,7 @@ export class StreetviewService {
       });
   }
 
-  public uploadPathToStreetviewService(dir: RemoteFile, toMapillary: boolean, toGoogle: boolean, retry: boolean = false): void {
-    if (toMapillary) {
-      this.streetviewAuthenticationService.checkExpiration('mapillary');
-    }
-
-    if (toGoogle) {
-      this.streetviewAuthenticationService.checkExpiration('google');
-    }
-
+  public uploadPathToStreetviewService(dir: RemoteFile, toMapillary: boolean, toGoogle: boolean, organization: string, retry: boolean = false): void {
     const tmp = {
       system: dir.system,
       path: dir.path
@@ -172,6 +163,7 @@ export class StreetviewService {
       folder: tmp,
       mapillary: toMapillary,
       google: toGoogle,
+      organization,
       retry
     };
 
@@ -185,16 +177,10 @@ export class StreetviewService {
   // Google API
 
   public getGoogleUser(): void {
-    this.streetviewAuthenticationService.checkExpiration('google');
     const params = new HttpParams()
       .set('client_id', this.envService.googleClientId);
 
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + JSON.parse(this.streetviewAuthenticationService.getLocalToken('google')).token
-    });
-
-    this.http.get('https://www.googleapis.com/oauth2/v1/userinfo?alt=json', { headers, params })
+    this.http.get('https://www.googleapis.com/oauth2/v1/userinfo?alt=json', { params })
       .subscribe(resp => {
         this._googleUser.next(resp);
       });
@@ -209,8 +195,6 @@ export class StreetviewService {
   // Mapillary API
 
   public searchMapillarySequence(params: any, pageUrl: string = ''): any {
-    this.streetviewAuthenticationService.checkExpiration('mapillary');
-
     if (pageUrl === '') {
       params = new HttpParams({fromObject: params})
         .set('client_id', this.envService.mapillaryClientId);
@@ -222,7 +206,6 @@ export class StreetviewService {
   }
 
   public getMapillarySequence(sequenceKey: string): any {
-    this.streetviewAuthenticationService.checkExpiration('mapillary');
     const params = new HttpParams()
       .set('client_id', this.envService.mapillaryClientId);
 
@@ -256,7 +239,6 @@ export class StreetviewService {
 
 
   public getMapillaryImage(imageKey: string): any {
-    this.streetviewAuthenticationService.checkExpiration('mapillary');
     const params = new HttpParams()
       .set('client_id', this.envService.mapillaryClientId);
 
@@ -264,7 +246,6 @@ export class StreetviewService {
   }
 
   public getMapillaryImages(sequence: any): any {
-    this.streetviewAuthenticationService.checkExpiration('mapillary');
     const userKey = localStorage.getItem('mapillaryUser');
     let params = {};
     if (!sequence.sequence_key) {
@@ -300,34 +281,28 @@ export class StreetviewService {
     this.http.get(this.envService.mapillaryApiUrl + `/images/`, {params}).subscribe(resp => {
       callback(resp);
     }, error => {
-      this.streetviewAuthenticationService.checkExpiration('mapillary');
+      console.log(error);
     });
   }
 
   public getMapillaryUser(): any {
-    this.streetviewAuthenticationService.checkExpiration('mapillary');
     const params = new HttpParams()
       .set('client_id', this.envService.mapillaryClientId);
 
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + JSON.parse(this.streetviewAuthenticationService.getLocalToken('mapillary')).token
-    });
-
-    return this.http.get(this.envService.mapillaryApiUrl + `/me/`, { headers, params });
+    return this.http.get(this.envService.mapillaryApiUrl + `/me/`, { params })
+      .subscribe(resp => {
+        this._mapillaryUser.next(resp);
+      });
   }
 
-  public getMapillaryOrganizations(): any {
-    this.streetviewAuthenticationService.checkExpiration('mapillary');
+  public getMapillaryUserOrganizations(): any {
+    const userKey = localStorage.getItem('mapillaryUser');
     const params = new HttpParams()
       .set('client_id', this.envService.mapillaryClientId);
 
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + JSON.parse(this.streetviewAuthenticationService.getLocalToken('mapillary')).token
-    });
-
-    return this.http.get(this.envService.mapillaryApiUrl + `/users/${this._mapillaryUser.value.key}/organizations`,
-                         { headers, params });
+    this.http.get(this.envService.mapillaryApiUrl + `/users/${userKey}/organizations`, { params })
+      .subscribe(resp => {
+        this._mapillaryUserOrganizations.next(resp)
+      });
   }
 }

@@ -27,6 +27,11 @@
                 </div>
               </ng-template>
             </div>
+
+            <div *ngIf="seq.organization_key" style="cursor: pointer" [tooltip]="seq.organization_key">
+              <i class="fas fa-users"></i>
+            </div>
+
             <div style="cursor: pointer; margin-right: 30px">
               <i class="fas fa-trash" (click)="deleteSequence(seq.service, seq.id)"></i>
             </div>

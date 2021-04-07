@@ -14,5 +14,5 @@ export interface IProgressNotification {
   status: string;
   message: string;
   viewed: boolean;
-  extraData: any;
+  logs: any;
 }

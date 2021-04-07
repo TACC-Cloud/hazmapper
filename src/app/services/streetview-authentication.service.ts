@@ -49,16 +49,17 @@ export class StreetviewAuthenticationService {
   }
 
   public isLoggedIn(service: string) {
-    return this.getLocalToken(service);
+    const userToken: AuthToken = JSON.parse(this.getLocalToken(service));
+    let notExpired = true;
+    if (userToken && userToken.expires instanceof Date)
+      if (userToken.isExpired())
+        notExpired = false;
+
+    return userToken && notExpired;
   }
 
   public login(service: string) {
-    const localToken = this.getLocalToken(service);
-    if (!localToken) {
-      this.streetviewTokenRequest(service);
-    } else {
-      this.checkExpiration(service);
-    }
+    this.streetviewTokenRequest(service);
   }
 
   public logout(service: string): void {
@@ -124,14 +125,6 @@ export class StreetviewAuthenticationService {
       });
   }
 
-  private testRequest(service: string): void {
-    if (service === 'google') {
-      this.testGetGoogleUser(service);
-    } else {
-      this.testGetMapillaryUser(service);
-    }
-  }
-
   public setStreetviewToken(projectId: number, username: string, service: string, authStr: string) {
     if (service === 'google') {
       this.setGoogleToken(authStr, projectId, username);
@@ -180,49 +173,10 @@ export class StreetviewAuthenticationService {
     }
   }
 
-  public checkExpiration(service: string): void {
-    const token: AuthToken = JSON.parse(this.getLocalToken(service));
-    if (token) {
-      if (token.expires instanceof Date) {
-        if (token.isExpired()) {
-          this.deleteLocalToken(service);
-          this.streetviewTokenRequest(service);
-        }
-      } else {
-        this.testRequest(service);
-      }
-    }
-  }
-
-  private testGetGoogleUser(service: string): void {
-    const params = new HttpParams()
-      .set('client_id', this.envService.googleClientId);
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + JSON.parse(this.getLocalToken(service)).token
-    });
-
-    this.http.get('https://www.googleapis.com/oauth2/v1/userinfo?alt=json', { headers, params })
-      .subscribe(resp => {
-        return;
-      }, error => {
-        this.deleteLocalToken(service);
-        this.streetviewTokenRequest(service);
-      });
-  }
-
   public setMapillaryUserKey(): any {
-    this.checkExpiration('mapillary');
     const params = new HttpParams()
-      .set('client_id', this.envService.mapillaryClientId);
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + JSON.parse(this.getLocalToken('mapillary')).token
-    });
-
-    return this.http.get(this.envService.mapillaryApiUrl + `/me/`, { headers, params })
+      .set('client_id', this.envService.mapillaryClientId)
+    return this.http.get(this.envService.mapillaryApiUrl + `/me/`, { params })
       .subscribe((resp: any) => {
         localStorage.setItem(this.MAPILLARY_USER_KEY, resp.key);
         console.log(resp);
@@ -239,19 +193,12 @@ export class StreetviewAuthenticationService {
     localStorage.getItem(this.MAPILLARY_USER_KEY);
   }
 
-
-
   // NOTE: In case user revokes access
   private testGetMapillaryUser(service: string): void {
     const params = new HttpParams()
       .set('client_id', this.envService.mapillaryClientId);
 
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + JSON.parse(this.getLocalToken(service)).token
-    });
-
-    this.http.get(this.envService.mapillaryApiUrl + `/me/`, { headers, params })
+    this.http.get(this.envService.mapillaryApiUrl + `/me/`, { params })
       .subscribe(resp => {
         return;
       }, error => {

@@ -27,6 +27,8 @@ export class StreetviewPanelComponent implements OnInit {
     if (this.streetviewAuthenticationService.isLoggedIn('mapillary')) {
       this.streetviewAuthenticationService.setRemoteToken('mapillary');
     }
+    // this.streetviewService.getMapillaryUserOrganizations() {
+    // }
   }
 
   openStreetviewPublishModal() {
@@ -34,7 +36,8 @@ export class StreetviewPanelComponent implements OnInit {
     modal.content.onClose.subscribe( (publishData: any) => {
       this.streetviewService.uploadPathToStreetviewService(publishData.selectedPath,
                                                            publishData.publishToMapillary,
-                                                           publishData.publishToGoogle);
+                                                           publishData.publishToGoogle,
+                                                           publishData.organization);
     });
   }
 

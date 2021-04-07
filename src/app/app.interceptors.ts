@@ -4,10 +4,13 @@ import { Observable } from 'rxjs';
 import { AuthService} from './services/authentication.service';
 import { EnvService} from './services/env.service';
 import { catchError } from 'rxjs/operators';
+import { StreetviewAuthenticationService } from './services/streetview-authentication.service';
+import { NotificationsService } from './services/notifications.service';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-  constructor(private authSvc: AuthService, private envService: EnvService) {}
+  constructor(private authSvc: AuthService, private envService: EnvService,
+              private streetviewAuthService: StreetviewAuthenticationService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
@@ -33,19 +36,39 @@ export class JwtInterceptor implements HttpInterceptor {
         });
       }
     }
+
+    if (request.url.indexOf(this.envService.mapillaryApiUrl) > -1) {
+      if (this.streetviewAuthService.isLoggedIn) {
+        const authToken = this.streetviewAuthService.getLocalToken('mapillary');
+        request = request.clone({
+          setHeaders: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + JSON.parse(authToken).token
+          }
+        })
+      }
+    }
+
     return next.handle(request);
   }
 }
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private envService: EnvService,
+              private streetviewAuthService: StreetviewAuthenticationService,
+              private notificationService: NotificationsService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(catchError(err => {
       if (err.status === 401) {
-        // auto logout if 401 response returned from api
-        this.authService.logout();
+        if (request.url.indexOf(this.envService.mapillaryApiUrl) > -1) {
+          this.streetviewAuthService.logout('mapillary')
+          this.notificationService.showErrorToast('Logged out of Mapillary!')
+        } else {
+          // auto logout if 401 response returned from api
+          this.authService.logout();
+        }
         location.reload(true);
       }
       throw err;

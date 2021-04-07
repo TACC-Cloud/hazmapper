@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StreetviewAuthenticationService } from 'src/app/services/streetview-authentication.service';
+import { StreetviewService } from 'src/app/services/streetview.service';
 
 @Component({
   selector: 'app-streetview-accounts',
@@ -7,10 +8,17 @@ import { StreetviewAuthenticationService } from 'src/app/services/streetview-aut
   styleUrls: ['./streetview-accounts.component.styl']
 })
 export class StreetviewAccountsComponent implements OnInit {
+  mapillaryUser;
   constructor(
+    private streetviewService: StreetviewService,
     private streetviewAuthenticationService: StreetviewAuthenticationService) { }
 
   ngOnInit() {
+    this.streetviewService.getMapillaryUser();
+    this.streetviewService.mapillaryUser.subscribe(next => {
+      this.mapillaryUser = next;
+      console.log(next);
+    });
   }
 
   isLoggedIn(service: string) {
@@ -24,5 +32,4 @@ export class StreetviewAccountsComponent implements OnInit {
   logout(service: string) {
     this.streetviewAuthenticationService.logout(service);
   }
-
 }

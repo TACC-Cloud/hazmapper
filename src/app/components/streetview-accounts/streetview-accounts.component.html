@@ -22,7 +22,16 @@
   <h4>Mapillary</h4>
   <div *ngIf="isLoggedIn('mapillary'); else authMapillary">
     <div class="auth-info">
-      Account information
+      <div *ngIf="mapillaryUser" style="display: flex; flex-direction: row; align-items: center; padding: 10px; background-color: #f0f0f0">
+        <a href="https://www.mapillary.com/dashboard/profile">
+          <img alt="" [src]="mapillaryUser.avatar" width=50 height=50/>
+        </a>
+        <div style="display: block; font-size: 20px; height 100%; width: 100%; text-align: center">
+          <a href="https://www.mapillary.com/dashboard/profile">
+            {{mapillaryUser.username}}
+          </a>
+        </div>
+      </div>
     </div>
     <div class="auth-info-button-container">
       <button class="button small" (click)="logout('mapillary')">Logout</button>

@@ -32,13 +32,15 @@ export class StreetviewLogsComponent implements OnInit, OnDestroy {
   retryPublish(pn: IProgressNotification) {
     let retry = pn.message == "From tapis" ? false : true
     this.streetviewService.uploadPathToStreetviewService({
-                                                           system: pn.extraData.publishInfo.system,
-                                                           path: pn.extraData.publishInfo.path
+                                                           system: pn.logs.publishInfo.system,
+                                                           path: pn.logs.publishInfo.path
                                                          },
-                                                         pn.extraData.publishInfo.mapillary,
-                                                         pn.extraData.publishInfo.google,
+                                                         pn.logs.publishInfo.mapillary,
+                                                         pn.logs.publishInfo.google,
+                                                         pn.logs.publishInfo.organization,
                                                          retry);
   }
+
 
 
   openDetailLogModal(pn: IProgressNotification) {
