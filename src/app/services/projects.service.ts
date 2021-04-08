@@ -112,6 +112,19 @@ export class ProjectsService {
       );
   }
 
+  saveProject(projectUUID: string, path: string, system: string) {
+    const payload = {
+      project_uuid: projectUUID,
+      path,
+      system_id: system
+    };
+    this.http.post<any>(this.envService.apiUrl + `/projects/save/`, payload).subscribe(resp => {
+      this.notificationsService.showSuccessToast(`Saved file to ${system}/${path}/${projectUUID}.hazmapper`)
+    }, error => {
+      console.log(error);
+    });
+  }
+
   setActiveProjectUUID(uuid: string): void {
     this._loadingActiveProject.next(true);
     this._loadingActiveProjectFailed.next(false);

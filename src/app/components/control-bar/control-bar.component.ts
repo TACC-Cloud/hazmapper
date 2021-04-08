@@ -1,11 +1,13 @@
 import {Component, OnInit, OnDestroy, Input} from '@angular/core';
 import { ProjectsService } from '../../services/projects.service';
 import { Project } from '../../models/models';
+import { BsModalRef, BsModalService } from 'ngx-foundation';
 import { GeoDataService } from '../../services/geo-data.service';
 import {LatLng} from 'leaflet';
 import {skip} from 'rxjs/operators';
 import {combineLatest, Subscription} from 'rxjs';
 import {NotificationsService} from '../../services/notifications.service';
+import { ModalFileBrowserComponent } from '../modal-file-browser/modal-file-browser.component';
 
 @Component({
   selector: 'app-control-bar',
@@ -20,8 +22,10 @@ export class ControlBarComponent implements OnInit, OnDestroy {
   private loadingActiveProject = true;
   private loadingActiveProjectFailed = false;
   private loadingData = false;
+  modalRef: BsModalRef;
 
   constructor(private projectsService: ProjectsService,
+              private bsModalService: BsModalService,
               private geoDataService: GeoDataService,
               private notificationsService: NotificationsService,
               ) { }
@@ -58,6 +62,20 @@ export class ControlBarComponent implements OnInit, OnDestroy {
     this.subscription.add(this.geoDataService.mapMouseLocation.pipe(skip(1)).subscribe( (next) => {
       this.mapMouseLocation = next;
     }));
+  }
+
+  openSaveProjectModal() {
+    const initialState = {
+      single: true,
+      allowFolders: true,
+      onlyFolder: true,
+    };
+    const modal: BsModalRef = this.bsModalService.show(ModalFileBrowserComponent, { initialState });
+    modal.content.onClose.subscribe( (next) => {
+      this.projectsService.saveProject(this.activeProject.uuid,
+                                       next[0].path,
+                                       next[0].system)
+    });
   }
 
   ngOnDestroy() {
