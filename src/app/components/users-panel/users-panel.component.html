@@ -34,6 +34,17 @@
       >
       </app-edit-name-input>
 
+      <h6 id="property-title">Linked Project</h6>
+      <div *ngIf="activeProject.system_name; else noLink" style="margin-bottom: 20px">
+        <a [href]="'https://www.designsafe-ci.org/data/browser/projects/' + activeProject.system_id + '/'"><span>{{activeProject.system_name}}</span></a>
+      </div>
+      <ng-template #noLink>
+        <div style="margin-bottom: 20px">
+          No link! <br />
+          <em>You must export the map to a project.</em>
+        </div>
+      </ng-template>
+
       <h6 id="property-title">Public Access</h6>
 
       <div *ngIf="activeProject.public" class="public-status-container">
@@ -53,9 +64,16 @@
           <i class="fas fa-globe"></i>  Make map public
         </button>
       </div>
+
+
+      <div class="grid-x">
+      <button class="button hollow" (click)=openExportProjectModal()>
+        <i class="fas fa-save"></i>  Export map
+      </button>
       <button class="button warning alert hollow" (click)=deleteProject()>
         <i class="fas fa-trash"></i>  Delete map
       </button>
+      </div>
     </div>
   </div>
 </div>

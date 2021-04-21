@@ -18,7 +18,9 @@ export class ModalCreateProjectComponent implements OnInit {
 
   projCreateForm: FormGroup;
   rapidFolder: RemoteFile;
+  linkProject = false;
   submitting: boolean;
+  dsProject: any;
   errorMessage = '';
 
   constructor(private bsModalRef: BsModalRef, private projectsService: ProjectsService) { }
@@ -27,9 +29,9 @@ export class ModalCreateProjectComponent implements OnInit {
     this.submitting = false;
     this.projCreateForm = new FormGroup( {
       name: new FormControl(''),
-      description: new FormControl('')
+      description: new FormControl(''),
+      linkProject: new FormControl(false)
     });
-
   }
 
   close(project: Project) {
@@ -39,6 +41,10 @@ export class ModalCreateProjectComponent implements OnInit {
 
   onFolderSelection(item: Array<RemoteFile>) {
     this.rapidFolder = item[0];
+  }
+
+  onProjectSelection(item: any) {
+    this.dsProject = item;
   }
 
   createRapidProject() {
@@ -57,11 +63,14 @@ export class ModalCreateProjectComponent implements OnInit {
     p.description = this.projCreateForm.get('description').value;
     p.name = this.projCreateForm.get('name').value;
     this.projectsService.create(p).subscribe( (project) => {
+      if (this.linkProject) {
+        // console.log(this.linkProject)
+        this.projectsService.linkExportProject(project, this.dsProject.id, '/');
+      }
       this.close(project);
     }, err => {
       this.errorMessage = err.toString();
     });
     this.submitting = true;
   }
-
 }

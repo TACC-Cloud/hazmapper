@@ -9,11 +9,14 @@
 
     <div class="grid-x align-center">
       <div id=welcome-projects-list class="grid-y align-center">
-        <div class="welcome-project-header grid-x align-justify">
-          <div>
+        <div class="welcome-project-header grid-x">
+          <div class="list-column">
             <b>Maps</b>
           </div>
-          <div>
+          <div class="list-column">
+            <b>Linked Project</b>
+          </div>
+          <div class="list-column" style="text-align: right">
             <div id="new-map" (click)="openCreateProjectModal()">
               <i class="fas fa-plus"></i>
               Create a New Map
@@ -40,18 +43,28 @@
 
           <ng-template #projectDisconnected>
             <div *ngIf="projects.length > 0; else noProject" class="project-list-container">
-              <div *ngFor="let p of projects; let indexOfelement=index;">
+              <div *ngFor="let p of projects; let indexOfElement=index;">
                 <div (dblclick)="routeToProject(p.uuid)"
                      class="project-list-item"
                      [ngClass]="{
-                                 'welcome-project-light': (indexOfelement % 2) == 0,
-                                 'welcome-project-dark': (indexOfelement % 2) == 1,
+                                 'welcome-project-light': (indexOfElement % 2) == 0,
+                                 'welcome-project-dark': (indexOfElement % 2) == 1,
                                  'welcome-project': true,
-                                 'grid-x': true,
-                                 'align-justify' :true
+                                 'grid-x': true
                                  }">
-                  {{p.name}}
-                  <div>
+
+                  <div class="list-column">
+                    {{p.name}}
+                  </div>
+
+                  <div class="list-column">
+                    <ng-container *ngIf="p.system_name" class="list-column link-hover">
+                      <a [href]="'https://www.designsafe-ci.org/data/browser/projects/' + p.system_id + '/'">
+                        <span>{{p.system_name}}</span>
+                      </a>
+                    </ng-container>
+                  </div>
+                  <div class="list-column" style="text-align: right">
                     <button class="project-list-item-button" (click)="routeToProject(p.uuid)">
                       <i class="fas fa-folder-open"></i>
                     </button>
@@ -88,8 +101,16 @@
       </div>
     </div>
 
-    <div class="grid-x" id="sponsor">Powered by
-      <img src="assets/nsf.png" width="50px">
+    <div class="grid-x" id="sponsor">
+      <a href="https://www.nsf.gov/">
+        <img src="assets/nsf.png" width="60px">
+      </a>
+      <a href="https://www.designsafe-ci.org/">
+        <img src="assets/designsafe.svg" width="200px">
+      </a>
+      <a href="https://www.designsafe-ci.org/about/">
+        <img src="assets/nheri.png" width="150px">
+      </a>
     </div>
 
   </div>

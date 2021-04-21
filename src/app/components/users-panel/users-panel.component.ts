@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import {ProjectsService} from '../../services/projects.service';
 import {ModalService} from '../../services/modal.service';
+import { BsModalRef, BsModalService } from 'ngx-foundation';
 import {IProjectUser} from '../../models/project-user';
 import {FormGroup, FormControl} from '@angular/forms';
 import {Project} from '../../models/models';
 import {EnvService} from '../../services/env.service';
+import { ModalLinkProjectComponent } from '../modal-link-project/modal-link-project.component';
+import { ModalFileBrowserComponent } from '../modal-file-browser/modal-file-browser.component';
 
 @Component({
   selector: 'app-users-panel',
@@ -23,6 +26,7 @@ export class UsersPanelComponent implements OnInit {
   publicStatusChangingError = false;
 
   constructor(private projectsService: ProjectsService,
+              private bsModalService: BsModalService,
               private modalService: ModalService,
               private envService: EnvService) { }
 
@@ -43,6 +47,42 @@ export class UsersPanelComponent implements OnInit {
   getPublicUrl() {
    const publicUrl = location.origin + this.envService.baseHref + `project-public/${this.activeProject.uuid}/`;
    return publicUrl;
+  }
+
+  openLinkProjectModal() {
+    const modal: BsModalRef = this.bsModalService.show(ModalLinkProjectComponent);
+    modal.content.onClose.subscribe( (next) => {
+      console.log(next.id);
+      // this.projectsService.linkExportProject(this.activeProject, next.id);
+    });
+  }
+
+  openExportProjectModal() {
+    const initialState = {
+      single: true,
+      allowFolders: true,
+      onlyFolder: true,
+      allowEmptyFiles: true,
+      allowedExtensions: []
+    };
+    const modal: BsModalRef = this.bsModalService.show(ModalLinkProjectComponent, { initialState });
+    modal.content.onCloseAll.subscribe( (next) => {
+      const path = next.fileList.length > 0 ? next.fileList[0].path : '/';
+      console.log(path);
+      console.log(next);
+      console.log(next.system.id)
+      if (next.system.id.includes('project') && next.linkProject) {
+        console.log("awesome.");
+        this.projectsService.linkExportProject(this.activeProject,
+                                               next.system.id,
+                                               path)
+      } else {
+        console.log("Fridge");
+        this.projectsService.exportProject(this.activeProject.uuid,
+                                           next.system.id,
+                                           path)
+      }
+    });
   }
 
   updateMapPublicAccess(makePublic: boolean) {

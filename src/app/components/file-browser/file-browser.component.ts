@@ -25,6 +25,7 @@ export class FileBrowserComponent implements OnInit {
   @Input() helpText = 'Note: Only files are selectable, not folders. Double click on a folder to navigate into it.';
   @Input() allowedExtensions: Array<string> = [];
   @Output() selection: EventEmitter<Array<RemoteFile>> = new EventEmitter<Array<RemoteFile>>();
+  @Output() systemSelection: EventEmitter<any> = new EventEmitter<any>();
 
   private currentUser: AuthenticatedUser;
   private currentDirectory: RemoteFile;
@@ -65,8 +66,9 @@ export class FileBrowserComponent implements OnInit {
         this.myDataSystem = systems.find( (sys) => sys.id === 'designsafe.storage.default');
         this.communityDataSystem = systems.find( (sys) => sys.id === 'designsafe.storage.community');
         this.publishedDataSystem = systems.find( (sys) => sys.id === 'designsafe.storage.published');
-        this.selectedSystem = this.myDataSystem;
         this.projects = projects;
+        this.selectedSystem = this.myDataSystem;
+        this.systemSelection.next(this.myDataSystem);
         this.currentUser = user;
         const init = <RemoteFile> {
           system: this.myDataSystem.id,
@@ -86,6 +88,7 @@ export class FileBrowserComponent implements OnInit {
       type: 'dir',
       path: pth
     };
+    this.systemSelection.next(system)
     this.browse(init);
   }
 

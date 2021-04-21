@@ -6,13 +6,10 @@
         <i class="fas fa-spin fa-spinner"></i>
     </div>
     <div *ngIf="!loadingActiveProject && !loadingActiveProjectFailed" class="cell small-8 align-middle grid-x">
-        <button class="button tiny" (click)="openSaveProjectModal()">
-          <i class="fas fa-save"></i>
-          <div style="display: inline-block; margin-left: 5px">
-            Save
-          </div>
-        </button>
         <span style="margin-left: 1rem">{{isPublicView? 'Public Map': 'Map'}}: {{ activeProject.name }}</span>
+        <div *ngIf="activeProject.system_name" style="padding-left: 30px">
+          <span>Project: {{activeProject.system_name}}</span>
+        </div>
         <div *ngIf="loadingData" style="margin-left: 1rem">
             <i class="fas fa-spin fa-spinner" style="margin-right: 0.3rem"></i>
             <span>Loading Data</span>

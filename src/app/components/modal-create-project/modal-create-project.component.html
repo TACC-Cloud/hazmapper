@@ -10,9 +10,22 @@
             <label> Description
                 <textarea formControlName="description" required="true"></textarea>
             </label>
+
+            <div class="link-project">
+              <label>
+                <span style="padding-right: 10px">Link Project</span>
+                <input formControlName="linkProject" type="checkbox" [(ngModel)]="linkProject">
+              </label>
+
+            </div>
+            <div *ngIf="linkProject">
+              <app-project-browser
+                (selection)="onProjectSelection($event)">
+              </app-project-browser>
+            </div>
             <div class="button-group small">
                 <button class="button small warning" type="button" (click)="close()">Close</button>
-                <button class="button small align-right" type="submit" [disabled]="!projCreateForm.valid || submitting">Submit</button>
+                <button class="button small align-right" type="submit" [disabled]="(!projCreateForm.valid || submitting || (linkProject && !dsProject))">Submit</button>
             </div>
         </form>
     </tab>
@@ -22,8 +35,10 @@
           [onlyFolder]="true"
           [single]="true"
           [heading]="'Select a RApp Folder'"
+          [allowedExtensions]="allowedExtensions"
           [helpText]="'All files inside this folder (that can be) will be imported. ' +
-           'This folder will also be periodically scraped for new data.'"
+           'This folder will also be periodically scraped for new data.' +
+           'A project link will be created with the project of this folder.'"
           (selection)="onFolderSelection($event)"
         >
         </app-file-browser>
@@ -34,6 +49,3 @@
         </div>
     </tab>
 </tabset>
-
-
-

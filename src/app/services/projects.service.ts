@@ -96,6 +96,19 @@ export class ProjectsService {
       );
   }
 
+  linkExportProject(proj: Project, systemId: string, path: string = '/') {
+    const data = {
+      systemId,
+      path
+    };
+
+    this.http.put<Project>(this.envService.apiUrl + `/projects/${proj.id}/link`, data).subscribe(
+        proj => {
+          this._projects.next([...this._projects.value, proj]);
+        }
+      );
+  }
+
   createRapidProject(data: RapidProjectRequest) {
     return this.http.post<Project>(this.envService.apiUrl + `/projects/rapid/`, data)
       .pipe(
@@ -112,13 +125,13 @@ export class ProjectsService {
       );
   }
 
-  saveProject(projectUUID: string, path: string, system: string) {
+  exportProject(projectUUID: string, system: string, path: string) {
     const payload = {
       project_uuid: projectUUID,
       path,
       system_id: system
     };
-    this.http.post<any>(this.envService.apiUrl + `/projects/save/`, payload).subscribe(resp => {
+    this.http.post<any>(this.envService.apiUrl + `/projects/export/`, payload).subscribe(resp => {
       this.notificationsService.showSuccessToast(`Saved file to ${system}/${path}/${projectUUID}.hazmapper`)
     }, error => {
       console.log(error);

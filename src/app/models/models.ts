@@ -49,6 +49,8 @@ export interface Project {
   name: string;
   uuid?: string;
   public?: boolean;
+  system_name?: string;
+  system_id?: string;
 }
 
 export class Project implements Project {
