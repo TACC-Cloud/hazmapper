@@ -20,7 +20,7 @@ export class ModalLinkProjectComponent implements OnInit {
   selectedFiles: Array<RemoteFile> = [];
   selectedSystem: any;
   linkProject: boolean = false;
-  public onCloseAll: Subject<any> = new Subject<any>();
+  public onClose: Subject<any> = new Subject<any>();
   constructor(private modalRef: BsModalRef,
               private tapisFilesService: TapisFilesService,
               private cdref: ChangeDetectorRef ) { }
@@ -45,7 +45,7 @@ export class ModalLinkProjectComponent implements OnInit {
   }
 
   close() {
-    this.onCloseAll.next({
+    this.onClose.next({
       fileList: this.selectedFiles,
       linkProject: this.linkProject,
       system: this.selectedSystem

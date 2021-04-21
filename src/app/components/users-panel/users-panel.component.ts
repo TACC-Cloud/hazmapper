@@ -66,18 +66,16 @@ export class UsersPanelComponent implements OnInit {
       allowedExtensions: []
     };
     const modal: BsModalRef = this.bsModalService.show(ModalLinkProjectComponent, { initialState });
-    modal.content.onCloseAll.subscribe( (next) => {
+    modal.content.onClose.subscribe( (next) => {
       const path = next.fileList.length > 0 ? next.fileList[0].path : '/';
       console.log(path);
       console.log(next);
       console.log(next.system.id)
       if (next.system.id.includes('project') && next.linkProject) {
-        console.log("awesome.");
         this.projectsService.linkExportProject(this.activeProject,
                                                next.system.id,
                                                path)
       } else {
-        console.log("Fridge");
         this.projectsService.exportProject(this.activeProject.uuid,
                                            next.system.id,
                                            path)
