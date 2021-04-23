@@ -49,14 +49,6 @@ export class UsersPanelComponent implements OnInit {
    return publicUrl;
   }
 
-  openLinkProjectModal() {
-    const modal: BsModalRef = this.bsModalService.show(ModalLinkProjectComponent);
-    modal.content.onClose.subscribe( (next) => {
-      console.log(next.id);
-      // this.projectsService.linkExportProject(this.activeProject, next.id);
-    });
-  }
-
   openExportProjectModal() {
     const initialState = {
       single: true,
@@ -68,9 +60,6 @@ export class UsersPanelComponent implements OnInit {
     const modal: BsModalRef = this.bsModalService.show(ModalLinkProjectComponent, { initialState });
     modal.content.onClose.subscribe( (next) => {
       const path = next.fileList.length > 0 ? next.fileList[0].path : '/';
-      console.log(path);
-      console.log(next);
-      console.log(next.system.id)
       if (next.system.id.includes('project') && next.linkProject) {
         this.projectsService.linkExportProject(this.activeProject,
                                                next.system.id,

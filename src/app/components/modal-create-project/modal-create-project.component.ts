@@ -64,7 +64,6 @@ export class ModalCreateProjectComponent implements OnInit {
     p.name = this.projCreateForm.get('name').value;
     this.projectsService.create(p).subscribe( (project) => {
       if (this.linkProject) {
-        // console.log(this.linkProject)
         this.projectsService.linkExportProject(project, this.dsProject.id, '/');
       }
       this.close(project);

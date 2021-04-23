@@ -96,13 +96,13 @@ export class ProjectsService {
       );
   }
 
-  linkExportProject(proj: Project, systemId: string, path: string = '/') {
+  linkExportProject(proj: Project, system_id: string, path: string = '/') {
     const data = {
-      systemId,
+      system_id,
       path
     };
 
-    this.http.put<Project>(this.envService.apiUrl + `/projects/${proj.id}/link`, data).subscribe(
+    this.http.post<Project>(this.envService.apiUrl + `/projects/${proj.id}/link/`, data).subscribe(
         proj => {
           this._projects.next([...this._projects.value, proj]);
         }

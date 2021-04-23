@@ -9,13 +9,11 @@ import { take } from 'rxjs/operators';
   styleUrls: ['./project-browser.component.styl']
 })
 export class ProjectBrowserComponent implements OnInit {
-
   static limit = 200;
   public projects: Array<SystemSummary>;
   public hasError: boolean;
   private currentIndex = 0;
   public inProgress = true;
-  private offset = 0;
 
   @Output() selection: EventEmitter<any> = new EventEmitter<any>();
 
@@ -29,11 +27,8 @@ export class ProjectBrowserComponent implements OnInit {
     })
   }
 
-
   select(system: any, index: number) {
-    console.log(system);
     this.selection.next(system);
     this.currentIndex = index;
   }
-
 }

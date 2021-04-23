@@ -40,10 +40,6 @@ export class ModalLinkProjectComponent implements OnInit {
     this.selectedSystem = system;
   }
 
-  testIt(hw) {
-    console.log(hw.disabled);
-  }
-
   close() {
     this.onClose.next({
       fileList: this.selectedFiles,
