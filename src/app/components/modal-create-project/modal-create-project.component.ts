@@ -76,7 +76,7 @@ export class ModalCreateProjectComponent implements OnInit {
     p.description = this.projCreateForm.get('description').value;
     p.name = this.projCreateForm.get('name').value;
     this.projectsService.create(p).subscribe( (project) => {
-      if (this.projCreateForm.get('exportProject').value) {
+      if (this.projCreateForm.get('exportMap').value) {
         const path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path : '/';
         const systemId = this.selectedSystem.id;
         if (this.projCreateForm.get('linkProject').value) {
