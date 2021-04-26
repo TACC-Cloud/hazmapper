@@ -13,19 +13,39 @@
 
             <div class="link-project">
               <label>
-                <span style="padding-right: 10px">Link Project</span>
-                <input formControlName="linkProject" type="checkbox" [(ngModel)]="linkProject">
+                <span style="padding-right: 10px">Export Project</span>
+                <input formControlName="exportProject" type="checkbox">
               </label>
 
             </div>
-            <div *ngIf="linkProject">
-              <app-project-browser
-                (selection)="onProjectSelection($event)">
-              </app-project-browser>
+            <div *ngIf="projCreateForm.get('exportProject').value">
+              <app-file-browser
+                [single]=true
+                [allowFolders]=true
+                [allowedExtensions]=[]
+                [onlyFolder]=true
+                [showPublicSystems]=false
+                [heading]="'Select Export Location'"
+                [helpText]="'If no folder is selected, the file will be exported to the root of the selected system.' +
+                         'If you select a project, you can link the current map to the project.'"
+                (selection)="onSelect($event)"
+                (systemSelection)="onSystemSelect($event)">
+              </app-file-browser>
+
+              <div class="confirm-checkbox">
+                <label>
+                  <span [ngClass]="{dimmed: linkCheckbox.disabled}">Link Project</span>
+                  <input #linkCheckbox type="checkbox"
+                         formControlName="linkProject">
+                </label>
+                <div *ngIf="linkCheckbox.disabled">
+                  <small><em>Must be in a project folder to link!</em></small>
+                </div>
+              </div>
             </div>
             <div class="button-group small">
                 <button class="button small warning" type="button" (click)="close()">Close</button>
-                <button class="button small align-right" type="submit" [disabled]="(!projCreateForm.valid || submitting || (linkProject && !dsProject))">Submit</button>
+                <button class="button small align-right" type="submit" [disabled]="(!projCreateForm.valid || submitting)">Submit</button>
             </div>
         </form>
     </tab>

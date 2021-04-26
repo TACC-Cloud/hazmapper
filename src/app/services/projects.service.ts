@@ -96,15 +96,29 @@ export class ProjectsService {
       );
   }
 
+  exportProject(project_uuid: string, system_id: string, path: string) {
+    const payload = {
+      project_uuid,
+      path,
+      system_id
+    };
+    this.http.put<any>(this.envService.apiUrl + `/projects/export/`, payload).subscribe(resp => {
+      this.notificationsService.showSuccessToast(`Saved file to ${system_id}/${path}/${project_uuid}.hazmapper`)
+      this.getProjects();
+    }, error => {
+      console.log(error);
+    });
+  }
+
   linkExportProject(proj: Project, system_id: string, path: string = '/') {
     const data = {
       system_id,
       path
     };
 
-    this.http.post<Project>(this.envService.apiUrl + `/projects/${proj.id}/link/`, data).subscribe(
-        proj => {
-          this._projects.next([...this._projects.value, proj]);
+    this.http.put<Project>(this.envService.apiUrl + `/projects/${proj.id}/link/`, data).subscribe(
+        resp => {
+          this.getProjects();
         }
       );
   }
@@ -123,19 +137,6 @@ export class ProjectsService {
           throw new Error('Unable to create project.');
         })
       );
-  }
-
-  exportProject(projectUUID: string, system: string, path: string) {
-    const payload = {
-      project_uuid: projectUUID,
-      path,
-      system_id: system
-    };
-    this.http.post<any>(this.envService.apiUrl + `/projects/export/`, payload).subscribe(resp => {
-      this.notificationsService.showSuccessToast(`Saved file to ${system}/${path}/${projectUUID}.hazmapper`)
-    }, error => {
-      console.log(error);
-    });
   }
 
   setActiveProjectUUID(uuid: string): void {

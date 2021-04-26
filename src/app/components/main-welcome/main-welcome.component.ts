@@ -5,6 +5,7 @@ import {ProjectsService} from '../../services/projects.service';
 import {BsModalService} from 'ngx-foundation';
 import {ModalCreateProjectComponent} from '../modal-create-project/modal-create-project.component';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ModalConfirmationBodyComponent } from '../modal-confirmation-body/modal-confirmation-body.component';
 
 @Component({
   selector: 'app-main-welcome',
@@ -51,13 +52,31 @@ export class MainWelcomeComponent implements OnInit {
   }
 
   openCreateProjectModal() {
-    const modal = this.bsModalService.show(ModalCreateProjectComponent);
-    modal.content.onClose.subscribe( (project) => {
-      this.routeToProject(project.uuid);
-    });
+    this.bsModalService.show(ModalCreateProjectComponent);
   }
 
   deleteProject(p: Project) {
     this.projectsService.deleteProject(p);
+  }
+
+  openDeleteProjectModal(p: Project) {
+    let initialState = {
+      title: 'Delete Project',
+      message: 'Confirm deleting project.',
+      options: ['Cancel', 'Confirm']
+    };
+    if (p.system_path) {
+      initialState = {
+        title: 'Delete Project',
+        message: 'Deleting this project will remove the associated file as well.',
+        options: ['Cancel', 'Confirm']
+      };
+    }
+    const modal = this.bsModalService.show(ModalConfirmationBodyComponent, {initialState});
+    modal.content.answer.subscribe( (close) => {
+      if (close === 'Confirm') {
+        this.projectsService.deleteProject(p);
+      }
+    });
   }
 }

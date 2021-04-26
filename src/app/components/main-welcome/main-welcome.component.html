@@ -58,7 +58,7 @@
                   </div>
 
                   <div class="list-column">
-                    <ng-container *ngIf="p.system_name" class="list-column link-hover">
+                    <ng-container *ngIf="p.system_name && p.system_id.includes('project')" class="list-column link-hover">
                       <a [href]="'https://www.designsafe-ci.org/data/browser/projects/' + p.system_id + '/'">
                         <span>{{p.system_name}}</span>
                       </a>
@@ -68,7 +68,8 @@
                     <button class="project-list-item-button" (click)="routeToProject(p.uuid)">
                       <i class="fas fa-folder-open"></i>
                     </button>
-                    <button class="project-list-item-button" (click)=deleteProject(p)>
+                    <!-- <button class="project-list-item-button" (click)=deleteProject(p)> -->
+                    <button class="project-list-item-button" (click)=openDeleteProjectModal(p)>
                       <i class="fas fa-trash"></i>
                     </button>
                   </div>

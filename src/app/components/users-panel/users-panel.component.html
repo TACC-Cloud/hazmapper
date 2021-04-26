@@ -34,14 +34,29 @@
       >
       </app-edit-name-input>
 
+      <h6 id="property-title">Saved Location</h6>
+      <div *ngIf="activeProject.system_path; else noSave" style="margin-bottom: 20px">
+        <div *ngIf="activeProject.system_id.includes('project'); else noProject">
+          <a [href]="'https://www.designsafe-ci.org/data/browser/projects/' + activeProject.system_id.substr(8) + activeProject.system_path"><span>{{activeProject.system_path}}</span></a>
+        </div>
+        <ng-template #noProject>
+          <a [href]="'https://www.designsafe-ci.org/data/browser/' + activeProject.system_id + activeProject.system_path"><span>{{activeProject.system_path}}</span></a>
+        </ng-template>
+      </div>
+      <ng-template #noSave>
+        <div style="margin-bottom: 20px">
+          Map not saved.
+        </div>
+      </ng-template>
+
       <h6 id="property-title">Linked Project</h6>
-      <div *ngIf="activeProject.system_name; else noLink" style="margin-bottom: 20px">
+      <div *ngIf="activeProject.system_name && activeProject.system_id.includes('project'); else noLink" style="margin-bottom: 20px">
         <a [href]="'https://www.designsafe-ci.org/data/browser/projects/' + activeProject.system_id + '/'"><span>{{activeProject.system_name}}</span></a>
       </div>
       <ng-template #noLink>
         <div style="margin-bottom: 20px">
           No link! <br />
-          <em>You must export the map to a project.</em>
+          <small><em>You must export the map to a project.</em></small>
         </div>
       </ng-template>
 

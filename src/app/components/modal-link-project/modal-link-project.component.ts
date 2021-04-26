@@ -1,9 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { RemoteFile} from 'ng-tapis/models/remote-file';
+import { Project } from '../../models/models';
+import { ProjectsService } from '../../services/projects.service';
 import { BsModalRef } from 'ngx-foundation/modal/bs-modal-ref.service';
 import { Subject } from 'rxjs';
 import { TapisFilesService } from '../../services/tapis-files.service';
-import {ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 
 
 @Component({
@@ -19,13 +21,19 @@ export class ModalLinkProjectComponent implements OnInit {
   @Input() allowEmptyFiles: false;
   selectedFiles: Array<RemoteFile> = [];
   selectedSystem: any;
+  activeProject: Project;
   linkProject: boolean = false;
+  confirmRemove: boolean = false;
   public onClose: Subject<any> = new Subject<any>();
   constructor(private modalRef: BsModalRef,
+              private projectsService: ProjectsService,
               private tapisFilesService: TapisFilesService,
               private cdref: ChangeDetectorRef ) { }
 
   ngOnInit() {
+    this.projectsService.activeProject.subscribe( (next) => {
+      this.activeProject = next;
+    });
   }
 
   ngAfterContentChecked() {

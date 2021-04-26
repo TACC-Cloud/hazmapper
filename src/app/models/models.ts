@@ -51,6 +51,7 @@ export interface Project {
   public?: boolean;
   system_name?: string;
   system_id?: string;
+  system_path?: string;
 }
 
 export class Project implements Project {

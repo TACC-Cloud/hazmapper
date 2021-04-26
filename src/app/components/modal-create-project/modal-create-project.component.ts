@@ -5,7 +5,7 @@ import { ProjectsService } from '../../services/projects.service';
 import { Project } from '../../models/models';
 import {RemoteFile} from 'ng-tapis';
 import {RapidProjectRequest} from '../../models/rapid-project-request';
-import {Subject} from 'rxjs';
+import {ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-modal-create-project',
@@ -14,28 +14,33 @@ import {Subject} from 'rxjs';
 })
 export class ModalCreateProjectComponent implements OnInit {
 
-  public readonly onClose: Subject<any> = new Subject<any>();
-
   projCreateForm: FormGroup;
   rapidFolder: RemoteFile;
-  linkProject = false;
+  exportProject = false;
   submitting: boolean;
-  dsProject: any;
   errorMessage = '';
+  selectedFiles: Array<RemoteFile> = [];
+  selectedSystem: any;
 
-  constructor(private bsModalRef: BsModalRef, private projectsService: ProjectsService) { }
+  constructor(private bsModalRef: BsModalRef,
+              private cdref: ChangeDetectorRef,
+              private projectsService: ProjectsService) { }
 
   ngOnInit() {
     this.submitting = false;
     this.projCreateForm = new FormGroup( {
       name: new FormControl(''),
       description: new FormControl(''),
+      exportProject: new FormControl(false),
       linkProject: new FormControl(false)
     });
   }
 
+  ngAfterContentChecked() {
+    this.cdref.detectChanges();
+  }
+
   close(project: Project) {
-    this.onClose.next(project);
     this.bsModalRef.hide();
   }
 
@@ -43,8 +48,17 @@ export class ModalCreateProjectComponent implements OnInit {
     this.rapidFolder = item[0];
   }
 
-  onProjectSelection(item: any) {
-    this.dsProject = item;
+  onSelect(items: Array<RemoteFile>) {
+    this.selectedFiles = items;
+  }
+
+  onSystemSelect(system: any) {
+    this.selectedSystem = system;
+    if (system.id.includes('project')) {
+      this.projCreateForm.get('linkProject').enable()
+    } else {
+      this.projCreateForm.get('linkProject').disable()
+    }
   }
 
   createRapidProject() {
@@ -63,8 +77,14 @@ export class ModalCreateProjectComponent implements OnInit {
     p.description = this.projCreateForm.get('description').value;
     p.name = this.projCreateForm.get('name').value;
     this.projectsService.create(p).subscribe( (project) => {
-      if (this.linkProject) {
-        this.projectsService.linkExportProject(project, this.dsProject.id, '/');
+      if (this.projCreateForm.get('exportProject').value) {
+        const path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path : '/';
+        const systemId = this.selectedSystem.id;
+        if (this.projCreateForm.get('linkProject').value) {
+          this.projectsService.linkExportProject(project, systemId, path);
+        } else {
+          this.projectsService.exportProject(project.uuid, systemId, path);
+        }
       }
       this.close(project);
     }, err => {

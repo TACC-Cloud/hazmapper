@@ -7,7 +7,6 @@ import {FormGroup, FormControl} from '@angular/forms';
 import {Project} from '../../models/models';
 import {EnvService} from '../../services/env.service';
 import { ModalLinkProjectComponent } from '../modal-link-project/modal-link-project.component';
-import { ModalFileBrowserComponent } from '../modal-file-browser/modal-file-browser.component';
 
 @Component({
   selector: 'app-users-panel',
