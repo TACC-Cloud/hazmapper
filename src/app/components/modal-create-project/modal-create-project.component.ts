@@ -16,7 +16,6 @@ export class ModalCreateProjectComponent implements OnInit {
 
   projCreateForm: FormGroup;
   rapidFolder: RemoteFile;
-  exportProject = false;
   submitting: boolean;
   errorMessage = '';
   selectedFiles: Array<RemoteFile> = [];
@@ -31,7 +30,7 @@ export class ModalCreateProjectComponent implements OnInit {
     this.projCreateForm = new FormGroup( {
       name: new FormControl(''),
       description: new FormControl(''),
-      exportProject: new FormControl(false),
+      exportMap: new FormControl(false),
       linkProject: new FormControl(false)
     });
   }

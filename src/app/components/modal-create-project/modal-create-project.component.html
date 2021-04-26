@@ -13,12 +13,12 @@
 
             <div class="link-project">
               <label>
-                <span style="padding-right: 10px">Export Project</span>
-                <input formControlName="exportProject" type="checkbox">
+                <span style="padding-right: 10px">Export Map</span>
+                <input formControlName="exportMap" type="checkbox">
               </label>
 
             </div>
-            <div *ngIf="projCreateForm.get('exportProject').value">
+            <div *ngIf="projCreateForm.get('exportMap').value">
               <app-file-browser
                 [single]=true
                 [allowFolders]=true
