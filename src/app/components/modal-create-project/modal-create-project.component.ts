@@ -82,7 +82,7 @@ export class ModalCreateProjectComponent implements OnInit {
         if (this.projCreateForm.get('linkProject').value) {
           this.projectsService.linkExportProject(project, systemId, path);
         } else {
-          this.projectsService.exportProject(project.uuid, systemId, path);
+          this.projectsService.exportProject(project.id, systemId, path);
         }
       }
       this.close(project);

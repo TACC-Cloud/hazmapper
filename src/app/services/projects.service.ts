@@ -3,7 +3,7 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
 import {Project} from '../models/models';
 import { RapidProjectRequest } from '../models/rapid-project-request';
-import {catchError, map, tap} from 'rxjs/operators';
+import {catchError, map, tap, filter, take} from 'rxjs/operators';
 import {IProjectUser} from '../models/project-user';
 import {NotificationsService} from './notifications.service';
 import {GeoDataService} from './geo-data.service';
@@ -96,15 +96,15 @@ export class ProjectsService {
       );
   }
 
-  exportProject(project_uuid: string, system_id: string, path: string) {
+  exportProject(projectId: number, system_id: string, path: string) {
     const payload = {
-      project_uuid,
       path,
       system_id
     };
-    this.http.put<any>(this.envService.apiUrl + `/projects/export/`, payload).subscribe(resp => {
-      this.notificationsService.showSuccessToast(`Saved file to ${system_id}/${path}/${project_uuid}.hazmapper`)
-      this.getProjects();
+    this.http.put<any>(this.envService.apiUrl + `/projects/${projectId}/export/`, payload).subscribe(current_project => {
+      this.notificationsService.showSuccessToast(`Create file ${system_id}/${path}/${current_project.uuid}.hazmapper`)
+      this._projects.next([...this._projects.value.filter((p) => p.id != projectId),
+                           current_project]);
     }, error => {
       console.log(error);
     });
@@ -117,10 +117,13 @@ export class ProjectsService {
     };
 
     this.http.put<Project>(this.envService.apiUrl + `/projects/${proj.id}/link/`, data).subscribe(
-        resp => {
-          this.getProjects();
-        }
-      );
+      resp => {
+        this.notificationsService.showSuccessToast(`Create file ${system_id}/${path}/${resp.uuid}.hazmapper`)
+        this._projects.next([...this._projects.value.filter((p) => p.id != proj.id),
+                             resp]);
+      }, error => {
+        console.log(error);
+      });
   }
 
   createRapidProject(data: RapidProjectRequest) {

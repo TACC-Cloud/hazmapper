@@ -64,7 +64,7 @@ export class UsersPanelComponent implements OnInit {
                                                next.system.id,
                                                path)
       } else {
-        this.projectsService.exportProject(this.activeProject.uuid,
+        this.projectsService.exportProject(this.activeProject.id,
                                            next.system.id,
                                            path)
       }
