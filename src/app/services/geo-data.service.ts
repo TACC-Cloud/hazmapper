@@ -69,7 +69,7 @@ export class GeoDataService {
     tree.insert(featurePath, feature, null);
   }
 
-  getFeatures(projectId: number, usePublicRoute: boolean): void {
+  getFeatures(projectId: number, usePublicRoute: boolean = false): void {
     const qstring: string = querystring.stringify(this._assetFilters.toJson());
     const projectRoute = usePublicRoute ? 'public-projects' : 'projects';
     this.setLoadFeatureData(true);
@@ -97,12 +97,12 @@ export class GeoDataService {
   deleteFeature(feature: Feature) {
     this.http.delete(this.envService.apiUrl + `/projects/${feature.project_id}/features/${feature.id}/`)
       .subscribe( (resp) => {
-        this.getFeatures(feature.project_id, false);
-        this.getPointClouds(feature.project_id, false);
+        this.getFeatures(feature.project_id);
+        this.getPointClouds(feature.project_id);
       });
   }
 
-  getPointClouds(projectId: number, usePublicRoute: boolean) {
+  getPointClouds(projectId: number, usePublicRoute: boolean = false) {
     this.setLoadPointCloudData(true);
     const projectRoute = usePublicRoute ? 'public-projects' : 'projects';
     this.http.get<Array<IPointCloud>>(this.envService.apiUrl + `/${projectRoute}/${projectId}/point-cloud/`)
@@ -130,7 +130,7 @@ export class GeoDataService {
     };
     this.http.post(this.envService.apiUrl + `/projects/${projectId}/point-cloud/`, payload)
       .subscribe( (resp) => {
-        this.getPointClouds(projectId, false);
+        this.getPointClouds(projectId);
       }, error => {
         this.notificationsService.showErrorToast('Could not create point cloud!');
       });
@@ -140,7 +140,7 @@ export class GeoDataService {
     console.log(pc);
     this.http.delete(this.envService.apiUrl + `/projects/${pc.project_id}/point-cloud/${pc.id}/`)
       .subscribe( (resp) => {
-        this.getPointClouds(pc.project_id, false);
+        this.getPointClouds(pc.project_id);
       });
   }
 
@@ -150,7 +150,7 @@ export class GeoDataService {
     console.log(pc);
     this.http.post(this.envService.apiUrl + `/projects/${pc.project_id}/point-cloud/${pc.id}/`, form)
       .subscribe( (resp) => {
-        this.getPointClouds(pc.project_id, false);
+        this.getPointClouds(pc.project_id);
         this.notificationsService.showSuccessToast('Point cloud file uploaded!');
       }, (error => {
         this.notificationsService.showErrorToast('Could not import point cloud file!');
@@ -231,14 +231,14 @@ export class GeoDataService {
         const f = this._activeFeature.getValue();
         if (f && f.id === featureId) {
           this._activeFeature.next(new Feature(feature));
-          this.getFeatures(projectId, false);
+          this.getFeatures(projectId);
         }
       }, error => {
         this.notificationsService.showErrorToast(`Error importing ${payload.path}`);
       });
   }
 
-  getOverlays(projectId: number, usePublicRoute: boolean): void {
+  getOverlays(projectId: number, usePublicRoute: boolean = false): void {
     this.setLoadOverlayData(true);
     const projectRoute = usePublicRoute ? 'public-projects' : 'projects';
     this.http.get(this.envService.apiUrl + `/${projectRoute}/${projectId}/overlays/`).subscribe( (ovs: Array<Overlay>) => {
@@ -258,7 +258,7 @@ export class GeoDataService {
 
     this.http.post(this.envService.apiUrl + `/projects/${projectId}/overlays/`, payload)
       .subscribe((resp) => {
-        this.getOverlays(projectId, false);
+        this.getOverlays(projectId);
       });
   }
 
@@ -275,7 +275,7 @@ export class GeoDataService {
     }
     this.http.post(this.envService.apiUrl + `/projects/${projectId}/overlays/import/`, payload)
       .subscribe( (resp) => {
-        this.getOverlays(projectId, false);
+        this.getOverlays(projectId);
       }, error => {
         this.notificationsService.showErrorToast('Overlay import failed! Try again?');
       });
@@ -353,7 +353,7 @@ export class GeoDataService {
   public saveTileServers(projectId: number, tileServers: Array<TileServer>): void {
     this.http.put(this.envService.apiUrl + `/projects/${projectId}/tile-servers/`, tileServers)
       .subscribe( (resp) => {
-        this.getTileServers(projectId, false);
+        this.getTileServers(projectId);
         if (this._dirtyTileOptions.value) {
           this.notificationsService.showSuccessToast('Tile layer options saved!');
         }
@@ -369,7 +369,7 @@ export class GeoDataService {
     this.updateTileServer(projectId, ts);
   }
 
-  getTileServers(projectId: number, usePublicRoute: boolean): void {
+  getTileServers(projectId: number, usePublicRoute: boolean = false): void {
     const projectRoute = usePublicRoute ? 'public-projects' : 'projects';
     this.http.get(this.envService.apiUrl + `/${projectRoute}/${projectId}/tile-servers/`).subscribe((tsv: Array<TileServer>) => {
       tsv.sort((a, b) => {
@@ -403,7 +403,7 @@ export class GeoDataService {
 
     this.http.post(this.envService.apiUrl + `/projects/${projectId}/tile-servers/`, tileServer)
       .subscribe((resp) => {
-        this.getTileServers(projectId, false);
+        this.getTileServers(projectId);
         if (!quiet) {
           this.notificationsService.showSuccessToast('Tile server ' + tileServer.name + ' added!');
         }
