@@ -112,12 +112,13 @@ export class ProjectsService {
       );
   }
 
-  setActiveProjectUUID(uuid: string): void {
+  setActiveProjectUUID(uuid: string, usePublicRoute: boolean = false): void {
     this._loadingActiveProject.next(true);
     this._loadingActiveProjectFailed.next(false);
     this.setActiveProject(null);
 
-    this.http.get<Project[]>(this.envService.apiUrl + `/projects/?uuid=` + uuid)
+    const projectRoute = usePublicRoute ? 'public-projects' : 'projects';
+    this.http.get<Project[]>(this.envService.apiUrl + `/${projectRoute}/?uuid=` + uuid)
       .subscribe( (resp) => {
         this._loadingActiveProject.next(false);
         this.setActiveProject(resp[0]);
