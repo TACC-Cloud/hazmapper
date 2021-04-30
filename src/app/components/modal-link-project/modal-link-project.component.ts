@@ -21,8 +21,10 @@ export class ModalLinkProjectComponent implements OnInit {
   @Input() allowEmptyFiles: false;
   selectedFiles: Array<RemoteFile> = [];
   selectedSystem: any;
+  fileSuffix: string = '';
   activeProject: Project;
   linkProject: boolean = false;
+  currentPath: string;
   confirmRemove: boolean = false;
   public onClose: Subject<any> = new Subject<any>();
   constructor(private modalRef: BsModalRef,
@@ -42,17 +44,25 @@ export class ModalLinkProjectComponent implements OnInit {
 
   onSelect(items: Array<RemoteFile>) {
     this.selectedFiles = items;
+    console.log(this.selectedFiles)
   }
 
   onSystemSelect(system: any) {
     this.selectedSystem = system;
+    console.log(this.selectedFiles)
+  }
+
+  setCurrentPath(path: string) {
+    this.currentPath = path;
   }
 
   close() {
     this.onClose.next({
       fileList: this.selectedFiles,
       linkProject: this.linkProject,
-      system: this.selectedSystem
+      system: this.selectedSystem,
+      fileSuffix: this.fileSuffix,
+      currentPath: this.currentPath
     });
     this.modalRef.hide();
   }

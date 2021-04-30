@@ -26,6 +26,7 @@ export class FileBrowserComponent implements OnInit {
   @Input() allowedExtensions: Array<string> = [];
   @Output() selection: EventEmitter<Array<RemoteFile>> = new EventEmitter<Array<RemoteFile>>();
   @Output() systemSelection: EventEmitter<any> = new EventEmitter<any>();
+  @Output() currentPath: EventEmitter<string> = new EventEmitter<string>();
 
   private currentUser: AuthenticatedUser;
   private currentDirectory: RemoteFile;
@@ -122,6 +123,7 @@ export class FileBrowserComponent implements OnInit {
                   // This removes the first item in the listing, which in Agave
                   // is always a reference to self '.' and replaces with '..'
                   const current = files.shift();
+                  this.currentPath.next(current.path);
                   current.path = this.tapisFilesService.getParentPath(current.path);
                   current.name = '..';
                   files.unshift(current);

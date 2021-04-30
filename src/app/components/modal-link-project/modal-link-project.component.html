@@ -8,8 +8,16 @@
   [helpText]="'If no folder is selected, the file will be exported to the root of the selected system.' +
            'If you select a project, you can link the current map to the project.'"
   (selection)="onSelect($event)"
-  (systemSelection)="onSystemSelect($event)">
+  (systemSelection)="onSystemSelect($event)"
+  (currentPath)="setCurrentPath($event)">
 </app-file-browser>
+
+<div style="padding: 20px 0px">
+  <label> Custom file name:
+    <input type="text" [(ngModel)]="fileSuffix">
+  </label>
+  <small><em>If name is not given, file will be saved as the map uuid.</em></small>
+</div>
 
 <div class="confirm-checkbox">
   <label>
@@ -33,6 +41,6 @@
 </div>
 
 <div>
-    <button class="button warning" (click)="cancel()">Cancel</button>
-    <button class="button" [disabled]="!selectedFiles.length && !allowEmptyFiles || (activeProject.system_path && !confirmRemove)" (click)="close()">Export</button>
+  <button class="button warning" (click)="cancel()">Cancel</button>
+  <button class="button" [disabled]="!selectedFiles.length && !allowEmptyFiles || (activeProject.system_path && !confirmRemove)" (click)="close()">Export</button>
 </div>

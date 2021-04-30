@@ -50,6 +50,7 @@ export interface Project {
   uuid?: string;
   public?: boolean;
   system_name?: string;
+  system_file?: string;
   system_id?: string;
   system_path?: string;
 }

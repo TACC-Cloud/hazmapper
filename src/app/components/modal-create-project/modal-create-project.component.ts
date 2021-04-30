@@ -18,6 +18,8 @@ export class ModalCreateProjectComponent implements OnInit {
   rapidFolder: RemoteFile;
   submitting: boolean;
   errorMessage = '';
+  currentPath: string;
+  fileSuffix: string = '';
   selectedFiles: Array<RemoteFile> = [];
   selectedSystem: any;
 
@@ -31,7 +33,8 @@ export class ModalCreateProjectComponent implements OnInit {
       name: new FormControl(''),
       description: new FormControl(''),
       exportMap: new FormControl(false),
-      linkProject: new FormControl(false)
+      linkProject: new FormControl(false),
+      fileSuffix: new FormControl('')
     });
   }
 
@@ -77,12 +80,18 @@ export class ModalCreateProjectComponent implements OnInit {
     p.name = this.projCreateForm.get('name').value;
     this.projectsService.create(p).subscribe( (project) => {
       if (this.projCreateForm.get('exportMap').value) {
-        const path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path : '/';
+        const path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path : this.currentPath;
         const systemId = this.selectedSystem.id;
         if (this.projCreateForm.get('linkProject').value) {
-          this.projectsService.linkExportProject(project, systemId, path);
+          this.projectsService.linkExportProject(project.id,
+                                                 systemId,
+                                                 path,
+                                                 this.projCreateForm.get('fileSuffix').value);
         } else {
-          this.projectsService.exportProject(project.id, systemId, path);
+          this.projectsService.exportProject(project.id,
+                                             systemId,
+                                             path,
+                                             this.projCreateForm.get('fileSuffix').value);
         }
       }
       this.close(project);
@@ -90,5 +99,9 @@ export class ModalCreateProjectComponent implements OnInit {
       this.errorMessage = err.toString();
     });
     this.submitting = true;
+  }
+
+  setCurrentPath(path: string) {
+    this.currentPath = path;
   }
 }
