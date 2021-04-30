@@ -44,12 +44,10 @@ export class ModalLinkProjectComponent implements OnInit {
 
   onSelect(items: Array<RemoteFile>) {
     this.selectedFiles = items;
-    console.log(this.selectedFiles)
   }
 
   onSystemSelect(system: any) {
     this.selectedSystem = system;
-    console.log(this.selectedFiles)
   }
 
   setCurrentPath(path: string) {
