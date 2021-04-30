@@ -5,7 +5,7 @@ import {ProjectsService} from '../../services/projects.service';
 import {BsModalService} from 'ngx-foundation';
 import {ModalCreateProjectComponent} from '../modal-create-project/modal-create-project.component';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ModalConfirmationBodyComponent } from '../modal-confirmation-body/modal-confirmation-body.component';
+import { ModalService } from 'src/app/services/modal.service';
 
 @Component({
   selector: 'app-main-welcome',
@@ -28,7 +28,8 @@ export class MainWelcomeComponent implements OnInit {
     private router: Router,
     private geoDataService: GeoDataService,
     private projectsService: ProjectsService,
-    private bsModalService: BsModalService
+    private bsModalService: BsModalService,
+    private modalService: ModalService
   ) { }
 
   ngOnInit() {
@@ -55,27 +56,14 @@ export class MainWelcomeComponent implements OnInit {
     this.bsModalService.show(ModalCreateProjectComponent);
   }
 
-  deleteProject(p: Project) {
-    this.projectsService.deleteProject(p);
-  }
-
   openDeleteProjectModal(p: Project) {
-    let initialState = {
-      title: 'Delete Project',
-      message: 'Confirm deleting project.',
-      options: ['Cancel', 'Confirm']
-    };
-    if (p.system_path) {
-      initialState = {
-        title: 'Delete Project',
-        message: 'Deleting this project will remove the associated file as well.',
-        options: ['Cancel', 'Confirm']
-      };
-    }
-    const modal = this.bsModalService.show(ModalConfirmationBodyComponent, {initialState});
-    modal.content.answer.subscribe( (close) => {
-      if (close === 'Confirm') {
+    this.modalService.confirm(
+      'Delete map',
+      'Are you sure you want to delete this map?  All associated features, metadata, and saved files will be deleted. THIS CANNOT BE UNDONE.',
+      ['Cancel', 'Delete']).subscribe( (answer) => {
+      if (answer === 'Delete') {
         this.projectsService.deleteProject(p);
+
       }
     });
   }

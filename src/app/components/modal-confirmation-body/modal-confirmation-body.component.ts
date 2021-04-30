@@ -1,6 +1,5 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-foundation/modal';
-import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-modal-confirmation-body',
@@ -8,15 +7,15 @@ import {Subject} from 'rxjs';
   styleUrls: ['./modal-confirmation-body.component.styl']
 })
 export class ModalConfirmationBodyComponent {
-  @Input() options: Array<any> = [false, true];
-  @Input() message: string = 'message';
-  @Input() title: string = 'title';
-  public readonly answer: Subject<string> = new Subject<string>();
+  title: string;
+  message: string;
+  options: string;
+  answer: string;
 
   constructor(public bsModalRef: BsModalRef) { }
 
-  closeModal(answer: string) {
-    this.answer.next(answer);
-    this.bsModalRef.hide();
-  }
+ closeModal(answer) {
+   this.answer = answer;
+   this.bsModalRef.hide();
+ }
 }

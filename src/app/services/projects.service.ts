@@ -9,7 +9,9 @@ import {NotificationsService} from './notifications.service';
 import {GeoDataService} from './geo-data.service';
 import { EnvService } from '../services/env.service';
 import { AuthService } from '../services/authentication.service';
+import {MAIN, LOGIN} from '../constants/routes';
 import {defaultTileServers} from '../constants/tile-servers';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +40,7 @@ export class ProjectsService {
   constructor(private http: HttpClient,
               private notificationsService: NotificationsService,
               private geoDataService: GeoDataService,
+              private router: Router,
               private authService: AuthService,
               private envService: EnvService) { }
 
@@ -174,6 +177,7 @@ export class ProjectsService {
     this.http.delete(this.envService.apiUrl + `/projects/${proj.id}/`)
       .subscribe( (resp) => {
         this.getProjects();
+        this.router.navigate([MAIN]);
       }, error => {
         this.notificationsService.showErrorToast('Could not delete project!');
       });
