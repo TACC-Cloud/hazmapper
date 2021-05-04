@@ -6,6 +6,30 @@
         <i class="fas fa-spin fa-spinner"></i>
     </div>
     <div *ngIf="!loadingActiveProject && !loadingActiveProjectFailed" class="cell small-8 align-middle grid-x">
+        <button class="button tiny" (click)="routeToMain()"><i class="fas fa-arrow-left"></i></button>
+        <div class="grid-x align-middle">
+            <button class="button tiny success" (click)="openCreateProjectModal()"> <i class="fas fa-plus"></i></button>
+            <ul class="dropdown vertical menu" dropdown>
+                <li class="is-dropdown-submenu-parent">
+                    <button dropdownToggle  class="dropdown button tiny hollow">
+                        Maps
+                        <span class="" *ngIf="selectedProject"> : {{selectedProject.name}}</span>
+                    </button>
+                    <ul *dropdownMenu class="menu is-dropdown-submenu">
+                        <li class="clickable" *ngFor="let p of projects" (click)="routeToProject(p.uuid)" [ngClass]="{'active-project': p === selectedProject}">
+                            {{ p.name }}
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <div *ngIf="!projects.length && !loading"> <span class="label alert"> No maps! Create one to get started. </span></div>
+            <div *ngIf="loadingData" style="margin-left: 1rem">
+                <span>Loading Data</span>
+                <i class="fas fa-spin fa-spinner ml-4" style="margin-left: 0.5rem"></i>
+            </div>
+        </div>
+
+
         <span style="margin-left: 1rem">{{isPublicView? 'Public Map': 'Map'}}: {{ activeProject.name }}</span>
         <div *ngIf="loadingData" style="margin-left: 1rem">
             <i class="fas fa-spin fa-spinner" style="margin-right: 0.3rem"></i>
