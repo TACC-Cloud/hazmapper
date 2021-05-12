@@ -5,6 +5,7 @@ import { INotification, IProgressNotification } from '../models/notification';
 import { interval, Observable, ReplaySubject } from 'rxjs';
 import { EnvService } from '../services/env.service';
 import { take, map } from 'rxjs/operators';
+import { AuthService } from '../services/authentication.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,11 +19,16 @@ export class NotificationsService {
   private _progressNotifications: ReplaySubject<Array<IProgressNotification>> = new ReplaySubject<Array<IProgressNotification>>(1);
   public readonly  progressNotifications$: Observable<Array<IProgressNotification>> = this._progressNotifications.asObservable();
 
-  constructor(private toastr: ToastrService, private envService: EnvService, private http: HttpClient) {
-    const timer = interval(this.TIMEOUT);
-    timer.subscribe( (next) => {
-      this.getRecent();
-    });
+  constructor(private toastr: ToastrService,
+              private envService: EnvService,
+              private http: HttpClient,
+              private authService: AuthService ) {
+    if (authService.isLoggedIn()) {
+      const timer = interval(this.TIMEOUT);
+      timer.subscribe((next) => {
+        this.getRecent();
+      });
+    }
   }
 
   getRecent(): void {
@@ -102,7 +108,7 @@ export class NotificationsService {
 
     this.http.delete<Array<IProgressNotification>>(baseUrl + '/' + pn.uuid)
       .subscribe(() => {
-        this.showSuccessToast("Deleted progress: " + pn.uuid);
+        this.showSuccessToast('Deleted progress: ' + pn.uuid);
       });
   }
 

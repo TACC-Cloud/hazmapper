@@ -24,17 +24,15 @@ export class JwtInterceptor implements HttpInterceptor {
       }
     }
 
-    // This is only for local development, we put the JWT on the request
-    // because it is not behind ws02
-    if (request.url.indexOf(this.envService.apiUrl) > -1)  {
-      if (this.envService.jwt) {
+    // we put the JWT on the request to our geoapi API because it is not behind ws02 if in local dev
+    // and if user is logged in
+    if (this.envService.jwt && request.url.indexOf(this.envService.apiUrl) > -1 && this.authSvc.isLoggedIn()) {
         // add header
         request = request.clone({
           setHeaders: {
             'X-JWT-Assertion-designsafe': this.envService.jwt
           }
         });
-      }
     }
 
     if (request.url.indexOf(this.envService.mapillaryApiUrl) > -1) {

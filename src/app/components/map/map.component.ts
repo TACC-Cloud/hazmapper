@@ -1,9 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import * as L from 'leaflet';
 import 'types.leaflet.heat';
 import 'leaflet.markercluster';
-import 'leaflet-contextmenu';
 import { LatLng } from 'leaflet';
 import * as Mapillary from 'mapillary-js';
 import { ProjectsService} from '../../services/projects.service';
@@ -18,6 +16,7 @@ import {Subscription} from 'rxjs';
 import {Overlay, Project, TileServer} from '../../models/models';
 import {EnvService} from '../../services/env.service';
 import { StreetviewService } from 'src/app/services/streetview.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-map',
@@ -97,7 +96,6 @@ export class MapComponent implements OnInit, OnDestroy {
         }
       });
     }));
-
 
     this.subscription.add(this.streetviewService.streetviewDisplaySequences.subscribe((collection) => {
       this.mapillarySequences.clearLayers();
