@@ -32,13 +32,16 @@ export class MapComponent implements OnInit, OnDestroy {
   _activeProjectId: number;
   features: FeatureGroup = new FeatureGroup();
   mapillarySequences: FeatureGroup = new FeatureGroup();
+  projectMapillarySequences: FeatureGroup = new FeatureGroup();
   overlays: LayerGroup = new LayerGroup<any>();
+  streetviews: LayerGroup = new LayerGroup<any>();
   tileServerLayers: Map<number, TileLayer> = new Map<number, TileLayer>();
   fitToFeatureExtent = true;
   private subscription: Subscription = new Subscription();
   streetviewFeatures: FeatureGroup = new FeatureGroup();
-  mapillaryStreetview: boolean = false;
+  mapillaryStreetview = false;
   streetviewMarker: any;
+  mapWidth = 100;
 
   constructor(private projectsService: ProjectsService,
               private geoDataService: GeoDataService,
@@ -52,105 +55,104 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // const mapType: string = this.route.snapshot.queryParamMap.get('mapType');
-    // this.projectId = +this.route.snapshot.paramMap.get("projectId");
-    // this.cluster = this.route.snapshot.queryParamMap.get('mapType');
-    this.loadMap();
-  }
+    this.map = new L.Map('map', {
+      center: [40, -80],
+      zoom: 3,
+      maxZoom: 19
+    });
 
-  loadMap() {
-    setTimeout(() => {
-      this.map = new L.Map('map', {
-        center: [40, -80],
-        zoom: 3,
-        maxZoom: 19
-      });
+    this.subscription.add(this.streetviewService.streetviewerOpen.subscribe((next: boolean) => {
+      if (!next && this.mapillaryViewer) {
+        this.mapillaryStreetview = false;
+        this.mapillaryViewer.remove();
+        this.mapWidth = 100;
+      }
+    }));
 
-      this.subscription.add(this.geoDataService.tileServers.subscribe((next: Array<TileServer>) => {
-        // remove any layers that no longer exist from tileServerLayers
-        const currentTileLayerIds = new Set<number>(next.map(l => l.id));
-        for (const tileLayerId of this.tileServerLayers.keys()) {
-          if (!currentTileLayerIds.has(tileLayerId)) {
-            if (this.map.hasLayer(this.tileServerLayers.get(tileLayerId))) {
-              this.map.removeLayer(this.tileServerLayers.get(tileLayerId));
-            }
-            this.tileServerLayers.delete(tileLayerId);
+    this.subscription.add(this.geoDataService.tileServers.subscribe((next: Array<TileServer>) => {
+      // remove any layers that no longer exist from tileServerLayers
+      const currentTileLayerIds = new Set<number>(next.map(l => l.id));
+      for (const tileLayerId of this.tileServerLayers.keys()) {
+        if (!currentTileLayerIds.has(tileLayerId)) {
+          if (this.map.hasLayer(this.tileServerLayers.get(tileLayerId))) {
+            this.map.removeLayer(this.tileServerLayers.get(tileLayerId));
           }
+          this.tileServerLayers.delete(tileLayerId);
+        }
+      }
+
+      // update/add layers
+      next.forEach((ts) => {
+        if (!this.tileServerLayers.has(ts.id)) {
+          this.tileServerLayers.set(ts.id, this.tileServerToLayer(ts));
         }
 
-        // update/add layers
-        next.forEach((ts) => {
-          if (!this.tileServerLayers.has(ts.id)) {
-            this.tileServerLayers.set(ts.id, this.tileServerToLayer(ts));
-          }
+        this.tileServerLayers.get(ts.id).setZIndex(ts.uiOptions.zIndex);
+        this.tileServerLayers.get(ts.id).setOpacity(ts.uiOptions.opacity);
 
-          this.tileServerLayers.get(ts.id).setZIndex(ts.uiOptions.zIndex);
-          this.tileServerLayers.get(ts.id).setOpacity(ts.uiOptions.opacity);
-
-          if (ts.uiOptions.isActive) {
-            this.map.addLayer(this.tileServerLayers.get(ts.id));
-          } else {
-            this.map.removeLayer(this.tileServerLayers.get(ts.id));
-          }
-        });
-      }));
-
-
-      this.subscription.add(this.streetviewService.streetviewDisplaySequences.subscribe((collection) => {
-        this.mapillarySequences.clearLayers();
-        collection.features.forEach( d => {
-          // NOTE: LineString
-          const seq = L.geoJSON(d, { style: {
-            weight: 10
-          }});
-          seq.on('click', (ev) => { this.sequenceClickHandler(ev); } );
-          seq.on('contextmenu', (ev) => { this.sequenceRightClickHandler(ev); } );
-
-          this.mapillarySequences.addLayer(seq);
-        });
-        this.map.addLayer(this.mapillarySequences);
-
-
-        if (this.mapillarySequences.getBounds().getNorthEast()) {
-          this.map.setView(this.mapillarySequences.getBounds().getNorthEast(), 15);
+        if (ts.uiOptions.isActive) {
+          this.map.addLayer(this.tileServerLayers.get(ts.id));
+        } else {
+          this.map.removeLayer(this.tileServerLayers.get(ts.id));
         }
+      });
+    }));
+
+
+    this.subscription.add(this.streetviewService.streetviewDisplaySequences.subscribe((collection) => {
+      this.mapillarySequences.clearLayers();
+      collection.features.forEach( d => {
+        // NOTE: LineString
+        const seq = L.geoJSON(d, { style: {
+          weight: 10
+        }});
+        seq.on('click', (ev) => { this.sequenceClickHandler(ev); } );
+        seq.on('contextmenu', (ev) => { this.sequenceRightClickHandler(ev); } );
+
+        this.mapillarySequences.addLayer(seq);
+      });
+      this.map.addLayer(this.mapillarySequences);
+
+
+      if (this.mapillarySequences.getBounds().getNorthEast()) {
+        this.map.setView(this.mapillarySequences.getBounds().getNorthEast(), 15);
+      }
+    }));
+
+    // Subscribe to active project and features
+    this.subscription.add(this.loadFeatures());
+
+    const baseOSM = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+    const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      // tslint:disable-next-line:max-line-length
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    });
+    // default to streetmap view;
+    this.map.addLayer(baseOSM);
+
+
+    // Filter out and display only the active overlays
+    this.subscription.add(this.geoDataService.selectedOverlays$
+      .pipe(
+        map( (items: Array<Overlay>) => items.filter( (item: Overlay) => item.isActive))
+      )
+      .subscribe( (filteredOverlays: Array<Overlay>) => {
+        this.overlays.clearLayers();
+        filteredOverlays.forEach( (item: Overlay) => {
+          this.overlays.addLayer(this.createOverlayLayer(item));
+        });
+        this.overlays.addTo(this.map);
       }));
 
-      // Subscribe to active project and features
-      this.subscription.add(this.loadFeatures());
-
-      const baseOSM = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      });
-      const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        // tslint:disable-next-line:max-line-length
-        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-      });
-      // default to streetmap view;
-      this.map.addLayer(baseOSM);
-
-
-      // Filter out and display only the active overlays
-      this.subscription.add(this.geoDataService.selectedOverlays$
-        .pipe(
-          map( (items: Array<Overlay>) => items.filter( (item: Overlay) => item.isActive))
-        )
-        .subscribe( (filteredOverlays: Array<Overlay>) => {
-          this.overlays.clearLayers();
-          filteredOverlays.forEach( (item: Overlay) => {
-            this.overlays.addLayer(this.createOverlayLayer(item));
-          });
-          this.overlays.addTo(this.map);
-        }));
-
-      // Listen on the activeFeature stream and zoom map to that feature when it changes
-      this.subscription.add(this.geoDataService.activeFeature.pipe(filter(n => n != null)).subscribe( (next) => {
-        this.activeFeature = next;
-        const bbox = turf.bbox(<AllGeoJSON> next);
-        this.map.fitBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]]);
-      }));
-    })
+    // Listen on the activeFeature stream and zoom map to that feature when it changes
+    this.subscription.add(this.geoDataService.activeFeature.pipe(filter(n => n != null)).subscribe( (next) => {
+      this.activeFeature = next;
+      const bbox = turf.bbox(<AllGeoJSON> next);
+      this.map.fitBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]]);
+    }));
   }
 
   createOverlayLayer(ov: Overlay): Layer {
@@ -166,7 +168,7 @@ export class MapComponent implements OnInit, OnDestroy {
     const layerOptions = {
       attribution: ts.attribution,
       ...ts.tileOptions
-    }
+    };
 
     if (ts.type === 'tms') {
       return L.tileLayer(ts.url, layerOptions);
@@ -221,14 +223,13 @@ export class MapComponent implements OnInit, OnDestroy {
       if (next && this._activeProjectId !== next.id) {
         this.fitToFeatureExtent = true;
       }
-      this._activeProjectId = next ? next.id: null;
+      this._activeProjectId = next ? next.id : null;
     }));
 
     return subscription;
   }
 
   /**
-   *
    * @param ev
    */
   featureClickHandler(ev: any): void {
@@ -243,16 +244,16 @@ export class MapComponent implements OnInit, OnDestroy {
     const query = lon + ',' + lat;
 
     this.streetviewService.searchMapillaryImages({
-      'closeto': query,
-      'lookat': query
+      closeto: query,
+      lookat: query
     }, (resp) => {
       if (this.mapillaryStreetview) {
         this.mapillaryViewer.moveToKey(resp.features[0].properties.key);
         this.focusMarker(ev.latlng);
       } else {
-        window.open("https://www.mapillary.com/map/im/" + resp.features[0].properties.key);
+        window.open('https://www.mapillary.com/map/im/' + resp.features[0].properties.key);
       }
-    })
+    });
   }
 
   sequenceRightClickHandler(ev: any): void {
@@ -263,23 +264,18 @@ export class MapComponent implements OnInit, OnDestroy {
     }
   }
 
-  closeStreetview() {
-    this.mapillaryStreetview = false;
-    this.mapillaryViewer.remove();
-    this.loadMap();
-  }
-
   openStreetview(latlng: LatLng) {
+    this.streetviewService.streetviewerOpener = true;
     this.mapillaryStreetview = true;
     setTimeout(() => {
-      if (this.mapillaryViewer && this.mapillaryStreetview)
+      if (this.mapillaryViewer && this.mapillaryStreetview) {
         this.mapillaryViewer.remove();
+      }
 
       const query = latlng.lng + ',' + latlng.lat;
 
       this.streetviewService.searchMapillaryImages({
-        'closeto': query,
-        'lookat': query
+        closeto: query,
       }, (resp) => {
         this.mapillaryViewer = new Mapillary.Viewer({
           apiClient: this.envService.mapillaryClientId,
@@ -288,39 +284,27 @@ export class MapComponent implements OnInit, OnDestroy {
         });
 
         this.mapillaryViewer.on(Mapillary.Viewer.nodechanged, (node) => {
-          if (node) {
-            if (node.latLon) {
-              if (node.latLon.lat) {
-                if (node.latLon.lon) {
-                  this.map.setView({lat: node.latLon.lat, lng: node.latLon.lon}, 15)
-                }
-              }
-            }
-          }
-
           if (!this.streetviewMarker) {
-            this.streetviewMarker = L.marker(node.latLon).addTo(this.map)
-            this.streetviewMarker.setZIndex(1000)
+            this.streetviewMarker = L.marker(node.latLon).addTo(this.map);
           } else {
-            this.streetviewMarker.setLatLng(node.latLon)
+            this.streetviewMarker.setLatLng(node.latLon);
           }
-        })
+        });
 
         window.addEventListener('resize', () => this.mapillaryViewer.resize());
         this.focusMarker(latlng);
-      })
-    }, 10)
-    this.loadMap();
+      });
+    }, 1000);
+    this.mapWidth = 50;
   }
 
   focusMarker(latlng: LatLng) {
     if (this.mapillaryStreetview) {
-      this.map.setView(latlng, 15)
+      this.map.setView(latlng, 15);
       if (!this.streetviewMarker) {
-        this.streetviewMarker = L.marker(latlng).addTo(this.map)
-        this.streetviewMarker.setZIndex(1000)
+        this.streetviewMarker = L.marker(latlng).addTo(this.map);
       } else {
-        this.streetviewMarker.setLatLng(latlng)
+        this.streetviewMarker.setLatLng(latlng);
       }
     }
   }

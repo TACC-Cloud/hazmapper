@@ -1,47 +1,34 @@
-<h4>Select Where to Publish</h4>
-<!-- <small><em>Can select both</em></small> -->
-<div class="select-publish-server grid-x align-center">
-  <div class="publish-container">
-    <label for="publishMapillary">
-      <input id="publishMapillary"
-             class="hidden-checkbox"
-             [(ngModel)]="publishToMapillary"
-             [disabled]="!isLoggedIn('mapillary')"
-             type="checkbox"/>
-      <span [tooltip]="!isLoggedIn('mapillary') ? 'Not authenticated to Mapillary!' : ''">Mapillary</span>
-    </label>
-  </div>
-  <!-- <div class="publish-container">
-       <label for="publishGoogle">
-       <input id="publishGoogle"
-       class="hidden-checkbox"
-       [(ngModel)]="publishToGoogle"
-       [disabled]="!isLoggedIn('google')"
-       type="checkbox"/>
-       <span [tooltip]="!isLoggedIn('google') ? 'Not authenticated to Google!' : ''">Google</span>
-       </label>
-       </div> -->
-</div>
-
-<div *ngIf="publishToMapillary">
-  <h4>Select Organizations</h4>
-  <select [(ngModel)]="selectedOrganization">
-    <option value="">
-      Upload to User Account
-    </option>
-    <option
-      *ngFor="let org of userOrganizations"
-      [value]="org.name">
-      {{org.nice_name}}
-    </option>
-  </select>
-</div>
+<!-- <h4>Select Where to Publish</h4>
+     <small><em>Can select both</em></small>
+     <div class="select-publish-server grid-x align-center">
+     <div class="publish-container">
+     <label for="publishMapillary">
+     <input id="publishMapillary"
+     class="hidden-checkbox"
+     [(ngModel)]="publishToMapillary"
+     [disabled]="!isLoggedIn('mapillary')"
+     type="checkbox"/>
+     <span [tooltip]="!isLoggedIn('mapillary') ? 'Not authenticated to Mapillary!' : ''">Mapillary</span>
+     </label>
+     </div>
+     <div class="publish-container">
+     <label for="publishGoogle">
+     <input id="publishGoogle"
+     class="hidden-checkbox"
+     [(ngModel)]="publishToGoogle"
+     [disabled]="!isLoggedIn('google')"
+     type="checkbox"/>
+     <span [tooltip]="!isLoggedIn('google') ? 'Not authenticated to Google!' : ''">Google</span>
+     </label>
+     </div>
+     </div>
+-->
 
 <app-file-browser
   [single]="true"
   [allowFolders]=allowFolders
   [onlyFolder]="true"
-  [heading]="'Select a Folder Contaning Streetview Images'"
+  [heading]="'Select a Folder Containing Streetview Images'"
   [helpText]="'Streetview image files (with gpano metadata) inside this folder will be imported (only single level).'"
   (selection)="onSelect($event)">
 </app-file-browser>

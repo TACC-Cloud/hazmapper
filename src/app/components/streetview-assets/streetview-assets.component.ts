@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { StreetviewService } from 'src/app/services/streetview.service';
+import { BsModalService } from 'ngx-foundation';
+import { ModalStreetviewInfoComponent } from '../modal-streetview-info/modal-streetview-info.component';
 
 @Component({
   selector: 'app-streetview-assets',
@@ -7,30 +9,23 @@ import { StreetviewService } from 'src/app/services/streetview.service';
   styleUrls: ['./streetview-assets.component.styl']
 })
 export class StreetviewAssetsComponent implements OnInit {
-  private mapillarySequences: Array<any> = [];
+  private streetviews: Array<any> = [];
 
-  constructor(private streetviewService: StreetviewService) { }
+  constructor(private streetviewService: StreetviewService,
+              private bsModalService: BsModalService) { }
 
   ngOnInit() {
-    this.streetviewService.getStreetviewSequences('mapillary');
+    this.streetviewService.getStreetviews();
 
-    this.streetviewService.streetviewSequences.subscribe((next) => {
-      this.mapillarySequences = next;
+    this.streetviewService.streetviews.subscribe((next) => {
+      this.streetviews = next;
     })
   }
 
-  toggleStreetview(svId: number) {
-    let sv = this.mapillarySequences[svId];
-    sv.open = !sv.open;
+  openStreetviewInfoModal(streetview: any) {
+    const initialState = {
+      streetview
+    };
+    this.bsModalService.show(ModalStreetviewInfoComponent, { initialState });
   }
-
-  toggleSequence(seqId: number, sequences: Array<any>) {
-    let seq = sequences[seqId];
-    seq.open = !seq.open;
-  }
-
-  deleteSequence(service: string, seqId: number) {
-    this.streetviewService.removeStreetviewSequence(service, seqId);
-  }
-
 }

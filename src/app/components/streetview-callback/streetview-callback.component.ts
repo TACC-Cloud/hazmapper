@@ -23,7 +23,7 @@ export class StreetviewCallbackComponent implements OnInit {
     const username = state.username;
 
     const authStr = service == 'google' ? params.code : params.access_token;
-    this.streetviewAuthenticationService.setStreetviewToken(projectId, username, service, authStr);
+    this.streetviewAuthenticationService.setStreetviewToken(service, authStr);
     this.streetviewAuthenticationService.setMapillaryUserKey();
 
     this.router.navigate([originUrl]);

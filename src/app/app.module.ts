@@ -51,13 +51,13 @@ import { ModalStreetviewPublishComponent } from './components/modal-streetview-p
 import { MainWelcomeComponent } from './components/main-welcome/main-welcome.component';
 import { MainProjectComponent } from './components/main-project/main-project.component';
 import {DragDropModule, CDK_DRAG_CONFIG} from '@angular/cdk/drag-drop';
-import { StreetviewSequenceComponent } from './components/streetview-sequence/streetview-sequence.component';
 import { ModalStreetviewLogComponent } from './components/modal-streetview-log/modal-streetview-log.component';
 import { StreetviewCallbackComponent } from './components/streetview-callback/streetview-callback.component';
 import { StreetviewAccountsComponent } from './components/streetview-accounts/streetview-accounts.component';
 import { StreetviewLogsComponent } from './components/streetview-logs/streetview-logs.component';
 import { StreetviewAssetsComponent } from './components/streetview-assets/streetview-assets.component';
 import { ModalStreetviewLinkComponent } from './components/modal-streetview-link/modal-streetview-link.component';
+import { ModalStreetviewInfoComponent } from './components/modal-streetview-info/modal-streetview-info.component';
 
 @NgModule({
   declarations: [
@@ -92,13 +92,13 @@ import { ModalStreetviewLinkComponent } from './components/modal-streetview-link
     ModalStreetviewPublishComponent,
     MainWelcomeComponent,
     MainProjectComponent,
-    StreetviewSequenceComponent,
     ModalStreetviewLogComponent,
     StreetviewCallbackComponent,
     StreetviewAccountsComponent,
     StreetviewLogsComponent,
     StreetviewAssetsComponent,
     ModalStreetviewLinkComponent,
+    ModalStreetviewInfoComponent,
   ],
   imports: [
     CommonModule,
@@ -167,6 +167,7 @@ import { ModalStreetviewLinkComponent } from './components/modal-streetview-link
     ModalCreateTileServerComponent,
     ModalStreetviewLogComponent,
     ModalStreetviewLinkComponent,
-    ModalPointCloudInfoComponent]
+    ModalPointCloudInfoComponent,
+    ModalStreetviewInfoComponent]
 })
 export class AppModule { }

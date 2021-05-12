@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 import { StreetviewService } from '../../services/streetview.service';
 import { StreetviewAuthenticationService } from '../../services/streetview-authentication.service';
 import { TapisFilesService } from '../../services/tapis-files.service';
+import {Feature} from '../../models/models';
 
 @Component({
   selector: 'app-modal-streetview-link',
@@ -15,40 +16,38 @@ export class ModalStreetviewLinkComponent implements OnInit {
   // @Input() allowedExtensions: Array<string> = this.tapisFilesService.IMPORTABLE_FEATURE_TYPES;
   @Input() single: true;
   @Input() allowFolders: true;
-  selectedFiles: Array<RemoteFile> = [];
-  selectedSequences: Array<string> = [];
   private projectId: number;
   private username: string;
-
-  userSequences: Array<any> = [];
+  public onClose: Subject<any> = new Subject<any>();
+  selectedFiles: Array<RemoteFile> = [];
+  selectedSequences: Array<string> = [];
+  userSequences: Array<Feature> = [];
   loadingSequences = true;
   loadingMoreSequences = false;
 
-  firstPageLink = "";
-  prevPageLink = "";
-  nextPageLink = "";
-  lastPageLink = "";
+  firstPageLink = '';
+  prevPageLink = '';
+  nextPageLink = '';
+  lastPageLink = '';
+
+  currentService = 'mapillary';
+  publishErrorMessage = '';
 
   currentPageNumber = 1;
   lastPageNumber = 1;
-  // TODO Type
-  public onClose: Subject<any> = new Subject<any>();
 
-  currentService: string = 'mapillary';
 
-  publishErrorMessage: string = "";
 
   constructor(public bsModalRef: BsModalRef,
               private streetviewService: StreetviewService,
               private streetviewAuthenticationService: StreetviewAuthenticationService,
               private tapisFilesService: TapisFilesService) { }
 
-  // TODO: In Progress notifier
   ngOnInit() {
     this.streetviewService.clearMapillarySequences();
     this.loadingSequences = true;
     this.getSequences();
-    this.streetviewService.mapillaryUserSequences.subscribe(seq => {
+    this.streetviewService.mapillarySequences.subscribe(seq => {
       this.loadingSequences = true;
       if (seq) {
         this.userSequences = seq;
@@ -61,16 +60,18 @@ export class ModalStreetviewLinkComponent implements OnInit {
       this.nextPageLink = seq;
     });
 
-    this.streetviewService.googleUserSequences.subscribe(seq => {
+    this.streetviewService.googleSequences.subscribe(seq => {
       if (seq) {
         this.userSequences = seq;
       }
     });
+
+    this.onChooseService('mapillary');
   }
 
   getSequences() {
     this.loadingSequences = true;
-    this.streetviewService.getMapillaryUserSequences();
+    this.streetviewService.getMapillarySequences();
   }
 
   addSequenceToList(sequence: string) {
@@ -88,10 +89,10 @@ export class ModalStreetviewLinkComponent implements OnInit {
   onChooseService(service: string) {
     this.streetviewService.clearMapillarySequences();
     this.loadingSequences = true;
-    if (service == 'google') {
-      this.streetviewService.getGoogleUserSequences();
+    if (service === 'google') {
+      this.streetviewService.getGoogleSequences();
     } else {
-      this.streetviewService.getMapillaryUserSequences();
+      this.streetviewService.getMapillarySequences();
     }
   }
 
@@ -114,7 +115,7 @@ export class ModalStreetviewLinkComponent implements OnInit {
 
   loadMoreSequences() {
     this.loadingMoreSequences = true;
-    this.streetviewService.getMapillaryUserSequences(this.nextPageLink);
+    this.streetviewService.getMapillarySequences(this.nextPageLink);
   }
 
   containsSequence(sequenceKey: string) {

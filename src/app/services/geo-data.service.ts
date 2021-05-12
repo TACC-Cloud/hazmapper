@@ -514,7 +514,7 @@ export class GeoDataService {
     return this.basemap$;
   }
 
-  getDataForProject(projectId): void {
+  getDataForProject(projectId: number): void {
     this.getFeatures(projectId);
     this.getPointClouds(projectId);
     this.getOverlays(projectId);

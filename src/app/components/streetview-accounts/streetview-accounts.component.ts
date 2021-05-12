@@ -17,7 +17,6 @@ export class StreetviewAccountsComponent implements OnInit {
     this.streetviewService.getMapillaryUser();
     this.streetviewService.mapillaryUser.subscribe(next => {
       this.mapillaryUser = next;
-      console.log(next);
     });
   }
 

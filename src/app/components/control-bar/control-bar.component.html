@@ -11,6 +11,11 @@
             <i class="fas fa-spin fa-spinner" style="margin-right: 0.3rem"></i>
             <span>Loading Data</span>
         </div>
+        <div *ngIf="streetviewerOpen" class="grid-x align-center" style="margin-left: 30px">
+          <button class="button tiny" (click)="closeStreetview()">
+            <strong>Close Streetview</strong>
+          </button>
+        </div>
     </div>
     <div *ngIf="!loadingActiveProject && !loadingActiveProjectFailed" class="cell small-4 align-right align-middle grid-x">
         <div class="grid-x align-right align-middle">

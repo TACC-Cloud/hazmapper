@@ -27,22 +27,6 @@ export class StreetviewLogsComponent implements OnInit, OnDestroy {
     this.timerSub = this.notificationsService.initProgressPoll();
   }
 
-
-  // TODO: Fix so that it is considers incremental retry
-  retryPublish(pn: IProgressNotification) {
-    let retry = pn.message == "From tapis" ? false : true
-    this.streetviewService.uploadPathToStreetviewService({
-                                                           system: pn.logs.publishInfo.system,
-                                                           path: pn.logs.publishInfo.path
-                                                         },
-                                                         pn.logs.publishInfo.mapillary,
-                                                         pn.logs.publishInfo.google,
-                                                         pn.logs.publishInfo.organization,
-                                                         retry);
-  }
-
-
-
   openDetailLogModal(pn: IProgressNotification) {
     const initialState = {
       notification: pn
@@ -55,7 +39,7 @@ export class StreetviewLogsComponent implements OnInit, OnDestroy {
   }
 
   deleteErrorLog(pn: IProgressNotification) {
-    this.notificationsService.deleteProgress(pn);
+    this.streetviewService.deleteStreetviewSession(pn);
   }
 
   ngOnDestroy() {

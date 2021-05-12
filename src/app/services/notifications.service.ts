@@ -16,7 +16,7 @@ export class NotificationsService {
   private _notifications: ReplaySubject<Array<INotification>> = new ReplaySubject<Array<INotification>>(1);
   public readonly  notifications: Observable<Array<INotification>> = this._notifications.asObservable();
   private _progressNotifications: ReplaySubject<Array<IProgressNotification>> = new ReplaySubject<Array<IProgressNotification>>(1);
-  public readonly  progressNotifications: Observable<Array<IProgressNotification>> = this._progressNotifications.asObservable();
+  public readonly  progressNotifications$: Observable<Array<IProgressNotification>> = this._progressNotifications.asObservable();
 
   constructor(private toastr: ToastrService, private envService: EnvService, private http: HttpClient) {
     const timer = interval(this.TIMEOUT);
@@ -112,6 +112,14 @@ export class NotificationsService {
       .subscribe((note) => {
         return note;
       });
+  }
+
+  public set progressNotifications(notifications) {
+    this._progressNotifications.next(notifications);
+  }
+
+  public get progressNotifications(): any {
+    return this.progressNotifications$;
   }
 
 }

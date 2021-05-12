@@ -14,7 +14,6 @@ export class EnvService {
   private _mapillaryApiUrl?: string;
   private _clientId: string;
   private _baseHref: string;
-  private _rootUrl: string;
 
   private getApiUrl(backend: EnvironmentType): string {
     if (backend === EnvironmentType.Local) {
@@ -38,10 +37,6 @@ export class EnvService {
 
   get apiUrl(): string {
     return this._apiUrl;
-  }
-
-  get rootUrl(): string {
-    return this._rootUrl;
   }
 
   get jwt(): string {
@@ -91,9 +86,9 @@ export class EnvService {
 
     this._googleClientSecret = '';
     this._googleClientId = '573001329633-1p0k8rko13s6n2p2cugp3timji3ip9f0.apps.googleusercontent.com';
-    this._mapillaryClientId = 'VDRaeGFzMEtzRnJrMFZwdVYzckd6cjo0ZWY3ZDEzZGIyMWJkZjNi';
+    // this._mapillaryClientId = 'VDRaeGFzMEtzRnJrMFZwdVYzckd6cjo0ZWY3ZDEzZGIyMWJkZjNi';
+    this._mapillaryClientId = 'SHpCUGVyZ0R5eTdwZmhzajB1dzA4MDpkZWQxMjY4N2E1NDljMTFk';
     this._mapillaryApiUrl = 'https://a.mapillary.com/v3';
-    this._rootUrl = 'https://hazmapper.tacc.utexas.edu';
 
     if (/^localhost/.test(hostname)) {
       this._env = EnvironmentType.Local;
@@ -104,7 +99,6 @@ export class EnvService {
       }
       this._baseHref = '/';
       this._clientId = 'RMCJHgW9CwJ6mKjhLTDnUYBo9Hka';
-      this._rootUrl = 'http://localhost:4200';
     } else if (/^hazmapper.tacc.utexas.edu/.test(hostname) && pathname.startsWith('/staging')) {
       this._env = EnvironmentType.Staging;
       this._apiUrl = this.getApiUrl(this.env);

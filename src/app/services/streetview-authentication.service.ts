@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { AuthToken } from '../models/models';
 import { Router } from '@angular/router';
 import { AuthService } from './authentication.service';
 import { ProjectsService } from './projects.service';
 import { EnvService } from '../services/env.service';
+import { MapillaryUser } from '../models/streetview';
 
 @Injectable({
   providedIn: 'root'
@@ -26,34 +27,25 @@ export class StreetviewAuthenticationService {
     this.projectsService.activeProject.subscribe(p => this._projectId = p ? p.id : null);
   }
 
-  public setRemoteToken(service: string, projectId?: number, username?: string) {
-    const projId = projectId ? projectId : this._projectId;
-    const uname = username ? username : this._username;
+  public setRemoteToken(service: string): void {
     const token = JSON.parse(this.getLocalToken(service)).token;
-
     const payload = {token};
 
-    this.http.post<any>(this.envService.apiUrl + `/projects/${projId}/users/${uname}/streetview/${service}`, payload).subscribe(resp => {
-      console.log(resp);
-    });
+    this.http.post(this.envService.apiUrl + `/streetview/${service}/token/`, payload).subscribe();
   }
 
-  private deleteRemoteToken(service: string) {
-    this.http.delete<any>(this.envService.apiUrl + `/projects/${this._projectId}/users/${this._username}/streetview/${service}`);
-  }
-
-  private updateRemoteToken(service: string) {
-    const token = this.getLocalToken(service);
-    const payload = {token};
-    this.http.put<any>(this.envService.apiUrl + `/projects/${this._projectId}/users/${this._username}/streetview/${service}`, payload);
+  private deleteRemoteToken(service: string): void {
+    this.http.delete<any>(this.envService.apiUrl + `/streetview/${service}/token/`).subscribe();
   }
 
   public isLoggedIn(service: string) {
     const userToken: AuthToken = JSON.parse(this.getLocalToken(service));
     let notExpired = true;
-    if (userToken && userToken.expires instanceof Date)
-      if (userToken.isExpired())
+    if (userToken && userToken.expires instanceof Date) {
+      if (userToken.isExpired()) {
         notExpired = false;
+      }
+    }
 
     return userToken && notExpired;
   }
@@ -69,6 +61,7 @@ export class StreetviewAuthenticationService {
 
   private streetviewTokenRequest(service: string): void {
     const mapillaryScope = 'user:email+user:read+user:write+public:write+public:upload+private:read+private:write+private:upload';
+    // tslint:disable-next-line:max-line-length
     const googleScope = 'https://www.googleapis.com/auth/streetviewpublish+https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile';
     const mapillaryAuthUrl = 'https://www.mapillary.com/connect';
     const googleAuthUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
@@ -80,7 +73,7 @@ export class StreetviewAuthenticationService {
       username: this._username
     });
 
-    const callback = this.envService.rootUrl + this.envService.baseHref + 'streetview/callback';
+    const callback = location.origin + this.envService.baseHref + 'streetview/callback';
     let url = '';
 
     if (service === 'google') {
@@ -102,11 +95,11 @@ export class StreetviewAuthenticationService {
     window.location.href = url;
   }
 
-  private setGoogleToken(code: string, projectId: number, username: string) {
+  private setGoogleToken(code: string) {
     const googleTokenUrl = 'https://oauth2.googleapis.com/token';
 
     const payload = new FormData();
-    const callback = this.envService.rootUrl + this.envService.baseHref + 'streetview/callback';
+    const callback = location.origin + this.envService.baseHref + 'streetview/callback';
 
     payload.append('code', code);
     payload.append('grant_type', 'authorization_code');
@@ -115,31 +108,31 @@ export class StreetviewAuthenticationService {
     payload.append('redirect_uri', callback);
 
     this.http.post<any>(googleTokenUrl, payload)
-      .subscribe( (resp ) => {
+      .subscribe((resp) => {
         const token = {
           access_token: resp.access_token,
           expiration_date: resp.expiration_date
         };
         this.setLocalToken('google', token);
-        this.setRemoteToken('google', projectId, username);
+        this.setRemoteToken('google');
       });
   }
 
-  public setStreetviewToken(projectId: number, username: string, service: string, authStr: string) {
+  public setStreetviewToken(service: string, authStr: string) {
     if (service === 'google') {
-      this.setGoogleToken(authStr, projectId, username);
+      this.setGoogleToken(authStr);
     } else {
-      this.setMapillaryToken(authStr, projectId, username);
+      this.setMapillaryToken(authStr);
       this.setMapillaryUserKey();
     }
   }
 
-  private setMapillaryToken(accessToken: string, projectId: number, username: string) {
+  private setMapillaryToken(accessToken: string) {
     const token = {
       access_token: accessToken
     };
     this.setLocalToken('mapillary', token);
-    this.setRemoteToken('mapillary', projectId, username);
+    this.setRemoteToken('mapillary');
   }
 
   private deleteLocalToken(service: string) {
@@ -175,9 +168,9 @@ export class StreetviewAuthenticationService {
 
   public setMapillaryUserKey(): any {
     const params = new HttpParams()
-      .set('client_id', this.envService.mapillaryClientId)
-    return this.http.get(this.envService.mapillaryApiUrl + `/me/`, { params })
-      .subscribe((resp: any) => {
+      .set('client_id', this.envService.mapillaryClientId);
+    return this.http.get<MapillaryUser>(this.envService.mapillaryApiUrl + `/me/`, { params })
+      .subscribe((resp: MapillaryUser) => {
         localStorage.setItem(this.MAPILLARY_USER_KEY, resp.key);
         console.log(resp);
       }, error => {
@@ -191,19 +184,5 @@ export class StreetviewAuthenticationService {
 
   public getMapillaryUserKey(): any {
     localStorage.getItem(this.MAPILLARY_USER_KEY);
-  }
-
-  // NOTE: In case user revokes access
-  private testGetMapillaryUser(service: string): void {
-    const params = new HttpParams()
-      .set('client_id', this.envService.mapillaryClientId);
-
-    this.http.get(this.envService.mapillaryApiUrl + `/me/`, { params })
-      .subscribe(resp => {
-        return;
-      }, error => {
-        this.deleteLocalToken(service);
-        this.streetviewTokenRequest(service);
-      });
   }
 }
