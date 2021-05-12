@@ -49,7 +49,7 @@ export class ControlBarComponent implements OnInit, OnDestroy {
     this.subscription.add(this.projectsService.activeProject.subscribe(next => {
       this.activeProject = next;
       if (this.activeProject) {
-        this.geoDataService.getDataForProject(next.id);
+        this.geoDataService.getDataForProject(next.id, this.isPublicView);
       } else {
         this.geoDataService.clearData();
       }
@@ -58,7 +58,7 @@ export class ControlBarComponent implements OnInit, OnDestroy {
     this.subscription.add(this.notificationsService.notifications.subscribe(next => {
       const hasSuccessNotification = next.some(note => note.status === 'success');
       if (hasSuccessNotification) {
-        this.geoDataService.getDataForProject(this.activeProject.id);
+        this.geoDataService.getDataForProject(this.activeProject.id, false);
       }
     }));
 
