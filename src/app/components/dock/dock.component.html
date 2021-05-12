@@ -10,7 +10,7 @@
         </div>
       </button>
     </div>
-    <div class="dock-button" [ngClass]="{'active': panelsDisplay.pointClouds}">
+    <div class="dock-button" [ngClass]="{'active': panelsDisplay.pointClouds}" *ngIf="!isPublicView">
       <button (click)="showPanel('pointClouds')"  [disabled]="!activeProject">
         <div>
           <img class="dock-button-icon" src="assets/point-clouds.png" width="32px">
@@ -20,7 +20,7 @@
         </div>
       </button>
     </div>
-    <div class="dock-button" [ngClass]="{'active':  panelsDisplay.layers}">
+    <div class="dock-button" [ngClass]="{'active':  panelsDisplay.layers}" *ngIf="!isPublicView">
       <button (click)="showPanel('layers')"  [disabled]="!activeProject">
         <div>
           <img class="dock-button-icon" src="assets/layers.png" width="32px">
@@ -56,28 +56,20 @@
           <img class="dock-button-icon" src="assets/users-solid.png" width="32px">
         </div>
         <div class="dock-button-label">
-          <span>Manage</span>
+          <span *ngIf="!isPublicView">Manage</span>
+          <span *ngIf="isPublicView">Info</span>
         </div>
       </button>
     </div>
-
-    <!--    <div class="dock-button" (click)="showPanel('settings')" [ngClass]="{'active': panelsDisplay.settings}">-->
-    <!--      <div>-->
-    <!--        <img class="dock-button-icon" src="assets/settings.png" width="32px">-->
-    <!--      </div>-->
-    <!--      <div class="dock-button-label">-->
-    <!--        <span>Settings</span>-->
-    <!--      </div>-->
-    <!--    </div>-->
   </div>
   <div class="cell auto dock-panel">
-    <app-assets-panel *ngIf="panelsDisplay.assets" ></app-assets-panel>
+    <app-assets-panel *ngIf="panelsDisplay.assets" [isPublicView]=isPublicView></app-assets-panel>
     <app-layers-panel *ngIf="panelsDisplay.layers" ></app-layers-panel>
     <app-filters-panel *ngIf="panelsDisplay.filters" ></app-filters-panel>
     <app-measure-panel *ngIf="panelsDisplay.measure" ></app-measure-panel>
     <app-settings-panel *ngIf="panelsDisplay.settings" ></app-settings-panel>
     <app-point-clouds-panel *ngIf="panelsDisplay.pointClouds"></app-point-clouds-panel>
-    <app-streetview-panel *ngIf="panelsDisplay.streetview"></app-streetview-panel>
-    <app-users-panel *ngIf="panelsDisplay.users"></app-users-panel>
+    <app-users-panel *ngIf="panelsDisplay.users && !isPublicView"></app-users-panel>
+    <app-public-map-info-panel *ngIf="panelsDisplay.users && isPublicView"></app-public-map-info-panel>
   </div>
 </div>

@@ -1,14 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CallbackComponent } from './callback.component';
-import {AuthService} from "../../services/authentication.service";
-import {GeoDataService} from "../../services/geo-data.service";
+import {AuthService} from '../../services/authentication.service';
 import {ActivatedRoute, Router} from "@angular/router";
-import {Test} from "tslint";
 
 class MockAuth {
   setToken(){}
-  getUserInfo(){}
 }
 class MockRouter {
   navigate(){}
