@@ -113,7 +113,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
 
       if (this.mapillarySequences.getBounds().getNorthEast()) {
-        this.map.setView(this.mapillarySequences.getBounds().getNorthEast(), 15);
+        this.map.fitBounds(this.mapillarySequences.getBounds());
       }
     }));
 
