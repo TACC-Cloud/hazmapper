@@ -42,7 +42,7 @@ export class ControlBarComponent implements OnInit, OnDestroy {
         this.loadingData = (loadingOverlay || loadingPointCloud || loadingFeature);
       }));
 
-    this.subscription.add(this.streetviewService.streetviewerOpen.subscribe((next: boolean) => {
+    this.subscription.add(this.streetviewService.streetviewerOpen$.subscribe((next: boolean) => {
       this.streetviewerOpen = next;
     }));
 
@@ -68,7 +68,7 @@ export class ControlBarComponent implements OnInit, OnDestroy {
   }
 
   closeStreetview() {
-    this.streetviewService.streetviewerOpener = false;
+    this.streetviewService.streetviewerOpen = false;
   }
 
   ngOnDestroy() {

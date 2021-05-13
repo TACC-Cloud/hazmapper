@@ -38,7 +38,7 @@ export class StreetviewService {
   private _nextPage: BehaviorSubject<string> = new BehaviorSubject('');
   public nextPage: Observable<string> = this._nextPage.asObservable();
   private _streetviewerOpen: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  public streetviewerOpen: Observable<boolean> = this._streetviewerOpen.asObservable();
+  public streetviewerOpen$: Observable<boolean> = this._streetviewerOpen.asObservable();
 
   constructor(private http: HttpClient,
               private notificationsService: NotificationsService,
@@ -334,7 +334,7 @@ export class StreetviewService {
     });
   }
 
-  public set streetviewerOpener(open: boolean) {
+  public set streetviewerOpen(open: boolean) {
     this._streetviewerOpen.next(open);
   }
 

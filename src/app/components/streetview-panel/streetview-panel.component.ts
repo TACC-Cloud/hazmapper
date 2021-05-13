@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-foundation';
+import { IProgressNotification } from 'src/app/models/notification';
+import { NotificationsService } from '../../services/notifications.service';
 import { Project } from '../../models/models';
 import { StreetviewService } from '../../services/streetview.service';
 import { StreetviewAuthenticationService } from 'src/app/services/streetview-authentication.service';
@@ -16,9 +18,12 @@ export class StreetviewPanelComponent implements OnInit {
 
   private _activeProjectId: number;
   private username: string;
+  private publishingStreetview = false;
+  private progressNotifications: Array<IProgressNotification> = [];
 
   constructor(private bsModalService: BsModalService,
               private streetviewService: StreetviewService,
+              private notificationsService: NotificationsService,
               private streetviewAuthenticationService: StreetviewAuthenticationService,
              ) { }
 
@@ -26,6 +31,11 @@ export class StreetviewPanelComponent implements OnInit {
     if (this.streetviewAuthenticationService.isLoggedIn('mapillary')) {
       this.streetviewAuthenticationService.setRemoteToken('mapillary');
     }
+
+    this.notificationsService.progressNotifications.subscribe((next: Array<IProgressNotification>) => {
+      this.progressNotifications = next;
+      this.publishingStreetview = (next.length > 0)
+    });
   }
 
   openStreetviewPublishModal() {

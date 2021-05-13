@@ -60,7 +60,7 @@ export class MapComponent implements OnInit, OnDestroy {
       maxZoom: 19
     });
 
-    this.subscription.add(this.streetviewService.streetviewerOpen.subscribe((next: boolean) => {
+    this.subscription.add(this.streetviewService.streetviewerOpen$.subscribe((next: boolean) => {
       if (!next && this.mapillaryViewer) {
         this.mapillaryStreetview = false;
         this.mapillaryViewer.remove();
@@ -254,7 +254,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   openStreetview(latlng: LatLng) {
-    this.streetviewService.streetviewerOpener = true;
+    this.streetviewService.streetviewerOpen = true;
     this.mapillaryStreetview = true;
     setTimeout(() => {
       if (this.mapillaryViewer && this.mapillaryStreetview) {
