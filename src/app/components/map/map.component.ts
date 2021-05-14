@@ -298,6 +298,14 @@ export class MapComponent implements OnInit, OnDestroy {
     }
   }
 
+  closeStreetview() {
+    if (this.mapillaryViewer) {
+      this.mapillaryStreetview = false;
+      this.mapillaryViewer.remove();
+      this.mapWidth = 100;
+    }
+  }
+
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }

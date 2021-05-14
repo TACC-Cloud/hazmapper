@@ -2,7 +2,6 @@ import {Component, OnInit, OnDestroy, Input} from '@angular/core';
 import { ProjectsService } from '../../services/projects.service';
 import { Project } from '../../models/models';
 import { GeoDataService } from '../../services/geo-data.service';
-import { StreetviewService } from '../../services/streetview.service';
 import { LatLng } from 'leaflet';
 import { skip } from 'rxjs/operators';
 import { combineLatest, Subscription } from 'rxjs';
@@ -22,11 +21,9 @@ export class ControlBarComponent implements OnInit, OnDestroy {
   private loadingActiveProject = true;
   private loadingActiveProjectFailed = false;
   private loadingData = false;
-  private streetviewerOpen = false;
   constructor(private projectsService: ProjectsService,
               private geoDataService: GeoDataService,
               private notificationsService: NotificationsService,
-              private streetviewService: StreetviewService,
               ) { }
 
   ngOnInit() {
@@ -41,10 +38,6 @@ export class ControlBarComponent implements OnInit, OnDestroy {
         // They are running
         this.loadingData = (loadingOverlay || loadingPointCloud || loadingFeature);
       }));
-
-    this.subscription.add(this.streetviewService.streetviewerOpen$.subscribe((next: boolean) => {
-      this.streetviewerOpen = next;
-    }));
 
     this.subscription.add(this.projectsService.activeProject.subscribe(next => {
       this.activeProject = next;
@@ -65,10 +58,6 @@ export class ControlBarComponent implements OnInit, OnDestroy {
     this.subscription.add(this.geoDataService.mapMouseLocation.pipe(skip(1)).subscribe( (next) => {
       this.mapMouseLocation = next;
     }));
-  }
-
-  closeStreetview() {
-    this.streetviewService.streetviewerOpen = false;
   }
 
   ngOnDestroy() {

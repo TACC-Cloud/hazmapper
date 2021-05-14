@@ -37,8 +37,6 @@ export class StreetviewService {
   public mapillaryImages: Observable<FeatureCollection> = this._mapillaryImages.asObservable();
   private _nextPage: BehaviorSubject<string> = new BehaviorSubject('');
   public nextPage: Observable<string> = this._nextPage.asObservable();
-  private _streetviewerOpen: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  public streetviewerOpen$: Observable<boolean> = this._streetviewerOpen.asObservable();
 
   constructor(private http: HttpClient,
               private notificationsService: NotificationsService,
@@ -332,10 +330,6 @@ export class StreetviewService {
       console.error(error);
       this.notificationsService.showErrorToast('Failed to abort streetview upload task!');
     });
-  }
-
-  public set streetviewerOpen(open: boolean) {
-    this._streetviewerOpen.next(open);
   }
 
 }
