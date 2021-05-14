@@ -60,14 +60,6 @@ export class MapComponent implements OnInit, OnDestroy {
       maxZoom: 19
     });
 
-    this.subscription.add(this.streetviewService.streetviewerOpen$.subscribe((next: boolean) => {
-      if (!next && this.mapillaryViewer) {
-        this.mapillaryStreetview = false;
-        this.mapillaryViewer.remove();
-        this.mapWidth = 100;
-      }
-    }));
-
     this.subscription.add(this.geoDataService.tileServers.subscribe((next: Array<TileServer>) => {
       // remove any layers that no longer exist from tileServerLayers
       const currentTileLayerIds = new Set<number>(next.map(l => l.id));
