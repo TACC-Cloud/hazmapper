@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Project } from '../../models/models';
 import {GeoDataService} from '../../services/geo-data.service';
 import {ProjectsService} from '../../services/projects.service';
-import {BsModalService} from 'ngx-foundation';
+import {BsModalRef, BsModalService} from 'ngx-foundation';
 import {ModalCreateProjectComponent} from '../modal-create-project/modal-create-project.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ModalService } from 'src/app/services/modal.service';
@@ -48,12 +48,15 @@ export class MainWelcomeComponent implements OnInit {
     this.projectsService.getProjects();
   }
 
-  routeToProject(projectId: number) {
-    this.router.navigate(['project', projectId], { relativeTo: this.route });
+  routeToProject(projectUUID: string) {
+    this.router.navigate(['project', projectUUID], { relativeTo: this.route });
   }
 
   openCreateProjectModal() {
-    this.bsModalService.show(ModalCreateProjectComponent);
+    const modal: BsModalRef = this.bsModalService.show(ModalCreateProjectComponent);
+    modal.content.onClose.subscribe( (project: Project) => {
+      this.routeToProject(project.uuid);
+    });
   }
 
   openDeleteProjectModal(p: Project) {

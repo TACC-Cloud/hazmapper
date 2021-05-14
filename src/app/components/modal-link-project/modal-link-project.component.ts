@@ -48,6 +48,11 @@ export class ModalLinkProjectComponent implements OnInit {
 
   onSystemSelect(system: any) {
     this.selectedSystem = system;
+    if (system.id.includes('project')) {
+      this.linkProject = true;
+    } else {
+      this.linkProject = false;
+    }
   }
 
   setCurrentPath(path: string) {

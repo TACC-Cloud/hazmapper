@@ -6,6 +6,7 @@ import { Project } from '../../models/models';
 import {RemoteFile} from 'ng-tapis';
 import {RapidProjectRequest} from '../../models/rapid-project-request';
 import {ChangeDetectorRef } from '@angular/core';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-modal-create-project',
@@ -13,6 +14,8 @@ import {ChangeDetectorRef } from '@angular/core';
   styleUrls: ['./modal-create-project.component.styl']
 })
 export class ModalCreateProjectComponent implements OnInit {
+
+  public readonly onClose: Subject<any> = new Subject<any>();
 
   projCreateForm: FormGroup;
   rapidFolder: RemoteFile;
@@ -43,6 +46,7 @@ export class ModalCreateProjectComponent implements OnInit {
   }
 
   close(project: Project) {
+    this.onClose.next(project);
     this.bsModalRef.hide();
   }
 
@@ -57,9 +61,11 @@ export class ModalCreateProjectComponent implements OnInit {
   onSystemSelect(system: any) {
     this.selectedSystem = system;
     if (system.id.includes('project')) {
-      this.projCreateForm.get('linkProject').enable()
+      this.projCreateForm.get('linkProject').enable();
+      this.projCreateForm.get('linkProject').setValue(true);
     } else {
-      this.projCreateForm.get('linkProject').disable()
+      this.projCreateForm.get('linkProject').disable();
+      this.projCreateForm.get('linkProject').setValue(false);
     }
   }
 

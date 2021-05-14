@@ -13,7 +13,7 @@
 
             <div class="link-project">
               <label>
-                <span style="padding-right: 10px">Export Map</span>
+                <span style="padding-right: 10px">Export Map Link</span>
                 <input formControlName="exportMap" type="checkbox">
               </label>
 
@@ -64,7 +64,6 @@
           [onlyFolder]="true"
           [single]="true"
           [heading]="'Select a RApp Folder'"
-          [allowedExtensions]="allowedExtensions"
           [helpText]="'All files inside this folder (that can be) will be imported. ' +
            'This folder will also be periodically scraped for new data.' +
            'A project link will be created with the project of this folder.'"
