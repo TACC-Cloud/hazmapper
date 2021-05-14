@@ -3,9 +3,12 @@ import { Project } from '../../models/models';
 import {GeoDataService} from '../../services/geo-data.service';
 import {ProjectsService} from '../../services/projects.service';
 import {BsModalRef, BsModalService} from 'ngx-foundation';
+import {AgaveSystemsService} from '../../services/agave-systems.service';
 import {ModalCreateProjectComponent} from '../modal-create-project/modal-create-project.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ModalService } from 'src/app/services/modal.service';
+import { combineLatest } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-main-welcome',
@@ -17,10 +20,10 @@ export class MainWelcomeComponent implements OnInit {
   release_url = 'https://github.com/TACC-cloud/hazmapper';
   guide_url = 'https://www.designsafe-ci.org/rw/user-guide/workspace/hazmapper/';
 
-  spinner: boolean;
+  spinner: boolean = true;
   connected: boolean;
 
-  public projects: Project[] = [];
+  public projects = [];
   public activeProject: Project;
 
   constructor(
@@ -29,23 +32,36 @@ export class MainWelcomeComponent implements OnInit {
     private geoDataService: GeoDataService,
     private projectsService: ProjectsService,
     private bsModalService: BsModalService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private agaveSystemsService: AgaveSystemsService
   ) { }
 
   ngOnInit() {
-    this.projectsService.loadingProjects.subscribe((isLoading) => {
-      this.spinner = isLoading;
-    });
+
+    this.projectsService.getProjects();
+    this.agaveSystemsService.getDSProjectId();
 
     this.projectsService.loadingProjectsFailed.subscribe((connected) => {
       this.connected = connected;
     });
 
-    this.projectsService.projects.subscribe( (projects) => {
-      this.projects = projects;
-    });
+    combineLatest(
+      this.projectsService.projects,
+      this.agaveSystemsService.dsProjects).pipe(take(1))
+        .subscribe(([projects, dsProjects]) => {
+          if (projects.length > 0) {
+            this.projects = dsProjects.length > 0
+              ? projects.map(p => {
+                p.dsName = dsProjects.find(dp => dp.id === p.system_id).dsId
+                return p;
+              })
+              : projects;
+            this.spinner = false;
+          } else {
+            this.spinner = true;
+          }
+        });
 
-    this.projectsService.getProjects();
   }
 
   routeToProject(projectUUID: string) {

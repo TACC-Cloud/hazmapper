@@ -58,11 +58,16 @@
                   </div>
 
                   <div class="list-column">
-                    <ng-container *ngIf="p.system_name && p.system_id.includes('project')" class="list-column link-hover">
+                    <ng-container *ngIf="p.system_name && p.system_id.includes('project'); else noSystem" class="list-column link-hover">
                       <a [href]="'https://www.designsafe-ci.org/data/browser/projects/' + p.system_id + '/'">
-                        <span>{{p.system_name}}</span>
+                        <span style="display:inline-block; text-overflow:ellipsis; overflow:hidden; width:175px; white-space: nowrap;">
+                          {{p.dsName}} | {{p.system_name}}
+                        </span>
                       </a>
                     </ng-container>
+                    <ng-template #noSystem>
+                      ------
+                    </ng-template>
                   </div>
                   <div class="list-column" style="text-align: right">
                     <button class="project-list-item-button" (click)="routeToProject(p.uuid)">

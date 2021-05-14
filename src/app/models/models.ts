@@ -47,6 +47,7 @@ export interface Project {
   description: string;
   id?: number;
   name: string;
+  dsName?: string;
   uuid?: string;
   public?: boolean;
   system_name?: string;

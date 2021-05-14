@@ -16,6 +16,8 @@ export class AgaveSystemsService {
   public readonly systems: Observable<SystemSummary[]> = this._systems.asObservable();
   private _projects: ReplaySubject<SystemSummary[]> = new ReplaySubject<SystemSummary[]>(1);
   public readonly projects: Observable<SystemSummary[]> = this._projects.asObservable();
+  private _dsProjects: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  public readonly dsProjects: Observable<any[]> = this._dsProjects.asObservable();
   constructor(private tapis: ApiService, private envService: EnvService, private http: HttpClient) { }
 
   list() {
@@ -38,5 +40,21 @@ export class AgaveSystemsService {
       }, error => {
         this._projects.next(null);
       });
+  }
+
+  getDSProjectId() {
+    this.http.get<DesignSafeProjectCollection>(this.envService.designSafeUrl + `/projects/v2/`)
+      .subscribe( resp => {
+        const projectSystems = resp.projects.map((project) => {
+          return {
+            id: 'project-' + project.uuid,
+            dsId: project.value.projectId
+          };
+        });
+        this._dsProjects.next(projectSystems);
+      }, error => {
+        this._dsProjects.next(null);
+      });
+
   }
 }
