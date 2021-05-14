@@ -21,7 +21,7 @@ export class ModalLinkProjectComponent implements OnInit {
   @Input() allowEmptyFiles: false;
   selectedFiles: Array<RemoteFile> = [];
   selectedSystem: any;
-  fileSuffix: string = '';
+  fileName: string = '';
   activeProject: Project;
   linkProject: boolean = false;
   currentPath: string;
@@ -59,7 +59,7 @@ export class ModalLinkProjectComponent implements OnInit {
       fileList: this.selectedFiles,
       linkProject: this.linkProject,
       system: this.selectedSystem,
-      fileSuffix: this.fileSuffix,
+      fileName: this.fileName,
       currentPath: this.currentPath
     });
     this.modalRef.hide();

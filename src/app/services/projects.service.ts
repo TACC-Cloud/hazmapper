@@ -99,11 +99,11 @@ export class ProjectsService {
       );
   }
 
-  exportProject(projectId: number, system_id: string, path: string = '/', file_suffix: string = '') {
+  exportProject(projectId: number, system_id: string, path: string = '/', file_name: string = '') {
     const payload = {
       system_id,
       path,
-      file_suffix
+      file_name
     };
     this.http.put<any>(this.envService.apiUrl + `/projects/${projectId}/export/`, payload).subscribe(current_project => {
       this.notificationsService.showSuccessToast(`Create file ${system_id}/${path}/${current_project.uuid}.hazmapper`)
@@ -114,11 +114,11 @@ export class ProjectsService {
     });
   }
 
-  linkExportProject(projectId: number, system_id: string, path: string = '/', file_suffix: string = '') {
+  linkExportProject(projectId: number, system_id: string, path: string = '/', file_name: string = '') {
     const data = {
       system_id,
       path,
-      file_suffix
+      file_name
     };
 
     this.http.put<Project>(this.envService.apiUrl + `/projects/${projectId}/link/`, data).subscribe(

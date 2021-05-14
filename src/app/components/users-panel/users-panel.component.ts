@@ -82,12 +82,12 @@ export class UsersPanelComponent implements OnInit {
         this.projectsService.linkExportProject(this.activeProject.id,
                                                next.system.id,
                                                path,
-                                               next.fileSuffix)
+                                               next.fileName)
       } else {
         this.projectsService.exportProject(this.activeProject.id,
                                            next.system.id,
                                            path,
-                                           next.fileSuffix)
+                                           next.fileName)
       }
     });
   }

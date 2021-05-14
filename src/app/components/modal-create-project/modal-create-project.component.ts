@@ -19,7 +19,7 @@ export class ModalCreateProjectComponent implements OnInit {
   submitting: boolean;
   errorMessage = '';
   currentPath: string;
-  fileSuffix: string = '';
+  fileName: string = '';
   selectedFiles: Array<RemoteFile> = [];
   selectedSystem: any;
 
@@ -34,7 +34,7 @@ export class ModalCreateProjectComponent implements OnInit {
       description: new FormControl(''),
       exportMap: new FormControl(false),
       linkProject: new FormControl(false),
-      fileSuffix: new FormControl('')
+      fileName: new FormControl('')
     });
   }
 
@@ -86,12 +86,12 @@ export class ModalCreateProjectComponent implements OnInit {
           this.projectsService.linkExportProject(project.id,
                                                  systemId,
                                                  path,
-                                                 this.projCreateForm.get('fileSuffix').value);
+                                                 this.projCreateForm.get('fileName').value);
         } else {
           this.projectsService.exportProject(project.id,
                                              systemId,
                                              path,
-                                             this.projCreateForm.get('fileSuffix').value);
+                                             this.projCreateForm.get('fileName').value);
         }
       }
       this.close(project);
