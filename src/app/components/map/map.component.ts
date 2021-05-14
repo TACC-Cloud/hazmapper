@@ -246,7 +246,6 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   openStreetview(latlng: LatLng) {
-    this.streetviewService.streetviewerOpen = true;
     this.mapillaryStreetview = true;
     setTimeout(() => {
       if (this.mapillaryViewer && this.mapillaryStreetview) {
