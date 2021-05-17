@@ -35,10 +35,12 @@
 
               <div style="padding: 20px 0px">
                 <label> Custom file name:
-                  <input type="text"
-                         formControlName="fileName">
+                  <div style="display: flex; flex-direction: row">
+                    <input type="text" formControlName="fileName">
+                    <span style="line-height: 1.5; font-size: 1rem; margin: 5px">.hazmapper</span>
+                  </div>
                 </label>
-                <small><em>If name is not given, file will be saved as the map uuid.</em></small>
+                <small><em>If a name is not given, file will be saved as the map uuid.</em></small>
               </div>
 
               <div class="confirm-checkbox">

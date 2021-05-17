@@ -35,6 +35,7 @@ export class ModalLinkProjectComponent implements OnInit {
   ngOnInit() {
     this.projectsService.activeProject.subscribe( (next) => {
       this.activeProject = next;
+      this.fileName = next.uuid;
     });
   }
 
