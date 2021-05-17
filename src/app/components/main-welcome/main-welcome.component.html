@@ -10,13 +10,13 @@
     <div class="grid-x align-center">
       <div id=welcome-projects-list class="grid-y align-center">
         <div class="welcome-project-header grid-x">
-          <div class="list-column">
+          <div class="map-column">
             <b>Maps</b>
           </div>
-          <div class="list-column">
+          <div class="project-column">
             <b>Linked Project</b>
           </div>
-          <div class="list-column" style="text-align: right">
+          <div class="button-column" style="text-align: right">
             <div id="new-map" (click)="openCreateProjectModal()">
               <i class="fas fa-plus"></i>
               Create a New Map
@@ -53,23 +53,23 @@
                                  'grid-x': true
                                  }">
 
-                  <div class="list-column">
+                  <div class="map-column">
                     {{p.name}}
                   </div>
 
-                  <div class="list-column">
+                  <div class="project-column">
                     <ng-container *ngIf="p.system_name && p.system_id.includes('project'); else noSystem" class="list-column link-hover">
                       <a [href]="'https://www.designsafe-ci.org/data/browser/projects/' + p.system_id + '/'">
-                        <span style="display:inline-block; text-overflow:ellipsis; overflow:hidden; width:175px; white-space: nowrap;">
+                        <span class="project-name">
                           {{p.dsName}} | {{p.system_name}}
                         </span>
                       </a>
                     </ng-container>
                     <ng-template #noSystem>
-                      ------
+                      ----------
                     </ng-template>
                   </div>
-                  <div class="list-column" style="text-align: right">
+                  <div class="button-column" style="text-align: right">
                     <button class="project-list-item-button" (click)="routeToProject(p.uuid)">
                       <i class="fas fa-folder-open"></i>
                     </button>
