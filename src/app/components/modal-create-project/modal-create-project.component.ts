@@ -88,17 +88,11 @@ export class ModalCreateProjectComponent implements OnInit {
       if (this.projCreateForm.get('exportMapLink').value) {
         const path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path : this.currentPath;
         const systemId = this.selectedSystem.id;
-        if (this.projCreateForm.get('linkProject').value) {
-          this.projectsService.linkExportProject(project.id,
-                                                 systemId,
-                                                 path,
-                                                 this.projCreateForm.get('fileName').value);
-        } else {
-          this.projectsService.exportProject(project.id,
-                                             systemId,
-                                             path,
-                                             this.projCreateForm.get('fileName').value);
-        }
+        this.projectsService.exportProject(project.id,
+                                           systemId,
+                                           path,
+                                           this.projCreateForm.get('linkProject').value,
+                                           this.projCreateForm.get('fileName').value)
       }
       this.close(project);
     }, err => {

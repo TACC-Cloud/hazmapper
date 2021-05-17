@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Project } from '../../models/models';
-import {GeoDataService} from '../../services/geo-data.service';
 import {ProjectsService} from '../../services/projects.service';
 import {BsModalRef, BsModalService} from 'ngx-foundation';
 import {AgaveSystemsService} from '../../services/agave-systems.service';
@@ -29,7 +28,6 @@ export class MainWelcomeComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private geoDataService: GeoDataService,
     private projectsService: ProjectsService,
     private bsModalService: BsModalService,
     private modalService: ModalService,
@@ -50,7 +48,6 @@ export class MainWelcomeComponent implements OnInit {
       this.agaveSystemsService.dsProjects).pipe(take(1))
         .subscribe(([projects, dsProjects]) => {
           if (dsProjects) {
-            console.log(dsProjects)
             if (projects.length > 0) {
               this.projects = dsProjects.length > 0
                 ? projects.map(p => {
