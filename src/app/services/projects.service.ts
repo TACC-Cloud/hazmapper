@@ -93,11 +93,13 @@ export class ProjectsService {
       );
   }
 
-  exportProject(projectId: number,
+  exportProject(project: Project,
                 system_id: string,
                 path: string = '/',
                 link: boolean,
                 file_name: string = '') {
+    file_name = file_name === '' ? project.uuid : file_name;
+
     const payload = {
       system_id,
       path,
@@ -105,13 +107,14 @@ export class ProjectsService {
       link
     };
 
-    this.http.put<any>(this.envService.apiUrl + `/projects/${projectId}/export/`, payload)
+    this.http.put<any>(this.envService.apiUrl + `/projects/${project.id}/export/`, payload)
       .subscribe(currentProject => {
-        this.notificationsService.showSuccessToast(`Create file ${system_id}/${path}/${currentProject.uuid}.hazmapper`)
-        this._projects.next([...this._projects.value.filter((p) => p.id != projectId),
+        this.notificationsService.showSuccessToast(`Create file ${system_id}/${path}/${file_name}.hazmapper`)
+        this._projects.next([...this._projects.value.filter((p) => p.id != project.id),
                              currentProject]);
         this.setActiveProject(currentProject);
       }, error => {
+        this.notificationsService.showErrorToast(`Failed to create file ${system_id}/${path}/${file_name}.hazmapper`)
         console.log(error);
       });
   }

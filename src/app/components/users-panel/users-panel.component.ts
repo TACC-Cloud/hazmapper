@@ -80,7 +80,7 @@ export class UsersPanelComponent implements OnInit {
     const modal: BsModalRef = this.bsModalService.show(ModalLinkProjectComponent, { initialState });
     modal.content.onClose.subscribe( (next) => {
       const path = next.fileList.length > 0 ? next.fileList[0].path : next.currentPath;
-      this.projectsService.exportProject(this.activeProject.id,
+      this.projectsService.exportProject(this.activeProject,
                                          next.system.id,
                                          path,
                                          next.system.id.includes('project') && next.linkProject,
