@@ -99,10 +99,12 @@ export class ProjectsService {
       path,
       file_name
     };
-    this.http.put<any>(this.envService.apiUrl + `/projects/${projectId}/export/`, payload).subscribe(current_project => {
-      this.notificationsService.showSuccessToast(`Create file ${system_id}/${path}/${current_project.uuid}.hazmapper`)
+    this.http.put<any>(this.envService.apiUrl + `/projects/${projectId}/export/`, payload)
+      .subscribe(currentProject => {
+      this.notificationsService.showSuccessToast(`Create file ${system_id}/${path}/${currentProject.uuid}.hazmapper`)
       this._projects.next([...this._projects.value.filter((p) => p.id != projectId),
-                           current_project]);
+                           currentProject]);
+      this.setActiveProject(currentProject);
     }, error => {
       console.log(error);
     });
@@ -116,10 +118,11 @@ export class ProjectsService {
     };
 
     this.http.put<Project>(this.envService.apiUrl + `/projects/${projectId}/link/`, data).subscribe(
-      resp => {
-        this.notificationsService.showSuccessToast(`Create file ${system_id}/${path}/${resp.uuid}.hazmapper`)
+      (currentProject: Project) => {
+        this.notificationsService.showSuccessToast(`Create file ${system_id}/${path}/${currentProject.uuid}.hazmapper`)
         this._projects.next([...this._projects.value.filter((p) => p.id != projectId),
-                             resp]);
+                             currentProject]);
+        this.setActiveProject(currentProject);
       }, error => {
         console.log(error);
       });

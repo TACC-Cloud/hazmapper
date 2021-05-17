@@ -49,19 +49,22 @@ export class MainWelcomeComponent implements OnInit {
       this.projectsService.projects,
       this.agaveSystemsService.dsProjects).pipe(take(1))
         .subscribe(([projects, dsProjects]) => {
-          if (projects.length > 0) {
-            this.projects = dsProjects.length > 0
-              ? projects.map(p => {
-                p.dsName = dsProjects.find(dp => dp.id === p.system_id).dsId
-                return p;
-              })
-              : projects;
-            this.spinner = false;
-          } else {
-            this.spinner = true;
+          if (dsProjects) {
+            console.log(dsProjects)
+            if (projects.length > 0) {
+              this.projects = dsProjects.length > 0
+                ? projects.map(p => {
+                  const pDir = dsProjects.find(dp => dp.id === p.system_id);
+                  p.dsName = pDir ? pDir.dsId : null;
+                  return p;
+                })
+                : projects;
+              this.spinner = false;
+            } else {
+              this.spinner = true;
+            }
           }
         });
-
   }
 
   routeToProject(projectUUID: string) {

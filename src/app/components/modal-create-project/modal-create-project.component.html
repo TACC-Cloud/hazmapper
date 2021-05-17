@@ -14,19 +14,19 @@
             <div class="link-project">
               <label>
                 <span style="padding-right: 10px">Export Map Link</span>
-                <input formControlName="exportMap" type="checkbox">
+                <input formControlName="exportMapLink" type="checkbox">
               </label>
 
             </div>
-            <div *ngIf="projCreateForm.get('exportMap').value">
+            <div *ngIf="projCreateForm.get('exportMapLink').value">
               <app-file-browser
                 [single]=true
                 [allowFolders]=true
                 [allowedExtensions]=[]
                 [onlyFolder]=true
                 [showPublicSystems]=false
-                [heading]="'Select Export Location'"
-                [helpText]="'If no folder is selected, the file will be exported to the root of the selected system.' +
+                [heading]="'Select Link Export Location'"
+                [helpText]="'If no folder is selected, the link file will be exported to the root of the selected system.' +
                          'If you select a project, you can link the current map to the project.'"
                 (selection)="onSelect($event)"
                 (currentPath)="setCurrentPath($event)"

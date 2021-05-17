@@ -35,7 +35,7 @@ export class ModalCreateProjectComponent implements OnInit {
     this.projCreateForm = new FormGroup( {
       name: new FormControl(''),
       description: new FormControl(''),
-      exportMap: new FormControl(false),
+      exportMapLink: new FormControl(false),
       linkProject: new FormControl(false),
       fileName: new FormControl('')
     });
@@ -85,7 +85,7 @@ export class ModalCreateProjectComponent implements OnInit {
     p.description = this.projCreateForm.get('description').value;
     p.name = this.projCreateForm.get('name').value;
     this.projectsService.create(p).subscribe( (project) => {
-      if (this.projCreateForm.get('exportMap').value) {
+      if (this.projCreateForm.get('exportMapLink').value) {
         const path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path : this.currentPath;
         const systemId = this.selectedSystem.id;
         if (this.projCreateForm.get('linkProject').value) {
