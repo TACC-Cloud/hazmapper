@@ -3,9 +3,6 @@ node_js:
     - "12"
 sudo: true
 
-services:
-    - docker
-
 addons:
     chrome: stable
 
@@ -13,10 +10,3 @@ before_script:
     - npm install
 script:
     - ng test --watch=false --browsers=ChromeHeadless --prod
-before_deploy:
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-deploy:
-    provider: script
-    script: make image && make deploy
-    on:
-        branch: master
