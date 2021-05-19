@@ -54,13 +54,13 @@
                                  }">
 
                   <div class="map-column">
-                    <span class="project-name">{{p.name}}</span>
+                    <span [tooltip]="p.name" class="project-name">{{p.name}}</span>
                   </div>
 
                   <div class="project-column">
                     <ng-container *ngIf="p.system_name && p.system_id.includes('project'); else noSystem" class="list-column link-hover">
-                      <a [href]="'https://www.designsafe-ci.org/data/browser/projects/' + p.system_id + '/'">
-                        <span class="project-name">
+                      <a [href]="'https://www.designsafe-ci.org/data/browser/projects/' + p.system_id.substr(8) + '/'">
+                        <span class="project-name" [tooltip]="p.system_name">
                           {{p.dsName}} | {{p.system_name}}
                         </span>
                       </a>

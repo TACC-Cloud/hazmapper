@@ -46,7 +46,7 @@
 
       <h6 id="property-title">Linked Project</h6>
       <div *ngIf="activeProject.system_name && activeProject.system_id.includes('project'); else noLink" style="margin-bottom: 20px">
-        <a [href]="'https://www.designsafe-ci.org/data/browser/projects/' + activeProject.system_id + '/'">
+        <a [href]="'https://www.designsafe-ci.org/data/browser/projects/' + activeProject.system_id.substr(8) + '/'">
           <span>
             {{activeProject.system_name}}
           </span>
