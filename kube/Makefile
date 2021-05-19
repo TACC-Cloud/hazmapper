@@ -32,6 +32,7 @@ create: checkforcontext checkfortag
 delete: checkforcontext
 	@echo "Deleting hazmapper deployment in '$(KUBE_CONTEXT)' context"
 	kubectl delete --context $(KUBE_CONTEXT) --ignore-not-found=true deployment hazmapper 
+	kubectl delete --context $(KUBE_CONTEXT) --ignore-not-found=true service hazmapper
 
 .PHONY: delete-staging
 delete-staging: KUBE_CONTEXT=geoapi-dev
