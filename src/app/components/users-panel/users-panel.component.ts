@@ -44,7 +44,7 @@ export class UsersPanelComponent implements OnInit {
         if (next.system_id) {
           if (next.system_id.includes('project')) {
             this.dsHref = dsUrl + 'projects/' +
-              next.system_id.substr(8) +
+              next.system_id.substr(8) + '/' +
               next.system_path + '/';
             if (next.system_name) {
               this.projectHref = dsUrl + 'projects/' +
