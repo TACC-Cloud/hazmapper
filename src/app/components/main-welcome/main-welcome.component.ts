@@ -56,10 +56,8 @@ export class MainWelcomeComponent implements OnInit {
                   return p;
                 })
                 : projects;
-              this.spinner = false;
-            } else {
-              this.spinner = true;
             }
+            this.spinner = false;
           }
         });
   }
