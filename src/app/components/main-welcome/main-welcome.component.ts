@@ -19,7 +19,7 @@ export class MainWelcomeComponent implements OnInit {
   release_url = 'https://github.com/TACC-cloud/hazmapper';
   guide_url = 'https://www.designsafe-ci.org/rw/user-guide/workspace/hazmapper/';
 
-  spinner: boolean = true;
+  spinner = true;
   connected: boolean;
 
   public projects = [];
