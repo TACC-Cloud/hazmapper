@@ -35,7 +35,6 @@ export class MainWelcomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
     this.projectsService.getProjects();
     this.agaveSystemsService.getDSProjectId();
 
@@ -45,8 +44,9 @@ export class MainWelcomeComponent implements OnInit {
 
     combineLatest(
       this.projectsService.projects,
-      this.agaveSystemsService.dsProjects).pipe(take(1))
+      this.agaveSystemsService.dsProjects)
         .subscribe(([projects, dsProjects]) => {
+          this.spinner = true;
           if (dsProjects) {
             if (projects.length > 0) {
               this.projects = dsProjects.length > 0
@@ -56,6 +56,8 @@ export class MainWelcomeComponent implements OnInit {
                   return p;
                 })
                 : projects;
+            } else {
+              this.projects = [];
             }
             this.spinner = false;
           }
