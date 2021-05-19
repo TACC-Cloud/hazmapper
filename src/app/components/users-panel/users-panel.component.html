@@ -74,19 +74,20 @@
       <div *ngIf="!activeProject.public" class="public-status-container">
         <span class="public-status-message">This map is private and can only be viewed by team members.</span>
         <span *ngIf="this.publicStatusChangingError" class="label alert">Unable to make map public.</span>
-        <button class="button hollow right" [disabled]="this.publicStatusChanging" (click)=updateMapPublicAccess(true)>
+        <button class="button hollow left" style="margin-top: 20px" [disabled]="this.publicStatusChanging" (click)=updateMapPublicAccess(true)>
           <i class="fas fa-globe"></i>  Make map public
         </button>
       </div>
 
+      <hr />
 
-      <div class="grid-x">
-      <button class="button hollow" (click)=openExportProjectModal()>
-        <i class="fas fa-save"></i>  Export map link
-      </button>
-      <button class="button warning alert hollow" (click)=deleteProject()>
-        <i class="fas fa-trash"></i>  Delete map
-      </button>
+      <div style="display: flex; flex-direction: column; justify-content: center">
+        <button class="button hollow" (click)=openExportProjectModal()>
+          <i class="fas fa-save"></i>  Export map link
+        </button>
+        <button class="button warning alert hollow" (click)=deleteProject()>
+          <i class="fas fa-trash"></i>  Delete map
+        </button>
       </div>
     </div>
   </div>
