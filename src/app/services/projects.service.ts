@@ -124,6 +124,9 @@ export class ProjectsService {
       .pipe(
         map( (proj) => {
           this._projects.next([proj, ...this._projects.value]);
+          defaultTileServers.forEach(ts => {
+            this.geoDataService.addTileServer(proj.id, ts, true);
+          });
           return proj;
         }),
        catchError( (err: any) =>  {
