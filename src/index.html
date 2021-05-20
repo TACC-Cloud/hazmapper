@@ -11,13 +11,25 @@
     gtag('config', 'UA-125525035-16');
   </script>
 
+
   <meta charset="utf-8">
   <title>HazMapper</title>
-  <base href="/">
-
+  <base id="base">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+  <script>
+    var hostname = window.location.hostname;
+    var pathname = window.location.pathname;
+
+    if (/^hazmapper.tacc.utexas.edu/.test(hostname) && pathname.startsWith('/staging')) {
+      document.getElementById('base').href = '/staging/';
+    } else if (/^hazmapper.tacc.utexas.edu/.test(hostname)) {
+      document.getElementById('base').href = '/hazmapper/';
+    } else {
+      document.getElementById('base').href = '/';
+    }
+  </script>
 </head>
 <body>
   <app-root></app-root>

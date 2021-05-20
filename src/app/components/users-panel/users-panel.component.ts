@@ -43,25 +43,23 @@ export class UsersPanelComponent implements OnInit {
 
     combineLatest([this.projectsService.activeProject,
                                          this.agaveSystemsService.projects])
-
       .subscribe(([activeProject, dsProjects]) => {
-    // this.projectsService.activeProject.subscribe( (next) => {
       if (activeProject) {
         this.activeProject = this.agaveSystemsService.getDSProjectInformation([activeProject], dsProjects)[0];
         const dsUrl = 'https://www.designsafe-ci.org/data/browser/';
         if (activeProject.system_id) {
           if (activeProject.system_id.includes('project')) {
             this.dsHref = dsUrl + 'projects/' +
-              activeProject.system_id.substr(8) +
-              activeProject.system_path + '/'
+              activeProject.system_id.substr(8) + '/' +
+              activeProject.system_path + '/';
             if (activeProject.ds_id) {
               this.projectHref = dsUrl + 'projects/' +
-                activeProject.system_id + '/'
+                activeProject.system_id.substr(8) + '/';
             }
           } else {
             this.dsHref = dsUrl + 'agave/' +
               activeProject.system_id +
-              activeProject.system_path + '/'
+              activeProject.system_path + '/';
           }
         }
       }

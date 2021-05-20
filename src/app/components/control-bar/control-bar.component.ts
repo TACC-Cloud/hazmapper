@@ -48,13 +48,11 @@ export class ControlBarComponent implements OnInit, OnDestroy {
         this.loadingData = (loadingOverlay || loadingPointCloud || loadingFeature);
       }));
 
-
     this.subscription.add(combineLatest([this.projectsService.activeProject,
                                          this.agaveSystemsService.projects])
       .subscribe(([activeProject, dsProjects]) => {
-        this.activeProject = activeProject;
-        if (this.activeProject) {
-          this.geoDataService.getDataForProject(activeProject.id);
+        if (activeProject) {
+          this.geoDataService.getDataForProject(activeProject.id, this.isPublicView);
           this.activeProject = this.agaveSystemsService.getDSProjectInformation([activeProject], dsProjects)[0];
         } else {
           this.geoDataService.clearData();
@@ -64,7 +62,7 @@ export class ControlBarComponent implements OnInit, OnDestroy {
     this.subscription.add(this.notificationsService.notifications.subscribe(next => {
       const hasSuccessNotification = next.some(note => note.status === 'success');
       if (hasSuccessNotification) {
-        this.geoDataService.getDataForProject(this.activeProject.id);
+        this.geoDataService.getDataForProject(this.activeProject.id, false);
       }
     }));
 
