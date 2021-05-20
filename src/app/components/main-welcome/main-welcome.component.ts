@@ -48,25 +48,6 @@ export class MainWelcomeComponent implements OnInit {
         .subscribe(([projects, dsProjects]) => {
           this.projects = this.agaveSystemsService.getDSProjectInformation(projects, dsProjects);
           this.spinner = false;
-// =======
-//       this.agaveSystemsService.dsProjects)
-//         .subscribe(([projects, dsProjects]) => {
-//           this.spinner = true;
-//           if (dsProjects) {
-//             if (projects.length > 0) {
-//               this.projects = dsProjects.length > 0
-//                 ? projects.map(p => {
-//                   const pDir = dsProjects.find(dp => dp.id === p.system_id);
-//                   p.dsName = pDir ? pDir.dsId : null;
-//                   return p;
-//                 })
-//                 : projects;
-//             } else {
-//               this.projects = [];
-//             }
-//             this.spinner = false;
-//           }
-// >>>>>>> 8c225311eef998cd6401e6bc7caf653ea35d7479
         });
   }
 
