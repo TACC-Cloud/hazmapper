@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import {SystemSummary} from 'ng-tapis';
+import {System, SystemSummary} from 'ng-tapis';
 import { ApiService } from 'ng-tapis';
-import {Observable, ReplaySubject} from 'rxjs';
+import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import { EnvService } from '../services/env.service';
-import { DesignSafeProjectCollection } from '../models/models';
+import { DesignSafeProjectCollection, Project } from '../models/models';
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +16,6 @@ export class AgaveSystemsService {
   public readonly systems: Observable<SystemSummary[]> = this._systems.asObservable();
   private _projects: ReplaySubject<SystemSummary[]> = new ReplaySubject<SystemSummary[]>(1);
   public readonly projects: Observable<SystemSummary[]> = this._projects.asObservable();
-  private _dsProjects: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
-  public readonly dsProjects: Observable<any[]> = this._dsProjects.asObservable();
   constructor(private tapis: ApiService, private envService: EnvService, private http: HttpClient) { }
 
   list() {
@@ -32,7 +30,7 @@ export class AgaveSystemsService {
         const projectSystems = resp.projects.map((project) => {
           return {
             id: 'project-' + project.uuid,
-            name: project.uuid,
+            name: project.value.projectId,
             description: project.value.title,
           };
         });
@@ -42,19 +40,15 @@ export class AgaveSystemsService {
       });
   }
 
-  getDSProjectId() {
-    this.http.get<DesignSafeProjectCollection>(this.envService.designSafeUrl + `/projects/v2/`)
-      .subscribe( resp => {
-        const projectSystems = resp.projects.map((project) => {
-          return {
-            id: 'project-' + project.uuid,
-            dsId: project.value.projectId
-          };
-        });
-        this._dsProjects.next(projectSystems);
-      }, error => {
-        this._dsProjects.next(null);
+  getDSProjectInformation(projects: Project[], dsProjects: SystemSummary[]): Project[] {
+    if (dsProjects.length > 0) {
+      return projects.map(p => {
+        const dsProject = dsProjects.find(dp => dp.id === p.system_id);
+        p.title = dsProject ? dsProject.description : null;
+        p.ds_id = dsProject ? dsProject.name : null;
+        return p;
       });
-
+    }
+    return projects;
   }
 }

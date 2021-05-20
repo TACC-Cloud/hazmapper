@@ -47,10 +47,10 @@ export interface Project {
   description: string;
   id?: number;
   name: string;
-  dsName?: string;
+  ds_id?: string;
+  title?: string;
   uuid?: string;
   public?: boolean;
-  system_name?: string;
   system_file?: string;
   system_id?: string;
   system_path?: string;

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
-import {Project} from '../models/models';
+import {DesignSafeProjectCollection, Project} from '../models/models';
 import { RapidProjectRequest } from '../models/rapid-project-request';
 import {catchError, map, tap, filter, take} from 'rxjs/operators';
 import {IProjectUser} from '../models/project-user';
@@ -11,6 +11,7 @@ import { EnvService } from '../services/env.service';
 import { AuthService } from '../services/authentication.service';
 import {MAIN, LOGIN} from '../constants/routes';
 import {defaultTileServers} from '../constants/tile-servers';
+import { AgaveSystemsService } from '../services/agave-systems.service';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -37,6 +38,7 @@ export class ProjectsService {
   constructor(private http: HttpClient,
               private notificationsService: NotificationsService,
               private geoDataService: GeoDataService,
+              private agaveSystemsService: AgaveSystemsService,
               private router: Router,
               private authService: AuthService,
               private envService: EnvService) { }
@@ -45,12 +47,50 @@ export class ProjectsService {
     this._loadingProjectsFailed.next(false);
     this.http.get<Project[]>(this.envService.apiUrl + `/projects/`).subscribe( resp => {
       this._projects.next(resp);
+      // this.getDSInformation(resp);
       this._loadingProjectsFailed.next(false);
     }, error => {
       this._loadingProjectsFailed.next(true);
       this.notificationsService.showErrorToast('Failed to retrieve project data! Geoapi might be down.');
     });
   }
+
+  // getDSProjectInformation(projects: Project[]): Project[] {
+  //   return dsProjects.length > 0
+  //     ? projects.map(p => {
+  //       const pDir = dsProjects.find(dp => 'project-' + dp.uuid === p.system_id);
+  //       p.systemName = pDir ? pDir.value.title : null;
+  //       p.dsName = pDir ? pDir.value.projectId : null;
+  //       return p;
+  //     })
+  //     : projects;
+  // }
+
+  // getDSProjectInformation(projects?: Project[], currentProject?: Project): void {
+  //   return this.agaveSystemsService.getDSProjectIdObs()
+  //     .subscribe((resp: DesignSafeProjectCollection) => {
+  //       const dsProjects = resp.projects;
+  //       if (projects) {
+  //         const newProjects = dsProjects.length > 0
+  //           ? projects.map(p => {
+  //             const pDir = dsProjects.find(dp => 'project-' + dp.uuid === p.system_id);
+  //             p.systemName = pDir ? pDir.value.title : null;
+  //             p.dsName = pDir ? pDir.value.projectId : null;
+  //             return p;
+  //           })
+  //           : projects;
+
+  //         console.log(newProjects);
+  //         this._projects.next(newProjects);
+  //       }
+  //       if (currentProject) {
+  //         const pDir = dsProjects.find(dp => 'project-' + dp.uuid === currentProject.system_id);
+  //         currentProject.systemName = pDir ? pDir.value.title : null;
+  //         currentProject.dsName = pDir ? pDir.value.projectId : null;
+  //         this._activeProject.next(currentProject);
+  //       }
+  //     });
+  // }
 
   getProjectUsers(proj: Project): void {
     this.http.get<Array<IProjectUser>>(this.envService.apiUrl + `/projects/${proj.id}/users/`)
@@ -84,6 +124,7 @@ export class ProjectsService {
         tap(proj => {
           // Spread operator, just pushes the new project into the array
           this._projects.next([...this._projects.value, proj]);
+          // this.getDSInformation([...this._projects.value, proj], undefined);
           // Add default servers
           defaultTileServers.forEach(ts => {
             this.geoDataService.addTileServer(proj.id, ts, true);
@@ -109,12 +150,29 @@ export class ProjectsService {
 
     this.http.put<any>(this.envService.apiUrl + `/projects/${project.id}/export/`, payload)
       .subscribe(currentProject => {
-        this.notificationsService.showSuccessToast(`Create file ${system_id}/${path}/${file_name}.hazmapper`)
+        this.notificationsService.showSuccessToast(`Create file ${system_id}/${path}/${file_name}.hazmapper`);
+        // this.getDSInformation([...this._projects.value.filter((p) => p.id !== project.id)], currentProject);
         this._projects.next([...this._projects.value.filter((p) => p.id != project.id),
                              currentProject]);
         this.setActiveProject(currentProject);
+
+        // if (dsProjects) {
+        //   if (projects.length > 0) {
+        //     this.projects = dsProjects.length > 0
+        //       ? projects.map(p => {
+        //         const pDir = dsProjects.find(dp => dp.id === p.system_id);
+        //         p.dsName = pDir ? pDir.dsId : null;
+        //         return p;
+        //       })
+        //       : projects;
+        //     this.spinner = false;
+        //   } else {
+        //     this.spinner = true;
+        //   }
+        // }
+
       }, error => {
-        this.notificationsService.showErrorToast(`Failed to create file ${system_id}/${path}/${file_name}.hazmapper`)
+        this.notificationsService.showErrorToast(`Failed to create file ${system_id}/${path}/${file_name}.hazmapper`);
         console.log(error);
       });
   }
@@ -124,6 +182,10 @@ export class ProjectsService {
       .pipe(
         map( (proj) => {
           this._projects.next([proj, ...this._projects.value]);
+          // this.getDSInformation([...this._projects.value, proj], undefined);
+          defaultTileServers.forEach(ts => {
+            this.geoDataService.addTileServer(proj.id, ts, true);
+          });
           return proj;
         }),
        catchError( (err: any) =>  {
@@ -158,6 +220,7 @@ export class ProjectsService {
     //  is not a member of the project.  https://jira.tacc.utexas.edu/browse/DES-1927
 
     this._activeProject.next(proj);
+    // this.getDSInformation(undefined, proj);
     if (proj && this.authService.isLoggedIn()) {
       this.getProjectUsers(proj);
     }
@@ -206,9 +269,11 @@ export class ProjectsService {
         map((updatedProject) => {
           // Update the project list
           const projects = this._projects.value.map(proj => proj.id === this._activeProject.value.id ? updatedProject : proj);
-          this._projects.next(projects);
-          // Update the active project
+          // this._projects.next(projects);
+          // // Update the active project
           this._activeProject.next(updatedProject);
+
+          // this.getDSInformation(projects, updatedProject);
           return updatedProject;
         }),
         catchError((err: any) => {

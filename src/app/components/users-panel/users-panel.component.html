@@ -45,10 +45,10 @@
       </ng-template>
 
       <h6 id="property-title">Linked Project</h6>
-      <div *ngIf="activeProject.system_name && activeProject.system_id.includes('project'); else noLink" style="margin-bottom: 20px">
+      <div *ngIf="activeProject.ds_id && activeProject.system_id.includes('project'); else noLink" style="margin-bottom: 20px">
         <a [href]="'https://www.designsafe-ci.org/data/browser/projects/' + activeProject.system_id + '/'">
           <span>
-            {{activeProject.system_name}}
+            {{activeProject.ds_id}} | {{activeProject.title}}
           </span>
         </a>
       </div>

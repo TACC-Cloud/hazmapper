@@ -7,6 +7,8 @@ import {FormGroup, FormControl} from '@angular/forms';
 import {Project} from '../../models/models';
 import {EnvService} from '../../services/env.service';
 import { ModalLinkProjectComponent } from '../modal-link-project/modal-link-project.component';
+import { AgaveSystemsService } from 'src/app/services/agave-systems.service';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-users-panel',
@@ -29,31 +31,37 @@ export class UsersPanelComponent implements OnInit {
   constructor(private projectsService: ProjectsService,
               private bsModalService: BsModalService,
               private modalService: ModalService,
+              private agaveSystemsService: AgaveSystemsService,
               private envService: EnvService) { }
 
   ngOnInit() {
+    this.agaveSystemsService.list();
+
     this.addUserForm = new FormGroup( {
       username: new FormControl()
     });
 
-    this.projectsService.activeProject.subscribe( (next) => {
-      if (next) {
-        this.activeProject = next;
+    combineLatest([this.projectsService.activeProject,
+                                         this.agaveSystemsService.projects])
 
+      .subscribe(([activeProject, dsProjects]) => {
+    // this.projectsService.activeProject.subscribe( (next) => {
+      if (activeProject) {
+        this.activeProject = this.agaveSystemsService.getDSProjectInformation([activeProject], dsProjects)[0];
         const dsUrl = 'https://www.designsafe-ci.org/data/browser/';
-        if (next.system_id) {
-          if (next.system_id.includes('project')) {
+        if (activeProject.system_id) {
+          if (activeProject.system_id.includes('project')) {
             this.dsHref = dsUrl + 'projects/' +
-              next.system_id.substr(8) +
-              next.system_path + '/'
-            if (next.system_name) {
+              activeProject.system_id.substr(8) +
+              activeProject.system_path + '/'
+            if (activeProject.ds_id) {
               this.projectHref = dsUrl + 'projects/' +
-                next.system_id + '/'
+                activeProject.system_id + '/'
             }
           } else {
             this.dsHref = dsUrl + 'agave/' +
-              next.system_id +
-              next.system_path + '/'
+              activeProject.system_id +
+              activeProject.system_path + '/'
           }
         }
       }

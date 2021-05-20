@@ -58,10 +58,10 @@
                   </div>
 
                   <div class="project-column">
-                    <ng-container *ngIf="p.system_name && p.system_id.includes('project'); else noSystem" class="list-column link-hover">
+                    <ng-container *ngIf="p.ds_id && p.system_id.includes('project'); else noSystem" class="list-column link-hover">
                       <a [href]="'https://www.designsafe-ci.org/data/browser/projects/' + p.system_id + '/'">
                         <span class="project-name">
-                          {{p.dsName}} | {{p.system_name}}
+                          {{p.ds_id}} | {{p.title}}
                         </span>
                       </a>
                     </ng-container>
