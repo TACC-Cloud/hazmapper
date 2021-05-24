@@ -61,10 +61,8 @@ export class ModalCreateProjectComponent implements OnInit {
   onSystemSelect(system: any) {
     this.selectedSystem = system;
     if (system.id.includes('project')) {
-      this.projCreateForm.get('linkProject').enable();
       this.projCreateForm.get('linkProject').setValue(true);
     } else {
-      this.projCreateForm.get('linkProject').disable();
       this.projCreateForm.get('linkProject').setValue(false);
     }
   }
@@ -85,6 +83,7 @@ export class ModalCreateProjectComponent implements OnInit {
     p.description = this.projCreateForm.get('description').value;
     p.name = this.projCreateForm.get('name').value;
     this.projectsService.create(p).subscribe( (project) => {
+
       if (this.projCreateForm.get('exportMapLink').value) {
         const path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path : this.currentPath;
         const systemId = this.selectedSystem.id;

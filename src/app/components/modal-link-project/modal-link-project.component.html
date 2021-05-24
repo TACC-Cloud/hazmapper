@@ -22,18 +22,6 @@
   <small><em>If a name is not given, file will be saved as the map uuid.</em></small>
 </div>
 
-<div class="confirm-checkbox">
-  <label>
-    <span [ngClass]="{dimmed: linkCheckbox.disabled}">Link Project</span>
-    <input #linkCheckbox type="checkbox"
-           [disabled]="selectedSystem && !selectedSystem.id.includes('project')"
-           [(ngModel)]="linkProject">
-  </label>
-  <div *ngIf="linkCheckbox.disabled">
-    <small><em>Must be in a project folder to link!</em></small>
-  </div>
-</div>
-
 <div *ngIf="activeProject.system_path" class="confirm-checkbox">
   <label>
     <span>Remove previously saved file</span>

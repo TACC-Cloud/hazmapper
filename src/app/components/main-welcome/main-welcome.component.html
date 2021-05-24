@@ -14,7 +14,7 @@
             <b>Maps</b>
           </div>
           <div class="project-column">
-            <b>Linked Project</b>
+            <b>Map Location</b>
           </div>
           <div class="button-column" style="text-align: right">
             <div id="new-map" (click)="openCreateProjectModal()">
@@ -44,7 +44,7 @@
           <ng-template #projectDisconnected>
             <div *ngIf="projects.length > 0; else noProject" class="project-list-container">
               <div *ngFor="let p of projects; let indexOfElement=index;">
-                <div (dblclick)="routeToProject(p.uuid)"
+                <div (click)="routeToProject(p.uuid)"
                      class="project-list-item"
                      [ngClass]="{
                                  'welcome-project-light': (indexOfElement % 2) == 0,
@@ -58,22 +58,29 @@
                   </div>
 
                   <div class="project-column">
-                    <ng-container *ngIf="p.ds_id && p.system_id.includes('project'); else noSystem" class="list-column link-hover">
-                      <a [href]="'https://www.designsafe-ci.org/data/browser/projects/' + p.system_id.substr(8) + '/'">
+                    <ng-container *ngIf="p.system_path; else noSystem">
+                      <ng-container *ngIf="p.system_id.includes('project')" class="list-column link-hover">
                         <span class="project-name" [tooltip]="p.title">
                           {{p.ds_id}} | {{p.title}}
                         </span>
-                      </a>
+                      </ng-container>
+
+                      <ng-container *ngIf="!p.system_id.includes('project')" class="list-column link-hover">
+                        <span class="project-name" [tooltip]="p.title">
+                          {{p.system_path}}
+                        </span>
+                      </ng-container>
                     </ng-container>
+
                     <ng-template #noSystem>
                       ----------
                     </ng-template>
                   </div>
                   <div class="button-column" style="text-align: right">
-                    <button class="project-list-item-button" (click)="routeToProject(p.uuid)">
-                      <i class="fas fa-folder-open"></i>
+                    <button class="project-list-item-button" [tooltip]="'Edit Map'">
+                      <i class="fas fa-edit"></i>
                     </button>
-                    <button class="project-list-item-button" (click)=openDeleteProjectModal(p)>
+                    <button class="project-list-item-button" [tooltip]="'Delete Map'" (click)="openDeleteProjectModal(p, $event)">
                       <i class="fas fa-trash"></i>
                     </button>
                   </div>

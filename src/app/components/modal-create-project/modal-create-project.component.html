@@ -16,7 +16,6 @@
                 <span style="padding-right: 10px">Export Map Link</span>
                 <input formControlName="exportMapLink" type="checkbox">
               </label>
-
             </div>
             <div *ngIf="projCreateForm.get('exportMapLink').value">
               <app-file-browser
@@ -41,17 +40,6 @@
                   </div>
                 </label>
                 <small><em>If a name is not given, file will be saved as the map uuid.</em></small>
-              </div>
-
-              <div class="confirm-checkbox">
-                <label>
-                  <span [ngClass]="{dimmed: linkCheckbox.disabled}">Link Project</span>
-                  <input #linkCheckbox type="checkbox"
-                         formControlName="linkProject">
-                </label>
-                <div *ngIf="linkCheckbox.disabled">
-                  <small><em>Must be in a project folder to link!</em></small>
-                </div>
               </div>
             </div>
             <div class="button-group small">
