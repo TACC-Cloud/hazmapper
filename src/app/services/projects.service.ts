@@ -112,15 +112,16 @@ export class ProjectsService {
       );
   }
 
-  setActiveProjectUUID(uuid: string): void {
+  setActiveProjectUUID(uuid: string, usePublicRoute: boolean = false): void {
     this._loadingActiveProject.next(true);
     this._loadingActiveProjectFailed.next(false);
     this.setActiveProject(null);
 
-    this.http.get<Project[]>(this.envService.apiUrl + `/projects/?uuid=` + uuid)
+    const projectRoute = usePublicRoute ? 'public-projects' : 'projects';
+    this.http.get<Project[]>(this.envService.apiUrl + `/${projectRoute}/?uuid=` + uuid)
       .subscribe( (resp) => {
         this._loadingActiveProject.next(false);
-        this.setActiveProject(resp[0]);
+        this.setActiveProject(resp[0], usePublicRoute);
         }, error => {
         this._loadingActiveProject.next(false);
         this._loadingActiveProjectFailed.next(true);
@@ -128,14 +129,14 @@ export class ProjectsService {
       );
   }
 
-  setActiveProject(proj: Project): void {
+  setActiveProject(proj: Project, publicAccess: boolean = false): void {
     // TODO needs to be extended with a parameter (checkIfHasPrivateAccess)
     //  to check if we need to set _loadingActiveProjectFailed to False
     //  in cases where we have a private view but despite the map being public, the user
     //  is not a member of the project.  https://jira.tacc.utexas.edu/browse/DES-1927
 
     this._activeProject.next(proj);
-    if (proj && this.authService.isLoggedIn()) {
+    if (proj && !publicAccess && this.authService.isLoggedIn()) {
       this.getProjectUsers(proj);
     }
   }
