@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ProjectsService} from '../../services/projects.service';
+import {NotificationsService} from '../../services/notifications.service';
 import {ModalService} from '../../services/modal.service';
 import { BsModalRef, BsModalService } from 'ngx-foundation';
 import {IProjectUser} from '../../models/project-user';
@@ -9,6 +10,7 @@ import {EnvService} from '../../services/env.service';
 import { ModalLinkProjectComponent } from '../modal-link-project/modal-link-project.component';
 import { AgaveSystemsService } from 'src/app/services/agave-systems.service';
 import { combineLatest } from 'rxjs';
+import { copyToClipboard } from '../../utils/copyText';
 
 @Component({
   selector: 'app-users-panel',
@@ -27,10 +29,12 @@ export class UsersPanelComponent implements OnInit {
   publicStatusChangingError = false;
   dsHref: string;
   projectHref: string;
+  myDataHref: string;
 
   constructor(private projectsService: ProjectsService,
               private bsModalService: BsModalService,
               private modalService: ModalService,
+              private notificationsService: NotificationsService,
               private agaveSystemsService: AgaveSystemsService,
               private envService: EnvService) { }
 
@@ -57,8 +61,9 @@ export class UsersPanelComponent implements OnInit {
                 activeProject.system_id.substr(8) + '/';
             }
           } else {
-            this.dsHref = dsUrl + 'agave/' +
-              activeProject.system_id +
+            this.myDataHref = dsUrl + 'agave/' +
+              activeProject.system_id;
+            this.dsHref = this.myDataHref +
               activeProject.system_path + '/';
           }
         }
@@ -90,8 +95,13 @@ export class UsersPanelComponent implements OnInit {
                                          next.system.id,
                                          path,
                                          next.system.id.includes('project') && next.linkProject,
-                                         next.fileName)
+                                         next.fileName);
     });
+  }
+
+  copyLinkToClipboard(link: string) {
+    copyToClipboard(link);
+    this.notificationsService.showSuccessToast(`Copied ${link} to the clipboard!`);
   }
 
   updateMapPublicAccess(makePublic: boolean) {

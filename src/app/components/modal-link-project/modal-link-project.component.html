@@ -4,8 +4,8 @@
   [allowedExtensions]=allowedExtensions
   [onlyFolder]=onlyFolder
   [showPublicSystems]=false
-  [heading]="'Select Export Location'"
-  [helpText]="'If no folder is selected, the file will be exported to the root of the selected system.' +
+  [heading]="'Select Save Location'"
+  [helpText]="'If no folder is selected, the file will be saved to the root of the selected system.' +
            'If you select a project, you can link the current map to the project.'"
   (selection)="onSelect($event)"
   (systemSelection)="onSystemSelect($event)"
@@ -28,10 +28,10 @@
     <input type="checkbox"
            [(ngModel)]="confirmRemove">
   </label>
-  <small><em>Exporting this map will remove the previous link and link file's location.</em></small>
+  <small><em>Saving this map will remove the previous link and link file's location.</em></small>
 </div>
 
 <div>
   <button class="button warning" (click)="cancel()">Cancel</button>
-  <button class="button" [disabled]="!selectedFiles.length && !allowEmptyFiles || (activeProject.system_path && !confirmRemove)" (click)="close()">Export</button>
+  <button class="button" [disabled]="!selectedFiles.length && !allowEmptyFiles || (activeProject.system_path && !confirmRemove)" (click)="close()">Save</button>
 </div>

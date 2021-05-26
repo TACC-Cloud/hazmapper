@@ -13,7 +13,7 @@
 
             <div class="link-project">
               <label>
-                <span style="padding-right: 10px">Export Map Link</span>
+                <span style="padding-right: 10px">Save Map Link</span>
                 <input formControlName="exportMapLink" type="checkbox">
               </label>
             </div>
@@ -24,8 +24,8 @@
                 [allowedExtensions]=[]
                 [onlyFolder]=true
                 [showPublicSystems]=false
-                [heading]="'Select Link Export Location'"
-                [helpText]="'If no folder is selected, the link file will be exported to the root of the selected system.' +
+                [heading]="'Select Link Save Location'"
+                [helpText]="'If no folder is selected, the link file will be saved to the root of the selected system.' +
                          'If you select a project, you can link the current map to the project.'"
                 (selection)="onSelect($event)"
                 (currentPath)="setCurrentPath($event)"

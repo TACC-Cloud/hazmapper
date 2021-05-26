@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterContentChecked } from '@angular/core';
 import { BsModalRef } from 'ngx-foundation';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ProjectsService } from '../../services/projects.service';
@@ -13,7 +13,7 @@ import { Subject } from 'rxjs';
   templateUrl: './modal-create-project.component.html',
   styleUrls: ['./modal-create-project.component.styl']
 })
-export class ModalCreateProjectComponent implements OnInit {
+export class ModalCreateProjectComponent implements OnInit, AfterContentChecked {
 
   public readonly onClose: Subject<any> = new Subject<any>();
 
@@ -22,7 +22,7 @@ export class ModalCreateProjectComponent implements OnInit {
   submitting: boolean;
   errorMessage = '';
   currentPath: string;
-  fileName: string = '';
+  fileName = '';
   selectedFiles: Array<RemoteFile> = [];
   selectedSystem: any;
 
@@ -69,7 +69,7 @@ export class ModalCreateProjectComponent implements OnInit {
 
   createRapidProject() {
     this.errorMessage = '';
-    const req: RapidProjectRequest = new RapidProjectRequest(this.rapidFolder.system, this.rapidFolder.path)
+    const req: RapidProjectRequest = new RapidProjectRequest(this.rapidFolder.system, this.rapidFolder.path);
     this.projectsService.createRapidProject(req).subscribe( (project) => {
       this.close(project);
     }, (err) => {
@@ -83,7 +83,6 @@ export class ModalCreateProjectComponent implements OnInit {
     p.description = this.projCreateForm.get('description').value;
     p.name = this.projCreateForm.get('name').value;
     this.projectsService.create(p).subscribe( (project) => {
-
       if (this.projCreateForm.get('exportMapLink').value) {
         const path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path : this.currentPath;
         const systemId = this.selectedSystem.id;

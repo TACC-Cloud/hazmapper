@@ -58,7 +58,9 @@ export class MainWelcomeComponent implements OnInit {
   openCreateProjectModal() {
     const modal: BsModalRef = this.bsModalService.show(ModalCreateProjectComponent);
     modal.content.onClose.subscribe( (project: Project) => {
-      this.routeToProject(project.uuid);
+      if (project) {
+        this.routeToProject(project.uuid);
+      }
     });
   }
 
