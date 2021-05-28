@@ -3,9 +3,11 @@ import { ProjectsService } from '../../services/projects.service';
 import { Project } from '../../models/models';
 import { GeoDataService } from '../../services/geo-data.service';
 import {LatLng} from 'leaflet';
-import {skip} from 'rxjs/operators';
+import {skip, take} from 'rxjs/operators';
 import {combineLatest, Subscription} from 'rxjs';
 import {NotificationsService} from '../../services/notifications.service';
+import {Router} from '@angular/router';
+import {AuthService} from '../../services/authentication.service';
 
 @Component({
   selector: 'app-control-bar',
@@ -20,10 +22,13 @@ export class ControlBarComponent implements OnInit, OnDestroy {
   private loadingActiveProject = true;
   private loadingActiveProjectFailed = false;
   private loadingData = false;
+  private canSwitchToPrivateMap = false;
 
-  constructor(private projectsService: ProjectsService,
+  constructor(private router: Router,
+              private projectsService: ProjectsService,
               private geoDataService: GeoDataService,
               private notificationsService: NotificationsService,
+              private authService: AuthService
               ) { }
 
   ngOnInit() {
@@ -43,10 +48,22 @@ export class ControlBarComponent implements OnInit, OnDestroy {
       this.activeProject = next;
       if (this.activeProject) {
         this.geoDataService.getDataForProject(next.id, this.isPublicView);
+
       } else {
         this.geoDataService.clearData();
       }
     }));
+
+    this.subscription.add(combineLatest([this.authService.currentUser,
+      this.projectsService.projectUsers$])
+      .subscribe(([currentUser, projectUsers]) => {
+        // check if user is logged in viewing a public map but is allowed to switch to private view
+        if (this.isPublicView && projectUsers) {
+          this.canSwitchToPrivateMap = projectUsers.find(u => u.username === currentUser.username) ? true : false;
+        } else {
+          this.canSwitchToPrivateMap = false;
+        }
+      }));
 
     this.subscription.add(this.notificationsService.notifications.subscribe(next => {
       const hasSuccessNotification = next.some(note => note.status === 'success');
@@ -62,5 +79,9 @@ export class ControlBarComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  routeToPrivateView() {
+    this.router.navigate(['project', this.activeProject.uuid]);
   }
 }

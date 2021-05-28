@@ -116,6 +116,7 @@ export class ProjectsService {
     this._loadingActiveProject.next(true);
     this._loadingActiveProjectFailed.next(false);
     this._activeProject.next(null);
+    this._projectUsers.next(null);
 
     const projectRoute = usePublicRoute ? 'public-projects' : 'projects';
     this.http.get<Project[]>(this.envService.apiUrl + `/${projectRoute}/?uuid=` + uuid)
@@ -123,6 +124,10 @@ export class ProjectsService {
         if (usePublicRoute) {
           this._activeProject.next(resp[0]);
           this._loadingActiveProject.next(false);
+
+          if (this.authService.isLoggedIn()) {
+            this.getProjectUsers(resp[0]).subscribe();
+          }
         } else {
           //  as we are viewing the private map we need to get the project
           //  users. We also need to check that the current user is part of that list as
