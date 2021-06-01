@@ -10,9 +10,41 @@
             <label> Description
                 <textarea formControlName="description" required="true"></textarea>
             </label>
+
+            <div class="link-project">
+              <label>
+                <span style="padding-right: 10px">Save Map Link</span>
+                <input formControlName="exportMapLink" type="checkbox">
+              </label>
+            </div>
+            <div *ngIf="projCreateForm.get('exportMapLink').value">
+              <app-file-browser
+                [single]=true
+                [allowFolders]=true
+                [allowedExtensions]=[]
+                [onlyFolder]=true
+                [showPublicSystems]=false
+                [heading]="'Select Link Save Location'"
+                [helpText]="'If no folder is selected, the link file will be saved to the root of the selected system.' +
+                         'If you select a project, you can link the current map to the project.'"
+                (selection)="onSelect($event)"
+                (currentPath)="setCurrentPath($event)"
+                (systemSelection)="onSystemSelect($event)">
+              </app-file-browser>
+
+              <div style="padding: 20px 0px">
+                <label> Custom file name:
+                  <div style="display: flex; flex-direction: row">
+                    <input type="text" formControlName="fileName">
+                    <span style="line-height: 1.5; font-size: 1rem; margin: 5px">.hazmapper</span>
+                  </div>
+                </label>
+                <small><em>If a name is not given, file will be saved as the map uuid.</em></small>
+              </div>
+            </div>
             <div class="button-group small">
                 <button class="button small warning" type="button" (click)="close()">Close</button>
-                <button class="button small align-right" type="submit" [disabled]="!projCreateForm.valid || submitting">Submit</button>
+                <button class="button small align-right" type="submit" [disabled]="(!projCreateForm.valid || submitting)">Submit</button>
             </div>
         </form>
     </tab>
@@ -23,7 +55,8 @@
           [single]="true"
           [heading]="'Select a RApp Folder'"
           [helpText]="'All files inside this folder (that can be) will be imported. ' +
-           'This folder will also be periodically scraped for new data.'"
+           'This folder will also be periodically scraped for new data.' +
+           'A project link will be created with the project of this folder.'"
           (selection)="onFolderSelection($event)"
         >
         </app-file-browser>
@@ -34,6 +67,3 @@
         </div>
     </tab>
 </tabset>
-
-
-

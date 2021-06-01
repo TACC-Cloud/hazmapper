@@ -6,6 +6,7 @@
          title="{{currentName}}"
          data-position="top"
          data-alignment="left"
+         [tooltip]="currentName"
          *ngIf="!inputShown"
          (dblclick)=showInput()>
       {{currentName}}

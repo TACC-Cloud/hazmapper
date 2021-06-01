@@ -25,6 +25,8 @@ export class FileBrowserComponent implements OnInit {
   @Input() helpText = 'Note: Only files are selectable, not folders. Double click on a folder to navigate into it.';
   @Input() allowedExtensions: Array<string> = [];
   @Output() selection: EventEmitter<Array<RemoteFile>> = new EventEmitter<Array<RemoteFile>>();
+  @Output() systemSelection: EventEmitter<any> = new EventEmitter<any>();
+  @Output() currentPath: EventEmitter<string> = new EventEmitter<string>();
 
   private currentUser: AuthenticatedUser;
   private currentDirectory: RemoteFile;
@@ -65,8 +67,9 @@ export class FileBrowserComponent implements OnInit {
         this.myDataSystem = systems.find( (sys) => sys.id === 'designsafe.storage.default');
         this.communityDataSystem = systems.find( (sys) => sys.id === 'designsafe.storage.community');
         this.publishedDataSystem = systems.find( (sys) => sys.id === 'designsafe.storage.published');
-        this.selectedSystem = this.myDataSystem;
         this.projects = projects;
+        this.selectedSystem = this.myDataSystem;
+        this.systemSelection.next(this.myDataSystem);
         this.currentUser = user;
         const init = <RemoteFile> {
           system: this.myDataSystem.id,
@@ -86,6 +89,7 @@ export class FileBrowserComponent implements OnInit {
       type: 'dir',
       path: pth
     };
+    this.systemSelection.next(system)
     this.browse(init);
   }
 
@@ -119,6 +123,7 @@ export class FileBrowserComponent implements OnInit {
                   // This removes the first item in the listing, which in Agave
                   // is always a reference to self '.' and replaces with '..'
                   const current = files.shift();
+                  this.currentPath.next(current.path);
                   current.path = this.tapisFilesService.getParentPath(current.path);
                   current.name = '..';
                   files.unshift(current);
