@@ -20,7 +20,7 @@ export class MainWelcomeComponent implements OnInit {
   guide_url = 'https://www.designsafe-ci.org/rw/user-guide/workspace/hazmapper/';
 
   spinner = true;
-  connected: boolean;
+  notConnected: boolean;
 
   public projects = [];
   public activeProject: Project;
@@ -38,8 +38,8 @@ export class MainWelcomeComponent implements OnInit {
     this.projectsService.getProjects();
     this.agaveSystemsService.list();
 
-    this.projectsService.loadingProjectsFailed.subscribe((connected) => {
-      this.connected = connected;
+    this.projectsService.loadingProjectsFailed.subscribe((notConnected) => {
+      this.notConnected = notConnected;
     });
 
     combineLatest(
