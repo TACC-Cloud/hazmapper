@@ -12,9 +12,23 @@
     padding: 20px
     margin-bottom: 50px
     #user-guide
-      width: 550px
+      width: 100%
       text-align: right
-    
+  .map-column
+    max-width: 120px
+    min-width: 120px
+    width: 120px
+  .project-column
+    width: 100%
+  .button-column
+    width: 280px
+    white-space: nowrap
+  .project-name
+    display: inline-block
+    text-overflow: ellipsis
+    overflow: hidden
+    width: 80%
+    white-space: nowrap
   #sponsor
     height: 50px
     display: flex
@@ -22,13 +36,13 @@
     justify-content: center
     background-color: #f7f7f7
     img
-      padding-left: 5px
+      padding-left: 10px
   #welcome-background
     background-color: #f7f7f7
     height: calc(100% - 40px)
     #welcome-projects-list
       background-color: #ffffff
-      width: 600px
+      width: 100%
     .project-list-container
       height: 270px
       overflow-y: scroll
@@ -36,40 +50,40 @@
         font-size: 14px
         padding: 12px
         display: flex
+        flex-wrap: nowrap
         jusitfy-content: space-between
+        cursor: pointer
         .project-list-item-button
           cursor: pointer
           margin: 0px 10px
+          :hover
+            color: #fff
     .welcome-project-header
       font-size: 14px
       padding: 12px
+      display: flex
+      flex-wrap: nowrap
       background-color: #d0d0d0
     .welcome-project-light
-      font-size: 14px
-      padding: 12px
       background-color: #ffffff
     .welcome-project-dark
-      font-size: 14px
-      padding: 12px
       background-color: #eeeeee
     .welcome-project:hover
       color: #ffffff
       background-color: #3c6fdb
+      a
+        color: #ADDFFF
     #welcome-no-information
-      height: 100%
       display: flex
       flex-direction: column
       font-size: 24px
       padding: 90px
       height: 270px
       align-items: center
+      width: 100%
     #welcome-information
       background-color: #f7f7f7
-      // padding: 150px 300px
-      // padding: 50px
-      // margin-bottom: 20px
-      width: 800px
-      // width: calc(100% - 400px)
+      width: 100%
       #welcome-logo
         display: flex
         flex-direction: column

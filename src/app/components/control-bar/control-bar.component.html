@@ -6,8 +6,13 @@
         <i class="fas fa-spin fa-spinner"></i>
     </div>
     <div *ngIf="!loadingActiveProject && !loadingActiveProjectFailed" class="cell small-8 align-middle grid-x">
+      <ng-container *ngIf="activeProject">
         <span style="margin-left: 1rem">{{isPublicView? 'Public Map': 'Map'}}: {{ activeProject.name }}</span>
-        <div *ngIf="loadingData" style="margin-left: 1rem">
+        <div *ngIf="activeProject.ds_id" style="padding-left: 30px">
+          <span>Project: {{activeProject.ds_id}} | {{activeProject.title}}</span>
+        </div>
+      </ng-container>
+      <div *ngIf="loadingData" style="margin-left: 1rem">
             <i class="fas fa-spin fa-spinner" style="margin-right: 0.3rem"></i>
             <span>Loading Data</span>
         </div>

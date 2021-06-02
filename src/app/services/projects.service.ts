@@ -1,15 +1,18 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
-import {Project} from '../models/models';
+import {DesignSafeProjectCollection, Project} from '../models/models';
 import { RapidProjectRequest } from '../models/rapid-project-request';
-import {catchError, map, tap} from 'rxjs/operators';
+import {catchError, map, tap, filter, take} from 'rxjs/operators';
 import {IProjectUser} from '../models/project-user';
 import {NotificationsService} from './notifications.service';
 import {GeoDataService} from './geo-data.service';
 import { EnvService } from '../services/env.service';
 import { AuthService } from '../services/authentication.service';
+import {MAIN, LOGIN} from '../constants/routes';
 import {defaultTileServers} from '../constants/tile-servers';
+import { AgaveSystemsService } from '../services/agave-systems.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -23,9 +26,6 @@ export class ProjectsService {
   private _projectUsers: ReplaySubject<Array<IProjectUser>> = new ReplaySubject<Array<IProjectUser>>(1);
   public readonly projectUsers$: Observable<Array<IProjectUser>> = this._projectUsers.asObservable();
 
-  private _loadingProjects: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  public loadingProjects: Observable<boolean> = this._loadingProjects.asObservable();
-
   private _loadingProjectsFailed: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public loadingProjectsFailed: Observable<boolean> = this._loadingProjectsFailed.asObservable();
 
@@ -38,18 +38,17 @@ export class ProjectsService {
   constructor(private http: HttpClient,
               private notificationsService: NotificationsService,
               private geoDataService: GeoDataService,
+              private agaveSystemsService: AgaveSystemsService,
+              private router: Router,
               private authService: AuthService,
               private envService: EnvService) { }
 
   getProjects(): void {
-    this._loadingProjects.next(true);
     this._loadingProjectsFailed.next(false);
     this.http.get<Project[]>(this.envService.apiUrl + `/projects/`).subscribe( resp => {
       this._projects.next(resp);
-      this._loadingProjects.next(false);
       this._loadingProjectsFailed.next(false);
     }, error => {
-      this._loadingProjects.next(false);
       this._loadingProjectsFailed.next(true);
       this.notificationsService.showErrorToast('Failed to retrieve project data! Geoapi might be down.');
     });
@@ -96,11 +95,40 @@ export class ProjectsService {
       );
   }
 
+  exportProject(project: Project,
+                system_id: string,
+                path: string = '/',
+                link: boolean,
+                file_name: string = '') {
+    file_name = file_name === '' ? project.uuid : file_name;
+
+    const payload = {
+      system_id,
+      path,
+      file_name,
+      link
+    };
+
+    this.http.put<any>(this.envService.apiUrl + `/projects/${project.id}/export/`, payload)
+      .subscribe(currentProject => {
+        this.notificationsService.showSuccessToast(`Create file ${system_id}/${path}/${file_name}.hazmapper`);
+        this._projects.next([...this._projects.value.filter((p) => p.id != project.id),
+                             currentProject]);
+        this._activeProject.next(currentProject);
+      }, error => {
+        this.notificationsService.showErrorToast(`Failed to create file ${system_id}/${path}/${file_name}.hazmapper`);
+        console.log(error);
+      });
+  }
+
   createRapidProject(data: RapidProjectRequest) {
     return this.http.post<Project>(this.envService.apiUrl + `/projects/rapid/`, data)
       .pipe(
         map( (proj) => {
           this._projects.next([proj, ...this._projects.value]);
+          defaultTileServers.forEach(ts => {
+            this.geoDataService.addTileServer(proj.id, ts, true);
+          });
           return proj;
         }),
        catchError( (err: any) =>  {
@@ -154,6 +182,7 @@ export class ProjectsService {
     this.http.delete(this.envService.apiUrl + `/projects/${proj.id}/`)
       .subscribe( (resp) => {
         this.getProjects();
+        this.router.navigate([MAIN]);
       }, error => {
         this.notificationsService.showErrorToast('Could not delete project!');
       });
@@ -193,8 +222,9 @@ export class ProjectsService {
           // Update the project list
           const projects = this._projects.value.map(proj => proj.id === this._activeProject.value.id ? updatedProject : proj);
           this._projects.next(projects);
-          // Update the active project
+          // // Update the active project
           this._activeProject.next(updatedProject);
+
           return updatedProject;
         }),
         catchError((err: any) => {

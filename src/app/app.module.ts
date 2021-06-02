@@ -52,6 +52,7 @@ import { MainProjectComponent } from './components/main-project/main-project.com
 import {DragDropModule, CDK_DRAG_CONFIG} from '@angular/cdk/drag-drop';
 import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
+import { ModalLinkProjectComponent } from './components/modal-link-project/modal-link-project.component';
 
 @NgModule({
   declarations: [
@@ -87,6 +88,7 @@ import { LogoutComponent } from './components/logout/logout.component';
     MainProjectComponent,
     LoginComponent,
     LogoutComponent,
+    ModalLinkProjectComponent,
   ],
   imports: [
     CommonModule,
@@ -151,6 +153,7 @@ import { LogoutComponent } from './components/logout/logout.component';
     ModalCreatePointCloudComponent,
     ModalCreateOverlayComponent,
     ModalCreateTileServerComponent,
-    ModalPointCloudInfoComponent]
+    ModalPointCloudInfoComponent,
+    ModalLinkProjectComponent]
 })
 export class AppModule { }
