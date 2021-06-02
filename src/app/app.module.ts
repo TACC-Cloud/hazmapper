@@ -53,6 +53,7 @@ import {DragDropModule, CDK_DRAG_CONFIG} from '@angular/cdk/drag-drop';
 import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { ModalLinkProjectComponent } from './components/modal-link-project/modal-link-project.component';
+import { GroupsPanelComponent } from './components/groups-panel/groups-panel.component';
 
 @NgModule({
   declarations: [
@@ -89,6 +90,7 @@ import { ModalLinkProjectComponent } from './components/modal-link-project/modal
     LoginComponent,
     LogoutComponent,
     ModalLinkProjectComponent,
+    GroupsPanelComponent,
   ],
   imports: [
     CommonModule,
