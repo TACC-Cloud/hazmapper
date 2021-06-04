@@ -5,6 +5,7 @@ import { Streetview,
          StreetviewSequence,
          MapillaryImageSearchCallback,
          MapillaryUser,
+         MapillaryOrganization,
          GoogleUser } from '../models/streetview';
 import { AsyncSubject, BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
 import { parseLinkHeader } from '../utils/headers';
@@ -28,6 +29,8 @@ export class StreetviewService {
   public mapillaryUser: Observable<MapillaryUser> = this._mapillaryUser.asObservable();
   private _googleUser: BehaviorSubject<GoogleUser> = new BehaviorSubject(null);
   public googleUser: Observable<GoogleUser> = this._googleUser.asObservable();
+  private _mapillaryOrganizations: BehaviorSubject<Array<MapillaryOrganization>> = new BehaviorSubject([]);
+  public mapillaryOrganizations: Observable<Array<MapillaryOrganization>> = this._mapillaryOrganizations.asObservable();
   private _mapillarySequences: BehaviorSubject<Array<Feature>> = new BehaviorSubject([]);
   public mapillarySequences: Observable<Array<Feature>> = this._mapillarySequences.asObservable();
   private _googleSequences: BehaviorSubject<any> = new BehaviorSubject([]);
@@ -58,6 +61,20 @@ export class StreetviewService {
       }, error => {
         console.error(error);
         this.notificationsService.showErrorToast('Failed to get streetviews from Geoapi!');
+      });
+  }
+
+  public addProjectStreetview(streetviewId: number, projectId: number): void {
+    const payload = {
+      streetviewId
+    };
+
+    this.http.post(this.envService.apiUrl + `/projects/${projectId}/streetviews/`, payload)
+      .subscribe(() => {
+        this.getStreetviews();
+      }, error => {
+        console.error(error);
+        this.notificationsService.showErrorToast('Failed to get project streetviews from Geoapi!');
       });
   }
 
@@ -115,8 +132,11 @@ export class StreetviewService {
       .subscribe((streetviews: Array<Streetview>) => {
         // NOTE: Populate displaySequences for drawing
         for (const sv of streetviews) {
+          // NOTE: Different color if project linked to it
+          const color = (sv.projects.length > 0) ? '#6CED5D' : '#3388ff';
           for (const seq of sv.sequences) {
             this.convertToDisplaySequences(seq).subscribe((sequence: Feature) => {
+              sequence.properties.color = color;
               this.setDisplaySequences([...this.getDisplaySequences(), sequence]);
             });
           }
@@ -313,6 +333,19 @@ export class StreetviewService {
       });
   }
 
+  public getMapillaryOrganizations(): void {
+    const userKey = localStorage.getItem('mapillaryUser');
+    const params = new HttpParams()
+      .set('client_id', this.envService.mapillaryClientId);
+
+    this.http.get<Array<MapillaryOrganization>>(this.envService.mapillaryApiUrl + `/users/${userKey}/organizations`, { params })
+      .subscribe((organizations: Array<MapillaryOrganization>) => {
+        this._mapillaryOrganizations.next(organizations);
+      }, error => {
+        console.error(error);
+        this.notificationsService.showErrorToast('Failed to get organization information from Mapillary!');
+      });
+  }
 
   // TODO: Implement actual abortion of task
   public deleteStreetviewSession(pn: IProgressNotification): void {

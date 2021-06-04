@@ -3,33 +3,80 @@
 </div>
 
 <ng-template #showSequences>
+  <div *ngIf="streetview.projects.length > 0">
+    <h4>
+      Linked Maps
+    </h4>
+    <div *ngFor="let sp of streetview.projects">
+      {{sp.name}}
+    </div>
+  </div>
+
   <h4>Sequences</h4>
 
-  <div *ngFor="let seq of streetview.sequences; let q = index">
-    <div style="display: flex; flex-direction: row; justify-content: space-between">
-      <div style="margin-left: 20px; width: 100px; padding-bottom: 5px;">
-        <div *ngIf="seq.sequence_key; else pendingApproval">
-          {{seq.sequence_key}}
-        </div>
-        <ng-template #pendingApproval>
-          <div>
-            Pending Approval
-          </div>
-        </ng-template>
-      </div>
-      <div class="grid-x align-spaced" style="cursor: pointer; margin-right: 30px">
-        <div style="padding: 0px 5px 0px 5px;">
-          <a [href]="'https://www.mapillary.com/map/s/' + seq.sequence_key" style="color: #0A0A0A">
-            <i class="fas fa-external-link-alt"></i>
-          </a>
-        </div>
-        <div style="padding: 0px 5px 0px 5px">
-          <i class="fas fa-trash" (click)="deleteSequence(seq.id)"></i>
-        </div>
-      </div>
+  <!-- <div *ngFor="let seq of streetview.sequences; let q = index">
+       <div style="display: flex; flex-direction: row; justify-content: space-between">
+       <div style="margin-left: 20px; width: 100px; padding-bottom: 5px;">
+       <div *ngIf="seq.sequence_key; else pendingApproval">
+       {{seq.sequence_key}}
+       </div>
+       <ng-template #pendingApproval>
+       <div>
+       Pending Approval
+       </div>
+       </ng-template>
+       </div>
+       <div class="grid-x align-spaced" style="cursor: pointer; margin-right: 30px">
+       <div style="padding: 0px 5px 0px 5px;">
+       <a [href]="'https://www.mapillary.com/map/s/' + seq.sequence_key" style="color: #0A0A0A">
+       <i class="fas fa-external-link-alt"></i>
+       </a>
+       </div>
+       <div style="padding: 0px 5px 0px 5px">
+       <i class="fas fa-trash" (click)="deleteSequence(seq.id)"></i>
+       </div>
+       </div>
 
+       </div>
+
+       </div>
+  -->
+  <div *ngFor="let seqGroup of sortedStreetview | keyvalue; let q = index">
+    <div *ngIf="seqGroup.key !== 'other'; else noOrganization">
+      <h4>
+        Organization: {{seqGroup.key}}
+      </h4>
     </div>
+    <ng-template #noOrganization>
+      <h6>
+        No Organization
+      </h6>
+    </ng-template>
 
+    <div *ngFor="let seq of seqGroup.value; let v = index">
+      <div style="display: flex; flex-direction: row; justify-content: space-between">
+        <div style="margin-left: 20px; width: 100px; padding-bottom: 5px;">
+          <div *ngIf="seq.sequence_key; else pendingApproval">
+            {{seq.sequence_key}}
+          </div>
+          <ng-template #pendingApproval>
+            <div>
+              Pending Approval
+            </div>
+          </ng-template>
+        </div>
+        <div class="grid-x align-spaced" style="cursor: pointer; margin-right: 30px">
+          <div style="padding: 0px 5px 0px 5px;">
+            <a [href]="'https://www.mapillary.com/map/s/' + seq.sequence_key" style="color: #0A0A0A">
+              <i class="fas fa-external-link-alt"></i>
+            </a>
+          </div>
+          <div style="padding: 0px 5px 0px 5px">
+            <i class="fas fa-trash" (click)="deleteSequence(seq.id)"></i>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </ng-template>
 

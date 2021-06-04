@@ -16,6 +16,12 @@ export class ModalStreetviewPublishComponent implements OnInit {
   selectedFiles: Array<RemoteFile> = [];
   public onClose: Subject<any> = new Subject<any>();
 
+  userOrganizations: Array<any> = [{
+    name: 'No Organization for this user',
+    key: ''
+  }];
+  selectedOrganization = '';
+
   publishToMapillary = true;
   publishToGoogle = false;
   publishErrorMessage = '';
@@ -26,6 +32,12 @@ export class ModalStreetviewPublishComponent implements OnInit {
 
   ngOnInit() {
     this.publishErrorMessage = '';
+    this.streetviewService.getMapillaryOrganizations();
+    this.streetviewService.mapillaryOrganizations.subscribe(orgs => {
+      if (orgs.length !== 0) {
+        this.userOrganizations = orgs;
+      }
+    });
   }
 
   onSelect(items: Array<RemoteFile>) {
@@ -41,6 +53,7 @@ export class ModalStreetviewPublishComponent implements OnInit {
       selectedPath: this.selectedFiles[0],
       publishToMapillary: this.publishToMapillary,
       publishToGoogle: this.publishToGoogle,
+      organization: this.selectedOrganization
     });
     this.bsModalRef.hide();
   }

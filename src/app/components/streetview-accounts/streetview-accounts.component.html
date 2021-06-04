@@ -26,8 +26,10 @@
         <a href="https://www.mapillary.com/dashboard/profile">
           <img alt="" [src]="mapillaryUser.avatar" width=50 height=50/>
         </a>
-        <div style="display: block; font-size: 20px; height 100%; width: 100%; text-align: center">
-          <a href="https://www.mapillary.com/dashboard/profile">
+        <div class="account-text-wrapper">
+          <a href="https://www.mapillary.com/dashboard/profile"
+             class="account-text"
+             [tooltip]="mapillaryUser.username">
             {{mapillaryUser.username}}
           </a>
         </div>

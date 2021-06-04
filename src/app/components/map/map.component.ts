@@ -94,7 +94,8 @@ export class MapComponent implements OnInit, OnDestroy {
       collection.features.forEach( d => {
         // NOTE: LineString
         const seq = L.geoJSON(d, { style: {
-          weight: 10
+          weight: 10,
+          color: d.properties.color,
         }});
         seq.on('click', (ev) => { this.sequenceClickHandler(ev); } );
         seq.on('contextmenu', (ev) => { this.sequenceRightClickHandler(ev); } );

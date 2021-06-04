@@ -24,6 +24,20 @@
      </div>
 -->
 
+<div *ngIf="publishToMapillary">
+  <h4>Select Organizations</h4>
+  <select [(ngModel)]="selectedOrganization">
+    <option value="">
+      Upload to User Account
+    </option>
+    <option
+      *ngFor="let org of userOrganizations"
+      [value]="org.name">
+      {{org.nice_name}}
+    </option>
+  </select>
+</div>
+
 <app-file-browser
   [single]="true"
   [allowFolders]=allowFolders

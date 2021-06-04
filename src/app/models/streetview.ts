@@ -1,4 +1,5 @@
 import { FeatureCollection } from 'geojson';
+import { Project } from './models';
 
 // TODO: Get correct api
 export type GoogleUser = any;
@@ -23,6 +24,7 @@ export interface Streetview {
   path?: string;
   system_id?: number;
   sequences?: Array<StreetviewSequence>;
+  projects?: Array<Project>;
 };
 
 export interface StreetviewSequence {
@@ -33,6 +35,7 @@ export interface StreetviewSequence {
   end_date?: Date;
   bbox?: string;
   sequence_key?: string;
+  organization_key?: string;
 };
 
 export interface MapillaryUser {
@@ -41,6 +44,15 @@ export interface MapillaryUser {
   email: string;
   key: string;
   username: string;
+};
+
+export interface MapillaryOrganization {
+  avatar: string;
+  key: string;
+  name: string;
+  nice_name: string;
+  private_repository: boolean;
+  public_repository: boolean;
 };
 
 export interface MapillaryImageSearchCallback {
