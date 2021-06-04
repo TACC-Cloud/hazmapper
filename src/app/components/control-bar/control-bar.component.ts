@@ -1,11 +1,15 @@
 import {Component, OnInit, OnDestroy, Input} from '@angular/core';
 import { ProjectsService } from '../../services/projects.service';
 import { Project } from '../../models/models';
+import { BsModalRef, BsModalService } from 'ngx-foundation';
 import { GeoDataService } from '../../services/geo-data.service';
-import { LatLng } from 'leaflet';
-import { skip } from 'rxjs/operators';
-import { combineLatest, Subscription } from 'rxjs';
-import { NotificationsService } from '../../services/notifications.service';
+import {LatLng} from 'leaflet';
+import {skip} from 'rxjs/operators';
+import {combineLatest, Subscription} from 'rxjs';
+import {NotificationsService} from '../../services/notifications.service';
+import { ModalFileBrowserComponent } from '../modal-file-browser/modal-file-browser.component';
+import { ModalLinkProjectComponent } from '../modal-link-project/modal-link-project.component';
+import { AgaveSystemsService } from 'src/app/services/agave-systems.service';
 
 @Component({
   selector: 'app-control-bar',
@@ -21,12 +25,18 @@ export class ControlBarComponent implements OnInit, OnDestroy {
   private loadingActiveProject = true;
   private loadingActiveProjectFailed = false;
   private loadingData = false;
+  modalRef: BsModalRef;
+
   constructor(private projectsService: ProjectsService,
+              private bsModalService: BsModalService,
               private geoDataService: GeoDataService,
               private notificationsService: NotificationsService,
+              private agaveSystemsService: AgaveSystemsService
               ) { }
 
   ngOnInit() {
+    this.agaveSystemsService.list();
+
     this.subscription.add(this.projectsService.loadingActiveProject.subscribe(
       value => this.loadingActiveProject = value));
     this.subscription.add(this.projectsService.loadingActiveProjectFailed.subscribe(value => this.loadingActiveProjectFailed = value));
@@ -39,14 +49,16 @@ export class ControlBarComponent implements OnInit, OnDestroy {
         this.loadingData = (loadingOverlay || loadingPointCloud || loadingFeature);
       }));
 
-    this.subscription.add(this.projectsService.activeProject.subscribe(next => {
-      this.activeProject = next;
-      if (this.activeProject) {
-        this.geoDataService.getDataForProject(next.id, this.isPublicView);
-      } else {
-        this.geoDataService.clearData();
-      }
-    }));
+    this.subscription.add(combineLatest([this.projectsService.activeProject,
+                                         this.agaveSystemsService.projects])
+      .subscribe(([activeProject, dsProjects]) => {
+        if (activeProject) {
+          this.geoDataService.getDataForProject(activeProject.id, this.isPublicView);
+          this.activeProject = this.agaveSystemsService.getDSProjectInformation([activeProject], dsProjects)[0];
+        } else {
+          this.geoDataService.clearData();
+        }
+      }));
 
     this.subscription.add(this.notificationsService.notifications.subscribe(next => {
       const hasSuccessNotification = next.some(note => note.status === 'success');
