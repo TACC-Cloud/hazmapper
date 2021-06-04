@@ -39,7 +39,10 @@ export class ControlBarComponent implements OnInit, OnDestroy {
               ) { }
 
   ngOnInit() {
-    this.agaveSystemsService.list();
+    if (this.authService.isLoggedIn()) {
+      // potential refactor of this defined in https://jira.tacc.utexas.edu/browse/DES-1998
+      this.agaveSystemsService.list();
+    }
 
     this.subscription.add(this.projectsService.loadingActiveProject.subscribe(
       value => this.loadingActiveProject = value));
