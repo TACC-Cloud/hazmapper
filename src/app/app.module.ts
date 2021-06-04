@@ -61,6 +61,7 @@ import { ModalStreetviewInfoComponent } from './components/modal-streetview-info
 import { PublicMapInfoPanelComponent } from './components/public-map-info-panel/public-map-info-panel.component';
 import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
+import { ModalLinkProjectComponent } from './components/modal-link-project/modal-link-project.component';
 
 @NgModule({
   declarations: [
@@ -105,6 +106,7 @@ import { LogoutComponent } from './components/logout/logout.component';
     PublicMapInfoPanelComponent,
     LoginComponent,
     LogoutComponent,
+    ModalLinkProjectComponent,
   ],
   imports: [
     CommonModule,
@@ -173,7 +175,8 @@ import { LogoutComponent } from './components/logout/logout.component';
     ModalCreateTileServerComponent,
     ModalStreetviewLogComponent,
     ModalStreetviewLinkComponent,
+    ModalStreetviewInfoComponent,
     ModalPointCloudInfoComponent,
-    ModalStreetviewInfoComponent]
+    ModalLinkProjectComponent]
 })
 export class AppModule { }

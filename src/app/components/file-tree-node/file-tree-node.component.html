@@ -1,4 +1,4 @@
-<div [ngClass]="{'active': isActiveFeature()}">
+<div *ngIf="node" [ngClass]="{'active': isActiveFeature()}">
   <div *ngIf="node.isDir() && node.getPath()" class="clickable" (click)="onClick(node)">
     <i class="fas fa-folder-open" *ngIf="displayChildren"></i>
     <i class="fas fa-folder" *ngIf="!displayChildren"></i>
@@ -23,7 +23,3 @@
       </app-file-tree-node>
   </div>
 </div>
-
-
-
-

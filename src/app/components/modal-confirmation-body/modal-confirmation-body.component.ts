@@ -14,8 +14,8 @@ export class ModalConfirmationBodyComponent {
 
   constructor(public bsModalRef: BsModalRef) { }
 
-  closeModal(answer) {
-    this.answer = answer;
-    this.bsModalRef.hide();
-  }
+ closeModal(answer) {
+   this.answer = answer;
+   this.bsModalRef.hide();
+ }
 }

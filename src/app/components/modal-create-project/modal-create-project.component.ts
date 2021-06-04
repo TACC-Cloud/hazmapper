@@ -1,18 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterContentChecked } from '@angular/core';
 import { BsModalRef } from 'ngx-foundation';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ProjectsService } from '../../services/projects.service';
 import { Project } from '../../models/models';
 import {RemoteFile} from 'ng-tapis';
 import {RapidProjectRequest} from '../../models/rapid-project-request';
-import {Subject} from 'rxjs';
+import {ChangeDetectorRef } from '@angular/core';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-modal-create-project',
   templateUrl: './modal-create-project.component.html',
   styleUrls: ['./modal-create-project.component.styl']
 })
-export class ModalCreateProjectComponent implements OnInit {
+export class ModalCreateProjectComponent implements OnInit, AfterContentChecked {
 
   public readonly onClose: Subject<any> = new Subject<any>();
 
@@ -20,16 +21,28 @@ export class ModalCreateProjectComponent implements OnInit {
   rapidFolder: RemoteFile;
   submitting: boolean;
   errorMessage = '';
+  currentPath: string;
+  fileName = '';
+  selectedFiles: Array<RemoteFile> = [];
+  selectedSystem: any;
 
-  constructor(private bsModalRef: BsModalRef, private projectsService: ProjectsService) { }
+  constructor(private bsModalRef: BsModalRef,
+              private cdref: ChangeDetectorRef,
+              private projectsService: ProjectsService) { }
 
   ngOnInit() {
     this.submitting = false;
     this.projCreateForm = new FormGroup( {
       name: new FormControl(''),
-      description: new FormControl('')
+      description: new FormControl(''),
+      exportMapLink: new FormControl(false),
+      linkProject: new FormControl(false),
+      fileName: new FormControl('')
     });
+  }
 
+  ngAfterContentChecked() {
+    this.cdref.detectChanges();
   }
 
   close(project: Project) {
@@ -41,9 +54,22 @@ export class ModalCreateProjectComponent implements OnInit {
     this.rapidFolder = item[0];
   }
 
+  onSelect(items: Array<RemoteFile>) {
+    this.selectedFiles = items;
+  }
+
+  onSystemSelect(system: any) {
+    this.selectedSystem = system;
+    if (system.id.includes('project')) {
+      this.projCreateForm.get('linkProject').setValue(true);
+    } else {
+      this.projCreateForm.get('linkProject').setValue(false);
+    }
+  }
+
   createRapidProject() {
     this.errorMessage = '';
-    const req: RapidProjectRequest = new RapidProjectRequest(this.rapidFolder.system, this.rapidFolder.path)
+    const req: RapidProjectRequest = new RapidProjectRequest(this.rapidFolder.system, this.rapidFolder.path);
     this.projectsService.createRapidProject(req).subscribe( (project) => {
       this.close(project);
     }, (err) => {
@@ -57,6 +83,15 @@ export class ModalCreateProjectComponent implements OnInit {
     p.description = this.projCreateForm.get('description').value;
     p.name = this.projCreateForm.get('name').value;
     this.projectsService.create(p).subscribe( (project) => {
+      if (this.projCreateForm.get('exportMapLink').value) {
+        const path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path : this.currentPath;
+        const systemId = this.selectedSystem.id;
+        this.projectsService.exportProject(project,
+                                           systemId,
+                                           path,
+                                           this.projCreateForm.get('linkProject').value,
+                                           this.projCreateForm.get('fileName').value)
+      }
       this.close(project);
     }, err => {
       this.errorMessage = err.toString();
@@ -64,4 +99,7 @@ export class ModalCreateProjectComponent implements OnInit {
     this.submitting = true;
   }
 
+  setCurrentPath(path: string) {
+    this.currentPath = path;
+  }
 }
