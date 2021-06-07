@@ -25,7 +25,7 @@ export class EnvService {
 
   private getPortalUrl(backend: EnvironmentType): string {
     if (backend === EnvironmentType.Production) {
-      return 'https://https://www.designsafe-ci.org/';
+      return 'https://www.designsafe-ci.org/';
     } else {
       return 'https://designsafeci-dev.tacc.utexas.edu/';
     }
