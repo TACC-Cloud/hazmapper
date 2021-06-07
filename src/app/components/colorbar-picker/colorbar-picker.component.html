@@ -1,0 +1,14 @@
+<div class="grid-y">
+  <div class="cell">
+    <div>
+      <app-colorbar [colorScale]="selectedColorMap"></app-colorbar>
+    </div>
+    <div class="label"> {{selectedColorMap}}</div>
+  </div>
+
+  <app-colorbar *ngFor="let item of colorMaps | keyvalue"
+    [colorScale]="item.key"
+    (click)="select(item.key)"
+  >
+  </app-colorbar>
+</div>

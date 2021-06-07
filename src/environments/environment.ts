@@ -12,7 +12,7 @@ export interface AppEnvironment {
 }
 
 export const environment: AppEnvironment =  {
-  backend: EnvironmentType.Local,
+  backend: EnvironmentType.Production,
   jwt: devJWT,
   production: false
 };

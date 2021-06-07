@@ -54,6 +54,8 @@ import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { ModalLinkProjectComponent } from './components/modal-link-project/modal-link-project.component';
 import { GroupsPanelComponent } from './components/groups-panel/groups-panel.component';
+import { ColorbarComponent } from './components/colorbar/colorbar.component';
+import { ColorbarPickerComponent } from './components/colorbar-picker/colorbar-picker.component';
 
 @NgModule({
   declarations: [
@@ -91,6 +93,8 @@ import { GroupsPanelComponent } from './components/groups-panel/groups-panel.com
     LogoutComponent,
     ModalLinkProjectComponent,
     GroupsPanelComponent,
+    ColorbarComponent,
+    ColorbarPickerComponent,
   ],
   imports: [
     CommonModule,

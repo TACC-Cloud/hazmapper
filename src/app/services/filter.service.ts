@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {AssetFilters, Project} from '../models/models';
-import {BehaviorSubject, Observable} from "rxjs";
+import {BehaviorSubject, Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
