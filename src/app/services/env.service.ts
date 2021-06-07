@@ -6,6 +6,7 @@ import {EnvironmentType} from '../../environments/environmentType';
 export class EnvService {
   private _env: EnvironmentType;
   private _apiUrl: string;
+  private _portalUrl: string;
   private _jwt?: string;
   private _clientId: string;
   private _baseHref: string;
@@ -19,6 +20,14 @@ export class EnvService {
       return 'https://agave.designsafe-ci.org/geo/v2';
     } else {
       throw new Error('Unsupported Type');
+    }
+  }
+
+  private getPortalUrl(backend: EnvironmentType): string {
+    if (backend === EnvironmentType.Production) {
+      return 'https://https://www.designsafe-ci.org/';
+    } else {
+      return 'https://designsafeci-dev.tacc.utexas.edu/';
     }
   }
 
@@ -50,6 +59,10 @@ export class EnvService {
     return 'https://agave.designsafe-ci.org/';
   }
 
+  get portalUrl(): string {
+    return this._portalUrl;
+  }
+
   constructor() {}
 
   init(): Promise<void> {
@@ -66,6 +79,7 @@ export class EnvService {
     if (/^localhost/.test(hostname)) {
       this._env = EnvironmentType.Local;
       this._apiUrl = this.getApiUrl(environment.backend);
+      this._portalUrl = this.getPortalUrl(environment.backend);
       // when we are using the local backend, a jwt is required
       if (environment.backend === EnvironmentType.Local) {
         this._jwt = environment.jwt;
@@ -75,11 +89,13 @@ export class EnvService {
     } else if (/^hazmapper.tacc.utexas.edu/.test(hostname) && pathname.startsWith('/staging')) {
       this._env = EnvironmentType.Staging;
       this._apiUrl = this.getApiUrl(this.env);
+      this._portalUrl = this.getPortalUrl(this.env);
       this._clientId = 'foitdqFcimPzKZuMhbQ1oyh3Anka';
       this._baseHref = '/staging/';
     } else if (/^hazmapper.tacc.utexas.edu/.test(hostname)) {
       this._env = EnvironmentType.Production;
       this._apiUrl = this.getApiUrl(this.env);
+      this._portalUrl = this.getPortalUrl(this.env);
       this._clientId = 'tMvAiRdcsZ52S_89lCkO4x3d6VMa';
       this._baseHref = '/hazmapper/';
     } else {
