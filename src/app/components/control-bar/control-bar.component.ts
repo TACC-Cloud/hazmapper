@@ -4,9 +4,11 @@ import { Project } from '../../models/models';
 import { BsModalRef, BsModalService } from 'ngx-foundation';
 import { GeoDataService } from '../../services/geo-data.service';
 import {LatLng} from 'leaflet';
-import {skip} from 'rxjs/operators';
+import {skip, take} from 'rxjs/operators';
 import {combineLatest, Subscription} from 'rxjs';
 import {NotificationsService} from '../../services/notifications.service';
+import {Router} from '@angular/router';
+import {AuthService} from '../../services/authentication.service';
 import { ModalFileBrowserComponent } from '../modal-file-browser/modal-file-browser.component';
 import { ModalLinkProjectComponent } from '../modal-link-project/modal-link-project.component';
 import { AgaveSystemsService } from 'src/app/services/agave-systems.service';
@@ -24,18 +26,19 @@ export class ControlBarComponent implements OnInit, OnDestroy {
   private loadingActiveProject = true;
   private loadingActiveProjectFailed = false;
   private loadingData = false;
+  private canSwitchToPrivateMap = false;
   modalRef: BsModalRef;
 
-  constructor(private projectsService: ProjectsService,
+  constructor(private router: Router,
+              private projectsService: ProjectsService,
               private bsModalService: BsModalService,
               private geoDataService: GeoDataService,
               private notificationsService: NotificationsService,
+              private authService: AuthService,
               private agaveSystemsService: AgaveSystemsService
               ) { }
 
   ngOnInit() {
-    this.agaveSystemsService.list();
-
     this.subscription.add(this.projectsService.loadingActiveProject.subscribe(
       value => this.loadingActiveProject = value));
     this.subscription.add(this.projectsService.loadingActiveProjectFailed.subscribe(value => this.loadingActiveProjectFailed = value));
@@ -48,14 +51,39 @@ export class ControlBarComponent implements OnInit, OnDestroy {
         this.loadingData = (loadingOverlay || loadingPointCloud || loadingFeature);
       }));
 
-    this.subscription.add(combineLatest([this.projectsService.activeProject,
-                                         this.agaveSystemsService.projects])
-      .subscribe(([activeProject, dsProjects]) => {
-        if (activeProject) {
-          this.geoDataService.getDataForProject(activeProject.id, this.isPublicView);
-          this.activeProject = this.agaveSystemsService.getDSProjectInformation([activeProject], dsProjects)[0];
+    // potential refactor of this if/else block defined in https://jira.tacc.utexas.edu/browse/DES-1998
+    if (this.authService.isLoggedIn()) {
+      this.agaveSystemsService.list();
+
+      this.subscription.add(combineLatest([this.projectsService.activeProject,
+                                           this.agaveSystemsService.projects])
+        .subscribe(([activeProject, dsProjects]) => {
+          if (activeProject) {
+            this.geoDataService.getDataForProject(activeProject.id, this.isPublicView);
+            this.activeProject = this.agaveSystemsService.getDSProjectInformation([activeProject], dsProjects)[0];
+          } else {
+            this.geoDataService.clearData();
+          }
+        }));
+    } else {
+      this.subscription.add(this.projectsService.activeProject.subscribe(next => {
+        this.activeProject = next;
+        if (this.activeProject) {
+          this.geoDataService.getDataForProject(next.id, this.isPublicView);
         } else {
           this.geoDataService.clearData();
+        }
+      }));
+    }
+
+    this.subscription.add(combineLatest([this.authService.currentUser,
+      this.projectsService.projectUsers$])
+      .subscribe(([currentUser, projectUsers]) => {
+        // check if user is logged in viewing a public map but is allowed to switch to private view
+        if (this.isPublicView && projectUsers) {
+          this.canSwitchToPrivateMap = projectUsers.find(u => u.username === currentUser.username) ? true : false;
+        } else {
+          this.canSwitchToPrivateMap = false;
         }
       }));
 
@@ -73,5 +101,9 @@ export class ControlBarComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  routeToPrivateView() {
+    this.router.navigate(['project', this.activeProject.uuid]);
   }
 }

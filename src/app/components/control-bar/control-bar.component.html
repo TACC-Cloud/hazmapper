@@ -11,6 +11,11 @@
         <div *ngIf="activeProject.ds_id" style="padding-left: 30px">
           <span>Project: {{activeProject.ds_id}} | {{activeProject.title}}</span>
         </div>
+        <div *ngIf="canSwitchToPrivateMap" class="grid-x align-left align-middle">
+          <a class="light-blue private-view-link" tooltip="View private map" [delay]="100" (click)="routeToPrivateView()">
+            <i class="fas fa-lock"></i>
+          </a>
+        </div>
       </ng-container>
       <div *ngIf="loadingData" style="margin-left: 1rem">
             <i class="fas fa-spin fa-spinner" style="margin-right: 0.3rem"></i>

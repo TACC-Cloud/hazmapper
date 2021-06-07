@@ -54,11 +54,11 @@ export class ProjectsService {
     });
   }
 
-  getProjectUsers(proj: Project): void {
-    this.http.get<Array<IProjectUser>>(this.envService.apiUrl + `/projects/${proj.id}/users/`)
-      .subscribe( (resp) => {
-        this._projectUsers.next(resp);
-      });
+  getProjectUsers(proj: Project): Observable<Array<IProjectUser>> {
+    return this.http.get<Array<IProjectUser>>(this.envService.apiUrl + `/projects/${proj.id}/users/`).pipe(
+      tap(users => {
+        this._projectUsers.next(users);
+      }));
   }
 
   addUserToProject(proj: Project, uname: string): void {
@@ -67,14 +67,14 @@ export class ProjectsService {
     };
     this.http.post(this.envService.apiUrl + `/projects/${proj.id}/users/`, payload)
       .subscribe( (resp) => {
-        this.getProjectUsers(proj);
+        this.getProjectUsers(proj).subscribe();
       });
   }
 
   deleteUserFromProject(proj: Project, uname: string): void {
     this.http.delete(this.envService.apiUrl + `/projects/${proj.id}/users/${uname}/`)
       .subscribe( (resp) => {
-        this.getProjectUsers(proj);
+        this.getProjectUsers(proj).subscribe();
       }, error => {
       this.notificationsService.showErrorToast('Unable to delete user');
     });
@@ -114,7 +114,7 @@ export class ProjectsService {
         this.notificationsService.showSuccessToast(`Create file ${system_id}/${path}/${file_name}.hazmapper`);
         this._projects.next([...this._projects.value.filter((p) => p.id != project.id),
                              currentProject]);
-        this.setActiveProject(currentProject);
+        this._activeProject.next(currentProject);
       }, error => {
         this.notificationsService.showErrorToast(`Failed to create file ${system_id}/${path}/${file_name}.hazmapper`);
         console.log(error);
@@ -143,30 +143,39 @@ export class ProjectsService {
   setActiveProjectUUID(uuid: string, usePublicRoute: boolean = false): void {
     this._loadingActiveProject.next(true);
     this._loadingActiveProjectFailed.next(false);
-    this.setActiveProject(null);
+    this._activeProject.next(null);
+    this._projectUsers.next(null);
 
     const projectRoute = usePublicRoute ? 'public-projects' : 'projects';
     this.http.get<Project[]>(this.envService.apiUrl + `/${projectRoute}/?uuid=` + uuid)
       .subscribe( (resp) => {
-        this._loadingActiveProject.next(false);
-        this.setActiveProject(resp[0], usePublicRoute);
+        if (usePublicRoute) {
+          this._activeProject.next(resp[0]);
+          this._loadingActiveProject.next(false);
+
+          if (this.authService.isLoggedIn()) {
+            this.getProjectUsers(resp[0]).subscribe();
+          }
+        } else {
+          //  as we are viewing the private map we need to get the project
+          //  users. We also need to check that the current user is part of that list as
+          //  it is possible that their request for the map was successful only due to the
+          //  map being public
+          this.getProjectUsers(resp[0]).subscribe( (users) => {
+            // successful got the users which implies user is one of the map-projects' users
+            this._activeProject.next(resp[0]);
+            this._loadingActiveProject.next(false);
+          }, error => {
+            // logged in user is not a member of project's users so shouldn't have private access
+            this._loadingActiveProject.next(false);
+            this._loadingActiveProjectFailed.next(true);
+          });
+        }
         }, error => {
         this._loadingActiveProject.next(false);
         this._loadingActiveProjectFailed.next(true);
         }
       );
-  }
-
-  setActiveProject(proj: Project, publicAccess: boolean = false): void {
-    // TODO needs to be extended with a parameter (checkIfHasPrivateAccess)
-    //  to check if we need to set _loadingActiveProjectFailed to False
-    //  in cases where we have a private view but despite the map being public, the user
-    //  is not a member of the project.  https://jira.tacc.utexas.edu/browse/DES-1927
-
-    this._activeProject.next(proj);
-    if (proj && !publicAccess && this.authService.isLoggedIn()) {
-      this.getProjectUsers(proj);
-    }
   }
 
   deleteProject(proj: Project): void {
