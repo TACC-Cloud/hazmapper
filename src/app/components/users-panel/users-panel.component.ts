@@ -49,19 +49,19 @@ export class UsersPanelComponent implements OnInit {
                                          this.agaveSystemsService.projects])
       .subscribe(([activeProject, dsProjects]) => {
       if (activeProject) {
+        const portalUrl = this.envService.portalUrl + 'data/browser/';
         this.activeProject = this.agaveSystemsService.getDSProjectInformation([activeProject], dsProjects)[0];
-        const dsUrl = 'https://www.designsafe-ci.org/data/browser/';
         if (activeProject.system_id) {
           if (activeProject.system_id.includes('project')) {
-            this.dsHref = dsUrl + 'projects/' +
+            this.dsHref = portalUrl + 'projects/' +
               activeProject.system_id.substr(8) + '/' +
               activeProject.system_path + '/';
             if (activeProject.ds_id) {
-              this.projectHref = dsUrl + 'projects/' +
+              this.projectHref = portalUrl + 'projects/' +
                 activeProject.system_id.substr(8) + '/';
             }
           } else {
-            this.myDataHref = dsUrl + 'agave/' +
+            this.myDataHref = portalUrl + 'agave/' +
               activeProject.system_id;
             this.dsHref = this.myDataHref +
               activeProject.system_path + '/';
