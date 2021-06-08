@@ -56,6 +56,8 @@ import { ModalLinkProjectComponent } from './components/modal-link-project/modal
 import { GroupsPanelComponent } from './components/groups-panel/groups-panel.component';
 import { ColorbarComponent } from './components/colorbar/colorbar.component';
 import { ColorbarPickerComponent } from './components/colorbar-picker/colorbar-picker.component';
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
+import { FeatureGroupComponent } from './components/feature-group/feature-group.component';
 
 @NgModule({
   declarations: [
@@ -95,6 +97,7 @@ import { ColorbarPickerComponent } from './components/colorbar-picker/colorbar-p
     GroupsPanelComponent,
     ColorbarComponent,
     ColorbarPickerComponent,
+    FeatureGroupComponent,
   ],
   imports: [
     CommonModule,
@@ -113,7 +116,8 @@ import { ColorbarPickerComponent } from './components/colorbar-picker/colorbar-p
     TooltipModule.forRoot(),
     TabsModule.forRoot(),
     ToastrModule.forRoot(),
-    DragDropModule
+    DragDropModule,
+    NgxSliderModule
   ],
   providers: [
     AuthService,

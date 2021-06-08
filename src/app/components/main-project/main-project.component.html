@@ -5,7 +5,8 @@
 </div>
 
 <div class="grid-x">
-  <div class="cell auto">
+  <div class="cell auto map">
+    <app-dock></app-dock>
     <app-map></app-map>
   </div>
   <app-asset-detail *ngIf="activeFeature" [isPublicView]=isPublicView></app-asset-detail>

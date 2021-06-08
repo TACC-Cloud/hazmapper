@@ -21,6 +21,7 @@ export class ColorMapsService {
     this.colormaps.set('spectral', d3.interpolateSpectral);
     this.colormaps.set('cool', d3.interpolateCool);
     this.colormaps.set('reds', d3.interpolateReds);
+    this.colormaps.set('turbo', d3.interpolateTurbo);
 
   }
 
