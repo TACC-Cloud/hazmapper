@@ -18,6 +18,10 @@ export class ColorMapsService {
     this.colormaps.set('rdylgn', d3.interpolateRdYlGn);
     this.colormaps.set('plasma', d3.interpolatePlasma);
     this.colormaps.set('warm', d3.interpolateWarm);
+    this.colormaps.set('spectral', d3.interpolateSpectral);
+    this.colormaps.set('cool', d3.interpolateCool);
+    this.colormaps.set('reds', d3.interpolateReds);
+
   }
 
   public getColorMaps(): Map<string, (number: number) => number | string> {

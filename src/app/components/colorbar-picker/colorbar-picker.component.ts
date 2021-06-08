@@ -11,9 +11,13 @@ export class ColorbarPickerComponent implements OnInit {
   @Output() selection: EventEmitter<string> = new EventEmitter<string>();
   public colorMaps: Map<string, (number: number) => number | string>;
   public selectedColorMap: string;
+  public showOptions = false;
 
   constructor(private colorMapsService: ColorMapsService) { }
 
+  showHide(): void {
+    this.showOptions = !this.showOptions;
+  }
 
   ngOnInit() {
     this.colorMaps = this.colorMapsService.getColorMaps();

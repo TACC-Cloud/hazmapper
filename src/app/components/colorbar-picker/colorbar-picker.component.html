@@ -1,14 +1,23 @@
 <div class="grid-y">
-  <div class="cell">
-    <div>
-      <app-colorbar [colorScale]="selectedColorMap"></app-colorbar>
-    </div>
-    <div class="label"> {{selectedColorMap}}</div>
-  </div>
+  <div class="grid-x grid-margin-x">
 
-  <app-colorbar *ngFor="let item of colorMaps | keyvalue"
-    [colorScale]="item.key"
-    (click)="select(item.key)"
-  >
-  </app-colorbar>
+    <div class="cell auto">
+      <app-colorbar [colorScale]="selectedColorMap"
+         class="clickable"
+         (click)="showHide()"
+        >
+      </app-colorbar>
+    </div>
+    <div class="cell shrink">
+      <div class="label"> {{selectedColorMap}} </div>
+    </div>
+  </div>
+  <div class="cell" [hidden]="!showOptions">
+    <app-colorbar *ngFor="let item of colorMaps | keyvalue"
+      class="clickable"
+      [colorScale]="item.key"
+      (click)="select(item.key)"
+    >
+    </app-colorbar>
+  </div>
 </div>
