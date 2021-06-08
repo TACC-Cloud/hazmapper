@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Options } from '@angular-slider/ngx-slider';
 
 @Component({
   selector: 'app-feature-group',
@@ -6,10 +7,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./feature-group.component.styl']
 })
 export class FeatureGroupComponent implements OnInit {
-
-  constructor() { }
+  public options: Options;
+  constructor() {
+    this.options = {
+      floor: 0,
+      ceil: 100
+    };
+  }
 
   ngOnInit() {
+
   }
 
 }

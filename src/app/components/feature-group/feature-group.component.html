@@ -1,3 +1,14 @@
-<p>
-  feature-group works!
-</p>
+<div class="bordered padded">
+  <div class="group-header">
+    <div class="group-name"> Group 1 </div>
+  </div>
+  <div class="bordered padded">
+    <div class="control-label"> Fill Color </div>
+      <app-colorbar-picker>
+    </app-colorbar-picker>
+  </div>
+  <div class="bordered padded">
+    <div class="control-label"> Radius </div>
+    <ngx-slider [(value)]="value" [options]="options"></ngx-slider>
+  </div>
+</div>
