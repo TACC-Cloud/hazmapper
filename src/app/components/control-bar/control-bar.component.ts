@@ -1,16 +1,14 @@
 import {Component, OnInit, OnDestroy, Input} from '@angular/core';
 import { ProjectsService } from '../../services/projects.service';
 import { Project } from '../../models/models';
-import { BsModalRef, BsModalService } from 'ngx-foundation';
 import { GeoDataService } from '../../services/geo-data.service';
 import {LatLng} from 'leaflet';
 import {skip, take} from 'rxjs/operators';
 import {combineLatest, Subscription} from 'rxjs';
 import {NotificationsService} from '../../services/notifications.service';
+import {MAIN} from '../../constants/routes';
 import {Router} from '@angular/router';
 import {AuthService} from '../../services/authentication.service';
-import { ModalFileBrowserComponent } from '../modal-file-browser/modal-file-browser.component';
-import { ModalLinkProjectComponent } from '../modal-link-project/modal-link-project.component';
 import { AgaveSystemsService } from 'src/app/services/agave-systems.service';
 
 @Component({
@@ -27,11 +25,9 @@ export class ControlBarComponent implements OnInit, OnDestroy {
   private loadingActiveProjectFailed = false;
   private loadingData = false;
   private canSwitchToPrivateMap = false;
-  modalRef: BsModalRef;
 
   constructor(private router: Router,
               private projectsService: ProjectsService,
-              private bsModalService: BsModalService,
               private geoDataService: GeoDataService,
               private notificationsService: NotificationsService,
               private authService: AuthService,
