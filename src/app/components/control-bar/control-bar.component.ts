@@ -18,7 +18,6 @@ import { AgaveSystemsService } from 'src/app/services/agave-systems.service';
 })
 export class ControlBarComponent implements OnInit, OnDestroy {
   @Input() isPublicView = false;
-  public projects: Project[] = [];
   private subscription: Subscription = new Subscription();
   private activeProject: Project;
   private mapMouseLocation: LatLng = new LatLng(0, 0);
