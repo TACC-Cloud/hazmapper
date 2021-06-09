@@ -95,10 +95,6 @@ export class ControlBarComponent implements OnInit, OnDestroy {
     }));
   }
 
-  routeToMain() {
-     this.router.navigateByUrl(MAIN);
-  }
-
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
