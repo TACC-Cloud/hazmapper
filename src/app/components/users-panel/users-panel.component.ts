@@ -1,10 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import {ProjectsService} from '../../services/projects.service';
+import {NotificationsService} from '../../services/notifications.service';
 import {ModalService} from '../../services/modal.service';
+import { BsModalRef, BsModalService } from 'ngx-foundation';
 import {IProjectUser} from '../../models/project-user';
 import {FormGroup, FormControl} from '@angular/forms';
 import {Project} from '../../models/models';
 import {EnvService} from '../../services/env.service';
+import { ModalLinkProjectComponent } from '../modal-link-project/modal-link-project.component';
+import { AgaveSystemsService } from 'src/app/services/agave-systems.service';
+import { combineLatest } from 'rxjs';
+import { copyToClipboard } from '../../utils/copyText';
 
 @Component({
   selector: 'app-users-panel',
@@ -21,18 +27,47 @@ export class UsersPanelComponent implements OnInit {
   descriptionErrorMessage = 'Project description must be under 4096 characters!';
   publicStatusChanging = false;
   publicStatusChangingError = false;
+  dsHref: string;
+  projectHref: string;
+  myDataHref: string;
 
   constructor(private projectsService: ProjectsService,
+              private bsModalService: BsModalService,
               private modalService: ModalService,
+              private notificationsService: NotificationsService,
+              private agaveSystemsService: AgaveSystemsService,
               private envService: EnvService) { }
 
   ngOnInit() {
+    this.agaveSystemsService.list();
+
     this.addUserForm = new FormGroup( {
       username: new FormControl()
     });
 
-    this.projectsService.activeProject.subscribe( (next) => {
-      this.activeProject = next;
+    combineLatest([this.projectsService.activeProject,
+                                         this.agaveSystemsService.projects])
+      .subscribe(([activeProject, dsProjects]) => {
+      if (activeProject) {
+        const portalUrl = this.envService.portalUrl + 'data/browser/';
+        this.activeProject = this.agaveSystemsService.getDSProjectInformation([activeProject], dsProjects)[0];
+        if (activeProject.system_id) {
+          if (activeProject.system_id.includes('project')) {
+            this.dsHref = portalUrl + 'projects/' +
+              activeProject.system_id.substr(8) + '/' +
+              activeProject.system_path + '/';
+            if (activeProject.ds_id) {
+              this.projectHref = portalUrl + 'projects/' +
+                activeProject.system_id.substr(8) + '/';
+            }
+          } else {
+            this.myDataHref = portalUrl + 'agave/' +
+              activeProject.system_id;
+            this.dsHref = this.myDataHref +
+              activeProject.system_path + '/';
+          }
+        }
+      }
     });
 
     this.projectsService.projectUsers$.subscribe( (next) => {
@@ -43,6 +78,30 @@ export class UsersPanelComponent implements OnInit {
   getPublicUrl() {
    const publicUrl = location.origin + this.envService.baseHref + `project-public/${this.activeProject.uuid}/`;
    return publicUrl;
+  }
+
+  openExportProjectModal() {
+    const initialState = {
+      single: true,
+      allowFolders: true,
+      onlyFolder: true,
+      allowEmptyFiles: true,
+      allowedExtensions: []
+    };
+    const modal: BsModalRef = this.bsModalService.show(ModalLinkProjectComponent, { initialState });
+    modal.content.onClose.subscribe( (next) => {
+      const path = next.fileList.length > 0 ? next.fileList[0].path : next.currentPath;
+      this.projectsService.exportProject(this.activeProject,
+                                         next.system.id,
+                                         path,
+                                         next.system.id.includes('project') && next.linkProject,
+                                         next.fileName);
+    });
+  }
+
+  copyLinkToClipboard(link: string) {
+    copyToClipboard(link);
+    this.notificationsService.showSuccessToast(`Copied ${link} to the clipboard!`);
   }
 
   updateMapPublicAccess(makePublic: boolean) {

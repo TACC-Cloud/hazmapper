@@ -10,16 +10,13 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class MainComponent implements AfterContentInit {
   public currentUser: AuthenticatedUser;
-  private afterLoginRoute: string;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService) {
-    // should support redirect to public project on login and offer way to switch to private view if user is
-    // project member (see https://jira.tacc.utexas.edu/browse/DES-1921)
-    this.afterLoginRoute = MAIN;
   }
+
 
   ngAfterContentInit() {
     if (this.authService.isLoggedIn()) {
@@ -36,5 +33,10 @@ export class MainComponent implements AfterContentInit {
 
   routeToWelcome() {
     this.router.navigate([MAIN]);
+  }
+
+  routeToLogin() {
+    // route to login and then to this page
+    this.router.navigateByUrl(LOGIN + '?to=' + encodeURIComponent(this.router.url));
   }
 }
