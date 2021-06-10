@@ -17,7 +17,7 @@ import { take } from 'rxjs/operators';
 
 export class MainWelcomeComponent implements OnInit {
   release_url = 'https://github.com/TACC-cloud/hazmapper';
-  guide_url = 'https://www.designsafe-ci.org/rw/user-guide/workspace/hazmapper/';
+  guide_url = 'https://www.designsafe-ci.org/rw/user-guides/tools-applications/visualization/hazmapper/';
 
   spinner = true;
   notConnected: boolean;

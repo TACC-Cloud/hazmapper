@@ -60,13 +60,9 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(catchError(err => {
       if (err.status === 401) {
-        if (request.url.indexOf(this.envService.mapillaryApiUrl) > -1) {
-          this.streetviewAuthService.logout('mapillary')
-          this.notificationService.showErrorToast('Logged out of Mapillary!')
-        } else {
-          // auto logout if 401 response returned from api
-          this.authService.logout();
-        }
+        // auto logout if 401 response returned from api
+        // https://jira.tacc.utexas.edu/browse/DES-1999
+        this.authService.logout();
         location.reload(true);
       }
       throw err;
