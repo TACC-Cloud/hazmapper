@@ -1,5 +1,10 @@
-import {CircleMarker, MarkerOptions, circleMarker, divIcon, LatLng, Marker, marker} from 'leaflet';
-import {Feature, MarkerConfig, Path, MarkerIcon} from '../models/models';
+import {CircleMarker, MarkerOptions, Path, circleMarker, divIcon, LatLng, Marker, marker} from 'leaflet';
+import {Feature} from '../models/models';
+
+interface MarkerIcon {
+  color: string;
+  name: string;
+}
 
 function createCircleMarker(feature: Feature, latlng: LatLng): CircleMarker {
   const options = {
@@ -31,7 +36,18 @@ function createVideoMarker(feature: Feature, latlng: LatLng): Marker {
   return marker(latlng, {icon: ico});
 }
 
-export function createMarker(feature: Feature, latlng: LatLng): Path {
+function createCustomIconMarker(feature: Feature, latlng: LatLng): Marker {
+  const icon = feature.properties.icon as MarkerIcon;
+  const divHtml = `<i class="fas ${icon.name} fa-2x" style="color: ${icon.color}"></i>`;
+  const ico = divIcon({className: 'leaflet-fa-marker-icon', html: divHtml});
+  return marker(latlng, {icon: ico, ...feature.styles});
+}
+
+function createCustomCircleMarker(latlng: LatLng, options: MarkerOptions): CircleMarker {
+  return circleMarker(latlng, options);
+}
+
+export function createMarker(feature: Feature, latlng: LatLng): Marker | CircleMarker {
   if (feature.properties.customMarker) {
     if (feature.properties.customMarker === 'icon') {
       return createCustomIconMarker(feature, latlng);
@@ -49,15 +65,4 @@ export function createMarker(feature: Feature, latlng: LatLng): Path {
       return createCircleMarker(feature, latlng);
     }
   }
-}
-
-function createCustomIconMarker(feature: Feature, latlng: LatLng): Marker {
-  const icon = feature.properties.icon as MarkerIcon;
-  const divHtml = `<i class="fas ${icon.name} fa-2x" style="color: ${icon.color}"></i>`;
-  const ico = divIcon({className: 'leaflet-fa-marker-icon', html: divHtml});
-  return marker(latlng, {icon: ico, ...feature.styles});
-}
-
-function createCustomCircleMarker(latlng: LatLng, options: MarkerOptions): CircleMarker {
-  return circleMarker(latlng, options);
 }
