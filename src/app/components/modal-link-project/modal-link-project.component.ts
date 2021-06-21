@@ -21,11 +21,11 @@ export class ModalLinkProjectComponent implements OnInit {
   @Input() allowEmptyFiles: false;
   selectedFiles: Array<RemoteFile> = [];
   selectedSystem: any;
-  fileName: string = '';
+  fileName = '';
   activeProject: Project;
-  linkProject: boolean = false;
+  linkProject = false;
   currentPath: string;
-  confirmRemove: boolean = false;
+  confirmRemove = false;
   public onClose: Subject<any> = new Subject<any>();
   constructor(private modalRef: BsModalRef,
               private projectsService: ProjectsService,

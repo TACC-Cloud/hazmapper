@@ -11,6 +11,7 @@ import { ModalLinkProjectComponent } from '../modal-link-project/modal-link-proj
 import { AgaveSystemsService } from 'src/app/services/agave-systems.service';
 import { combineLatest } from 'rxjs';
 import { copyToClipboard } from '../../utils/copyText';
+import {RapidProjectRequest} from 'src/app/models/rapid-project-request';
 
 @Component({
   selector: 'app-users-panel',
@@ -89,13 +90,23 @@ export class UsersPanelComponent implements OnInit {
       allowedExtensions: []
     };
     const modal: BsModalRef = this.bsModalService.show(ModalLinkProjectComponent, { initialState });
-    modal.content.onClose.subscribe( (next) => {
+    modal.content.onClose.subscribe((next) => {
       const path = next.fileList.length > 0 ? next.fileList[0].path : next.currentPath;
-      this.projectsService.exportProject(this.activeProject,
-                                         next.system.id,
-                                         path,
-                                         next.system.id.includes('project') && next.linkProject,
-                                         next.fileName);
+      if (next.linkProject) {
+        const req: RapidProjectRequest = new RapidProjectRequest(next.system.id, path, false, this.activeProject.id);
+        this.projectsService.createRapidProject(req).subscribe((project: Project) => {
+          this.notificationsService.showSuccessToast(`Saved to ${next.system.id}/${path}`);
+        }, (err) => {
+          this.notificationsService.showErrorToast(`Failed to save to ${next.system.id}/${path} ${err.toString()}`);
+        });
+
+      } else {
+        this.projectsService.exportProject(this.activeProject,
+                                           next.system.id,
+                                           path,
+                                           next.system.id.includes('project') && next.linkProject,
+                                           next.fileName);
+      }
     });
   }
 

@@ -69,7 +69,7 @@ export class ModalCreateProjectComponent implements OnInit, AfterContentChecked 
 
   createRapidProject() {
     this.errorMessage = '';
-    const req: RapidProjectRequest = new RapidProjectRequest(this.rapidFolder.system, this.rapidFolder.path);
+    const req: RapidProjectRequest = new RapidProjectRequest(this.rapidFolder.system, this.rapidFolder.path, true);
     this.projectsService.createRapidProject(req).subscribe( (project) => {
       this.close(project);
     }, (err) => {
@@ -82,16 +82,26 @@ export class ModalCreateProjectComponent implements OnInit, AfterContentChecked 
     const p = new Project();
     p.description = this.projCreateForm.get('description').value;
     p.name = this.projCreateForm.get('name').value;
-    this.projectsService.create(p).subscribe( (project) => {
+    this.projectsService.create(p).subscribe((project) => {
       if (this.projCreateForm.get('exportMapLink').value) {
         const path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path : this.currentPath;
         const systemId = this.selectedSystem.id;
-        this.projectsService.exportProject(project,
-                                           systemId,
-                                           path,
-                                           this.projCreateForm.get('linkProject').value,
-                                           this.projCreateForm.get('fileName').value)
+        if (this.projCreateForm.get('linkProject').value) {
+          this.projectsService.exportProject(project,
+            systemId,
+            path,
+            this.projCreateForm.get('linkProject').value,
+            this.projCreateForm.get('fileName').value);
+        } else {
+          const req: RapidProjectRequest = new RapidProjectRequest(systemId, path, true);
+          this.projectsService.createRapidProject(req).subscribe((resProject: Project) => {
+            this.close(resProject);
+          }, (err) => {
+            this.errorMessage = err.toString();
+          });
+        }
       }
+       
       this.close(project);
     }, err => {
       this.errorMessage = err.toString();
