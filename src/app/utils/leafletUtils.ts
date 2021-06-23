@@ -1,5 +1,5 @@
 import {CircleMarker, MarkerOptions, circleMarker, divIcon, LatLng, Marker, marker} from 'leaflet';
-import {Feature, MarkerConfig, Path, MarkerIcon} from '../models/models';
+import {Feature, MarkerConfig, MarkerIcon} from '../models/models';
 
 function createCircleMarker(feature: Feature, latlng: LatLng): CircleMarker {
   const options = {
@@ -31,7 +31,7 @@ function createVideoMarker(feature: Feature, latlng: LatLng): Marker {
   return marker(latlng, {icon: ico});
 }
 
-export function createMarker(feature: Feature, latlng: LatLng): Path {
+export function createMarker(feature: Feature, latlng: LatLng) {
   if (feature.properties.customMarker) {
     if (feature.properties.customMarker === 'icon') {
       return createCustomIconMarker(feature, latlng);
