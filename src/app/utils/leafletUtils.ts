@@ -1,5 +1,6 @@
-import {CircleMarker, MarkerOptions, Path, circleMarker, divIcon, LatLng, Marker, marker} from 'leaflet';
+import {CircleMarker, Path, circleMarker, divIcon, LatLng, Marker, marker} from 'leaflet';
 import {Feature} from '../models/models';
+import {MarkerStyle} from '../models/style';
 
 interface MarkerIcon {
   color: string;
@@ -36,23 +37,26 @@ function createVideoMarker(feature: Feature, latlng: LatLng): Marker {
   return marker(latlng, {icon: ico});
 }
 
-function createCustomIconMarker(feature: Feature, latlng: LatLng): Marker {
-  const icon = feature.properties.icon as MarkerIcon;
-  const divHtml = `<i class="fas ${icon.name} fa-2x" style="color: ${icon.color}"></i>`;
+function createCustomIconMarker(latlng: LatLng, style: MarkerStyle): Marker {
+  const icon = style.faIcon;
+  const color = style.color;
+  const divHtml = `<i class="fas ${icon} fa-2x" style="color: ${color}"></i>`;
   const ico = divIcon({className: 'leaflet-fa-marker-icon', html: divHtml});
-  return marker(latlng, {icon: ico, ...feature.styles});
+  return marker(latlng, {icon: ico, ...style});
 }
 
-function createCustomCircleMarker(latlng: LatLng, options: MarkerOptions): CircleMarker {
-  return circleMarker(latlng, options);
+function createCustomCircleMarker(latlng: LatLng, style: MarkerStyle): CircleMarker {
+  return circleMarker(latlng, style);
 }
 
 export function createMarker(feature: Feature, latlng: LatLng): Marker | CircleMarker {
   if (feature.properties.customMarker) {
-    if (feature.properties.customMarker === 'icon') {
-      return createCustomIconMarker(feature, latlng);
-    } else { // 'styled'
-      return createCustomCircleMarker(latlng, feature.styles as MarkerOptions);
+    const markerType = feature.properties.customMarker;
+    const style = feature.properties.style;
+    if (markerType === 'icon') {
+      return createCustomIconMarker(latlng, style);
+    } else if (markerType === 'styled') {
+      return createCustomCircleMarker(latlng, style);
     }
   } else {
     if (feature.featureType() === 'image') {
@@ -61,8 +65,8 @@ export function createMarker(feature: Feature, latlng: LatLng): Marker | CircleM
       return createCollectionMarker(feature, latlng);
     } else if (feature.featureType() === 'video') {
       return createVideoMarker(feature, latlng);
-    } else {
-      return createCircleMarker(feature, latlng);
     }
   }
+
+  return createCircleMarker(feature, latlng);
 }
