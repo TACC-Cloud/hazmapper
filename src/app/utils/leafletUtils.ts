@@ -50,12 +50,11 @@ function createCustomCircleMarker(latlng: LatLng, style: MarkerStyle): CircleMar
 }
 
 export function createMarker(feature: Feature, latlng: LatLng): Marker | CircleMarker {
-  if (feature.properties.customMarker) {
-    const markerType = feature.properties.customMarker;
+  if (feature.properties.style) {
     const style = feature.properties.style;
-    if (markerType === 'icon') {
+    if (style.faIcon) {
       return createCustomIconMarker(latlng, style);
-    } else if (markerType === 'styled') {
+    } else {
       return createCustomCircleMarker(latlng, style);
     }
   } else {
@@ -65,8 +64,8 @@ export function createMarker(feature: Feature, latlng: LatLng): Marker | CircleM
       return createCollectionMarker(feature, latlng);
     } else if (feature.featureType() === 'video') {
       return createVideoMarker(feature, latlng);
+    } else {
+      return createCircleMarker(feature, latlng);
     }
   }
-
-  return createCircleMarker(feature, latlng);
 }
