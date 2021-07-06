@@ -93,7 +93,7 @@ export class UsersPanelComponent implements OnInit {
     modal.content.onClose.subscribe((next) => {
       const path = next.fileList.length > 0 ? next.fileList[0].path : next.currentPath;
       if (next.linkProject) {
-        const req: RapidProjectRequest = new RapidProjectRequest(next.system.id, path, false, this.activeProject.id);
+        const req: RapidProjectRequest = new RapidProjectRequest(next.system.id, path, false, this.activeProject.id, next.fileName);
         this.projectsService.createRapidProject(req).subscribe((project: Project) => {
           this.notificationsService.showSuccessToast(`Saved to ${next.system.id}/${path}`);
         }, (err) => {

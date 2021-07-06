@@ -86,14 +86,20 @@ export class ModalCreateProjectComponent implements OnInit, AfterContentChecked 
       if (this.projCreateForm.get('exportMapLink').value) {
         const path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path : this.currentPath;
         const systemId = this.selectedSystem.id;
-        if (this.projCreateForm.get('linkProject').value) {
+        if (!systemId.includes('project')) {
           this.projectsService.exportProject(project,
             systemId,
             path,
             this.projCreateForm.get('linkProject').value,
             this.projCreateForm.get('fileName').value);
         } else {
-          const req: RapidProjectRequest = new RapidProjectRequest(systemId, path, true);
+          const req: RapidProjectRequest = new RapidProjectRequest(
+            systemId,
+            path,
+            true,
+            project.id,
+            this.projCreateForm.get('fileName').value
+          );
           this.projectsService.createRapidProject(req).subscribe((resProject: Project) => {
             this.close(resProject);
           }, (err) => {
