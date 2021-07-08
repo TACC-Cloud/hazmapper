@@ -92,7 +92,7 @@ export class MapComponent implements OnInit, OnDestroy {
           this.overlays.addLayer(this.createOverlayLayer(item));
         });
         this.overlays.addTo(this.map);
-    }));
+      }));
 
     // Listen on the activeFeature stream and zoom map to that feature when it changes
     this.subscription.add(this.geoDataService.activeFeature.pipe(filter(n => n != null)).subscribe( (next) => {
@@ -119,7 +119,7 @@ export class MapComponent implements OnInit, OnDestroy {
     const layerOptions = {
       attribution: ts.attribution,
       ...ts.tileOptions
-    }
+    };
 
     if (ts.type === 'tms') {
       return L.tileLayer(ts.url, layerOptions);
@@ -139,35 +139,41 @@ export class MapComponent implements OnInit, OnDestroy {
     };
 
     const subscription = this.geoDataService.features.subscribe((collection) => {
-        this.features.clearLayers();
-        this.overlays.clearLayers();
-        const markers = L.markerClusterGroup({
-          iconCreateFunction: (cluster) => {
-            return L.divIcon({html: `<div><b>${cluster.getChildCount()}</b></div>`, className: 'marker-cluster'});
-          }
-        });
+      this.features.clearLayers();
+      this.overlays.clearLayers();
+      const markers = L.markerClusterGroup({
+        iconCreateFunction: (cluster) => {
+          return L.divIcon({html: `<div><b>${cluster.getChildCount()}</b></div>`, className: 'marker-cluster'});
+        }
+      });
 
-        collection.features.forEach( d => {
-          const feat = L.geoJSON(d, geojsonOptions);
-          feat.on('click', (ev) => { this.featureClickHandler(ev); } );
+      collection.features.forEach(d => {
+        let feat: LayerGroup;
+        if (d.geometry.type === 'Polygon' && d.properties.style) {
+          feat = L.geoJSON(d, {style: d.properties.style});
+        } else {
+          feat = L.geoJSON(d, geojsonOptions);
+        }
 
-          feat.setZIndex(1);
+        feat.on('click', (ev) => { this.featureClickHandler(ev); } );
 
-          if (d.geometry.type === 'Point') {
-            markers.addLayer(feat);
-          } else {
-            this.features.addLayer(feat);
-          }
-        });
-        this.features.addLayer(markers);
-        this.map.addLayer(this.features);
-        try {
-          if (this.fitToFeatureExtent) {
-            this.fitToFeatureExtent = false;
-            this.map.fitBounds(this.features.getBounds());
-          }
-        } catch (e) {}
-      }
+        feat.setZIndex(1);
+
+        if (d.geometry.type === 'Point') {
+          markers.addLayer(feat);
+        } else {
+          this.features.addLayer(feat);
+        }
+      });
+      this.features.addLayer(markers);
+      this.map.addLayer(this.features);
+      try {
+        if (this.fitToFeatureExtent) {
+          this.fitToFeatureExtent = false;
+          this.map.fitBounds(this.features.getBounds());
+        }
+      } catch (e) {}
+    }
     );
 
     subscription.add(this.projectsService.activeProject.subscribe((next: Project) => {
@@ -175,7 +181,7 @@ export class MapComponent implements OnInit, OnDestroy {
       if (next && this._activeProjectId !== next.id) {
         this.fitToFeatureExtent = true;
       }
-      this._activeProjectId = next ? next.id: null;
+      this._activeProjectId = next ? next.id : null;
     }));
 
     return subscription;
