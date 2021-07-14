@@ -3,6 +3,7 @@ import {Feature as GeoJSONFeature,
   Geometry,
   FeatureCollection as IFeatureCollection } from 'geojson';
 
+
 // TODO: break these out into their own files
 
 export interface IFileImportRequest {
