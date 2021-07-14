@@ -2,7 +2,6 @@ import {Feature as GeoJSONFeature,
   GeoJsonProperties,
   Geometry,
   FeatureCollection as IFeatureCollection } from 'geojson';
-import { MarkerOptions } from 'leaflet';
 
 // TODO: break these out into their own files
 
@@ -215,15 +214,4 @@ export interface DesignSafeProject {
 
 export interface DesignSafeProjectCollection {
   projects: DesignSafeProject[];
-}
-
-export interface MarkerIcon {
-  color: string;
-  name: string;
-}
-
-export interface MarkerConfig {
-  type: string;
-  icon?: MarkerIcon;
-  options?: MarkerOptions;
 }
