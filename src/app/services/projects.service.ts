@@ -10,7 +10,6 @@ import {GeoDataService} from './geo-data.service';
 import { EnvService } from '../services/env.service';
 import { AuthService } from '../services/authentication.service';
 import {MAIN, LOGIN} from '../constants/routes';
-import {defaultTileServers} from '../constants/tile-servers';
 import { AgaveSystemsService } from '../services/agave-systems.service';
 import { Router } from '@angular/router';
 
@@ -51,7 +50,7 @@ export class ProjectsService {
     }, error => {
       this._loadingProjectsFailed.next(true);
       this.notificationsService.showErrorToast('Failed to retrieve project data! Geoapi might be down.');
-    });
+      });
   }
 
   getProjectUsers(proj: Project): Observable<Array<IProjectUser>> {
@@ -86,49 +85,46 @@ export class ProjectsService {
         tap(proj => {
           // Spread operator, just pushes the new project into the array
           this._projects.next([...this._projects.value, proj]);
-          // Add default servers
-          defaultTileServers.forEach(ts => {
-            this.geoDataService.addTileServer(proj.id, ts, true);
-          });
-
+          this.geoDataService.addDefaultTileServers(proj.id);
         }),
       );
   }
 
   exportProject(project: Project,
-                system_id: string,
+                systemId: string,
+                observable: boolean,
+                watch_content: boolean,
                 path: string = '/',
-                link: boolean,
                 file_name: string = '') {
+    
     file_name = file_name === '' ? project.uuid : file_name;
 
     const payload = {
-      system_id,
+      system_id: systemId,
       path,
       file_name,
-      link
+      observable,
+      watch_content
     };
 
-    this.http.put<any>(this.envService.apiUrl + `/projects/${project.id}/export/`, payload)
+    this.http.post<any>(this.envService.apiUrl + `/projects/${project.id}/export/`, payload)
       .subscribe(currentProject => {
-        this.notificationsService.showSuccessToast(`Create file ${system_id}/${path}/${file_name}.hazmapper`);
-        this._projects.next([...this._projects.value.filter((p) => p.id != project.id),
+        this.notificationsService.showSuccessToast(`Successfully linked file!`);
+        this._projects.next([...this._projects.value.filter((p) => p.id !== project.id),
                              currentProject]);
         this._activeProject.next(currentProject);
       }, error => {
-        this.notificationsService.showErrorToast(`Failed to create file ${system_id}/${path}/${file_name}.hazmapper`);
+        this.notificationsService.showErrorToast(`Failed linked file!`);
         console.log(error);
-      });
+        });
   }
 
   createRapidProject(data: RapidProjectRequest) {
     return this.http.post<Project>(this.envService.apiUrl + `/projects/rapid/`, data)
       .pipe(
-        map( (proj) => {
+        map((proj) => {
           this._projects.next([proj, ...this._projects.value]);
-          defaultTileServers.forEach(ts => {
-            this.geoDataService.addTileServer(proj.id, ts, true);
-          });
+          this.geoDataService.addDefaultTileServers(proj.id);
           return proj;
         }),
        catchError( (err: any) =>  {
@@ -222,7 +218,7 @@ export class ProjectsService {
           // Update the project list
           const projects = this._projects.value.map(proj => proj.id === this._activeProject.value.id ? updatedProject : proj);
           this._projects.next(projects);
-          // // Update the active project
+          // Update the active project
           this._activeProject.next(updatedProject);
 
           return updatedProject;
@@ -230,7 +226,7 @@ export class ProjectsService {
         catchError((err: any) => {
           throw new Error('Unable to update project.');
         })
-      );
+    );
   }
 
 }

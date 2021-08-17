@@ -4,7 +4,6 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { ProjectsService } from '../../services/projects.service';
 import { Project } from '../../models/models';
 import {RemoteFile} from 'ng-tapis';
-import {RapidProjectRequest} from '../../models/rapid-project-request';
 import {ChangeDetectorRef } from '@angular/core';
 import { Subject } from 'rxjs';
 
@@ -68,12 +67,18 @@ export class ModalCreateProjectComponent implements OnInit, AfterContentChecked 
   }
 
   createRapidProject() {
-    this.errorMessage = '';
-    const req: RapidProjectRequest = new RapidProjectRequest(this.rapidFolder.system, this.rapidFolder.path, true);
-    this.projectsService.createRapidProject(req).subscribe( (project) => {
+    const p = new Project();
+    p.name = this.rapidFolder.system + '/' + this.rapidFolder.path;
+    this.projectsService.create(p).subscribe((project) => {
+      this.projectsService.exportProject(
+        project,
+        this.rapidFolder.system,
+        true,
+        true,
+        this.rapidFolder.path,
+        this.projCreateForm.get('fileName').value
+      );
       this.close(project);
-    }, (err) => {
-     this.errorMessage = err.toString();
     });
   }
 
@@ -83,31 +88,19 @@ export class ModalCreateProjectComponent implements OnInit, AfterContentChecked 
     p.description = this.projCreateForm.get('description').value;
     p.name = this.projCreateForm.get('name').value;
     this.projectsService.create(p).subscribe((project) => {
+
       if (this.projCreateForm.get('exportMapLink').value) {
         const path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path : this.currentPath;
-        const systemId = this.selectedSystem.id;
-        if (!systemId.includes('project')) {
-          this.projectsService.exportProject(project,
-            systemId,
-            path,
-            this.projCreateForm.get('linkProject').value,
-            this.projCreateForm.get('fileName').value);
-        } else {
-          const req: RapidProjectRequest = new RapidProjectRequest(
-            systemId,
-            path,
-            true,
-            project.id,
-            this.projCreateForm.get('fileName').value
-          );
-          this.projectsService.createRapidProject(req).subscribe((resProject: Project) => {
-            this.close(resProject);
-          }, (err) => {
-            this.errorMessage = err.toString();
-          });
-        }
-      }
-       
+        const linkProject = this.selectedSystem.id.includes('project');
+        this.projectsService.exportProject(
+          project,
+          this.selectedSystem.id,
+          linkProject,
+          false,
+          path,
+          this.projCreateForm.get('fileName').value
+        );
+      } 
       this.close(project);
     }, err => {
       this.errorMessage = err.toString();

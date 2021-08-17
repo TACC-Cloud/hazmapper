@@ -82,32 +82,7 @@ export class UsersPanelComponent implements OnInit {
   }
 
   openExportProjectModal() {
-    const initialState = {
-      single: true,
-      allowFolders: true,
-      onlyFolder: true,
-      allowEmptyFiles: true,
-      allowedExtensions: []
-    };
-    const modal: BsModalRef = this.bsModalService.show(ModalLinkProjectComponent, { initialState });
-    modal.content.onClose.subscribe((next) => {
-      const path = next.fileList.length > 0 ? next.fileList[0].path : next.currentPath;
-      if (next.linkProject) {
-        const req: RapidProjectRequest = new RapidProjectRequest(next.system.id, path, false, this.activeProject.id, next.fileName);
-        this.projectsService.createRapidProject(req).subscribe((project: Project) => {
-          this.notificationsService.showSuccessToast(`Saved to ${next.system.id}/${path}`);
-        }, (err) => {
-          this.notificationsService.showErrorToast(`Failed to save to ${next.system.id}/${path} ${err.toString()}`);
-        });
-
-      } else {
-        this.projectsService.exportProject(this.activeProject,
-                                           next.system.id,
-                                           path,
-                                           next.system.id.includes('project') && next.linkProject,
-                                           next.fileName);
-      }
-    });
+    this.bsModalService.show(ModalLinkProjectComponent);
   }
 
   copyLinkToClipboard(link: string) {

@@ -4,8 +4,10 @@ import { Project } from '../../models/models';
 import { ProjectsService } from '../../services/projects.service';
 import { BsModalRef } from 'ngx-foundation/modal/bs-modal-ref.service';
 import { Subject } from 'rxjs';
-import { TapisFilesService } from '../../services/tapis-files.service';
-import { ChangeDetectorRef } from '@angular/core';
+import {TapisFilesService} from '../../services/tapis-files.service';
+import {ChangeDetectorRef} from '@angular/core';
+import { RapidProjectRequest } from '../../models/rapid-project-request';
+import {NotificationsService} from '../../services/notifications.service';
 
 
 @Component({
@@ -14,11 +16,12 @@ import { ChangeDetectorRef } from '@angular/core';
   styleUrls: ['./modal-link-project.component.styl']
 })
 export class ModalLinkProjectComponent implements OnInit {
-  @Input() allowedExtensions: Array<string> = this.tapisFilesService.IMPORTABLE_FEATURE_TYPES;
-  @Input() single: false;
-  @Input() allowFolders: false;
-  @Input() onlyFolder: false;
-  @Input() allowEmptyFiles: false;
+  @Input() allowedExtensions: Array<string> = [];
+  @Input() single: true;
+  @Input() allowFolders: true;
+  @Input() onlyFolder: true;
+  @Input() allowEmptyFiles: true;
+
   selectedFiles: Array<RemoteFile> = [];
   selectedSystem: any;
   fileName = '';
@@ -26,10 +29,9 @@ export class ModalLinkProjectComponent implements OnInit {
   linkProject = false;
   currentPath: string;
   confirmRemove = false;
-  public onClose: Subject<any> = new Subject<any>();
   constructor(private modalRef: BsModalRef,
               private projectsService: ProjectsService,
-              private tapisFilesService: TapisFilesService,
+              private notificationsService: NotificationsService,
               private cdref: ChangeDetectorRef ) { }
 
   ngOnInit() {
@@ -60,18 +62,21 @@ export class ModalLinkProjectComponent implements OnInit {
     this.currentPath = path;
   }
 
-  close() {
-    this.onClose.next({
-      fileList: this.selectedFiles,
-      linkProject: this.linkProject,
-      system: this.selectedSystem,
-      fileName: this.fileName,
-      currentPath: this.currentPath
-    });
-    this.modalRef.hide();
+  submit() {
+    const path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path : this.currentPath;
+    const linkProject = this.selectedSystem.id.includes('project');
+    this.projectsService.exportProject(
+      this.activeProject,
+      this.selectedSystem.id,
+      linkProject,
+      false,
+      path,
+      this.fileName,
+    );
+    this.close();
   }
 
-  cancel() {
+  close() {
     this.modalRef.hide();
   }
 }
