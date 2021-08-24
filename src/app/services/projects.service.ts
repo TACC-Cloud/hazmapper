@@ -109,12 +109,12 @@ export class ProjectsService {
 
     this.http.post<any>(this.envService.apiUrl + `/projects/${project.id}/export/`, payload)
       .subscribe(currentProject => {
-        this.notificationsService.showSuccessToast(`Successfully linked file!`);
+        this.notificationsService.showSuccessToast(`Successfully linked map to DesignSafe!`);
         this._projects.next([...this._projects.value.filter((p) => p.id !== project.id),
                              currentProject]);
         this._activeProject.next(currentProject);
       }, error => {
-        this.notificationsService.showErrorToast(`Failed linked file!`);
+        this.notificationsService.showErrorToast(`Failed to link map to DesignSafe!!`);
         console.log(error);
         });
   }
