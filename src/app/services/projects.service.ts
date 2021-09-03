@@ -94,54 +94,6 @@ export class ProjectsService {
       );
   }
 
-  exportProject(project: Project,
-                systemId: string,
-                observable: boolean,
-                watch_content: boolean,
-                path: string = '/',
-                file_name: string = '') {
-    
-    file_name = file_name === '' ? project.uuid : file_name;
-
-    const payload = {
-      system_id: systemId,
-      path,
-      file_name,
-      observable,
-      watch_content
-    };
-
-    this.agaveSystemsService.uploadFile(project.uuid, systemId, path, file_name);
-
-    this.http.post<any>(this.envService.apiUrl + `/projects/${project.id}/export/`, payload)
-      .subscribe(currentProject => {
-        this.notificationsService.showSuccessToast(`Successfully linked map to DesignSafe!`);
-        this._projects.next([...this._projects.value.filter((p) => p.id !== project.id),
-                             currentProject]);
-        this._activeProject.next(currentProject);
-      }, error => {
-        this.notificationsService.showErrorToast(`Failed to link map to DesignSafe!!`);
-        console.log(error);
-        });
-  }
-
-  createRapidProject(data: RapidProjectRequest) {
-    return this.http.post<Project>(this.envService.apiUrl + `/projects/rapid/`, data)
-      .pipe(
-        map((proj) => {
-          this._projects.next([proj, ...this._projects.value]);
-          this.geoDataService.addDefaultTileServers(proj.id);
-          return proj;
-        }),
-       catchError( (err: any) =>  {
-          if (err instanceof HttpErrorResponse && err.status === 409) {
-            throw new Error('This project/folder is already a map project.');
-          }
-          throw new Error('Unable to create project.');
-        })
-      );
-  }
-
   setActiveProjectUUID(uuid: string, usePublicRoute: boolean = false): void {
     this._loadingActiveProject.next(true);
     this._loadingActiveProjectFailed.next(false);
