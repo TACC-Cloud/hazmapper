@@ -4,7 +4,7 @@
   </div>
 
   <div class="dock-panel-content">
-    <tabset *ngIf="activeProject">
+    <tabset #staticTabs *ngIf="activeProject">
       <tab heading="Map">
         <h6 id="property-title">Name:</h6>
         <app-edit-name-input
@@ -34,16 +34,14 @@
       </tab>
 
       <tab heading="Members">
-        <div>
-          <form [formGroup]="addUserForm" (ngSubmit)="addUser()">
-            <input type="text" formControlName="username" required="true">
-            <button class="button success" style="width: 100%" type="submit" [disabled]="!addUserForm.valid">Add</button>
-          </form>
-        </div>
+      <div *ngIf="activeProject.system_id && activeProject.system_id.includes('project'); else noMembers">
         <h6 id="property-title"> Current Members </h6>
         <app-user-row [user]="user" *ngFor="let user of projectUsers"></app-user-row>
+      </div>
+      <ng-template #noMembers>
+        <a (click)="selectTab(3)">Link</a> map to a <em>project</em> to see members.
+      </ng-template>
       </tab>
-
 
       <tab heading="Public">
         <h6 id="property-title">Public Access</h6>
@@ -75,6 +73,11 @@
       <tab heading="Save">
         <h6 id="property-title">Saved Location</h6>
         <div *ngIf="activeProject.system_path || activeProject.ds_id; else noSave">
+          <div *ngIf="activeProject.system_file" style="margin-bottom: 10px">
+            <span>File:  </span>
+            {{activeProject.system_file}}.hazmapper
+          </div>
+
           <div *ngIf="activeProject.system_path" style="margin-bottom: 10px">
             <span>Path:  </span>
             <a [href]="dsHref"><span>{{activeProject.system_path}}</span></a>
@@ -103,8 +106,8 @@
             Map link not saved.
           </div>
         </ng-template>
-
-        <div style="display: flex; flex-direction: column; justify-content: center">
+        <div *ngIf="!activeProject.system_id || (activeProject.system_id && !activeProject.system_id.includes('project'))" 
+          style="display: flex; flex-direction: column; justify-content: center">
           <button class="button hollow" (click)=openExportProjectModal()>
             <i class="fas fa-save"></i>  Save map link
           </button>

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { RemoteFile} from 'ng-tapis/models/remote-file';
-import { Project } from '../../models/models';
+import { Project, ProjectRequest } from '../../models/models';
 import { ProjectsService } from '../../services/projects.service';
 import { BsModalRef } from 'ngx-foundation/modal/bs-modal-ref.service';
 import { Subject } from 'rxjs';
@@ -25,13 +25,16 @@ export class ModalLinkProjectComponent implements OnInit {
   selectedFiles: Array<RemoteFile> = [];
   selectedSystem: any;
   fileName = '';
+  watchContent = false;
   activeProject: Project;
-  linkProject = false;
   currentPath: string;
-  confirmRemove = false;
+  projectObserveOptions = [{name: 'Sync Members and Files', value: true}, {name: 'Sync Only Members', value: false}];
+  myDataObserveOptions = [{name: 'Don\'t Sync', value: false}, {name: 'Sync Files', value: true}];
+  observeOptions = this.myDataObserveOptions;
+  observeOption = false;
+
   constructor(private modalRef: BsModalRef,
               private projectsService: ProjectsService,
-              private notificationsService: NotificationsService,
               private cdref: ChangeDetectorRef ) { }
 
   ngOnInit() {
@@ -51,10 +54,11 @@ export class ModalLinkProjectComponent implements OnInit {
 
   onSystemSelect(system: any) {
     this.selectedSystem = system;
+    this.observeOption = false;
     if (system.id.includes('project')) {
-      this.linkProject = true;
+      this.observeOptions = this.projectObserveOptions;
     } else {
-      this.linkProject = false;
+      this.observeOptions = this.myDataObserveOptions;
     }
   }
 
@@ -64,15 +68,25 @@ export class ModalLinkProjectComponent implements OnInit {
 
   submit() {
     const path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path : this.currentPath;
-    const linkProject = this.selectedSystem.id.includes('project');
-    this.projectsService.exportProject(
-      this.activeProject,
-      this.selectedSystem.id,
-      linkProject,
-      false,
-      path,
-      this.fileName,
-    );
+
+    this.activeProject.system_path = path;
+    this.activeProject.system_id = this.selectedSystem.id;
+    this.activeProject.system_file = this.fileName;
+
+    const pr = new ProjectRequest();
+
+    pr.project = this.activeProject;
+    pr.link = true;
+
+    if (this.selectedSystem.id.includes('project')) {
+      pr.observable = true;
+      pr.watch_content = this.observeOption;
+    } else {
+      pr.observable = this.observeOption;
+      pr.watch_content = pr.observable ? true : false;
+    }
+
+    this.projectsService.updateProject(this.activeProject, pr);
     this.close();
   }
 

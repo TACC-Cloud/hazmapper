@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
-import {DesignSafeProjectCollection, Project} from '../models/models';
+import {DesignSafeProjectCollection, Project, ProjectRequest} from '../models/models';
 import { RapidProjectRequest } from '../models/rapid-project-request';
 import {catchError, map, tap, filter, take} from 'rxjs/operators';
 import {IProjectUser} from '../models/project-user';
@@ -79,10 +79,14 @@ export class ProjectsService {
     });
   }
 
-  create(data: Project): Observable<Project> {
+  create(data: ProjectRequest): Observable<Project> {
     return this.http.post<Project>(this.envService.apiUrl + `/projects/`, data)
       .pipe(
         tap(proj => {
+          if (data.observable || proj.system_path) {
+            this.agaveSystemsService.uploadFile(proj.uuid, proj.system_id, proj.system_path, proj.system_file);
+          }
+
           // Spread operator, just pushes the new project into the array
           this._projects.next([...this._projects.value, proj]);
           this.geoDataService.addDefaultTileServers(proj.id);
@@ -106,6 +110,8 @@ export class ProjectsService {
       observable,
       watch_content
     };
+
+    this.agaveSystemsService.uploadFile(project.uuid, systemId, path, file_name);
 
     this.http.post<any>(this.envService.apiUrl + `/projects/${project.id}/export/`, payload)
       .subscribe(currentProject => {
@@ -176,28 +182,31 @@ export class ProjectsService {
 
   deleteProject(proj: Project): void {
     this.http.delete(this.envService.apiUrl + `/projects/${proj.id}/`)
-      .subscribe( (resp) => {
+      .subscribe((resp) => {
+        if (proj.system_path) {
+          this.agaveSystemsService.deleteFile(proj.system_id, proj.system_path, proj.system_file);
+        }
         this.getProjects();
         this.router.navigate([MAIN]);
       }, error => {
         this.notificationsService.showErrorToast('Could not delete project!');
+        console.error(error);
       });
   }
 
-  updateProject(proj: Project, name: string, description: string, isPublic: boolean): void {
-    name = name ? name : proj.name;
-    description = description ? description : proj.description;
-    isPublic = isPublic !== undefined ? isPublic : proj.public;
+  updateProject(proj: Project, req: ProjectRequest): void {
+    if (req.link) {
+      if (proj.system_file !== req.project.system_file) {
+          this.agaveSystemsService.deleteFile(proj.system_id, proj.system_path, proj.system_path);
+      }
+      this.agaveSystemsService.uploadFile(proj.uuid, req.project.system_id, req.project.system_path, req.project.system_file);
+    }
 
-    const payload = {
-      name,
-      description,
-      public: isPublic
-    };
-
-    this.http.put(this.envService.apiUrl + `/projects/${proj.id}/`, payload)
-      .subscribe( (resp) => {
-        proj.name = name;
+    this.http.put(this.envService.apiUrl + `/projects/${proj.id}/`, req)
+      .subscribe((resp) => {
+        if (req.link) {
+          this.notificationsService.showSuccessToast('Uploaded file!');
+        }
       });
   }
 

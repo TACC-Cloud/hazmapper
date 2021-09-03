@@ -60,6 +60,17 @@ export class Project implements Project {
 
 }
 
+export interface ProjectRequest {
+  project: Project;
+  link: boolean;
+  observable: boolean;
+  watch_content: boolean;
+}
+
+export class ProjectRequest implements ProjectRequest {
+
+}
+
 export class AuthToken {
   token: string;
   expires: Date;

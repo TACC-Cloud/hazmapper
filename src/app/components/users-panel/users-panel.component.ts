@@ -1,17 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChildren, QueryList, OnInit } from '@angular/core';
 import {ProjectsService} from '../../services/projects.service';
 import {NotificationsService} from '../../services/notifications.service';
 import {ModalService} from '../../services/modal.service';
-import { BsModalRef, BsModalService } from 'ngx-foundation';
+import { TabsetComponent, BsModalService } from 'ngx-foundation';
 import {IProjectUser} from '../../models/project-user';
-import {FormGroup, FormControl} from '@angular/forms';
-import {Project} from '../../models/models';
+import {Project, ProjectRequest} from '../../models/models';
 import {EnvService} from '../../services/env.service';
 import { ModalLinkProjectComponent } from '../modal-link-project/modal-link-project.component';
 import { AgaveSystemsService } from 'src/app/services/agave-systems.service';
 import { combineLatest } from 'rxjs';
 import { copyToClipboard } from '../../utils/copyText';
-import {RapidProjectRequest} from 'src/app/models/rapid-project-request';
 
 @Component({
   selector: 'app-users-panel',
@@ -19,8 +17,9 @@ import {RapidProjectRequest} from 'src/app/models/rapid-project-request';
   styleUrls: ['./users-panel.component.styl']
 })
 export class UsersPanelComponent implements OnInit {
+  @ViewChildren('staticTabs') staticTabs: QueryList<TabsetComponent>;
+
   public projectUsers: Array<IProjectUser>;
-  addUserForm: FormGroup;
   activeProject: Project;
   nameInputError = false;
   descriptionInputError = false;
@@ -41,10 +40,6 @@ export class UsersPanelComponent implements OnInit {
 
   ngOnInit() {
     this.agaveSystemsService.list();
-
-    this.addUserForm = new FormGroup( {
-      username: new FormControl()
-    });
 
     combineLatest([this.projectsService.activeProject,
                                          this.agaveSystemsService.projects])
@@ -122,18 +117,22 @@ export class UsersPanelComponent implements OnInit {
       if (answer === 'Delete') {
         this.projectsService.deleteProject(this.activeProject);
       }
-    });
+      });
   }
 
-  addUser() {
-    this.projectsService.addUserToProject(this.activeProject, this.addUserForm.get('username').value);
+  selectTab(tabId: number) {
+    this.staticTabs.first.tabs[tabId].active = true;
   }
 
   changeProjectName(name: string) {
     if (name.length < 512) {
       this.nameInputError = false;
       this.activeProject.name = name;
-      this.projectsService.updateProject(this.activeProject, name, undefined, undefined);
+
+      const pr = new ProjectRequest();
+      pr.project = this.activeProject;
+
+      this.projectsService.updateProject(this.activeProject, pr);
     } else {
       this.nameInputError = true;
     }
@@ -143,7 +142,11 @@ export class UsersPanelComponent implements OnInit {
     if (description.length < 4096) {
       this.descriptionInputError = false;
       this.activeProject.description = description;
-      this.projectsService.updateProject(this.activeProject, undefined, description, undefined);
+
+      const pr = new ProjectRequest();
+      pr.project = this.activeProject;
+
+      this.projectsService.updateProject(this.activeProject, pr);
     } else {
       this.descriptionInputError = true;
     }

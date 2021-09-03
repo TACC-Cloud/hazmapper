@@ -2,7 +2,7 @@ import { Component, OnInit, AfterContentChecked } from '@angular/core';
 import { BsModalRef } from 'ngx-foundation';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ProjectsService } from '../../services/projects.service';
-import { Project } from '../../models/models';
+import { Project, ProjectRequest } from '../../models/models';
 import {RemoteFile} from 'ng-tapis';
 import {ChangeDetectorRef } from '@angular/core';
 import { Subject } from 'rxjs';
@@ -24,6 +24,9 @@ export class ModalCreateProjectComponent implements OnInit, AfterContentChecked 
   fileName = '';
   selectedFiles: Array<RemoteFile> = [];
   selectedSystem: any;
+  projectObserveOptions = [{name: 'Sync Members and Files', value: true}, {name: 'Sync Only Members', value: false}];
+  myDataObserveOptions = [{name: 'Don\'t Sync', value: false}, {name: 'Sync Files', value: true}];
+  observeOptions = this.myDataObserveOptions;
 
   constructor(private bsModalRef: BsModalRef,
               private cdref: ChangeDetectorRef,
@@ -34,8 +37,8 @@ export class ModalCreateProjectComponent implements OnInit, AfterContentChecked 
     this.projCreateForm = new FormGroup( {
       name: new FormControl(''),
       description: new FormControl(''),
-      exportMapLink: new FormControl(false),
-      linkProject: new FormControl(false),
+      link: new FormControl(false),
+      observeOption: new FormControl(false),
       fileName: new FormControl('')
     });
   }
@@ -59,49 +62,44 @@ export class ModalCreateProjectComponent implements OnInit, AfterContentChecked 
 
   onSystemSelect(system: any) {
     this.selectedSystem = system;
+    this.projCreateForm.get('observeOption').setValue(false);
     if (system.id.includes('project')) {
-      this.projCreateForm.get('linkProject').setValue(true);
+      this.observeOptions = this.projectObserveOptions;
     } else {
-      this.projCreateForm.get('linkProject').setValue(false);
+      this.observeOptions = this.myDataObserveOptions;
     }
-  }
-
-  createRapidProject() {
-    const p = new Project();
-    p.name = this.rapidFolder.system + '/' + this.rapidFolder.path;
-    this.projectsService.create(p).subscribe((project) => {
-      this.projectsService.exportProject(
-        project,
-        this.rapidFolder.system,
-        true,
-        true,
-        this.rapidFolder.path,
-        this.projCreateForm.get('fileName').value
-      );
-      this.close(project);
-    }, err => {
-      this.errorMessage = err.toString();
-    });
   }
 
   submit() {
     this.submitting = true;
     const p = new Project();
+    const pr = new ProjectRequest();
+
     p.description = this.projCreateForm.get('description').value;
     p.name = this.projCreateForm.get('name').value;
-    this.projectsService.create(p).subscribe((project) => {
-      if (this.projCreateForm.get('exportMapLink').value) {
-        const path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path : this.currentPath;
-        const linkProject = this.selectedSystem.id.includes('project');
-        this.projectsService.exportProject(
-          project,
-          this.selectedSystem.id,
-          linkProject,
-          false,
-          path,
-          this.projCreateForm.get('fileName').value
-        );
-      } 
+
+    if (this.projCreateForm.get('link').value) {
+      p.system_path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path : this.currentPath;
+      p.system_id = this.selectedSystem.id;
+      p.system_file = this.projCreateForm.get('fileName').value;
+
+      if (this.selectedSystem.id.includes('project')) {
+        pr.observable = true;
+        pr.watch_content = this.projCreateForm.get('observeOption').value;
+      } else {
+        pr.observable = this.projCreateForm.get('observeOption').value;
+        pr.watch_content = pr.observable ? true : false;
+      }
+    } else {
+      pr.observable = false;
+      pr.watch_content = false;
+    }
+
+    pr.link = this.projCreateForm.get('link').value;
+
+    pr.project = p;
+
+    this.projectsService.create(pr).subscribe((project) => {
       this.close(project);
     }, err => {
       this.errorMessage = err.toString();
