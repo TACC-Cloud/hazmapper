@@ -3,71 +3,160 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { AuthToken } from '../models/models';
 import { Router } from '@angular/router';
 import { AuthService } from './authentication.service';
-import { ProjectsService } from './projects.service';
-import { EnvService } from '../services/env.service';
-import { MapillaryUser } from '../models/streetview';
+import {ProjectsService} from './projects.service';
+import {EnvService} from '../services/env.service';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {NotificationsService} from './notifications.service';
+import {tap} from 'rxjs/operators';
+import { StreetviewRequest, Streetview, StreetviewOrganization, StreetviewSequence, StreetviewInstance } from '../models/streetview';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StreetviewAuthenticationService {
+  private _activeStreetview: BehaviorSubject<Streetview> = new BehaviorSubject(null);
+  public activeStreetview$: Observable<Streetview> = this._activeStreetview.asObservable();
+  private _streetviews: BehaviorSubject<Array<Streetview>> = new BehaviorSubject([]);
+  public streetviews$: Observable<Array<Streetview>> = this._streetviews.asObservable();
 
-  private MAPILLARY_TOKEN_KEY = 'mapillaryToken';
-  private MAPILLARY_USER_KEY = 'mapillaryUser';
-  private GOOGLE_TOKEN_KEY = 'googleToken';
+  private _activeOrganization: BehaviorSubject<StreetviewOrganization> = new BehaviorSubject(null);
+  public activeOrganization: Observable<StreetviewOrganization> = this._activeOrganization.asObservable();
+  private _organizations: BehaviorSubject<Array<StreetviewOrganization>> = new BehaviorSubject([]);
+  public organizations: Observable<Array<StreetviewOrganization>> = this._organizations.asObservable();
+
+  private TOKEN_STORE = {
+    google: 'googleToken',
+    mapillary: 'mapillaryToken'
+  };
   private _username: string;
   private _projectId: number;
 
   constructor(private http: HttpClient,
               private authService: AuthService,
               private projectsService: ProjectsService,
+              private notificationsService: NotificationsService,
               private envService: EnvService,
               private router: Router) {
     this.authService.currentUser.subscribe(u => this._username = u ? u.username : null);
     this.projectsService.activeProject.subscribe(p => this._projectId = p ? p.id : null);
   }
 
-  public setRemoteToken(service: string): void {
-    const token = JSON.parse(this.getLocalToken(service)).token;
-    const payload = {token};
-
-    this.http.post(this.envService.apiUrl + `/streetview/${service}/token/`, payload).subscribe();
-  }
-
-  private deleteRemoteToken(service: string): void {
-    this.http.delete<any>(this.envService.apiUrl + `/streetview/${service}/token/`).subscribe();
-  }
-
-  public isLoggedIn(service: string) {
-    const userToken: AuthToken = JSON.parse(this.getLocalToken(service));
-    let notExpired = true;
-    if (userToken && userToken.expires instanceof Date) {
-      if (userToken.isExpired()) {
-        notExpired = false;
-      }
-    }
-
-    return userToken && notExpired;
+  public isLoggedIn(service: string): boolean {
+    const userToken: AuthToken = this.getLocalToken(service);
+    return userToken && !userToken.isExpired();
   }
 
   public login(service: string) {
-    this.streetviewTokenRequest(service);
+    this.tokenRequest(service);
   }
 
   public logout(service: string): void {
-    this.deleteLocalToken(service);
-    this.deleteRemoteToken(service);
+    localStorage.removeItem(this.TOKEN_STORE[service]);
   }
 
-  private streetviewTokenRequest(service: string): void {
-    const mapillaryScope = 'user:email+user:read+user:write+public:write+public:upload+private:read+private:write+private:upload';
-    // tslint:disable-next-line:max-line-length
-    const googleScope = 'https://www.googleapis.com/auth/streetviewpublish+https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile';
-    const mapillaryAuthUrl = 'https://www.mapillary.com/connect';
-    const googleAuthUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
+  public sequenceInStreetview(sequenceId: string): boolean {
+    return this._activeStreetview.getValue().instances
+      .some(instance => instance.sequences
+        .some(sequence => sequence.sequence_id === sequenceId));
+
+    // return this._activeStreetview.getValue().instances
+    //   .some((si: StreetviewInstance) => si.sequences
+    //     .some((seq: StreetviewSequence) => seq.sequence_id === sequenceId));
+  }
+
+  public getStreetviews(): Observable<Streetview[]> {
+    return this.http.get<Array<Streetview>>(this.envService.apiUrl + `/streetview/`)
+    .pipe(
+      tap((streetviews: Array<Streetview>) => {
+        this._streetviews.next(streetviews);
+        this._activeStreetview.next(streetviews[0]);
+        if (streetviews[0]) {
+          this._organizations.next(streetviews[0].organizations);
+          this._activeOrganization.next(streetviews[0].organizations[0]);
+        }
+        console.log(streetviews);
+      }));
+  }
+
+  public createStreetview(data: StreetviewRequest) {
+    return this.http.post<any>(this.envService.apiUrl + '/streetview/', data).pipe(
+      tap((streetview: Streetview) => {
+        this._activeStreetview.next(streetview);
+      }));
+  }
+
+  public updateStreetview(streetviewId: number, data: StreetviewRequest) {
+    return this.http.put<any>(this.envService.apiUrl + `/streetview/${streetviewId}/`, data).pipe(
+      tap((streetview: Streetview) => {
+        this._activeStreetview.next(streetview);
+      }));
+  }
+
+  public deleteStreetview(streetviewId: number) {
+    return this.http.delete<any>(this.envService.apiUrl + `/streetview/${streetviewId}/`).pipe(
+      tap(() => {
+        this._streetviews.next(this._streetviews.value.filter(sv => {
+          return sv.id !== streetviewId;
+        }));
+
+        if (this._streetviews.value.length > 0) {
+          this._activeStreetview.next(this._streetviews.value[0]);
+        } else {
+          this._activeStreetview.next(null);
+        }
+      }));
+  }
+
+  public updateStreetviewByService(service: string, data: StreetviewRequest) {
+    return this.http.put<any>(this.envService.apiUrl + `/streetview/${service}/`, data).pipe(
+      tap((streetview: Streetview) => {
+        this._activeStreetview.next(streetview);
+      }));
+  }
+
+  public deleteStreetviewByService(service: string) {
+    return this.http.delete<any>(this.envService.apiUrl + `/streetview/${service}/`).pipe(
+      tap(() => {
+        this._activeStreetview.next(null);
+      }));
+  }
+
+  // TODO: Test if working
+  public refreshToken(service: string) {
+    const oldToken = this.getLocalToken(service).token;
+    const envs = this.envService.streetviewEnv[service];
+
+    const params = new HttpParams()
+      .set('grant_type', 'refresh_token')
+      .set('refresh_token', oldToken)
+      .set('client_id', envs.clientId);
+
+    this.http.post<any>(envs.tokenUrl, {}, {params})
+      .subscribe((resp) => {
+        console.log(resp);
+        const token = {
+          token: resp.access_token,
+          expires_in: resp.expires_in
+        };
+
+        this.setLocalToken(service, token);
+
+        this.updateStreetviewByService(service, {
+          token: token.token,
+        }).subscribe((sv: Streetview) => {
+          this._activeStreetview.next(sv);
+        });
+      }, error => {
+          this.logout('mapillary');
+          this.notificationsService.showErrorToast('Logged out of Mapillary!');
+      });
+  }
+  
+  private tokenRequest(service: string): void {
+    const envs = this.envService.streetviewEnv[service];
 
     const state = JSON.stringify({
-      origin_url: this.router.url,
+      originUrl: this.router.url,
       service,
       projectId: this._projectId,
       username: this._username
@@ -76,113 +165,63 @@ export class StreetviewAuthenticationService {
     const callback = location.origin + this.envService.baseHref + 'streetview/callback';
     let url = '';
 
-    if (service === 'google') {
-      url = googleAuthUrl + '?'
-        + '&client_id=' + this.envService.googleClientId
-        + '&scope=' + googleScope
-        + '&redirect_uri=' + callback
-        + '&response_type=code'
-        + '&state=' + state;
-    } else {
-      url = mapillaryAuthUrl + '?'
-        + '&client_id=' + this.envService.mapillaryClientId
-        + '&scope=' + mapillaryScope
-        + '&redirect_uri=' + callback
-        + '&response_type=token'
-        + '&state=' + state;
-    }
+    url = envs.authUrl + '?'
+    + '&client_id=' + envs.clientId
+    + '&scope=' + envs.scope
+    + '&redirect_uri=' + callback
+    + '&state=' + state;
 
     window.location.href = url;
   }
 
-  private setGoogleToken(code: string) {
-    const googleTokenUrl = 'https://oauth2.googleapis.com/token';
-
-    const payload = new FormData();
+  public setToken(service: string, code: string) {
+    const envs = this.envService.streetviewEnv[service];
     const callback = location.origin + this.envService.baseHref + 'streetview/callback';
 
-    payload.append('code', code);
-    payload.append('grant_type', 'authorization_code');
-    payload.append('client_id', this.envService.googleClientId);
-    payload.append('client_secret', this.envService.googleClientSecret);
-    payload.append('redirect_uri', callback);
-
-    this.http.post<any>(googleTokenUrl, payload)
-      .subscribe((resp) => {
-        const token = {
-          access_token: resp.access_token,
-          expiration_date: resp.expiration_date
-        };
-        this.setLocalToken('google', token);
-        this.setRemoteToken('google');
-      });
-  }
-
-  public setStreetviewToken(service: string, authStr: string) {
-    if (service === 'google') {
-      this.setGoogleToken(authStr);
-    } else {
-      this.setMapillaryToken(authStr);
-      this.setMapillaryUserKey();
-    }
-  }
-
-  private setMapillaryToken(accessToken: string) {
-    const token = {
-      access_token: accessToken
-    };
-    this.setLocalToken('mapillary', token);
-    this.setRemoteToken('mapillary');
-  }
-
-  private deleteLocalToken(service: string) {
-    if (service === 'google') {
-      localStorage.removeItem(this.GOOGLE_TOKEN_KEY);
-    } else {
-      localStorage.removeItem(this.MAPILLARY_TOKEN_KEY);
-    }
-  }
-
-  public getLocalToken(service: string) {
-    if (service === 'google') {
-      return localStorage.getItem(this.GOOGLE_TOKEN_KEY);
-    } else {
-      return localStorage.getItem(this.MAPILLARY_TOKEN_KEY);
-    }
-  }
-
-  private setLocalToken(service: string, token: any) {
-    let userToken: AuthToken;
-    if (token.expiration_date) {
-      userToken = AuthToken.fromExpiresIn(token.access_token, token.expiration_date);
-    } else {
-      userToken = new AuthToken(token.access_token);
-    }
-
-    if (service === 'google') {
-      localStorage.setItem(this.GOOGLE_TOKEN_KEY, JSON.stringify(userToken));
-    } else {
-      localStorage.setItem(this.MAPILLARY_TOKEN_KEY, JSON.stringify(userToken));
-    }
-  }
-
-  public setMapillaryUserKey(): any {
     const params = new HttpParams()
-      .set('client_id', this.envService.mapillaryClientId);
-    return this.http.get<MapillaryUser>(this.envService.mapillaryApiUrl + `/me/`, { params })
-      .subscribe((resp: MapillaryUser) => {
-        localStorage.setItem(this.MAPILLARY_USER_KEY, resp.key);
-        console.log(resp);
-      }, error => {
-        console.log(error);
-      });
+      .set('grant_type', 'authorization_code')
+      .set('client_id', envs.clientId)
+      .set('code', code)
+      .set('redirect_uri', callback);
+
+    return this.http.post<any>(envs.tokenUrl, {}, {params})
+      .pipe(tap((resp) => {
+      }));
   }
 
-  public deleteMapillaryUserKey(): any {
-    localStorage.removeItem(this.MAPILLARY_USER_KEY);
+  public getLocalToken(service: string): AuthToken {
+    const tokenStr = localStorage.getItem(this.TOKEN_STORE[service]);
+
+    if (tokenStr) {
+      const token: any = JSON.parse(tokenStr);
+
+      let userToken: AuthToken;
+
+      if (token.expires_in) {
+        userToken = AuthToken.fromExpiresIn(token.token, token.expires_in);
+      } else {
+        userToken = new AuthToken(token.token);
+      }
+
+      return userToken;
+    }
+
+    return null;
   }
 
-  public getMapillaryUserKey(): any {
-    localStorage.getItem(this.MAPILLARY_USER_KEY);
+  public setLocalToken(service: string, token: any) {
+    localStorage.setItem(this.TOKEN_STORE[service], JSON.stringify(token));
+  }
+
+  public set activeStreetview(streetview: any) {
+    this._activeStreetview.next(streetview);
+  }
+
+  public get activeStreetview() {
+    return this.activeStreetview$;
+  }
+
+  public get streetviews() {
+    return this.streetviews$;
   }
 }

@@ -1,30 +1,31 @@
-<div *ngIf="streetview.sequences.length == 0; else showSequences">
-  Uploading <i class="fas fa-spinner fa-spin"></i>
+<div *ngIf="streetviewInstance.sequences.length == 0; else showSequences">
+  Upload in progress <i class="fas fa-spinner fa-spin"></i>
 </div>
 
 <ng-template #showSequences>
   <h4>Sequences</h4>
-
-  <div *ngFor="let seq of streetview.sequences; let q = index">
+  <div *ngFor="let seq of streetviewInstance.sequences; let q = index">
     <div style="display: flex; flex-direction: row; justify-content: space-between">
       <div style="margin-left: 20px; width: 100px; padding-bottom: 5px;">
-        <div *ngIf="seq.sequence_key; else pendingApproval">
-          {{seq.sequence_key}}
+        <div *ngIf="seq.sequence_id; else pendingApproval">
+          {{seq.sequence_id}}
+          <button (click)="showInMap(seq)">Show in map</button>
         </div>
         <ng-template #pendingApproval>
           <div>
-            Pending Approval
+            Still processing sequence in Mapillary
           </div>
+          <button class="small" (click)="checkComplete(seq)">Check if complete</button>
         </ng-template>
       </div>
       <div class="grid-x align-spaced" style="cursor: pointer; margin-right: 30px">
         <div style="padding: 0px 5px 0px 5px;">
-          <a [href]="'https://www.mapillary.com/map/s/' + seq.sequence_key" style="color: #0A0A0A">
+          <a [href]="'https://www.mapillary.com/map/s/' + seq.sequence_id" style="color: #0A0A0A">
             <i class="fas fa-external-link-alt"></i>
           </a>
         </div>
         <div style="padding: 0px 5px 0px 5px">
-          <i class="fas fa-trash" (click)="deleteSequence(seq.id)"></i>
+          <i class="fas fa-trash" (click)="deleteSequence(seq)"></i>
         </div>
       </div>
 
@@ -34,5 +35,5 @@
 </ng-template>
 
 <div class="grid-x align-center" style="padding: 20px;">
-  <button (click)="deleteStreetview()" class="button alert">Remove Streetview Item</button>
+  <button (click)="deleteInstance()" class="button alert">Remove Streetview Instance</button>
 </div>

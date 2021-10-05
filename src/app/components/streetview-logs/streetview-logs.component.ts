@@ -38,9 +38,9 @@ export class StreetviewLogsComponent implements OnInit, OnDestroy {
     this.notificationsService.deleteProgress(pn);
   }
 
-  deleteErrorLog(pn: IProgressNotification) {
-    this.streetviewService.deleteStreetviewSession(pn);
-  }
+  // deleteErrorLog(pn: IProgressNotification) {
+  //   this.streetviewService.deleteStreetviewSession(pn);
+  // }
 
   ngOnDestroy() {
     if (this.timerSub) {

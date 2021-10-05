@@ -1,0 +1,22 @@
+<div class="dock-panel">
+  <div class="dock-panel-content">
+    <div><span class="dock-panel-title"> Filters </span></div>
+    <div>
+      <h6>Organizations</h6>
+      <div *ngIf="activeStreetview">
+        <div *ngFor="let org of activeStreetview.organizations">
+          <div>
+            <label for="orgFilter">
+              <input type="checkbox" id="orgFilter">{{org.name}}
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div> -->
+    <!--   <h6>Date Filter</h6> -->
+    <!-- </div> -->
+
+  </div>
+</div>

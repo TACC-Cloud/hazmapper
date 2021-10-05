@@ -47,21 +47,24 @@ import { ModalConfirmationBodyComponent } from './components/modal-confirmation-
 import { UserRowComponent } from './components/user-row/user-row.component';
 import { EditNameInputComponent } from './components/edit-name-input/edit-name-input.component';
 import { StreetviewPanelComponent } from './components/streetview-panel/streetview-panel.component';
-import { ModalStreetviewPublishComponent } from './components/modal-streetview-publish/modal-streetview-publish.component';
 import { MainWelcomeComponent } from './components/main-welcome/main-welcome.component';
 import { MainProjectComponent } from './components/main-project/main-project.component';
 import {DragDropModule, CDK_DRAG_CONFIG} from '@angular/cdk/drag-drop';
-import { ModalStreetviewLogComponent } from './components/modal-streetview-log/modal-streetview-log.component';
 import { StreetviewCallbackComponent } from './components/streetview-callback/streetview-callback.component';
 import { StreetviewAccountsComponent } from './components/streetview-accounts/streetview-accounts.component';
 import { StreetviewLogsComponent } from './components/streetview-logs/streetview-logs.component';
 import { StreetviewAssetsComponent } from './components/streetview-assets/streetview-assets.component';
-import { ModalStreetviewLinkComponent } from './components/modal-streetview-link/modal-streetview-link.component';
-import { ModalStreetviewInfoComponent } from './components/modal-streetview-info/modal-streetview-info.component';
 import { PublicMapInfoPanelComponent } from './components/public-map-info-panel/public-map-info-panel.component';
 import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { ModalLinkProjectComponent } from './components/modal-link-project/modal-link-project.component';
+import { ModalStreetviewPublishComponent } from './components/modal-streetview-publish/modal-streetview-publish.component';
+import { ModalStreetviewLogComponent } from './components/modal-streetview-log/modal-streetview-log.component';
+import { ModalStreetviewLinkComponent } from './components/modal-streetview-link/modal-streetview-link.component';
+import { ModalStreetviewInfoComponent } from './components/modal-streetview-info/modal-streetview-info.component';
+import { ModalStreetviewUsernameComponent } from './components/modal-streetview-username/modal-streetview-username.component';
+import { StreetviewAssetDetailComponent } from './components/streetview-asset-detail/streetview-asset-detail.component';
+import { StreetviewFiltersComponent } from './components/streetview-filters/streetview-filters.component';
 
 @NgModule({
   declarations: [
@@ -93,20 +96,23 @@ import { ModalLinkProjectComponent } from './components/modal-link-project/modal
     UserRowComponent,
     EditNameInputComponent,
     StreetviewPanelComponent,
-    ModalStreetviewPublishComponent,
     MainWelcomeComponent,
     MainProjectComponent,
-    ModalStreetviewLogComponent,
     StreetviewCallbackComponent,
     StreetviewAccountsComponent,
     StreetviewLogsComponent,
     StreetviewAssetsComponent,
-    ModalStreetviewLinkComponent,
-    ModalStreetviewInfoComponent,
     PublicMapInfoPanelComponent,
     LoginComponent,
     LogoutComponent,
     ModalLinkProjectComponent,
+    ModalStreetviewPublishComponent,
+    ModalStreetviewLogComponent,
+    ModalStreetviewLinkComponent,
+    ModalStreetviewInfoComponent,
+    ModalStreetviewUsernameComponent,
+    StreetviewAssetDetailComponent,
+    StreetviewFiltersComponent,
   ],
   imports: [
     CommonModule,
@@ -171,11 +177,12 @@ import { ModalLinkProjectComponent } from './components/modal-link-project/modal
     ModalFileBrowserComponent,
     ModalCreatePointCloudComponent,
     ModalCreateOverlayComponent,
-    ModalStreetviewPublishComponent,
     ModalCreateTileServerComponent,
+    ModalStreetviewPublishComponent,
     ModalStreetviewLogComponent,
     ModalStreetviewLinkComponent,
     ModalStreetviewInfoComponent,
+    ModalStreetviewUsernameComponent,
     ModalPointCloudInfoComponent,
     ModalLinkProjectComponent]
 })

@@ -2,8 +2,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import * as L from 'leaflet';
 import 'types.leaflet.heat';
 import 'leaflet.markercluster';
-import { LatLng } from 'leaflet';
-import * as Mapillary from 'mapillary-js';
+import {LatLng} from 'leaflet';
+import '@bagage/leaflet.vectorgrid';
+// import 'leaflet.vectorgrid';
+// import * as Mapillary from 'mapillary-js';
+import {Viewer, ViewerOptions} from 'mapillary-js';
 import { ProjectsService} from '../../services/projects.service';
 import { GeoDataService} from '../../services/geo-data.service';
 import { createMarker } from '../../utils/leafletUtils';
@@ -15,7 +18,8 @@ import {filter, map} from 'rxjs/operators';
 import {Subscription} from 'rxjs';
 import {Overlay, Project, TileServer} from '../../models/models';
 import {EnvService} from '../../services/env.service';
-import { StreetviewService } from 'src/app/services/streetview.service';
+import {StreetviewService} from 'src/app/services/streetview.service';
+import { StreetviewAuthenticationService } from 'src/app/services/streetview-authentication.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -25,7 +29,6 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class MapComponent implements OnInit, OnDestroy {
   map: L.Map;
-  mapillaryViewer: any;
   mapType = 'normal';
   activeFeature: Feature;
   _activeProjectId: number;
@@ -38,15 +41,25 @@ export class MapComponent implements OnInit, OnDestroy {
   fitToFeatureExtent = true;
   private subscription: Subscription = new Subscription();
   streetviewFeatures: FeatureGroup = new FeatureGroup();
-  mapillaryStreetview = false;
-  streetviewMarker: any;
+  streetviewViewer: any = null;
+  streetviewViewerOn = false;
+  streetviewMarker: any = null;
   mapWidth = 100;
+  imageMode = false;
+  activeStreetviewAsset: any;
+
+  //       Should make a default filter and mutate state on that like redux
+  mapillaryLayer: any;
+  mapillaryFilter = {
+
+  };
 
   constructor(private projectsService: ProjectsService,
               private geoDataService: GeoDataService,
               private envService: EnvService,
               private route: ActivatedRoute,
               private streetviewService: StreetviewService,
+              private streetviewAuthenticationService: StreetviewAuthenticationService,
              ) {
     // Have to bind these to keep this being this
     this.featureClickHandler.bind(this);
@@ -89,28 +102,165 @@ export class MapComponent implements OnInit, OnDestroy {
       });
     }));
 
-    this.subscription.add(this.streetviewService.streetviewDisplaySequences.subscribe((collection) => {
-      this.mapillarySequences.clearLayers();
-      collection.features.forEach( d => {
-        // NOTE: LineString
-        const seq = L.geoJSON(d, { style: {
-          weight: 10
-        }});
-        seq.on('click', (ev) => { this.sequenceClickHandler(ev); } );
-        seq.on('contextmenu', (ev) => { this.sequenceRightClickHandler(ev); } );
+    this.subscription.add(this.streetviewService.displayStreetview.subscribe((next: boolean) => {
+      if (next) {
+        // TODO: Wrap all of this mapillary segement in service that triggers on/off state of mapillary tiles (should only fire once)
+        // Also when enabled => it should set zoom to 6
+        // this.map.setZoom(6);
+        const vectorTileStyling = {
+          sequence: (properties, zoom, geometryType) => {
+            if (zoom === 14) {
+              return [];
+            } else {
+              // if (properties.organization_id === 904845143524564) {
+              //   if (this.streetviewAuthenticationService.sequenceInStreetview(properties.id)) {
+              return {
+                fill: true,
+                weight: 10,
+                fillColor: '#06cccc',
+                color: '#06cccc',
+                fillOpacity: 0.2,
+                opacity: 0.4
+              };
+              // } else {
+              //   return {
+              //     fill: true,
+              //     weight: 2,
+              //     fillColor: '#06cccc',
+              //     color: '#06cccc',
+              //     fillOpacity: 0.2,
+              //     opacity: 0.4
+              //   };
+              // }
+              // } else {
+              //   return [];
+              // }
+            }
+          },
+          image: (properties, zoom, geometryType) => {
+            this.imageMode = true;
+            // Later
+            // if (properties.organization_id === '') {
+            //   if (this.streetviewAuthenticationService.sequenceInStreetview(properties.sequence_id)) {
+            return {
+              fill: true,
+              weight: 2,
+              fillColor: '#06cccc',
+              color: '#06cccc',
+              fillOpacity: 0.2,
+              opacity: 0.4
+            };
+            // } 
+            // else {
+            //       return {
+            //         fill: true,
+            //         weight: 2,
+            //         fillColor: '#06cccc',
+            //         color: '#06cccc',
+            //         fillOpacity: 0.2,
+            //         opacity: 0.4
+            //       };
+            //     }
+            //   } else {
+            //     return [];
+            //   }
+          },
+          overview: []
+        };
 
-        this.mapillarySequences.addLayer(seq);
-      });
-      this.map.addLayer(this.mapillarySequences);
+        const vectorTileOptions = {
+          // rendererFactory: L.canvas.tile,
+          attribution: 'stuff',
+          vectorTileLayerStyles: vectorTileStyling,
+          token: 'MLYARDcnHyGduYMTxCn5gVuhZCFPHQAFhZBUX1JGw25udGnTa6YunU3UYUZBsmiIykVApTBwxHguCyTZAdGvHavJ6O7mr3uPA3ZC3ZCOwkTg2HiVR8AoR5Om2Dhw2vAOawgZDZD',
+          interactive: true,
+          getFeatureId: (f: any) => {
+            return f.properties.id;
+          }
+        };
 
+        const vectorTileUrl = 'https://tiles.mapillary.com/maps/vtp/mly1_public/2/{z}/{x}/{y}?access_token={token}';
+        this.mapillaryLayer = L.vectorGrid.protobuf(vectorTileUrl, vectorTileOptions).addTo(this.map);
+        console.log(this.mapillaryLayer)
 
-      if (this.mapillarySequences.getBounds().getNorthEast()) {
-        this.map.fitBounds(this.mapillarySequences.getBounds());
+        this.mapillaryLayer.on('click', (e) => {
+          const prop = e.layer.feature ? e.layer.feature.properties : e.layer.properties;
+          // NOTE: Determines whether point or segment
+          if (prop.image_id) {
+            this.imageMode = true;
+            this.map.setView(e.latlng, 14);
+          } else {
+            this.openOrMoveStreetviewViewer(prop.image_id, e.latlng);
+            // console.log('image!');
+            // TODO: Open mapillary viewer here (show selected sequence in image)
+          }
+        });
+
+        this.mapillaryLayer.on('contextmenu', (e) => {
+          const prop = e.layer.feature ? e.layer.feature.properties : e.layer.properties;
+          this.streetviewService.activeAsset = prop;
+          // NOTE: Determines whether point or segment
+          if (prop.image_id) {
+            console.log('sequence!');
+          } else {
+            console.log('image!');
+          }
+        });
+
+        //     this.mapillaryLayer.on('mouseout', (e) => {
+        //       const prop = e.layer.feature ? e.layer.feature.properties : e.layer.properties;
+        //       // this.mapillaryLayer.resetFeatureStyle(prop.id);
+        //       if (prop.image_id) {
+        //         if (this.imageMode) {
+        //           console.log('image mode man')
+        //         } else {
+        //           this.mapillaryLayer.setFeatureStyle(prop.id, {
+        //             color: '#06cccc',
+        //             fillColor: '#06cccc'
+        //           });
+        //         }
+        //       } else {
+        //         console.log("In a n image mousein")
+        //         // this.mapillaryLayer.setFeatureStyle(prop.id, {
+        //         //   color: '#06cccc',
+        //         //   fillColor: '#06cccc'
+        //         // });
+        //       }
+        //     });
+
+        // this.mapillaryLayer.on('mouseover', (e) => {
+        //   const prop = e.layer.feature ? e.layer.feature.properties : e.layer.properties;
+        //   if (prop.image_id) {
+        //     if (this.imageMode) {
+        //       console.log('image mode man')
+        //     } else {
+        //       this.mapillaryLayer.setFeatureStyle(prop.id, {
+        //         color: '#ff0000',
+        //         fillColor: '#ff0000'
+        //       });
+        //     }
+        //   } else {
+        //     console.log("In a n image mouseover")
+        //     // this.mapillaryLayer.setFeatureStyle(prop.id, {
+        //     //   color: '#ff0000',
+        //     //   fillColor: '#ff0000'
+        //     // });
+        //   }
+        // });
+
+      } else {
+        if (this.mapillaryLayer) {
+          this.map.removeLayer(this.mapillaryLayer);
+        }
       }
     }));
 
     // Subscribe to active project and features
     this.subscription.add(this.loadFeatures());
+
+    this.subscription.add(this.streetviewService.activeAsset.subscribe((asset: any) => {
+      this.activeStreetviewAsset = asset;
+    }));
 
     // Publish the mouse location on the mapMouseLocation stream
     this.map.on('mousemove', (ev: LeafletMouseEvent) => this.mouseEventHandler(ev));
@@ -157,6 +307,11 @@ export class MapComponent implements OnInit, OnDestroy {
       return L.tileLayer.wms(ts.url, layerOptions);
     }
   }
+
+  // setFilterOptions(style: any) {
+  //   L.vectorGrid.setFeatureStyle(this.mapillaryLayer.getFeatureId(), style);
+  // }
+
 
   /**
    * Load Features for a project.
@@ -218,82 +373,64 @@ export class MapComponent implements OnInit, OnDestroy {
     this.geoDataService.activeFeature = f;
   }
 
-  sequenceClickHandler(ev: any): void {
-    const lat = ev.latlng.lat;
-    const lon = ev.latlng.lng;
-
-    const query = lon + ',' + lat;
-
-    this.streetviewService.searchMapillaryImages({
-      closeto: query,
-      lookat: query
-    }, (resp) => {
-      if (this.mapillaryStreetview) {
-        this.mapillaryViewer.moveToKey(resp.features[0].properties.key);
-        this.focusMarker(ev.latlng);
-      } else {
-        window.open('https://www.mapillary.com/map/im/' + resp.features[0].properties.key);
-      }
-    });
-  }
-
-  sequenceRightClickHandler(ev: any): void {
-    if (!this.mapillaryStreetview) {
-      this.openStreetview(ev.latlng);
+  showStreetviewMarker(latlng: LatLng) {
+    this.map.setView(latlng, 14);
+    if (!this.streetviewMarker) {
+      this.streetviewMarker = L.marker(latlng).addTo(this.map);
     } else {
-      this.sequenceClickHandler(ev);
+      this.streetviewMarker.setLatLng(latlng);
     }
   }
 
-  openStreetview(latlng: LatLng) {
-    this.mapillaryStreetview = true;
+  openOrMoveStreetviewViewer(imageId: string, latlng: any) {
+    console.log(this.streetviewViewer);
+    if (this.streetviewViewer) {
+      this.streetviewViewer.moveTo(imageId);
+    } else {
+      this.openStreetviewViewer(imageId, latlng);
+    }
+  }
+
+  openOrMoveStreetviewMarker(latlng: any) {
+    if (this.streetviewMarker) {
+      this.streetviewMarker.setLatLng(latlng);
+    } else {
+      this.streetviewMarker = L.marker(latlng).addTo(this.map);
+    }
+    this.map.setView(latlng, 14);
+  }
+
+  openStreetviewViewer(imageId: string, latlng: any) {
+    this.streetviewViewerOn = true;
     setTimeout(() => {
-      if (this.mapillaryViewer && this.mapillaryStreetview) {
-        this.mapillaryViewer.remove();
-      }
+      const options: ViewerOptions = {
+        accessToken: 'MLYARDcnHyGduYMTxCn5gVuhZCFPHQAFhZBUX1JGw25udGnTa6YunU3UYUZBsmiIykVApTBwxHguCyTZAdGvHavJ6O7mr3uPA3ZC3ZCOwkTg2HiVR8AoR5Om2Dhw2vAOawgZDZD',
+        container: 'mapillary',
+        imageId
+      };
+      this.streetviewViewer = new Viewer(options);
 
-      const query = latlng.lng + ',' + latlng.lat;
-
-      this.streetviewService.searchMapillaryImages({
-        closeto: query,
-      }, (resp) => {
-        this.mapillaryViewer = new Mapillary.Viewer({
-          apiClient: this.envService.mapillaryClientId,
-          container: 'mapillary',
-          imageKey: resp.features[0].properties.key,
-        });
-
-        this.mapillaryViewer.on(Mapillary.Viewer.nodechanged, (node) => {
-          if (!this.streetviewMarker) {
-            this.streetviewMarker = L.marker(node.latLon).addTo(this.map);
-          } else {
-            this.streetviewMarker.setLatLng(node.latLon);
-          }
-        });
-
-        window.addEventListener('resize', () => this.mapillaryViewer.resize());
-        this.focusMarker(latlng);
+      // this.streetviewViewer.on(Viewer.nodechanged, (node) => {
+      this.streetviewViewer.on('image', (node) => {
+        this.openOrMoveStreetviewMarker(node.LatLon);
       });
+      this.openOrMoveStreetviewMarker(latlng);
+      window.addEventListener('resize', () => this.streetviewViewer.resize());
     }, 1000);
     this.mapWidth = 50;
   }
 
-  focusMarker(latlng: LatLng) {
-    if (this.mapillaryStreetview) {
-      this.map.setView(latlng, 15);
-      if (!this.streetviewMarker) {
-        this.streetviewMarker = L.marker(latlng).addTo(this.map);
-      } else {
-        this.streetviewMarker.setLatLng(latlng);
-      }
-    }
-  }
-
-  closeStreetview() {
-    if (this.mapillaryViewer) {
-      this.mapillaryStreetview = false;
-      this.mapillaryViewer.remove();
+  closeStreetviewViewer() {
+    if (this.streetviewViewer) {
+      this.streetviewViewer.remove();
+      this.streetviewViewer = null;
+      this.streetviewViewerOn = false;
       this.mapWidth = 100;
+    }
+
+    if (this.streetviewMarker) {
+      this.streetviewMarker.remove();
+      this.streetviewMarker = null;
     }
   }
 

@@ -1,16 +1,16 @@
-<div *ngIf="streetviews.length <= 0; else showSequences">
-  No Sequences
-</div>
-<ng-template #showSequences>
-  <div *ngFor="let sv of streetviews; let i = index">
-    <div class="sequence-container">
-      <div (click)="openStreetviewInfoModal(sv)" class="sequence-name" style="display: flex">
+<div *ngIf="activeStreetview && activeStreetview.instances.length; else noInstances">
+  <div *ngFor="let svi of activeStreetview.instances; let i = index">
+    <div class="instance-container">
+      <div (click)="openStreetviewInstanceInfoModal(svi)" class="instance-name" style="display: flex">
         <i class="fas fa-list" style="padding-left: 8px; padding-bottom: 5px; padding-bottom: 5px; padding-top: 9px; padding-bottom: 5px; margin-bottom: 0px"></i>
-        <span [tooltip]="sv.system_id + sv.path"
+        <span [tooltip]="svi.system_id + svi.path"
               style="margin-left: 5px; padding-top: 5px; width: 150px; display: inline-block; padding-bottom: 5px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap">
-          {{sv.path}}
+          {{svi.path}}
         </span>
       </div>
     </div>
   </div>
+</div>
+<ng-template #noInstances>
+  No Instances
 </ng-template>

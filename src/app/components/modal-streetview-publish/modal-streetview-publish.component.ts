@@ -25,7 +25,6 @@ export class ModalStreetviewPublishComponent implements OnInit {
               private streetviewAuthenticationService: StreetviewAuthenticationService) { }
 
   ngOnInit() {
-    this.publishErrorMessage = '';
   }
 
   onSelect(items: Array<RemoteFile>) {

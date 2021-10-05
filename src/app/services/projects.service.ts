@@ -23,8 +23,12 @@ export class ProjectsService {
   public readonly projects: Observable<Project[]> = this._projects.asObservable();
   private _activeProject: BehaviorSubject<Project> = new BehaviorSubject<Project>(null);
   public readonly activeProject: Observable<Project> = this._activeProject.asObservable();
+
   private _projectUsers: ReplaySubject<Array<IProjectUser>> = new ReplaySubject<Array<IProjectUser>>(1);
   public readonly projectUsers$: Observable<Array<IProjectUser>> = this._projectUsers.asObservable();
+
+  private _currentProjectUser: BehaviorSubject<IProjectUser> = new BehaviorSubject<IProjectUser>(null);
+  public readonly currentProjectUser: Observable<IProjectUser> = this._currentProjectUser.asObservable();
 
   private _loadingProjectsFailed: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public loadingProjectsFailed: Observable<boolean> = this._loadingProjectsFailed.asObservable();
@@ -60,6 +64,16 @@ export class ProjectsService {
         this._projectUsers.next(users);
       }));
   }
+
+  getProjectUser(proj: Project, uname: string): any {
+    return this.http.get(this.envService.apiUrl + `/projects/${proj.id}/users/${uname}/`);
+      // .subscribe((resp: IProjectUser) => {
+      //   this._currentProjectUser.next(resp);
+      // }, error => {
+      // this.notificationsService.showErrorToast('Unable to get user');
+    // });
+  }
+
 
   addUserToProject(proj: Project, uname: string): void {
     const payload = {

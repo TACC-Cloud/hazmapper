@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { StreetviewAuthenticationService } from 'src/app/services/streetview-authentication.service';
 import { StreetviewService } from 'src/app/services/streetview.service';
+import {ModalStreetviewUsernameComponent} from '../modal-streetview-username/modal-streetview-username.component';
+import {BsModalRef, BsModalService} from 'ngx-foundation';
+import {  Streetview } from '../../models/streetview';
+
 
 @Component({
   selector: 'app-streetview-accounts',
@@ -8,15 +12,31 @@ import { StreetviewService } from 'src/app/services/streetview.service';
   styleUrls: ['./streetview-accounts.component.styl']
 })
 export class StreetviewAccountsComponent implements OnInit {
-  mapillaryUser;
+  activeStreetview: Streetview;
+  streetviews: Streetview[];
+  organizations = [];
   constructor(
+    private bsModalService: BsModalService,
     private streetviewService: StreetviewService,
-    private streetviewAuthenticationService: StreetviewAuthenticationService) { }
+    private streetviewAuthenticationService: StreetviewAuthenticationService) {}
 
   ngOnInit() {
-    this.streetviewService.getMapillaryUser();
-    this.streetviewService.mapillaryUser.subscribe(next => {
-      this.mapillaryUser = next;
+    this.streetviewAuthenticationService.streetviews.subscribe(next => {
+      this.streetviews = next;
+    });
+
+    this.streetviewAuthenticationService.activeStreetview.subscribe(next => {
+      this.activeStreetview = next;
+    });
+
+  }
+
+  openStreetviewUsernameModal(service: string) {
+    const modal: BsModalRef = this.bsModalService.show(ModalStreetviewUsernameComponent);
+    modal.content.onClose.subscribe((data: any) => {
+      this.streetviewAuthenticationService.updateStreetviewByService(service,
+        {service_user: data.username}
+      ).subscribe();
     });
   }
 

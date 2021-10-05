@@ -35,16 +35,26 @@ export class JwtInterceptor implements HttpInterceptor {
         });
     }
 
-    if (request.url.indexOf(this.envService.mapillaryApiUrl) > -1) {
-      if (this.streetviewAuthService.isLoggedIn) {
+    if (request.url.indexOf(this.envService.streetviewEnv.mapillary.apiUrl) > -1 &&
+      !(request.url.indexOf(this.envService.streetviewEnv.mapillary.tokenUrl) > -1)) {
+      if (this.streetviewAuthService.isLoggedIn('mapillary')) {
         const authToken = this.streetviewAuthService.getLocalToken('mapillary');
         request = request.clone({
           setHeaders: {
             'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + JSON.parse(authToken).token
+            Authorization: 'OAuth ' + authToken.token
           }
-        })
+        });
       }
+    }
+
+    if (request.url.indexOf(this.envService.streetviewEnv.mapillary.tokenUrl) > -1) {
+      request = request.clone({
+        setHeaders: {
+          'Content-Type': 'application/json',
+          Authorization: 'OAuth ' + this.envService.streetviewEnv.mapillary.clientSecret
+        }
+      });
     }
 
     return next.handle(request);
@@ -60,10 +70,14 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(catchError(err => {
       if (err.status === 401) {
-        // auto logout if 401 response returned from api
-        // https://jira.tacc.utexas.edu/browse/DES-1999
+        // if (request.url.indexOf(this.envService.mapillaryApiUrl) > -1) {
+        //   this.streetviewAuthService.logout('mapillary')
+        //   this.notificationService.showErrorToast('Logged out of Mapillary!')
+        // } else {
+          // auto logout if 401 response returned from api
         this.authService.logout();
-        location.reload(true);
+        // }
+        location.reload();
       }
       throw err;
     }));

@@ -3,52 +3,71 @@
     <span class="dock-panel-title"> Streetview </span>
   </div>
 
-  <div style="height: 30px; padding-top: 20px; text-align: center">
-    <div *ngIf="publishingStreetview; else noPublish">
-      Publishing in progress <i class="fas fa-spinner fa-spin"></i>
-    </div>
-
-    <ng-template #noPublish>
-      <div>
-        No publish in progress
-      </div>
-    </ng-template>
-  </div>
-
   <div class="dock-panel-content">
-    <div *ngIf="isLoggedIn('google') || isLoggedIn('mapillary'); else notAuthenticated">
-      <div class="publish-container grid-x align-right">
-        <a class="publish-button" (click)="openStreetviewPublishModal()">
-          <small>
-            <i class="fas fa-plus"></i>
-            Publish
-          </small>
-        </a>
-        <a class="publish-button" (click)="openStreetviewLinkModal()">
-          <small>
-            <i class="fas fa-exchange-alt"></i>
-            Link
-          </small>
-        </a>
+    <div *ngIf="isLoggedIn('mapillary'); else notAuthenticated">
+      <div style="height: 31px; padding-top: 20px; text-align: center">
+        <!-- <div *ngIf="publishingStreetview; else noPublish"> -->
+        <div>
+          <label for="toggleDisplay">
+            <input type="checkbox" id="toggleDisplay" (change)="toggleStreetviewDisplay()">Display in Map
+          </label>
+        </div>
+
+        <div *ngIf="publishingStreetview">
+          Publishing in progress <i class="fas fa-spinner fa-spin"></i>
+        </div>
+
+        <!-- <ng-template #noPublish> -->
+        <!--   <!-1- <div> -1-> -->
+        <!--   <!-1-   <button class="button small" (click)="testStreetview()"> -1-> -->
+        <!--   <!-1-     Click me -1-> -->
+        <!--   <!-1-   </button> -1-> -->
+        <!--   <!-1- </div> -1-> -->
+        <!--   <div> -->
+        <!--     No publish in progress -->
+        <!--   </div> -->
+        <!-- </ng-template> -->
+
       </div>
+      <div *ngIf="activeStreetview && activeStreetview.service_user; else noUsername">
+        <div class="publish-container grid-x align-right">
+          <a class="publish-button" (click)="openStreetviewPublishModal()">
+            <small>
+              <i class="fas fa-plus"></i>
+              Publish
+            </small>
+          </a>
+          <!-- <a class="publish-button" (click)="openStreetviewLinkModal()"> -->
+          <!--   <small> -->
+          <!--     <i class="fas fa-exchange-alt"></i> -->
+          <!--     Link -->
+          <!--   </small> -->
+          <!-- </a> -->
+        </div>
 
 
-      <tabset>
+        <tabset>
         <tab heading="Assets">
-          <app-streetview-assets>
-          </app-streetview-assets>
+        <app-streetview-assets>
+        </app-streetview-assets>
         </tab>
 
-        <tab heading="Publish Log">
-          <app-streetview-logs>
-          </app-streetview-logs>
+        <tab heading="Log">
+        <app-streetview-logs>
+        </app-streetview-logs>
+        </tab>
+
+        <tab heading="Filter">
+        <app-streetview-filters>
+        </app-streetview-filters>
         </tab>
 
         <tab heading="Accounts">
-          <app-streetview-accounts>
-          </app-streetview-accounts>
+        <app-streetview-accounts>
+        </app-streetview-accounts>
         </tab>
-      </tabset>
+        </tabset>
+      </div>
     </div>
 
     <ng-template #notAuthenticated>
@@ -63,9 +82,20 @@
             Login to Mapillary
           </button>
           <!-- <button class="button auth-button" (click)="login('google')">
-               Login to Google Streetview
-               </button> -->
+            Login to Google Streetview
+            </button> -->
         </div>
+      </div>
+    </ng-template>
+
+    <ng-template #noUsername>
+      <div class="grid-y align-center">
+        <button class="button auth-button" (click)="openStreetviewUsernameModal('mapillary')">
+          Register Username
+        </button>
+        <button class="button auth-button" (click)="logout('mapillary')">
+          Logout
+        </button>
       </div>
     </ng-template>
 
