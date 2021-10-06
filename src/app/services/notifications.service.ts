@@ -70,11 +70,14 @@ export class NotificationsService {
   }
 
   initProgressPoll() {
-    const timer = interval(this.TIMEOUT);
-    const timerSub = timer.subscribe( (next) => {
-      this.getRecentProgress();
-    });
-    return timerSub;
+    if (this.authService.isLoggedIn()) {
+      const timer = interval(this.TIMEOUT);
+      const timerSub = timer.subscribe((next) => {
+        this.getRecentProgress();
+      });
+      return timerSub;
+    }
+    return null;
   }
 
   getRecentProgress(): void {

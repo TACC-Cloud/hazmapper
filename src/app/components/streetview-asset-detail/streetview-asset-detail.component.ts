@@ -19,32 +19,40 @@ export class StreetviewAssetDetailComponent implements OnInit {
   constructor(private streetviewService: StreetviewService,
               private bsModalService: BsModalService,
               private streetviewAuthenticationService: StreetviewAuthenticationService) {}
-  public activeStreetviewAsset: any;
-  public imageUrl: string;
-  public assetType: string;
-  public imageId: string;
-  public sequenceId: string;
-  public siteUrl: string;
-  public imageLoading = false;
-  public showLinkModal = true;
-  public activeStreetview: Streetview;
-
+              public activeStreetviewAsset: any;
+              public streetviewAssetEvent: any;
+              public imageUrl: string;
+              public assetType: string;
+              public imageId: string;
+              public sequenceId: string;
+              public siteUrl: string;
+              public imageLoading = false;
+              public showLinkModal = true;
+              public activeStreetview: Streetview;
+          
   ngOnInit() {
     this.streetviewAuthenticationService.activeStreetview.subscribe(next => {
       this.activeStreetview = next;
     });
 
     this.streetviewService.activeAsset.subscribe(next => {
-      this.activeStreetviewAsset = next;
       if (next) {
-        if (next.image_id) {
+        const prop = next.layer.feature ? next.layer.feature.properties : next.layer.properties;
+        this.activeStreetviewAsset = prop;
+        this.streetviewAssetEvent = {
+          latlng: next.latlng,
+          properties: prop
+        };
+        if (this.activeStreetviewAsset.image_id) {
           this.assetType = 'Sequence';
-          this.imageId = next.image_id;
-          this.sequenceId = next.id;
+          this.imageId = this.activeStreetviewAsset.image_id;
+          this.sequenceId = this.activeStreetviewAsset.id;
+          this.siteUrl = 'https://www.mapillary.com/map/s/' + this.sequenceId;
         } else {
           this.assetType = 'Image';
-          this.imageId = next.id;
-          this.sequenceId = next.sequence_id;
+          this.imageId = this.activeStreetviewAsset.id;
+          this.sequenceId = this.activeStreetviewAsset.sequence_id;
+          this.siteUrl = 'https://www.mapillary.com/map/im/' + this.imageId;
         }
 
         this.showLinkModal = this.activeStreetview ?
@@ -52,10 +60,10 @@ export class StreetviewAssetDetailComponent implements OnInit {
           false;
 
         this.imageLoading = true;
+
         this.streetviewService.getMapillaryImageData(this.imageId, ['thumb_1024_url']).subscribe(e => {
           this.imageUrl = e.thumb_1024_url;
           this.imageLoading = false;
-          this.siteUrl = 'https://www.mapillary.com/map/im/' + this.imageId;
         });
       }
     });
@@ -70,7 +78,15 @@ export class StreetviewAssetDetailComponent implements OnInit {
     });
   }
 
+  sendEvent(type: string) {
+    this.streetviewService.assetDetailEvent = {
+      asset: this.streetviewAssetEvent,
+      type
+    };
+  }
+
   close() {
+    this.sendEvent('close');
     this.streetviewService.activeAsset = null;
   }
 

@@ -1,10 +1,6 @@
 <div class="grid-y asset-detail">
   <div class="cell medium-1">
     <div class="asset-detail-header">
-      <!-- <app-feature-icon [feature]="feature"></app-feature-icon> -->
-      <!-- <div class="feature-label"> -->
-      <!--   {{feature.properties.label || feature.properties.title || feature.id}} -->
-      <!-- </div> -->
       <div>
         <button class="close-button" (click)="close()">
           <span>&times;</span>
@@ -18,19 +14,8 @@
       <i class="fas fa-spinner fa-spin"></i>
     </div>
     <img *ngIf="!imageLoading" [src]="imageUrl">
-
-  <!--   <video *ngIf="feature.featureType() ==='video'" -->
-  <!--          [src]=featureSource -->
-  <!--          controls width="100%"> -->
-  <!--   </video> -->
-  <!--   <div style="position:relative;" *ngIf="feature.featureType() ==='point_cloud'"> -->
-  <!--     <iframe class="e2e-iframe-trusted-src" -->
-  <!--             [src]="safePointCloudUrl" -->
-  <!--             style="width: 100%; height: 300px"></iframe> -->
-  <!--   </div> -->
-  <!-- </div> -->
   <div class="cell medium-1 text-center asset-detail-action">
-      {{assetType}}: {{assetId}}
+      {{assetType}}: {{sequenceId}}
       <div *ngIf="assetType === 'Image'">
         {{assetType}}: {{imageId}}
         Containing Sequence: {{sequenceId}}
@@ -56,35 +41,9 @@
         </button>
       </div>
 
-      <button class="button small">
+      <button class="button small" (click)="sendEvent('view')">
         Open in viewer
       </button>
-  <!--   <div *ngIf="feature.featureType() === 'image'"> -->
-  <!--     <a [href]="featureSource" download="feature-{{feature.id}}.jpeg"> -->
-  <!--       <button class="button small"> -->
-  <!--         Download -->
-  <!--       </button> -->
-  <!--     </a> -->
-  <!--   </div> -->
-  <!--   <div *ngIf="feature.featureType() === 'point_cloud'"> -->
-  <!--     <a [href]="featureSource+'/index.html'" target="_blank"> -->
-  <!--       <button class="button small"> -->
-  <!--         View -->
-  <!--       </button> -->
-  <!--     </a> -->
-  <!--   </div> -->
-  <!--   <div *ngIf="!feature.assets.length" class="text-center"> -->
-  <!--     <div data-alert class="alert-box secondary"> -->
-  <!--       Feature has no asset. -->
-  <!--     </div> -->
-  <!--     <button class="button expanded hollow" (click)="openFileBrowserModal()" *ngIf="!isPublicView"> -->
-  <!--       Add asset from DesignSafe -->
-  <!--     </button> -->
     </div>
-  <!--   <hr> -->
   </div>
-  <!-- <div class="cell medium-5 asset-detail-content"> -->
-  <!--   <app-feature-metadata [feature]="feature"></app-feature-metadata> -->
-  <!--   <app-feature-geometry [feature]="feature"></app-feature-geometry> -->
-  <!-- </div> -->
 </div>

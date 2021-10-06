@@ -11,7 +11,7 @@ import {StreetviewAuthenticationService} from 'src/app/services/streetview-authe
   styleUrls: ['./streetview-assets.component.styl']
 })
 export class StreetviewAssetsComponent implements OnInit {
-  private activeStreetview: Streetview;
+  public activeStreetview: Streetview;
 
   constructor(private streetviewAuthService: StreetviewAuthenticationService,
               private bsModalService: BsModalService) { }

@@ -41,6 +41,12 @@ export class StreetviewService {
   private _displayStreetview: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public displayStreetview$: Observable<boolean> = this._displayStreetview.asObservable();
 
+  private _activeMapillaryOrganizations: BehaviorSubject<Array<any>> = new BehaviorSubject([]);
+  public activeMapillaryOrganizations$: Observable<Array<any>> = this._activeMapillaryOrganizations.asObservable();
+
+  private _assetDetailEvent: BehaviorSubject<any> = new BehaviorSubject(null);
+  public assetDetailEvent$: Observable<any> = this._assetDetailEvent.asObservable();
+
   constructor(private http: HttpClient,
               private notificationsService: NotificationsService,
               private streetviewAuthentication: StreetviewAuthenticationService,
@@ -525,6 +531,22 @@ export class StreetviewService {
 
   public set displayStreetview(a: any) {
     this._displayStreetview.next(a);
+  }
+
+  public get activeMapillaryOrganizations() {
+    return this.activeMapillaryOrganizations$;
+  }
+
+  public set activeMapillaryOrganizations(a: any) {
+    this._activeMapillaryOrganizations.next(a);
+  }
+
+  public get assetDetailEvent() {
+    return this.assetDetailEvent$;
+  }
+
+  public set assetDetailEvent(a: any) {
+    this._assetDetailEvent.next(a);
   }
 
 }

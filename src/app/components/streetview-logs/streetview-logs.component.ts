@@ -11,7 +11,7 @@ import { ModalStreetviewLogComponent } from '../modal-streetview-log/modal-stree
   styleUrls: ['./streetview-logs.component.styl']
 })
 export class StreetviewLogsComponent implements OnInit, OnDestroy {
-  private progressNotifications: Array<IProgressNotification> = [];
+  public progressNotifications: Array<IProgressNotification> = [];
   private timerSub: any;
 
   constructor(private notificationsService: NotificationsService,

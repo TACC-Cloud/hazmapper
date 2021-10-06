@@ -22,8 +22,8 @@ export class ControlBarComponent implements OnInit, OnDestroy {
   private subscription: Subscription = new Subscription();
   private activeProject: Project;
   private mapMouseLocation: LatLng = new LatLng(0, 0);
-  private loadingActiveProject = true;
-  private loadingActiveProjectFailed = false;
+  public loadingActiveProject = true;
+  public loadingActiveProjectFailed = false;
   private loadingData = false;
   private canSwitchToPrivateMap = false;
 

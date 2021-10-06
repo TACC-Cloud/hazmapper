@@ -4,9 +4,7 @@ import 'types.leaflet.heat';
 import 'leaflet.markercluster';
 import {LatLng} from 'leaflet';
 import '@bagage/leaflet.vectorgrid';
-// import 'leaflet.vectorgrid';
-// import * as Mapillary from 'mapillary-js';
-import {Viewer, ViewerOptions, RenderMode, CameraControls, TransitionMode} from 'mapillary-js';
+import {Viewer, ViewerOptions} from 'mapillary-js';
 import { ProjectsService} from '../../services/projects.service';
 import { GeoDataService} from '../../services/geo-data.service';
 import { createMarker } from '../../utils/leafletUtils';
@@ -17,10 +15,12 @@ import { AllGeoJSON } from '@turf/helpers';
 import {filter, map} from 'rxjs/operators';
 import {Subscription} from 'rxjs';
 import {Overlay, Project, TileServer} from '../../models/models';
+import {Streetview} from '../../models/streetview';
 import {EnvService} from '../../services/env.service';
 import {StreetviewService} from 'src/app/services/streetview.service';
-import { StreetviewAuthenticationService } from 'src/app/services/streetview-authentication.service';
-import { ActivatedRoute } from '@angular/router';
+import {StreetviewAuthenticationService} from 'src/app/services/streetview-authentication.service';
+import {ActivatedRoute} from '@angular/router';
+import { streetviewAssetStyles } from '../../utils/streetview';
 
 @Component({
   selector: 'app-map',
@@ -47,6 +47,18 @@ export class MapComponent implements OnInit, OnDestroy {
   mapWidth = 100;
   imageMode = false;
   activeStreetviewAsset: any;
+  activeStreetview: any;
+  selectedStreetviewAsset = {
+    sequence: {
+      id: '',
+      instance: false
+    },
+    image: {
+      id: '',
+      instance: false
+    },
+  };
+  organizations: Array<any>;
 
   //       Should make a default filter and mutate state on that like redux
   mapillaryLayer: any;
@@ -104,73 +116,38 @@ export class MapComponent implements OnInit, OnDestroy {
 
     this.subscription.add(this.streetviewService.displayStreetview.subscribe((next: boolean) => {
       if (next) {
-        // TODO: Wrap all of this mapillary segement in service that triggers on/off state of mapillary tiles (should only fire once)
-        // Also when enabled => it should set zoom to 6
+        console.log(next);
         // this.map.setZoom(6);
         const vectorTileStyling = {
           sequence: (properties, zoom, geometryType) => {
-            if (zoom === 14) {
-              return [];
+            // if (this.organizations.includes(properties.organization_id)) {
+            if (this.streetviewAuthenticationService.sequenceInStreetview(properties.id)) {
+              return streetviewAssetStyles.instance.sequence.default;
             } else {
-              // if (properties.organization_id === 904845143524564) {
-              //   if (this.streetviewAuthenticationService.sequenceInStreetview(properties.id)) {
-              return {
-                fill: true,
-                weight: 10,
-                fillColor: '#06cccc',
-                color: '#06cccc',
-                fillOpacity: 0.2,
-                opacity: 0.4
-              };
-              // } else {
-              //   return {
-              //     fill: true,
-              //     weight: 2,
-              //     fillColor: '#06cccc',
-              //     color: '#06cccc',
-              //     fillOpacity: 0.2,
-              //     opacity: 0.4
-              //   };
-              // }
-              // } else {
-              //   return [];
-              // }
+              return streetviewAssetStyles.sequence.default;
             }
+            // }
+            // else {
+            //   return [];
+            // }
           },
           image: (properties, zoom, geometryType) => {
-            this.imageMode = true;
-            // Later
-            // if (properties.organization_id === '') {
-            //   if (this.streetviewAuthenticationService.sequenceInStreetview(properties.sequence_id)) {
-            return {
-              fill: true,
-              weight: 2,
-              fillColor: '#06cccc',
-              color: '#06cccc',
-              fillOpacity: 0.2,
-              opacity: 0.4
-            };
+            // if (this.organizations.includes(properties.organization_id)) {
+            if (this.streetviewAuthenticationService.sequenceInStreetview(properties.sequence_id)) {
+              return streetviewAssetStyles.instance.image.default;
+            } else {
+              return streetviewAssetStyles.image.default;
+            }
             // } 
             // else {
-            //       return {
-            //         fill: true,
-            //         weight: 2,
-            //         fillColor: '#06cccc',
-            //         color: '#06cccc',
-            //         fillOpacity: 0.2,
-            //         opacity: 0.4
-            //       };
-            //     }
-            //   } else {
-            //     return [];
-            //   }
+            //   return [];
+            // }
           },
           overview: []
         };
 
         const vectorTileOptions = {
-          // rendererFactory: L.canvas.tile,
-          attribution: 'stuff',
+          attribution: 'Mapillary layer',
           vectorTileLayerStyles: vectorTileStyling,
           token: 'MLYARDcnHyGduYMTxCn5gVuhZCFPHQAFhZBUX1JGw25udGnTa6YunU3UYUZBsmiIykVApTBwxHguCyTZAdGvHavJ6O7mr3uPA3ZC3ZCOwkTg2HiVR8AoR5Om2Dhw2vAOawgZDZD',
           interactive: true,
@@ -181,72 +158,49 @@ export class MapComponent implements OnInit, OnDestroy {
 
         const vectorTileUrl = 'https://tiles.mapillary.com/maps/vtp/mly1_public/2/{z}/{x}/{y}?access_token={token}';
         this.mapillaryLayer = L.vectorGrid.protobuf(vectorTileUrl, vectorTileOptions).addTo(this.map);
-        console.log(this.mapillaryLayer)
 
         this.mapillaryLayer.on('click', (e) => {
           const prop = e.layer.feature ? e.layer.feature.properties : e.layer.properties;
-          // NOTE: Determines whether point or segment
           if (prop.image_id) {
             this.imageMode = true;
             this.map.setView(e.latlng, 14);
+            this.mapillarySelectAsset('sequence', prop.id, prop.id);
           } else {
             this.openOrMoveStreetviewViewer(prop.id, e.latlng);
-            // console.log('image!');
-            // TODO: Open mapillary viewer here (show selected sequence in image)
+            this.mapillarySelectAsset('image', prop.id, prop.sequence_id);
+            this.mapillarySelectAsset('sequence', prop.sequence_id, prop.sequence_id);
           }
         });
 
         this.mapillaryLayer.on('contextmenu', (e) => {
           const prop = e.layer.feature ? e.layer.feature.properties : e.layer.properties;
-          this.streetviewService.activeAsset = prop;
-          // NOTE: Determines whether point or segment
+          this.streetviewService.activeAsset = e;
           if (prop.image_id) {
-            console.log('sequence!');
+            this.mapillarySelectAsset('sequence', prop.id, prop.id);
           } else {
-            console.log('image!');
+            this.mapillarySelectAsset('image', prop.id, prop.sequence_id);
+            this.mapillarySelectAsset('sequence', prop.sequence_id, prop.sequence_id);
+          }
+            
+        });
+
+        this.mapillaryLayer.on('mouseout', (e) => {
+          const prop = e.layer.feature ? e.layer.feature.properties : e.layer.properties;
+          if (prop.image_id) {
+            this.mapillaryHoverAsset('sequence', prop.id, prop.id, false);
+          } else {
+            this.mapillaryHoverAsset('image', prop.id, prop.sequence_id, false);
           }
         });
 
-        //     this.mapillaryLayer.on('mouseout', (e) => {
-        //       const prop = e.layer.feature ? e.layer.feature.properties : e.layer.properties;
-        //       // this.mapillaryLayer.resetFeatureStyle(prop.id);
-        //       if (prop.image_id) {
-        //         if (this.imageMode) {
-        //           console.log('image mode man')
-        //         } else {
-        //           this.mapillaryLayer.setFeatureStyle(prop.id, {
-        //             color: '#06cccc',
-        //             fillColor: '#06cccc'
-        //           });
-        //         }
-        //       } else {
-        //         console.log("In a n image mousein")
-        //         // this.mapillaryLayer.setFeatureStyle(prop.id, {
-        //         //   color: '#06cccc',
-        //         //   fillColor: '#06cccc'
-        //         // });
-        //       }
-        //     });
-
-        // this.mapillaryLayer.on('mouseover', (e) => {
-        //   const prop = e.layer.feature ? e.layer.feature.properties : e.layer.properties;
-        //   if (prop.image_id) {
-        //     if (this.imageMode) {
-        //       console.log('image mode man')
-        //     } else {
-        //       this.mapillaryLayer.setFeatureStyle(prop.id, {
-        //         color: '#ff0000',
-        //         fillColor: '#ff0000'
-        //       });
-        //     }
-        //   } else {
-        //     console.log("In a n image mouseover")
-        //     // this.mapillaryLayer.setFeatureStyle(prop.id, {
-        //     //   color: '#ff0000',
-        //     //   fillColor: '#ff0000'
-        //     // });
-        //   }
-        // });
+        this.mapillaryLayer.on('mouseover', (e) => {
+          const prop = e.layer.feature ? e.layer.feature.properties : e.layer.properties;
+          if (prop.image_id) {
+            this.mapillaryHoverAsset('sequence', prop.id, prop.id, true);
+          } else {
+            this.mapillaryHoverAsset('image', prop.id, prop.sequence_id, true);
+          }
+        });
 
       } else {
         if (this.mapillaryLayer) {
@@ -260,6 +214,11 @@ export class MapComponent implements OnInit, OnDestroy {
 
     this.subscription.add(this.streetviewService.activeAsset.subscribe((asset: any) => {
       this.activeStreetviewAsset = asset;
+    }));
+
+    // TODO Restart on addition
+    this.subscription.add(this.streetviewService.activeMapillaryOrganizations.subscribe((orgs: any) => {
+      this.organizations = orgs;
     }));
 
     // Publish the mouse location on the mapMouseLocation stream
@@ -284,6 +243,25 @@ export class MapComponent implements OnInit, OnDestroy {
       const bbox = turf.bbox(<AllGeoJSON> next);
       this.map.fitBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]]);
     }));
+
+    this.subscription.add(this.streetviewService.assetDetailEvent.subscribe((ev: any) => {
+      if (ev) {
+        switch (ev.type) {
+          case 'close':
+            this.mapillaryDeselectAll();
+            break;
+          case 'viewer':
+            if (ev.asset.properties.image_id) {
+              this.openOrMoveStreetviewViewer(ev.asset.properties.image_id, ev.asset.latlng);
+            } else {
+              this.openOrMoveStreetviewViewer(ev.asset.properties.id, ev.asset.latlng);
+            }
+            break;
+          default:
+            break;
+        }
+      }
+    }));
   }
 
   createOverlayLayer(ov: Overlay): Layer {
@@ -307,11 +285,6 @@ export class MapComponent implements OnInit, OnDestroy {
       return L.tileLayer.wms(ts.url, layerOptions);
     }
   }
-
-  // setFilterOptions(style: any) {
-  //   L.vectorGrid.setFeatureStyle(this.mapillaryLayer.getFeatureId(), style);
-  // }
-
 
   /**
    * Load Features for a project.
@@ -383,13 +356,12 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   openOrMoveStreetviewViewer(imageId: string, latlng: any) {
-    console.log(this.streetviewViewer);
     if (this.streetviewViewer) {
-      console.log('awesome')
-      this.streetviewViewer.moveTo(imageId);
+      this.streetviewViewer.moveTo(imageId).catch(() => {});
     } else {
-      this.openStreetviewViewer(imageId, latlng);
+      this.openStreetviewViewer(imageId);
     }
+
     this.openOrMoveStreetviewMarker(latlng);
   }
 
@@ -402,26 +374,21 @@ export class MapComponent implements OnInit, OnDestroy {
     this.map.setView(latlng, 14);
   }
 
-  openStreetviewViewer(imageId: string, latlng: any) {
+  openStreetviewViewer(imageId: string) {
     this.streetviewViewerOn = true;
     setTimeout(() => {
-      console.log(this.streetviewAuthenticationService.getLocalToken('mapillary').token)
-      console.log(imageId);
       const options: ViewerOptions = {
         accessToken: this.streetviewAuthenticationService.getLocalToken('mapillary').token,
         component: {
           cover: false,
         },
-        container: 'mapillary',
-        cameraControls: CameraControls.Street,
-        combinedPanning: false,
-        imageId,
-        imageTiling: false,
-        renderMode: RenderMode.Letterbox,
-        trackResize: false,
-        transitionMode: TransitionMode.Instantaneous,
+        container: 'mapillary'
       };
       this.streetviewViewer = new Viewer(options);
+
+      if (this.streetviewViewer) {
+        this.streetviewViewer.moveTo(imageId).catch(() => {});
+      }
 
       this.streetviewViewer.on('image', (img) => {
         this.openOrMoveStreetviewMarker([
@@ -430,8 +397,9 @@ export class MapComponent implements OnInit, OnDestroy {
         ]);
         window.addEventListener('resize', () => this.streetviewViewer.resize());
       });
-    }, 1000);
+    }, 400);
     this.mapWidth = 50;
+    setTimeout(() => this.map.invalidateSize(), 400);
   }
 
   closeStreetviewViewer() {
@@ -440,12 +408,82 @@ export class MapComponent implements OnInit, OnDestroy {
       this.streetviewViewer = null;
       this.streetviewViewerOn = false;
       this.mapWidth = 100;
+      setTimeout(() => this.map.invalidateSize(), 400);
     }
 
     if (this.streetviewMarker) {
       this.streetviewMarker.remove();
       this.streetviewMarker = null;
     }
+
+    this.mapillaryDeselectAll();
+  }
+
+  mapillaryHoverAsset(assetType: string, assetId: string, sequenceId: string, mouseAction: boolean) {
+    const isInstance = this.streetviewAuthenticationService.sequenceInStreetview(sequenceId);
+
+    const prevAsset = this.selectedStreetviewAsset[assetType];
+
+    const assetStyle = streetviewAssetStyles[assetType];
+    const instanceAssetStyle = streetviewAssetStyles.instance[assetType];
+
+    // const newAssetStyle = prevAsset.instance ?
+    const newAssetStyle = isInstance ?
+      instanceAssetStyle :
+      assetStyle;
+
+    const hoverStyle = mouseAction ?
+      newAssetStyle.hover :
+      newAssetStyle.default;
+
+    if (assetId !== prevAsset.id) {
+      this.mapillaryLayer.setFeatureStyle(assetId, hoverStyle);
+    }
+  }
+
+  mapillarySelectAsset(assetType: string, assetId: string, sequenceId: string) {
+    const isInstance = this.streetviewAuthenticationService.sequenceInStreetview(sequenceId);
+    const prevAsset = this.selectedStreetviewAsset[assetType];
+
+    const assetStyle = streetviewAssetStyles[assetType];
+    const instanceAssetStyle = streetviewAssetStyles.instance[assetType];
+
+    if (prevAsset.id) {
+      const defaultAsset = prevAsset.instance ?
+        instanceAssetStyle.default :
+        assetStyle.default;
+
+      this.mapillaryLayer.setFeatureStyle(
+        prevAsset.id, 
+        defaultAsset
+      );
+    }
+
+    const selectStyle = isInstance ?
+      instanceAssetStyle.select :
+      assetStyle.select;
+
+    this.mapillaryLayer.setFeatureStyle(
+      assetId,
+      selectStyle
+    );
+
+    this.selectedStreetviewAsset[assetType].id = assetId;
+    this.selectedStreetviewAsset[assetType].instance = isInstance;
+  }
+
+  mapillaryDeselectAsset(assetType: string) {
+    this.mapillaryLayer.setFeatureStyle(
+      this.selectedStreetviewAsset[assetType].id, 
+      streetviewAssetStyles[assetType].default
+    );
+    this.selectedStreetviewAsset[assetType].id = '';
+  }
+
+  // BUG: Consider instances
+  mapillaryDeselectAll() {
+    this.mapillaryDeselectAsset('image');
+    this.mapillaryDeselectAsset('sequence');
   }
 
   ngOnDestroy() {

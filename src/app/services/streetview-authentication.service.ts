@@ -57,7 +57,10 @@ export class StreetviewAuthenticationService {
   public sequenceInStreetview(sequenceId: string): boolean {
     return this._activeStreetview.getValue().instances
       .some(instance => instance.sequences
-        .some(sequence => sequence.sequence_id === sequenceId));
+        .some(sequence => {
+          return 'WQCH1c0mn86bygjUFt3uJv' === sequenceId;
+          // sequence.sequence_id === sequenceId;
+        }));
 
     // return this._activeStreetview.getValue().instances
     //   .some((si: StreetviewInstance) => si.sequences

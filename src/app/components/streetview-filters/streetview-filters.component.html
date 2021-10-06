@@ -7,16 +7,12 @@
         <div *ngFor="let org of activeStreetview.organizations">
           <div>
             <label for="orgFilter">
-              <input type="checkbox" id="orgFilter">{{org.name}}
+              <input type="checkbox" id="orgFilter" (change)="addOrRemoveOrganization(org.id)">{{org.name}} {{org.id}}
             </label>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- <div> -->
-    <!--   <h6>Date Filter</h6> -->
-    <!-- </div> -->
 
   </div>
 </div>
