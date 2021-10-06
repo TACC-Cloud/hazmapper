@@ -13,8 +13,6 @@ import {NotificationsService} from './notifications.service';
 import {EnvService} from '../services/env.service';
 import {StreetviewAuthenticationService} from './streetview-authentication.service';
 import {tap} from 'rxjs/operators';
-import {vt2geojson} from '@mapbox/vt2geojson';
-import SphericalMercator from '@mapbox/sphericalmercator';
 
 @Injectable({
   providedIn: 'root'

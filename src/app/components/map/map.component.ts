@@ -6,7 +6,7 @@ import {LatLng} from 'leaflet';
 import '@bagage/leaflet.vectorgrid';
 // import 'leaflet.vectorgrid';
 // import * as Mapillary from 'mapillary-js';
-import {Viewer, ViewerOptions} from 'mapillary-js';
+import {Viewer, ViewerOptions, RenderMode, CameraControls, TransitionMode} from 'mapillary-js';
 import { ProjectsService} from '../../services/projects.service';
 import { GeoDataService} from '../../services/geo-data.service';
 import { createMarker } from '../../utils/leafletUtils';
@@ -190,7 +190,7 @@ export class MapComponent implements OnInit, OnDestroy {
             this.imageMode = true;
             this.map.setView(e.latlng, 14);
           } else {
-            this.openOrMoveStreetviewViewer(prop.image_id, e.latlng);
+            this.openOrMoveStreetviewViewer(prop.id, e.latlng);
             // console.log('image!');
             // TODO: Open mapillary viewer here (show selected sequence in image)
           }
@@ -385,10 +385,12 @@ export class MapComponent implements OnInit, OnDestroy {
   openOrMoveStreetviewViewer(imageId: string, latlng: any) {
     console.log(this.streetviewViewer);
     if (this.streetviewViewer) {
+      console.log('awesome')
       this.streetviewViewer.moveTo(imageId);
     } else {
       this.openStreetviewViewer(imageId, latlng);
     }
+    this.openOrMoveStreetviewMarker(latlng);
   }
 
   openOrMoveStreetviewMarker(latlng: any) {
@@ -403,19 +405,31 @@ export class MapComponent implements OnInit, OnDestroy {
   openStreetviewViewer(imageId: string, latlng: any) {
     this.streetviewViewerOn = true;
     setTimeout(() => {
+      console.log(this.streetviewAuthenticationService.getLocalToken('mapillary').token)
+      console.log(imageId);
       const options: ViewerOptions = {
-        accessToken: 'MLYARDcnHyGduYMTxCn5gVuhZCFPHQAFhZBUX1JGw25udGnTa6YunU3UYUZBsmiIykVApTBwxHguCyTZAdGvHavJ6O7mr3uPA3ZC3ZCOwkTg2HiVR8AoR5Om2Dhw2vAOawgZDZD',
+        accessToken: this.streetviewAuthenticationService.getLocalToken('mapillary').token,
+        component: {
+          cover: false,
+        },
         container: 'mapillary',
-        imageId
+        cameraControls: CameraControls.Street,
+        combinedPanning: false,
+        imageId,
+        imageTiling: false,
+        renderMode: RenderMode.Letterbox,
+        trackResize: false,
+        transitionMode: TransitionMode.Instantaneous,
       };
       this.streetviewViewer = new Viewer(options);
 
-      // this.streetviewViewer.on(Viewer.nodechanged, (node) => {
-      this.streetviewViewer.on('image', (node) => {
-        this.openOrMoveStreetviewMarker(node.LatLon);
+      this.streetviewViewer.on('image', (img) => {
+        this.openOrMoveStreetviewMarker([
+          img.image._core.geometry.lat, 
+          img.image._core.geometry.lng
+        ]);
+        window.addEventListener('resize', () => this.streetviewViewer.resize());
       });
-      this.openOrMoveStreetviewMarker(latlng);
-      window.addEventListener('resize', () => this.streetviewViewer.resize());
     }, 1000);
     this.mapWidth = 50;
   }
