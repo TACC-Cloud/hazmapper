@@ -45,8 +45,10 @@ export class ModalCreateProjectComponent implements OnInit, AfterContentChecked 
     this.cdref.detectChanges();
   }
 
-  close(project: Project) {
-    this.onClose.next(project);
+  close(project?: Project) {
+    if (project) {
+      this.onClose.next(project);
+    }
     this.bsModalRef.hide();
   }
 
