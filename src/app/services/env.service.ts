@@ -86,6 +86,16 @@ export class EnvService {
       }
       this._baseHref = '/';
       this._clientId = 'RMCJHgW9CwJ6mKjhLTDnUYBo9Hka';
+    } else if (/^hazmapper.local/.test(hostname)) {
+      this._env = EnvironmentType.Local;
+      this._apiUrl = this.getApiUrl(environment.backend);
+      this._portalUrl = this.getPortalUrl(environment.backend);
+      // when we are using the local backend, a jwt is required
+      if (environment.backend === EnvironmentType.Local) {
+        this._jwt = environment.jwt;
+      }
+      this._baseHref = '/';
+      this._clientId = 'Eb9NCCtWkZ83c01UbIAITFvhD9ka';
     } else if (/^hazmapper.tacc.utexas.edu/.test(hostname) && pathname.startsWith('/staging')) {
       this._env = EnvironmentType.Staging;
       this._apiUrl = this.getApiUrl(this.env);
