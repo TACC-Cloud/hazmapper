@@ -108,11 +108,12 @@ export class ProjectsService {
       file_name,
       link
     };
+    this.agaveSystemsService.saveDSFile(system_id, path, file_name, project);
 
     this.http.put<any>(this.envService.apiUrl + `/projects/${project.id}/export/`, payload)
       .subscribe(currentProject => {
         this.notificationsService.showSuccessToast(`Create file ${system_id}/${path}/${file_name}.hazmapper`);
-        this._projects.next([...this._projects.value.filter((p) => p.id != project.id),
+        this._projects.next([...this._projects.value.filter((p) => p.id !== project.id),
                              currentProject]);
         this._activeProject.next(currentProject);
       }, error => {

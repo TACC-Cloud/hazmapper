@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {System, SystemSummary} from 'ng-tapis';
 import { ApiService } from 'ng-tapis';
 import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { EnvService } from '../services/env.service';
 import { DesignSafeProjectCollection, Project } from '../models/models';
 
@@ -50,5 +50,43 @@ export class AgaveSystemsService {
       });
     }
     return projects;
+  }
+
+  updateDSProjectInformation(uuid: string, data: any) {
+    const payload = {
+      uuid,
+      ...data
+    };
+
+    const headers = new HttpHeaders()
+      .set('X-Requested-With', 'XMLHttpRequest');
+
+    this.http.post<any>(this.envService.designSafeUrl + `projects-staging/v2/${uuid}/`, payload, {headers})
+      .subscribe( resp => {
+        // TODO: Update project information
+        console.log(resp);
+      }, error => {
+        console.log(error);
+      });
+  }
+
+  public saveDSFile(systemID: string, path: string, fileName: string, project: Project) {
+    console.log("Works?")
+    const data: any = {
+      uuid: project.uuid
+    };
+    const fileType = "plain/text";
+    const tmp = new Blob([data], {type: fileType});
+    const date = new Date();
+    const file = new File([tmp], fileName + ".hazmapper", {lastModified: date.valueOf()});
+
+    const form: FormData = new FormData;
+    form.append("fileToUpload", file)
+
+    this.http.post(this.envService.designSafeUrl + `files/v2/media/system/${systemID}${path}`, form).subscribe(resp => {
+      console.log(resp);
+    }, error => {
+      console.log(error);
+    })
   }
 }
