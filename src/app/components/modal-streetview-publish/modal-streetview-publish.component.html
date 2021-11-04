@@ -7,7 +7,15 @@
   (selection)="onSelect($event)">
 </app-file-browser>
 
+<div style="margin: 25px 0">
+  <label> <h5>Select Publish Organization</h5>
+    <select [(ngModel)]="selectedOrganization">
+      <option *ngFor="let org of organizations" [ngValue]="org.key">{{org.name}}</option>
+    </select>
+  </label>
+</div>
+
 <div>
   <button class="button warning" (click)="cancel()">Cancel</button>
-  <button class="button" [disabled]="!(selectedFiles.length && (publishToGoogle || publishToMapillary))" (click)="publish()">Publish</button>
+  <button class="button" [disabled]="!(selectedFiles.length && (publishToGoogle || publishToMapillary) && selectedOrganization)" (click)="publish()">Publish</button>
 </div>

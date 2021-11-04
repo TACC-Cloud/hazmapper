@@ -58,13 +58,8 @@ export class StreetviewAuthenticationService {
     return this._activeStreetview.getValue().instances
       .some(instance => instance.sequences
         .some(sequence => {
-          return 'WQCH1c0mn86bygjUFt3uJv' === sequenceId;
-          // sequence.sequence_id === sequenceId;
+          return sequence.sequence_id === sequenceId;
         }));
-
-    // return this._activeStreetview.getValue().instances
-    //   .some((si: StreetviewInstance) => si.sequences
-    //     .some((seq: StreetviewSequence) => seq.sequence_id === sequenceId));
   }
 
   public getStreetviews(): Observable<Streetview[]> {
@@ -154,7 +149,7 @@ export class StreetviewAuthenticationService {
           this.notificationsService.showErrorToast('Logged out of Mapillary!');
       });
   }
-  
+
   private tokenRequest(service: string): void {
     const envs = this.envService.streetviewEnv[service];
 

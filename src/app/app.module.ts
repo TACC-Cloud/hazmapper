@@ -63,6 +63,7 @@ import { ModalStreetviewLogComponent } from './components/modal-streetview-log/m
 import { ModalStreetviewLinkComponent } from './components/modal-streetview-link/modal-streetview-link.component';
 import { ModalStreetviewInfoComponent } from './components/modal-streetview-info/modal-streetview-info.component';
 import { ModalStreetviewUsernameComponent } from './components/modal-streetview-username/modal-streetview-username.component';
+import { ModalStreetviewOrganizationComponent } from './components/modal-streetview-organization/modal-streetview-organization.component';
 import { StreetviewAssetDetailComponent } from './components/streetview-asset-detail/streetview-asset-detail.component';
 import { StreetviewFiltersComponent } from './components/streetview-filters/streetview-filters.component';
 
@@ -111,6 +112,7 @@ import { StreetviewFiltersComponent } from './components/streetview-filters/stre
     ModalStreetviewLinkComponent,
     ModalStreetviewInfoComponent,
     ModalStreetviewUsernameComponent,
+    ModalStreetviewOrganizationComponent,
     StreetviewAssetDetailComponent,
     StreetviewFiltersComponent,
   ],
@@ -183,6 +185,7 @@ import { StreetviewFiltersComponent } from './components/streetview-filters/stre
     ModalStreetviewLinkComponent,
     ModalStreetviewInfoComponent,
     ModalStreetviewUsernameComponent,
+    ModalStreetviewOrganizationComponent,
     ModalPointCloudInfoComponent,
     ModalLinkProjectComponent]
 })

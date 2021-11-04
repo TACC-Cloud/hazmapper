@@ -1,18 +1,16 @@
-<div class="dock-panel">
-  <div class="dock-panel-content">
-    <div><span class="dock-panel-title"> Filters </span></div>
-    <div>
+<div>
+  <div>
+    <div *ngIf="activeStreetview.organizations.length">
       <h6>Organizations</h6>
       <div *ngIf="activeStreetview">
         <div *ngFor="let org of activeStreetview.organizations">
           <div>
             <label for="orgFilter">
-              <input type="checkbox" id="orgFilter" (change)="addOrRemoveOrganization(org.id)">{{org.name}} {{org.id}}
+              <input type="checkbox" id="orgFilter" (change)="addOrRemoveOrganization(org.id)">{{org.name}}
             </label>
           </div>
         </div>
       </div>
     </div>
-
   </div>
 </div>

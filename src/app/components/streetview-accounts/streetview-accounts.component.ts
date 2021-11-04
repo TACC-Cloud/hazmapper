@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { StreetviewAuthenticationService } from 'src/app/services/streetview-authentication.service';
 import { StreetviewService } from 'src/app/services/streetview.service';
 import {ModalStreetviewUsernameComponent} from '../modal-streetview-username/modal-streetview-username.component';
+import {ModalStreetviewOrganizationComponent} from '../modal-streetview-organization/modal-streetview-organization.component';
 import {BsModalRef, BsModalService} from 'ngx-foundation';
 import {  Streetview } from '../../models/streetview';
 
@@ -38,6 +39,10 @@ export class StreetviewAccountsComponent implements OnInit {
         {service_user: data.username}
       ).subscribe();
     });
+  }
+
+  openStreetviewOrganizationModal() {
+    this.bsModalService.show(ModalStreetviewOrganizationComponent);
   }
 
   isLoggedIn(service: string) {

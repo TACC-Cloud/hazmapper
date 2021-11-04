@@ -22,9 +22,9 @@ export class StreetviewAssetsComponent implements OnInit {
     });
   }
 
-  openStreetviewInstanceInfoModal(streetviewInstance: StreetviewInstance) {
+  openStreetviewInstanceInfoModal(streetviewInstanceId: number) {
     const initialState = {
-      streetviewInstance
+      streetviewInstanceId
     };
     this.bsModalService.show(ModalStreetviewInfoComponent, { initialState });
   }

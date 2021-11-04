@@ -14,17 +14,21 @@ export class ModalStreetviewPublishComponent implements OnInit {
   @Input() single: true;
   @Input() allowFolders: true;
   selectedFiles: Array<RemoteFile> = [];
+  selectedOrganization = '';
   public onClose: Subject<any> = new Subject<any>();
-
   publishToMapillary = true;
   publishToGoogle = false;
   publishErrorMessage = '';
+  organizations = [];
 
   constructor(public bsModalRef: BsModalRef,
               private streetviewService: StreetviewService,
               private streetviewAuthenticationService: StreetviewAuthenticationService) { }
 
   ngOnInit() {
+    this.streetviewAuthenticationService.organizations.subscribe(o => {
+      this.organizations = o;
+    });
   }
 
   onSelect(items: Array<RemoteFile>) {
@@ -38,6 +42,7 @@ export class ModalStreetviewPublishComponent implements OnInit {
   publish() {
     this.onClose.next({
       selectedPath: this.selectedFiles[0],
+      selectedOrganization: this.selectedOrganization,
       publishToMapillary: this.publishToMapillary,
       publishToGoogle: this.publishToGoogle,
     });

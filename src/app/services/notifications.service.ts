@@ -76,6 +76,9 @@ export class NotificationsService {
         this.getRecentProgress();
       });
       return timerSub;
+    } else {
+      this.authService.logout();
+      this.authService.redirectToAuthenticator();
     }
     return null;
   }

@@ -9,8 +9,8 @@ import {StreetviewAuthenticationService} from 'src/app/services/streetview-authe
 import {AuthService} from 'src/app/services/authentication.service';
 import { ProjectsService } from 'src/app/services/projects.service';
 import { ModalStreetviewPublishComponent } from '../modal-streetview-publish/modal-streetview-publish.component';
-import { ModalStreetviewLinkComponent } from '../modal-streetview-link/modal-streetview-link.component';
 import {ModalStreetviewUsernameComponent} from '../modal-streetview-username/modal-streetview-username.component';
+import {ModalStreetviewOrganizationComponent} from '../modal-streetview-organization/modal-streetview-organization.component';
 
 
 @Component({
@@ -63,8 +63,9 @@ export class StreetviewPanelComponent implements OnInit {
   openStreetviewPublishModal() {
     const modal: BsModalRef = this.bsModalService.show(ModalStreetviewPublishComponent);
     modal.content.onClose.subscribe( (publishData: any) => {
-      this.streetviewService.uploadPathToStreetviewService(publishData.selectedPath, 
-        'mapillary');
+      this.streetviewService.uploadPathToStreetviewService(publishData.selectedPath,
+                                                           publishData.selectedOrganization,
+                                                           'mapillary');
     });
   }
 
@@ -78,14 +79,9 @@ export class StreetviewPanelComponent implements OnInit {
     });
   }
 
-  // openStreetviewLinkModal() {
-  //   const modal: BsModalRef = this.bsModalService.show(ModalStreetviewLinkComponent);
-  //   modal.content.onClose.subscribe( (linkData: any) => {
-  //     this.streetviewService.addSequenceToPath(linkData.service,
-  //                                              linkData.sequences,
-  //                                              linkData.selectedPath);
-  //   });
-  // }
+  openStreetviewOrganizationModal() {
+    this.bsModalService.show(ModalStreetviewOrganizationComponent);
+  }
 
   login(svService: string) {
     this.streetviewAuthenticationService.login(svService);

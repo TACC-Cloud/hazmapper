@@ -1,0 +1,55 @@
+<h4>Streetview Organizations</h4>
+<h6 (click)="toggleShowInput()">Add Organization
+  <span *ngIf="showInput; else hideInput">
+    <i class="fas fa-arrow-down"></i>
+  </span>
+  <ng-template #hideInput>
+    <i class="fas fa-arrow-right"></i>
+  </ng-template>
+</h6>
+<div *ngIf="showInput">
+  <label> Username:
+    <input type="text" [(ngModel)]="name">
+  </label>
+  <label> Key:
+    <input type="text" [(ngModel)]="key">
+  </label>
+  <div>
+    Information for organizations can be found in the <a href="https://www.mapillary.com/dashboard/profile">Mapillary Dashboard</a>.
+    Enter the correct information to utilize upload features.
+  </div>
+  <div style="display: flex; flex-direction: row; justify-content: center; margin: 10px;">
+    <button type="button" class="button primary" (click)="addOrganization()">Add Organization</button>
+  </div>
+</div>
+
+<h6>Organization List:</h6>
+<div style="margin: 25px">
+  <div *ngIf="organizations.length; else noOrganizations">
+    <div *ngFor="let o of organizations">
+      <div style="display: flex; flex-direction: row; justify-content: space-between">
+        <div style="margin-left: 20px; width: 100px; padding-bottom: 5px;">
+          {{o.name}}
+        </div>
+        <div class="grid-x align-spaced" style="cursor: pointer; margin-right: 30px">
+          <div [tooltip]="'Open in Mapillary'" style="padding: 0px 5px 0px 5px;">
+            <a [href]="'https://www.mapillary.com/dashboard/org/' + o.name + '/profile'" style="color: #0A0A0A">
+              <i class="fas fa-external-link-alt"></i>
+            </a>
+          </div>
+          <div [tooltip]="'Remove link to organization'" style="padding: 0px 5px 0px 5px">
+            <i class="fas fa-trash" (click)="removeOrganization(o)"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noOrganizations>
+    <div style="text-align: center">
+      No organizations! Please add organizations.
+    </div>
+  </ng-template>
+</div>
+
+<button type="button" class="button primary" (click)="cancel()">Close</button>

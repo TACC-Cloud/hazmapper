@@ -5,31 +5,7 @@
 
   <div class="dock-panel-content">
     <div *ngIf="isLoggedIn('mapillary'); else notAuthenticated">
-      <div style="height: 31px; padding-top: 20px; text-align: center">
-        <!-- <div *ngIf="publishingStreetview; else noPublish"> -->
-        <div>
-          <label for="toggleDisplay">
-            <input type="checkbox" id="toggleDisplay" (change)="toggleStreetviewDisplay()">Display in Map
-          </label>
-        </div>
-
-        <div *ngIf="publishingStreetview">
-          Publishing in progress <i class="fas fa-spinner fa-spin"></i>
-        </div>
-
-        <!-- <ng-template #noPublish> -->
-        <!--   <!-1- <div> -1-> -->
-        <!--   <!-1-   <button class="button small" (click)="testStreetview()"> -1-> -->
-        <!--   <!-1-     Click me -1-> -->
-        <!--   <!-1-   </button> -1-> -->
-        <!--   <!-1- </div> -1-> -->
-        <!--   <div> -->
-        <!--     No publish in progress -->
-        <!--   </div> -->
-        <!-- </ng-template> -->
-
-      </div>
-      <div *ngIf="activeStreetview && activeStreetview.service_user; else noUsername">
+      <div *ngIf="activeStreetview && activeStreetview.service_user && activeStreetview.organizations.length !== 0; else noUsername">
         <div class="publish-container grid-x align-right">
           <a class="publish-button" (click)="openStreetviewPublishModal()">
             <small>
@@ -37,14 +13,7 @@
               Publish
             </small>
           </a>
-          <!-- <a class="publish-button" (click)="openStreetviewLinkModal()"> -->
-          <!--   <small> -->
-          <!--     <i class="fas fa-exchange-alt"></i> -->
-          <!--     Link -->
-          <!--   </small> -->
-          <!-- </a> -->
         </div>
-
 
         <tabset>
         <tab heading="Assets">
@@ -57,12 +26,12 @@
         </app-streetview-logs>
         </tab>
 
-        <tab heading="Filter">
+        <tab heading="Filters">
         <app-streetview-filters>
         </app-streetview-filters>
         </tab>
 
-        <tab heading="Accounts">
+        <tab heading="Account">
         <app-streetview-accounts>
         </app-streetview-accounts>
         </tab>
@@ -89,15 +58,22 @@
     </ng-template>
 
     <ng-template #noUsername>
-      <div class="grid-y align-center">
-        <button class="button auth-button" (click)="openStreetviewUsernameModal('mapillary')">
-          Register Username
-        </button>
-        <button class="button auth-button" (click)="logout('mapillary')">
-          Logout
-        </button>
+      <div style="text-align: center">
+        <div class="grid-y align-center">
+          <div style="margin: 10px">
+            You must set your username and add at least one organization.
+          </div>
+          <button *ngIf="activeStreetview && !activeStreetview.service_user" class="button auth-button" (click)="openStreetviewUsernameModal('mapillary')">
+            Set Username
+          </button>
+          <button *ngIf="activeStreetview && !activeStreetview.organizations.length" class="button auth-button" (click)="openStreetviewOrganizationModal()">
+            Set Organization
+          </button>
+          <button class="button auth-button" (click)="logout('mapillary')">
+            Logout
+          </button>
+        </div>
       </div>
     </ng-template>
-
   </div>
 </div>

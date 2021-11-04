@@ -45,7 +45,6 @@ export class MapComponent implements OnInit, OnDestroy {
   streetviewViewerOn = false;
   streetviewMarker: any = null;
   mapWidth = 100;
-  imageMode = false;
   activeStreetviewAsset: any;
   activeStreetview: any;
   selectedStreetviewAsset = {
@@ -114,34 +113,32 @@ export class MapComponent implements OnInit, OnDestroy {
       });
     }));
 
+    // TOOD: Remove this and just display on init
     this.subscription.add(this.streetviewService.displayStreetview.subscribe((next: boolean) => {
-      if (next) {
-        console.log(next);
+      if (true) {
         // this.map.setZoom(6);
         const vectorTileStyling = {
           sequence: (properties, zoom, geometryType) => {
-            // if (this.organizations.includes(properties.organization_id)) {
-            if (this.streetviewAuthenticationService.sequenceInStreetview(properties.id)) {
-              return streetviewAssetStyles.instance.sequence.default;
+            if (this.organizations.includes(properties.organization_id)) {
+              if (this.streetviewAuthenticationService.sequenceInStreetview(properties.id)) {
+                return streetviewAssetStyles.instance.sequence.default;
+              } else {
+                return streetviewAssetStyles.sequence.default;
+              }
             } else {
-              return streetviewAssetStyles.sequence.default;
+              return [];
             }
-            // }
-            // else {
-            //   return [];
-            // }
           },
           image: (properties, zoom, geometryType) => {
-            // if (this.organizations.includes(properties.organization_id)) {
-            if (this.streetviewAuthenticationService.sequenceInStreetview(properties.sequence_id)) {
-              return streetviewAssetStyles.instance.image.default;
+            if (this.organizations.includes(properties.organization_id)) {
+              if (this.streetviewAuthenticationService.sequenceInStreetview(properties.sequence_id)) {
+                return streetviewAssetStyles.instance.image.default;
+              } else {
+                return streetviewAssetStyles.image.default;
+              }
             } else {
-              return streetviewAssetStyles.image.default;
+              return [];
             }
-            // } 
-            // else {
-            //   return [];
-            // }
           },
           overview: []
         };
@@ -162,7 +159,6 @@ export class MapComponent implements OnInit, OnDestroy {
         this.mapillaryLayer.on('click', (e) => {
           const prop = e.layer.feature ? e.layer.feature.properties : e.layer.properties;
           if (prop.image_id) {
-            this.imageMode = true;
             this.map.setView(e.latlng, 14);
             this.mapillarySelectAsset('sequence', prop.id, prop.id);
           } else {
@@ -181,7 +177,7 @@ export class MapComponent implements OnInit, OnDestroy {
             this.mapillarySelectAsset('image', prop.id, prop.sequence_id);
             this.mapillarySelectAsset('sequence', prop.sequence_id, prop.sequence_id);
           }
-            
+
         });
 
         this.mapillaryLayer.on('mouseout', (e) => {
@@ -216,7 +212,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.activeStreetviewAsset = asset;
     }));
 
-    // TODO Restart on addition
+    // TODO Restart on addition (filter values)
     this.subscription.add(this.streetviewService.activeMapillaryOrganizations.subscribe((orgs: any) => {
       this.organizations = orgs;
     }));
@@ -260,6 +256,14 @@ export class MapComponent implements OnInit, OnDestroy {
           default:
             break;
         }
+      }
+    }));
+
+    this.subscription.add(this.streetviewService.sequenceFocusEvent.subscribe((ev: any) => {
+      this.streetviewService.displayStreetview = true;
+      if (ev) {
+        this.map.setView(ev.latlng, 13);
+        this.mapillarySelectAsset('sequence', ev.id, ev.id);
       }
     }));
   }
@@ -392,7 +396,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
       this.streetviewViewer.on('image', (img) => {
         this.openOrMoveStreetviewMarker([
-          img.image._core.geometry.lat, 
+          img.image._core.geometry.lat,
           img.image._core.geometry.lng
         ]);
         window.addEventListener('resize', () => this.streetviewViewer.resize());
@@ -454,7 +458,7 @@ export class MapComponent implements OnInit, OnDestroy {
         assetStyle.default;
 
       this.mapillaryLayer.setFeatureStyle(
-        prevAsset.id, 
+        prevAsset.id,
         defaultAsset
       );
     }
@@ -474,7 +478,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   mapillaryDeselectAsset(assetType: string) {
     this.mapillaryLayer.setFeatureStyle(
-      this.selectedStreetviewAsset[assetType].id, 
+      this.selectedStreetviewAsset[assetType].id,
       streetviewAssetStyles[assetType].default
     );
     this.selectedStreetviewAsset[assetType].id = '';
