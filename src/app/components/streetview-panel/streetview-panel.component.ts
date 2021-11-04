@@ -95,10 +95,6 @@ export class StreetviewPanelComponent implements OnInit {
     return this.streetviewAuthenticationService.isLoggedIn(svService);
   }
 
-  testStreetview() {
-    this.streetviewService.testRequest();
-  }
-
   toggleStreetviewDisplay() {
     this.streetviewService.displayStreetview = !this.displayStreetview;
   }
