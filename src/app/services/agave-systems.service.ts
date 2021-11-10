@@ -52,29 +52,42 @@ export class AgaveSystemsService {
     return projects;
   }
 
-  updateDSProjectInformation(uuid: string, data: any) {
-    const payload = {
-      uuid,
-      ...data
-    };
+  updateDSProjectInformation(designsafeUUID: string, project: Project, path: string) {
+    this.http.get<any>(this.envService.designSafeUrl + `projects-staging/v2/${designsafeUUID}`).subscribe(dsProject => {
+      const previousMaps = dsProjects.value.hazmapperMaps
+        ? dsProject.value.hazmapperMaps.filter(e => e.uuid !== project.uuid)
+        : [];
 
-    const headers = new HttpHeaders()
-      .set('X-Requested-With', 'XMLHttpRequest');
+      const payload = {
+        designsafeUUID,
+        hazmapperMaps: [
+          ...previousMaps
+          {
+            name: project.name,
+            uuid: project.uuid,
+            path,
+            deployment: this.envService.env
+          }
+        ]
+      };
 
-    this.http.post<any>(this.envService.designSafeUrl + `projects-staging/v2/${uuid}/`, payload, {headers})
-      .subscribe( resp => {
-        // TODO: Update project information
-        console.log(resp);
-      }, error => {
-        console.log(error);
-      });
+      const headers = new HttpHeaders()
+        .set('X-Requested-With', 'XMLHttpRequest');
+
+      this.http.post<any>(this.envService.designSafeUrl + `projects-staging/v2/${designsafeUUID}/`, payload, {headers})
+        .subscribe( resp => {
+          console.log(resp);
+        }, error => {
+          console.log(error);
+        });
+    });
   }
 
   public saveDSFile(systemID: string, path: string, fileName: string, project: Project) {
-    console.log("Works?")
     const data: any = {
       uuid: project.uuid
     };
+
     const fileType = "plain/text";
     const tmp = new Blob([data], {type: fileType});
     const date = new Date();

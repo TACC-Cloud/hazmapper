@@ -109,6 +109,10 @@ export class ProjectsService {
       link
     };
     this.agaveSystemsService.saveDSFile(system_id, path, file_name, project);
+    this.agaveSystemsService.updateDSProjectInformation(system_id.replace('project-', ''),
+                                                        project,
+                                                        path);
+
 
     this.http.put<any>(this.envService.apiUrl + `/projects/${project.id}/export/`, payload)
       .subscribe(currentProject => {
