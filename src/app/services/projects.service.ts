@@ -111,8 +111,9 @@ export class ProjectsService {
     this.agaveSystemsService.saveDSFile(system_id, path, file_name, project);
     if (system_id.includes('project')) {
       this.agaveSystemsService.updateDSProjectInformation(system_id.replace('project-', ''),
+                                                          path,
                                                           project,
-                                                          path);
+                                                          'update');
     }
 
     this.http.put<any>(this.envService.apiUrl + `/projects/${project.id}/export/`, payload)
@@ -185,6 +186,16 @@ export class ProjectsService {
   }
 
   deleteProject(proj: Project): void {
+    if (proj.system_id && proj.system_id.includes('project')) {
+      this.agaveSystemsService.updateDSProjectInformation(system_id.replace('project-', ''),
+                                                          path,
+                                                          project,
+                                                          'delete');
+    }
+    if (proj.system_file) {
+      this.agaveSystemsService.deleteDSFile(proj);
+    }
+
     this.http.delete(this.envService.apiUrl + `/projects/${proj.id}/`)
       .subscribe( (resp) => {
         this.getProjects();

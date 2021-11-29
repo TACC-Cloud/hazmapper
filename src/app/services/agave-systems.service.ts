@@ -52,22 +52,26 @@ export class AgaveSystemsService {
     return projects;
   }
 
-  updateDSProjectInformation(designsafeUUID: string, project: Project, path: string) {
+  updateDSProjectInformation(designsafeUUID: string, path: string, project: Project, operation: string) {
     this.http.get<any>(this.envService.designSafeUrl + `projects-staging/v2/${designsafeUUID}/`).subscribe(dsProject => {
       const previousMaps = dsProject.value.hazmapperMaps
         ? dsProject.value.hazmapperMaps.filter(e => e.uuid !== project.uuid)
+        : [];
+
+      const payloadProject = operation === 'update'
+        ? [{
+            name: project.name,
+            uuid: project.uuid,
+            path,
+            deployment: this.envService.env
+          }]
         : [];
 
       const payload = {
         designsafeUUID,
         hazmapperMaps: [
           ...previousMaps,
-          {
-            name: project.name,
-            uuid: project.uuid,
-            path,
-            deployment: this.envService.env
-          }
+          ...payloadProject
         ]
       };
 
@@ -97,6 +101,14 @@ export class AgaveSystemsService {
     form.append("fileToUpload", file)
 
     this.http.post(this.envService.designSafeUrl + `files/v2/media/system/${systemID}${path}`, form).subscribe(resp => {
+      console.log(resp);
+    }, error => {
+      console.log(error);
+    })
+  }
+
+  public deleteDSFile(project: Project) {
+    this.http.post(this.envService.designSafeUrl + `files/v2/media/system/${proj.systemId}${proj.system_path}/${proj.system_file}`, form).subscribe(resp => {
       console.log(resp);
     }, error => {
       console.log(error);
