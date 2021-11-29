@@ -53,15 +53,15 @@ export class AgaveSystemsService {
   }
 
   updateDSProjectInformation(designsafeUUID: string, project: Project, path: string) {
-    this.http.get<any>(this.envService.designSafeUrl + `projects-staging/v2/${designsafeUUID}`).subscribe(dsProject => {
-      const previousMaps = dsProjects.value.hazmapperMaps
+    this.http.get<any>(this.envService.designSafeUrl + `projects-staging/v2/${designsafeUUID}/`).subscribe(dsProject => {
+      const previousMaps = dsProject.value.hazmapperMaps
         ? dsProject.value.hazmapperMaps.filter(e => e.uuid !== project.uuid)
         : [];
 
       const payload = {
         designsafeUUID,
         hazmapperMaps: [
-          ...previousMaps
+          ...previousMaps,
           {
             name: project.name,
             uuid: project.uuid,
