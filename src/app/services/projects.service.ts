@@ -187,11 +187,12 @@ export class ProjectsService {
 
   deleteProject(proj: Project): void {
     if (proj.system_id && proj.system_id.includes('project')) {
-      this.agaveSystemsService.updateDSProjectInformation(system_id.replace('project-', ''),
-                                                          path,
-                                                          project,
+      this.agaveSystemsService.updateDSProjectInformation(proj.system_id.replace('project-', ''),
+                                                          proj.system_path,
+                                                          proj,
                                                           'delete');
     }
+
     if (proj.system_file) {
       this.agaveSystemsService.deleteDSFile(proj);
     }

@@ -108,7 +108,7 @@ export class AgaveSystemsService {
   }
 
   public deleteDSFile(proj: Project) {
-    this.http.post(this.envService.designSafeUrl + `files/v2/media/system/${proj.systemId}${proj.system_path}/${proj.system_file}`, form).subscribe(resp => {
+    this.http.delete(this.envService.designSafeUrl + `files/v2/media/system/${proj.system_id}${proj.system_path}/${proj.system_file}`).subscribe(resp => {
       console.log(resp);
     }, error => {
       console.log(error);
