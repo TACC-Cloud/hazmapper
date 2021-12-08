@@ -130,6 +130,13 @@ export class ProjectsService {
     return this.http.post<Project>(this.envService.apiUrl + `/projects/rapid/`, data)
       .pipe(
         map( (proj) => {
+          this.agaveSystemsService.saveDSFile(proj.system_id, proj.system_path, proj.system_file, proj);
+          if (system_id.startsWith('project')) {
+            this.agaveSystemsService.updateDSProjectInformation(proj.system_id.replace('project-', ''),
+                                                                proj.system_path,
+                                                                proj,
+                                                                AgaveFileOperations.Update);
+          }
           this._projects.next([proj, ...this._projects.value]);
           defaultTileServers.forEach(ts => {
             this.geoDataService.addTileServer(proj.id, ts, true);
