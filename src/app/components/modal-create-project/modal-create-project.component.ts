@@ -60,7 +60,7 @@ export class ModalCreateProjectComponent implements OnInit, AfterContentChecked 
 
   onSystemSelect(system: any) {
     this.selectedSystem = system;
-    if (system.id.includes('project')) {
+    if (system.id.startsWith('project')) {
       this.projCreateForm.get('linkProject').setValue(true);
     } else {
       this.projCreateForm.get('linkProject').setValue(false);

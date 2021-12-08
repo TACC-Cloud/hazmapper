@@ -109,7 +109,7 @@ export class ProjectsService {
       link
     };
     this.agaveSystemsService.saveDSFile(system_id, path, file_name, project);
-    if (system_id.includes('project')) {
+    if (system_id.startsWith('project')) {
       this.agaveSystemsService.updateDSProjectInformation(system_id.replace('project-', ''),
                                                           path,
                                                           project,
@@ -186,7 +186,7 @@ export class ProjectsService {
   }
 
   deleteProject(proj: Project): void {
-    if (proj.system_id && proj.system_id.includes('project')) {
+    if (proj.system_id && proj.system_id.startsWith('project')) {
       this.agaveSystemsService.updateDSProjectInformation(proj.system_id.replace('project-', ''),
                                                           proj.system_path,
                                                           proj,
