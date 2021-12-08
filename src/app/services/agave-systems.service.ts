@@ -53,7 +53,7 @@ export class AgaveSystemsService {
   }
 
   updateDSProjectInformation(designsafeUUID: string, path: string, project: Project, operation: string) {
-    this.http.get<any>(this.envService.designSafeUrl + `projects-staging/v2/${designsafeUUID}/`).subscribe(dsProject => {
+    this.http.get<any>(this.envService.designSafeUrl + `projects/v2/${designsafeUUID}/`).subscribe(dsProject => {
       const previousMaps = dsProject.value.hazmapperMaps
         ? dsProject.value.hazmapperMaps.filter(e => e.uuid !== project.uuid)
         : [];
@@ -78,7 +78,7 @@ export class AgaveSystemsService {
       const headers = new HttpHeaders()
         .set('X-Requested-With', 'XMLHttpRequest');
 
-      this.http.post<any>(this.envService.designSafeUrl + `projects-staging/v2/${designsafeUUID}/`, payload, {headers})
+      this.http.post<any>(this.envService.designSafeUrl + `projects/v2/${designsafeUUID}/`, payload, {headers})
         .subscribe( resp => {
           console.log(resp);
         }, error => {
