@@ -98,22 +98,25 @@ export class AgaveSystemsService {
     const date = new Date();
     const file = new File([tmp], fileName + ".hazmapper", {lastModified: date.valueOf()});
 
-    const form: FormData = new FormData;
-    form.append("fileToUpload", file)
-
-    this.http.post(this.envService.designSafeUrl + `files/v2/media/system/${systemId}${path}`, form).subscribe(resp => {
-      console.log(resp);
+    this.tapis.filesImport({
+      systemId,
+      filePath: path,
+      body: {
+        fileToUpload: file
+      }
+    }).subscribe(resp => {
       this.notificationsService.showSuccessToast(`Successfully saved file to ${systemId}${path}.`);
     }, error => {
       this.notificationsService.showErrorToast(`Failed to save file to ${systemId}${path}.`);
-    })
+    });
   }
 
   public deleteDSFile(proj: Project) {
-    this.http.delete(this.envService.designSafeUrl + `files/v2/media/system/${proj.system_id}${proj.system_path}/${proj.system_file}`).subscribe(resp => {
-      this.notificationsService.showSuccessToast(`Successfully deleted file from ${proj.system_id}${proj.system_path}.`);
-    }, error => {
-      this.notificationsService.showErrorToast(`Failed to delete file from ${proj.system_id}${proj.system_path}.`);
-    })
+    this.tapis.filesDelete({systemId: proj.system_id, filePath: `${proj.system_path}/${proj.system_file}`})
+      .subscribe(resp => {
+        this.notificationsService.showSuccessToast(`Successfully deleted file from ${proj.system_id}${proj.system_path}.`);
+      }, error => {
+        this.notificationsService.showErrorToast(`Failed to delete file from ${proj.system_id}${proj.system_path}.`);
+      });
   }
 }
