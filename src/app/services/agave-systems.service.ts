@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {System, SystemSummary} from 'ng-tapis';
 import { ApiService } from 'ng-tapis';
 import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
+import {NotificationsService} from './notifications.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { EnvService } from '../services/env.service';
 import { DesignSafeProjectCollection, Project } from '../models/models';
@@ -87,7 +88,7 @@ export class AgaveSystemsService {
     });
   }
 
-  public saveDSFile(systemID: string, path: string, fileName: string, project: Project) {
+  public saveDSFile(systemId: string, path: string, fileName: string, project: Project) {
     const data: any = {
       uuid: project.uuid
     };
@@ -100,18 +101,19 @@ export class AgaveSystemsService {
     const form: FormData = new FormData;
     form.append("fileToUpload", file)
 
-    this.http.post(this.envService.designSafeUrl + `files/v2/media/system/${systemID}${path}`, form).subscribe(resp => {
+    this.http.post(this.envService.designSafeUrl + `files/v2/media/system/${systemId}${path}`, form).subscribe(resp => {
       console.log(resp);
+      this.notificationsService.showSuccessToast(`Successfully saved file to ${systemId}${path}.`);
     }, error => {
-      console.log(error);
+      this.notificationsService.showErrorToast(`Failed to save file to ${systemId}${path}.`);
     })
   }
 
   public deleteDSFile(proj: Project) {
     this.http.delete(this.envService.designSafeUrl + `files/v2/media/system/${proj.system_id}${proj.system_path}/${proj.system_file}`).subscribe(resp => {
-      console.log(resp);
+      this.notificationsService.showSuccessToast(`Successfully deleted file from ${proj.system_id}${proj.system_path}.`);
     }, error => {
-      console.log(error);
+      this.notificationsService.showErrorToast(`Failed to delete file from ${proj.system_id}${proj.system_path}.`);
     })
   }
 }
