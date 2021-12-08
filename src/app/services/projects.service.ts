@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
-import {DesignSafeProjectCollection, Project} from '../models/models';
+import {DesignSafeProjectCollection, Project, AgaveFileOperations} from '../models/models';
 import { RapidProjectRequest } from '../models/rapid-project-request';
 import {catchError, map, tap, filter, take} from 'rxjs/operators';
 import {IProjectUser} from '../models/project-user';
@@ -113,18 +113,16 @@ export class ProjectsService {
       this.agaveSystemsService.updateDSProjectInformation(system_id.replace('project-', ''),
                                                           path,
                                                           project,
-                                                          'update');
+                                                          AgaveFileOperations.Update);
     }
 
     this.http.put<any>(this.envService.apiUrl + `/projects/${project.id}/export/`, payload)
       .subscribe(currentProject => {
-        this.notificationsService.showSuccessToast(`Create file ${system_id}/${path}/${file_name}.hazmapper`);
         this._projects.next([...this._projects.value.filter((p) => p.id !== project.id),
                              currentProject]);
         this._activeProject.next(currentProject);
       }, error => {
-        this.notificationsService.showErrorToast(`Failed to create file ${system_id}/${path}/${file_name}.hazmapper`);
-        console.log(error);
+        this.notificationsService.showErrorToast(`Failed to save to ${system_id}/${path}/${file_name}!`);
       });
   }
 
@@ -190,7 +188,7 @@ export class ProjectsService {
       this.agaveSystemsService.updateDSProjectInformation(proj.system_id.replace('project-', ''),
                                                           proj.system_path,
                                                           proj,
-                                                          'delete');
+                                                          AgaveFileOperations.Delete);
     }
 
     if (proj.system_file) {

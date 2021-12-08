@@ -5,7 +5,7 @@ import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
 import {NotificationsService} from './notifications.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { EnvService } from '../services/env.service';
-import { DesignSafeProjectCollection, Project } from '../models/models';
+import { DesignSafeProjectCollection, Project, AgaveFileOperations } from '../models/models';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class AgaveSystemsService {
   public readonly systems: Observable<SystemSummary[]> = this._systems.asObservable();
   private _projects: ReplaySubject<SystemSummary[]> = new ReplaySubject<SystemSummary[]>(1);
   public readonly projects: Observable<SystemSummary[]> = this._projects.asObservable();
-  constructor(private tapis: ApiService, private envService: EnvService, private http: HttpClient) { }
+  constructor(private tapis: ApiService, private notificationsService: NotificationsService, private envService: EnvService, private http: HttpClient) { }
 
   list() {
     this.tapis.systemsList({type: 'STORAGE'})
@@ -53,13 +53,13 @@ export class AgaveSystemsService {
     return projects;
   }
 
-  updateDSProjectInformation(designsafeUUID: string, path: string, project: Project, operation: string) {
+  updateDSProjectInformation(designsafeUUID: string, path: string, project: Project, operation: AgaveFileOperations) {
     this.http.get<any>(this.envService.designSafeUrl + `projects/v2/${designsafeUUID}/`).subscribe(dsProject => {
       const previousMaps = dsProject.value.hazmapperMaps
         ? dsProject.value.hazmapperMaps.filter(e => e.uuid !== project.uuid)
         : [];
 
-      const payloadProject = operation === 'update'
+      const payloadProject = operation === AgaveFileOperations.Update
         ? [{
             name: project.name,
             uuid: project.uuid,
