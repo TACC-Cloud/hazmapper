@@ -131,7 +131,7 @@ export class ProjectsService {
       .pipe(
         map( (proj) => {
           this.agaveSystemsService.saveDSFile(proj.system_id, proj.system_path, proj.system_file, proj);
-          if (system_id.startsWith('project')) {
+          if (proj.system_id.startsWith('project')) {
             this.agaveSystemsService.updateDSProjectInformation(proj.system_id.replace('project-', ''),
                                                                 proj.system_path,
                                                                 proj,

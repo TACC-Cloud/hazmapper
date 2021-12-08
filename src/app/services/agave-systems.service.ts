@@ -102,6 +102,7 @@ export class AgaveSystemsService {
       systemId,
       filePath: path,
       body: {
+        // @ts-ignore
         fileToUpload: file
       }
     }).subscribe(resp => {
