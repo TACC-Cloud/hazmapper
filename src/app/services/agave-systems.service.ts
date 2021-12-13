@@ -17,7 +17,11 @@ export class AgaveSystemsService {
   public readonly systems: Observable<SystemSummary[]> = this._systems.asObservable();
   private _projects: ReplaySubject<SystemSummary[]> = new ReplaySubject<SystemSummary[]>(1);
   public readonly projects: Observable<SystemSummary[]> = this._projects.asObservable();
-  constructor(private tapis: ApiService, private notificationsService: NotificationsService, private envService: EnvService, private http: HttpClient) { }
+  constructor(
+    private tapis: ApiService,
+    private notificationsService: NotificationsService,
+    private envService: EnvService,
+    private http: HttpClient) { }
 
   list() {
     this.tapis.systemsList({type: 'STORAGE'})
@@ -69,7 +73,7 @@ export class AgaveSystemsService {
         : [];
 
       const payload = {
-        designsafeUUID,
+        uuid: designsafeUUID,
         hazmapperMaps: [
           ...previousMaps,
           ...payloadProject
@@ -90,13 +94,16 @@ export class AgaveSystemsService {
 
   public saveDSFile(systemId: string, path: string, fileName: string, project: Project) {
     const data: any = {
-      uuid: project.uuid
+      uuid: project.uuid,
+      deployment: this.envService.env
     };
 
-    const fileType = "plain/text";
-    const tmp = new Blob([data], {type: fileType});
+    const dataJSON = JSON.stringify(data);
+
+    const fileType = 'plain/text';
+    const tmp = new Blob([dataJSON], {type: fileType});
     const date = new Date();
-    const file = new File([tmp], fileName + ".hazmapper", {lastModified: date.valueOf()});
+    const file = new File([tmp], fileName + '.hazmapper', {lastModified: date.valueOf()});
 
     this.tapis.filesImport({
       systemId,
