@@ -83,7 +83,7 @@
             <a [href]="dsHref"><span>{{activeProject.system_path}}</span></a>
           </div>
 
-          <div *ngIf="activeProject.system_id.includes('project'); else myData" style="margin-bottom: 20px">
+          <div *ngIf="activeProject.system_id.startsWith('project'); else myData" style="margin-bottom: 20px">
             <span>Project:  </span>
             <a [href]="projectHref">
               <span>

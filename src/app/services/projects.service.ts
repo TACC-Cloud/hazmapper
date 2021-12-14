@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
-import {DesignSafeProjectCollection, Project, ProjectRequest} from '../models/models';
+import {DesignSafeProjectCollection, Project, ProjectRequest, AgaveFileOperations} from '../models/models';
 import { RapidProjectRequest } from '../models/rapid-project-request';
 import {catchError, map, tap, filter, take} from 'rxjs/operators';
 import {IProjectUser} from '../models/project-user';
@@ -83,13 +83,74 @@ export class ProjectsService {
     return this.http.post<Project>(this.envService.apiUrl + `/projects/`, data)
       .pipe(
         tap(proj => {
+          // if (data.observable || proj.system_path) {
+          //   this.agaveSystemsService.uploadFile(proj.uuid, proj.system_id, proj.system_path, proj.system_file);
+          // }
+
           if (data.observable || proj.system_path) {
-            this.agaveSystemsService.uploadFile(proj.uuid, proj.system_id, proj.system_path, proj.system_file);
+            this.agaveSystemsService.saveFile(proj);
           }
 
           // Spread operator, just pushes the new project into the array
           this._projects.next([...this._projects.value, proj]);
           this.geoDataService.addDefaultTileServers(proj.id);
+//           this.geoDataService.addDefaultTileServers(proj.id);
+//           // Add default servers
+//           // defaultTileServers.forEach(ts => {
+//           //   this.geoDataService.addTileServer(proj.id, ts, true);
+//           // });
+
+//         }),
+//       );
+//   }
+
+//   exportProject(project: Project,
+//                 system_id: string,
+//                 path: string = '/',
+//                 link: boolean,
+//                 file_name: string = '') {
+//     file_name = file_name === '' ? project.uuid : file_name;
+
+//     const payload = {
+//       system_id,
+//       path,
+//       file_name,
+//       link
+//     };
+//     this.agaveSystemsService.saveDSFile(system_id, path, file_name, project);
+//     if (system_id.startsWith('project')) {
+//       this.agaveSystemsService.updateDSProjectInformation(system_id.replace('project-', ''),
+//                                                           path,
+//                                                           project,
+//                                                           AgaveFileOperations.Update);
+//     }
+
+//     this.http.put<any>(this.envService.apiUrl + `/projects/${project.id}/export/`, payload)
+//       .subscribe(currentProject => {
+//         this._projects.next([...this._projects.value.filter((p) => p.id !== project.id),
+//                              currentProject]);
+//         this._activeProject.next(currentProject);
+//       }, error => {
+//         this.notificationsService.showErrorToast(`Failed to save to ${system_id}/${path}/${file_name}!`);
+//       });
+//   }
+
+//   createRapidProject(data: RapidProjectRequest) {
+//     return this.http.post<Project>(this.envService.apiUrl + `/projects/rapid/`, data)
+//       .pipe(
+//         map( (proj) => {
+//           this.agaveSystemsService.saveDSFile(proj.system_id, proj.system_path, proj.system_file, proj);
+//           if (proj.system_id.startsWith('project')) {
+//             this.agaveSystemsService.updateDSProjectInformation(proj.system_id.replace('project-', ''),
+//                                                                 proj.system_path,
+//                                                                 proj,
+//                                                                 AgaveFileOperations.Update);
+//           }
+//           this._projects.next([proj, ...this._projects.value]);
+//           defaultTileServers.forEach(ts => {
+//             this.geoDataService.addTileServer(proj.id, ts, true);
+//           });
+//           return proj;
         }),
       );
   }
@@ -133,10 +194,22 @@ export class ProjectsService {
   }
 
   deleteProject(proj: Project): void {
+    if (proj.system_id && proj.system_id.startsWith('project')) {
+      this.agaveSystemsService.updateDSProjectInformation(proj.system_id.replace('project-', ''),
+                                                          proj.system_path,
+                                                          proj,
+                                                          AgaveFileOperations.Delete);
+    }
+
+    // if (proj.system_file) {
+    //   this.agaveSystemsService.deleteFile(proj);
+    // }
+
     this.http.delete(this.envService.apiUrl + `/projects/${proj.id}/`)
       .subscribe((resp) => {
         if (proj.system_path) {
-          this.agaveSystemsService.deleteFile(proj.system_id, proj.system_path, proj.system_file);
+          this.agaveSystemsService.deleteFile(proj);
+          // this.agaveSystemsService.deleteFile(proj.system_id, proj.system_path, proj.system_file);
         }
         this.getProjects();
         this.router.navigate([MAIN]);
@@ -146,12 +219,15 @@ export class ProjectsService {
       });
   }
 
-  updateProject(proj: Project, req: ProjectRequest): void {
+  // updateProject(proj: Project, req: ProjectRequest): void {
+  updateProject(req: ProjectRequest): void {
     if (req.link) {
-      if (proj.system_file !== req.project.system_file) {
-          this.agaveSystemsService.deleteFile(proj.system_id, proj.system_path, proj.system_path);
-      }
-      this.agaveSystemsService.uploadFile(proj.uuid, req.project.system_id, req.project.system_path, req.project.system_file);
+      // NOTE: req.project IS active project...
+      // if (proj.system_file !== req.project.system_file) {
+      //     this.agaveSystemsService.deleteFile(proj);
+      // }
+      this.agaveSystemsService.saveFile(req.project);
+      // this.agaveSystemsService.saveFile(proj.uuid, req.project.system_id, req.project.system_path, req.project.system_file);
     }
 
     this.http.put(this.envService.apiUrl + `/projects/${proj.id}/`, req)

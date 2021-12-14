@@ -3,9 +3,10 @@ import {System, SystemSummary} from 'ng-tapis';
 import { ApiService } from 'ng-tapis';
 import {NotificationsService} from './notifications.service';
 import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
+import {NotificationsService} from './notifications.service';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { EnvService } from '../services/env.service';
-import { DesignSafeProjectCollection, Project } from '../models/models';
+import { DesignSafeProjectCollection, Project, AgaveFileOperations } from '../models/models';
 
 @Injectable({
   providedIn: 'root'
@@ -17,10 +18,11 @@ export class AgaveSystemsService {
   public readonly systems: Observable<SystemSummary[]> = this._systems.asObservable();
   private _projects: ReplaySubject<SystemSummary[]> = new ReplaySubject<SystemSummary[]>(1);
   public readonly projects: Observable<SystemSummary[]> = this._projects.asObservable();
-  constructor(private tapis: ApiService, 
-              private envService: EnvService, 
-              private notificationsService: NotificationsService,
-              private http: HttpClient) { }
+  constructor(
+    private tapis: ApiService,
+    private notificationsService: NotificationsService,
+    private envService: EnvService,
+    private http: HttpClient) { }
 
   list() {
     this.tapis.systemsList({type: 'STORAGE'})
@@ -56,33 +58,70 @@ export class AgaveSystemsService {
     return projects;
   }
 
-  public uploadFile(uuid: string, systemID: string, path: string, fileName: string) {
-    const rawdata = {
-      uuid
-    };
-    const data = JSON.stringify(rawdata);
-    const fileType = 'plain/text';
-    const tmp = new Blob([data], {type: fileType});
-    const date = new Date();
-    const file = new File([tmp], `${fileName}.hazmapper`, {lastModified: date.valueOf()});
+  updateDSProjectInformation(designsafeUUID: string, path: string, project: Project, operation: AgaveFileOperations) {
+    this.http.get<any>(this.envService.designSafeUrl + `projects/v2/${designsafeUUID}/`).subscribe(dsProject => {
+      const previousMaps = dsProject.value.hazmapperMaps
+        ? dsProject.value.hazmapperMaps.filter(e => e.uuid !== project.uuid)
+        : [];
 
-    const form: FormData = new FormData();
-    form.append('fileToUpload', file);
+      const payloadProject = operation === AgaveFileOperations.Update
+        ? [{
+            name: project.name,
+            uuid: project.uuid,
+            path,
+            deployment: this.envService.env
+          }]
+        : [];
 
-    this.http.post(this.envService.designSafeUrl + `files/v2/media/system/${systemID}${path}`, form).subscribe(resp => {
-      this.notificationsService.showSuccessToast('Saved file to DesignSafe!');
-    }, error => {
-      this.notificationsService.showErrorToast('Could not save file to DesignSafe!');
+      const payload = {
+        uuid: designsafeUUID,
+        hazmapperMaps: [
+          ...previousMaps,
+          ...payloadProject
+        ]
+      };
+
+      const headers = new HttpHeaders()
+        .set('X-Requested-With', 'XMLHttpRequest');
+
+      this.http.post<any>(this.envService.designSafeUrl + `projects/v2/${designsafeUUID}/`, payload, {headers})
+        .subscribe( resp => {
+          console.log(resp);
+        }, error => {
+          console.log(error);
+        });
     });
   }
 
-  public deleteFile(systemID: string, path: string, fileName: string) {
-    this.http.delete(this.envService.designSafeUrl + `files/v2/media/system/${systemID}${path}/${fileName}.hazmapper`).subscribe(resp => {
-      this.notificationsService.showErrorToast('Removed file from Designsafe!');
+  public saveFile(proj: Project) {
+    const data = JSON.stringify({
+      uuid: proj.uuid,
+      deployment: this.envService.env
+    });
+
+    this.tapis.filesImport({
+      proj.system_id,
+      filePath: proj.system_path,
+      body: {
+        fileType: 'plain/text',
+        callbackURL: '',
+        fileName: proj.system_file + '.hazmapper',
+        urlToIngest: '',
+        fileToUpload: data
+      }
+    }).subscribe(resp => {
+      this.notificationsService.showSuccessToast(`Successfully saved file to ${proj.system_id}${proj.system_path}.`);
     }, error => {
-      this.notificationsService.showErrorToast('Could not remove file from Designsafe!');
-      console.error(error);
+      this.notificationsService.showErrorToast(`Failed to save file to ${proj.system_id}${proj.system_path}.`);
     });
   }
 
+  public deleteFile(proj: Project) {
+    this.tapis.filesDelete({systemId: proj.system_id, filePath: `${proj.system_path}/${proj.system_file}`})
+      .subscribe(resp => {
+        this.notificationsService.showSuccessToast(`Successfully deleted file from ${proj.system_id}${proj.system_path}.`);
+      }, error => {
+        this.notificationsService.showErrorToast(`Failed to delete file from ${proj.system_id}${proj.system_path}.`);
+      });
+  }
 }

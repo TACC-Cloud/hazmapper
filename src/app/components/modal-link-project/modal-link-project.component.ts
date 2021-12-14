@@ -55,7 +55,7 @@ export class ModalLinkProjectComponent implements OnInit {
   onSystemSelect(system: any) {
     this.selectedSystem = system;
     this.observeOption = false;
-    if (system.id.includes('project')) {
+    if (system.id.startsWith('project')) {
       this.observeOptions = this.projectObserveOptions;
     } else {
       this.observeOptions = this.myDataObserveOptions;
@@ -86,7 +86,8 @@ export class ModalLinkProjectComponent implements OnInit {
       pr.watch_content = pr.observable ? true : false;
     }
 
-    this.projectsService.updateProject(this.activeProject, pr);
+    // this.projectsService.updateProject(this.activeProject, pr);
+    this.projectsService.updateProject(pr);
     this.close();
   }
 
