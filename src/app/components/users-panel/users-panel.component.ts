@@ -52,7 +52,7 @@ export class UsersPanelComponent implements OnInit {
         const portalUrl = this.envService.portalUrl + 'data/browser/';
         this.activeProject = this.agaveSystemsService.getDSProjectInformation([activeProject], dsProjects)[0];
         if (activeProject.system_id) {
-          if (activeProject.system_id.includes('project')) {
+          if (activeProject.system_id.startsWith('project')) {
             this.dsHref = portalUrl + 'projects/' +
               activeProject.system_id.substr(8) + '/' +
               activeProject.system_path + '/';
@@ -94,7 +94,7 @@ export class UsersPanelComponent implements OnInit {
       this.projectsService.exportProject(this.activeProject,
                                          next.system.id,
                                          path,
-                                         next.system.id.includes('project') && next.linkProject,
+                                         next.system.id.startsWith('project') && next.linkProject,
                                          next.fileName);
     });
   }
