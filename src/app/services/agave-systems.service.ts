@@ -100,17 +100,15 @@ export class AgaveSystemsService {
 
     const dataJSON = JSON.stringify(data);
 
-    const fileType = 'plain/text';
-    const tmp = new Blob([dataJSON], {type: fileType});
-    const date = new Date();
-    const file = new File([tmp], fileName + '.hazmapper', {lastModified: date.valueOf()});
-
     this.tapis.filesImport({
       systemId,
       filePath: path,
       body: {
-        // @ts-ignore
-        fileToUpload: file
+        fileType: 'plain/text',
+        callbackURL: '',
+        fileName: fileName + '.hazmapper',
+        urlToIngest: '',
+        fileToUpload: dataJSON
       }
     }).subscribe(resp => {
       this.notificationsService.showSuccessToast(`Successfully saved file to ${systemId}${path}.`);
