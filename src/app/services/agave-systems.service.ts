@@ -3,7 +3,6 @@ import {System, SystemSummary} from 'ng-tapis';
 import { ApiService } from 'ng-tapis';
 import {NotificationsService} from './notifications.service';
 import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
-import {NotificationsService} from './notifications.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { EnvService } from '../services/env.service';
 import { DesignSafeProjectCollection, Project, AgaveFileOperations } from '../models/models';
@@ -46,7 +45,7 @@ export class AgaveSystemsService {
       });
   }
 
-  getDSProjectInformation(projects: Project[], dsProjects: SystemSummary[]): Project[] {
+  getProjectMetadata(projects: Project[], dsProjects: SystemSummary[]): Project[] {
     if (dsProjects.length > 0) {
       return projects.map(p => {
         const dsProject = dsProjects.find(dp => dp.id === p.system_id);
@@ -58,23 +57,27 @@ export class AgaveSystemsService {
     return projects;
   }
 
-  updateDSProjectInformation(designsafeUUID: string, path: string, project: Project, operation: AgaveFileOperations) {
-    this.http.get<any>(this.envService.designSafeUrl + `projects/v2/${designsafeUUID}/`).subscribe(dsProject => {
+  updateProjectMetadata(proj: Project, operation: AgaveFileOperations) {
+    const uuid = proj.system_id.replace('project-', '');
+    const path = proj.system_path;
+    const name = proj.name;
+
+    this.http.get<any>(this.envService.designSafeUrl + `projects/v2/${uuid}/`).subscribe(dsProject => {
       const previousMaps = dsProject.value.hazmapperMaps
-        ? dsProject.value.hazmapperMaps.filter(e => e.uuid !== project.uuid)
+        ? dsProject.value.hazmapperMaps.filter(e => e.uuid !== uuid)
         : [];
 
       const payloadProject = operation === AgaveFileOperations.Update
         ? [{
-            name: project.name,
-            uuid: project.uuid,
+            name,
+            uuid,
             path,
             deployment: this.envService.env
           }]
         : [];
 
       const payload = {
-        uuid: designsafeUUID,
+        uuid,
         hazmapperMaps: [
           ...previousMaps,
           ...payloadProject
@@ -84,7 +87,7 @@ export class AgaveSystemsService {
       const headers = new HttpHeaders()
         .set('X-Requested-With', 'XMLHttpRequest');
 
-      this.http.post<any>(this.envService.designSafeUrl + `projects/v2/${designsafeUUID}/`, payload, {headers})
+      this.http.post<any>(this.envService.designSafeUrl + `projects/v2/${uuid}/`, payload, {headers})
         .subscribe( resp => {
           console.log(resp);
         }, error => {
@@ -100,12 +103,12 @@ export class AgaveSystemsService {
     });
 
     this.tapis.filesImport({
-      proj.system_id,
+      systemId: proj.system_id,
       filePath: proj.system_path,
       body: {
         fileType: 'plain/text',
         callbackURL: '',
-        fileName: proj.system_file + '.hazmapper',
+        fileName: `${proj.system_file}.hazmapper`,
         urlToIngest: '',
         fileToUpload: data
       }
@@ -117,11 +120,15 @@ export class AgaveSystemsService {
   }
 
   public deleteFile(proj: Project) {
-    this.tapis.filesDelete({systemId: proj.system_id, filePath: `${proj.system_path}/${proj.system_file}`})
+    this.tapis.filesDelete({systemId: proj.system_id, filePath: `${proj.system_path}/${proj.system_file}.hazmapper`})
       .subscribe(resp => {
-        this.notificationsService.showSuccessToast(`Successfully deleted file from ${proj.system_id}${proj.system_path}.`);
+        this.notificationsService.showSuccessToast(
+          `Successfully deleted file ${proj.system_id}${proj.system_path}/${proj.system_file}.hazmapper.`
+        );
       }, error => {
-        this.notificationsService.showErrorToast(`Failed to delete file from ${proj.system_id}${proj.system_path}.`);
+        this.notificationsService.showErrorToast(
+          `Failed to delete file ${proj.system_id}${proj.system_path}/${proj.system_file}.hazmapper.`
+        );
       });
   }
 }

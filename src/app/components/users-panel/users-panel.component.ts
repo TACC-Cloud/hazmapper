@@ -46,7 +46,7 @@ export class UsersPanelComponent implements OnInit {
       .subscribe(([activeProject, dsProjects]) => {
       if (activeProject) {
         const portalUrl = this.envService.portalUrl + 'data/browser/';
-        this.activeProject = this.agaveSystemsService.getDSProjectInformation([activeProject], dsProjects)[0];
+        this.activeProject = this.agaveSystemsService.getProjectMetadata([activeProject], dsProjects)[0];
         if (activeProject.system_id) {
           if (activeProject.system_id.startsWith('project')) {
             this.dsHref = portalUrl + 'projects/' +

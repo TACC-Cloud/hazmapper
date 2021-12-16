@@ -46,7 +46,7 @@ export class MainWelcomeComponent implements OnInit {
       this.projectsService.projects,
       this.agaveSystemsService.projects)
         .subscribe(([projects, dsProjects]) => {
-          this.projects = this.agaveSystemsService.getDSProjectInformation(projects, dsProjects);
+          this.projects = this.agaveSystemsService.getProjectMetadata(projects, dsProjects);
           this.spinner = false;
         });
   }
