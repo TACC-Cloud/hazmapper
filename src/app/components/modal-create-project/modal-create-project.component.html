@@ -11,14 +11,6 @@
         <textarea formControlName="description" required="true"></textarea>
       </label>
 
-      <div class="link-project">
-        <label>
-          <span style="padding-right: 10px">Save Map Link</span>
-          <input formControlName="link" type="checkbox">
-        </label>
-      </div>
-
-      <div *ngIf="projCreateForm.get('link').value">
         <div style="padding: 20px 0px">
           <label> Custom file name:
             <div style="display: flex; flex-direction: row">
@@ -39,11 +31,9 @@
 
         <div>{{errorValue}}</div>
 
-      </div>
     </div>
 
     <div>
-      <div *ngIf="projCreateForm.get('link').value">
         <app-file-browser
           [single]=true
           [allowFolders]=true
@@ -58,9 +48,6 @@
           (getFilesList)="updateFilesList($event)"
           (systemSelection)="onSystemSelect($event)">
         </app-file-browser>
-
-
-      </div>
     </div>
   </div>
 

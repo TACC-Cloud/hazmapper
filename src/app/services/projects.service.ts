@@ -156,21 +156,16 @@ export class ProjectsService {
       });
   }
 
-  // updateProject(proj: Project, req: ProjectRequest): void {
   updateProject(req: ProjectRequest): void {
-    if (req.link) {
-      // NOTE: req.project IS active project...
-      // if (proj.system_file !== req.project.system_file) {
-      //     this.agaveSystemsService.deleteFile(proj);
-      // }
-      this.agaveSystemsService.saveFile(req.project);
+    if (proj.system_file) {
+      this.agaveSystemsService.deleteFile(proj);
     }
+
+    this.agaveSystemsService.saveFile(req.project);
 
     this.http.put(this.envService.apiUrl + `/projects/${req.project.id}/`, req)
       .subscribe((resp) => {
-        if (req.link) {
-          this.notificationsService.showSuccessToast('Uploaded file!');
-        }
+        this.notificationsService.showSuccessToast('Uploaded file!');
       });
   }
 

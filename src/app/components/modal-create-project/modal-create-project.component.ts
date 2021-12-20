@@ -38,7 +38,6 @@ export class ModalCreateProjectComponent implements OnInit, AfterContentChecked 
     this.projCreateForm = new FormGroup( {
       name: new FormControl(''),
       description: new FormControl(''),
-      link: new FormControl(false),
       observeOption: new FormControl(false),
       fileName: new FormControl('')
     });
@@ -83,32 +82,24 @@ export class ModalCreateProjectComponent implements OnInit, AfterContentChecked 
     p.description = this.projCreateForm.get('description').value;
     p.name = this.projCreateForm.get('name').value;
 
-    if (this.projCreateForm.get('link').value) {
-      if (this.fileAlreadyExists(this.fileName)) {
-        this.errorMessage = 'File already exists!';
-        this.submitting = false;
-        return;
-      } else {
-        p.system_path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path : this.currentPath;
-        p.system_id = this.selectedSystem.id;
-        p.system_file = this.projCreateForm.get('fileName').value;
-
-        if (this.selectedSystem.id.includes('project')) {
-          pr.observable = true;
-          pr.watch_content = this.projCreateForm.get('observeOption').value;
-        } else {
-          pr.observable = this.projCreateForm.get('observeOption').value;
-          pr.watch_content = pr.observable ? true : false;
-        }
-        this.errorMessage = '';
-      }
+    if (this.fileAlreadyExists(this.fileName)) {
+      this.errorMessage = 'File already exists!';
+      this.submitting = false;
+      return;
     } else {
-      this.errorMessage = '';
-      pr.observable = false;
-      pr.watch_content = false;
-    }
+      p.system_path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path : this.currentPath;
+      p.system_id = this.selectedSystem.id;
+      p.system_file = this.projCreateForm.get('fileName').value;
 
-    pr.link = this.projCreateForm.get('link').value;
+      if (this.selectedSystem.id.includes('project')) {
+        pr.observable = true;
+        pr.watch_content = this.projCreateForm.get('observeOption').value;
+      } else {
+        pr.observable = this.projCreateForm.get('observeOption').value;
+        pr.watch_content = pr.observable ? true : false;
+      }
+      this.errorMessage = '';
+    }
 
     pr.project = p;
 

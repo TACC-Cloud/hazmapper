@@ -76,7 +76,6 @@ export class ModalLinkProjectComponent implements OnInit {
     const pr = new ProjectRequest();
 
     pr.project = this.activeProject;
-    pr.link = true;
 
     if (this.selectedSystem.id.includes('project')) {
       pr.observable = true;
