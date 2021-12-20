@@ -53,6 +53,7 @@ export class ProjectsService {
       });
   }
 
+  // TODO: Utilize project metdata
   getProjectUsers(proj: Project): Observable<Array<IProjectUser>> {
     return this.http.get<Array<IProjectUser>>(this.envService.apiUrl + `/projects/${proj.id}/users/`).pipe(
       tap(users => {
@@ -60,6 +61,7 @@ export class ProjectsService {
       }));
   }
 
+  // TODO: Utilize project metdata
   addUserToProject(proj: Project, uname: string): void {
     const payload = {
       username: uname
@@ -70,6 +72,7 @@ export class ProjectsService {
       });
   }
 
+  // TODO: Utilize project metdata
   deleteUserFromProject(proj: Project, uname: string): void {
     this.http.delete(this.envService.apiUrl + `/projects/${proj.id}/users/${uname}/`)
       .subscribe( (resp) => {
