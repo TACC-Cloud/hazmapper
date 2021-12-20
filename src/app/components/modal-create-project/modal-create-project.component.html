@@ -4,7 +4,7 @@
   <div style="display: flex; flex-direction: row">
     <div style="width: 100%; padding: 20px">
       <label> Name:
-        <input type="text" formControlName="name" required="true">
+        <input type="text" formControlName="name" required="true" (input)="setFileName($event)">
       </label>
 
       <label> Description
@@ -22,7 +22,7 @@
         <div style="padding: 20px 0px">
           <label> Custom file name:
             <div style="display: flex; flex-direction: row">
-              <input type="text" formControlName="fileName">
+              <input type="text" formControlName="fileName" [value]="fileName">
               <span style="line-height: 1.5; font-size: 1rem; margin: 5px">.hazmapper</span>
             </div>
           </label>
@@ -36,6 +36,9 @@
             </select>
           </label>
         </div>
+
+        <div>{{errorValue}}</div>
+
       </div>
     </div>
 
@@ -52,6 +55,7 @@
           'If you select a project, you can link the current map to the project.'"
           (selection)="onSelect($event)"
           (currentPath)="setCurrentPath($event)"
+          (getFilesList)="updateFilesList($event)"
           (systemSelection)="onSystemSelect($event)">
         </app-file-browser>
 

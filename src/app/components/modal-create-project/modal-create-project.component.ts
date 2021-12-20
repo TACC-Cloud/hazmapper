@@ -24,6 +24,7 @@ export class ModalCreateProjectComponent implements OnInit, AfterContentChecked 
   fileName = '';
   selectedFiles: Array<RemoteFile> = [];
   selectedSystem: any;
+  filesList = [];
   projectObserveOptions = [{name: 'Sync Members and Files', value: true}, {name: 'Sync Only Members', value: false}];
   myDataObserveOptions = [{name: 'Don\'t Sync', value: false}, {name: 'Sync Files', value: true}];
   observeOptions = this.myDataObserveOptions;
@@ -70,6 +71,10 @@ export class ModalCreateProjectComponent implements OnInit, AfterContentChecked 
     }
   }
 
+  setFileName(ev: any) {
+    this.projCreateForm.get('fileName').setValue(ev.target.value);
+  }
+
   submit() {
     this.submitting = true;
     const p = new Project();
@@ -79,18 +84,26 @@ export class ModalCreateProjectComponent implements OnInit, AfterContentChecked 
     p.name = this.projCreateForm.get('name').value;
 
     if (this.projCreateForm.get('link').value) {
-      p.system_path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path : this.currentPath;
-      p.system_id = this.selectedSystem.id;
-      p.system_file = this.projCreateForm.get('fileName').value;
-
-      if (this.selectedSystem.id.includes('project')) {
-        pr.observable = true;
-        pr.watch_content = this.projCreateForm.get('observeOption').value;
+      if (this.fileAlreadyExists(this.fileName)) {
+        this.errorMessage = 'File already exists!';
+        this.submitting = false;
+        return;
       } else {
-        pr.observable = this.projCreateForm.get('observeOption').value;
-        pr.watch_content = pr.observable ? true : false;
+        p.system_path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path : this.currentPath;
+        p.system_id = this.selectedSystem.id;
+        p.system_file = this.projCreateForm.get('fileName').value;
+
+        if (this.selectedSystem.id.includes('project')) {
+          pr.observable = true;
+          pr.watch_content = this.projCreateForm.get('observeOption').value;
+        } else {
+          pr.observable = this.projCreateForm.get('observeOption').value;
+          pr.watch_content = pr.observable ? true : false;
+        }
+        this.errorMessage = '';
       }
     } else {
+      this.errorMessage = '';
       pr.observable = false;
       pr.watch_content = false;
     }
@@ -103,8 +116,16 @@ export class ModalCreateProjectComponent implements OnInit, AfterContentChecked 
       this.close(project);
     }, err => {
       this.errorMessage = err.toString();
+        this.submitting = false;
     });
-    this.submitting = true;
+  }
+
+  fileAlreadyExists(fileName: string) {
+    return this.filesList.includes(`${fileName}.hazmapper`);
+  }
+
+  updateFilesList(filesList: any) {
+    this.filesList = filesList ? filesList : [];
   }
 
   setCurrentPath(path: string) {
