@@ -160,8 +160,8 @@ export class ProjectsService {
   }
 
   updateProject(req: ProjectRequest): void {
-    if (proj.system_file) {
-      this.agaveSystemsService.deleteFile(proj);
+    if (req.project.system_file) {
+      this.agaveSystemsService.deleteFile(req.project);
     }
 
     this.agaveSystemsService.saveFile(req.project);
