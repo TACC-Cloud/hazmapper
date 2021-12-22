@@ -21,15 +21,21 @@
           <small><em>If a name is not given, file will be saved as the map uuid.</em></small>
         </div>
 
-        <div class="observable-project">
-          <label> Sync Options:
-            <select formControlName="observeOption">
-              <option *ngFor="let option of observeOptions" [ngValue]="option.value">{{option.name}}</option>
-            </select>
+        <div style="padding: 20px 0px">
+          <label> Save Location:
+            <span style="color: #007cb6">{{selectedFiles.length > 0 ? selectedFiles[0].path : currentPath}}</span>
           </label>
         </div>
 
-        <div>{{errorValue}}</div>
+        <div style="padding: 20px 0px">
+          <label>
+            <span style="padding-right: 10px">Sync Folder:</span>
+            <input formControlName="watchContent" type="checkbox">
+          </label>
+          <small><em>This will automatically update files in the save location.</em></small>
+        </div>
+
+        <div><span style="color: red">{{errorMessage}}</span></div>
 
     </div>
 

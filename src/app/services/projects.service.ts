@@ -98,6 +98,8 @@ export class ProjectsService {
           // Spread operator, just pushes the new project into the array
           this._projects.next([...this._projects.value, proj]);
           this.geoDataService.addDefaultTileServers(proj.id);
+        }, error => {
+          console.log(error);
         }),
       );
   }

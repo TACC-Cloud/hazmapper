@@ -126,9 +126,17 @@ export class AgaveSystemsService {
           `Successfully deleted file ${proj.system_id}${proj.system_path}/${proj.system_file}.hazmapper.`
         );
       }, error => {
-        this.notificationsService.showErrorToast(
-          `Failed to delete file ${proj.system_id}${proj.system_path}/${proj.system_file}.hazmapper.`
-        );
+        if (error.status === 404) {
+          // File deleted
+          return;
+        } else if (error.status === 502) {
+          // Proxy error that tries to do it again
+          return;
+        } else {
+          this.notificationsService.showErrorToast(
+            `Failed to delete file ${proj.system_id}${proj.system_path}/${proj.system_file}.hazmapper.`
+          );
+        }
       });
   }
 }
