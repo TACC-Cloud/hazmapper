@@ -75,10 +75,12 @@ export class ModalCreateProjectComponent implements OnInit, AfterContentChecked 
     p.name = this.projCreateForm.get('name').value;
     p.system_path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path : this.currentPath;
     p.system_id = this.selectedSystem.id;
-    p.system_file = this.projCreateForm.get('fileName').value;
+    p.system_file = this.projCreateForm.get('fileName').value
+      ? this.projCreateForm.get('fileName').value
+      : p.name;
 
     if (this.fileAlreadyExists(p.system_file)) {
-      this.errorMessage = 'File already exists!';
+      this.errorMessage = 'File already exists in that location!';
       this.submitting = false;
       return;
     } else {

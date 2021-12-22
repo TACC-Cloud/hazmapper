@@ -126,17 +126,10 @@ export class AgaveSystemsService {
           `Successfully deleted file ${proj.system_id}${proj.system_path}/${proj.system_file}.hazmapper.`
         );
       }, error => {
-        if (error.status === 404) {
-          // File deleted
-          return;
-        } else if (error.status === 502) {
-          // Proxy error that tries to do it again
-          return;
-        } else {
-          this.notificationsService.showErrorToast(
-            `Failed to delete file ${proj.system_id}${proj.system_path}/${proj.system_file}.hazmapper.`
-          );
-        }
+        // TODO: Handle this
+        // 404 happens when redundant delete
+        // 502/500 I'm not sure why...
+        console.log(error);
       });
   }
 }
