@@ -36,19 +36,17 @@ export class MainWelcomeComponent implements OnInit {
 
   ngOnInit() {
     this.projectsService.getProjects();
-    this.agaveSystemsService.list();
 
     this.projectsService.loadingProjectsFailed.subscribe((notConnected) => {
       this.notConnected = notConnected;
     });
 
-    combineLatest(
-      this.projectsService.projects,
-      this.agaveSystemsService.projects)
-        .subscribe(([projects, dsProjects]) => {
-          this.projects = this.agaveSystemsService.getDSProjectInformation(projects, dsProjects);
-          this.spinner = false;
-        });
+    this.projectsService.projects.subscribe((projects) => {
+      this.projects = projects;
+      if (projects.length > 0) {
+        this.spinner = false;
+      }
+    });
   }
 
   routeToProject(projectUUID: string) {

@@ -35,6 +35,7 @@ export class ControlBarComponent implements OnInit, OnDestroy {
               ) { }
 
   ngOnInit() {
+    this.projectsService.getProjects();
     this.subscription.add(this.projectsService.loadingActiveProject.subscribe(
       value => this.loadingActiveProject = value));
     this.subscription.add(this.projectsService.loadingActiveProjectFailed.subscribe(value => this.loadingActiveProjectFailed = value));
@@ -47,30 +48,14 @@ export class ControlBarComponent implements OnInit, OnDestroy {
         this.loadingData = (loadingOverlay || loadingPointCloud || loadingFeature);
       }));
 
-    // potential refactor of this if/else block defined in https://jira.tacc.utexas.edu/browse/DES-1998
-    if (this.authService.isLoggedIn()) {
-      this.agaveSystemsService.list();
-
-      this.subscription.add(combineLatest([this.projectsService.activeProject,
-                                           this.agaveSystemsService.projects])
-        .subscribe(([activeProject, dsProjects]) => {
-          if (activeProject) {
-            this.geoDataService.getDataForProject(activeProject.id, this.isPublicView);
-            this.activeProject = this.agaveSystemsService.getDSProjectInformation([activeProject], dsProjects)[0];
-          } else {
-            this.geoDataService.clearData();
-          }
-        }));
-    } else {
-      this.subscription.add(this.projectsService.activeProject.subscribe(next => {
-        this.activeProject = next;
-        if (this.activeProject) {
-          this.geoDataService.getDataForProject(next.id, this.isPublicView);
-        } else {
-          this.geoDataService.clearData();
-        }
-      }));
-    }
+    this.subscription.add(this.projectsService.activeProject.subscribe(activeProject => {
+      if (activeProject) {
+        this.geoDataService.getDataForProject(activeProject.id, this.isPublicView);
+        this.activeProject = activeProject;
+      } else {
+        this.geoDataService.clearData();
+      }
+    }));
 
     this.subscription.add(combineLatest([this.authService.currentUser,
       this.projectsService.projectUsers$])

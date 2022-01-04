@@ -39,18 +39,14 @@ export class UsersPanelComponent implements OnInit {
               private envService: EnvService) { }
 
   ngOnInit() {
-    this.agaveSystemsService.list();
-
     this.addUserForm = new FormGroup( {
       username: new FormControl()
     });
 
-    combineLatest([this.projectsService.activeProject,
-                                         this.agaveSystemsService.projects])
-      .subscribe(([activeProject, dsProjects]) => {
+    this.projectsService.activeProject.subscribe(activeProject => {
       if (activeProject) {
+        this.activeProject = activeProject;
         const portalUrl = this.envService.portalUrl + 'data/browser/';
-        this.activeProject = this.agaveSystemsService.getDSProjectInformation([activeProject], dsProjects)[0];
         if (activeProject.system_id) {
           if (activeProject.system_id.startsWith('project')) {
             this.dsHref = portalUrl + 'projects/' +

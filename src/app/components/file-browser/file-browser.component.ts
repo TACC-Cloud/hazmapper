@@ -39,7 +39,7 @@ export class FileBrowserComponent implements OnInit {
   public firstFileIndex: number;
   public fileDeselectMode: boolean = false;
 
-  public projects: Array<SystemSummary>;
+  public projects: Array<any>;
   private selectedSystem: SystemSummary;
   public myDataSystem: SystemSummary;
   public communityDataSystem: SystemSummary;

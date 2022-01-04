@@ -5,7 +5,8 @@ import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
 import {NotificationsService} from './notifications.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { EnvService } from '../services/env.service';
-import { DesignSafeProjectCollection, Project, AgaveFileOperations } from '../models/models';
+import {catchError, map, tap, filter, take} from 'rxjs/operators';
+import { DesignSafeProjectCollection, Project, AgaveFileOperations, DesignSafeProject } from '../models/models';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,9 @@ export class AgaveSystemsService {
 
   private _systems: ReplaySubject<SystemSummary[]> = new ReplaySubject<SystemSummary[]>(1);
   public readonly systems: Observable<SystemSummary[]> = this._systems.asObservable();
-  private _projects: ReplaySubject<SystemSummary[]> = new ReplaySubject<SystemSummary[]>(1);
-  public readonly projects: Observable<SystemSummary[]> = this._projects.asObservable();
+  private _projects: ReplaySubject<any> = new ReplaySubject<any>(1);
+  public readonly projects: Observable<any> = this._projects.asObservable();
+
   constructor(
     private tapis: ApiService,
     private notificationsService: NotificationsService,
@@ -30,22 +32,28 @@ export class AgaveSystemsService {
       }, error => {
         this._systems.next(null);
       });
-    this.http.get<DesignSafeProjectCollection>(this.envService.designSafeUrl + `/projects/v2/`)
-      .subscribe( resp => {
-        const projectSystems = resp.projects.map((project) => {
-          return {
-            id: 'project-' + project.uuid,
-            name: project.value.projectId,
-            description: project.value.title,
-          };
-        });
-        this._projects.next(projectSystems);
-      }, error => {
-        this._projects.next(null);
-      });
+    this.getDSProjects().subscribe();
   }
 
-  getDSProjectInformation(projects: Project[], dsProjects: SystemSummary[]): Project[] {
+  getDSProjects(): Observable<any[]> {
+    return this.http.get<DesignSafeProjectCollection>(this.envService.designSafeUrl + `/projects/v2/`)
+      .pipe(
+        map(resp => resp.projects.map(project => ({
+          id: 'project-' + project.uuid,
+          name: project.value.projectId,
+          description: project.value.title,
+        }))),
+        tap(projects => {
+          this._projects.next(projects)
+        }),
+        catchError((err: any) => {
+          this._projects.next(null);
+          throw new Error('Unable to get DesignSafe projects');
+        })
+      );
+  }
+
+  mapDSProjects(projects: Project[], dsProjects: SystemSummary[]): Project[] {
     if (dsProjects.length > 0) {
       return projects.map(p => {
         const dsProject = dsProjects.find(dp => dp.id === p.system_id);

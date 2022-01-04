@@ -21,8 +21,10 @@ export class ProjectsService {
 
   private _projects: BehaviorSubject<Project[]> = new BehaviorSubject([]);
   public readonly projects: Observable<Project[]> = this._projects.asObservable();
+
   private _activeProject: BehaviorSubject<Project> = new BehaviorSubject<Project>(null);
   public readonly activeProject: Observable<Project> = this._activeProject.asObservable();
+
   private _projectUsers: ReplaySubject<Array<IProjectUser>> = new ReplaySubject<Array<IProjectUser>>(1);
   public readonly projectUsers$: Observable<Array<IProjectUser>> = this._projectUsers.asObservable();
 
@@ -43,10 +45,37 @@ export class ProjectsService {
               private authService: AuthService,
               private envService: EnvService) { }
 
+  setProjects(projects: Project[] = null, activeProject: Project = null) {
+    if (this.authService.isLoggedIn()) {
+      this.agaveSystemsService.getDSProjects().subscribe(dsProjects => {
+        if (projects && activeProject) {
+          const addedProjects = this.agaveSystemsService.mapDSProjects(projects, dsProjects)
+          this._projects.next(addedProjects);
+          this._activeProject.next(addedProjects.find(proj => activeProject.id === proj.id));
+        } else if (!projects && activeProject) {
+          const addedProjects = this.agaveSystemsService.mapDSProjects([activeProject], dsProjects);
+          this._activeProject.next(addedProjects.find(proj => activeProject.id === proj.id));
+        } else if (projects && !activeProject){
+          const addedProjects = this.agaveSystemsService.mapDSProjects(projects, dsProjects);
+          this._projects.next(addedProjects);
+          this._activeProject.next(addedProjects.find(proj => proj[0].id === proj.id));
+        } else {
+          this._projects.next(null);
+          this._activeProject.next(null);
+        }
+      });
+    } else {
+      this._projects.next(projects);
+      this._activeProject.next(activeProject);
+    }
+  }
+
   getProjects(): void {
     this._loadingProjectsFailed.next(false);
     this.http.get<Project[]>(this.envService.apiUrl + `/projects/`).subscribe( resp => {
-      this._projects.next(resp);
+      if (resp.length > 0) {
+        this.setProjects(resp, resp[0]);
+      }
       this._loadingProjectsFailed.next(false);
     }, error => {
       this._loadingProjectsFailed.next(true);
@@ -85,7 +114,7 @@ export class ProjectsService {
       .pipe(
         tap(proj => {
           // Spread operator, just pushes the new project into the array
-          this._projects.next([...this._projects.value, proj]);
+          this.setProjects([...this._projects.value, proj]);
           // Add default servers
           defaultTileServers.forEach(ts => {
             this.geoDataService.addTileServer(proj.id, ts, true);
@@ -118,9 +147,8 @@ export class ProjectsService {
 
     this.http.put<any>(this.envService.apiUrl + `/projects/${project.id}/export/`, payload)
       .subscribe(currentProject => {
-        this._projects.next([...this._projects.value.filter((p) => p.id !== project.id),
-                             currentProject]);
-        this._activeProject.next(currentProject);
+        this.setProjects([...this._projects.value.filter((p) => p.id !== project.id),
+                          currentProject], currentProject);
       }, error => {
         this.notificationsService.showErrorToast(`Failed to save to ${system_id}/${path}/${file_name}!`);
       });
@@ -137,7 +165,9 @@ export class ProjectsService {
                                                                 proj,
                                                                 AgaveFileOperations.Update);
           }
-          this._projects.next([proj, ...this._projects.value]);
+
+          this.setProjects([proj, ...this._projects.value], proj);
+
           defaultTileServers.forEach(ts => {
             this.geoDataService.addTileServer(proj.id, ts, true);
           });
@@ -162,7 +192,7 @@ export class ProjectsService {
     this.http.get<Project[]>(this.envService.apiUrl + `/${projectRoute}/?uuid=` + uuid)
       .subscribe( (resp) => {
         if (usePublicRoute) {
-          this._activeProject.next(resp[0]);
+          this.setProjects(null, resp[0]);
           this._loadingActiveProject.next(false);
 
           if (this.authService.isLoggedIn()) {
@@ -175,7 +205,7 @@ export class ProjectsService {
           //  map being public
           this.getProjectUsers(resp[0]).subscribe( (users) => {
             // successful got the users which implies user is one of the map-projects' users
-            this._activeProject.next(resp[0]);
+            this.setProjects(null, resp[0]);
             this._loadingActiveProject.next(false);
           }, error => {
             // logged in user is not a member of project's users so shouldn't have private access
@@ -244,10 +274,7 @@ export class ProjectsService {
         map((updatedProject) => {
           // Update the project list
           const projects = this._projects.value.map(proj => proj.id === this._activeProject.value.id ? updatedProject : proj);
-          this._projects.next(projects);
-          // // Update the active project
-          this._activeProject.next(updatedProject);
-
+          this.setProjects(projects, updatedProject);
           return updatedProject;
         }),
         catchError((err: any) => {
