@@ -79,20 +79,15 @@ export class ModalCreateProjectComponent implements OnInit, AfterContentChecked 
       ? this.projCreateForm.get('fileName').value
       : p.name;
 
-    if (this.fileAlreadyExists(p.system_file)) {
-      this.errorMessage = 'File already exists in that location!';
-      this.submitting = false;
-      return;
+    if (this.selectedSystem.id.includes('project')) {
+      pr.observable = true;
+      pr.watch_content = this.projCreateForm.get('watchContent').value;
     } else {
-      if (this.selectedSystem.id.includes('project')) {
-        pr.observable = true;
-        pr.watch_content = this.projCreateForm.get('watchContent').value;
-      } else {
-        pr.observable = this.projCreateForm.get('watchContent').value;
-        pr.watch_content = pr.observable;
-      }
-      this.errorMessage = '';
+      pr.observable = this.projCreateForm.get('watchContent').value;
+      pr.watch_content = pr.observable;
     }
+
+    this.errorMessage = '';
 
     pr.project = p;
 
