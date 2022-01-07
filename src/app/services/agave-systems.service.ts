@@ -58,11 +58,12 @@ export class AgaveSystemsService {
   }
 
   updateProjectMetadata(proj: Project, operation: AgaveFileOperations) {
-    const uuid = proj.system_id.replace('project-', '');
+    const DSuuid = proj.system_id.replace('project-', '');
+    const uuid = proj.uuid;
     const path = proj.system_path;
     const name = proj.name;
 
-    this.http.get<any>(this.envService.designSafeUrl + `projects/v2/${uuid}/`).subscribe(dsProject => {
+    this.http.get<any>(this.envService.designSafeUrl + `projects/v2/${DSuuid}/`).subscribe(dsProject => {
       const previousMaps = dsProject.value.hazmapperMaps
         ? dsProject.value.hazmapperMaps.filter(e => e.uuid !== uuid)
         : [];
@@ -77,7 +78,7 @@ export class AgaveSystemsService {
         : [];
 
       const payload = {
-        uuid,
+        DSuuid,
         hazmapperMaps: [
           ...previousMaps,
           ...payloadProject
@@ -87,7 +88,7 @@ export class AgaveSystemsService {
       const headers = new HttpHeaders()
         .set('X-Requested-With', 'XMLHttpRequest');
 
-      this.http.post<any>(this.envService.designSafeUrl + `projects/v2/${uuid}/`, payload, {headers})
+      this.http.post<any>(this.envService.designSafeUrl + `projects/v2/${DSuuid}/`, payload, {headers})
         .subscribe( resp => {
           console.log(resp);
         }, error => {
