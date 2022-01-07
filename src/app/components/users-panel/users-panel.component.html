@@ -48,23 +48,23 @@
 
         <div *ngIf="activeProject.public" class="public-status-container">
           <span class="public-status-message" style="margin-bottom: 20px"> This map can be viewed by anyone with this link:</span>
-          <div style="display: flex">
-            <a [href]="getPublicUrl()" [tooltip]="getPublicUrl()" target="_blank" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 180px">
-              {{getPublicUrl()}}
+          <div [tooltip]="getPublicUrl()" style="display: flex">
+            <a [href]="getPublicUrl()" target="_blank" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 180px">
+              <span >{{getPublicUrl()}}</span>
             </a>
             <span style="display: inline-block; cursor: pointer" (click)="copyLinkToClipboard(getPublicUrl())">
               <i class="far fa-copy"></i>
             </span>
           </div>
-          <span *ngIf="this.publicStatusChangingError" class="label alert">Unable to make map private.</span>
-          <button class="button hollow left" style="margin-top: 20px" [disabled]="this.publicStatusChanging" (click)=updateMapPublicAccess(false)>
+          <span *ngIf="publicStatusChangingError" class="label alert">Unable to make map private.</span>
+          <button class="button hollow left" style="margin-top: 20px" [disabled]="publicStatusChanging" (click)=updateMapPublicAccess(false)>
             <i class="fas fa-lock"></i>  Make map private
           </button>
         </div>
         <div *ngIf="!activeProject.public" class="public-status-container">
           <span class="public-status-message">This map is private and can only be viewed by team members.</span>
-          <span *ngIf="this.publicStatusChangingError" class="label alert">Unable to make map public.</span>
-          <button class="button hollow left" style="margin-top: 20px" [disabled]="this.publicStatusChanging" (click)=updateMapPublicAccess(true)>
+          <span *ngIf="publicStatusChangingError" class="label alert">Unable to make map public.</span>
+          <button class="button hollow left" style="margin-top: 20px" [disabled]="publicStatusChanging" (click)=updateMapPublicAccess(true)>
             <i class="fas fa-globe"></i>  Make map public
           </button>
         </div>

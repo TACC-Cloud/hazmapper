@@ -179,11 +179,13 @@ export class ProjectsService {
     description = description ? description : this._activeProject.value.description;
     isPublic = isPublic !== undefined ? isPublic : this._activeProject.value.public;
 
-    const payload = {
-      name,
-      description,
-      public: isPublic
-    };
+    const payload: ProjectRequest = {
+      project: {
+        name,
+        description,
+        public: isPublic
+      }
+    }
 
     return this.http.put<Project>(this.envService.apiUrl + `/projects/${this._activeProject.value.id}/`, payload)
       .pipe(

@@ -66,8 +66,8 @@ export class Project implements Project {
 
 export interface ProjectRequest {
   project: Project;
-  observable: boolean;
-  watch_content: boolean;
+  observable?: boolean;
+  watch_content?: boolean;
 }
 
 export class ProjectRequest implements ProjectRequest {
