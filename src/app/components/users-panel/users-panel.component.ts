@@ -133,7 +133,6 @@ export class UsersPanelComponent implements OnInit {
       pr.project = this.activeProject;
 
       this.projectsService.updateProject(pr);
-      // this.projectsService.updateProject(this.activeProject, pr);
     } else {
       this.nameInputError = true;
     }
@@ -147,7 +146,6 @@ export class UsersPanelComponent implements OnInit {
       const pr = new ProjectRequest();
       pr.project = this.activeProject;
 
-      // this.projectsService.updateProject(this.activeProject, pr);
       this.projectsService.updateProject(pr);
     } else {
       this.descriptionInputError = true;
