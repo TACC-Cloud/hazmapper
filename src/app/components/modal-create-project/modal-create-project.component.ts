@@ -99,10 +99,6 @@ export class ModalCreateProjectComponent implements OnInit, AfterContentChecked 
     });
   }
 
-  fileAlreadyExists(fileName: string) {
-    return this.filesList.includes(`${fileName}.hazmapper`);
-  }
-
   updateFilesList(filesList: any) {
     this.filesList = filesList ? filesList : [];
   }
