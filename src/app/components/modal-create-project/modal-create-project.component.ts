@@ -94,7 +94,11 @@ export class ModalCreateProjectComponent implements OnInit, AfterContentChecked 
     this.projectsService.create(pr).subscribe((project) => {
       this.close(project);
     }, err => {
-      this.errorMessage = err.error.message;
+
+      this.errorMessage = err.error && err.error.message
+        ? err.error.message
+        : 'That folder is already syncing with a different map!';
+
       this.submitting = false;
     });
   }
