@@ -4,7 +4,7 @@
   </div>
 
   <div class="dock-panel-content">
-    <tabset *ngIf="activeProject">
+    <tabset #staticTabs *ngIf="activeProject">
       <tab heading="Map">
         <h6 id="property-title">Name:</h6>
         <app-edit-name-input
@@ -34,39 +34,37 @@
       </tab>
 
       <tab heading="Members">
-        <div>
-          <form [formGroup]="addUserForm" (ngSubmit)="addUser()">
-            <input type="text" formControlName="username" required="true">
-            <button class="button success" style="width: 100%" type="submit" [disabled]="!addUserForm.valid">Add</button>
-          </form>
-        </div>
+      <div *ngIf="activeProject.system_id && activeProject.system_id.includes('project'); else noMembers">
         <h6 id="property-title"> Current Members </h6>
         <app-user-row [user]="user" *ngFor="let user of projectUsers"></app-user-row>
+      </div>
+      <ng-template #noMembers>
+        No members as map is not saved to a project. Members are managed by DesignSafe projects.
+      </ng-template>
       </tab>
-
 
       <tab heading="Public">
         <h6 id="property-title">Public Access</h6>
 
         <div *ngIf="activeProject.public" class="public-status-container">
           <span class="public-status-message" style="margin-bottom: 20px"> This map can be viewed by anyone with this link:</span>
-          <div style="display: flex">
-            <a [href]="getPublicUrl()" [tooltip]="getPublicUrl()" target="_blank" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 180px">
-              {{getPublicUrl()}}
+          <div [tooltip]="getPublicUrl()" style="display: flex">
+            <a [href]="getPublicUrl()" target="_blank" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 180px">
+              <span >{{getPublicUrl()}}</span>
             </a>
             <span style="display: inline-block; cursor: pointer" (click)="copyLinkToClipboard(getPublicUrl())">
               <i class="far fa-copy"></i>
             </span>
           </div>
-          <span *ngIf="this.publicStatusChangingError" class="label alert">Unable to make map private.</span>
-          <button class="button hollow left" style="margin-top: 20px" [disabled]="this.publicStatusChanging" (click)=updateMapPublicAccess(false)>
+          <span *ngIf="publicStatusChangingError" class="label alert">Unable to make map private.</span>
+          <button class="button hollow left" style="margin-top: 20px" [disabled]="publicStatusChanging" (click)=updateMapPublicAccess(false)>
             <i class="fas fa-lock"></i>  Make map private
           </button>
         </div>
         <div *ngIf="!activeProject.public" class="public-status-container">
           <span class="public-status-message">This map is private and can only be viewed by team members.</span>
-          <span *ngIf="this.publicStatusChangingError" class="label alert">Unable to make map public.</span>
-          <button class="button hollow left" style="margin-top: 20px" [disabled]="this.publicStatusChanging" (click)=updateMapPublicAccess(true)>
+          <span *ngIf="publicStatusChangingError" class="label alert">Unable to make map public.</span>
+          <button class="button hollow left" style="margin-top: 20px" [disabled]="publicStatusChanging" (click)=updateMapPublicAccess(true)>
             <i class="fas fa-globe"></i>  Make map public
           </button>
         </div>
@@ -75,6 +73,11 @@
       <tab heading="Save">
         <h6 id="property-title">Saved Location</h6>
         <div *ngIf="activeProject.system_path || activeProject.ds_id; else noSave">
+          <div *ngIf="activeProject.system_file" style="margin-bottom: 10px">
+            <span>File:  </span>
+            {{activeProject.system_file}}.hazmapper
+          </div>
+
           <div *ngIf="activeProject.system_path" style="margin-bottom: 10px">
             <span>Path:  </span>
             <a [href]="dsHref"><span>{{activeProject.system_path}}</span></a>
@@ -103,12 +106,6 @@
             Map link not saved.
           </div>
         </ng-template>
-
-        <div style="display: flex; flex-direction: column; justify-content: center">
-          <button class="button hollow" (click)=openExportProjectModal()>
-            <i class="fas fa-save"></i>  Save map link
-          </button>
-        </div>
       </tab>
 
     </tabset>

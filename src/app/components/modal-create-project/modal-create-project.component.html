@@ -1,69 +1,63 @@
 <h4> Create a new Map </h4>
 
-<tabset>
-    <tab heading="Standard">
-        <form [formGroup]="projCreateForm" (ngSubmit)="submit()">
-            <label> Name:
-                <input type="text" formControlName="name" required="true">
-            </label>
+<form [formGroup]="projCreateForm" (ngSubmit)="submit()">
+  <div style="display: flex; flex-direction: row">
+    <div style="width: 100%; padding: 20px">
+      <label> Name:
+        <input type="text" formControlName="name" required="true" (input)="setFileName($event)">
+      </label>
 
-            <label> Description
-                <textarea formControlName="description" required="true"></textarea>
-            </label>
+      <label> Description
+        <textarea formControlName="description" required="true"></textarea>
+      </label>
 
-            <div class="link-project">
-              <label>
-                <span style="padding-right: 10px">Save Map Link</span>
-                <input formControlName="exportMapLink" type="checkbox">
-              </label>
+        <div style="padding: 20px 0px">
+          <label> Custom file name:
+            <div style="display: flex; flex-direction: row">
+              <input type="text" formControlName="fileName" [value]="fileName">
+              <span style="line-height: 1.5; font-size: 1rem; margin: 5px">.hazmapper</span>
             </div>
-            <div *ngIf="projCreateForm.get('exportMapLink').value">
-              <app-file-browser
-                [single]=true
-                [allowFolders]=true
-                [allowedExtensions]=[]
-                [onlyFolder]=true
-                [showPublicSystems]=false
-                [heading]="'Select Link Save Location'"
-                [helpText]="'If no folder is selected, the link file will be saved to the root of the selected system.' +
-                         'If you select a project, you can link the current map to the project.'"
-                (selection)="onSelect($event)"
-                (currentPath)="setCurrentPath($event)"
-                (systemSelection)="onSystemSelect($event)">
-              </app-file-browser>
-
-              <div style="padding: 20px 0px">
-                <label> Custom file name:
-                  <div style="display: flex; flex-direction: row">
-                    <input type="text" formControlName="fileName">
-                    <span style="line-height: 1.5; font-size: 1rem; margin: 5px">.hazmapper</span>
-                  </div>
-                </label>
-                <small><em>If a name is not given, file will be saved as the map uuid.</em></small>
-              </div>
-            </div>
-            <div class="button-group small">
-                <button class="button small warning" type="button" (click)="close()">Close</button>
-                <button class="button small align-right" type="submit" [disabled]="(!projCreateForm.valid || submitting)">Submit</button>
-            </div>
-        </form>
-    </tab>
-    <tab heading="From Designsafe project / RApp">
-        <app-file-browser
-          [showPublicSystems]="false"
-          [onlyFolder]="true"
-          [single]="true"
-          [heading]="'Select a RApp Folder'"
-          [helpText]="'All files inside this folder (that can be) will be imported. ' +
-           'This folder will also be periodically scraped for new data.' +
-           'A project link will be created with the project of this folder.'"
-          (selection)="onFolderSelection($event)"
-        >
-        </app-file-browser>
-        <div *ngIf="errorMessage"> <span class="label warning"> {{ errorMessage }} </span> </div>
-        <div class="button-group small">
-            <button class="button small warning" type="button" (click)="close()">Close</button>
-            <button class="button small align-right" type="submit" [disabled]="!rapidFolder" (click)="createRapidProject()">Submit</button>
+          </label>
         </div>
-    </tab>
-</tabset>
+
+        <div style="padding: 20px 0px">
+          <label> Save Location:
+            <span style="color: #007cb6">{{selectedFiles.length > 0 ? selectedFiles[0].path : currentPath}}</span>
+          </label>
+        </div>
+
+        <div style="padding: 20px 0px">
+          <label>
+            <span style="padding-right: 10px">Sync Folder:</span>
+            <input formControlName="watchContent" type="checkbox">
+          </label>
+          <small><em>When enabled, files in this folder are automatically synced into the map periodically.</em></small>
+        </div>
+
+        <div><span style="color: red">{{errorMessage}}</span></div>
+
+    </div>
+
+    <div>
+        <app-file-browser
+          [single]=true
+          [allowFolders]=true
+          [allowedExtensions]=[]
+          [onlyFolder]=true
+          [showPublicSystems]=false
+          [heading]="'Select Link Save Location'"
+          [helpText]="'If no folder is selected, the link file will be saved to the root of the selected system.' +
+          'If you select a project, you can link the current map to the project.'"
+          (selection)="onSelect($event)"
+          (currentPath)="setCurrentPath($event)"
+          (getFilesList)="updateFilesList($event)"
+          (systemSelection)="onSystemSelect($event)">
+        </app-file-browser>
+    </div>
+  </div>
+
+  <div class="button-group small">
+    <button class="button small warning" type="button" (click)="close()">Close</button>
+    <button class="button small align-right" type="submit" [disabled]="(!projCreateForm.valid || submitting)">Submit</button>
+  </div>
+</form>

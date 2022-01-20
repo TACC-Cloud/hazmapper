@@ -56,7 +56,7 @@ export class ControlBarComponent implements OnInit, OnDestroy {
         .subscribe(([activeProject, dsProjects]) => {
           if (activeProject) {
             this.geoDataService.getDataForProject(activeProject.id, this.isPublicView);
-            this.activeProject = this.agaveSystemsService.getDSProjectInformation([activeProject], dsProjects)[0];
+            this.activeProject = this.agaveSystemsService.getProjectMetadata([activeProject], dsProjects)[0];
           } else {
             this.geoDataService.clearData();
           }

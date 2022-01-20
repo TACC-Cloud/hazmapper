@@ -24,8 +24,4 @@ export class UserRowComponent implements OnInit {
       this.activeProject = next;
     });
   }
-
-  delete() {
-    this.projectsService.deleteUserFromProject(this.activeProject, this.user.username);
-  }
 }

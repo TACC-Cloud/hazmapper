@@ -26,6 +26,7 @@ export class FileBrowserComponent implements OnInit {
   @Input() allowedExtensions: Array<string> = [];
   @Output() selection: EventEmitter<Array<RemoteFile>> = new EventEmitter<Array<RemoteFile>>();
   @Output() systemSelection: EventEmitter<any> = new EventEmitter<any>();
+  @Output() getFilesList: EventEmitter<any> = new EventEmitter<any>();
   @Output() currentPath: EventEmitter<string> = new EventEmitter<string>();
 
   private currentUser: AuthenticatedUser;
@@ -37,7 +38,7 @@ export class FileBrowserComponent implements OnInit {
   public selectedFiles: Map<string, RemoteFile> = new Map();
 
   public firstFileIndex: number;
-  public fileDeselectMode: boolean = false;
+  public fileDeselectMode = false;
 
   public projects: Array<SystemSummary>;
   private selectedSystem: SystemSummary;
@@ -89,7 +90,7 @@ export class FileBrowserComponent implements OnInit {
       type: 'dir',
       path: pth
     };
-    this.systemSelection.next(system)
+    this.systemSelection.next(system);
     this.browse(init);
   }
 
@@ -131,6 +132,7 @@ export class FileBrowserComponent implements OnInit {
 
                 this.inProgress = false;
                 this.filesList = this.filesList.concat(files);
+                this.getFilesList.next(this.filesList.map(file => file.name));
                 this.offset = this.offset + files.length;
               },
           error => {
@@ -141,8 +143,8 @@ export class FileBrowserComponent implements OnInit {
   }
 
   addRangeFiles(firstFileIndex: number, lastFileIndex: number, again: boolean) {
-    let maxIndex = Math.max(firstFileIndex, lastFileIndex);
-    let minIndex = Math.min(firstFileIndex, lastFileIndex);
+    const maxIndex = Math.max(firstFileIndex, lastFileIndex);
+    const minIndex = Math.min(firstFileIndex, lastFileIndex);
 
     for (let i = minIndex; i < maxIndex + 1; ++i) {
       this.addSelectedFile(this.filesList[i], -1);
@@ -154,7 +156,7 @@ export class FileBrowserComponent implements OnInit {
   }
 
   selectShift(index: number, file: RemoteFile) {
-    if (this.firstFileIndex != undefined && this.firstFileIndex != index) {
+    if (this.firstFileIndex !== undefined && this.firstFileIndex !== index) {
       this.addRangeFiles(this.firstFileIndex, index, true);
     } else {
       this.addSelectedFile(file, index);
@@ -205,10 +207,10 @@ export class FileBrowserComponent implements OnInit {
       this.selectFilesShiftCtrlClick(index, file);
     } else if (event.shiftKey) {
       this.selectFilesShiftClick(index, file);
-    } else if(event.ctrlKey) {
+    } else if (event.ctrlKey) {
       this.selectFilesCtrlClick(index, file);
     } else {
-      this.selectFilesClick(index, file)
+      this.selectFilesClick(index, file);
     }
   }
 
@@ -223,7 +225,7 @@ export class FileBrowserComponent implements OnInit {
   }
 
   addSelectedFile(file: RemoteFile, index: number) {
-    if (index != -1) {
+    if (index !== -1) {
       this.firstFileIndex = index;
     }
 
