@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.4] - 2022-01-21
+
+### Added
+
+- DES-1988: Save to project metadata. (#70)
+- DES-2006: Add ability to display custom styles and icons on map. (#65)
+
+### Changed
+
+- DES-2001: Project links as observables (subscribe to project-user data). (#67)
+- DES-2054: Fix point cloud preview. (#69)
+
 ## [2.3] - 2021-06-09
 
 ### Added
@@ -44,6 +56,7 @@
 
 
 [unreleased]: https://github.com/TACC-Cloud/hazmapper/compare/v2.3...HEAD
+[2.4]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.4
 [2.3]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.3
 [2.2]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.2
 [2.1]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.1
