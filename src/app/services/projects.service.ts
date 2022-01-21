@@ -162,12 +162,6 @@ export class ProjectsService {
   }
 
   updateProject(req: ProjectRequest): void {
-    if (req.project.system_file) {
-      this.agaveSystemsService.deleteFile(req.project);
-    }
-
-    this.agaveSystemsService.saveFile(req.project);
-
     this.http.put(this.envService.apiUrl + `/projects/${req.project.id}/`, req)
       .subscribe((resp) => {
         this.notificationsService.showSuccessToast('Uploaded file!');
