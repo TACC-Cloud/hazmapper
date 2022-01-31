@@ -148,14 +148,25 @@ export class ProjectsService {
                                                      AgaveFileOperations.Delete);
     }
 
+    this._projects.next(this._projects.value.map(p =>
+      p.id === proj.id
+      ? {...p, deleting: true}
+      : p));
+
+    this.router.navigate([MAIN]);
+
     this.http.delete(this.envService.apiUrl + `/projects/${proj.id}/`)
       .subscribe((resp) => {
         if (proj.system_path) {
           this.agaveSystemsService.deleteFile(proj);
         }
         this.getProjects();
-        this.router.navigate([MAIN]);
       }, error => {
+        this._projects.next(this._projects.value.map(p =>
+          p.id === proj.id
+          ? {...p, deletingFailed: true}
+          : p));
+
         this.notificationsService.showErrorToast('Could not delete project!');
         console.error(error);
       });
