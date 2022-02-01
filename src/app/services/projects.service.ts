@@ -34,6 +34,9 @@ export class ProjectsService {
   private _loadingActiveProjectFailed: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public loadingActiveProjectFailed: Observable<boolean> = this._loadingActiveProjectFailed.asObservable();
 
+  private _deletingProjects: BehaviorSubject<Project[]> = new BehaviorSubject<Project[]>([]);
+  public deletingProjects: Observable<Project[]> = this._deletingProjects.asObservable();
+
   constructor(private http: HttpClient,
               private notificationsService: NotificationsService,
               private geoDataService: GeoDataService,
@@ -42,15 +45,32 @@ export class ProjectsService {
               private authService: AuthService,
               private envService: EnvService) { }
 
+  updateProjectsList(resp: Project[] = []) {
+    const myProjs = resp.length !== 0
+      ? resp
+      : this._projects.value;
+
+    this._deletingProjects.value.length !== 0
+      ? this._projects.next(myProjs.map(p => {
+        const deletingProj = this._deletingProjects.value.find(dp => dp.id === p.id);
+        return deletingProj
+          ? deletingProj
+          : p;
+      }))
+      : this._projects.next(myProjs);
+  }
+
   getProjects(): void {
     this._loadingProjectsFailed.next(false);
     this.http.get<Project[]>(this.envService.apiUrl + `/projects/`).subscribe( resp => {
-      this._projects.next(resp);
+
+      this.updateProjectsList(resp);
+
       this._loadingProjectsFailed.next(false);
     }, error => {
       this._loadingProjectsFailed.next(true);
       this.notificationsService.showErrorToast('Failed to retrieve project data! Geoapi might be down.');
-      });
+    });
   }
 
   // TODO: Utilize project metdata
@@ -148,14 +168,31 @@ export class ProjectsService {
                                                      AgaveFileOperations.Delete);
     }
 
+    this._deletingProjects.next([...this._deletingProjects.value, {...proj, deleting: true}]);
+    this.updateProjectsList();
+
+    this.router.navigate([MAIN]);
+
     this.http.delete(this.envService.apiUrl + `/projects/${proj.id}/`)
       .subscribe((resp) => {
         if (proj.system_path) {
           this.agaveSystemsService.deleteFile(proj);
         }
+
+        this._deletingProjects.next(this._deletingProjects.value.filter(p => p.id !== proj.id));
+        this.updateProjectsList();
         this.getProjects();
-        this.router.navigate([MAIN]);
       }, error => {
+
+        this._deletingProjects.next(this._deletingProjects.value.map(p => {
+          return p.id === proj.id
+            ? {...p, deleting: false, deletingFailed: true}
+            : p;
+        }));
+        this.updateProjectsList();
+
+        this.getProjects();
+
         this.notificationsService.showErrorToast('Could not delete project!');
         console.error(error);
       });

@@ -58,6 +58,8 @@ export interface Project {
   system_file?: string;
   system_id?: string;
   system_path?: string;
+  deleting?: boolean;
+  deletingFailed?: boolean;
 }
 
 export class Project implements Project {

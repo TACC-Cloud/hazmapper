@@ -71,9 +71,25 @@
                     <button class="project-list-item-button" [tooltip]="'Edit Map'">
                       <i class="fas fa-edit"></i>
                     </button>
-                    <button class="project-list-item-button" [tooltip]="'Delete Map'" (click)="openDeleteProjectModal(p, $event)">
-                      <i class="fas fa-trash"></i>
-                    </button>
+                    <ng-container *ngIf="p.deletingFailed; else deletingNotFailed">
+                      <button style="color: #cc4b37" class="project-list-item-button" [tooltip]="'Map Failed to Delete'" (click)="openDeleteProjectModal(p, $event)">
+                        <i class="fas fa-exclamation-triangle"></i>
+                      </button>
+                    </ng-container>
+                    <ng-template #deletingNotFailed>
+                      <ng-container *ngIf="p.deleting; else notDeleting">
+                        <button class="project-list-item-button" [tooltip]="'Deleting Map'">
+                          <i class="fas fa-spin fa-spinner"></i>
+                        </button>
+                      </ng-container>
+
+                      <ng-template #notDeleting>
+                        <button class="project-list-item-button" [tooltip]="'Delete Map'" (click)="openDeleteProjectModal(p, $event)">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </ng-template>
+                    </ng-template>
+
                   </div>
                 </div>
               </div>
