@@ -73,7 +73,10 @@ export class ModalCreateProjectComponent implements OnInit, AfterContentChecked 
 
     p.description = this.projCreateForm.get('description').value;
     p.name = this.projCreateForm.get('name').value;
-    p.system_path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path : this.currentPath;
+    p.system_path = this.selectedFiles.length > 0 ?
+      (this.selectedFiles[0].path || '/') :
+      (this.currentPath || '/')
+
     p.system_id = this.selectedSystem.id;
     p.system_file = this.projCreateForm.get('fileName').value
       ? this.projCreateForm.get('fileName').value
