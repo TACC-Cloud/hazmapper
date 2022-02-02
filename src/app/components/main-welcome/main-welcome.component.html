@@ -58,7 +58,7 @@
                   </div>
 
                   <div class="project-column">
-                    <ng-container *ngIf="p.system_path && p.system_id.startsWith('project'); else noProject" class="list-column link-hover">
+                    <ng-container *ngIf="p.system_id.startsWith('project'); else noProject" class="list-column link-hover">
                       <span class="project-name" [tooltip]="p.title">
                         {{p.ds_id}} | {{p.title}}
                       </span>
