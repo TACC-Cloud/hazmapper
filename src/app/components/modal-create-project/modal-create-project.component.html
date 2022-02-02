@@ -22,7 +22,7 @@
 
         <div style="padding: 20px 0px">
           <label> Save Location:
-            <span style="color: #007cb6">{{selectedFiles.length > 0 ? selectedFiles[0].path : currentPath}}</span>
+            <span style="color: #007cb6">{{selectedFiles.length > 0 ? (selectedFiles[0].path || '/') : (currentPath || '/')}}</span>
           </label>
         </div>
 

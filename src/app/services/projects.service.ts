@@ -175,7 +175,7 @@ export class ProjectsService {
 
     this.http.delete(this.envService.apiUrl + `/projects/${proj.id}/`)
       .subscribe((resp) => {
-        if (proj.system_path) {
+        if (proj.system_path || proj.ds_id) {
           this.agaveSystemsService.deleteFile(proj);
         }
 
