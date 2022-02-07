@@ -130,7 +130,7 @@ export class MapComponent implements OnInit, OnDestroy {
         const vectorTileOptions = {
           attribution: 'Mapillary layer',
           vectorTileLayerStyles: vectorTileStyling,
-          token: this.envService.streetviewEnv.mapToken,
+          token: this.envService.streetviewEnv.mapillary.mapToken,
           interactive: true,
           getFeatureId: (f: any) => {
             return f.properties.id;
