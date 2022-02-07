@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { BsModalRef } from 'ngx-foundation/modal';
 import { StreetviewService } from 'src/app/services/streetview.service';
-import {StreetviewInstance, StreetviewSequence} from '../../models/streetview';
+import { StreetviewSequence } from '../../models/streetview';
 import { StreetviewAuthenticationService } from 'src/app/services/streetview-authentication.service';
 
 @Component({

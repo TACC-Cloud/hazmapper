@@ -3,11 +3,7 @@ import {StreetviewService} from '../../services/streetview.service';
 import {BsModalRef, BsModalService} from 'ngx-foundation';
 import {StreetviewAuthenticationService} from '../../services/streetview-authentication.service';
 import {ModalStreetviewLinkComponent} from '../modal-streetview-link/modal-streetview-link.component';
-import {
-  Streetview,
-  StreetviewSequence,
-  StreetviewInstance,
-} from '../../models/streetview';
+import { Streetview } from '../../models/streetview';
 
 @Component({
   selector: 'app-streetview-asset-detail',

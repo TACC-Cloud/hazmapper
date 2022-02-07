@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {BsModalService} from 'ngx-foundation';
-import {ModalStreetviewInfoComponent} from '../modal-streetview-info/modal-streetview-info.component';
-import {Streetview, StreetviewInstance} from '../../models/streetview';
-import {StreetviewAuthenticationService} from 'src/app/services/streetview-authentication.service';
-
+import { BsModalService } from 'ngx-foundation';
+import { ModalStreetviewInfoComponent } from '../modal-streetview-info/modal-streetview-info.component';
+import { Streetview } from '../../models/streetview';
+import { StreetviewAuthenticationService } from 'src/app/services/streetview-authentication.service';
 
 @Component({
   selector: 'app-streetview-assets',

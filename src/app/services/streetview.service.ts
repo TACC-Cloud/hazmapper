@@ -1,18 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-import { Feature, FeatureCollection, AuthToken } from '../models/models';
-import {
-  Streetview,
-  StreetviewSequence,
-  StreetviewInstance,
-} from '../models/streetview';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Feature, FeatureCollection } from '../models/models';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { parseLinkHeader } from '../utils/headers';
 import { RemoteFile } from 'ng-tapis';
-import {NotificationsService} from './notifications.service';
-import {EnvService} from '../services/env.service';
-import {StreetviewAuthenticationService} from './streetview-authentication.service';
-import {tap} from 'rxjs/operators';
+import { NotificationsService } from './notifications.service';
+import { EnvService } from '../services/env.service';
+import { StreetviewAuthenticationService } from './streetview-authentication.service';
 
 @Injectable({
   providedIn: 'root'
@@ -66,7 +59,7 @@ export class StreetviewService {
       };
 
       this.http.post(this.envService.apiUrl + `/streetview/${streetviewId}/organization/`, payload)
-        .subscribe((e) => {
+        .subscribe(() => {
           this.streetviewAuthentication.getStreetviews().subscribe();
         }, error => {
           console.error(error);

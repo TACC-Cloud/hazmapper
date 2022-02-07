@@ -1,5 +1,3 @@
-import { FeatureCollection } from 'geojson';
-
 export interface StreetviewAuthentication {
   google: boolean;
   mapillary: boolean;

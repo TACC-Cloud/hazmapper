@@ -3,12 +3,13 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { AuthToken } from '../models/models';
 import { Router } from '@angular/router';
 import { AuthService } from './authentication.service';
-import {ProjectsService} from './projects.service';
-import {EnvService} from '../services/env.service';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {NotificationsService} from './notifications.service';
-import {tap} from 'rxjs/operators';
-import { StreetviewRequest, Streetview, StreetviewOrganization, StreetviewSequence, StreetviewInstance } from '../models/streetview';
+import { ProjectsService } from './projects.service';
+import { EnvService } from '../services/env.service';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { NotificationsService } from './notifications.service';
+import { tap} from 'rxjs/operators';
+import { StreetviewRequest,
+         Streetview } from '../models/streetview';
 
 @Injectable({
   providedIn: 'root'

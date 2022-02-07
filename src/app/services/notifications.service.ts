@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { INotification, IProgressNotification } from '../models/notification';
 import { interval, Observable, ReplaySubject } from 'rxjs';
 import { EnvService } from '../services/env.service';
-import { take, map } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { AuthService } from '../services/authentication.service';
 
 @Injectable({
@@ -25,7 +25,7 @@ export class NotificationsService {
               private authService: AuthService ) {
     if (authService.isLoggedIn()) {
       const timer = interval(this.TIMEOUT);
-      timer.subscribe((next) => {
+      timer.subscribe(() => {
         this.getRecent();
       });
     }
@@ -72,7 +72,7 @@ export class NotificationsService {
 
   initProgressPoll() {
     const timer = interval(this.TIMEOUT);
-    const timerSub = timer.subscribe((next) => {
+    const timerSub = timer.subscribe(() => {
       this.getRecentProgress();
     });
     return timerSub;
@@ -103,7 +103,7 @@ export class NotificationsService {
     const baseUrl = this.envService.apiUrl + '/notifications/progress';
 
     this.progressNotifications
-      .pipe(take(1)).subscribe((progressList) => {
+      .pipe(take(1)).subscribe((progressList: Array<any>) => {
         progressList = progressList.filter(n => n.uuid != pn.uuid);
         this._progressNotifications.next(progressList)
       });

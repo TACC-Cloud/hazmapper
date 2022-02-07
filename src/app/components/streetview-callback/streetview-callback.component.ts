@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import {BsModalRef, BsModalService} from 'ngx-foundation';
-import {StreetviewAuthenticationService} from 'src/app/services/streetview-authentication.service';
-import {NotificationsService} from 'src/app/services/notifications.service';
-import {ModalStreetviewUsernameComponent} from '../modal-streetview-username/modal-streetview-username.component';
-import {Streetview} from "../../models/streetview";
+import { BsModalService} from 'ngx-foundation';
+import { StreetviewAuthenticationService } from 'src/app/services/streetview-authentication.service';
+import { NotificationsService } from 'src/app/services/notifications.service';
+import { ModalStreetviewUsernameComponent } from '../modal-streetview-username/modal-streetview-username.component';
+import { Streetview } from "../../models/streetview";
 import { ModalStreetviewOrganizationComponent } from '../modal-streetview-organization/modal-streetview-organization.component';
 
 @Component({
@@ -22,7 +22,7 @@ export class StreetviewCallbackComponent implements OnInit {
   activeStreetview: Streetview;
 
   ngOnInit() {
-    this.streetviewAuthenticationService.activeStreetview.subscribe((next) => {
+    this.streetviewAuthenticationService.activeStreetview.subscribe((next: Streetview) => {
       this.activeStreetview = next;
     });
 
@@ -31,9 +31,6 @@ export class StreetviewCallbackComponent implements OnInit {
 
     const service = state.service;
     const originUrl = state.originUrl;
-    const projectId = state.projectId;
-    const username = state.username;
-
 
     this.streetviewAuthenticationService.setToken(service, params.code)
       .subscribe((resp: any) => {
@@ -47,7 +44,7 @@ export class StreetviewCallbackComponent implements OnInit {
         this.streetviewAuthenticationService.createStreetview({
           token: token.token,
           service,
-        }).subscribe((sv: Streetview) => {
+        }).subscribe(() => {
           const usernameModal = this.bsModalService.show(ModalStreetviewUsernameComponent, {class: 'tiny'});
           usernameModal.content.onClose.subscribe((resp: any) => {
             if (resp.username && this.activeStreetview) {
@@ -56,7 +53,7 @@ export class StreetviewCallbackComponent implements OnInit {
                 {service_user: resp.username}
               );
               this.notificationsService.showSuccessToast('Successfully added username to Mapillary!');
-              const organizationModal = this.bsModalService.show(ModalStreetviewOrganizationComponent);
+              this.bsModalService.show(ModalStreetviewOrganizationComponent);
             } else {
               this.notificationsService.showWarningToast('Must include username to Mapillary to work properly!');
             }

@@ -34,7 +34,7 @@ export class StreetviewLogsComponent implements OnInit, OnDestroy {
     const initialState = {
       notification: pn
     };
-    const modal: BsModalRef = this.bsModalService.show(ModalStreetviewLogComponent, {initialState});
+    this.bsModalService.show(ModalStreetviewLogComponent, {initialState});
   }
 
   deleteDoneLog(pn: IProgressNotification) {
