@@ -130,8 +130,7 @@ export class MapComponent implements OnInit, OnDestroy {
         const vectorTileOptions = {
           attribution: 'Mapillary layer',
           vectorTileLayerStyles: vectorTileStyling,
-          token: 'MLYARDcnHyGduYMTxCn5gVuhZCFPHQAFhZBUX1JGw25udGnTa6YunU3UYUZBsmiIykVApTBwxHguCyTZAdGvHavJ6O7mr3uPA3ZC3ZCOwkTg2HiVR8AoR5Om2Dhw2vAOawgZDZD',
-          // token: 'MLYARBbnSgSlSCZBYiOSlbKk5s271PF5EJm61bhLznIARyPmasuP1tZAAZBZAAArhughs5ZAyElJ9L0ZC2CBPJhIjQt0jL7bWzHI2Ym6ZAaxH9eWgvCnMob0kiZAvBhBysdwgZDZD',
+          token: this.envService.streetviewEnv.mapToken,
           interactive: true,
           getFeatureId: (f: any) => {
             return f.properties.id;

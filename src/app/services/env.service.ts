@@ -63,30 +63,6 @@ export class EnvService {
     return this._streetviewEnv;
   }
 
-  // get googleClientId(): string {
-  //   return this._googleClientId;
-  // }
-
-  // get googleClientSecret(): string {
-  //   return this._googleClientSecret;
-  // }
-
-  // get mapillaryClientId(): string {
-  //   return this._mapillaryClientId;
-  // }
-
-  // get mapillaryClientIdAuth(): string {
-  //   return this._mapillaryClientIdAuth;
-  // }
-
-  // get mapillaryClientSecret(): string {
-  //   return this._mapillaryClientSecret;
-  // }
-
-  // get mapillaryApiUrl(): string {
-  //   return this._mapillaryApiUrl;
-  // }
-
   get baseHref(): string {
     return this._baseHref;
   }
@@ -125,6 +101,7 @@ export class EnvService {
         clientSecret: 'MLY|4045602648858965|a8572bcecde684bc4c77c006e145019b',
         clientId: '4045602648858965',
         clientAuth: 'MLY|4045602648858965|5b906cb2dfd6d0f7c5ed7cb7d50620d8',
+        mapToken: 'MLYARDcnHyGduYMTxCn5gVuhZCFPHQAFhZBUX1JGw25udGnTa6YunU3UYUZBsmiIykVApTBwxHguCyTZAdGvHavJ6O7mr3uPA3ZC3ZCOwkTg2HiVR8AoR5Om2Dhw2vAOawgZDZD',
         tileUrl: 'https://tiles.mapillary.com/',
         apiUrl: 'https://graph.mapillary.com/',
         tokenUrl: 'https://graph.mapillary.com/token',
