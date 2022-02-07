@@ -114,7 +114,7 @@ export class ProjectsService {
             this.agaveSystemsService.saveFile(proj);
           }
 
-          if (proj.system_id.startsWith('project')) {
+          if (proj.system_id && proj.system_id.startsWith('project')) {
             this.agaveSystemsService.updateProjectMetadata(proj,
                                                            AgaveFileOperations.Update);
           }
