@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
-import {DesignSafeProjectCollection, Project} from '../models/models';
+import {DesignSafeProjectCollection, Project, ProjectRequest, AgaveFileOperations} from '../models/models';
 import { RapidProjectRequest } from '../models/rapid-project-request';
 import {catchError, map, tap, filter, take} from 'rxjs/operators';
 import {IProjectUser} from '../models/project-user';
@@ -10,7 +10,6 @@ import {GeoDataService} from './geo-data.service';
 import { EnvService } from '../services/env.service';
 import { AuthService } from '../services/authentication.service';
 import {MAIN, LOGIN} from '../constants/routes';
-import {defaultTileServers} from '../constants/tile-servers';
 import { AgaveSystemsService } from '../services/agave-systems.service';
 import { Router } from '@angular/router';
 
@@ -39,6 +38,9 @@ export class ProjectsService {
   private _loadingActiveProjectFailed: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public loadingActiveProjectFailed: Observable<boolean> = this._loadingActiveProjectFailed.asObservable();
 
+  private _deletingProjects: BehaviorSubject<Project[]> = new BehaviorSubject<Project[]>([]);
+  public deletingProjects: Observable<Project[]> = this._deletingProjects.asObservable();
+
   constructor(private http: HttpClient,
               private notificationsService: NotificationsService,
               private geoDataService: GeoDataService,
@@ -47,10 +49,27 @@ export class ProjectsService {
               private authService: AuthService,
               private envService: EnvService) { }
 
+  updateProjectsList(resp: Project[] = []) {
+    const myProjs = resp.length !== 0
+      ? resp
+      : this._projects.value;
+
+    this._deletingProjects.value.length !== 0
+      ? this._projects.next(myProjs.map(p => {
+        const deletingProj = this._deletingProjects.value.find(dp => dp.id === p.id);
+        return deletingProj
+          ? deletingProj
+          : p;
+      }))
+      : this._projects.next(myProjs);
+  }
+
   getProjects(): void {
     this._loadingProjectsFailed.next(false);
     this.http.get<Project[]>(this.envService.apiUrl + `/projects/`).subscribe( resp => {
-      this._projects.next(resp);
+
+      this.updateProjectsList(resp);
+
       this._loadingProjectsFailed.next(false);
     }, error => {
       this._loadingProjectsFailed.next(true);
@@ -58,6 +77,7 @@ export class ProjectsService {
     });
   }
 
+  // TODO: Utilize project metdata
   getProjectUsers(proj: Project): Observable<Array<IProjectUser>> {
     return this.http.get<Array<IProjectUser>>(this.envService.apiUrl + `/projects/${proj.id}/users/`).pipe(
       tap(users => {
@@ -65,16 +85,7 @@ export class ProjectsService {
       }));
   }
 
-  getProjectUser(proj: Project, uname: string): any {
-    return this.http.get(this.envService.apiUrl + `/projects/${proj.id}/users/${uname}/`);
-      // .subscribe((resp: IProjectUser) => {
-      //   this._currentProjectUser.next(resp);
-      // }, error => {
-      // this.notificationsService.showErrorToast('Unable to get user');
-    // });
-  }
-
-
+  // TODO: Utilize project metdata
   addUserToProject(proj: Project, uname: string): void {
     const payload = {
       username: uname
@@ -85,6 +96,7 @@ export class ProjectsService {
       });
   }
 
+  // TODO: Utilize project metdata
   deleteUserFromProject(proj: Project, uname: string): void {
     this.http.delete(this.envService.apiUrl + `/projects/${proj.id}/users/${uname}/`)
       .subscribe( (resp) => {
@@ -94,63 +106,25 @@ export class ProjectsService {
     });
   }
 
-  create(data: Project): Observable<Project> {
+  create(data: ProjectRequest): Observable<Project> {
     return this.http.post<Project>(this.envService.apiUrl + `/projects/`, data)
       .pipe(
         tap(proj => {
+          if (data.observable || proj.system_path) {
+            this.agaveSystemsService.saveFile(proj);
+          }
+
+          if (proj.system_id.startsWith('project')) {
+            this.agaveSystemsService.updateProjectMetadata(proj,
+                                                           AgaveFileOperations.Update);
+          }
+
           // Spread operator, just pushes the new project into the array
           this._projects.next([...this._projects.value, proj]);
-          // Add default servers
-          defaultTileServers.forEach(ts => {
-            this.geoDataService.addTileServer(proj.id, ts, true);
-          });
-
+          this.geoDataService.addDefaultTileServers(proj.id);
+        }, error => {
+          console.log(error);
         }),
-      );
-  }
-
-  exportProject(project: Project,
-                system_id: string,
-                path: string = '/',
-                link: boolean,
-                file_name: string = '') {
-    file_name = file_name === '' ? project.uuid : file_name;
-
-    const payload = {
-      system_id,
-      path,
-      file_name,
-      link
-    };
-
-    this.http.put<any>(this.envService.apiUrl + `/projects/${project.id}/export/`, payload)
-      .subscribe(currentProject => {
-        this.notificationsService.showSuccessToast(`Create file ${system_id}/${path}/${file_name}.hazmapper`);
-        this._projects.next([...this._projects.value.filter((p) => p.id != project.id),
-                             currentProject]);
-        this._activeProject.next(currentProject);
-      }, error => {
-        this.notificationsService.showErrorToast(`Failed to create file ${system_id}/${path}/${file_name}.hazmapper`);
-        console.log(error);
-      });
-  }
-
-  createRapidProject(data: RapidProjectRequest) {
-    return this.http.post<Project>(this.envService.apiUrl + `/projects/rapid/`, data)
-      .pipe(
-        map( (proj) => {
-          this._projects.next([proj, ...this._projects.value]);
-          defaultTileServers.forEach(ts => {
-            this.geoDataService.addTileServer(proj.id, ts, true);
-          });
-          return proj;
-        }),
-       catchError( (err: any) =>  {
-          if (err instanceof HttpErrorResponse && err.status === 409) {
-            throw new Error('This project/folder is already a map project.');
-          }
-          throw new Error('Unable to create project.');
-        })
       );
   }
 
@@ -193,29 +167,45 @@ export class ProjectsService {
   }
 
   deleteProject(proj: Project): void {
+    if (proj.system_id && proj.system_id.startsWith('project')) {
+      this.agaveSystemsService.updateProjectMetadata(proj,
+                                                     AgaveFileOperations.Delete);
+    }
+
+    this._deletingProjects.next([...this._deletingProjects.value, {...proj, deleting: true}]);
+    this.updateProjectsList();
+
+    this.router.navigate([MAIN]);
+
     this.http.delete(this.envService.apiUrl + `/projects/${proj.id}/`)
-      .subscribe( (resp) => {
+      .subscribe((resp) => {
+        if (proj.system_path || proj.ds_id) {
+          this.agaveSystemsService.deleteFile(proj);
+        }
+
+        this._deletingProjects.next(this._deletingProjects.value.filter(p => p.id !== proj.id));
+        this.updateProjectsList();
         this.getProjects();
-        this.router.navigate([MAIN]);
       }, error => {
+
+        this._deletingProjects.next(this._deletingProjects.value.map(p => {
+          return p.id === proj.id
+            ? {...p, deleting: false, deletingFailed: true}
+            : p;
+        }));
+        this.updateProjectsList();
+
+        this.getProjects();
+
         this.notificationsService.showErrorToast('Could not delete project!');
+        console.error(error);
       });
   }
 
-  updateProject(proj: Project, name: string, description: string, isPublic: boolean): void {
-    name = name ? name : proj.name;
-    description = description ? description : proj.description;
-    isPublic = isPublic !== undefined ? isPublic : proj.public;
-
-    const payload = {
-      name,
-      description,
-      public: isPublic
-    };
-
-    this.http.put(this.envService.apiUrl + `/projects/${proj.id}/`, payload)
-      .subscribe( (resp) => {
-        proj.name = name;
+  updateProject(req: ProjectRequest): void {
+    this.http.put(this.envService.apiUrl + `/projects/${req.project.id}/`, req)
+      .subscribe((resp) => {
+        this.notificationsService.showSuccessToast('Uploaded file!');
       });
   }
 
@@ -224,11 +214,13 @@ export class ProjectsService {
     description = description ? description : this._activeProject.value.description;
     isPublic = isPublic !== undefined ? isPublic : this._activeProject.value.public;
 
-    const payload = {
-      name,
-      description,
-      public: isPublic
-    };
+    const payload: ProjectRequest = {
+      project: {
+        name,
+        description,
+        public: isPublic
+      }
+    }
 
     return this.http.put<Project>(this.envService.apiUrl + `/projects/${this._activeProject.value.id}/`, payload)
       .pipe(
@@ -236,7 +228,7 @@ export class ProjectsService {
           // Update the project list
           const projects = this._projects.value.map(proj => proj.id === this._activeProject.value.id ? updatedProject : proj);
           this._projects.next(projects);
-          // // Update the active project
+          // Update the active project
           this._activeProject.next(updatedProject);
 
           return updatedProject;
@@ -244,7 +236,7 @@ export class ProjectsService {
         catchError((err: any) => {
           throw new Error('Unable to update project.');
         })
-      );
+    );
   }
 
 }

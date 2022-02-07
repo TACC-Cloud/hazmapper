@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChildren, QueryList, OnInit } from '@angular/core';
 import {ProjectsService} from '../../services/projects.service';
 import {NotificationsService} from '../../services/notifications.service';
 import {ModalService} from '../../services/modal.service';
-import { BsModalRef, BsModalService } from 'ngx-foundation';
+import { TabsetComponent, BsModalService } from 'ngx-foundation';
 import {IProjectUser} from '../../models/project-user';
-import {FormGroup, FormControl} from '@angular/forms';
-import {Project} from '../../models/models';
+import {Project, ProjectRequest} from '../../models/models';
 import {EnvService} from '../../services/env.service';
 import { ModalLinkProjectComponent } from '../modal-link-project/modal-link-project.component';
 import { AgaveSystemsService } from 'src/app/services/agave-systems.service';
@@ -18,8 +17,9 @@ import { copyToClipboard } from '../../utils/copyText';
   styleUrls: ['./users-panel.component.styl']
 })
 export class UsersPanelComponent implements OnInit {
+  @ViewChildren('staticTabs') staticTabs: QueryList<TabsetComponent>;
+
   public projectUsers: Array<IProjectUser>;
-  addUserForm: FormGroup;
   activeProject: Project;
   nameInputError = false;
   descriptionInputError = false;
@@ -41,18 +41,14 @@ export class UsersPanelComponent implements OnInit {
   ngOnInit() {
     this.agaveSystemsService.list();
 
-    this.addUserForm = new FormGroup( {
-      username: new FormControl()
-    });
-
     combineLatest([this.projectsService.activeProject,
                                          this.agaveSystemsService.projects])
       .subscribe(([activeProject, dsProjects]) => {
       if (activeProject) {
         const portalUrl = this.envService.portalUrl + 'data/browser/';
-        this.activeProject = this.agaveSystemsService.getDSProjectInformation([activeProject], dsProjects)[0];
+        this.activeProject = this.agaveSystemsService.getProjectMetadata([activeProject], dsProjects)[0];
         if (activeProject.system_id) {
-          if (activeProject.system_id.includes('project')) {
+          if (activeProject.system_id.startsWith('project')) {
             this.dsHref = portalUrl + 'projects/' +
               activeProject.system_id.substr(8) + '/' +
               activeProject.system_path + '/';
@@ -81,22 +77,7 @@ export class UsersPanelComponent implements OnInit {
   }
 
   openExportProjectModal() {
-    const initialState = {
-      single: true,
-      allowFolders: true,
-      onlyFolder: true,
-      allowEmptyFiles: true,
-      allowedExtensions: []
-    };
-    const modal: BsModalRef = this.bsModalService.show(ModalLinkProjectComponent, { initialState });
-    modal.content.onClose.subscribe( (next) => {
-      const path = next.fileList.length > 0 ? next.fileList[0].path : next.currentPath;
-      this.projectsService.exportProject(this.activeProject,
-                                         next.system.id,
-                                         path,
-                                         next.system.id.includes('project') && next.linkProject,
-                                         next.fileName);
-    });
+    this.bsModalService.show(ModalLinkProjectComponent);
   }
 
   copyLinkToClipboard(link: string) {
@@ -136,18 +117,22 @@ export class UsersPanelComponent implements OnInit {
       if (answer === 'Delete') {
         this.projectsService.deleteProject(this.activeProject);
       }
-    });
+      });
   }
 
-  addUser() {
-    this.projectsService.addUserToProject(this.activeProject, this.addUserForm.get('username').value);
+  selectTab(tabId: number) {
+    this.staticTabs.first.tabs[tabId].active = true;
   }
 
   changeProjectName(name: string) {
     if (name.length < 512) {
       this.nameInputError = false;
       this.activeProject.name = name;
-      this.projectsService.updateProject(this.activeProject, name, undefined, undefined);
+
+      const pr = new ProjectRequest();
+      pr.project = this.activeProject;
+
+      this.projectsService.updateProject(pr);
     } else {
       this.nameInputError = true;
     }
@@ -157,7 +142,11 @@ export class UsersPanelComponent implements OnInit {
     if (description.length < 4096) {
       this.descriptionInputError = false;
       this.activeProject.description = description;
-      this.projectsService.updateProject(this.activeProject, undefined, description, undefined);
+
+      const pr = new ProjectRequest();
+      pr.project = this.activeProject;
+
+      this.projectsService.updateProject(pr);
     } else {
       this.descriptionInputError = true;
     }

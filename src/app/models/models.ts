@@ -3,8 +3,12 @@ import {Feature as GeoJSONFeature,
   Geometry,
   FeatureCollection as IFeatureCollection } from 'geojson';
 
-
 // TODO: break these out into their own files
+
+export enum AgaveFileOperations {
+  Delete,
+  Update,
+}
 
 export interface IFileImportRequest {
   system_id: string;
@@ -54,9 +58,21 @@ export interface Project {
   system_file?: string;
   system_id?: string;
   system_path?: string;
+  deleting?: boolean;
+  deletingFailed?: boolean;
 }
 
 export class Project implements Project {
+
+}
+
+export interface ProjectRequest {
+  project: Project;
+  observable?: boolean;
+  watch_content?: boolean;
+}
+
+export class ProjectRequest implements ProjectRequest {
 
 }
 

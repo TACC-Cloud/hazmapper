@@ -58,7 +58,7 @@
                   </div>
 
                   <div class="project-column">
-                    <ng-container *ngIf="p.system_path && p.system_id.includes('project'); else noProject" class="list-column link-hover">
+                    <ng-container *ngIf="p.system_id.startsWith('project'); else noProject" class="list-column link-hover">
                       <span class="project-name" [tooltip]="p.title">
                         {{p.ds_id}} | {{p.title}}
                       </span>
@@ -71,9 +71,25 @@
                     <button class="project-list-item-button" [tooltip]="'Edit Map'">
                       <i class="fas fa-edit"></i>
                     </button>
-                    <button class="project-list-item-button" [tooltip]="'Delete Map'" (click)="openDeleteProjectModal(p, $event)">
-                      <i class="fas fa-trash"></i>
-                    </button>
+                    <ng-container *ngIf="p.deletingFailed; else deletingNotFailed">
+                      <button style="color: #cc4b37" class="project-list-item-button" [tooltip]="'Map Failed to Delete'" (click)="openDeleteProjectModal(p, $event)">
+                        <i class="fas fa-exclamation-triangle"></i>
+                      </button>
+                    </ng-container>
+                    <ng-template #deletingNotFailed>
+                      <ng-container *ngIf="p.deleting; else notDeleting">
+                        <button class="project-list-item-button" [tooltip]="'Deleting Map'">
+                          <i class="fas fa-spin fa-spinner"></i>
+                        </button>
+                      </ng-container>
+
+                      <ng-template #notDeleting>
+                        <button class="project-list-item-button" [tooltip]="'Delete Map'" (click)="openDeleteProjectModal(p, $event)">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </ng-template>
+                    </ng-template>
+
                   </div>
                 </div>
               </div>

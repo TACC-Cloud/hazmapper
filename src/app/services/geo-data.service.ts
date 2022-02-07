@@ -11,6 +11,7 @@ import {RemoteFile} from 'ng-tapis';
 import {PathTree} from '../models/path-tree';
 import {NotificationsService} from './notifications.service';
 import {EnvService} from '../services/env.service';
+import {defaultTileServers} from '../constants/tile-servers';
 
 @Injectable({
   providedIn: 'root'
@@ -222,6 +223,12 @@ export class GeoDataService {
           return `Unhandled event: ${event.type}`;
       }
     })).subscribe();
+  }
+
+  addDefaultTileServers(projectId: number): void {
+    defaultTileServers.forEach(ts => {
+      this.addTileServer(projectId, ts, true);
+    });
   }
 
   importFeatureAsset(projectId: number, featureId: number, payload: IFileImportRequest): void {

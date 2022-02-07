@@ -57,7 +57,7 @@ export class MainWelcomeComponent implements OnInit {
       this.projectsService.projects,
       this.agaveSystemsService.projects)
         .subscribe(([projects, dsProjects]) => {
-          this.projects = this.agaveSystemsService.getDSProjectInformation(projects, dsProjects);
+          this.projects = this.agaveSystemsService.getProjectMetadata(projects, dsProjects);
           this.spinner = false;
         });
   }
@@ -67,7 +67,7 @@ export class MainWelcomeComponent implements OnInit {
   }
 
   openCreateProjectModal() {
-    const modal: BsModalRef = this.bsModalService.show(ModalCreateProjectComponent);
+    const modal: BsModalRef = this.bsModalService.show(ModalCreateProjectComponent, {class: 'reveal-medium'});
     modal.content.onClose.subscribe( (project: Project) => {
       if (project) {
         this.routeToProject(project.uuid);

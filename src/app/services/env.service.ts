@@ -133,17 +133,7 @@ export class EnvService {
       }
     };
 
-    // this._googleClientSecret = '';
-    // this._googleClientId = '573001329633-1p0k8rko13s6n2p2cugp3timji3ip9f0.apps.googleusercontent.com';
-    // // this._mapillaryClientId = 'VDRaeGFzMEtzRnJrMFZwdVYzckd6cjo0ZWY3ZDEzZGIyMWJkZjNi';
-    // // this._mapillaryClientId = 'SHpCUGVyZ0R5eTdwZmhzajB1dzA4MDpkZWQxMjY4N2E1NDljMTFk';
-    // // this._mapillaryClientId = '4045602648858965';
-    // this._mapillaryClientId = 'MLY|4045602648858965|5b906cb2dfd6d0f7c5ed7cb7d50620d8';
-    // this._mapillaryClientIdAuth = '4045602648858965';
-    // this._mapillaryClientSecret = 'MLY|4045602648858965|a8572bcecde684bc4c77c006e145019b';
-    // this._mapillaryApiUrl = 'https://a.mapillary.com/v3';
-
-    if (/^localhost/.test(hostname)) {
+    if (/^localhost/.test(hostname) || /^hazmapper.local/.test(hostname) ) {
       this._env = EnvironmentType.Local;
       this._apiUrl = this.getApiUrl(environment.backend);
       this._portalUrl = this.getPortalUrl(environment.backend);
@@ -152,7 +142,10 @@ export class EnvService {
         this._jwt = environment.jwt;
       }
       this._baseHref = '/';
-      this._clientId = 'RMCJHgW9CwJ6mKjhLTDnUYBo9Hka';
+      // local devevelopers can use localhost or hazmapper.local but
+      // hazmapper.local is preferred as TAPIS supports it as a frame ancestor
+      // (i.e. it allows for point cloud iframe preview)
+      this._clientId = /^localhost/.test(hostname)  ? 'RMCJHgW9CwJ6mKjhLTDnUYBo9Hka' : 'Eb9NCCtWkZ83c01UbIAITFvhD9ka';
     } else if (/^hazmapper.tacc.utexas.edu/.test(hostname) && pathname.startsWith('/staging')) {
       this._env = EnvironmentType.Staging;
       this._apiUrl = this.getApiUrl(this.env);

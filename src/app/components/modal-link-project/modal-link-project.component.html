@@ -22,16 +22,19 @@
   <small><em>If a name is not given, file will be saved as the map uuid.</em></small>
 </div>
 
-<div *ngIf="activeProject.system_path" class="confirm-checkbox">
-  <label>
-    <span>Remove previously saved file</span>
-    <input type="checkbox"
-           [(ngModel)]="confirmRemove">
+<div class="observable-project">
+  <label> Sync Options:
+    <select [(ngModel)]="observeOption">
+      <option *ngFor="let option of observeOptions" [ngValue]="option.value">{{option.name}}</option>
+    </select>
   </label>
+</div>
+
+<div *ngIf="activeProject.system_path" class="confirm-checkbox">
   <small><em>Saving this map will remove the previous link.</em></small>
 </div>
 
 <div>
-  <button class="button warning" (click)="cancel()">Cancel</button>
-  <button class="button" [disabled]="!selectedFiles.length && !allowEmptyFiles || (activeProject.system_path && !confirmRemove)" (click)="close()">Save</button>
+  <button class="button warning" (click)="close()">Cancel</button>
+  <button class="button" (click)="submit()">Save</button>
 </div>

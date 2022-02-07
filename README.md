@@ -16,7 +16,11 @@ See https://github.com/TACC-Cloud/geoapi which is an associated restful API.
 
 ### Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Two ways to run a dev server:
+* `ng serve --host hazmapper.local`. Navigate to `http://hazmapper.local:4200/`.  (Note that `hazmapper.local` needs to be added to your `/etc/hosts`)
+* `ng serve`. Navigate to `http://localhost:4200/`.
+
+The app will automatically reload if you change any of the source files.
 
 ### Configuring geoapi backend
 

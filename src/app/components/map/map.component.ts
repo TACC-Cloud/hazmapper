@@ -297,8 +297,14 @@ export class MapComponent implements OnInit, OnDestroy {
         }
       });
 
-      collection.features.forEach( d => {
-        const feat = L.geoJSON(d, geojsonOptions);
+      collection.features.forEach(d => {
+        let feat: LayerGroup;
+        if (d.geometry.type === 'Polygon' && d.properties.style) {
+          feat = L.geoJSON(d, {style: d.properties.style});
+        } else {
+          feat = L.geoJSON(d, geojsonOptions);
+        }
+
         feat.on('click', (ev) => { this.featureClickHandler(ev); } );
 
         feat.setZIndex(1);
