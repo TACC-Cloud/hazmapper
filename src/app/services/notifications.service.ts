@@ -32,6 +32,7 @@ export class NotificationsService {
   }
 
   getRecent(): void {
+    this.authService.checkLoggedIn();
     const baseUrl = this.envService.apiUrl + '/notifications/';
     const now = new Date();
     const then = new Date(now.getTime() - this.TIMEOUT);
@@ -70,20 +71,15 @@ export class NotificationsService {
   }
 
   initProgressPoll() {
-    if (this.authService.isLoggedIn()) {
-      const timer = interval(this.TIMEOUT);
-      const timerSub = timer.subscribe((next) => {
-        this.getRecentProgress();
-      });
-      return timerSub;
-    } else {
-      this.authService.logout();
-      this.authService.redirectToAuthenticator();
-    }
-    return null;
+    const timer = interval(this.TIMEOUT);
+    const timerSub = timer.subscribe((next) => {
+      this.getRecentProgress();
+    });
+    return timerSub;
   }
 
   getRecentProgress(): void {
+    this.authService.checkLoggedIn();
     const baseUrl = this.envService.apiUrl + '/notifications/progress';
     this.http.get<Array<IProgressNotification>>(baseUrl)
       .subscribe((notes) => {

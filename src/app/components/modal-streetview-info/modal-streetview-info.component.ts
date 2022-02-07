@@ -18,11 +18,9 @@ export class ModalStreetviewInfoComponent implements OnInit {
               public bsModalRef: BsModalRef) { }
 
   ngOnInit() {
-    // TODO: Call to check if any of the sequences are complete
     this.streetviewAuthService.activeStreetview.subscribe(sv => {
       this.streetviewInstance = sv.instances.find(e => this.streetviewInstanceId === e.id);
     });
-
   }
 
   removeSequence(sequence: StreetviewSequence) {

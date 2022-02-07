@@ -5,6 +5,7 @@ import {StreetviewAuthenticationService} from 'src/app/services/streetview-authe
 import {NotificationsService} from 'src/app/services/notifications.service';
 import {ModalStreetviewUsernameComponent} from '../modal-streetview-username/modal-streetview-username.component';
 import {Streetview} from "../../models/streetview";
+import { ModalStreetviewOrganizationComponent } from '../modal-streetview-organization/modal-streetview-organization.component';
 
 @Component({
   selector: 'app-streetview-callback',
@@ -36,7 +37,6 @@ export class StreetviewCallbackComponent implements OnInit {
 
     this.streetviewAuthenticationService.setToken(service, params.code)
       .subscribe((resp: any) => {
-        console.log(resp);
         const token = {
           token: resp.access_token,
           expires_in: resp.expires_in
@@ -48,21 +48,19 @@ export class StreetviewCallbackComponent implements OnInit {
           token: token.token,
           service,
         }).subscribe((sv: Streetview) => {
-          this.streetviewAuthenticationService.activeStreetview = sv;
-          if (!sv.service_user) {
-            const modalRef = this.bsModalService.show(ModalStreetviewUsernameComponent, {class: 'tiny'});
-            modalRef.content.onClose.subscribe((resp: any) => {
-              if (resp.username && this.activeStreetview) {
-                this.streetviewAuthenticationService.updateStreetviewByService(
-                  service,
-                  {service_user: resp.username}
-                ).subscribe();
-                this.notificationsService.showSuccessToast('Successfully added username to Mapillary!');
-              } else {
-                this.notificationsService.showWarningToast('Must include username to Mapillary to work properly!');
-              }
-            });
-          }
+          const usernameModal = this.bsModalService.show(ModalStreetviewUsernameComponent, {class: 'tiny'});
+          usernameModal.content.onClose.subscribe((resp: any) => {
+            if (resp.username && this.activeStreetview) {
+              this.streetviewAuthenticationService.updateStreetviewByService(
+                service,
+                {service_user: resp.username}
+              );
+              this.notificationsService.showSuccessToast('Successfully added username to Mapillary!');
+              const organizationModal = this.bsModalService.show(ModalStreetviewOrganizationComponent);
+            } else {
+              this.notificationsService.showWarningToast('Must include username to Mapillary to work properly!');
+            }
+          });
         });
       });
 

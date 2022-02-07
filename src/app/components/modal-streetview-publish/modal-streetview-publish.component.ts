@@ -3,7 +3,7 @@ import { BsModalRef } from 'ngx-foundation/modal';
 import { RemoteFile} from 'ng-tapis/models/remote-file';
 import { Subject } from 'rxjs';
 import { StreetviewAuthenticationService } from '../../services/streetview-authentication.service';
-import { StreetviewService } from 'src/app/services/streetview.service';
+import { Streetview } from 'src/app/models/streetview';
 
 @Component({
   selector: 'app-modal-streetview-publish',
@@ -16,18 +16,16 @@ export class ModalStreetviewPublishComponent implements OnInit {
   selectedFiles: Array<RemoteFile> = [];
   selectedOrganization = '';
   public onClose: Subject<any> = new Subject<any>();
-  publishToMapillary = true;
-  publishToGoogle = false;
   publishErrorMessage = '';
-  organizations = [];
+  activeStreetview: Streetview;
 
   constructor(public bsModalRef: BsModalRef,
-              private streetviewService: StreetviewService,
               private streetviewAuthenticationService: StreetviewAuthenticationService) { }
 
   ngOnInit() {
-    this.streetviewAuthenticationService.organizations.subscribe(o => {
-      this.organizations = o;
+    this.streetviewAuthenticationService.activeStreetview.subscribe((sv: Streetview) => {
+      this.activeStreetview = sv;
+      this.selectedOrganization = sv.organizations[0].key;
     });
   }
 
@@ -42,9 +40,7 @@ export class ModalStreetviewPublishComponent implements OnInit {
   publish() {
     this.onClose.next({
       selectedPath: this.selectedFiles[0],
-      selectedOrganization: this.selectedOrganization,
-      publishToMapillary: this.publishToMapillary,
-      publishToGoogle: this.publishToGoogle,
+      selectedOrganization: this.selectedOrganization
     });
     this.bsModalRef.hide();
   }

@@ -5,7 +5,7 @@
 
   <div class="dock-panel-content">
     <div *ngIf="isLoggedIn('mapillary'); else notAuthenticated">
-      <div *ngIf="activeStreetview && activeStreetview.service_user && activeStreetview.organizations.length !== 0; else noUsername">
+      <div *ngIf="activeStreetview && activeStreetview.service_user && activeStreetview.organizations.length; else noUsername">
         <div class="publish-container grid-x align-right">
           <a class="publish-button" (click)="openStreetviewPublishModal()">
             <small>
@@ -43,16 +43,13 @@
       <div style="margin-top: 8rem; height:100%" class="not-authenticated grid-y align-start text-center">
         <h5 style="margin-bottom: 2rem">
           <b>You are not<br>
-            Authenticated to any<br>
-            mapping service!</b>
+            authenticated to<br>
+            Mapillary!</b>
         </h5>
         <div class="grid-y align-center">
           <button class="button auth-button" (click)="login('mapillary')">
             Login to Mapillary
           </button>
-          <!-- <button class="button auth-button" (click)="login('google')">
-            Login to Google Streetview
-            </button> -->
         </div>
       </div>
     </ng-template>

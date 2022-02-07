@@ -2,8 +2,8 @@
   <h4>Mapillary</h4>
   <div *ngIf="isLoggedIn('mapillary'); else authMapillary">
     <div class="auth-info">
-      <div *ngIf="activeStreetview && activeStreetview.service_user" style="display: flex; flex-direction: row; align-items: center; padding: 10px; background-color: #f0f0f0">
-        <div style="display: block; font-size: 20px; height 100%; width: 100%; text-align: center">
+      <div *ngIf="activeStreetview && activeStreetview.service_user" style="align-items: center; padding: 10px; background-color: #f0f0f0">
+        <div style="display: block; font-size: 20px; height 100%; width: 100%; text-align: center; text-overflow: ellipsis; overflow: hidden" [tooltip]="activeStreetview.service_user" >
           <a href="https://www.mapillary.com/dashboard/profile">
             {{activeStreetview.service_user}}
           </a>

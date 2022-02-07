@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IProgressNotification } from 'src/app/models/notification';
 import { NotificationsService } from '../../services/notifications.service';
 import { BsModalRef, BsModalService } from 'ngx-foundation';
-import { StreetviewService } from 'src/app/services/streetview.service';
 import { ModalStreetviewLogComponent } from '../modal-streetview-log/modal-streetview-log.component';
+import { StreetviewAuthenticationService } from 'src/app/services/streetview-authentication.service';
 
 @Component({
   selector: 'app-streetview-logs',
@@ -16,12 +16,15 @@ export class StreetviewLogsComponent implements OnInit, OnDestroy {
 
   constructor(private notificationsService: NotificationsService,
               private bsModalService: BsModalService,
-              private streetviewService: StreetviewService,
+              private streetviewAuthenticationService: StreetviewAuthenticationService,
              ) { }
 
   ngOnInit() {
     this.notificationsService.progressNotifications.subscribe((next: Array<IProgressNotification>) => {
       this.progressNotifications = next;
+      if(next.some(pn => pn.status === 'success')) {
+        this.streetviewAuthenticationService.getStreetviews();
+      }
     });
     this.notificationsService.getRecentProgress();
     this.timerSub = this.notificationsService.initProgressPoll();
@@ -38,9 +41,10 @@ export class StreetviewLogsComponent implements OnInit, OnDestroy {
     this.notificationsService.deleteProgress(pn);
   }
 
-  // deleteErrorLog(pn: IProgressNotification) {
-  //   this.streetviewService.deleteStreetviewSession(pn);
-  // }
+  // TODO: Handle this properly by removing session and anything created
+  deleteErrorLog(pn: IProgressNotification) {
+    this.notificationsService.deleteProgress(pn);
+  }
 
   ngOnDestroy() {
     if (this.timerSub) {

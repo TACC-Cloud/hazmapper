@@ -19,11 +19,6 @@ export class StreetviewAuthenticationService {
   private _streetviews: BehaviorSubject<Array<Streetview>> = new BehaviorSubject([]);
   public streetviews$: Observable<Array<Streetview>> = this._streetviews.asObservable();
 
-  private _activeOrganization: BehaviorSubject<StreetviewOrganization> = new BehaviorSubject(null);
-  public activeOrganization: Observable<StreetviewOrganization> = this._activeOrganization.asObservable();
-  private _organizations: BehaviorSubject<Array<StreetviewOrganization>> = new BehaviorSubject([]);
-  public organizations: Observable<Array<StreetviewOrganization>> = this._organizations.asObservable();
-
   private TOKEN_STORE = {
     google: 'googleToken',
     mapillary: 'mapillaryToken'
@@ -43,6 +38,11 @@ export class StreetviewAuthenticationService {
 
   public isLoggedIn(service: string): boolean {
     const userToken: AuthToken = this.getLocalToken(service);
+
+    if (!this._activeStreetview.getValue()) {
+      return false;
+    }
+
     return userToken && !userToken.isExpired();
   }
 
@@ -52,6 +52,7 @@ export class StreetviewAuthenticationService {
 
   public logout(service: string): void {
     localStorage.removeItem(this.TOKEN_STORE[service]);
+    this.deleteStreetviewByService(service);
   }
 
   public sequenceInStreetview(sequenceId: string): boolean {
@@ -62,61 +63,45 @@ export class StreetviewAuthenticationService {
         }));
   }
 
-  public getStreetviews(): Observable<Streetview[]> {
-    return this.http.get<Array<Streetview>>(this.envService.apiUrl + `/streetview/`)
-    .pipe(
+  public getStreetviews(): Observable<Array<Streetview>> {
+    return this.http.get<Array<Streetview>>(this.envService.apiUrl + `/streetview/`).pipe(
       tap((streetviews: Array<Streetview>) => {
         this._streetviews.next(streetviews);
+        // NOTE: With just mapillary, assume single active streetview
         this._activeStreetview.next(streetviews[0]);
-        if (streetviews[0]) {
-          this._organizations.next(streetviews[0].organizations);
-          this._activeOrganization.next(streetviews[0].organizations[0]);
-        }
-        console.log(streetviews);
       }));
   }
 
   public createStreetview(data: StreetviewRequest) {
     return this.http.post<any>(this.envService.apiUrl + '/streetview/', data).pipe(
-      tap((streetview: Streetview) => {
-        this._activeStreetview.next(streetview);
+      tap(() => {
+        this.getStreetviews().subscribe();
       }));
   }
 
   public updateStreetview(streetviewId: number, data: StreetviewRequest) {
-    return this.http.put<any>(this.envService.apiUrl + `/streetview/${streetviewId}/`, data).pipe(
-      tap((streetview: Streetview) => {
-        this._activeStreetview.next(streetview);
-      }));
+    return this.http.put<any>(this.envService.apiUrl + `/streetview/${streetviewId}/`, data).subscribe(() => {
+      this.getStreetviews().subscribe();
+    });
   }
 
   public deleteStreetview(streetviewId: number) {
-    return this.http.delete<any>(this.envService.apiUrl + `/streetview/${streetviewId}/`).pipe(
-      tap(() => {
-        this._streetviews.next(this._streetviews.value.filter(sv => {
-          return sv.id !== streetviewId;
-        }));
-
-        if (this._streetviews.value.length > 0) {
-          this._activeStreetview.next(this._streetviews.value[0]);
-        } else {
-          this._activeStreetview.next(null);
-        }
-      }));
+    return this.http.delete<any>(this.envService.apiUrl + `/streetview/${streetviewId}/`).subscribe(() => {
+      this.getStreetviews().subscribe();
+    });
   }
 
   public updateStreetviewByService(service: string, data: StreetviewRequest) {
-    return this.http.put<any>(this.envService.apiUrl + `/streetview/${service}/`, data).pipe(
-      tap((streetview: Streetview) => {
-        this._activeStreetview.next(streetview);
-      }));
+    this.http.put<any>(this.envService.apiUrl + `/streetview/${service}/`, data).subscribe(
+      () => {
+        this.getStreetviews().subscribe();
+      });
   }
 
   public deleteStreetviewByService(service: string) {
-    return this.http.delete<any>(this.envService.apiUrl + `/streetview/${service}/`).pipe(
-      tap(() => {
-        this._activeStreetview.next(null);
-      }));
+    return this.http.delete<any>(this.envService.apiUrl + `/streetview/${service}/`).subscribe(() => {
+      this.getStreetviews().subscribe();
+    });
   }
 
   // TODO: Test if working
@@ -141,8 +126,6 @@ export class StreetviewAuthenticationService {
 
         this.updateStreetviewByService(service, {
           token: token.token,
-        }).subscribe((sv: Streetview) => {
-          this._activeStreetview.next(sv);
         });
       }, error => {
           this.logout('mapillary');

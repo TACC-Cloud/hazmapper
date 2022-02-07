@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Streetview} from '../../models/streetview';
+import {Streetview, StreetviewOrganization} from '../../models/streetview';
 import {StreetviewService} from '../../services/streetview.service';
 import {StreetviewAuthenticationService} from '../../services/streetview-authentication.service';
 
@@ -10,7 +10,6 @@ import {StreetviewAuthenticationService} from '../../services/streetview-authent
 })
 export class StreetviewFiltersComponent implements OnInit {
   public activeStreetview: Streetview;
-  public activeMapillaryOrganizations = [];
   public organizations = [];
 
   constructor(private streetviewAuthenticationService: StreetviewAuthenticationService,
@@ -32,6 +31,10 @@ export class StreetviewFiltersComponent implements OnInit {
     } else {
       this.streetviewService.activeMapillaryOrganizations = [...this.organizations, id];
     }
+  }
+
+  isActive(so: StreetviewOrganization) {
+    return this.organizations.includes(so.key);
   }
 }
 

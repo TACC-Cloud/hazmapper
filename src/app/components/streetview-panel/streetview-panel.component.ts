@@ -22,7 +22,6 @@ export class StreetviewPanelComponent implements OnInit {
 
   private publishingStreetview = false;
   private progressNotifications: Array<IProgressNotification> = [];
-  private streetviews: Streetview[];
   private activeStreetview: Streetview;
   private hasService = false;
   private displayStreetview = false;
@@ -36,20 +35,10 @@ export class StreetviewPanelComponent implements OnInit {
              ) { }
 
   ngOnInit() {
-    // TODO: Get this working? This should just work through interceptors
-    // if (this.streetviewAuthenticationService.isLoggedIn('mapillary')) {
-    //   this.streetviewAuthenticationService.setRemoteToken('mapillary');
-    // }
-
-    this.streetviewAuthenticationService.getStreetviews().subscribe(resp => {
-      this.streetviews = resp;
-    });
-
     this.streetviewService.displayStreetview.subscribe(display => {
       this.displayStreetview = display;
     });
 
-    // this.streetviewService.getMapillaryTiles();
     this.streetviewAuthenticationService.activeStreetview.subscribe((sv: Streetview) => {
       this.activeStreetview = sv;
     });
@@ -75,7 +64,7 @@ export class StreetviewPanelComponent implements OnInit {
       this.streetviewAuthenticationService.updateStreetviewByService(
         service, 
         {service_user: data.username}
-      ).subscribe();
+      );
     });
   }
 

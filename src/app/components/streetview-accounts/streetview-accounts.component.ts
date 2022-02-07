@@ -37,7 +37,7 @@ export class StreetviewAccountsComponent implements OnInit {
     modal.content.onClose.subscribe((data: any) => {
       this.streetviewAuthenticationService.updateStreetviewByService(service,
         {service_user: data.username}
-      ).subscribe();
+      );
     });
   }
 

@@ -20,17 +20,20 @@ import {tap} from 'rxjs/operators';
 export class StreetviewService {
   private _activeAsset: BehaviorSubject<any> = new BehaviorSubject(null);
   public activeAsset$: Observable<any> = this._activeAsset.asObservable();
+
   private _streetviewDisplaySequences: BehaviorSubject<FeatureCollection> = new BehaviorSubject({type: 'FeatureCollection', features: []});
   public streetviewDisplaySequences: Observable<FeatureCollection> = this._streetviewDisplaySequences.asObservable();
+
   private _mapillaryLines: BehaviorSubject<Feature> = new BehaviorSubject<Feature>(null);
   public mapillaryLines: Observable<Feature> = this._mapillaryLines.asObservable();
+
   private _mapillarySequences: BehaviorSubject<Array<Feature>> = new BehaviorSubject([]);
   public mapillarySequences: Observable<Array<Feature>> = this._mapillarySequences.asObservable();
-  private _googleSequences: BehaviorSubject<any> = new BehaviorSubject([]);
-  public googleSequences: Observable<any> = this._googleSequences.asObservable();
+
   private _mapillaryImages: BehaviorSubject<FeatureCollection> = new BehaviorSubject<FeatureCollection>({type: 'FeatureCollection',
                                                                                                          features: []});
   public mapillaryImages: Observable<FeatureCollection> = this._mapillaryImages.asObservable();
+
   private _nextPage: BehaviorSubject<string> = new BehaviorSubject('');
   public nextPage: Observable<string> = this._nextPage.asObservable();
 
@@ -53,23 +56,30 @@ export class StreetviewService {
   }
 
 
-  public addOrganization(streetviewId: number, name: string, key: string): void {
-    const payload = {
-      streetview_id: streetviewId,
-      name,
-      key
-    };
+  public addOrganization(streetviewId: number, key: string): void {
+    this.getMapillaryOrganizationData(key, ['name', 'slug']).subscribe((org: any) => {
+      const payload = {
+        streetview_id: streetviewId,
+        name: org.name,
+        slug: org.slug,
+        key
+      };
 
-    this.http.post(this.envService.apiUrl + `/streetview/${streetviewId}/organization/`, payload)
-      .subscribe((e) => {
-        console.log(e);
-        this.streetviewAuthentication.getStreetviews().subscribe();
-        ;
-        return;
-      }, error => {
-        console.error(error);
-        this.notificationsService.showErrorToast('Failed to get streetviews from Geoapi!');
+      this.http.post(this.envService.apiUrl + `/streetview/${streetviewId}/organization/`, payload)
+        .subscribe((e) => {
+          this.streetviewAuthentication.getStreetviews().subscribe();
+        }, error => {
+          console.error(error);
+          this.notificationsService.showErrorToast('Failed to get streetviews from Geoapi!');
         });
+    });
+  }
+
+  public getMapillaryOrganizationData(organizationKey: string, fields: string[]) {
+    const params = new HttpParams()
+      .set('fields', fields.join(', '));
+    return this.http.get<any>
+      (this.envService.streetviewEnv.mapillary.apiUrl + organizationKey, { params });
   }
 
   public getMapillaryImageData(imageId: string, fields: string[]) {
@@ -86,23 +96,8 @@ export class StreetviewService {
       (this.envService.streetviewEnv.mapillary.apiUrl + 'image_ids', { params });
   }
 
-  public updateOrganization(organizationId: number, name: string, key: string): void {
-    const payload = {
-      name,
-      key
-    };
-
-    this.http.put(this.envService.apiUrl + `/streetview/organization/${organizationId}`, payload)
-      .subscribe(() => {
-        return;
-      }, error => {
-        console.error(error);
-        this.notificationsService.showErrorToast('Failed to get streetviews from Geoapi!');
-        });
-  }
-
-  public removeOrganization(organizationId: number): void {
-    this.http.delete(this.envService.apiUrl + `/streetview/organization/${organizationId}/`)
+  public removeOrganization(organizationKey: number): void {
+    this.http.delete(this.envService.apiUrl + `/streetview/organization/${organizationKey}/`)
       .subscribe(() => {
         this.streetviewAuthentication.getStreetviews().subscribe();
         return;

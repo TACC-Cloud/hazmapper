@@ -1,17 +1,6 @@
 <h4>Streetview Organizations</h4>
-<h6 (click)="toggleShowInput()">Add Organization
-  <span *ngIf="showInput; else hideInput">
-    <i class="fas fa-arrow-down"></i>
-  </span>
-  <ng-template #hideInput>
-    <i class="fas fa-arrow-right"></i>
-  </ng-template>
-</h6>
-<div *ngIf="showInput">
-  <label> Username:
-    <input type="text" [(ngModel)]="name">
-  </label>
-  <label> Key:
+<div>
+  <label> Organization Key:
     <input type="text" [(ngModel)]="key">
   </label>
   <div>
@@ -25,15 +14,15 @@
 
 <h6>Organization List:</h6>
 <div style="margin: 25px">
-  <div *ngIf="organizations.length; else noOrganizations">
-    <div *ngFor="let o of organizations">
+  <div *ngIf="activeStreetview.organizations.length; else noOrganizations">
+    <div *ngFor="let o of activeStreetview.organizations">
       <div style="display: flex; flex-direction: row; justify-content: space-between">
         <div style="margin-left: 20px; width: 100px; padding-bottom: 5px;">
           {{o.name}}
         </div>
         <div class="grid-x align-spaced" style="cursor: pointer; margin-right: 30px">
           <div [tooltip]="'Open in Mapillary'" style="padding: 0px 5px 0px 5px;">
-            <a [href]="'https://www.mapillary.com/dashboard/org/' + o.name + '/profile'" style="color: #0A0A0A">
+            <a [href]="'https://www.mapillary.com/dashboard/org/' + o.slug + '/profile'" style="color: #0A0A0A">
               <i class="fas fa-external-link-alt"></i>
             </a>
           </div>

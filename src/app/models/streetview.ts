@@ -38,6 +38,7 @@ export interface StreetviewOrganization {
   id?: number;
   streetview_id?: number;
   name?: string;
+  slug?: string;
   key?: string;
 }
 

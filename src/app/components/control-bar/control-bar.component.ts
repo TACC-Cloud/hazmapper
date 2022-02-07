@@ -10,6 +10,9 @@ import {MAIN} from '../../constants/routes';
 import {Router} from '@angular/router';
 import {AuthService} from '../../services/authentication.service';
 import { AgaveSystemsService } from 'src/app/services/agave-systems.service';
+import { StreetviewAuthenticationService } from 'src/app/services/streetview-authentication.service';
+import { StreetviewService } from 'src/app/services/streetview.service';
+import { Streetview } from 'src/app/models/streetview';
 
 @Component({
   selector: 'app-control-bar',
@@ -31,6 +34,8 @@ export class ControlBarComponent implements OnInit, OnDestroy {
               private projectsService: ProjectsService,
               private geoDataService: GeoDataService,
               private notificationsService: NotificationsService,
+              private streetviewAuthenticationService: StreetviewAuthenticationService,
+              private streetviewService: StreetviewService,
               private authService: AuthService,
               private agaveSystemsService: AgaveSystemsService
               ) { }
@@ -57,6 +62,13 @@ export class ControlBarComponent implements OnInit, OnDestroy {
         .subscribe(([activeProject, dsProjects]) => {
           if (activeProject) {
             this.geoDataService.getDataForProject(activeProject.id, this.isPublicView);
+            this.streetviewAuthenticationService.getStreetviews().subscribe();
+            this.streetviewAuthenticationService.activeStreetview.subscribe((asv: Streetview) => {
+              if (asv) {
+                this.streetviewService.activeMapillaryOrganizations = asv.organizations.map(o => o.key);
+              }
+            });
+
             this.activeProject = this.agaveSystemsService.getDSProjectInformation([activeProject], dsProjects)[0];
           } else {
             this.geoDataService.clearData();

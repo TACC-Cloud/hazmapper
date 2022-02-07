@@ -108,4 +108,10 @@ export class AuthService {
     }
   }
 
+  checkLoggedIn(): void {
+    if (!this.isLoggedIn()) {
+      this.logout();
+      this.redirectToAuthenticator();
+    }
+  }
 }
