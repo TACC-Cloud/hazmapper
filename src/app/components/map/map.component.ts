@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import * as L from 'leaflet';
+import * as esri from 'esri-leaflet';
 import 'types.leaflet.heat';
 import 'leaflet.markercluster';
 
@@ -125,6 +126,10 @@ export class MapComponent implements OnInit, OnDestroy {
       return L.tileLayer(ts.url, layerOptions);
     } else if (ts.type === 'wms') {
       return L.tileLayer.wms(ts.url, layerOptions);
+    } else if (ts.type === 'arcgis') {
+      return esri.tiledMapLayer({
+        url: ts.url
+      });
     }
   }
 
