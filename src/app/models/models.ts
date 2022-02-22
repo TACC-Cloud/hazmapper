@@ -37,7 +37,7 @@ export class AssetFilters {
   bbox: Array<number> = [];
   assetType = '';
 
-  constructor(assetType: string) {
+  constructor(assetType?: string) {
     this.assetType = assetType;
   }
 
