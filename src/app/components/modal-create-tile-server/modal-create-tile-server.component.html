@@ -32,6 +32,7 @@
       <select formControlName="type" required="true">
         <option value="tms">TMS</option>
         <option value="wms">WMS</option>
+        <option value="arcgis">ArcGIS</option>
       </select>
     </label>
     <label> Name:
@@ -48,7 +49,7 @@
              required="true">
     </label>
 
-    <div class="grid-x grid-margin-x">
+    <div *ngIf="tsCreateForm.get('type').value == 'tms' || tsCreateForm.get('type').value == 'wms'" class="grid-x grid-margin-x">
       <div class="small-6 cell">
         <label> Attribution:
           <input type="text"
