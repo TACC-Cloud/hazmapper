@@ -1,5 +1,18 @@
 # Changelog
 
+## [Unreleased]
+
+## [2.5] - 2022-03-07
+
+### Added
+
+- DES-2165: Add spinner to welcome list item on deletion in progress. (#74)
+- DES-2183: Add arcgis tile support to hazmapper. (#78)
+
+### Fixed
+- Fix systemId rendering bug. (#76)
+- DES-2167: Associated project is not shown with map (#75)
+
 ## [2.4] - 2022-01-21
 
 ### Added
@@ -55,7 +68,8 @@
 
 
 
-[unreleased]: https://github.com/TACC-Cloud/hazmapper/compare/v2.3...HEAD
+[unreleased]: https://github.com/TACC-Cloud/hazmapper/compare/v2.5...HEAD
+[2.5]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.5
 [2.4]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.4
 [2.3]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.3
 [2.2]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.2
