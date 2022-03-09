@@ -179,11 +179,12 @@ export class MapComponent implements OnInit, OnDestroy {
 
         feat.on('click', (ev) => { this.featureClickHandler(ev); } );
 
-        feat.setZIndex(1);
 
         if (d.geometry.type === 'Point') {
+          feat.setZIndex(2);
           markers.addLayer(feat);
         } else {
+          feat.setZIndex(1);
           this.nonPointFeatures.push(feat);
           this.features.addLayer(feat);
         }
