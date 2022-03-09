@@ -15,6 +15,7 @@ import {filter, map} from 'rxjs/operators';
 import {Subscription} from 'rxjs';
 import {Overlay, Project, TileServer} from '../../models/models';
 import {EnvService} from '../../services/env.service';
+import 'leaflet-contextmenu';
 
 @Component({
   selector: 'app-map',
@@ -25,7 +26,9 @@ export class MapComponent implements OnInit, OnDestroy {
   map: L.Map;
   activeFeature: Feature;
   _activeProjectId: number;
+  nonPointFeatures: LayerGroup[] = [];
   features: FeatureGroup = new FeatureGroup();
+  featuresList: any;
   overlays: LayerGroup = new LayerGroup<any>();
   tileServerLayers: Map<number, TileLayer> = new Map<number, TileLayer>();
   fitToFeatureExtent = true;
@@ -44,7 +47,9 @@ export class MapComponent implements OnInit, OnDestroy {
     this.map = new L.Map('map', {
       center: [40, -80],
       zoom: 3,
-      maxZoom: 19
+      maxZoom: 19,
+    	contextmenu: true,
+      contextmenuWidth: 140,
     });
 
     this.subscription.add(this.geoDataService.tileServers.subscribe((next: Array<TileServer>) => {
@@ -100,6 +105,37 @@ export class MapComponent implements OnInit, OnDestroy {
       this.activeFeature = next;
       const bbox = turf.bbox(<AllGeoJSON> next);
       this.map.fitBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]]);
+
+      if (next.geometry.type === 'Point')  {
+        this.geoDataService.features = {
+          ...this.featuresList,
+          features: this.featuresList.features.map((f: Feature) => {
+            if (f.id === next.id) {
+              f.properties.style = {};
+              f.properties.style.color = "#ff0000";
+              return f;
+            } else {
+              f.properties.style = null;
+              return f;
+            }
+          })
+        };
+      } else if (next.geometry.type === 'Polygon') {
+        this.geoDataService.features = {
+          ...this.featuresList,
+          features: this.featuresList.features.map((f: Feature) => {
+            if (f.id === next.id) {
+              f.properties.style = {};
+              f.properties.style.color = "#ff0000";
+              f.properties.style.fillOpacity = 0.5;
+              return f;
+            } else {
+              f.properties.style = null;
+              return f;
+            }
+          })
+        };
+      }
     }));
   }
 
@@ -144,13 +180,16 @@ export class MapComponent implements OnInit, OnDestroy {
     };
 
     const subscription = this.geoDataService.features.subscribe((collection) => {
+      this.featuresList = collection;
       this.features.clearLayers();
       this.overlays.clearLayers();
+      this.nonPointFeatures = [];
       const markers = L.markerClusterGroup({
         iconCreateFunction: (cluster) => {
           return L.divIcon({html: `<div><b>${cluster.getChildCount()}</b></div>`, className: 'marker-cluster'});
         }
       });
+
 
       collection.features.forEach(d => {
         let feat: LayerGroup;
@@ -167,6 +206,7 @@ export class MapComponent implements OnInit, OnDestroy {
         if (d.geometry.type === 'Point') {
           markers.addLayer(feat);
         } else {
+          this.nonPointFeatures.push(feat);
           this.features.addLayer(feat);
         }
       });
@@ -197,7 +237,36 @@ export class MapComponent implements OnInit, OnDestroy {
    * @param ev
    */
   featureClickHandler(ev: any): void {
-    const f = ev.layer.feature;
-    this.geoDataService.activeFeature = f;
+    if (ev.layer.feature.featureType() === 'point_cloud') {
+      const overlapFeatures = [];
+      this.map.contextmenu.removeAllItems();
+
+      this.nonPointFeatures.forEach((of: LayerGroup) => {
+        const ofLayer: any = of.getLayers()[0];
+        const ofBounds: L.LatLngBounds = ofLayer.getBounds();
+        const layerExists = ofBounds.contains(ev.latlng);
+        if (layerExists) {
+          overlapFeatures.push(ofLayer.feature);
+          this.map.contextmenu.addItem({
+            text: ofLayer.feature.id,
+            callback: (ev) => {
+              const f = ofLayer.feature;
+              this.geoDataService.activeFeature = f;
+            }
+          });
+        }
+      });
+
+      if (overlapFeatures.length > 1) {
+        this.map.contextmenu.showAt(ev.latlng);
+      } else {
+        const f = ev.layer.feature;
+        this.geoDataService.activeFeature = f;
+      }
+
+    } else {
+      const f = ev.layer.feature;
+      this.geoDataService.activeFeature = f;
+    }
   }
 }

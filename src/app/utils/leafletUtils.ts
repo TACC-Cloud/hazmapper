@@ -37,6 +37,24 @@ function createVideoMarker(feature: Feature, latlng: LatLng): Marker {
   return marker(latlng, {icon: ico});
 }
 
+function createCustomImageMarker(latlng: LatLng, style: MarkerStyle): Marker {
+  const divHtml = `<i style="color: ${style.color}" class="fas fa-camera-retro fa-2x"></i>`;
+  const ico = divIcon({className: 'leaflet-fa-marker-icon', html: divHtml});
+  return marker(latlng, {icon: ico});
+}
+
+function createCustomCollectionMarker(latlng: LatLng, style: MarkerStyle): Marker {
+  const divHtml = `<i style="color: ${style.color}" class="fa fa-folder-open fa-2x"></i>`;
+  const ico = divIcon({className: 'icon-marker', html: divHtml});
+  return marker(latlng, {icon: ico});
+}
+
+function createCustomVideoMarker(latlng: LatLng, style: MarkerStyle): Marker {
+  const divHtml = `<i style="color: ${style.color}" class="fas fa-video fa-2x"></i>`;
+  const ico = divIcon({className: 'leaflet-fa-marker-icon', html: divHtml});
+  return marker(latlng, {icon: ico});
+}
+
 function createCustomIconMarker(latlng: LatLng, style: MarkerStyle): Marker {
   const icon = style.faIcon;
   const color = style.color;
@@ -55,7 +73,15 @@ export function createMarker(feature: Feature, latlng: LatLng): Marker | CircleM
     if (style.faIcon) {
       return createCustomIconMarker(latlng, style);
     } else {
-      return createCustomCircleMarker(latlng, style);
+      if (feature.featureType() === 'image') {
+        return createCustomImageMarker(latlng, style);
+      } else if (feature.featureType() === 'collection') {
+        return createCustomCollectionMarker(latlng, style);
+      } else if (feature.featureType() === 'video') {
+        return createCustomVideoMarker(latlng, style);
+      } else {
+        return createCustomCircleMarker(latlng, style);
+      }
     }
   } else {
     if (feature.featureType() === 'image') {

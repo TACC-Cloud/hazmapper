@@ -479,8 +479,12 @@ export class GeoDataService {
     return this.tileServers$;
   }
 
-  public get features(): Observable<FeatureCollection> {
+  public get features(): any {
     return this.features$;
+  }
+
+  public set features(fc: any) {
+    this._features.next(fc);
   }
 
   public get activeFeature() {
