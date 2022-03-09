@@ -30,6 +30,7 @@ export class MapComponent implements OnInit, OnDestroy {
   nonPointFeatures: LayerGroup[] = [];
   features: FeatureGroup = new FeatureGroup();
   featuresList: any;
+  enableAssetLabel: boolean = false;
   overlays: LayerGroup = new LayerGroup<any>();
   tileServerLayers: Map<number, TileLayer> = new Map<number, TileLayer>();
   fitToFeatureExtent = true;
@@ -85,6 +86,11 @@ export class MapComponent implements OnInit, OnDestroy {
     // Subscribe to active project and features
     this.subscription.add(this.loadFeatures());
 
+    this.subscription.add(this.geoDataService.enableAssetLabel.subscribe((enable: boolean) => {
+      this.enableAssetLabel = enable;
+      this.geoDataService.features = {...this.featuresList};
+    }));
+
     // Publish the mouse location on the mapMouseLocation stream
     this.map.on('mousemove', (ev: LeafletMouseEvent) => this.mouseEventHandler(ev));
 
@@ -110,7 +116,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.geoDataService.features = {
         ...this.featuresList,
         features: this.featuresList.features.map((f: Feature) => {
-          f.properties.style = f.id === next.id ? assetStyles.active : null;
+          f.properties.style = f.id === next.id ? assetStyles.active : assetStyles.inactive;
           return f
         })
       };
@@ -171,14 +177,20 @@ export class MapComponent implements OnInit, OnDestroy {
 
       collection.features.forEach(d => {
         let feat: LayerGroup;
-        if (d.geometry.type === 'Polygon' && d.properties.style) {
+
+        d.properties.style = d.properties.style ? d.properties.style : assetStyles.inactive;
+        if (d.geometry.type === 'Polygon') {
           feat = L.geoJSON(d, {style: d.properties.style});
         } else {
           feat = L.geoJSON(d, geojsonOptions);
         }
 
-        feat.on('click', (ev) => { this.featureClickHandler(ev); } );
 
+        feat.on('click', (ev) => { this.featureClickHandler(ev); } );
+        
+        if (this.enableAssetLabel) {
+          feat.bindTooltip(d.assets[0].display_path || d.id.toString(), { permanent: true, direction:"center" })
+        }
 
         if (d.geometry.type === 'Point') {
           feat.setZIndex(2);

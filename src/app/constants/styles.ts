@@ -1,8 +1,10 @@
 export const assetStyles = {
     inactive: {
-        color: "#0f83bd" // Light Blue
+        color: "#0f83bd", // Light Blue
+        fillOpacity: "0.1"
     },
     active: {
-        color: "#ff0000" // Red
+        color: "#ff0000", // Red
+        fillOpacity: "0.1"
     }
 }; 
