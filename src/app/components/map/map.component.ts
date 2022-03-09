@@ -220,7 +220,7 @@ export class MapComponent implements OnInit, OnDestroy {
       const overlapFeatures = [];
       this.map.contextmenu.removeAllItems();
 
-      this.nonPointFeatures.forEach((of: LayerGroup) => {
+      this.nonPointFeatures.reverse().forEach((of: LayerGroup) => {
         const ofLayer: any = of.getLayers()[0];
         const ofBounds: L.LatLngBounds = ofLayer.getBounds();
         const layerExists = ofBounds.contains(ev.latlng);
