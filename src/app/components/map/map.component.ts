@@ -16,6 +16,7 @@ import {Subscription} from 'rxjs';
 import {Overlay, Project, TileServer} from '../../models/models';
 import {EnvService} from '../../services/env.service';
 import 'leaflet-contextmenu';
+import { assetStyles } from 'src/app/constants/styles';
 
 @Component({
   selector: 'app-map',
@@ -106,36 +107,13 @@ export class MapComponent implements OnInit, OnDestroy {
       const bbox = turf.bbox(<AllGeoJSON> next);
       this.map.fitBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]]);
 
-      if (next.geometry.type === 'Point')  {
-        this.geoDataService.features = {
-          ...this.featuresList,
-          features: this.featuresList.features.map((f: Feature) => {
-            if (f.id === next.id) {
-              f.properties.style = {};
-              f.properties.style.color = "#ff0000";
-              return f;
-            } else {
-              f.properties.style = null;
-              return f;
-            }
-          })
-        };
-      } else if (next.geometry.type === 'Polygon') {
-        this.geoDataService.features = {
-          ...this.featuresList,
-          features: this.featuresList.features.map((f: Feature) => {
-            if (f.id === next.id) {
-              f.properties.style = {};
-              f.properties.style.color = "#ff0000";
-              f.properties.style.fillOpacity = 0.5;
-              return f;
-            } else {
-              f.properties.style = null;
-              return f;
-            }
-          })
-        };
-      }
+      this.geoDataService.features = {
+        ...this.featuresList,
+        features: this.featuresList.features.map((f: Feature) => {
+          f.properties.style = f.id === next.id ? assetStyles.active : null;
+          return f
+        })
+      };
     }));
   }
 
