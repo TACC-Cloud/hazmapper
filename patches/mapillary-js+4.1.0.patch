@@ -1,0 +1,14 @@
+diff --git a/node_modules/mapillary-js/dist/mapillary.module.js b/node_modules/mapillary-js/dist/mapillary.module.js
+index 2f636bb..d46fe90 100644
+--- a/node_modules/mapillary-js/dist/mapillary.module.js
++++ b/node_modules/mapillary-js/dist/mapillary.module.js
+@@ -6056,7 +6056,8 @@ class Quaternion {
+ 			sqrt1u1 * Math.cos( u2 ),
+ 			sqrtu1 * Math.sin( u3 ),
+ 			sqrtu1 * Math.cos( u3 ),
+-			sqrt1u1 * Math.sin( u2 ),
++			sqrt1u1 * Math.sin( u2 )
++
+ 		);
+ 
+ 	}

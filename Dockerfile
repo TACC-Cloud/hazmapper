@@ -1,5 +1,4 @@
-
-FROM node:12.22.9-alpine3.15 as node
+FROM node:14.19.1-alpine3.15 as node
 
 RUN mkdir /www
 COPY package.json /www
