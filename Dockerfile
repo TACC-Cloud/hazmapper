@@ -2,12 +2,14 @@ FROM node:14.19.1-alpine3.15 as node
 
 RUN mkdir /www
 COPY package.json /www
+COPY patches/ /www
 WORKDIR /www
 RUN npm install -g @angular/cli@8.0.3
 RUN npm install
 WORKDIR /
 COPY . /www
 WORKDIR /www
+RUN npx patch-package
 RUN ng build --prod
 RUN ls
 
