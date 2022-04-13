@@ -43,17 +43,16 @@ export class StreetviewAssetDetailComponent implements OnInit {
           this.assetType = 'Sequence';
           this.imageId = this.activeStreetviewAsset.image_id;
           this.sequenceId = this.activeStreetviewAsset.id;
-          this.siteUrl = 'https://www.mapillary.com/map/s/' + this.sequenceId;
         } else {
           this.assetType = 'Image';
           this.imageId = this.activeStreetviewAsset.id;
           this.sequenceId = this.activeStreetviewAsset.sequence_id;
-          this.siteUrl = 'https://www.mapillary.com/map/im/' + this.imageId;
         }
+        this.siteUrl = 'https://www.mapillary.com/app/?pKey=' + this.imageId;
 
-        this.showLinkModal = this.activeStreetview ?
-          !this.streetviewAuthenticationService.sequenceInStreetview(this.sequenceId) :
-          false;
+        this.showLinkModal = this.activeStreetview && !next.feature
+          ? !this.streetviewAuthenticationService.sequenceInStreetview(this.sequenceId)
+          : false;
 
         this.imageLoading = true;
 
@@ -85,5 +84,4 @@ export class StreetviewAssetDetailComponent implements OnInit {
     this.sendEvent('close');
     this.streetviewService.activeAsset = null;
   }
-
 }

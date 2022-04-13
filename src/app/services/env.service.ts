@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
-import {environment} from '../../environments/environment';
-import {EnvironmentType} from '../../environments/environmentType';
+import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
+import { EnvironmentType } from '../../environments/environmentType';
 
 @Injectable({ providedIn: 'root' })
 export class EnvService {
@@ -8,13 +8,6 @@ export class EnvService {
   private _apiUrl: string;
   private _portalUrl: string;
   private _jwt?: string;
-  // private _googleClientId?: string;
-  // TODO Move to somewhere else...
-  // private _googleClientSecret?: string;
-  // private _mapillaryClientId?: string;
-  // private _mapillaryClientIdAuth?: string;
-  // private _mapillaryClientSecret?: string;
-  // private _mapillaryApiUrl?: string;
   private _clientId: string;
   private _baseHref: string;
   private _streetviewEnv: any;
@@ -78,7 +71,7 @@ export class EnvService {
   constructor() {}
 
   init(): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       this.setEnvVariables();
       resolve();
     });
@@ -90,27 +83,23 @@ export class EnvService {
 
     this._streetviewEnv = {
       google: {
-        clientSecret: '',
-        clientId: '573001329633-1p0k8rko13s6n2p2cugp3timji3ip9f0.apps.googleusercontent.com',
-        // tslint:disable-next-line:max-line-length
-        scope: 'https://www.googleapis.com/auth/streetviewpublish+https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile',
         authUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
-        tokenUrl: 'https://oauth2.googleapis.com/token'
+        tokenUrl: 'https://oauth2.googleapis.com/token',
+        scope:
+          'https://www.googleapis.com/auth/streetviewpublish+https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile',
       },
       mapillary: {
-        clientSecret: 'MLY|4045602648858965|a8572bcecde684bc4c77c006e145019b',
-        clientId: '4045602648858965',
-        clientAuth: 'MLY|4045602648858965|5b906cb2dfd6d0f7c5ed7cb7d50620d8',
-        mapToken: 'MLYARDcnHyGduYMTxCn5gVuhZCFPHQAFhZBUX1JGw25udGnTa6YunU3UYUZBsmiIykVApTBwxHguCyTZAdGvHavJ6O7mr3uPA3ZC3ZCOwkTg2HiVR8AoR5Om2Dhw2vAOawgZDZD',
-        tileUrl: 'https://tiles.mapillary.com/',
-        apiUrl: 'https://graph.mapillary.com/',
-        tokenUrl: 'https://graph.mapillary.com/token',
         authUrl: 'https://www.mapillary.com/connect',
-        scope: 'user:email+user:read+user:write+public:write+public:upload+private:read+private:write+private:upload'
-      }
+        tokenUrl: 'https://graph.mapillary.com/token',
+        apiUrl: 'https://graph.mapillary.com/',
+        tileUrl: 'https://tiles.mapillary.com/',
+        scope:
+          'user:email+user:read+user:write+public:write+public:upload+private:read+private:write+private:upload',
+      },
+      secrets: {},
     };
 
-    if (/^localhost/.test(hostname) || /^hazmapper.local/.test(hostname) ) {
+    if (/^localhost/.test(hostname) || /^hazmapper.local/.test(hostname)) {
       this._env = EnvironmentType.Local;
       this._apiUrl = this.getApiUrl(environment.backend);
       this._portalUrl = this.getPortalUrl(environment.backend);
@@ -119,22 +108,69 @@ export class EnvService {
         this._jwt = environment.jwt;
       }
       this._baseHref = '/';
+      this._streetviewEnv.secrets = {
+        google: {
+          clientSecret: '',
+          clientId:
+            '573001329633-1p0k8rko13s6n2p2cugp3timji3ip9f0.apps.googleusercontent.com',
+        },
+        mapillary: {
+          clientSecret: 'MLY|4866220476802272|909ed0e2baefa5d5c195710f5c83f98b',
+          clientId: '4866220476802272',
+          clientToken: 'MLY|4866220476802272|cedfb10deac752ca3ddf83997cef60a4',
+          mapToken:
+            'MLYARDcnHyGduYMTxCn5gVuhZCFPHQAFhZBUX1JGw25udGnTa6YunU3UYUZBsmiIykVApTBwxHguCyTZAdGvHavJ6O7mr3uPA3ZC3ZCOwkTg2HiVR8AoR5Om2Dhw2vAOawgZDZD',
+        },
+      };
       // local devevelopers can use localhost or hazmapper.local but
       // hazmapper.local is preferred as TAPIS supports it as a frame ancestor
       // (i.e. it allows for point cloud iframe preview)
-      this._clientId = /^localhost/.test(hostname)  ? 'RMCJHgW9CwJ6mKjhLTDnUYBo9Hka' : 'Eb9NCCtWkZ83c01UbIAITFvhD9ka';
-    } else if (/^hazmapper.tacc.utexas.edu/.test(hostname) && pathname.startsWith('/staging')) {
+      this._clientId = /^localhost/.test(hostname)
+        ? 'RMCJHgW9CwJ6mKjhLTDnUYBo9Hka'
+        : 'Eb9NCCtWkZ83c01UbIAITFvhD9ka';
+    } else if (
+      /^hazmapper.tacc.utexas.edu/.test(hostname) &&
+      pathname.startsWith('/staging')
+    ) {
       this._env = EnvironmentType.Staging;
       this._apiUrl = this.getApiUrl(this.env);
       this._portalUrl = this.getPortalUrl(this.env);
       this._clientId = 'foitdqFcimPzKZuMhbQ1oyh3Anka';
       this._baseHref = '/staging/';
+      this._streetviewEnv.secrets = {
+        google: {
+          clientSecret: '',
+          clientId:
+            '573001329633-1p0k8rko13s6n2p2cugp3timji3ip9f0.apps.googleusercontent.com',
+        },
+        mapillary: {
+          clientSecret: 'MLY|4936281379826603|cafd014ccd8cfc983e47c69c16082c7b',
+          clientId: '4936281379826603',
+          clientToken: 'MLY|4936281379826603|f8c4732d3c9d96582b86158feb1c1a7a',
+          mapToken:
+            'MLYARDcnHyGduYMTxCn5gVuhZCFPHQAFhZBUX1JGw25udGnTa6YunU3UYUZBsmiIykVApTBwxHguCyTZAdGvHavJ6O7mr3uPA3ZC3ZCOwkTg2HiVR8AoR5Om2Dhw2vAOawgZDZD',
+        },
+      };
     } else if (/^hazmapper.tacc.utexas.edu/.test(hostname)) {
       this._env = EnvironmentType.Production;
       this._apiUrl = this.getApiUrl(this.env);
       this._portalUrl = this.getPortalUrl(this.env);
       this._clientId = 'tMvAiRdcsZ52S_89lCkO4x3d6VMa';
       this._baseHref = '/hazmapper/';
+      this._streetviewEnv.secrets = {
+        google: {
+          clientSecret: '',
+          clientId:
+            '573001329633-1p0k8rko13s6n2p2cugp3timji3ip9f0.apps.googleusercontent.com',
+        },
+        mapillary: {
+          clientSecret: 'MLY|5156692464392931|6be48c9f4074f4d486e0c42a012b349f',
+          clientId: '5156692464392931',
+          clientToken: 'MLY|5156692464392931|4f1118aa1b06f051a44217cb56bedf79',
+          mapToken:
+            'MLYARDcnHyGduYMTxCn5gVuhZCFPHQAFhZBUX1JGw25udGnTa6YunU3UYUZBsmiIykVApTBwxHguCyTZAdGvHavJ6O7mr3uPA3ZC3ZCOwkTg2HiVR8AoR5Om2Dhw2vAOawgZDZD',
+        },
+      };
     } else {
       console.error('Cannot find environment for host name ${hostname}');
     }

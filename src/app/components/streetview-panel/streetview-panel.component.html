@@ -6,6 +6,15 @@
   <div class="dock-panel-content">
     <div *ngIf="isLoggedIn('mapillary'); else notAuthenticated">
       <div *ngIf="activeStreetview && activeStreetview.service_user && activeStreetview.organizations.length; else noUsername">
+        <div class="text-center" style="padding-top: 20px">
+          <label class="tile-server-visibility">
+            Display Mapillary Sequences
+            <input name=""
+              type="checkbox"
+              [checked]="displayStreetview"
+              (change)="toggleStreetviewDisplay()"/>
+          </label>
+        </div>
         <div class="publish-container grid-x align-right">
           <a class="publish-button" (click)="openStreetviewPublishModal()">
             <small>

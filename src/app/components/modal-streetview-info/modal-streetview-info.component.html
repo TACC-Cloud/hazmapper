@@ -24,6 +24,10 @@
             {{seq.sequence_id}}
           </div>
           <div class="grid-x align-spaced" style="cursor: pointer; margin-right: 30px">
+            <div [tooltip]="'Link to Map Assets'" style="padding: 0px 5px 0px 5px;">
+              <!-- <i class="fas fa-link" (click)="sequenceToFeature(seq)"></i> -->
+              <i class="fas fa-link" (click)="openSequenceFeatureModal()"></i>
+            </div>
             <div [tooltip]="'Show in map'" style="padding: 0px 5px 0px 5px;">
               <i class="fas fa-map-marker-alt" (click)="showInMap(seq)"></i>
             </div>

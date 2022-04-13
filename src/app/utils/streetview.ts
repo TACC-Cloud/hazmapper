@@ -1,108 +1,121 @@
+import { LatLng } from 'leaflet';
+
 export const streetviewAssetStyles = {
   instance: {
     sequence: {
       default: {
-        fill: true,
+        fill: false,
         weight: 10,
-        fillColor: '#004aff',
         color: '#004aff',
-        fillOpacity: 0.7,
         opacity: 0.7
       },
       select: {
-        fill: true,
+        fill: false,
         weight: 10,
-        fillColor: '#ee3a89',
         color: '#ee3a89',
-        fillOpacity: 1,
         opacity: 1
       },
       hover: {
-        fill: true,
+        fill: false,
         weight: 10,
-        fillColor: '#ee3a89',
         color: '#ee3a89',
-        fillOpacity: 0.7,
         opacity: 0.7
       }
     },
     image: {
       default: {
-        fill: true,
+        fill: false,
         weight: 1,
-        fillColor: '#004aff',
         color: '#ee3a89',
-        fillOpacity: 0.7,
         opacity: 0.7
       },
       select: {
-        fill: true,
+        fill: false,
         weight: 1,
-        fillColor: '#ee3a89',
         color: '#004aff',
-        fillOpacity: 1,
         opacity: 1
       },
       hover: {
-        fill: true,
+        fill: false,
         weight: 1,
-        fillColor: '#ee3a89',
         color: '#004aff',
-        fillOpacity: 0.7,
         opacity: 0.7
       }
     }
   },
   sequence: {
     default: {
-      fill: true,
+      fill: false,
       weight: 10,
-      fillColor: '#05cb63',
       color: '#05cb63',
-      fillOpacity: 0.6,
       opacity: 0.6
     },
     select: {
-      fill: true,
+      fill: false,
       weight: 12,
-      fillColor: '#cb5905',
       color: '#cb5905',
-      fillOpacity: 1,
       opacity: 1
     },
     hover: {
-      fill: true,
+      fill: false,
       weight: 12,
-      fillColor: '#f37916',
       color: '#f37916',
-      fillOpacity: 0.8,
+      opacity: 0.8
+    }
+  },
+  feature: {
+    default: {
+      fill: false,
+      weight: 10,
+      color: '#22C7FF',
+      opacity: 0.6
+    },
+    select: {
+      fill: false,
+      weight: 12,
+      color: '#22C7FF',
+      opacity: 1
+    },
+    hover: {
+      fill: false,
+      weight: 12,
+      color: '#22C7FF',
       opacity: 0.8
     }
   },
   image: {
     default: {
-      fill: true,
+      fill: false,
       weight: 1,
-      fillColor: '#ffffff',
       color: '#00bcff',
-      fillOpacity: 0.8,
       opacity: 0.9
     },
     select: {
-      fill: true,
+      fill: false,
       weight: 1,
-      fillColor: '#00bcff',
       color: '#ffffff',
-      fillOpacity: 1,
       opacity: 1
     },
     hover: {
-      fill: true,
+      fill: false,
       weight: 1,
-      fillColor: '#00bcff',
       color: '#ffffff',
-      fillOpacity: 0.8,
       opacity: 0.8
     }
   }
 };
+
+export function getSequenceFeatureGeometry(feature: any) {
+  const geometry = feature.geometry;
+  const [coordinates] = geometry.coordinates;
+  const [lat, lng] = coordinates;
+  const latlng = new LatLng(lat, lng);
+  return latlng;
+}
+
+export function sequenceIdFromFeature(feature: any) {
+  const [featureAsset] = feature.assets;
+  const displayPath = featureAsset.display_path;
+  const sequenceId = displayPath.split("/").pop();
+  return sequenceId;
+}

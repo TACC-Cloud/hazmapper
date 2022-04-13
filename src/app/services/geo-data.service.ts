@@ -11,6 +11,7 @@ import {RemoteFile} from 'ng-tapis';
 import {PathTree} from '../models/path-tree';
 import {NotificationsService} from './notifications.service';
 import {EnvService} from '../services/env.service';
+import { StreetviewAuthenticationService } from './streetview-authentication.service';
 import {defaultTileServers} from '../constants/tile-servers';
 
 @Injectable({
@@ -53,6 +54,7 @@ export class GeoDataService {
   public readonly dirtyTileOptions$: Observable<boolean> = this._dirtyTileOptions.asObservable();
 
   constructor(private http: HttpClient, private filterService: FilterService,
+              private streetviewAuthentication: StreetviewAuthenticationService,
               private notificationsService: NotificationsService, private envService: EnvService) {
     this.filterService.assetFilter.subscribe( (next) => {
       this._assetFilters = next;
@@ -111,6 +113,41 @@ export class GeoDataService {
         this.setLoadPointCloudData(false);
         this._pointClouds.next(resp);
       });
+  }
+
+  streetviewSequenceFromFeature(projectId: number, featureId: number | string) {
+    return this.http
+      .get(
+        this.envService.apiUrl +
+          `/projects/${projectId}/streetview/${featureId}`
+      );
+  }
+
+  streetviewSequenceToFeature(sequenceId: number, projectId: number): void {
+    const token = this.streetviewAuthentication.getLocalToken('mapillary')
+
+    const payload = {
+      sequenceId,
+      token
+    };
+
+    this.http
+      .post(
+        this.envService.apiUrl +
+          `/projects/${projectId}/streetview/`,
+        payload
+      )
+      .subscribe(
+        () => {
+          this.getFeatures(projectId);
+        },
+        (error) => {
+          console.error(error);
+          this.notificationsService.showErrorToast(
+            'Failed to add streetview instance to project!'
+          );
+        }
+      );
   }
 
   addFeature(feat: Feature): void {

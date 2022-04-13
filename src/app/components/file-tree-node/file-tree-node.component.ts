@@ -13,6 +13,7 @@ import {PathTree} from '../../models/path-tree';
 import {Feature} from '../../models/models';
 import {GeoDataService} from '../../services/geo-data.service';
 import {Observable, Subscription} from 'rxjs';
+import { StreetviewService } from 'src/app/services/streetview.service';
 
 @Component({
   selector: 'app-file-tree-node',
@@ -26,10 +27,16 @@ export class FileTreeNodeComponent implements OnInit, OnDestroy {
   @Input() node: PathTree<Feature>;
   @Output() clickEvent: EventEmitter<PathTree<Feature>> = new EventEmitter<PathTree<Feature>>();
   public activeFeature: Feature;
+  public activeStreetviewAsset: any;
   private activeFeatureSub: Subscription;
+  private activeStreetviewAssetSub: Subscription;
   public displayChildren = true;
 
-  constructor(private geoDataService: GeoDataService, private cdRef: ChangeDetectorRef) { }
+  constructor(
+    private geoDataService: GeoDataService,
+    private streetviewService: StreetviewService,
+    private cdRef: ChangeDetectorRef
+  ) { }
 
   ngOnInit() {
 
@@ -41,6 +48,16 @@ export class FileTreeNodeComponent implements OnInit, OnDestroy {
         this.cdRef.detectChanges();
       }
     });
+
+    this.activeStreetviewAssetSub = this.streetviewService.activeAsset.subscribe( (next) => {
+      this.activeStreetviewAsset = next;
+      // NOTE: This is important for the change detection to get triggered. Without this and OnPush,
+      // angular freaks out because of the recursions
+      if (!(this.cdRef as ViewRef).destroyed) {
+        this.cdRef.detectChanges();
+      }
+    });
+
     this.geoDataService.featureTree$.subscribe( (next) => {
       // NOTE: This is important for the change detection to get triggered. Without this and OnPush,
       // angular freaks out because of the recursions
@@ -53,10 +70,17 @@ export class FileTreeNodeComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
       this.activeFeatureSub.unsubscribe();
+      this.activeStreetviewAssetSub.unsubscribe();
   }
 
   isActiveFeature() {
-    return this.node.getPayload() !== null && this.activeFeature !== null && this.activeFeature.id === this.node.getPayload().id;
+    const feature = this.node.getPayload();
+    const activeFeature = (feature && feature.featureType() === 'streetview') 
+      ? this.activeStreetviewAsset 
+        ? this.activeStreetviewAsset.feature 
+        : null
+      : this.activeFeature;
+    return feature && activeFeature && activeFeature.id === feature.id;
   }
 
   onClick(node: PathTree<Feature>) {

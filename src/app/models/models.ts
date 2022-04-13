@@ -1,7 +1,9 @@
-import {Feature as GeoJSONFeature,
+import {
+  Feature as GeoJSONFeature,
   GeoJsonProperties,
   Geometry,
-  FeatureCollection as IFeatureCollection } from 'geojson';
+  FeatureCollection as IFeatureCollection,
+} from 'geojson';
 
 // TODO: break these out into their own files
 
@@ -32,7 +34,6 @@ export interface IPointCloud {
 }
 
 export class AssetFilters {
-
   // bbox has the following format: [sw_lng, sw_lat, ne_lng, ne_lat], the same as leaflet
   bbox: Array<number> = [];
   assetType = '';
@@ -40,12 +41,10 @@ export class AssetFilters {
   toJson() {
     return {
       assetType: this.assetType,
-      bbox: this.bbox
+      bbox: this.bbox,
     };
   }
-
 }
-
 
 export interface Project {
   description: string;
@@ -60,11 +59,10 @@ export interface Project {
   system_path?: string;
   deleting?: boolean;
   deletingFailed?: boolean;
+  streetview_instances?: any;
 }
 
-export class Project implements Project {
-
-}
+export class Project implements Project {}
 
 export interface ProjectRequest {
   project: Project;
@@ -72,9 +70,7 @@ export interface ProjectRequest {
   watch_content?: boolean;
 }
 
-export class ProjectRequest implements ProjectRequest {
-
-}
+export class ProjectRequest implements ProjectRequest {}
 
 export class AuthToken {
   token: string;
@@ -106,7 +102,6 @@ export class AuthToken {
   }
 }
 
-
 export interface IFeatureAsset {
   id: number;
   path: string;
@@ -123,14 +118,11 @@ export class FeatureAsset implements IFeatureAsset {
   feature_id: number;
   asset_type: string;
   display_path: string | null;
-
 }
-
 
 interface FeatureStyles {
   [key: string]: string | number;
 }
-
 
 export interface Overlay {
   id: number;
@@ -188,7 +180,6 @@ export class FeatureCollection implements IFeatureCollection {
   type: any;
 }
 
-
 export class Feature implements AppGeoJSONFeature {
   geometry: Geometry;
   properties: GeoJsonProperties;
@@ -209,23 +200,17 @@ export class Feature implements AppGeoJSONFeature {
   }
 
   featureType?(): string {
-    if (this.assets &&
-        this.assets.length === 1) {
+    if (this.assets && this.assets.length === 1) {
       return this.assets[0].asset_type;
     }
 
-    if (this.assets &&
-        this.assets.length > 1) {
+    if (this.assets && this.assets.length > 1) {
       return 'collection';
     }
 
-    if (this.assets &&
-      !this.assets.length) {
+    if (this.assets && !this.assets.length) {
       return this.geometry.type;
     }
-
-
-
   }
 }
 
