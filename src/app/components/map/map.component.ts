@@ -121,28 +121,26 @@ export class MapComponent implements OnInit, OnDestroy {
     // TOOD: Remove this and just display on init
     this.subscription.add(
       this.streetviewService.displayStreetview.subscribe((next: boolean) => {
-        console.log(next);
         if (this.activeStreetview && next) {
           const vectorTileStyling = {
             sequence: (properties, zoom, geometryType) => {
-              // if (
-              //   this.activeStreetview.organizations.some(
-              //     (org) => org.key == properties.organization_id
-              //   )
-              // )
-              // {
               if (
+                this.activeStreetview.organizations.some(
+                  (org) => org.key == properties.organization_id
+                )
+              )
+            { if (
                 this.streetviewAuthenticationService.sequenceInStreetview(
                   properties.id
                 )
               ) {
-                return streetviewAssetStyles.instance.sequence.default;
+                  return streetviewAssetStyles.instance.sequence.default;
+                } else {
+                  return streetviewAssetStyles.sequence.default;
+                }
               } else {
-                return streetviewAssetStyles.sequence.default;
+                return [];
               }
-              // } else {
-              //   return [];
-              // }
             },
             image: [],
             overview: [],
