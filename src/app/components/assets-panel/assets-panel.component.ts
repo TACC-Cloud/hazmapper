@@ -23,7 +23,6 @@ export class AssetsPanelComponent implements OnInit {
   scrollableFeatures: ScrollableArray<Feature> = new ScrollableArray([]);
   displayFeatures: Array<Feature>;
   activeProject: Project;
-  enableAssetLabel: boolean = false;
   currentTreeListing: PathTree<Feature>;
 
   constructor(private geoDataService: GeoDataService, private bsModalService: BsModalService,
@@ -36,9 +35,6 @@ export class AssetsPanelComponent implements OnInit {
     this.geoDataService.features.subscribe( (fc: FeatureCollection) => {
       this.features = fc;
       this.scrollableFeatures.setContent(this.features.features);
-    });
-    this.geoDataService.enableAssetLabel.subscribe( (next: boolean) => {
-      this.enableAssetLabel = next;
     });
     this.geoDataService.activeFeature.subscribe( (next) => {
       this.activeFeature = next;
@@ -76,10 +72,6 @@ export class AssetsPanelComponent implements OnInit {
 
   exportGeoJSON() {
     this.geoDataService.downloadGeoJSON(this.activeProject.id);
-  }
-
-  toggleAssetLabel() {
-    this.geoDataService.enableAssetLabel = !this.enableAssetLabel;
   }
 
   selectTreeNode(node: PathTree<Feature>) {

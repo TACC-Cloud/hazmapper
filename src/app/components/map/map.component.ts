@@ -30,7 +30,6 @@ export class MapComponent implements OnInit, OnDestroy {
   nonPointFeatures: LayerGroup[] = [];
   features: FeatureGroup = new FeatureGroup();
   featuresList: any;
-  enableAssetLabel: boolean = false;
   overlays: LayerGroup = new LayerGroup<any>();
   tileServerLayers: Map<number, TileLayer> = new Map<number, TileLayer>();
   fitToFeatureExtent = true;
@@ -86,11 +85,6 @@ export class MapComponent implements OnInit, OnDestroy {
     // Subscribe to active project and features
     this.subscription.add(this.loadFeatures());
 
-    this.subscription.add(this.geoDataService.enableAssetLabel.subscribe((enable: boolean) => {
-      this.enableAssetLabel = enable;
-      this.geoDataService.features = {...this.featuresList};
-    }));
-
     // Publish the mouse location on the mapMouseLocation stream
     this.map.on('mousemove', (ev: LeafletMouseEvent) => this.mouseEventHandler(ev));
 
@@ -113,13 +107,13 @@ export class MapComponent implements OnInit, OnDestroy {
       const bbox = turf.bbox(<AllGeoJSON> next);
       this.map.fitBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]]);
 
-      this.geoDataService.features = {
+      this.geoDataService.setFeatures({
         ...this.featuresList,
         features: this.featuresList.features.map((f: Feature) => {
-          f.properties.style = f.id === next.id ? assetStyles.active : assetStyles.inactive;
+          f.properties.style = f.id === next.id ? assetStyles.active : assetStyles.default;
           return f
         })
-      };
+      });
     }));
   }
 
@@ -178,7 +172,7 @@ export class MapComponent implements OnInit, OnDestroy {
       collection.features.forEach(d => {
         let feat: LayerGroup;
 
-        d.properties.style = d.properties.style ? d.properties.style : assetStyles.inactive;
+        d.properties.style = d.properties.style ? d.properties.style : assetStyles.default;
         if (d.geometry.type === 'Polygon') {
           feat = L.geoJSON(d, {style: d.properties.style});
         } else {
@@ -188,10 +182,6 @@ export class MapComponent implements OnInit, OnDestroy {
 
         feat.on('click', (ev) => { this.featureClickHandler(ev); } );
         
-        if (this.enableAssetLabel) {
-          feat.bindTooltip(d.assets[0].display_path || d.id.toString(), { permanent: true, direction:"center" })
-        }
-
         if (d.geometry.type === 'Point') {
           feat.setZIndex(2);
           markers.addLayer(feat);
@@ -228,7 +218,7 @@ export class MapComponent implements OnInit, OnDestroy {
    * @param ev
    */
   featureClickHandler(ev: any): void {
-    if (ev.layer.feature.featureType() === 'point_cloud') {
+    if (ev.layer.feature.featureType() !== 'Point') {
       const overlapFeatures = [];
       this.map.contextmenu.removeAllItems();
 

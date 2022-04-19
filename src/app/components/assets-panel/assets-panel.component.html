@@ -6,12 +6,6 @@
     <button class="button expanded hollow" (click)="openFileBrowserModal()">Import from DesignSafe </button>
   </div>
 
-<div>
-    <label for="todayFilter">
-        <input type="checkbox" id="todayFilter" (change)="toggleAssetLabel()" [ngModel]="enableAssetLabel">Show Labels
-    </label>
-</div>
-
   <!-- TODO: Dear lord, we now have a recursive template. God help us. -->
   <div
     class="dock-panel-content"

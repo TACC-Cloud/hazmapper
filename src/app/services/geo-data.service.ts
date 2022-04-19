@@ -36,8 +36,6 @@ export class GeoDataService {
   private tileServers$: Observable<Array<TileServer>> = this._tileServers.asObservable();
   private _pointClouds: BehaviorSubject<Array<IPointCloud>> = new BehaviorSubject<Array<IPointCloud>>(null);
   private _assetFilters: AssetFilters;
-  private _enableAssetLabel: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  private enableAssetLabel$: Observable<boolean> = this._enableAssetLabel.asObservable();
   public readonly pointClouds: Observable<Array<IPointCloud>> = this._pointClouds.asObservable();
   private _featureTree: ReplaySubject<PathTree<Feature>> = new ReplaySubject<PathTree<Feature>>(1);
   public readonly featureTree$: Observable<PathTree<Feature>> = this._featureTree.asObservable();
@@ -481,11 +479,11 @@ export class GeoDataService {
     return this.tileServers$;
   }
 
-  public get features(): any {
+  public get features(): Observable<FeatureCollection> {
     return this.features$;
   }
 
-  public set features(fc: any) {
+  public setFeatures(fc: FeatureCollection) {
     this._features.next(fc);
   }
 
@@ -513,15 +511,6 @@ export class GeoDataService {
   public set activeOverlay(ov) {
     this._activeOverlay.next(ov);
   }
-
-  public get enableAssetLabel(): any {
-    return this.enableAssetLabel$;
-  }
-
-  public set enableAssetLabel(e: any) {
-    this._enableAssetLabel.next(e);
-  }
-
 
   public get mapMouseLocation(): Observable<LatLng> {
     return this.mapMouseLocation$;

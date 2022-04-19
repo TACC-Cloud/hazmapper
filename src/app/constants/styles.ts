@@ -1,5 +1,5 @@
 export const assetStyles = {
-    inactive: {
+    default: {
         color: "#0f83bd", // Light Blue
         fillOpacity: "0.1"
     },
@@ -7,4 +7,4 @@ export const assetStyles = {
         color: "#ff0000", // Red
         fillOpacity: "0.1"
     }
-}; 
+};
