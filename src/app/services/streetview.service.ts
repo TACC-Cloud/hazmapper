@@ -8,7 +8,8 @@ import { NotificationsService } from './notifications.service';
 import { EnvService } from '../services/env.service';
 import { ProjectsService } from '../services/projects.service';
 import { StreetviewAuthenticationService } from './streetview-authentication.service';
-import { getSequenceFeatureGeometry, sequenceIdFromFeature } from '../utils/streetview';
+import { getFeatureSequenceGeometry, getFeatureSequenceId, getFeatureSequencePath } from '../utils/streetview';
+import { StreetviewSequence, Streetview } from '../models/streetview';
 
 @Injectable({
   providedIn: 'root',
@@ -147,13 +148,16 @@ export class StreetviewService {
   public addSequenceToPath(
     streetviewId: number,
     sequenceId: string,
+    organizationId: string,
     dir: RemoteFile
   ): void {
     const payload = {
       streetviewId,
       sequenceId,
+      organizationId,
       dir,
     };
+    console.log(organizationId)
 
     this.http
       .post(this.envService.apiUrl + `/streetview/sequences/`, payload)
@@ -250,9 +254,39 @@ export class StreetviewService {
       );
   }
 
+  public checkStreetviewSequence(sequence: StreetviewSequence, streetview: Streetview) {
+    if (sequence.bbox &&
+      sequence.end_date &&
+      sequence.start_date) {
+
+      let organizationId = sequence.organization_id ? sequence.organization_id : streetview.organizations[0].key;
+
+      const bbox = sequence.bbox;
+      const startDate = new Date(sequence.start_date).toISOString();
+      const endDate = new Date(sequence.end_date).toISOString();
+
+      this.http.get(
+        this.envService.streetviewEnv.mapillary.apiUrl +
+          `/images?fields=sequence&bbox=${bbox}&start_captured_at=${startDate}&end_captured_at=${endDate}&organization_id=${organizationId}`
+      ).subscribe((resp: any) => {
+          const data = resp.data;
+          if (data && data.length) {
+            const [imageData] = data;
+            const payload = {
+              sequence_id: imageData.sequence
+            };
+            this.http.post(this.envService.apiUrl + `/streetview/sequences/${sequence.id}/`, payload).subscribe(() => {
+              this.streetviewAuthentication.getStreetviews().subscribe();
+            })
+          }
+        });
+    }
+  }
+
   public sequenceFeatureToActiveAsset(feature: Feature) {
-    const sequenceId = sequenceIdFromFeature(feature)
-    const latlng = getSequenceFeatureGeometry(feature);
+    const sequenceId = getFeatureSequenceId(feature)
+    const latlng = getFeatureSequenceGeometry(feature);
+    const path = getFeatureSequencePath(feature);
 
     return this.getMapillaryImages(sequenceId).pipe(map(e => {
       const [img] = e.data;
@@ -260,6 +294,7 @@ export class StreetviewService {
       return {
         feature: feature,
         latlng: latlng,   
+        path,
         layer: {
           properties: {
             image_id: img.id,

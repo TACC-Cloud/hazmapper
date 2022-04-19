@@ -12,10 +12,6 @@ export interface StreetviewUser {
   username: string;
 }
 
-export interface StreetviewUser {
-  username: string;
-}
-
 export interface StreetviewRequest {
   token?: string;
   service?: string;
@@ -55,4 +51,5 @@ export interface StreetviewSequence {
   end_date?: Date;
   bbox?: string;
   sequence_id?: string;
+  organization_id?: string;
 }

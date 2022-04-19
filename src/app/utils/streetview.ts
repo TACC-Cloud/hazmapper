@@ -105,7 +105,7 @@ export const streetviewAssetStyles = {
   }
 };
 
-export function getSequenceFeatureGeometry(feature: any) {
+export function getFeatureSequenceGeometry(feature: any) {
   const geometry = feature.geometry;
   const [coordinates] = geometry.coordinates;
   const [lat, lng] = coordinates;
@@ -113,9 +113,14 @@ export function getSequenceFeatureGeometry(feature: any) {
   return latlng;
 }
 
-export function sequenceIdFromFeature(feature: any) {
+export function getFeatureSequenceId(feature: any) {
   const [featureAsset] = feature.assets;
   const displayPath = featureAsset.display_path;
   const sequenceId = displayPath.split("/").pop();
   return sequenceId;
+}
+
+export function getFeatureSequencePath(feature: any) {
+  const [featureAsset] = feature.assets;
+  return featureAsset.path;
 }

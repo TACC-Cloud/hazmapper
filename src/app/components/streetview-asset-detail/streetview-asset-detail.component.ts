@@ -33,6 +33,7 @@ export class StreetviewAssetDetailComponent implements OnInit {
 
     this.streetviewService.activeAsset.subscribe(next => {
       if (next) {
+        const featureAsset = next.feature;
         const prop = next.layer.feature ? next.layer.feature.properties : next.layer.properties;
         this.activeStreetviewAsset = prop;
         this.streetviewAssetEvent = {
@@ -50,26 +51,33 @@ export class StreetviewAssetDetailComponent implements OnInit {
         }
         this.siteUrl = 'https://www.mapillary.com/app/?pKey=' + this.imageId;
 
-        this.showLinkModal = this.activeStreetview && !next.feature
+        this.showLinkModal = this.activeStreetview && !featureAsset
           ? !this.streetviewAuthenticationService.sequenceInStreetview(this.sequenceId)
           : false;
 
         this.imageLoading = true;
 
-        this.streetviewService.getMapillaryImageData(this.imageId, ['thumb_1024_url']).subscribe(e => {
-          this.imageUrl = e.thumb_1024_url;
+        if (!featureAsset) {
+          this.streetviewService.getMapillaryImageData(this.imageId, ['thumb_1024_url']).subscribe(e => {
+            this.imageUrl = e.thumb_1024_url;
+            this.imageLoading = false;
+          });
+        } else {
+          this.imageUrl = next.path
           this.imageLoading = false;
-        });
+        }
       }
     });
   }
 
   openStreetviewLinkModal() {
     const modal: BsModalRef = this.bsModalService.show(ModalStreetviewLinkComponent);
-    modal.content.onClose.subscribe((selectedFile: any) => {
+    modal.content.onClose.subscribe((linkData: any) => {
       this.streetviewService.addSequenceToPath(this.activeStreetview.id,
-                                               this.sequenceId,
-                                               selectedFile);
+        this.sequenceId,
+        linkData.selectedOrganization,
+        linkData.selectedPath
+        );
     });
   }
 

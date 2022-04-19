@@ -15,6 +15,7 @@ export class ModalStreetviewLinkComponent implements OnInit {
   @Input() allowFolders: true;
   public onClose: Subject<any> = new Subject<any>();
   selectedFiles: Array<RemoteFile> = [];
+  selectedOrganization = '';
   activeStreetview: Streetview;
   linkErrorMessage = '';
 
@@ -23,6 +24,10 @@ export class ModalStreetviewLinkComponent implements OnInit {
               ) { }
 
   ngOnInit() {
+    this.streetviewAuthenticationService.activeStreetview.subscribe((sv: Streetview) => {
+      this.activeStreetview = sv;
+      this.selectedOrganization = sv.organizations[0].key;
+    });
   }
 
   onSelect(items: Array<RemoteFile>) {
@@ -34,7 +39,10 @@ export class ModalStreetviewLinkComponent implements OnInit {
   }
 
   link() {
-    this.onClose.next(this.selectedFiles[0]);
+    this.onClose.next({
+      selectedPath: this.selectedFiles[0],
+      selectedOrganization: this.selectedOrganization
+    });
     this.bsModalRef.hide();
   }
 

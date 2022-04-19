@@ -45,9 +45,9 @@
         <ng-template #pendingApproval>
           <div style="display: flex; flex-direction: row; justify-content: space-between; padding-bottom: 5px;">
             <div style="margin-left: 20px; width: 300px">
-              Processing in Mapillary
-              <i class="fas fa-spinner fa-spin"></i>
+              {{q + 1}}. Sequence processing in Mapillary
             </div>
+            <button class="button tiny" (click)="checkSequenceState(seq)">Check if ready</button>
           </div>
         </ng-template>
 

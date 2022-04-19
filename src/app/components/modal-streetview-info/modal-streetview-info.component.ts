@@ -16,6 +16,7 @@ export class ModalStreetviewInfoComponent implements OnInit {
   @Input() streetviewInstanceId: number;
   public streetviewInstance: any;
   public activeProject: any;
+  public activeStreetview: any;
 
   constructor(
     private streetviewService: StreetviewService,
@@ -28,6 +29,7 @@ export class ModalStreetviewInfoComponent implements OnInit {
 
   ngOnInit() {
     this.streetviewAuthService.activeStreetview.subscribe((sv) => {
+      this.activeStreetview = sv;
       this.streetviewInstance = sv.instances.find(
         (e) => this.streetviewInstanceId === e.id
       );
@@ -67,6 +69,10 @@ export class ModalStreetviewInfoComponent implements OnInit {
 
   close() {
     this.bsModalRef.hide();
+  }
+
+  checkSequenceState(streetviewSequence: StreetviewSequence) {
+    this.streetviewService.checkStreetviewSequence(streetviewSequence, this.activeStreetview);
   }
 
   showInMap(sequence: StreetviewSequence) {
