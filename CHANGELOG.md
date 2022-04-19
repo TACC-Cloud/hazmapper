@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [2.6] - 2022-04-19
+
+### Fixed
+
+- DES-2185: Fix filtering (#82)
+
 ## [2.5] - 2022-03-07
 
 ### Added
@@ -68,7 +74,7 @@
 
 
 
-[unreleased]: https://github.com/TACC-Cloud/hazmapper/compare/v2.5...HEAD
+[unreleased]: https://github.com/TACC-Cloud/hazmapper/compare/v2.6...HEAD
 [2.5]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.5
 [2.4]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.4
 [2.3]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.3
