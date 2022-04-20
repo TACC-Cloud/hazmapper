@@ -259,7 +259,7 @@ export class StreetviewService {
       sequence.end_date &&
       sequence.start_date) {
 
-      let organizationId = sequence.organization_id ? sequence.organization_id : streetview.organizations[0].key;
+      let organizationId = sequence.organization_id ? sequence.organization_id : streetview.organizations[1].key;
 
       const bbox = sequence.bbox;
       const startDate = new Date(sequence.start_date).toISOString();
