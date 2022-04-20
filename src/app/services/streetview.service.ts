@@ -275,7 +275,7 @@ export class StreetviewService {
             const payload = {
               sequence_id: imageData.sequence
             };
-            this.http.post(this.envService.apiUrl + `/streetview/sequences/${sequence.id}/`, payload).subscribe(() => {
+            this.http.put(this.envService.apiUrl + `/streetview/sequences/${sequence.id}/`, payload).subscribe(() => {
               this.streetviewAuthentication.getStreetviews().subscribe();
             })
           }
