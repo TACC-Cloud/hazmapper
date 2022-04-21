@@ -27,13 +27,8 @@
             <div [tooltip]="'Link to Map Assets'" style="padding: 0px 5px 0px 5px;">
               <i class="fas fa-link" (click)="openSequenceFeatureModal(seq)"></i>
             </div>
-            <div [tooltip]="'Show in map'" style="padding: 0px 5px 0px 5px;">
+            <div [tooltip]="'Center to location'" style="padding: 0px 5px 0px 5px;">
               <i class="fas fa-map-marker-alt" (click)="showInMap(seq)"></i>
-            </div>
-            <div [tooltip]="'See in Mapillary'" style="padding: 0px 5px 0px 5px;">
-              <a [href]="'https://www.mapillary.com/map/s/' + seq.sequence_id" style="color: #0A0A0A">
-                <i class="fas fa-external-link-alt"></i>
-              </a>
             </div>
             <div [tooltip]="'Remove association'" style="padding: 0px 5px 0px 5px">
               <i class="fas fa-trash" (click)="removeSequence(seq)"></i>
