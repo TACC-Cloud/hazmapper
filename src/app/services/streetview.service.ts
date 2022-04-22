@@ -157,7 +157,6 @@ export class StreetviewService {
       organizationId,
       dir,
     };
-    console.log(organizationId)
 
     this.http
       .post(this.envService.apiUrl + `/streetview/sequences/`, payload)
