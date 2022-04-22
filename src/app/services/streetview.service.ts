@@ -253,21 +253,6 @@ export class StreetviewService {
       );
   }
 
-  public awesome() {
-    // const fields = ['name'];
-    // const params = new HttpParams().set('fields', fields.join(', '));
-    // const awesome = '107227258181842';
-    // this.http.get(
-    //   `${this.envService.streetviewEnv.mapillary.apiUrl}${awesome}`, { params }).subscribe(e => {
-    //     console.log(e);
-    //
-    //   });
-    //
-    this.http.get('https://graph.mapillary.com/graphql?doc=query%20getData(%24username%3A%20String!)%20%7B%0A%20%20%20%20%20%20user_by_username(username%3A%20%24username)%20%7B%0A%20%20%20%20%20%20%20%20__typename%20created_at_seconds%20description%20id%20username%20stats%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20distance%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20km%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20__typename%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20images%0A%20%20%20%20%20%20%20%20%20%20%20%20__typename%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D&query=query%20getData(%24username%3A%20String!)%20%7B%0A%20%20user_by_username(username%3A%20%24username)%20%7B%0A%20%20%20%20__typename%0A%20%20%20%20created_at_seconds%0A%20%20%20%20description%0A%20%20%20%20id%0A%20%20%20%20username%0A%20%20%20%20stats%20%7B%0A%20%20%20%20%20%20distance%20%7B%0A%20%20%20%20%20%20%20%20km%0A%20%20%20%20%20%20%20%20__typename%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20images%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D%0A&operationName=getData&variables=%7B%22username%22%3A%22wieodk%22%7D').subscribe(e => {
-      console.log(e);
-    });
-  }
-
   public checkStreetviewSequence(sequence: StreetviewSequence, streetview: Streetview) {
     if (sequence.bbox &&
       sequence.end_date &&
