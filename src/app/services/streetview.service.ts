@@ -253,12 +253,27 @@ export class StreetviewService {
       );
   }
 
+  public awesome() {
+    // const fields = ['name'];
+    // const params = new HttpParams().set('fields', fields.join(', '));
+    // const awesome = '107227258181842';
+    // this.http.get(
+    //   `${this.envService.streetviewEnv.mapillary.apiUrl}${awesome}`, { params }).subscribe(e => {
+    //     console.log(e);
+    //
+    //   });
+    //
+    this.http.get('https://graph.mapillary.com/graphql?doc=query%20getData(%24username%3A%20String!)%20%7B%0A%20%20%20%20%20%20user_by_username(username%3A%20%24username)%20%7B%0A%20%20%20%20%20%20%20%20__typename%20created_at_seconds%20description%20id%20username%20stats%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20distance%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20km%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20__typename%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20images%0A%20%20%20%20%20%20%20%20%20%20%20%20__typename%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D&query=query%20getData(%24username%3A%20String!)%20%7B%0A%20%20user_by_username(username%3A%20%24username)%20%7B%0A%20%20%20%20__typename%0A%20%20%20%20created_at_seconds%0A%20%20%20%20description%0A%20%20%20%20id%0A%20%20%20%20username%0A%20%20%20%20stats%20%7B%0A%20%20%20%20%20%20distance%20%7B%0A%20%20%20%20%20%20%20%20km%0A%20%20%20%20%20%20%20%20__typename%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20images%0A%20%20%20%20%20%20__typename%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D%0A&operationName=getData&variables=%7B%22username%22%3A%22wieodk%22%7D').subscribe(e => {
+      console.log(e);
+    });
+  }
+
   public checkStreetviewSequence(sequence: StreetviewSequence, streetview: Streetview) {
     if (sequence.bbox &&
       sequence.end_date &&
       sequence.start_date) {
 
-      let organizationId = sequence.organization_id;
+      const organizationId = sequence.organization_id;
 
       const bbox = sequence.bbox;
       const startDate = new Date(sequence.start_date).toISOString();
@@ -284,24 +299,21 @@ export class StreetviewService {
 
   public sequenceFeatureToActiveAsset(feature: Feature) {
     const sequenceId = getFeatureSequenceId(feature)
+    const imageId = getFeatureImageId(feature);
     const latlng = getFeatureSequenceGeometry(feature);
     const path = getFeatureSequencePath(feature);
 
-    return this.getMapillaryImages(sequenceId).pipe(map(e => {
-      const [img] = e.data;
-
-      return {
-        feature: feature,
-        latlng: latlng,   
-        path,
-        layer: {
-          properties: {
-            image_id: img.id,
-            id: sequenceId
-          }
+    return {
+      feature: feature,
+      latlng: latlng,
+      path,
+      layer: {
+        properties: {
+          image_id: imageId,
+          id: sequenceId
         }
       }
-    }));
+    }
   }
 
   public get activeAsset() {

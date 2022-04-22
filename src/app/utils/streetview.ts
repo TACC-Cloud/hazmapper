@@ -113,6 +113,10 @@ export function getFeatureSequenceGeometry(feature: any) {
   return latlng;
 }
 
+export function getFeatureImageId(feature: any) {
+  return feature.original_name;
+}
+
 export function getFeatureSequenceId(feature: any) {
   const [featureAsset] = feature.assets;
   const displayPath = featureAsset.display_path;
