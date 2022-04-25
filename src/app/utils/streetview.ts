@@ -114,7 +114,8 @@ export function getFeatureSequenceGeometry(feature: any) {
 }
 
 export function getFeatureImageId(feature: any) {
-  return feature.original_name;
+  const [featureAsset] = feature.assets;
+  return featureAsset.original_name;
 }
 
 export function getFeatureSequenceId(feature: any) {

@@ -137,7 +137,6 @@ export class StreetviewAuthenticationService {
 
     this.http.post<any>(envs.tokenUrl, {}, { params }).subscribe(
       (resp) => {
-        console.log(resp);
         const token = {
           token: resp.access_token,
           expires_in: resp.expires_in,

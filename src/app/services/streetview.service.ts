@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Feature, FeatureCollection } from '../models/models';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, catchError, take } from 'rxjs/operators';
 import { RemoteFile } from 'ng-tapis';
 import { NotificationsService } from './notifications.service';
@@ -305,11 +305,9 @@ export class StreetviewService {
           layerData.layer.properties.image_id = img.id;
           return layerData;
         }),
-        catchError((_, caught) => {
-          console.log(caught)
-          return caught
-        }),
-        take(1)
+        catchError((err) => {
+          return of(layerData);
+        })
       )
   }
 
