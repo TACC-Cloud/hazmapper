@@ -33,7 +33,7 @@ export class ModalStreetviewOrganizationComponent implements OnInit {
 
   addOrganization() {
     if (this.key !== '') {
-      this.streetviewService.addOrganization(this.activeStreetview.id,
+      this.streetviewService.addOrganization(this.activeStreetview.service,
         this.key
       );
     }

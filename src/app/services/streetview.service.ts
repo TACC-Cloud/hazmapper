@@ -2,11 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Feature, FeatureCollection } from '../models/models';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators'
+import { map, catchError, take } from 'rxjs/operators';
 import { RemoteFile } from 'ng-tapis';
 import { NotificationsService } from './notifications.service';
 import { EnvService } from '../services/env.service';
-import { ProjectsService } from '../services/projects.service';
 import { StreetviewAuthenticationService } from './streetview-authentication.service';
 import { getFeatureSequenceGeometry, getFeatureSequenceId, getFeatureSequencePath, getFeatureImageId } from '../utils/streetview';
 import { StreetviewSequence, Streetview } from '../models/streetview';
@@ -66,17 +65,14 @@ export class StreetviewService {
   constructor(
     private http: HttpClient,
     private notificationsService: NotificationsService,
-    private projectsService: ProjectsService,
     private streetviewAuthentication: StreetviewAuthenticationService,
     private envService: EnvService
   ) {}
 
-  // public addOrganization(streetviewId: number, key: string): void {
   public addOrganization(service: string, key: string): void {
     this.getMapillaryOrganizationData(key, ['name', 'slug']).subscribe(
       (org: any) => {
         const payload = {
-          // streetview_id: streetviewId,
           name: org.name,
           slug: org.slug,
           key,
@@ -85,7 +81,6 @@ export class StreetviewService {
         this.http
           .post(
             this.envService.apiUrl +
-              // `/streetview/${streetviewId}/organization/`,
               `/streetview/services/${service}/organization/`,
             payload
           )
@@ -104,34 +99,6 @@ export class StreetviewService {
     );
   }
 
-  public getMapillaryOrganizationData(
-    organizationKey: string,
-    fields: string[]
-  ) {
-    const params = new HttpParams().set('fields', fields.join(', '));
-    return this.http.get<any>(
-      this.envService.streetviewEnv.mapillary.apiUrl + organizationKey,
-      { params }
-    );
-  }
-
-  public getMapillaryImageData(imageId: string, fields: string[]) {
-    const params = new HttpParams().set('fields', fields.join(', '));
-    return this.http.get<any>(
-      this.envService.streetviewEnv.mapillary.apiUrl + imageId,
-      { params }
-    );
-  }
-
-  public getMapillaryImages(sequenceId: string) {
-    const params = new HttpParams().set('sequence_id', sequenceId);
-    return this.http.get<any>(
-      this.envService.streetviewEnv.mapillary.apiUrl + 'image_ids',
-      { params }
-    );
-  }
-
-  // public removeOrganization(organizationKey: number): void {
   public removeOrganization(service: string, organizationKey: number): void {
     this.http
       .delete(
@@ -176,7 +143,6 @@ export class StreetviewService {
       );
   }
 
-  // public removeStreetview(streetviewId: number): void {
   public removeStreetview(service: string): void {
     this.http
       .delete(this.envService.apiUrl + `/streetview/services/${service}/`)
@@ -257,6 +223,34 @@ export class StreetviewService {
       );
   }
 
+  public getMapillaryOrganizationData(
+    organizationKey: string,
+    fields: string[]
+  ) {
+    const params = new HttpParams().set('fields', fields.join(', '));
+    return this.http.get<any>(
+      this.envService.streetviewEnv.mapillary.apiUrl + organizationKey,
+      { params }
+    );
+  }
+
+  public getMapillaryImageData(imageId: string, fields: string[]) {
+    const params = new HttpParams().set('fields', fields.join(', '));
+    return this.http.get<any>(
+      this.envService.streetviewEnv.mapillary.apiUrl + imageId,
+      { params }
+    );
+  }
+
+  public getMapillaryImages(sequenceId: string) {
+    const params = new HttpParams().set('sequence_id', sequenceId);
+    return this.http.get<any>(
+      this.envService.streetviewEnv.mapillary.apiUrl + 'image_ids',
+      { params }
+    );
+  }
+
+
   public checkStreetviewSequence(sequence: StreetviewSequence, streetview: Streetview) {
     if (sequence.bbox &&
       sequence.end_date &&
@@ -287,12 +281,12 @@ export class StreetviewService {
   }
 
   public sequenceFeatureToActiveAsset(feature: Feature) {
-    const sequenceId = getFeatureSequenceId(feature)
+    const sequenceId = getFeatureSequenceId(feature);
     const imageId = getFeatureImageId(feature);
     const latlng = getFeatureSequenceGeometry(feature);
     const path = getFeatureSequencePath(feature);
 
-    return {
+    const layerData = {
       feature: feature,
       latlng: latlng,
       path,
@@ -302,7 +296,21 @@ export class StreetviewService {
           id: sequenceId
         }
       }
-    }
+    };
+
+    return this.getMapillaryImages(sequenceId)
+      .pipe(
+        map(e => {
+          const [img] = e.data;
+          layerData.layer.properties.image_id = img.id;
+          return layerData;
+        }),
+        catchError((_, caught) => {
+          console.log(caught)
+          return caught
+        }),
+        take(1)
+      )
   }
 
   public get activeAsset() {
