@@ -138,13 +138,15 @@ export class GeoDataService {
         payload
       )
       .subscribe(
-        () => {
+        (resp) => {
           this.getFeatures(projectId);
+          console.log(resp);
+          this.notificationsService.showSuccessToast('Started processing streetview sequence to map!');
         },
         (error) => {
           console.error(error);
           this.notificationsService.showErrorToast(
-            'Failed to add streetview instance to project!'
+            'Failed to add streetview sequence to map!'
           );
         }
       );
