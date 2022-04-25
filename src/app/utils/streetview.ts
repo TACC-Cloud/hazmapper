@@ -108,7 +108,7 @@ export const streetviewAssetStyles = {
 export function getFeatureSequenceGeometry(feature: any) {
   const geometry = feature.geometry;
   const [coordinates] = geometry.coordinates;
-  const [lat, lng] = coordinates;
+  const [lng, lat] = coordinates;
   const latlng = new LatLng(lat, lng);
   return latlng;
 }
