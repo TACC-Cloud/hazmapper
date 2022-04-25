@@ -71,11 +71,12 @@ export class StreetviewService {
     private envService: EnvService
   ) {}
 
-  public addOrganization(streetviewId: number, key: string): void {
+  // public addOrganization(streetviewId: number, key: string): void {
+  public addOrganization(service: string, key: string): void {
     this.getMapillaryOrganizationData(key, ['name', 'slug']).subscribe(
       (org: any) => {
         const payload = {
-          streetview_id: streetviewId,
+          // streetview_id: streetviewId,
           name: org.name,
           slug: org.slug,
           key,
@@ -84,7 +85,8 @@ export class StreetviewService {
         this.http
           .post(
             this.envService.apiUrl +
-              `/streetview/${streetviewId}/organization/`,
+              // `/streetview/${streetviewId}/organization/`,
+              `/streetview/services/${service}/organization/`,
             payload
           )
           .subscribe(
@@ -129,10 +131,11 @@ export class StreetviewService {
     );
   }
 
-  public removeOrganization(organizationKey: number): void {
+  // public removeOrganization(organizationKey: number): void {
+  public removeOrganization(service: string, organizationKey: number): void {
     this.http
       .delete(
-        this.envService.apiUrl + `/streetview/organization/${organizationKey}/`
+        this.envService.apiUrl + `/streetview/services/${service}/organization/${organizationKey}/`
       )
       .subscribe(
         () => {
@@ -173,9 +176,10 @@ export class StreetviewService {
       );
   }
 
-  public removeStreetview(streetviewId: number): void {
+  // public removeStreetview(streetviewId: number): void {
+  public removeStreetview(service: string): void {
     this.http
-      .delete(this.envService.apiUrl + `/streetview/${streetviewId}/`)
+      .delete(this.envService.apiUrl + `/streetview/services/${service}/`)
       .subscribe(
         () => {
           this.streetviewAuthentication.getStreetviews().subscribe();
@@ -226,7 +230,7 @@ export class StreetviewService {
       .get(this.envService.apiUrl + `/streetview/sequences/${sequenceId}/`)
   }
 
-  public uploadPathToStreetviewService(
+  public publishPathToStreetviewService(
     dir: RemoteFile,
     organizationKey: string,
     service: string
@@ -239,14 +243,14 @@ export class StreetviewService {
     };
 
     this.http
-      .post(this.envService.apiUrl + `/streetview/upload/`, payload)
+      .post(this.envService.apiUrl + `/streetview/publish/`, payload)
       .subscribe(
         () => {
-          this.notificationsService.showSuccessToast('Upload started!');
+          this.notificationsService.showSuccessToast('Publish started!');
         },
         (error) => {
           this.notificationsService.showErrorToast(
-            'Error during upload request!'
+            'Error during publish request!'
           );
           console.log(error);
         }

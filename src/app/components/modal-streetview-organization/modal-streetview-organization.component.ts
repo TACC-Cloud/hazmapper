@@ -40,7 +40,7 @@ export class ModalStreetviewOrganizationComponent implements OnInit {
   }
 
   removeOrganization(organization: any) {
-    this.streetviewService.removeOrganization(organization.id);
+    this.streetviewService.removeOrganization(this.activeStreetview.service, organization.id);
   }
 
   submit() {

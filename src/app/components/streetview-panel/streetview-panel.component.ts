@@ -47,7 +47,7 @@ export class StreetviewPanelComponent implements OnInit {
       ModalStreetviewPublishComponent
     );
     modal.content.onClose.subscribe((publishData: any) => {
-      this.streetviewService.uploadPathToStreetviewService(
+      this.streetviewService.publishPathToStreetviewService(
         publishData.selectedPath,
         publishData.selectedOrganization,
         'mapillary'

@@ -70,7 +70,8 @@ export class StreetviewAuthenticationService {
 
   public getStreetviews(): Observable<Array<Streetview>> {
     return this.http
-      .get<Array<Streetview>>(this.envService.apiUrl + `/streetview/`)
+      // .get<Array<Streetview>>(this.envService.apiUrl + `/streetview/`)
+      .get<Array<Streetview>>(this.envService.apiUrl + `/streetview/services/`)
       .pipe(
         tap((streetviews: Array<Streetview>) => {
           this._streetviews.next(streetviews);
@@ -83,7 +84,8 @@ export class StreetviewAuthenticationService {
 
   public createStreetview(data: StreetviewRequest) {
     return this.http
-      .post<any>(this.envService.apiUrl + '/streetview/', data)
+      // .post<any>(this.envService.apiUrl + '/streetview/', data)
+      .post<any>(this.envService.apiUrl + '/streetview/services/', data)
       .pipe(
         tap(() => {
           this.getStreetviews().subscribe();
@@ -93,7 +95,8 @@ export class StreetviewAuthenticationService {
 
   public updateStreetview(streetviewId: number, data: StreetviewRequest) {
     return this.http
-      .put<any>(this.envService.apiUrl + `/streetview/${streetviewId}/`, data)
+      // .put<any>(this.envService.apiUrl + `/streetview/${streetviewId}/`, data)
+      .put<any>(this.envService.apiUrl + `/streetview/services/${streetviewId}/`, data)
       .subscribe(() => {
         this.getStreetviews().subscribe();
       });
@@ -101,7 +104,8 @@ export class StreetviewAuthenticationService {
 
   public deleteStreetview(streetviewId: number) {
     return this.http
-      .delete<any>(this.envService.apiUrl + `/streetview/${streetviewId}/`)
+      // .delete<any>(this.envService.apiUrl + `/streetview/${streetviewId}/`)
+      .delete<any>(this.envService.apiUrl + `/streetview/services/${streetviewId}/`)
       .subscribe(() => {
         this.getStreetviews().subscribe();
       });
@@ -109,7 +113,8 @@ export class StreetviewAuthenticationService {
 
   public updateStreetviewByService(service: string, data: StreetviewRequest) {
     this.http
-      .put<any>(this.envService.apiUrl + `/streetview/${service}/`, data)
+      // .put<any>(this.envService.apiUrl + `/streetview/${service}/`, data)
+      .put<any>(this.envService.apiUrl + `/streetview/services/${service}/`, data)
       .subscribe(() => {
         this.getStreetviews().subscribe();
       });
@@ -117,7 +122,8 @@ export class StreetviewAuthenticationService {
 
   public deleteStreetviewByService(service: string) {
     return this.http
-      .delete<any>(this.envService.apiUrl + `/streetview/${service}/`)
+      // .delete<any>(this.envService.apiUrl + `/streetview/${service}/`)
+      .delete<any>(this.envService.apiUrl + `/streetview/services/${service}/`)
       .subscribe(() => {
         this.getStreetviews().subscribe();
       });

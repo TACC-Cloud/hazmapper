@@ -73,7 +73,7 @@ export class StreetviewAssetDetailComponent implements OnInit {
   openStreetviewLinkModal() {
     const modal: BsModalRef = this.bsModalService.show(ModalStreetviewLinkComponent);
     modal.content.onClose.subscribe((linkData: any) => {
-      this.streetviewService.addSequenceToPath(this.activeStreetview.id,
+      this.streetviewService.addSequenceToPath(this.activeStreetview.service,
         this.sequenceId,
         linkData.selectedOrganization,
         linkData.selectedPath
