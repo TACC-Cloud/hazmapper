@@ -445,10 +445,8 @@ export class MapComponent implements OnInit, OnDestroy {
    */
   featureClickHandler(ev: any, clickType: string): void {
     if (ev.layer.feature.featureType() === 'streetview') {
-      this.streetviewService.sequenceFeatureToActiveAsset(ev.layer.feature)
-        .subscribe(e => {
-          this.mapillaryClickHandler(e, clickType);
-        });
+      const asset = this.streetviewService.sequenceFeatureToActiveAsset(ev.layer.feature);
+      this.mapillaryClickHandler(asset, clickType);
     } else {
       const f = ev.layer.feature;
       this.geoDataService.activeFeature = f;

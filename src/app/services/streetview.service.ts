@@ -8,7 +8,7 @@ import { NotificationsService } from './notifications.service';
 import { EnvService } from '../services/env.service';
 import { ProjectsService } from '../services/projects.service';
 import { StreetviewAuthenticationService } from './streetview-authentication.service';
-import { getFeatureSequenceGeometry, getFeatureSequenceId, getFeatureSequencePath } from '../utils/streetview';
+import { getFeatureSequenceGeometry, getFeatureSequenceId, getFeatureSequencePath, getFeatureImageId } from '../utils/streetview';
 import { StreetviewSequence, Streetview } from '../models/streetview';
 
 @Injectable({

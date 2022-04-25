@@ -90,9 +90,8 @@ export class AssetsPanelComponent implements OnInit {
   selectTreeNode(node: PathTree<Feature>) {
     if (node.getPayload().featureType() === 'streetview') {
       this.geoDataService.activeFeature = null;
-      this.streetviewService.sequenceFeatureToActiveAsset(node.getPayload()).subscribe(asset => {
-        this.streetviewService.activeAsset = asset;
-      });
+      const asset = this.streetviewService.sequenceFeatureToActiveAsset(node.getPayload());
+      this.streetviewService.activeAsset = asset;
     } else {
       this.streetviewService.activeAsset = null;
       this.geoDataService.activeFeature = node.getPayload();
