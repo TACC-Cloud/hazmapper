@@ -512,7 +512,7 @@ export class MapComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       const options: ViewerOptions = {
         accessToken:
-          this.streetviewAuthenticationService.getLocalToken('mapillary').token,
+          this.envService.streetviewEnv.secrets.mapillary.mapToken,
         component: {
           cover: false,
         },
