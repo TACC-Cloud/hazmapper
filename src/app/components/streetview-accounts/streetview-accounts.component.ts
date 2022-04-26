@@ -4,6 +4,7 @@ import { ProjectsService } from 'src/app/services/projects.service';
 import { ModalStreetviewUsernameComponent } from '../modal-streetview-username/modal-streetview-username.component';
 import { ModalStreetviewOrganizationComponent } from '../modal-streetview-organization/modal-streetview-organization.component';
 import { BsModalRef, BsModalService } from 'ngx-foundation';
+import { ModalService } from 'src/app/services/modal.service';
 import { Streetview } from '../../models/streetview';
 import { Project } from 'src/app/models/models';
 
@@ -19,6 +20,7 @@ export class StreetviewAccountsComponent implements OnInit {
   organizations = [];
   constructor(
     private bsModalService: BsModalService,
+    private modalService: ModalService,
     private projectsService: ProjectsService,
     private streetviewAuthenticationService: StreetviewAuthenticationService) {}
 
@@ -60,4 +62,16 @@ export class StreetviewAccountsComponent implements OnInit {
   logout(service: string) {
     this.streetviewAuthenticationService.logout(service);
   }
+
+  openDeleteStreetviewModal(service: string) {
+    this.modalService.confirm(
+      'Delete streetview service',
+      'Are you sure you want to delete this streetview service? This will delete all the service user information stored including sequence assets and upload data. Only confirm if you are ok with losing all associated data!',
+      ['Cancel', 'Confirm']).subscribe((answer) => {
+        if (answer === 'Confirm') {
+          this.streetviewAuthenticationService.deleteStreetviewByService(service);
+        }
+      });
+  }
+
 }

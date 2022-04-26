@@ -57,7 +57,6 @@ export class StreetviewAuthenticationService {
 
   public logout(service: string): void {
     localStorage.removeItem(this.TOKEN_STORE[service]);
-    this.deleteStreetviewByService(service);
   }
 
   public sequenceInStreetview(sequenceId: string): boolean {
@@ -76,7 +75,6 @@ export class StreetviewAuthenticationService {
           this._streetviews.next(streetviews);
           // NOTE: With just mapillary, assume single active streetview
           this._activeStreetview.next(streetviews[0]);
-          console.log(this._activeStreetview);
         })
       );
   }

@@ -19,6 +19,9 @@
     <div class="auth-info-button-container">
       <button class="button small" (click)="openStreetviewOrganizationModal('mapillary')">Manage Organizations</button>
     </div>
+    <div class="auth-info-button-container">
+      <button class="button small" (click)="openDeleteStreetviewModal('mapillary')">Delete Streetview Service</button>
+    </div>
 
     <div class="organization-list">
       <div *ngFor="let organization of organizations">

@@ -101,6 +101,8 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((err) => {
         if (err.status === 401) {
+          // auto logout if 401 response returned from api
+          // https://jira.tacc.utexas.edu/browse/DES-1999
           this.authService.logout();
           location.reload();
         }
