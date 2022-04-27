@@ -18,19 +18,26 @@ export class FiltersPanelComponent implements OnInit {
   readonly featureTypes = featureTypes;
   readonly featureTypeLabels = featureTypeLabels;
 
+  enabledFilters: Array<string>;
+
   constructor(private filterService: FilterService, private geoDataService: GeoDataService, private projectsService: ProjectsService) { }
 
   ngOnInit() {
     this.filterService.assetFilter.subscribe( (next) => {
       this.assetFilters = next;
     });
+
+    this.filterService.enabledAssetTypes.subscribe( (next) => {
+      this.enabledFilters = next;
+    });
+
     this.projectsService.activeProject.subscribe( (next) => {
       this.activeProject = next;
     });
   }
 
   updateAssetTypeFilters(ftype: string): void {
-    this.filterService.updateAssetTypes(ftype);
+    this.filterService.updateEnabledAssetTypes(ftype);
     this.geoDataService.getFeatures(this.activeProject.id, false);
   }
 }
