@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [2.7] - 2022-04-27
+
+### Added
+
+- DES-1828: Support Streetview with Mapillary (#45)
+
 ## [2.6] - 2022-04-19
 
 ### Fixed
@@ -74,7 +80,8 @@
 
 
 
-[unreleased]: https://github.com/TACC-Cloud/hazmapper/compare/v2.6...HEAD
+[unreleased]: https://github.com/TACC-Cloud/hazmapper/compare/v2.7...HEAD
+[2.7]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.7
 [2.6]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.6
 [2.5]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.5
 [2.4]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.4
