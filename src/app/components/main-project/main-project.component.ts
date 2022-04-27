@@ -3,6 +3,7 @@ import {Router, ActivatedRoute, UrlSegment} from '@angular/router';
 import {Feature} from '../../models/models';
 import {ProjectsService} from '../../services/projects.service';
 import {GeoDataService} from '../../services/geo-data.service';
+import {StreetviewService} from '../../services/streetview.service';
 
 @Component({
   selector: 'app-main-project',
@@ -11,11 +12,13 @@ import {GeoDataService} from '../../services/geo-data.service';
 })
 export class MainProjectComponent implements OnInit {
   public activeFeature: Feature;
+  public activeStreetviewAsset: any;
   private isPublicView = false;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private projectsService: ProjectsService,
+              private streetviewService: StreetviewService,
               private geoDataService: GeoDataService) { }
 
   ngOnInit() {
@@ -25,6 +28,9 @@ export class MainProjectComponent implements OnInit {
     this.projectsService.setActiveProjectUUID(projectUUID, this.isPublicView);
     this.geoDataService.activeFeature.subscribe(next => {
       this.activeFeature = next;
+    });
+    this.streetviewService.activeAsset.subscribe(next => {
+      this.activeStreetviewAsset = next;
     });
   }
 }

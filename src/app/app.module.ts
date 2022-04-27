@@ -2,9 +2,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import {APP_BASE_HREF} from '@angular/common';
+import { APP_BASE_HREF } from '@angular/common';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import {ModalModule, BsDropdownModule, TooltipModule, TabsModule} from 'ngx-foundation';
+import { ModalModule, BsDropdownModule, TooltipModule, TabsModule, PaginationModule } from 'ngx-foundation';
 import { FileSizeModule } from 'ngx-filesize';
 import { ApiModule} from 'ng-tapis';
 import { AppRoutingModule } from './app-routing.module';
@@ -27,9 +27,9 @@ import { AuthService } from './services/authentication.service';
 import { ModalService } from './services/modal.service';
 import { EnvService } from './services/env.service';
 import { CallbackComponent } from './components/callback/callback.component';
-import {AuthInterceptor, JwtInterceptor} from './app.interceptors';
+import { AuthInterceptor, JwtInterceptor} from './app.interceptors';
 import { ModalCreateProjectComponent } from './components/modal-create-project/modal-create-project.component';
-import {ReactiveFormsModule, FormsModule} from '@angular/forms';
+import { ReactiveFormsModule, FormsModule} from '@angular/forms';
 import { ModalFileBrowserComponent } from './components/modal-file-browser/modal-file-browser.component';
 import { ModalCreatePointCloudComponent } from './components/modal-create-point-cloud/modal-create-point-cloud.component';
 import { FeatureGeometryComponent } from './components/feature-geometry/feature-geometry.component';
@@ -46,13 +46,26 @@ import { ToastrModule } from 'ngx-toastr';
 import { ModalConfirmationBodyComponent } from './components/modal-confirmation-body/modal-confirmation-body.component';
 import { UserRowComponent } from './components/user-row/user-row.component';
 import { EditNameInputComponent } from './components/edit-name-input/edit-name-input.component';
-import { PublicMapInfoPanelComponent } from './components/public-map-info-panel/public-map-info-panel.component';
+import { StreetviewPanelComponent } from './components/streetview-panel/streetview-panel.component';
 import { MainWelcomeComponent } from './components/main-welcome/main-welcome.component';
 import { MainProjectComponent } from './components/main-project/main-project.component';
 import {DragDropModule, CDK_DRAG_CONFIG} from '@angular/cdk/drag-drop';
+import { StreetviewCallbackComponent } from './components/streetview-callback/streetview-callback.component';
+import { StreetviewAccountsComponent } from './components/streetview-accounts/streetview-accounts.component';
+import { StreetviewLogsComponent } from './components/streetview-logs/streetview-logs.component';
+import { StreetviewAssetsComponent } from './components/streetview-assets/streetview-assets.component';
+import { PublicMapInfoPanelComponent } from './components/public-map-info-panel/public-map-info-panel.component';
 import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { ModalLinkProjectComponent } from './components/modal-link-project/modal-link-project.component';
+import { ModalStreetviewPublishComponent } from './components/modal-streetview-publish/modal-streetview-publish.component';
+import { ModalStreetviewLogComponent } from './components/modal-streetview-log/modal-streetview-log.component';
+import { ModalStreetviewLinkComponent } from './components/modal-streetview-link/modal-streetview-link.component';
+import { ModalStreetviewInfoComponent } from './components/modal-streetview-info/modal-streetview-info.component';
+import { ModalStreetviewUsernameComponent } from './components/modal-streetview-username/modal-streetview-username.component';
+import { ModalStreetviewOrganizationComponent } from './components/modal-streetview-organization/modal-streetview-organization.component';
+import { StreetviewAssetDetailComponent } from './components/streetview-asset-detail/streetview-asset-detail.component';
+import { StreetviewFiltersComponent } from './components/streetview-filters/streetview-filters.component';
 
 @NgModule({
   declarations: [
@@ -83,12 +96,25 @@ import { ModalLinkProjectComponent } from './components/modal-link-project/modal
     ModalConfirmationBodyComponent,
     UserRowComponent,
     EditNameInputComponent,
-    PublicMapInfoPanelComponent,
+    StreetviewPanelComponent,
     MainWelcomeComponent,
     MainProjectComponent,
+    StreetviewCallbackComponent,
+    StreetviewAccountsComponent,
+    StreetviewLogsComponent,
+    StreetviewAssetsComponent,
+    PublicMapInfoPanelComponent,
     LoginComponent,
     LogoutComponent,
     ModalLinkProjectComponent,
+    ModalStreetviewPublishComponent,
+    ModalStreetviewLogComponent,
+    ModalStreetviewLinkComponent,
+    ModalStreetviewInfoComponent,
+    ModalStreetviewUsernameComponent,
+    ModalStreetviewOrganizationComponent,
+    StreetviewAssetDetailComponent,
+    StreetviewFiltersComponent,
   ],
   imports: [
     CommonModule,
@@ -107,7 +133,8 @@ import { ModalLinkProjectComponent } from './components/modal-link-project/modal
     TooltipModule.forRoot(),
     TabsModule.forRoot(),
     ToastrModule.forRoot(),
-    DragDropModule
+    DragDropModule,
+    PaginationModule.forRoot()
   ],
   providers: [
     AuthService,
@@ -153,6 +180,12 @@ import { ModalLinkProjectComponent } from './components/modal-link-project/modal
     ModalCreatePointCloudComponent,
     ModalCreateOverlayComponent,
     ModalCreateTileServerComponent,
+    ModalStreetviewPublishComponent,
+    ModalStreetviewLogComponent,
+    ModalStreetviewLinkComponent,
+    ModalStreetviewInfoComponent,
+    ModalStreetviewUsernameComponent,
+    ModalStreetviewOrganizationComponent,
     ModalPointCloudInfoComponent,
     ModalLinkProjectComponent]
 })

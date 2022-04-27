@@ -50,7 +50,7 @@ export class AuthService {
     }
   }
 
-  private redirectToAuthenticator() {
+  public redirectToAuthenticator() {
     const client_id = this.envService.clientId;
     const callback = location.origin + this.envService.baseHref + 'callback';
     const state = Math.random().toString(36);
@@ -108,4 +108,10 @@ export class AuthService {
     }
   }
 
+  checkLoggedIn(): void {
+    if (!this.isLoggedIn()) {
+      this.logout();
+      this.redirectToAuthenticator();
+    }
+  }
 }

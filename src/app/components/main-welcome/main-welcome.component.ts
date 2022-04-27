@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Project } from '../../models/models';
+import { Streetview } from '../../models/streetview';
 import {ProjectsService} from '../../services/projects.service';
 import {BsModalRef, BsModalService} from 'ngx-foundation';
 import {AgaveSystemsService} from '../../services/agave-systems.service';
@@ -8,6 +9,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ModalService } from 'src/app/services/modal.service';
 import { combineLatest } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { StreetviewAuthenticationService } from 'src/app/services/streetview-authentication.service';
+import { StreetviewService } from 'src/app/services/streetview.service';
 
 @Component({
   selector: 'app-main-welcome',
@@ -31,12 +34,20 @@ export class MainWelcomeComponent implements OnInit {
     private projectsService: ProjectsService,
     private bsModalService: BsModalService,
     private modalService: ModalService,
+    private streetviewAuthenticationService: StreetviewAuthenticationService,
+    private streetviewService: StreetviewService,
     private agaveSystemsService: AgaveSystemsService
   ) { }
 
   ngOnInit() {
     this.projectsService.getProjects();
     this.agaveSystemsService.list();
+    this.streetviewAuthenticationService.getStreetviews().subscribe();
+    this.streetviewAuthenticationService.activeStreetview.subscribe((asv: Streetview) => {
+      if (asv) {
+        this.streetviewService.activeMapillaryOrganizations = asv.organizations.map(o => o.key);
+      }
+    });
 
     this.projectsService.loadingProjectsFailed.subscribe((notConnected) => {
       this.notConnected = notConnected;

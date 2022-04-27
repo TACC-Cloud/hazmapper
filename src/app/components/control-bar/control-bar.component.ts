@@ -10,19 +10,23 @@ import {MAIN} from '../../constants/routes';
 import {Router} from '@angular/router';
 import {AuthService} from '../../services/authentication.service';
 import { AgaveSystemsService } from 'src/app/services/agave-systems.service';
+import { StreetviewAuthenticationService } from 'src/app/services/streetview-authentication.service';
+import { StreetviewService } from 'src/app/services/streetview.service';
+import { Streetview } from 'src/app/models/streetview';
 
 @Component({
   selector: 'app-control-bar',
   templateUrl: './control-bar.component.html',
   styleUrls: ['./control-bar.component.styl']
 })
+
 export class ControlBarComponent implements OnInit, OnDestroy {
   @Input() isPublicView = false;
   private subscription: Subscription = new Subscription();
   private activeProject: Project;
   private mapMouseLocation: LatLng = new LatLng(0, 0);
-  private loadingActiveProject = true;
-  private loadingActiveProjectFailed = false;
+  public loadingActiveProject = true;
+  public loadingActiveProjectFailed = false;
   private loadingData = false;
   private canSwitchToPrivateMap = false;
 
@@ -30,6 +34,8 @@ export class ControlBarComponent implements OnInit, OnDestroy {
               private projectsService: ProjectsService,
               private geoDataService: GeoDataService,
               private notificationsService: NotificationsService,
+              private streetviewAuthenticationService: StreetviewAuthenticationService,
+              private streetviewService: StreetviewService,
               private authService: AuthService,
               private agaveSystemsService: AgaveSystemsService
               ) { }
@@ -56,6 +62,13 @@ export class ControlBarComponent implements OnInit, OnDestroy {
         .subscribe(([activeProject, dsProjects]) => {
           if (activeProject) {
             this.geoDataService.getDataForProject(activeProject.id, this.isPublicView);
+            this.streetviewAuthenticationService.getStreetviews().subscribe();
+            this.streetviewAuthenticationService.activeStreetview.subscribe((asv: Streetview) => {
+              if (asv) {
+                this.streetviewService.activeMapillaryOrganizations = asv.organizations.map(o => o.key);
+              }
+            });
+
             this.activeProject = this.agaveSystemsService.getProjectMetadata([activeProject], dsProjects)[0];
           } else {
             this.geoDataService.clearData();

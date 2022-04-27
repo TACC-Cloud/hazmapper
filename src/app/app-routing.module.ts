@@ -5,11 +5,11 @@ import {AuthService} from './services/authentication.service';
 import {MainComponent} from './components/main/main.component';
 import {MainProjectComponent} from './components/main-project/main-project.component';
 import {MainWelcomeComponent} from './components/main-welcome/main-welcome.component';
+import { StreetviewCallbackComponent } from './components/streetview-callback/streetview-callback.component';
 import {CallbackComponent} from './components/callback/callback.component';
 import {LoginComponent} from './components/login/login.component';
 import {LogoutComponent} from './components/logout/logout.component';
 import {LOGIN} from './constants/routes';
-
 
 @Injectable()
 export class Activate implements CanActivate {
@@ -34,6 +34,7 @@ const routes: Routes = [
       {path: '', pathMatch: 'full', component: MainWelcomeComponent, canActivate: [Activate]},
     ]},
   {path: 'callback', component: CallbackComponent},
+  {path: 'streetview/callback', component: StreetviewCallbackComponent},
   {path: '404', component: NotFoundComponent},
   {path: '**', redirectTo: '', pathMatch: 'full'}
   ];

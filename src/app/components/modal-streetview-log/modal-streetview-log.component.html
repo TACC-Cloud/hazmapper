@@ -1,0 +1,11 @@
+{{notification.message}}
+{{notification.status}}
+<div *ngIf="notification.status == 'success' && notification.logs.errorMessage">
+  <div *ngFor="let message of notification.logs.uploadFiles">
+    {{message}}
+  </div>
+</div>
+
+<div *ngIf="notification.status == 'error' && notification.logs.errorMessage">
+  {{notification.logs.errorMessage}}
+</div>
