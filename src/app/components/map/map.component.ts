@@ -86,7 +86,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.map = new L.Map('map', {
       center: [40, -80],
       zoom: 3,
-      maxZoom: 19,
+      maxZoom: 24,
     });
 
     this.subscription.add(
@@ -360,6 +360,7 @@ export class MapComponent implements OnInit, OnDestroy {
     } else if (ts.type === 'arcgis') {
       return esri.tiledMapLayer({
         url: ts.url,
+        maxZoom: 24
       });
     }
   }
