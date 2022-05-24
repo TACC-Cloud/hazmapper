@@ -14,7 +14,8 @@ export const defaultTileServers: ReadonlyArray<TileServer> = [
     },
     tileOptions: {
       minZoom: 0,
-      maxZoom: 19
+      maxZoom: 24,
+      maxNativeZoom: 19
     },
   },
   {
@@ -30,7 +31,8 @@ export const defaultTileServers: ReadonlyArray<TileServer> = [
     },
     tileOptions: {
       minZoom: 0,
-      maxZoom: 19
+      maxZoom: 24,
+      maxNativeZoom: 19
     },
   }
 ] as const;
