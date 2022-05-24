@@ -153,6 +153,7 @@ interface TileServerOptions {
   // TMS options
   minZoom?: number;
   maxZoom?: number;
+  maxNativeZoom?: number;
 
   // WMS options
   layers?: string;
