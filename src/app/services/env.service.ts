@@ -117,9 +117,7 @@ export class EnvService {
         mapillary: {
           clientSecret: 'MLY|4866220476802272|909ed0e2baefa5d5c195710f5c83f98b',
           clientId: '4866220476802272',
-          clientToken: 'MLY|4866220476802272|cedfb10deac752ca3ddf83997cef60a4',
-          mapToken:
-            'MLYARDcnHyGduYMTxCn5gVuhZCFPHQAFhZBUX1JGw25udGnTa6YunU3UYUZBsmiIykVApTBwxHguCyTZAdGvHavJ6O7mr3uPA3ZC3ZCOwkTg2HiVR8AoR5Om2Dhw2vAOawgZDZD',
+          clientToken: 'MLY|4866220476802272|cedfb10deac752ca3ddf83997cef60a4'
         },
       };
       // local devevelopers can use localhost or hazmapper.local but
@@ -146,9 +144,7 @@ export class EnvService {
         mapillary: {
           clientSecret: 'MLY|4936281379826603|cafd014ccd8cfc983e47c69c16082c7b',
           clientId: '4936281379826603',
-          clientToken: 'MLY|4936281379826603|f8c4732d3c9d96582b86158feb1c1a7a',
-          mapToken:
-            'MLYARDcnHyGduYMTxCn5gVuhZCFPHQAFhZBUX1JGw25udGnTa6YunU3UYUZBsmiIykVApTBwxHguCyTZAdGvHavJ6O7mr3uPA3ZC3ZCOwkTg2HiVR8AoR5Om2Dhw2vAOawgZDZD',
+          clientToken: 'MLY|4936281379826603|f8c4732d3c9d96582b86158feb1c1a7a'
         },
       };
     } else if (/^hazmapper.tacc.utexas.edu/.test(hostname)) {
@@ -166,9 +162,7 @@ export class EnvService {
         mapillary: {
           clientSecret: 'MLY|5156692464392931|6be48c9f4074f4d486e0c42a012b349f',
           clientId: '5156692464392931',
-          clientToken: 'MLY|5156692464392931|4f1118aa1b06f051a44217cb56bedf79',
-          mapToken:
-            'MLYARDcnHyGduYMTxCn5gVuhZCFPHQAFhZBUX1JGw25udGnTa6YunU3UYUZBsmiIykVApTBwxHguCyTZAdGvHavJ6O7mr3uPA3ZC3ZCOwkTg2HiVR8AoR5Om2Dhw2vAOawgZDZD',
+          clientToken: 'MLY|5156692464392931|4f1118aa1b06f051a44217cb56bedf79'
         },
       };
     } else {
