@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import * as L from 'leaflet';
 import * as esri from 'esri-leaflet';
 import 'types.leaflet.heat';
@@ -27,6 +27,7 @@ import { EnvService } from '../../services/env.service';
 import { StreetviewService } from 'src/app/services/streetview.service';
 import { StreetviewAuthenticationService } from 'src/app/services/streetview-authentication.service';
 import { ActivatedRoute } from '@angular/router';
+import { ModalService } from 'src/app/services/modal.service';
 import { streetviewAssetStyles } from '../../utils/streetview';
 
 @Component({
@@ -35,6 +36,8 @@ import { streetviewAssetStyles } from '../../utils/streetview';
   styleUrls: ['./map.component.styl'],
 })
 export class MapComponent implements OnInit, OnDestroy {
+  @Input() isPublicView;
+
   map: L.Map;
   mapType = 'normal';
   activeFeature: Feature;
@@ -73,6 +76,7 @@ export class MapComponent implements OnInit, OnDestroy {
     private projectsService: ProjectsService,
     private geoDataService: GeoDataService,
     private envService: EnvService,
+    private modalService: ModalService,
     private route: ActivatedRoute,
     private streetviewService: StreetviewService,
     private streetviewAuthenticationService: StreetviewAuthenticationService
@@ -278,7 +282,7 @@ export class MapComponent implements OnInit, OnDestroy {
       const vectorTileOptions = {
         attribution: 'Mapillary layer',
         vectorTileLayerStyles: vectorTileStyling,
-        token: this.envService.streetviewEnv.secrets.mapillary.mapToken,
+        token: this.streetviewAuthenticationService.getLocalToken('mapillary').token,
         interactive: true,
         getFeatureId: (f: any) => {
           return f.properties.id;
@@ -490,13 +494,20 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   openOrMoveStreetviewViewer(imageId: string, latlng: any) {
-    if (this.streetviewViewer) {
-      this.streetviewViewer.moveTo(imageId).catch(() => {});
+    if (this.streetviewAuthenticationService.isLoggedIn('mapillary', this.isPublicView)) {
+      if (this.streetviewViewer) {
+        this.streetviewViewer.moveTo(imageId).catch(() => {});
+      } else {
+        this.openStreetviewViewer(imageId);
+      }
+      this.openOrMoveStreetviewMarker(latlng);
     } else {
-      this.openStreetviewViewer(imageId);
+      // TODO: Open a warning message saying that you need auth
+      this.modalService.confirm(
+        'Not authenticated to Mapillary',
+        'In order to use the streetview viewer, you must login to Mapillary. Do this by navigating to the Streetview panel on the left and clicking the "Login to Mapillary" button.',
+        ['Close', 'Confirm']).subscribe();
     }
-
-    this.openOrMoveStreetviewMarker(latlng);
   }
 
   openOrMoveStreetviewMarker(latlng: any) {
@@ -513,7 +524,7 @@ export class MapComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       const options: ViewerOptions = {
         accessToken:
-          this.envService.streetviewEnv.secrets.mapillary.mapToken,
+          this.streetviewAuthenticationService.getLocalToken('mapillary').token,
         component: {
           cover: false,
         },

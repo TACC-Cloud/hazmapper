@@ -56,7 +56,7 @@ export class StreetviewAccountsComponent implements OnInit {
   }
 
   login(service: string) {
-    this.streetviewAuthenticationService.login(service, this.activeProject.id);
+    this.streetviewAuthenticationService.login(service, this.activeProject.id, false);
   }
 
   logout(service: string) {

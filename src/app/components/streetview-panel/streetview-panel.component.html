@@ -5,48 +5,65 @@
 
   <div class="dock-panel-content">
     <div *ngIf="isLoggedIn('mapillary'); else notAuthenticated">
-      <div *ngIf="activeStreetview && activeStreetview.service_user && activeStreetview.organizations.length; else noUsername">
-        <div class="text-center" style="padding-top: 20px">
-          <label class="tile-server-visibility">
-            Display Mapillary Sequences
-            <input name=""
-              type="checkbox"
-              [checked]="displayStreetview"
-              (change)="toggleStreetviewDisplay()"/>
-          </label>
+      <div *ngIf="!isPublicView; else publicView">
+        <div *ngIf="activeStreetview && activeStreetview.service_user && activeStreetview.organizations.length; else noUsername">
+          <div class="text-center" style="padding-top: 20px">
+            <label class="tile-server-visibility">
+              Display Mapillary Sequences
+              <input name=""
+                type="checkbox"
+                [checked]="displayStreetview"
+                (change)="toggleStreetviewDisplay()"/>
+            </label>
+          </div>
+          <div class="publish-container grid-x align-right">
+            <a class="publish-button" (click)="openStreetviewPublishModal()">
+              <small>
+                <i class="fas fa-plus"></i>
+                Publish
+              </small>
+            </a>
+          </div>
+
+          <tabset>
+            <tab heading="Assets">
+              <app-streetview-assets>
+              </app-streetview-assets>
+            </tab>
+
+            <tab heading="Log">
+              <app-streetview-logs>
+              </app-streetview-logs>
+            </tab>
+
+            <tab heading="Filters">
+              <app-streetview-filters>
+              </app-streetview-filters>
+            </tab>
+
+            <tab heading="Account">
+              <app-streetview-accounts>
+              </app-streetview-accounts>
+            </tab>
+          </tabset>
         </div>
-        <div class="publish-container grid-x align-right">
-          <a class="publish-button" (click)="openStreetviewPublishModal()">
-            <small>
-              <i class="fas fa-plus"></i>
-              Publish
-            </small>
-          </a>
-        </div>
-
-        <tabset>
-        <tab heading="Assets">
-        <app-streetview-assets>
-        </app-streetview-assets>
-        </tab>
-
-        <tab heading="Log">
-        <app-streetview-logs>
-        </app-streetview-logs>
-        </tab>
-
-        <tab heading="Filters">
-        <app-streetview-filters>
-        </app-streetview-filters>
-        </tab>
-
-        <tab heading="Account">
-        <app-streetview-accounts>
-        </app-streetview-accounts>
-        </tab>
-        </tabset>
       </div>
     </div>
+
+    <ng-template #publicView>
+      <div style="text-align: center">
+        <div class="grid-y align-center">
+          <div>
+            Logged into Mapillary
+          </div>
+
+          <button class="button auth-button" (click)="logout('mapillary')">
+            Logout
+          </button>
+
+        </div>
+      </div>
+    </ng-template>
 
     <ng-template #notAuthenticated>
       <div style="margin-top: 8rem; height:100%" class="not-authenticated grid-y align-start text-center">

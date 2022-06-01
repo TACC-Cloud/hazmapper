@@ -31,6 +31,7 @@ export class StreetviewCallbackComponent implements OnInit {
 
     const service = state.service;
     const originUrl = state.originUrl;
+    const isPublicView = state.isPublicView;
 
     this.streetviewAuthenticationService.setToken(service, params.code)
     .subscribe((resp: any) => {
@@ -41,34 +42,36 @@ export class StreetviewCallbackComponent implements OnInit {
 
       this.streetviewAuthenticationService.setLocalToken(service, token);
 
-      this.streetviewAuthenticationService.getStreetviews().subscribe(svs => {
-        const currentStreetview = svs.some(sv => sv.service === service);
-        if (!currentStreetview) {
-          this.streetviewAuthenticationService.createStreetview({
-            token: token.token,
-            service,
-          }).subscribe(() => {
-            const usernameModal = this.bsModalService.show(ModalStreetviewUsernameComponent, {class: 'tiny'});
-            usernameModal.content.onClose.subscribe((resp: any) => {
-              if (resp.username && this.activeStreetview) {
-                this.streetviewAuthenticationService.updateStreetviewByService(
-                  service,
-                  {service_user: resp.username}
-                );
-                this.notificationsService.showSuccessToast('Successfully added username to Mapillary!');
-                this.bsModalService.show(ModalStreetviewOrganizationComponent);
-              } else {
-                this.notificationsService.showWarningToast('Must include username to Mapillary to work properly!');
-              }
+      if (!isPublicView) {
+        this.streetviewAuthenticationService.getStreetviews().subscribe(svs => {
+          const currentStreetview = svs.some(sv => sv.service === service);
+          if (!currentStreetview) {
+            this.streetviewAuthenticationService.createStreetview({
+              token: token.token,
+              service,
+            }).subscribe(() => {
+              const usernameModal = this.bsModalService.show(ModalStreetviewUsernameComponent, {class: 'tiny'});
+              usernameModal.content.onClose.subscribe((resp: any) => {
+                if (resp.username && this.activeStreetview) {
+                  this.streetviewAuthenticationService.updateStreetviewByService(
+                    service,
+                    {service_user: resp.username}
+                  );
+                  this.notificationsService.showSuccessToast('Successfully added username to Mapillary!');
+                  this.bsModalService.show(ModalStreetviewOrganizationComponent);
+                } else {
+                  this.notificationsService.showWarningToast('Must include username to Mapillary to work properly!');
+                }
+              });
             });
-          });
-        } else {
-          const data = {
-            token: token.token
-          };
-          this.streetviewAuthenticationService.updateStreetviewByService(service, data);
-        }
-      });
+          } else {
+            const data = {
+              token: token.token
+            };
+            this.streetviewAuthenticationService.updateStreetviewByService(service, data);
+          }
+        });
+      }
     });
 
     this.router.navigate([originUrl]);
