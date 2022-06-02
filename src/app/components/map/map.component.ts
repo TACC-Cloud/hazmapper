@@ -504,7 +504,7 @@ export class MapComponent implements OnInit, OnDestroy {
     } else {
       this.modalService.confirm(
         'Not authenticated to Mapillary',
-        'In order to use the streetview viewer, you must login to Mapillary. Do this by navigating to the Streetview panel on the left and clicking the "Login to Mapillary" button.',
+        'In order to use the streetview viewer, you must login to Mapillary. Navigate to the Streetview panel on the left and click the "Login to Mapillary" button.',
         ['Close', 'Login To Mapillary']).subscribe(answer => {
           if (answer === 'Login To Mapillary') {
             this.projectsService.setPanelsDisplay('streetview');
