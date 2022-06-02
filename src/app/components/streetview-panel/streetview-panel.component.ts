@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-foundation';
 import { Streetview } from '../../models/streetview';
 import { StreetviewService } from '../../services/streetview.service';
@@ -16,6 +16,7 @@ import { Project } from 'src/app/models/models';
   styleUrls: ['./streetview-panel.component.styl'],
 })
 export class StreetviewPanelComponent implements OnInit {
+  @Input() isPublicView;
   private activeStreetview: Streetview;
   private activeProject: Project;
   private displayStreetview = false;
@@ -73,7 +74,7 @@ export class StreetviewPanelComponent implements OnInit {
   }
 
   login(svService: string) {
-    this.streetviewAuthenticationService.login(svService, this.activeProject.id);
+    this.streetviewAuthenticationService.login(svService, this.activeProject.id, this.isPublicView);
   }
 
   logout(svService: string) {
@@ -81,7 +82,7 @@ export class StreetviewPanelComponent implements OnInit {
   }
 
   isLoggedIn(svService: string) {
-    return this.streetviewAuthenticationService.isLoggedIn(svService);
+    return this.streetviewAuthenticationService.isLoggedIn(svService, this.isPublicView);
   }
 
   toggleStreetviewDisplay() {

@@ -298,17 +298,18 @@ export class StreetviewService {
       }
     };
 
-    return this.getMapillaryImages(sequenceId)
-      .pipe(
-        map(e => {
-          const [img] = e.data;
-          layerData.layer.properties.image_id = img.id;
-          return layerData;
-        }),
-        catchError((err) => {
-          return of(layerData);
-        })
-      )
+    if (this.streetviewAuthentication.isLoggedIn('mapillary')) {
+      return this.getMapillaryImages(sequenceId)
+        .pipe(
+          map(e => {
+            const [img] = e.data;
+            layerData.layer.properties.image_id = img.id;
+            return layerData;
+          }),
+        );
+    } else {
+      return of(layerData);
+    }
   }
 
   public get activeAsset() {

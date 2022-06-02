@@ -9,7 +9,7 @@
    <app-dock [isPublicView]=isPublicView></app-dock>
   </div>
   <div class="cell auto">
-    <app-map></app-map>
+    <app-map [isPublicView]=isPublicView></app-map>
   </div>
   <app-asset-detail *ngIf="activeFeature" [isPublicView]=isPublicView></app-asset-detail>
   <app-streetview-asset-detail *ngIf="activeStreetviewAsset"></app-streetview-asset-detail>

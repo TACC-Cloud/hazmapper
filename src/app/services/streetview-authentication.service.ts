@@ -41,18 +41,18 @@ export class StreetviewAuthenticationService {
     );
   }
 
-  public isLoggedIn(service: string): boolean {
+  public isLoggedIn(service: string, isPublicView: boolean = false): boolean {
     const userToken: AuthToken = this.getLocalToken(service);
 
-    if (!this._activeStreetview.getValue()) {
+    if (!isPublicView && !this._activeStreetview.getValue()) {
       return false;
     }
 
     return userToken && !userToken.isExpired();
   }
 
-  public login(service: string, projectId: number) {
-    this.tokenRequest(service, projectId);
+  public login(service: string, projectId: number, isPublicView: boolean) {
+    this.tokenRequest(service, projectId, isPublicView);
   }
 
   public logout(service: string): void {
@@ -153,7 +153,7 @@ export class StreetviewAuthenticationService {
     );
   }
 
-  private tokenRequest(service: string, projectId: number): void {
+  private tokenRequest(service: string, projectId: number, isPublicView: boolean): void {
     const envs = this.envService.streetviewEnv[service];
     const secretEnvs = this.envService.streetviewEnv.secrets[service];
 
@@ -162,6 +162,7 @@ export class StreetviewAuthenticationService {
       service,
       projectId,
       username: this._username,
+      isPublicView
     });
 
     const callback =
