@@ -13,6 +13,7 @@ import {NotificationsService} from './notifications.service';
 import {EnvService} from '../services/env.service';
 import { StreetviewAuthenticationService } from './streetview-authentication.service';
 import {defaultTileServers} from '../constants/tile-servers';
+import { existingFeatures } from '../constants/assets';
 
 @Injectable({
   providedIn: 'root'
@@ -53,6 +54,9 @@ export class GeoDataService {
   private _dirtyTileOptions: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public readonly dirtyTileOptions$: Observable<boolean> = this._dirtyTileOptions.asObservable();
 
+  private _existingFeatureTypes: BehaviorSubject<Record<string, boolean>> = new BehaviorSubject<Record<string, boolean>>(existingFeatures);
+  public readonly existingFeatureTypes: Observable<Record<string, boolean>> = this._existingFeatureTypes.asObservable();
+
   constructor(private http: HttpClient, private filterService: FilterService,
               private streetviewAuthentication: StreetviewAuthenticationService,
               private notificationsService: NotificationsService, private envService: EnvService) {
@@ -78,7 +82,11 @@ export class GeoDataService {
     this.setLoadFeatureData(true);
     this.http.get<FeatureCollection>(this.envService.apiUrl + `/${projectRoute}/${projectId}/features/` + '?' + qstring)
       .subscribe( (fc: FeatureCollection) => {
-        fc.features = fc.features.map( (feat: Feature) => new Feature(feat));
+        fc.features = fc.features.map( (feat: Feature) => {
+          const feature = new Feature(feat);
+          this._existingFeatureTypes.value[feature.featureType()] = true;
+          return feature;
+        });
 
         // Check if active feature is no longer present (i.e. filtered out, deleted)
         // TODO: this should be a stream/observable like in deleteOverlay;
@@ -140,7 +148,6 @@ export class GeoDataService {
       .subscribe(
         (resp) => {
           this.getFeatures(projectId);
-          console.log(resp);
           this.notificationsService.showSuccessToast('Started processing streetview sequence to map!');
         },
         (error) => {

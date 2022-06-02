@@ -8,6 +8,7 @@ import {
   AgaveFileOperations,
 } from '../models/models';
 import { RapidProjectRequest } from '../models/rapid-project-request';
+import { IpanelsDisplay, defaultPanelsDisplay } from '../models/ui';
 import { catchError, map, tap, filter, take } from 'rxjs/operators';
 import { IProjectUser } from '../models/project-user';
 import { NotificationsService } from './notifications.service';
@@ -62,6 +63,12 @@ export class ProjectsService {
   >([]);
   public deletingProjects: Observable<Project[]> =
     this._deletingProjects.asObservable();
+
+  private _panelsDisplay: BehaviorSubject<IpanelsDisplay> = new BehaviorSubject<
+    IpanelsDisplay
+  >(defaultPanelsDisplay);
+  public panelsDisplay: Observable<IpanelsDisplay> =
+    this._panelsDisplay.asObservable();
 
   constructor(
     private http: HttpClient,
@@ -308,5 +315,24 @@ export class ProjectsService {
           throw new Error('Unable to update project.');
         })
       );
+  }
+
+  setPanelsDisplay(panelName: string): void {
+    const panelsDisplay = this._panelsDisplay.value;
+    for (const key in panelsDisplay) {
+      if (key !== panelName) { panelsDisplay[key] = false; }
+    }
+
+    panelsDisplay[panelName] = !panelsDisplay[panelName];
+
+    this._panelsDisplay.next(panelsDisplay);
+  }
+
+  disablePanelsDisplay(): void {
+    const panelsDisplay = this._panelsDisplay.value;
+    for (const key in panelsDisplay) {
+      panelsDisplay[key] = false;
+    }
+    this._panelsDisplay.next(panelsDisplay);
   }
 }

@@ -1,18 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ProjectsService} from '../../services/projects.service';
 import {Project} from '../../models/models';
-
-
-interface IpanelsDisplay {
-  assets: boolean;
-  layers: boolean;
-  filters: boolean;
-  measure: boolean;
-  settings: boolean;
-  pointClouds: boolean;
-  streetview: boolean;
-  users: boolean;
-}
+import {IpanelsDisplay} from '../../models/ui';
+import { GeoDataService } from 'src/app/services/geo-data.service';
 
 @Component({
   selector: 'app-dock',
@@ -23,38 +13,32 @@ export class DockComponent implements OnInit {
   @Input() isPublicView = false;
   panelsDisplay: IpanelsDisplay;
   activeProject: Project;
+  existingFeatureTypes: Record<string, boolean>;
 
-  constructor(private projectsService: ProjectsService) { }
+  constructor(
+    private projectsService: ProjectsService,
+    private geoDataService: GeoDataService
+  ) { }
 
   ngOnInit() {
-    this.panelsDisplay = <IpanelsDisplay> {
-      assets: false,
-      layers: false,
-      filters: false,
-      pointClouds: false,
-      measure: false,
-      settings: false,
-      streetview: false,
-      users: false,
-    };
-
     this.projectsService.activeProject.subscribe( (next) => {
       this.activeProject = next;
       if (!this.activeProject) {
-        for (const key in this.panelsDisplay) {
-          this.panelsDisplay[key] = false;
-        }
+        this.projectsService.disablePanelsDisplay();
       }
     });
 
+    this.geoDataService.existingFeatureTypes.subscribe( (next) => {
+      this.existingFeatureTypes = next;
+    });
+
+
+    this.projectsService.panelsDisplay.subscribe( (next) => {
+      this.panelsDisplay = next;
+    });
   }
 
   showPanel(pname: string) {
-    for (const key in this.panelsDisplay) {
-      if (key !== pname) { this.panelsDisplay[key] = false; }
-    }
-    this.panelsDisplay[pname] = !this.panelsDisplay[pname];
-
+    this.projectsService.setPanelsDisplay(pname);
   }
-
 }

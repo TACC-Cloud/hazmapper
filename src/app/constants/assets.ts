@@ -9,3 +9,11 @@ export const featureTypeLabels: Record<featuresTypeID, string> = {
   streetview: 'Streetview',
   no_asset_vector: 'No Asset Vector'
 } as const;
+
+export const existingFeatures: Record<string, boolean> = {
+  image: false,
+  video: false,
+  point_cloud: false,
+  streetview: false,
+  no_asset_vector: false
+} as const

@@ -502,11 +502,14 @@ export class MapComponent implements OnInit, OnDestroy {
       }
       this.openOrMoveStreetviewMarker(latlng);
     } else {
-      // TODO: Open a warning message saying that you need auth
       this.modalService.confirm(
         'Not authenticated to Mapillary',
         'In order to use the streetview viewer, you must login to Mapillary. Do this by navigating to the Streetview panel on the left and clicking the "Login to Mapillary" button.',
-        ['Close', 'Confirm']).subscribe();
+        ['Close', 'Login To Mapillary']).subscribe(answer => {
+          if (answer === 'Login To Mapillary') {
+            this.projectsService.setPanelsDisplay('streetview');
+          }
+        });
     }
   }
 

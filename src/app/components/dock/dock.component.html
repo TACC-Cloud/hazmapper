@@ -40,7 +40,7 @@
         </div>
       </button>
     </div>
-    <div class="dock-button" [ngClass]="{'active': panelsDisplay.streetview}">
+    <div class="dock-button" [ngClass]="{'active': panelsDisplay.streetview}" *ngIf="((existingFeatureTypes['streetview'] && isPublicView) || !isPublicView)">
       <button (click)="showPanel('streetview')"  [disabled]="!activeProject">
         <div>
           <img class="dock-button-icon" src="assets/streetview.png" width="32px">
@@ -69,7 +69,7 @@
     <app-measure-panel *ngIf="panelsDisplay.measure" ></app-measure-panel>
     <app-settings-panel *ngIf="panelsDisplay.settings" ></app-settings-panel>
     <app-point-clouds-panel *ngIf="panelsDisplay.pointClouds"></app-point-clouds-panel>
-    <app-streetview-panel *ngIf="panelsDisplay.streetview" [isPublicView]=isPublicView></app-streetview-panel>
+    <app-streetview-panel *ngIf="panelsDisplay.streetview && ((existingFeatureTypes['streetview'] && isPublicView) || !isPublicView)" [isPublicView]=isPublicView></app-streetview-panel>
     <app-users-panel *ngIf="panelsDisplay.users && !isPublicView"></app-users-panel>
     <app-public-map-info-panel *ngIf="panelsDisplay.users && isPublicView"></app-public-map-info-panel>
   </div>
