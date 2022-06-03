@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+## [2.8] - 2022-06-03
+
+### Added
+
+- DES-2215: Adjust tile server zoom levels (#89)
+
+### Fixed
+
+- DES-2273: Mapillary authentication token enforce login (#91)
+
 ## [2.7] - 2022-04-27
 
 ### Added
