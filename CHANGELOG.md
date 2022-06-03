@@ -90,7 +90,8 @@
 
 
 
-[unreleased]: https://github.com/TACC-Cloud/hazmapper/compare/v2.7...HEAD
+[unreleased]: https://github.com/TACC-Cloud/hazmapper/compare/v2.8...HEAD
+[2.8]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.8
 [2.7]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.7
 [2.6]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.6
 [2.5]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.5
