@@ -6,7 +6,7 @@ import 'leaflet.markercluster';
 
 import { ProjectsService} from '../../services/projects.service';
 import { GeoDataService} from '../../services/geo-data.service';
-import { createMarker } from '../../utils/leafletUtils';
+import { createMarker, setMarkerStyle } from '../../utils/leafletUtils';
 import {Feature} from 'geojson';
 import {FeatureGroup, Layer, LayerGroup, LeafletMouseEvent, TileLayer} from 'leaflet';
 import * as turf from '@turf/turf';
@@ -26,6 +26,7 @@ import { assetStyles } from 'src/app/constants/styles';
 export class MapComponent implements OnInit, OnDestroy {
   map: L.Map;
   activeFeature: Feature;
+  previousFeatureLayer: Layer;
   _activeProjectId: number;
   nonPointFeatures: LayerGroup[] = [];
   features: FeatureGroup = new FeatureGroup();
@@ -102,18 +103,10 @@ export class MapComponent implements OnInit, OnDestroy {
       }));
 
     // Listen on the activeFeature stream and zoom map to that feature when it changes
-    this.subscription.add(this.geoDataService.activeFeature.pipe(filter(n => n != null)).subscribe( (next) => {
+    this.subscription.add(this.geoDataService.activeFeature.pipe(filter(n => n != null)).subscribe( (next: Feature) => {
       this.activeFeature = next;
       const bbox = turf.bbox(<AllGeoJSON> next);
       this.map.fitBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]]);
-
-      this.geoDataService.setFeatures({
-        ...this.featuresList,
-        features: this.featuresList.features.map((f: Feature) => {
-          f.properties.style = f.id === next.id ? assetStyles.active : assetStyles.default;
-          return f
-        })
-      });
     }));
   }
 
@@ -172,13 +165,15 @@ export class MapComponent implements OnInit, OnDestroy {
       collection.features.forEach(d => {
         let feat: LayerGroup;
 
-        d.properties.style = d.properties.style ? d.properties.style : assetStyles.default;
-        if (d.geometry.type === 'Polygon') {
+        d.properties.style = d.properties.customStyle
+          ? d.properties.customStyle
+          : assetStyles.default;
+
+        if (d.geometry.type === 'Polygon' || d.geometry.type === 'LineString') {
           feat = L.geoJSON(d, {style: d.properties.style});
         } else {
           feat = L.geoJSON(d, geojsonOptions);
         }
-
 
         feat.on('click', (ev) => { this.featureClickHandler(ev); } );
         
@@ -218,7 +213,13 @@ export class MapComponent implements OnInit, OnDestroy {
    * @param ev
    */
   featureClickHandler(ev: any): void {
-    if (ev.layer.feature.featureType() !== 'Point') {
+    if (this.previousFeatureLayer) {
+      setMarkerStyle(this.previousFeatureLayer, false);
+    }
+    setMarkerStyle(ev.layer, true);
+    this.previousFeatureLayer = ev.layer;
+
+    if (ev.layer.feature.featureType() === 'point_cloud') {
       const overlapFeatures = [];
       this.map.contextmenu.removeAllItems();
 

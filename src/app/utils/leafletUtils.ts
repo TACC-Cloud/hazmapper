@@ -1,6 +1,7 @@
 import {CircleMarker, Path, circleMarker, divIcon, LatLng, Marker, marker} from 'leaflet';
 import {Feature} from '../models/models';
 import {MarkerStyle} from '../models/style';
+import { assetStyles } from 'src/app/constants/styles';
 
 interface MarkerIcon {
   color: string;
@@ -65,6 +66,37 @@ function createCustomIconMarker(latlng: LatLng, style: MarkerStyle): Marker {
 
 function createCustomCircleMarker(latlng: LatLng, style: MarkerStyle): CircleMarker {
   return circleMarker(latlng, style);
+}
+
+export function setMarkerStyle(layer: any, active: boolean) {
+  const custom = layer.feature.properties.customStyle;
+  const featureType = layer.feature.featureType();
+  let icon = null;
+  if (featureType === 'Point' && custom && custom.faIcon) {
+    icon = custom.faIcon;
+  } else {
+    if (featureType === 'video') {
+      icon = 'fa-video';
+    } else if (featureType === 'image') {
+      icon = 'fa-camera-retro'
+    }
+  }
+
+  const color = active
+    ? assetStyles.active.color
+    : (custom
+      ? custom.color
+      : assetStyles.default.color);
+
+  if (icon) {
+    const divHtml = `<i style="color: ${color}" class="fas ${icon} fa-2x"></i>`;
+    layer.setIcon(divIcon({
+      html: divHtml,
+      className: 'leaflet-fa-marker-icon'
+    }));
+  } else {
+    layer.setStyle({fillColor: color, color});
+  }
 }
 
 export function createMarker(feature: Feature, latlng: LatLng): Marker | CircleMarker {

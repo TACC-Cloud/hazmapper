@@ -76,7 +76,13 @@ export class GeoDataService {
     this.setLoadFeatureData(true);
     this.http.get<FeatureCollection>(this.envService.apiUrl + `/${projectRoute}/${projectId}/features/` + '?' + qstring)
       .subscribe( (fc: FeatureCollection) => {
-        fc.features = fc.features.map( (feat: Feature) => new Feature(feat));
+        fc.features = fc.features.map( (feat: Feature) => {
+          if (feat.properties.style) {
+            feat.properties.customStyle = feat.properties.style;
+          }
+          return new Feature(feat);
+        });
+
 
         // Check if active feature is no longer present (i.e. filtered out, deleted)
         // TODO: this should be a stream/observable like in deleteOverlay;
