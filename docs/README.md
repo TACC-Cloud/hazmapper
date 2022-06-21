@@ -18,12 +18,6 @@ From the *Tools & Applications* page, the user can navigate to *Hazmapper (2.0)*
 
 <figure><img src="./images/designsafe-launch.png" alt="" style="filter:drop-shadow(2px 2px 3px black); width:100%"><figcaption align = "center"><b>Fig 1.4</b></figcaption></figure>
 
-
-| ![space-1.jpg](https://blog-assets.thedyrt.com/uploads/2019/01/shutterstock_1033306540-1.jpg) 
-||:--:
-|| <b>Image Credits - Fig.2 - 4K Mountains Wallpaper</b>|
-
-
 ## Interface Overview
 
 ### Welcome Menu<a id='welcome-menu'></a>
