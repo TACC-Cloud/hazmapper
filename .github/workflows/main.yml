@@ -25,6 +25,7 @@ jobs:
 
     - name: npm ci
       run: |
+        touch src/environments/jwt.js
         npm ci
     - name: Unit Tests
       run: |
