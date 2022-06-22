@@ -45,6 +45,16 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
+### Running linters
+
+Run `ng lint` to run all of the linters.
+
+Run `ng lint:js` to run linter for angular files.
+Run `ng lint:css` to run linter for css files.
+
+Run `ng lint:js -- --fix` to fix angular files.
+Run `ng lint:css -- --fix` to fix css files.
+
 ## Kubernetes (Production/Staging environments)
 
 Information on Kubernetes configuration for production and staging environments can be found in the [kube/README.md](kube/README.md) including information
