@@ -20,17 +20,22 @@ interface OpenIDUser {
   email: string;
 }
 
-
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
-  private _currentUser: ReplaySubject<AuthenticatedUser> = new ReplaySubject<AuthenticatedUser>(1);
-  public readonly currentUser: Observable<AuthenticatedUser> = this._currentUser.asObservable();
+  private _currentUser: ReplaySubject<AuthenticatedUser> =
+    new ReplaySubject<AuthenticatedUser>(1);
+  public readonly currentUser: Observable<AuthenticatedUser> =
+    this._currentUser.asObservable();
   userToken: AuthToken;
   private LS_TOKEN_KEY = 'hazmapperToken';
   private LS_USER_KEY = 'hazmapperUser';
   private LS_REDIRECT_KEY = 'hazmapperRedirectUrl';
 
-  constructor(private http: HttpClient, private envService: EnvService, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private envService: EnvService,
+    private router: Router
+  ) {}
 
   public login(requestedUrl: string) {
     localStorage.setItem(this.LS_REDIRECT_KEY, requestedUrl);
@@ -58,7 +63,6 @@ export class AuthService {
     const AUTH_URL = `https://agave.designsafe-ci.org/authorize?scope=openid&client_id=${client_id}&response_type=token&redirect_uri=${callback}&state=${state}`;
     window.location.href = AUTH_URL;
   }
-
 
   /**
    * Checks to make sure that the user has a token and the token is not expired;
@@ -96,11 +100,9 @@ export class AuthService {
     const userStr = localStorage.getItem(this.LS_USER_KEY);
     const user = JSON.parse(userStr);
     if (user !== null) {
-      this._currentUser.next(
-        new AuthenticatedUser(user.username, user.email)
-      );
+      this._currentUser.next(new AuthenticatedUser(user.username, user.email));
     } else {
-      this.http.get<OpenIDUser>(INFO_URL).subscribe(resp => {
+      this.http.get<OpenIDUser>(INFO_URL).subscribe((resp) => {
         const u = new AuthenticatedUser(resp.name, resp.email);
         localStorage.setItem(this.LS_USER_KEY, JSON.stringify(u));
         this._currentUser.next(u);

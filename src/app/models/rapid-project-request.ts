@@ -1,4 +1,3 @@
-
 class RapidProjectRequest {
   system_id: string;
   project_id: number;
@@ -6,7 +5,13 @@ class RapidProjectRequest {
   watch_content: boolean;
   path: string;
 
-  constructor(systemId: string, path: string, watchContent: boolean, projectId?: number, fileName?: string) {
+  constructor(
+    systemId: string,
+    path: string,
+    watchContent: boolean,
+    projectId?: number,
+    fileName?: string
+  ) {
     this.system_id = systemId;
     this.project_id = projectId ? projectId : undefined;
     this.file_name = fileName ? fileName : '';
@@ -15,4 +20,4 @@ class RapidProjectRequest {
   }
 }
 
-export {RapidProjectRequest};
+export { RapidProjectRequest };

@@ -1,41 +1,67 @@
 <div class="accounts-box">
-  <h4>Mapillary</h4>
-  <div *ngIf="isLoggedIn('mapillary'); else authMapillary">
-    <div class="auth-info">
-      <div *ngIf="activeStreetview && activeStreetview.service_user" style="align-items: center; padding: 10px; background-color: #f0f0f0">
-        <div style="display: block; font-size: 20px; height 100%; width: 100%; text-align: center; text-overflow: ellipsis; overflow: hidden" [tooltip]="activeStreetview.service_user" >
-          <a href="https://www.mapillary.com/dashboard/profile">
-            {{activeStreetview.service_user}}
-          </a>
+    <h4>Mapillary</h4>
+    <div *ngIf="isLoggedIn('mapillary'); else authMapillary">
+        <div class="auth-info">
+            <div
+                *ngIf="activeStreetview && activeStreetview.service_user"
+                style="
+                    align-items: center;
+                    padding: 10px;
+                    background-color: #f0f0f0;
+                "
+            >
+                <div
+                    style="display: block; font-size: 20px; height 100%; width: 100%; text-align: center; text-overflow: ellipsis; overflow: hidden"
+                    [tooltip]="activeStreetview.service_user"
+                >
+                    <a href="https://www.mapillary.com/dashboard/profile">
+                        {{ activeStreetview.service_user }}
+                    </a>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="auth-info-button-container">
-      <button class="button small" (click)="logout('mapillary')">Logout</button>
-    </div>
-    <div class="auth-info-button-container">
-      <button class="button small" (click)="openStreetviewUsernameModal('mapillary')">Change username</button>
-    </div>
-    <div class="auth-info-button-container">
-      <button class="button small" (click)="openStreetviewOrganizationModal('mapillary')">Manage Organizations</button>
-    </div>
-    <div class="auth-info-button-container">
-      <button class="button small" (click)="openDeleteStreetviewModal('mapillary')">Delete Streetview Service</button>
-    </div>
+        <div class="auth-info-button-container">
+            <button class="button small" (click)="logout('mapillary')">
+                Logout
+            </button>
+        </div>
+        <div class="auth-info-button-container">
+            <button
+                class="button small"
+                (click)="openStreetviewUsernameModal('mapillary')"
+            >
+                Change username
+            </button>
+        </div>
+        <div class="auth-info-button-container">
+            <button
+                class="button small"
+                (click)="openStreetviewOrganizationModal('mapillary')"
+            >
+                Manage Organizations
+            </button>
+        </div>
+        <div class="auth-info-button-container">
+            <button
+                class="button small"
+                (click)="openDeleteStreetviewModal('mapillary')"
+            >
+                Delete Streetview Service
+            </button>
+        </div>
 
-    <div class="organization-list">
-      <div *ngFor="let organization of organizations">
-        {{organization.name}}
-      </div>
+        <div class="organization-list">
+            <div *ngFor="let organization of organizations">
+                {{ organization.name }}
+            </div>
+        </div>
     </div>
-
-  </div>
-  <ng-template #authMapillary>
-    <div class="auth-info">
-      Not logged in to Mapillary!
-    </div>
-    <div class="auth-info-button-container">
-      <button class="button small" (click)="login('mapillary')">Login</button>
-    </div>
-  </ng-template>
-  </div>
+    <ng-template #authMapillary>
+        <div class="auth-info">Not logged in to Mapillary!</div>
+        <div class="auth-info-button-container">
+            <button class="button small" (click)="login('mapillary')">
+                Login
+            </button>
+        </div>
+    </ng-template>
+</div>

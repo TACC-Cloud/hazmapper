@@ -1,130 +1,192 @@
 <div class="dock-panel">
-  <div class="dock-panel-content">
-    <p class="dock-panel-title"> Layers </p>
-    <h6>Tile Layers</h6>
-    <button class="button expanded hollow tiny success"
-            (click)="openCreateTileServerModal()">
-      <i class="fa fa-plus"></i>
-    </button>
-    <div #cdkList
-         cdkDropList class="tile-servers-list"
-         (cdkDropListDropped)="drop($event)">
-      <div *ngFor="let ts of tileServers"
-           class="tile-servers"
-           cdkDragLockAxis="y"
-           cdkDragBoundary=".tile-servers-list"
-           (cdkDragStarted)="changeMovePointer($event, cdkList, true)"
-           (cdkDragReleased)="changeMovePointer($event, cdkList, false)"
-           cdkDrag>
-        <div [ngStyle]="{'min-height.px': height}" class="drag-list-placeholder" *cdkDragPlaceholder></div>
-        <div class="grid-x tile-server-container">
-          <div class="grid-x small-8 tile-server-left">
-            <div #gripHandle
-                 cdkDragHandle
-                 class="tile-server-move">
-              <i class="fas fa-grip-vertical"></i>
-            </div>
-            <label class="tile-server-visibility">
-              <input name=""
-                     type="checkbox"
-                     [checked]="ts.uiOptions.isActive"
-                     (change)="toggleTileServer(ts)"/>
-              <i class="fas fa-eye-slash unchecked"></i>
-              <i class="fas fa-eye checked"></i>
-            </label>
-            <div class="tile-server-name-container">
-              <input #activeText
-                     id=property-input
-                     type="text"
-                     *ngIf="ts.uiOptions.showInput"
-                     (blur)="updateName(activeText.value, ts)"
-                     (keyup.enter)="updateName(activeText.value, ts)"
-                     [value]="ts.name">
-              <div id="tile-server-name"
-                   class="tile-server-name"
-                   data-tooltip
-                   tabindex="1"
-                   title="{{ts.name}}"
-                   data-position="top"
-                   data-alignment="left"
-                   *ngIf="!ts.uiOptions.showInput"
-                   (dblclick)="showInput(ts, true)">
-                {{ts.name}}
-              </div>
-            </div>
-          </div>
-
-          <div class="cell small-4 grid-x tile-server-right">
-            <button class="button secondary clear edit-buttons">
-              <i class="fas fa-edit edit-button"
-                 (click)="showInput(ts, true)"
-                 *ngIf="!ts.uiOptions.showInput"></i>
-              <i class="fas fa-check edit-button"
-                 (click)="showInput(ts, false)"
-                 *ngIf="ts.uiOptions.showInput"></i>
-            </button>
-            <button class="button secondary clear option-button"
-                    (click)="toggleDescription(ts)">
-              <i class="fas fa-sliders-h" ></i>
-            </button>
-            <button class="button secondary clear button-no-margin delete-button"
-                    (click)="openDeleteTileServerModal(deleteTiles)">
-              <i class="fa fa-trash"></i>
-            </button>
-
-            <ng-template #deleteTiles>
-              <p>Confirm Deletion?</p>
-              <div class="button-group">
-                <button type="button" class="button secondary" (click)="deleteTileServer(ts); modalRef.hide()" >Yes</button>
-                <button type="button" class="button primary" (click)="modalRef.hide()" >No</button>
-              </div>
-            </ng-template>
-
-          </div>
-        </div>
-        <div *ngIf="ts.uiOptions.showDescription">
-          <div class="grid-x row tile-server-description">
-            <label class="small-4 align-self-middle">Opacity</label>
-            <input #slider type="range" min="0" max="1" step="0.1" [value]="ts.uiOptions.opacity" class="slider small-8 align-self-middle tile-server-slider" id="myRange" (change)="setLayerOpacity(ts, slider.value)">
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div *ngIf="dirtyOptions" class="tile-server-dirty-options">
-      <i class="tile-server-dirty-options-warning">
-        Layer options have been changed!
-        <br>
-        Save to persist changes.
-      </i>
-    </div>
-
-    <div class="tile-server-save-button">
-      <button class="button small success" [disabled]="!dirtyOptions" (click)="saveTileOptions()">Save Layer Options</button>
-    </div>
-    <hr>
-
-    <h6> Overlays </h6>
-    <button class="button expanded hollow tiny success" (click)="openCreateOverlayModal()">
-      <i class="fa fa-plus"></i>
-    </button>
-    <div *ngFor="let ov of overlays" class="overlay">
-      <div class="grid-x align-middle overlay-content" [ngClass]="{'active-overlay': ov.isActive}">
-        <div class="cell small-4 panel-thumbnail">
-          <img src="{{envService.apiUrl}}/assets/{{ov.project_id}}/{{ov.uuid}}.thumb.jpeg">
-        </div>
-        <div class="cell auto" (click)="selectOverlay(ov)">
-          <span class="overlay-label"> {{ov.label}} </span>
-        </div>
-        <div class="cell grid-x auto align-right">
-            <button
-              class="button hollow tiny alert button-no-margin"
-              (click)="deleteOverlay(ov)"
+    <div class="dock-panel-content">
+        <p class="dock-panel-title">Layers</p>
+        <h6>Tile Layers</h6>
+        <button
+            class="button expanded hollow tiny success"
+            (click)="openCreateTileServerModal()"
+        >
+            <i class="fa fa-plus"></i>
+        </button>
+        <div
+            #cdkList
+            cdkDropList
+            class="tile-servers-list"
+            (cdkDropListDropped)="drop($event)"
+        >
+            <div
+                *ngFor="let ts of tileServers"
+                class="tile-servers"
+                cdkDragLockAxis="y"
+                cdkDragBoundary=".tile-servers-list"
+                (cdkDragStarted)="changeMovePointer($event, cdkList, true)"
+                (cdkDragReleased)="changeMovePointer($event, cdkList, false)"
+                cdkDrag
             >
-              <i class="fa fa-trash"></i>
+                <div
+                    [ngStyle]="{ 'min-height.px': height }"
+                    class="drag-list-placeholder"
+                    *cdkDragPlaceholder
+                ></div>
+                <div class="grid-x tile-server-container">
+                    <div class="grid-x small-8 tile-server-left">
+                        <div #gripHandle cdkDragHandle class="tile-server-move">
+                            <i class="fas fa-grip-vertical"></i>
+                        </div>
+                        <label class="tile-server-visibility">
+                            <input
+                                name=""
+                                type="checkbox"
+                                [checked]="ts.uiOptions.isActive"
+                                (change)="toggleTileServer(ts)"
+                            />
+                            <i class="fas fa-eye-slash unchecked"></i>
+                            <i class="fas fa-eye checked"></i>
+                        </label>
+                        <div class="tile-server-name-container">
+                            <input
+                                #activeText
+                                id="property-input"
+                                type="text"
+                                *ngIf="ts.uiOptions.showInput"
+                                (blur)="updateName(activeText.value, ts)"
+                                (keyup.enter)="updateName(activeText.value, ts)"
+                                [value]="ts.name"
+                            />
+                            <div
+                                id="tile-server-name"
+                                class="tile-server-name"
+                                data-tooltip
+                                tabindex="1"
+                                title="{{ ts.name }}"
+                                data-position="top"
+                                data-alignment="left"
+                                *ngIf="!ts.uiOptions.showInput"
+                                (dblclick)="showInput(ts, true)"
+                            >
+                                {{ ts.name }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cell small-4 grid-x tile-server-right">
+                        <button class="button secondary clear edit-buttons">
+                            <i
+                                class="fas fa-edit edit-button"
+                                (click)="showInput(ts, true)"
+                                *ngIf="!ts.uiOptions.showInput"
+                            ></i>
+                            <i
+                                class="fas fa-check edit-button"
+                                (click)="showInput(ts, false)"
+                                *ngIf="ts.uiOptions.showInput"
+                            ></i>
+                        </button>
+                        <button
+                            class="button secondary clear option-button"
+                            (click)="toggleDescription(ts)"
+                        >
+                            <i class="fas fa-sliders-h"></i>
+                        </button>
+                        <button
+                            class="button secondary clear button-no-margin delete-button"
+                            (click)="openDeleteTileServerModal(deleteTiles)"
+                        >
+                            <i class="fa fa-trash"></i>
+                        </button>
+
+                        <ng-template #deleteTiles>
+                            <p>Confirm Deletion?</p>
+                            <div class="button-group">
+                                <button
+                                    type="button"
+                                    class="button secondary"
+                                    (click)="
+                                        deleteTileServer(ts); modalRef.hide()
+                                    "
+                                >
+                                    Yes
+                                </button>
+                                <button
+                                    type="button"
+                                    class="button primary"
+                                    (click)="modalRef.hide()"
+                                >
+                                    No
+                                </button>
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+                <div *ngIf="ts.uiOptions.showDescription">
+                    <div class="grid-x row tile-server-description">
+                        <label class="small-4 align-self-middle">Opacity</label>
+                        <input
+                            #slider
+                            type="range"
+                            min="0"
+                            max="1"
+                            step="0.1"
+                            [value]="ts.uiOptions.opacity"
+                            class="slider small-8 align-self-middle tile-server-slider"
+                            id="myRange"
+                            (change)="setLayerOpacity(ts, slider.value)"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="dirtyOptions" class="tile-server-dirty-options">
+            <i class="tile-server-dirty-options-warning">
+                Layer options have been changed!
+                <br />
+                Save to persist changes.
+            </i>
+        </div>
+
+        <div class="tile-server-save-button">
+            <button
+                class="button small success"
+                [disabled]="!dirtyOptions"
+                (click)="saveTileOptions()"
+            >
+                Save Layer Options
             </button>
         </div>
-      </div>
+        <hr />
+
+        <h6>Overlays</h6>
+        <button
+            class="button expanded hollow tiny success"
+            (click)="openCreateOverlayModal()"
+        >
+            <i class="fa fa-plus"></i>
+        </button>
+        <div *ngFor="let ov of overlays" class="overlay">
+            <div
+                class="grid-x align-middle overlay-content"
+                [ngClass]="{ 'active-overlay': ov.isActive }"
+            >
+                <div class="cell small-4 panel-thumbnail">
+                    <img
+                        src="{{ envService.apiUrl }}/assets/{{
+                            ov.project_id
+                        }}/{{ ov.uuid }}.thumb.jpeg"
+                    />
+                </div>
+                <div class="cell auto" (click)="selectOverlay(ov)">
+                    <span class="overlay-label"> {{ ov.label }} </span>
+                </div>
+                <div class="cell grid-x auto align-right">
+                    <button
+                        class="button hollow tiny alert button-no-margin"
+                        (click)="deleteOverlay(ov)"
+                    >
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>

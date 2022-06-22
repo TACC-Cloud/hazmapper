@@ -1,16 +1,21 @@
 <div class="grid-x">
-  <div class="cell control-bar">
-    <app-control-bar [isPublicView]=isPublicView></app-control-bar>
-  </div>
+    <div class="cell control-bar">
+        <app-control-bar [isPublicView]="isPublicView"></app-control-bar>
+    </div>
 </div>
 
 <div class="grid-x">
-  <div class="cell shrink">
-   <app-dock [isPublicView]=isPublicView></app-dock>
-  </div>
-  <div class="cell auto">
-    <app-map [isPublicView]=isPublicView></app-map>
-  </div>
-  <app-asset-detail *ngIf="activeFeature" [isPublicView]=isPublicView></app-asset-detail>
-  <app-streetview-asset-detail *ngIf="activeStreetviewAsset"></app-streetview-asset-detail>
+    <div class="cell shrink">
+        <app-dock [isPublicView]="isPublicView"></app-dock>
+    </div>
+    <div class="cell auto">
+        <app-map [isPublicView]="isPublicView"></app-map>
+    </div>
+    <app-asset-detail
+        *ngIf="activeFeature"
+        [isPublicView]="isPublicView"
+    ></app-asset-detail>
+    <app-streetview-asset-detail
+        *ngIf="activeStreetviewAsset"
+    ></app-streetview-asset-detail>
 </div>

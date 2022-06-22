@@ -7,7 +7,12 @@ import { RemoteFile } from 'ng-tapis';
 import { NotificationsService } from './notifications.service';
 import { EnvService } from '../services/env.service';
 import { StreetviewAuthenticationService } from './streetview-authentication.service';
-import { getFeatureSequenceGeometry, getFeatureSequenceId, getFeatureSequencePath, getFeatureImageId } from '../utils/streetview';
+import {
+  getFeatureSequenceGeometry,
+  getFeatureSequenceId,
+  getFeatureSequencePath,
+  getFeatureImageId,
+} from '../utils/streetview';
 import { StreetviewSequence, Streetview } from '../models/streetview';
 
 @Injectable({
@@ -102,7 +107,8 @@ export class StreetviewService {
   public removeOrganization(service: string, organizationKey: number): void {
     this.http
       .delete(
-        this.envService.apiUrl + `/streetview/services/${service}/organization/${organizationKey}/`
+        this.envService.apiUrl +
+          `/streetview/services/${service}/organization/${organizationKey}/`
       )
       .subscribe(
         () => {
@@ -192,8 +198,9 @@ export class StreetviewService {
   }
 
   public getStreetviewSequence(sequenceId: string) {
-    return this.http
-      .get(this.envService.apiUrl + `/streetview/sequences/${sequenceId}/`)
+    return this.http.get(
+      this.envService.apiUrl + `/streetview/sequences/${sequenceId}/`
+    );
   }
 
   public publishPathToStreetviewService(
@@ -250,31 +257,39 @@ export class StreetviewService {
     );
   }
 
-
-  public checkStreetviewSequence(sequence: StreetviewSequence, streetview: Streetview) {
-    if (sequence.bbox &&
-      sequence.end_date &&
-      sequence.start_date) {
-
+  public checkStreetviewSequence(
+    sequence: StreetviewSequence,
+    streetview: Streetview
+  ) {
+    if (sequence.bbox && sequence.end_date && sequence.start_date) {
       const organizationId = sequence.organization_id;
 
       const bbox = sequence.bbox;
       const startDate = new Date(sequence.start_date).toISOString();
       const endDate = new Date(sequence.end_date).toISOString();
 
-      this.http.get(
-        this.envService.streetviewEnv.mapillary.apiUrl +
-          `/images?fields=sequence&bbox=${bbox}&start_captured_at=${startDate}&end_captured_at=${endDate}&organization_id=${organizationId}`
-      ).subscribe((resp: any) => {
+      this.http
+        .get(
+          this.envService.streetviewEnv.mapillary.apiUrl +
+            // tslint:disable-next-line:max-line-length
+            `/images?fields=sequence&bbox=${bbox}&start_captured_at=${startDate}&end_captured_at=${endDate}&organization_id=${organizationId}`
+        )
+        .subscribe((resp: any) => {
           const data = resp.data;
           if (data && data.length) {
             const [imageData] = data;
             const payload = {
-              sequence_id: imageData.sequence
+              sequence_id: imageData.sequence,
             };
-            this.http.put(this.envService.apiUrl + `/streetview/sequences/${sequence.id}/`, payload).subscribe(() => {
-              this.streetviewAuthentication.getStreetviews().subscribe();
-            })
+            this.http
+              .put(
+                this.envService.apiUrl +
+                  `/streetview/sequences/${sequence.id}/`,
+                payload
+              )
+              .subscribe(() => {
+                this.streetviewAuthentication.getStreetviews().subscribe();
+              });
           }
         });
     }
@@ -287,26 +302,25 @@ export class StreetviewService {
     const path = getFeatureSequencePath(feature);
 
     const layerData = {
-      feature: feature,
-      latlng: latlng,
+      feature,
+      latlng,
       path,
       layer: {
         properties: {
           image_id: imageId,
-          id: sequenceId
-        }
-      }
+          id: sequenceId,
+        },
+      },
     };
 
     if (this.streetviewAuthentication.isLoggedIn('mapillary')) {
-      return this.getMapillaryImages(sequenceId)
-        .pipe(
-          map(e => {
-            const [img] = e.data;
-            layerData.layer.properties.image_id = img.id;
-            return layerData;
-          }),
-        );
+      return this.getMapillaryImages(sequenceId).pipe(
+        map((e) => {
+          const [img] = e.data;
+          layerData.layer.properties.image_id = img.id;
+          return layerData;
+        })
+      );
     } else {
       return of(layerData);
     }

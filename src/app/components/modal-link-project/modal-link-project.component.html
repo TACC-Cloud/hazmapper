@@ -1,40 +1,56 @@
 <app-file-browser
-  [single]=single
-  [allowFolders]=allowFolders
-  [allowedExtensions]=allowedExtensions
-  [onlyFolder]=onlyFolder
-  [showPublicSystems]=false
-  [heading]="'Select Save Location'"
-  [helpText]="'If no folder is selected, the file will be saved to the root of the selected system.' +
-           'If you select a project, you can link the current map to the project.'"
-  (selection)="onSelect($event)"
-  (systemSelection)="onSystemSelect($event)"
-  (currentPath)="setCurrentPath($event)">
+    [single]="single"
+    [allowFolders]="allowFolders"
+    [allowedExtensions]="allowedExtensions"
+    [onlyFolder]="onlyFolder"
+    [showPublicSystems]="false"
+    [heading]="'Select Save Location'"
+    [helpText]="
+        'If no folder is selected, the file will be saved to the root of the selected system.' +
+        'If you select a project, you can link the current map to the project.'
+    "
+    (selection)="onSelect($event)"
+    (systemSelection)="onSystemSelect($event)"
+    (currentPath)="setCurrentPath($event)"
+>
 </app-file-browser>
 
 <div style="padding: 20px 0px">
-  <label> Custom file name:
-    <div style="display: flex; flex-direction: row">
-      <input type="text" [(ngModel)]="fileName">
-      <span style="line-height: 1.5; font-size: 1rem; margin: 5px">.hazmapper</span>
-    </div>
-  </label>
-  <small><em>If a name is not given, file will be saved as the map uuid.</em></small>
+    <label>
+        Custom file name:
+        <div style="display: flex; flex-direction: row">
+            <input type="text" [(ngModel)]="fileName" />
+            <span style="line-height: 1.5; font-size: 1rem; margin: 5px"
+                >.hazmapper</span
+            >
+        </div>
+    </label>
+    <small
+        ><em
+            >If a name is not given, file will be saved as the map uuid.</em
+        ></small
+    >
 </div>
 
 <div class="observable-project">
-  <label> Sync Options:
-    <select [(ngModel)]="observeOption">
-      <option *ngFor="let option of observeOptions" [ngValue]="option.value">{{option.name}}</option>
-    </select>
-  </label>
+    <label>
+        Sync Options:
+        <select [(ngModel)]="observeOption">
+            <option
+                *ngFor="let option of observeOptions"
+                [ngValue]="option.value"
+            >
+                {{ option.name }}
+            </option>
+        </select>
+    </label>
 </div>
 
 <div *ngIf="activeProject.system_path" class="confirm-checkbox">
-  <small><em>Saving this map will remove the previous link.</em></small>
+    <small><em>Saving this map will remove the previous link.</em></small>
 </div>
 
 <div>
-  <button class="button warning" (click)="close()">Cancel</button>
-  <button class="button" (click)="submit()">Save</button>
+    <button class="button warning" (click)="close()">Cancel</button>
+    <button class="button" (click)="submit()">Save</button>
 </div>

@@ -1,19 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { RemoteFile} from 'ng-tapis/models/remote-file';
+import { RemoteFile } from 'ng-tapis/models/remote-file';
 import { Project, ProjectRequest } from '../../models/models';
 import { ProjectsService } from '../../services/projects.service';
 import { BsModalRef } from 'ngx-foundation/modal/bs-modal-ref.service';
 import { Subject } from 'rxjs';
-import {TapisFilesService} from '../../services/tapis-files.service';
-import {ChangeDetectorRef} from '@angular/core';
+import { TapisFilesService } from '../../services/tapis-files.service';
+import { ChangeDetectorRef } from '@angular/core';
 import { RapidProjectRequest } from '../../models/rapid-project-request';
-import {NotificationsService} from '../../services/notifications.service';
-
+import { NotificationsService } from '../../services/notifications.service';
 
 @Component({
   selector: 'app-modal-link-project',
   templateUrl: './modal-link-project.component.html',
-  styleUrls: ['./modal-link-project.component.styl']
+  styleUrls: ['./modal-link-project.component.styl'],
 })
 export class ModalLinkProjectComponent implements OnInit {
   @Input() allowedExtensions: Array<string> = [];
@@ -28,22 +27,31 @@ export class ModalLinkProjectComponent implements OnInit {
   watchContent = false;
   activeProject: Project;
   currentPath: string;
-  projectObserveOptions = [{name: 'Sync Members and Files', value: true}, {name: 'Sync Only Members', value: false}];
-  myDataObserveOptions = [{name: 'Don\'t Sync', value: false}, {name: 'Sync Files', value: true}];
+  projectObserveOptions = [
+    { name: 'Sync Members and Files', value: true },
+    { name: 'Sync Only Members', value: false },
+  ];
+  myDataObserveOptions = [
+    { name: 'Don\'t Sync', value: false },
+    { name: 'Sync Files', value: true },
+  ];
   observeOptions = this.myDataObserveOptions;
   observeOption = false;
 
-  constructor(private modalRef: BsModalRef,
-              private projectsService: ProjectsService,
-              private cdref: ChangeDetectorRef ) { }
+  constructor(
+    private modalRef: BsModalRef,
+    private projectsService: ProjectsService,
+    private cdref: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
-    this.projectsService.activeProject.subscribe( (next) => {
+    this.projectsService.activeProject.subscribe((next) => {
       this.activeProject = next;
       this.fileName = next.uuid;
     });
   }
 
+  // tslint:disable-next-line
   ngAfterContentChecked() {
     this.cdref.detectChanges();
   }
@@ -67,7 +75,10 @@ export class ModalLinkProjectComponent implements OnInit {
   }
 
   submit() {
-    const path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path : this.currentPath;
+    const path =
+      this.selectedFiles.length > 0
+        ? this.selectedFiles[0].path
+        : this.currentPath;
 
     this.activeProject.system_path = path;
     this.activeProject.system_id = this.selectedSystem.id;

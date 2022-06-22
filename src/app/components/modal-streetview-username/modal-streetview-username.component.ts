@@ -5,16 +5,15 @@ import { BsModalRef } from 'ngx-foundation/modal';
 @Component({
   selector: 'app-modal-streetview-username',
   templateUrl: './modal-streetview-username.component.html',
-  styleUrls: ['./modal-streetview-username.component.styl']
+  styleUrls: ['./modal-streetview-username.component.styl'],
 })
 export class ModalStreetviewUsernameComponent implements OnInit {
   public onClose: Subject<any> = new Subject<any>();
   public username = '';
 
-  constructor(public bsModalRef: BsModalRef) { }
+  constructor(public bsModalRef: BsModalRef) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   cancel() {
     this.bsModalRef.hide();
@@ -22,7 +21,7 @@ export class ModalStreetviewUsernameComponent implements OnInit {
 
   submit() {
     this.onClose.next({
-      username: this.username
+      username: this.username,
     });
     this.bsModalRef.hide();
   }

@@ -8,32 +8,38 @@ import { ModalConfirmationBodyComponent } from '../components/modal-confirmation
 export class ModalService {
   bsModalRef: BsModalRef;
 
-  constructor(
-    private bsModalService: BsModalService,
-  ) { }
+  constructor(private bsModalService: BsModalService) {}
 
-  confirm(title: string, message: string, options: string[]): Observable<string> {
+  confirm(
+    title: string,
+    message: string,
+    options: string[]
+  ): Observable<string> {
     const initialState = {
-      title: title,
-      message: message,
-      options: options,
+      title,
+      message,
+      options,
     };
-    this.bsModalRef = this.bsModalService.show(ModalConfirmationBodyComponent, { initialState });
+    this.bsModalRef = this.bsModalService.show(ModalConfirmationBodyComponent, {
+      initialState,
+    });
 
     return new Observable<string>(this.getConfirmSubscriber());
   }
 
   private getConfirmSubscriber() {
     return (observer) => {
-      const subscription = this.bsModalService.onHidden.subscribe((reason: string) => {
-        observer.next(this.bsModalRef.content.answer);
-        observer.complete();
-      });
+      const subscription = this.bsModalService.onHidden.subscribe(
+        (reason: string) => {
+          observer.next(this.bsModalRef.content.answer);
+          observer.complete();
+        }
+      );
 
       return {
         unsubscribe() {
           subscription.unsubscribe();
-        }
+        },
       };
     };
   }

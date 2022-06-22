@@ -1,19 +1,27 @@
-import {Component, OnInit, ElementRef, ViewChildren, QueryList, TemplateRef, OnDestroy} from '@angular/core';
-import {GeoDataService} from '../../services/geo-data.service';
-import {Overlay, Project, TileServer} from '../../models/models';
-import {BsModalRef, BsModalService} from 'ngx-foundation';
-import {ModalCreateOverlayComponent} from '../modal-create-overlay/modal-create-overlay.component';
-import {RemoteFile} from 'ng-tapis';
-import {ModalCreateTileServerComponent} from '../modal-create-tile-server/modal-create-tile-server.component';
-import {ProjectsService} from '../../services/projects.service';
-import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
-import {EnvService} from '../../services/env.service';
-import {Subscription} from 'rxjs';
+import {
+  Component,
+  OnInit,
+  ElementRef,
+  ViewChildren,
+  QueryList,
+  TemplateRef,
+  OnDestroy,
+} from '@angular/core';
+import { GeoDataService } from '../../services/geo-data.service';
+import { Overlay, Project, TileServer } from '../../models/models';
+import { BsModalRef, BsModalService } from 'ngx-foundation';
+import { ModalCreateOverlayComponent } from '../modal-create-overlay/modal-create-overlay.component';
+import { RemoteFile } from 'ng-tapis';
+import { ModalCreateTileServerComponent } from '../modal-create-tile-server/modal-create-tile-server.component';
+import { ProjectsService } from '../../services/projects.service';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { EnvService } from '../../services/env.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-layers-panel',
   templateUrl: './layers-panel.component.html',
-  styleUrls: ['./layers-panel.component.styl']
+  styleUrls: ['./layers-panel.component.styl'],
 })
 export class LayersPanelComponent implements OnInit, OnDestroy {
   @ViewChildren('activeText') activeInputs: QueryList<ElementRef>;
@@ -28,32 +36,43 @@ export class LayersPanelComponent implements OnInit, OnDestroy {
   modalRef: BsModalRef;
   private subscription: Subscription = new Subscription();
 
-  constructor(private geoDataService: GeoDataService,
-              private bsModalService: BsModalService,
-              private projectsService: ProjectsService,
-              private envService: EnvService) {
-  }
+  constructor(
+    private geoDataService: GeoDataService,
+    private bsModalService: BsModalService,
+    private projectsService: ProjectsService,
+    private envService: EnvService
+  ) {}
 
   ngOnInit() {
-    this.subscription.add(this.geoDataService.overlays.subscribe((ovs) => {
-      this.overlays = ovs;
-    }));
+    this.subscription.add(
+      this.geoDataService.overlays.subscribe((ovs) => {
+        this.overlays = ovs;
+      })
+    );
 
-    this.subscription.add(this.geoDataService.tileServers.subscribe((tsv) => {
-      this.tileServers = tsv;
-    }));
+    this.subscription.add(
+      this.geoDataService.tileServers.subscribe((tsv) => {
+        this.tileServers = tsv;
+      })
+    );
 
-    this.subscription.add(this.geoDataService.basemap.subscribe( (next) => {
-      this.basemap = next;
-    }));
+    this.subscription.add(
+      this.geoDataService.basemap.subscribe((next) => {
+        this.basemap = next;
+      })
+    );
 
-    this.subscription.add(this.geoDataService.dirtyTileOptions.subscribe( (next) => {
-      this.dirtyOptions = next;
-    }));
+    this.subscription.add(
+      this.geoDataService.dirtyTileOptions.subscribe((next) => {
+        this.dirtyOptions = next;
+      })
+    );
 
-    this.subscription.add(this.projectsService.activeProject.subscribe( (next) => {
-      this.activeProject = next;
-    }));
+    this.subscription.add(
+      this.projectsService.activeProject.subscribe((next) => {
+        this.activeProject = next;
+      })
+    );
   }
 
   ngOnDestroy() {
@@ -82,24 +101,31 @@ export class LayersPanelComponent implements OnInit, OnDestroy {
     // TODO: Figure out a better way to handle ZIndex
     // let zIndexMax = this.tileServers.length;
     let zIndexMax = 0;
-    this.tileServers.forEach(ts => {
+    this.tileServers.forEach((ts) => {
       ts.uiOptions.zIndex = zIndexMax;
       zIndexMax--;
     });
 
-    this.geoDataService.updateTileServers(this.activeProject.id, this.tileServers);
+    this.geoDataService.updateTileServers(
+      this.activeProject.id,
+      this.tileServers
+    );
   }
 
   openCreateOverlayModal() {
-    const modal: BsModalRef = this.bsModalService.show(ModalCreateOverlayComponent);
-    modal.content.onClose.subscribe( (next) => {
+    const modal: BsModalRef = this.bsModalService.show(
+      ModalCreateOverlayComponent
+    );
+    modal.content.onClose.subscribe((next) => {
       console.log(next);
     });
   }
 
   openCreateTileServerModal() {
-    const modal: BsModalRef = this.bsModalService.show(ModalCreateTileServerComponent);
-    modal.content.onClose.subscribe( (files: Array<RemoteFile>) => {
+    const modal: BsModalRef = this.bsModalService.show(
+      ModalCreateTileServerComponent
+    );
+    modal.content.onClose.subscribe((files: Array<RemoteFile>) => {
       if (files != null) {
         this.geoDataService.importFileFromTapis(this.activeProject.id, files);
       }
@@ -107,7 +133,7 @@ export class LayersPanelComponent implements OnInit, OnDestroy {
   }
 
   openDeleteTileServerModal(template: TemplateRef<any>) {
-    this.modalRef = this.bsModalService.show(template, {class: 'tiny'});
+    this.modalRef = this.bsModalService.show(template, { class: 'tiny' });
   }
 
   updateName(name: string, ts: TileServer) {
@@ -145,11 +171,16 @@ export class LayersPanelComponent implements OnInit, OnDestroy {
 
   changeMovePointer(ev: any, gripHandle: any, moving: boolean) {
     gripHandle.style.cursor = moving ? 'move' : 'auto';
-    this.dragHeight = moving ? ev.source.element.nativeElement.offsetHeight : this.releaseHeight;
+    this.dragHeight = moving
+      ? ev.source.element.nativeElement.offsetHeight
+      : this.releaseHeight;
     this.releaseHeight = ev.source.element.nativeElement.offsetHeight;
   }
 
   saveTileOptions() {
-    this.geoDataService.saveTileServers(this.activeProject.id, this.tileServers);
+    this.geoDataService.saveTileServers(
+      this.activeProject.id,
+      this.tileServers
+    );
   }
 }

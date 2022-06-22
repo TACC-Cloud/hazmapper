@@ -17,105 +17,105 @@
       .button-no-margin
         margin 0
   .tile-servers-list
-    padding-bottom: 15px
+    padding-bottom 15px
     .tile-servers
-      background-color: #fff;
-      padding: 10px
+      background-color #fff
+      padding 10px
       .tile-server-container
         .tile-server-left
-          padding-left: 5px
+          padding-left 5px
           .tile-server-move
-            width: 20px
-            opacity: 0
-            transition: 0.2s
-            cursor: move
+            width 20px
+            opacity 0
+            transition 0.2s
+            cursor move
           .tile-server-visibility
-            cursor: pointer
-            width: 20px
-            input[type="checkbox"],
+            cursor pointer
+            width 20px
+            input[type="checkbox"]
             .checked
-              display: none
+              display none
             input[type="checkbox"]:checked ~ .checked
-              display: inline
+              display inline
             input[type="checkbox"]:checked ~ .unchecked
-              display: none
+              display none
           .tile-server-name-container
-            max-width: 90px
+            max-width 90px
             #property-input
-              display: inline-block
-              width: 100%
-              font-size: 16px
-              padding: 0px
-              padding-left: 5px
-              margin: 0px
-              border: 0px solid #f0f0f0
-              -webkit-border-radius: 0px
-              border-radius: 0px
-              border: 1px solid #888
-              box-shadow: 0px 0px;
-              height: 100%
+              display inline-block
+              width 100%
+              font-size 16px
+              padding 0px
+              padding-left 5px
+              margin 0px
+              border 0px solid #f0f0f0
+              -webkit-border-radius 0px
+              border-radius 0px
+              border 1px solid #888
+              box-shadow 0px 0px
+              height 100%
             .tile-server-name
-              max-width: 90px
-              width: 90px
-              overflow: hidden
-              text-overflow: ellipsis
-              white-space: nowrap
-              padding-left: 5px
-              font-size: 16px
-              height: 100%
-              border: 1px solid #fff
-              transition: 0.5s
+              max-width 90px
+              width 90px
+              overflow hidden
+              text-overflow ellipsis
+              white-space nowrap
+              padding-left 5px
+              font-size 16px
+              height 100%
+              border 1px solid #fff
+              transition 0.5s
             #tile-server-name:hover
-              border: 1px solid #ccc
+              border 1px solid #ccc
         .tile-server-right
-          justify-content: center
+          justify-content center
           .edit-buttons
-            padding: 0px 0px
-            margin: 0
-            line-height: 0
+            padding 0px 0px
+            margin 0
+            line-height 0
             .edit-button
-              width: 17px
+              width 17px
           .option-button
-            padding: 0px 3px
-            margin: 0
-            line-height: 0
+            padding 0px 3px
+            margin 0
+            line-height 0
           .delete-button
-            padding: 0
-            margin: 0
-            line-height: 0
+            padding 0
+            margin 0
+            line-height 0
       .tile-server-container:hover
         .tile-server-left
           .tile-server-move
-            opacity: 1
+            opacity 1
       .tile-server-description
-        padding: 15px 10px
+        padding 15px 10px
         .tile-server-slider
-          margin: 0
+          margin 0
   .tile-server-dirty-options
-    text-align: center
-    padding-bottom: 15px
+    text-align center
+    padding-bottom 15px
     .tile-server-dirty-options-warning
-      color: #2e1800
-      font-size: 13px
+      color #2e1800
+      font-size 13px
   .tile-server-save-button
-    width: 100%
-    display: flex
-    justify-content: center
+    width 100%
+    display flex
+    justify-content center
   .drag-list-placeholder
-    min-height: 50px;
-    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    min-height 50px
+    transition transform 250ms cubic-bezier(0, 0, 0.2, 1)
 
 ::ng-deep
   .cdk-drag-placeholder
-    opacity: 0
-    min-height: 100px
-    background: #ccc
+    opacity 0
+    min-height 100px
+    background #ccc
   .cdk-drag-animating
-    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1)
+    transition transform 250ms cubic-bezier(0, 0, 0.2, 1)
   .cdk-drag-preview
     @extends :host .tile-servers-list .tile-servers
-    min-height: 50px;    
+    min-height 50px    
     .tile-server-container
       .tile-server-left
         .tile-server-move
-          opacity: 1
+          opacity 1

@@ -141,6 +141,18 @@ export interface Overlay {
   isActive?: boolean;
 }
 
+export interface QMSTile {
+  name: string;
+  type: string;
+  url: string;
+  desc: string;
+  z_max: number;
+  z_min: number;
+  layers: string;
+  params: string;
+  format: string;
+}
+
 interface TileServerUI {
   opacity: number;
   isActive: boolean;

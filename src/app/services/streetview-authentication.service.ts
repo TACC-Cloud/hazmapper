@@ -91,7 +91,10 @@ export class StreetviewAuthenticationService {
 
   public updateStreetview(streetviewId: number, data: StreetviewRequest) {
     return this.http
-      .put<any>(this.envService.apiUrl + `/streetview/services/${streetviewId}/`, data)
+      .put<any>(
+        this.envService.apiUrl + `/streetview/services/${streetviewId}/`,
+        data
+      )
       .subscribe(() => {
         this.getStreetviews().subscribe();
       });
@@ -99,7 +102,9 @@ export class StreetviewAuthenticationService {
 
   public deleteStreetview(streetviewId: number) {
     return this.http
-      .delete<any>(this.envService.apiUrl + `/streetview/services/${streetviewId}/`)
+      .delete<any>(
+        this.envService.apiUrl + `/streetview/services/${streetviewId}/`
+      )
       .subscribe(() => {
         this.getStreetviews().subscribe();
       });
@@ -107,7 +112,10 @@ export class StreetviewAuthenticationService {
 
   public updateStreetviewByService(service: string, data: StreetviewRequest) {
     this.http
-      .put<any>(this.envService.apiUrl + `/streetview/services/${service}/`, data)
+      .put<any>(
+        this.envService.apiUrl + `/streetview/services/${service}/`,
+        data
+      )
       .subscribe(() => {
         this.getStreetviews().subscribe();
       });
@@ -153,7 +161,11 @@ export class StreetviewAuthenticationService {
     );
   }
 
-  private tokenRequest(service: string, projectId: number, isPublicView: boolean): void {
+  private tokenRequest(
+    service: string,
+    projectId: number,
+    isPublicView: boolean
+  ): void {
     const envs = this.envService.streetviewEnv[service];
     const secretEnvs = this.envService.streetviewEnv.secrets[service];
 
@@ -162,7 +174,7 @@ export class StreetviewAuthenticationService {
       service,
       projectId,
       username: this._username,
-      isPublicView
+      isPublicView,
     });
 
     const callback =

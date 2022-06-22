@@ -4,9 +4,12 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:local": "ng serve --host hazmapper.local",
     "build": "ng build",
-    "test": "ng test",
-    "lint": "ng lint",
+    "test": "ng test -- --watch=false",
+    "lint": "npm run lint:js && npm run lint:css",
+    "lint:js": "ng lint",
+    "lint:css": "stylelint '**/*.{styl,stylus,css}'",
     "e2e": "ng e2e"
   },
   "private": true,
@@ -68,9 +71,12 @@
     "ngx-infinite-scroll": "^8.0.0",
     "protractor": "~5.4.0",
     "querystring": "^0.2.0",
+    "stylelint": "^14.9.1",
+    "stylelint-stylus": "^0.16.1",
     "ts-mockito": "^2.4.2",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
+    "tslint-config-prettier": "^1.18.0",
     "typescript": "~3.5.3"
   }
 }

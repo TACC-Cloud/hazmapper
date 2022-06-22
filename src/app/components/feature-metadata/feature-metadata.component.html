@@ -1,11 +1,16 @@
 <div class="text-center">
-  <h6 class="">Metadata</h6>
+    <h6 class="">Metadata</h6>
 </div>
-<div class="grid-x grid-margin-x kv-table" *ngFor="let item of feature.properties | keyvalue">
-  <div class="cell small-4 text-left break">
-    <b> <span> {{ item.key | titlecase }} </span></b>
-  </div>
-  <div class="cell small-8 text-left break">
-    <code>{{ item.value | json}}</code>
-  </div>
+<div
+    class="grid-x grid-margin-x kv-table"
+    *ngFor="let item of feature.properties | keyvalue"
+>
+    <div class="cell small-4 text-left break">
+        <b>
+            <span> {{ item.key | titlecase }} </span></b
+        >
+    </div>
+    <div class="cell small-8 text-left break">
+        <code>{{ item.value | json }}</code>
+    </div>
 </div>

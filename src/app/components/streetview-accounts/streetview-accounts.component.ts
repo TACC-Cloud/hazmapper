@@ -11,7 +11,7 @@ import { Project } from 'src/app/models/models';
 @Component({
   selector: 'app-streetview-accounts',
   templateUrl: './streetview-accounts.component.html',
-  styleUrls: ['./streetview-accounts.component.styl']
+  styleUrls: ['./streetview-accounts.component.styl'],
 })
 export class StreetviewAccountsComponent implements OnInit {
   activeStreetview: Streetview;
@@ -22,16 +22,19 @@ export class StreetviewAccountsComponent implements OnInit {
     private bsModalService: BsModalService,
     private modalService: ModalService,
     private projectsService: ProjectsService,
-    private streetviewAuthenticationService: StreetviewAuthenticationService) {}
+    private streetviewAuthenticationService: StreetviewAuthenticationService
+  ) {}
 
   ngOnInit() {
-    this.streetviewAuthenticationService.streetviews.subscribe(next => {
+    this.streetviewAuthenticationService.streetviews.subscribe((next) => {
       this.streetviews = next;
     });
 
-    this.streetviewAuthenticationService.activeStreetview.subscribe((next: Streetview) => {
-      this.activeStreetview = next;
-    });
+    this.streetviewAuthenticationService.activeStreetview.subscribe(
+      (next: Streetview) => {
+        this.activeStreetview = next;
+      }
+    );
 
     this.projectsService.activeProject.subscribe((project: Project) => {
       this.activeProject = project;
@@ -39,11 +42,13 @@ export class StreetviewAccountsComponent implements OnInit {
   }
 
   openStreetviewUsernameModal(service: string) {
-    const modal: BsModalRef = this.bsModalService.show(ModalStreetviewUsernameComponent);
+    const modal: BsModalRef = this.bsModalService.show(
+      ModalStreetviewUsernameComponent
+    );
     modal.content.onClose.subscribe((data: any) => {
-      this.streetviewAuthenticationService.updateStreetviewByService(service,
-        {service_user: data.username}
-      );
+      this.streetviewAuthenticationService.updateStreetviewByService(service, {
+        service_user: data.username,
+      });
     });
   }
 
@@ -56,7 +61,11 @@ export class StreetviewAccountsComponent implements OnInit {
   }
 
   login(service: string) {
-    this.streetviewAuthenticationService.login(service, this.activeProject.id, false);
+    this.streetviewAuthenticationService.login(
+      service,
+      this.activeProject.id,
+      false
+    );
   }
 
   logout(service: string) {
@@ -64,14 +73,20 @@ export class StreetviewAccountsComponent implements OnInit {
   }
 
   openDeleteStreetviewModal(service: string) {
-    this.modalService.confirm(
-      'Delete streetview service',
-      'Are you sure you want to delete this streetview service? This will delete all the service user information stored including sequence assets and upload data. Only confirm if you are ok with losing all associated data!',
-      ['Cancel', 'Confirm']).subscribe((answer) => {
+    this.modalService
+      .confirm(
+        'Delete streetview service',
+        'Are you sure you want to delete this streetview service? This \
+        will delete all the service user information stored including sequence \
+        assets and upload data. Only confirm if you are ok with losing all associated data!',
+        ['Cancel', 'Confirm']
+      )
+      .subscribe((answer) => {
         if (answer === 'Confirm') {
-          this.streetviewAuthenticationService.deleteStreetviewByService(service);
+          this.streetviewAuthenticationService.deleteStreetviewByService(
+            service
+          );
         }
       });
   }
-
 }

@@ -8,9 +8,8 @@ describe('ModalStreetviewUsernameComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ModalStreetviewUsernameComponent ]
-    })
-    .compileComponents();
+      declarations: [ModalStreetviewUsernameComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

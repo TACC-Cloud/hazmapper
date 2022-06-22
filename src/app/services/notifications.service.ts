@@ -6,23 +6,30 @@ import { interval, Observable, ReplaySubject } from 'rxjs';
 import { EnvService } from '../services/env.service';
 import { take } from 'rxjs/operators';
 import { AuthService } from '../services/authentication.service';
+import { wrap } from 'module';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class NotificationsService {
-
   // Interval time to get notifications in millisecs
   private TIMEOUT = 5000;
-  private _notifications: ReplaySubject<Array<INotification>> = new ReplaySubject<Array<INotification>>(1);
-  public readonly  notifications: Observable<Array<INotification>> = this._notifications.asObservable();
-  private _progressNotifications: ReplaySubject<Array<IProgressNotification>> = new ReplaySubject<Array<IProgressNotification>>(1);
-  public readonly  progressNotifications$: Observable<Array<IProgressNotification>> = this._progressNotifications.asObservable();
+  private _notifications: ReplaySubject<Array<INotification>> =
+    new ReplaySubject<Array<INotification>>(1);
+  public readonly notifications: Observable<Array<INotification>> =
+    this._notifications.asObservable();
+  private _progressNotifications: ReplaySubject<Array<IProgressNotification>> =
+    new ReplaySubject<Array<IProgressNotification>>(1);
+  public readonly progressNotifications$: Observable<
+    Array<IProgressNotification>
+  > = this._progressNotifications.asObservable();
 
-  constructor(private toastr: ToastrService,
-              private envService: EnvService,
-              private http: HttpClient,
-              private authService: AuthService ) {
+  constructor(
+    private toastr: ToastrService,
+    private envService: EnvService,
+    private http: HttpClient,
+    private authService: AuthService
+  ) {
     if (authService.isLoggedIn()) {
       const timer = interval(this.TIMEOUT);
       timer.subscribe(() => {
@@ -37,10 +44,11 @@ export class NotificationsService {
     const now = new Date();
     const then = new Date(now.getTime() - this.TIMEOUT);
 
-    this.http.get<Array<INotification>>(baseUrl + `?startDate=${then.toISOString()}`)
-      .subscribe( (notes) => {
+    this.http
+      .get<Array<INotification>>(baseUrl + `?startDate=${then.toISOString()}`)
+      .subscribe((notes) => {
         this._notifications.next(notes);
-        notes.forEach( (note) => {
+        notes.forEach((note) => {
           switch (note.status) {
             case 'success':
               this.showSuccessToast(note.message);
@@ -81,10 +89,9 @@ export class NotificationsService {
   getRecentProgress(): void {
     this.authService.checkLoggedIn();
     const baseUrl = this.envService.apiUrl + '/notifications/progress';
-    this.http.get<Array<IProgressNotification>>(baseUrl)
-      .subscribe((notes) => {
-        this._progressNotifications.next(notes);
-      });
+    this.http.get<Array<IProgressNotification>>(baseUrl).subscribe((notes) => {
+      this._progressNotifications.next(notes);
+    });
   }
 
   deleteAllDoneProgress(): void {
@@ -92,7 +99,8 @@ export class NotificationsService {
 
     // this._progressNotifications.next([]);
 
-    this.http.delete<Array<IProgressNotification>>(baseUrl)
+    this.http
+      .delete<Array<IProgressNotification>>(baseUrl)
       .subscribe((notes) => {
         // FIXME: Don't need
         this._progressNotifications.next(notes);
@@ -103,12 +111,14 @@ export class NotificationsService {
     const baseUrl = this.envService.apiUrl + '/notifications/progress';
 
     this.progressNotifications
-      .pipe(take(1)).subscribe((progressList: Array<any>) => {
-        progressList = progressList.filter(n => n.uuid != pn.uuid);
-        this._progressNotifications.next(progressList)
+      .pipe(take(1))
+      .subscribe((progressList: Array<any>) => {
+        progressList = progressList.filter((n) => n.uuid !== pn.uuid);
+        this._progressNotifications.next(progressList);
       });
 
-    this.http.delete<Array<IProgressNotification>>(baseUrl + '/' + pn.uuid)
+    this.http
+      .delete<Array<IProgressNotification>>(baseUrl + '/' + pn.uuid)
       .subscribe(() => {
         this.showSuccessToast('Deleted progress: ' + pn.uuid);
       });
@@ -116,7 +126,8 @@ export class NotificationsService {
 
   getProgressByUUID(pn: IProgressNotification): any {
     const baseUrl = this.envService.apiUrl + '/notifications/progress';
-    this.http.get<Array<IProgressNotification>>(baseUrl + '/' + pn.uuid)
+    this.http
+      .get<Array<IProgressNotification>>(baseUrl + '/' + pn.uuid)
       .subscribe((note) => {
         return note;
       });
@@ -129,5 +140,4 @@ export class NotificationsService {
   public get progressNotifications(): any {
     return this.progressNotifications$;
   }
-
 }

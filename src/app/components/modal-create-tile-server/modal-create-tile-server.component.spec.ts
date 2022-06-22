@@ -8,9 +8,8 @@ describe('ModalCreateTileServerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ModalCreateTileServerComponent ]
-    })
-    .compileComponents();
+      declarations: [ModalCreateTileServerComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

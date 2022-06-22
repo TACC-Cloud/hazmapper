@@ -64,9 +64,8 @@ export class ProjectsService {
   public deletingProjects: Observable<Project[]> =
     this._deletingProjects.asObservable();
 
-  private _panelsDisplay: BehaviorSubject<IpanelsDisplay> = new BehaviorSubject<
-    IpanelsDisplay
-  >(defaultPanelsDisplay);
+  private _panelsDisplay: BehaviorSubject<IpanelsDisplay> =
+    new BehaviorSubject<IpanelsDisplay>(defaultPanelsDisplay);
   public panelsDisplay: Observable<IpanelsDisplay> =
     this._panelsDisplay.asObservable();
 
@@ -320,7 +319,9 @@ export class ProjectsService {
   setPanelsDisplay(panelName: string): void {
     const panelsDisplay = this._panelsDisplay.value;
     for (const key in panelsDisplay) {
-      if (key !== panelName) { panelsDisplay[key] = false; }
+      if (key !== panelName) {
+        panelsDisplay[key] = false;
+      }
     }
 
     panelsDisplay[panelName] = !panelsDisplay[panelName];
@@ -330,6 +331,7 @@ export class ProjectsService {
 
   disablePanelsDisplay(): void {
     const panelsDisplay = this._panelsDisplay.value;
+    // tslint:disable-next-line
     for (const key in panelsDisplay) {
       panelsDisplay[key] = false;
     }

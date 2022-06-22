@@ -74,7 +74,11 @@ export class StreetviewPanelComponent implements OnInit {
   }
 
   login(svService: string) {
-    this.streetviewAuthenticationService.login(svService, this.activeProject.id, this.isPublicView);
+    this.streetviewAuthenticationService.login(
+      svService,
+      this.activeProject.id,
+      this.isPublicView
+    );
   }
 
   logout(svService: string) {
@@ -82,7 +86,10 @@ export class StreetviewPanelComponent implements OnInit {
   }
 
   isLoggedIn(svService: string) {
-    return this.streetviewAuthenticationService.isLoggedIn(svService, this.isPublicView);
+    return this.streetviewAuthenticationService.isLoggedIn(
+      svService,
+      this.isPublicView
+    );
   }
 
   toggleStreetviewDisplay() {
@@ -90,12 +97,19 @@ export class StreetviewPanelComponent implements OnInit {
   }
 
   openDeleteStreetviewModal(service: string) {
-    this.modalService.confirm(
-      'Delete streetview service',
-      'Are you sure you want to delete this streetview service? This will delete all the service user information stored including sequence assets and upload data. Only confirm if you are ok with losing all associated data!',
-      ['Cancel', 'Confirm']).subscribe((answer) => {
+    this.modalService
+      .confirm(
+        'Delete streetview service',
+        'Are you sure you want to delete this streetview service? \
+        This will delete all the service user information stored including sequence \
+        assets and upload data. Only confirm if you are ok with losing all associated data!',
+        ['Cancel', 'Confirm']
+      )
+      .subscribe((answer) => {
         if (answer === 'Confirm') {
-          this.streetviewAuthenticationService.deleteStreetviewByService(service);
+          this.streetviewAuthenticationService.deleteStreetviewByService(
+            service
+          );
         }
       });
   }

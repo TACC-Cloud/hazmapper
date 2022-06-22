@@ -1,4 +1,4 @@
-import {PathOptions, MarkerOptions} from 'leaflet';
+import { PathOptions, MarkerOptions } from 'leaflet';
 
 export interface MarkerStyle extends PathOptions, MarkerOptions {
   faIcon?: string;

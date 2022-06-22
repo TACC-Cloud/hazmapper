@@ -1,22 +1,48 @@
-<h4> Create a Point Cloud </h4>
+<h4>Create a Point Cloud</h4>
 
-<span class="help-text">Point cloud data files (e.g. las/laz files) can be added to a map asset.
-    Point cloud data files added to a point cloud are processed using <a href="https://github.com/potree/PotreeConverter" target="_blank">Potree Converter</a> and a corresponding asset on the map can be viewed.</span>
-<hr>
+<span class="help-text"
+    >Point cloud data files (e.g. las/laz files) can be added to a map asset.
+    Point cloud data files added to a point cloud are processed using
+    <a href="https://github.com/potree/PotreeConverter" target="_blank"
+        >Potree Converter</a
+    >
+    and a corresponding asset on the map can be viewed.</span
+>
+<hr />
 <form [formGroup]="pcCreateForm" (ngSubmit)="submit()">
-    <label> Description:
-        <input type="text" formControlName="description" required="true">
+    <label>
+        Description:
+        <input type="text" formControlName="description" required="true" />
     </label>
 
-    <label> Additional Conversion Parameters
-        <textarea formControlName="conversionParameters" required="false"></textarea>
-        <span class="help-text"> These will be added to the parameters passed to <a href="https://github.com/potree/PotreeConverter#potreeconverter-usage" target="_blank">Potree Converter</a>. By default, the only parameters passed are <code>--generate-page index.html</code> </span>
+    <label>
+        Additional Conversion Parameters
+        <textarea
+            formControlName="conversionParameters"
+            required="false"
+        ></textarea>
+        <span class="help-text">
+            These will be added to the parameters passed to
+            <a
+                href="https://github.com/potree/PotreeConverter#potreeconverter-usage"
+                target="_blank"
+                >Potree Converter</a
+            >. By default, the only parameters passed are
+            <code>--generate-page index.html</code>
+        </span>
     </label>
-    <hr>
+    <hr />
 
     <div class="button-group small">
-        <button class="button small warning" type="button" (click)="close()">Close</button>
-        <button class="button small align-right" type="submit" [disabled]="!pcCreateForm.valid">Submit</button>
+        <button class="button small warning" type="button" (click)="close()">
+            Close
+        </button>
+        <button
+            class="button small align-right"
+            type="submit"
+            [disabled]="!pcCreateForm.valid"
+        >
+            Submit
+        </button>
     </div>
 </form>
-

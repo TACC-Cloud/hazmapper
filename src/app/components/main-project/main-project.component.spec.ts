@@ -2,14 +2,13 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MainProjectComponent } from './main-project.component';
 
-import {GeoDataService} from '../../services/geo-data.service';
-import {instance, mock, when} from 'ts-mockito';
-import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {of} from 'rxjs';
-import {FeatureCollection} from '../../models/models';
-import {featureFixture} from '../../fixtures/feature.fixture';
-import {userFixture} from '../../fixtures/user.fixture';
-
+import { GeoDataService } from '../../services/geo-data.service';
+import { instance, mock, when } from 'ts-mockito';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { of } from 'rxjs';
+import { FeatureCollection } from '../../models/models';
+import { featureFixture } from '../../fixtures/feature.fixture';
+import { userFixture } from '../../fixtures/user.fixture';
 
 describe('MainProjectComponent', () => {
   let component: MainProjectComponent;
@@ -19,15 +18,15 @@ describe('MainProjectComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MainProjectComponent ],
+      declarations: [MainProjectComponent],
       providers: [
         {
-          provide: GeoDataService, useFactory: () => instance(MockData)
-        }
+          provide: GeoDataService,
+          useFactory: () => instance(MockData),
+        },
       ],
-      schemas: [NO_ERRORS_SCHEMA]
-    })
-    .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

@@ -8,9 +8,8 @@ describe('StreetviewAccountsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ StreetviewAccountsComponent ]
-    })
-    .compileComponents();
+      declarations: [StreetviewAccountsComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

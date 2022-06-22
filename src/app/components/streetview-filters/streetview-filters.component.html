@@ -1,14 +1,19 @@
 <div>
-  <div>
-    <div *ngIf="activeStreetview && activeStreetview.organizations.length">
-      <h6>Organizations</h6>
-      <div *ngFor="let org of activeStreetview.organizations">
-        <div>
-          <label for="orgFilter">
-            <input type="checkbox" id="orgFilter" [checked]="isActive(org)" (change)="addOrRemoveOrganization(org.key)">{{org.name}}
-          </label>
+    <div>
+        <div *ngIf="activeStreetview && activeStreetview.organizations.length">
+            <h6>Organizations</h6>
+            <div *ngFor="let org of activeStreetview.organizations">
+                <div>
+                    <label for="orgFilter">
+                        <input
+                            type="checkbox"
+                            id="orgFilter"
+                            [checked]="isActive(org)"
+                            (change)="addOrRemoveOrganization(org.key)"
+                        />{{ org.name }}
+                    </label>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>

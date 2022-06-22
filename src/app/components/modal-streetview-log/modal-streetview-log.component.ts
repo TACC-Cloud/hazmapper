@@ -5,18 +5,16 @@ import { IProgressNotification } from 'src/app/models/notification';
 @Component({
   selector: 'app-modal-streetview-log',
   templateUrl: './modal-streetview-log.component.html',
-  styleUrls: ['./modal-streetview-log.component.styl']
+  styleUrls: ['./modal-streetview-log.component.styl'],
 })
 export class ModalStreetviewLogComponent implements OnInit {
   @Input() notification: IProgressNotification;
 
-  constructor(private bsModalRef: BsModalRef) { }
+  constructor(private bsModalRef: BsModalRef) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   close() {
     this.bsModalRef.hide();
   }
-
 }

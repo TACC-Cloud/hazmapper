@@ -1,6 +1,13 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
-import {Feature} from '../../models/models';
-import {GeoDataService} from '../../services/geo-data.service';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewEncapsulation,
+} from '@angular/core';
+import { Feature } from '../../models/models';
+import { GeoDataService } from '../../services/geo-data.service';
 
 @Component({
   selector: 'app-feature-row',
@@ -8,13 +15,11 @@ import {GeoDataService} from '../../services/geo-data.service';
   styleUrls: ['./feature-row.component.styl'],
 })
 export class FeatureRowComponent implements OnInit {
-
   @Input() feature: Feature;
   @Output() clickRequest = new EventEmitter<Feature>();
-  constructor(private geoDataService: GeoDataService) { }
+  constructor(private geoDataService: GeoDataService) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   click() {
     this.clickRequest.emit(this.feature);
@@ -23,5 +28,4 @@ export class FeatureRowComponent implements OnInit {
   delete() {
     this.geoDataService.deleteFeature(this.feature);
   }
-
 }

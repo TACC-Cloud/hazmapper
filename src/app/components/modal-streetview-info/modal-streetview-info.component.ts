@@ -50,10 +50,14 @@ export class ModalStreetviewInfoComponent implements OnInit {
   }
 
   openSequenceFeatureModal(streetviewSequence: StreetviewSequence) {
-    this.modalService.confirm(
-      'Import sequence to map',
-      'Are you sure you want to import this sequence as a map asset? Members of this map will be able to see this sequence. This may take a while to process.',
-      ['Cancel', 'Confirm']).subscribe((answer) => {
+    this.modalService
+      .confirm(
+        'Import sequence to map',
+        'Are you sure you want to import this sequence as a map asset? \
+        Members of this map will be able to see this sequence. This may take a while to process.',
+        ['Cancel', 'Confirm']
+      )
+      .subscribe((answer) => {
         if (answer === 'Confirm') {
           this.sequenceToFeature(streetviewSequence);
         }
@@ -72,7 +76,10 @@ export class ModalStreetviewInfoComponent implements OnInit {
   }
 
   checkSequenceState(streetviewSequence: StreetviewSequence) {
-    this.streetviewService.checkStreetviewSequence(streetviewSequence, this.activeStreetview);
+    this.streetviewService.checkStreetviewSequence(
+      streetviewSequence,
+      this.activeStreetview
+    );
   }
 
   showInMap(sequence: StreetviewSequence) {

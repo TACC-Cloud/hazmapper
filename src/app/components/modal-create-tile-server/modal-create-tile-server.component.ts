@@ -1,19 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
-import {BsModalRef, BsModalService} from 'ngx-foundation';
-import {Subject} from 'rxjs';
-import {filter, first, map, take, toArray} from 'rxjs/operators';
-import {TapisFilesService} from '../../services/tapis-files.service';
-import {TileServer, Project} from '../../models/models';
-import {GeoDataService} from '../../services/geo-data.service';
-import {ProjectsService} from '../../services/projects.service';
-import {RemoteFile} from 'ng-tapis';
-import {defaultTileServers, suggestedTileServers} from '../../constants/tile-servers';
+import { FormControl, FormGroup } from '@angular/forms';
+import { BsModalRef, BsModalService } from 'ngx-foundation';
+import { Subject } from 'rxjs';
+import { filter, first, map, take, toArray } from 'rxjs/operators';
+import { TapisFilesService } from '../../services/tapis-files.service';
+import { TileServer, Project } from '../../models/models';
+import { GeoDataService } from '../../services/geo-data.service';
+import { ProjectsService } from '../../services/projects.service';
+import { RemoteFile } from 'ng-tapis';
+import {
+  defaultTileServers,
+  suggestedTileServers,
+} from '../../constants/tile-servers';
 
 @Component({
   selector: 'app-modal-create-tile-server',
   templateUrl: './modal-create-tile-server.component.html',
-  styleUrls: ['./modal-create-tile-server.component.styl']
+  styleUrls: ['./modal-create-tile-server.component.styl'],
 })
 export class ModalCreateTileServerComponent implements OnInit {
   remoteFileData: Array<RemoteFile> = new Array<RemoteFile>();
@@ -22,25 +25,26 @@ export class ModalCreateTileServerComponent implements OnInit {
   defaultServers: ReadonlyArray<TileServer> = defaultTileServers;
   suggestedServers: ReadonlyArray<TileServer> = suggestedTileServers;
   qmsSearchResults: Array<any>;
-  loadingSearch: boolean = false;
+  loadingSearch = false;
 
   public readonly onClose: Subject<any> = new Subject<any>();
 
-  constructor(private bsModalRef: BsModalRef,
-              private tapisFilesService: TapisFilesService,
-              private geoDataService: GeoDataService,
-              private projectsService: ProjectsService,
-              private bsModalService: BsModalService) { }
+  constructor(
+    private bsModalRef: BsModalRef,
+    private tapisFilesService: TapisFilesService,
+    private geoDataService: GeoDataService,
+    private projectsService: ProjectsService,
+    private bsModalService: BsModalService
+  ) {}
 
   ngOnInit() {
     this.geoDataService.qmsSearchResults.subscribe((next) => {
       if (next) {
         this.qmsSearchResults = next;
-        this.qmsSearchResults.map(n => n.show = false);
+        this.qmsSearchResults.map((n) => (n.show = false));
         this.loadingSearch = false;
       }
     });
-
 
     this.geoDataService.qmsServerResult.subscribe((next) => {
       if (next) {
@@ -49,11 +53,11 @@ export class ModalCreateTileServerComponent implements OnInit {
       }
     });
 
-    this.projectsService.activeProject.subscribe( (next) => {
+    this.projectsService.activeProject.subscribe((next) => {
       this.activeProject = next;
     });
 
-    this.tsCreateForm = new FormGroup( {
+    this.tsCreateForm = new FormGroup({
       method: new FormControl('suggestions'),
       type: new FormControl('tms'),
       name: new FormControl(''),
@@ -81,11 +85,11 @@ export class ModalCreateTileServerComponent implements OnInit {
   searchQMS(ev: any, query: string) {
     ev.preventDefault();
     this.loadingSearch = true;
-    let qmsQueryOptions = {
+    const qmsQueryOptions = {
       type: this.tsCreateForm.get('type').value,
       ordering: this.tsCreateForm.get('ordering').value,
       order: this.tsCreateForm.get('order').value,
-    }
+    };
 
     this.geoDataService.searchQMS(query, qmsQueryOptions);
   }
@@ -103,19 +107,23 @@ export class ModalCreateTileServerComponent implements OnInit {
   }
 
   removeTags(str: string) {
-    return str.replace( /(<([^>]+)>)/ig, '');
-  };
+    return str.replace(/(<([^>]+)>)/gi, '');
+  }
 
   generateAttribution() {
     let copyright = '';
 
-    const attributionText = this.removeTags(this.tsCreateForm.get('attribution').value);
-    const attributionLink = this.removeTags(this.tsCreateForm.get('attributionLink').value);
+    const attributionText = this.removeTags(
+      this.tsCreateForm.get('attribution').value
+    );
+    const attributionLink = this.removeTags(
+      this.tsCreateForm.get('attributionLink').value
+    );
 
     if (attributionText) {
-      copyright = '&copy; '
+      copyright = '&copy; ';
       if (attributionLink) {
-        copyright += '<a href=\"' + attributionLink + '\">';
+        copyright += '<a href="' + attributionLink + '">';
         copyright += attributionText + '</a>';
       } else {
         copyright += copyright + attributionText;
@@ -144,20 +152,20 @@ export class ModalCreateTileServerComponent implements OnInit {
         opacity: 0.5,
         isActive: true,
         showDescription: false,
-        showInput: false
-      }
+        showInput: false,
+      },
     };
 
     return tileServer;
   }
 
   submit() {
-    let importMethod = this.tsCreateForm.get('method').value;
-    if (importMethod == 'manual') {
-      let tileServer = this.tileServerFromForm();
+    const importMethod = this.tsCreateForm.get('method').value;
+    if (importMethod === 'manual') {
+      const tileServer = this.tileServerFromForm();
       this.geoDataService.addTileServer(this.activeProject.id, tileServer);
       this.onClose.next(null);
-    } else if (importMethod == 'ini') {
+    } else if (importMethod === 'ini') {
       this.onClose.next(this.remoteFileData);
     }
 

@@ -131,7 +131,7 @@ export class MapComponent implements OnInit, OnDestroy {
         if (next) {
           this.createStreetviewLayer();
         } else {
-          this.deleteStreetviewLayer()
+          this.deleteStreetviewLayer();
         }
       })
     );
@@ -171,7 +171,7 @@ export class MapComponent implements OnInit, OnDestroy {
               [bbox[3], bbox[2]],
             ]);
           }
-      })
+        })
     );
 
     // Publish the mouse location on the mapMouseLocation stream
@@ -231,7 +231,7 @@ export class MapComponent implements OnInit, OnDestroy {
               }
               break;
             default:
-            break;
+              break;
           }
         }
       })
@@ -259,14 +259,14 @@ export class MapComponent implements OnInit, OnDestroy {
         sequence: (properties, zoom, geometryType) => {
           if (
             this.activeStreetviewOrganizations.some(
-              (org) => org == properties.organization_id
-            )
-          )
-        { if (
-            this.streetviewAuthenticationService.sequenceInStreetview(
-              properties.id
+              (org) => org === properties.organization_id
             )
           ) {
+            if (
+              this.streetviewAuthenticationService.sequenceInStreetview(
+                properties.id
+              )
+            ) {
               return streetviewAssetStyles.instance.sequence.default;
             } else {
               return streetviewAssetStyles.sequence.default;
@@ -282,7 +282,8 @@ export class MapComponent implements OnInit, OnDestroy {
       const vectorTileOptions = {
         attribution: 'Mapillary layer',
         vectorTileLayerStyles: vectorTileStyling,
-        token: this.streetviewAuthenticationService.getLocalToken('mapillary').token,
+        token:
+          this.streetviewAuthenticationService.getLocalToken('mapillary').token,
         interactive: true,
         getFeatureId: (f: any) => {
           return f.properties.id;
@@ -310,12 +311,7 @@ export class MapComponent implements OnInit, OnDestroy {
         if (prop.image_id) {
           this.mapillaryHoverAsset('sequence', prop.id, prop.id, false);
         } else {
-          this.mapillaryHoverAsset(
-            'image',
-            prop.id,
-            prop.sequence_id,
-            false
-          );
+          this.mapillaryHoverAsset('image', prop.id, prop.sequence_id, false);
         }
       });
 
@@ -326,16 +322,11 @@ export class MapComponent implements OnInit, OnDestroy {
         if (prop.image_id) {
           this.mapillaryHoverAsset('sequence', prop.id, prop.id, true);
         } else {
-          this.mapillaryHoverAsset(
-            'image',
-            prop.id,
-            prop.sequence_id,
-            true
-          );
+          this.mapillaryHoverAsset('image', prop.id, prop.sequence_id, true);
         }
       });
     } else {
-      this.deleteStreetviewLayer()
+      this.deleteStreetviewLayer();
     }
   }
 
@@ -364,7 +355,7 @@ export class MapComponent implements OnInit, OnDestroy {
     } else if (ts.type === 'arcgis') {
       return esri.tiledMapLayer({
         url: ts.url,
-        maxZoom: 24
+        maxZoom: 24,
       });
     }
   }
@@ -397,10 +388,9 @@ export class MapComponent implements OnInit, OnDestroy {
           if (d.geometry.type === 'Polygon' && d.properties.style) {
             feat = L.geoJSON(d, { style: d.properties.style });
           } else if (d.featureType() === 'streetview') {
-            feat = L.geoJSON(d, 
-              { 
-                style: streetviewAssetStyles.feature.default 
-              });
+            feat = L.geoJSON(d, {
+              style: streetviewAssetStyles.feature.default,
+            });
           } else {
             feat = L.geoJSON(d, geojsonOptions);
           }
@@ -445,13 +435,11 @@ export class MapComponent implements OnInit, OnDestroy {
     return subscription;
   }
 
-  /**
-   * @param ev
-   */
   featureClickHandler(ev: any, clickType: string): void {
     if (ev.layer.feature.featureType() === 'streetview') {
-      this.streetviewService.sequenceFeatureToActiveAsset(ev.layer.feature)
-        .subscribe(e => {
+      this.streetviewService
+        .sequenceFeatureToActiveAsset(ev.layer.feature)
+        .subscribe((e) => {
           this.mapillaryClickHandler(e, clickType);
         });
     } else {
@@ -468,7 +456,7 @@ export class MapComponent implements OnInit, OnDestroy {
     const assetType = e.feature ? 'geojson' : 'mvt';
     const type = prop.image_id ? 'sequence' : 'image';
     const imageId = type === 'sequence' ? prop.image_id : prop.id;
-    const sequenceId = type ==='sequence' ? prop.id : prop.sequence_id;
+    const sequenceId = type === 'sequence' ? prop.id : prop.sequence_id;
 
     if (clickType === 'click') {
       this.openOrMoveStreetviewViewer(imageId, e.latlng);
@@ -494,7 +482,12 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   openOrMoveStreetviewViewer(imageId: string, latlng: any) {
-    if (this.streetviewAuthenticationService.isLoggedIn('mapillary', this.isPublicView)) {
+    if (
+      this.streetviewAuthenticationService.isLoggedIn(
+        'mapillary',
+        this.isPublicView
+      )
+    ) {
       if (this.streetviewViewer) {
         this.streetviewViewer.moveTo(imageId).catch(() => {});
       } else {
@@ -502,10 +495,14 @@ export class MapComponent implements OnInit, OnDestroy {
       }
       this.openOrMoveStreetviewMarker(latlng);
     } else {
-      this.modalService.confirm(
-        'Not authenticated to Mapillary',
-        'In order to use the streetview viewer, you must login to Mapillary. Navigate to the Streetview panel on the left and click the "Login to Mapillary" button.',
-        ['Close', 'Login To Mapillary']).subscribe(answer => {
+      this.modalService
+        .confirm(
+          'Not authenticated to Mapillary',
+          'In order to use the streetview viewer, you must login to Mapillary. \
+        Navigate to the Streetview panel on the left and click the "Login to Mapillary" button.',
+          ['Close', 'Login To Mapillary']
+        )
+        .subscribe((answer) => {
           if (answer === 'Login To Mapillary') {
             this.projectsService.setPanelsDisplay('streetview');
           }

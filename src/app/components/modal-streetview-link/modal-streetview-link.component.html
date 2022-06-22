@@ -1,22 +1,30 @@
 <app-file-browser
-  [single]="true"
-  [allowFolders]=allowFolders
-  [onlyFolder]="true"
-  [heading]="'Select a Folder to link Sequence'"
-  [helpText]="'Only folders are selectable.'"
-  (selection)="onSelect($event)">
+    [single]="true"
+    [allowFolders]="allowFolders"
+    [onlyFolder]="true"
+    [heading]="'Select a Folder to link Sequence'"
+    [helpText]="'Only folders are selectable.'"
+    (selection)="onSelect($event)"
+>
 </app-file-browser>
 
 <div style="margin: 25px 0">
-  <label> <h5>Select Organization</h5>
-    <select [(ngModel)]="selectedOrganization">
-      <option *ngFor="let org of activeStreetview.organizations" [ngValue]="org.key">{{org.name}}</option>
-    </select>
-  </label>
+    <label>
+        <h5>Select Organization</h5>
+        <select [(ngModel)]="selectedOrganization">
+            <option
+                *ngFor="let org of activeStreetview.organizations"
+                [ngValue]="org.key"
+            >
+                {{ org.name }}
+            </option>
+        </select>
+    </label>
 </div>
 
-
 <div>
-  <button class="button warning" (click)="cancel()">Cancel</button>
-  <button class="button" [disabled]="!selectedFiles.length" (click)="link()">Link</button>
+    <button class="button warning" (click)="cancel()">Cancel</button>
+    <button class="button" [disabled]="!selectedFiles.length" (click)="link()">
+        Link
+    </button>
 </div>
