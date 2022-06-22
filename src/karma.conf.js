@@ -24,8 +24,8 @@ module.exports = function (config) {
         port: 9876,
         colors: true,
         logLevel: config.DEBUG,
-        autoWatch: true,
-        browsers: ['Chrome'],
+        autoWatch: false,
+        browsers: ['ChromeHeadless'],
         singleRun: false,
         restartOnFileChange: true,
     });

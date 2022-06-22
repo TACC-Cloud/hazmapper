@@ -6,7 +6,7 @@
     "start": "ng serve",
     "start:local": "ng serve --host hazmapper.local",
     "build": "ng build",
-    "test": "ng test -- --watch=false",
+    "test": "ng test",
     "lint": "npm run lint:js && npm run lint:css",
     "lint:js": "ng lint",
     "lint:css": "stylelint '**/*.{styl,stylus,css}'",
