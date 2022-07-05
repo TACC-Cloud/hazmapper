@@ -30,7 +30,6 @@ export class MapComponent implements OnInit, OnDestroy {
   _activeProjectId: number;
   nonPointFeatures: LayerGroup[] = [];
   features: FeatureGroup = new FeatureGroup();
-  featuresList: any;
   overlays: LayerGroup = new LayerGroup<any>();
   tileServerLayers: Map<number, TileLayer> = new Map<number, TileLayer>();
   fitToFeatureExtent = true;
@@ -151,7 +150,6 @@ export class MapComponent implements OnInit, OnDestroy {
     };
 
     const subscription = this.geoDataService.features.subscribe((collection) => {
-      this.featuresList = collection;
       this.features.clearLayers();
       this.overlays.clearLayers();
       this.nonPointFeatures = [];
@@ -165,12 +163,13 @@ export class MapComponent implements OnInit, OnDestroy {
       collection.features.forEach(d => {
         let feat: LayerGroup;
 
-        d.properties.style = d.properties.customStyle
-          ? d.properties.customStyle
+        d.properties.defaultStyle = assetStyles.default;
+        const featureStyle = d.properties.style
+          ? d.properties.style
           : assetStyles.default;
 
         if (d.geometry.type === 'Polygon' || d.geometry.type === 'LineString') {
-          feat = L.geoJSON(d, {style: d.properties.style});
+          feat = L.geoJSON(d, {style: featureStyle});
         } else {
           feat = L.geoJSON(d, geojsonOptions);
         }

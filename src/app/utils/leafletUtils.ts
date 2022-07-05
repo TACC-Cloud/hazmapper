@@ -69,7 +69,8 @@ function createCustomCircleMarker(latlng: LatLng, style: MarkerStyle): CircleMar
 }
 
 export function setMarkerStyle(layer: any, active: boolean) {
-  const custom = layer.feature.properties.customStyle;
+  // const custom = layer.feature.properties.customStyle;
+  const custom = layer.feature.properties.style;
   const featureType = layer.feature.featureType();
   let icon = null;
   if (featureType === 'Point' && custom && custom.faIcon) {
@@ -100,8 +101,10 @@ export function setMarkerStyle(layer: any, active: boolean) {
 }
 
 export function createMarker(feature: Feature, latlng: LatLng): Marker | CircleMarker {
-  if (feature.properties.style) {
-    const style = feature.properties.style;
+  if (feature.properties.style || feature.properties.defaultStyle) {
+    const style = feature.properties.style
+      ? feature.properties.style
+      : feature.properties.defaultStyle;
     if (style.faIcon) {
       return createCustomIconMarker(latlng, style);
     } else {

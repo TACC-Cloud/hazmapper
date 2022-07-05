@@ -77,9 +77,6 @@ export class GeoDataService {
     this.http.get<FeatureCollection>(this.envService.apiUrl + `/${projectRoute}/${projectId}/features/` + '?' + qstring)
       .subscribe( (fc: FeatureCollection) => {
         fc.features = fc.features.map( (feat: Feature) => {
-          if (feat.properties.style) {
-            feat.properties.customStyle = feat.properties.style;
-          }
           return new Feature(feat);
         });
 
