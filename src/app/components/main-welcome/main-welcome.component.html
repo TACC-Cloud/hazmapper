@@ -84,7 +84,7 @@
                       </ng-container>
 
                       <ng-template #notDeleting>
-                        <button class="project-list-item-button" [tooltip]="'Delete Map'" (click)="openDeleteProjectModal(p, $event)">
+                        <button class="project-list-item-button" [tooltip]="'Delete Map'" [disabled]="!p.deletable" (click)="openDeleteProjectModal(p, $event)">
                           <i class="fas fa-trash"></i>
                         </button>
                       </ng-template>
