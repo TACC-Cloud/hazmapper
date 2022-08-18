@@ -1,7 +1,5 @@
 # Hazmapper
 
-[![Build Status](https://travis-ci.org/TACC-Cloud/hazmapper.svg?branch=master)](https://travis-ci.org/TACC-Cloud/hazmapper)
-
 Hazmapper is an application for creating, visualizing, and analyzing geospatial data in a variety of formats.
 
 See https://github.com/TACC-Cloud/geoapi which is an associated restful API.
