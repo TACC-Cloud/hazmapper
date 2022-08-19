@@ -25,10 +25,12 @@ jobs:
 
     - name: npm ci
       run: |
+        cd angular
         touch src/environments/jwt.js
         npm ci
     - name: Unit Tests
       run: |
+        cd angular
         npm run test:ci
 
   Linting:
@@ -49,7 +51,9 @@ jobs:
 
     - name: npm ci
       run: |
+        cd angular
         npm ci
     - name: Linting
       run: |
+        cd angular
         npm run lint
