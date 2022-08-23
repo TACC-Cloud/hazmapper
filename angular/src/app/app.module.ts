@@ -4,13 +4,20 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { APP_BASE_HREF } from '@angular/common';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { ModalModule, BsDropdownModule, TooltipModule, TabsModule, PaginationModule } from 'ngx-foundation';
+import {
+  ModalModule,
+  BsDropdownModule,
+  TooltipModule,
+  TabsModule,
+  PaginationModule,
+} from 'ngx-foundation';
 import { FileSizeModule } from 'ngx-filesize';
-import { ApiModule} from 'ng-tapis';
+import { ApiModule } from 'ng-tapis';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MapComponent} from './components/map/map.component';
+import { MapComponent } from './components/map/map.component';
 import { DockComponent } from './components/dock/dock.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MainComponent } from './components/main/main.component';
 import { AssetsPanelComponent } from './components/assets-panel/assets-panel.component';
 import { NotFoundComponent } from './components/notfound/notfound.component';
@@ -27,9 +34,9 @@ import { AuthService } from './services/authentication.service';
 import { ModalService } from './services/modal.service';
 import { EnvService } from './services/env.service';
 import { CallbackComponent } from './components/callback/callback.component';
-import { AuthInterceptor, JwtInterceptor} from './app.interceptors';
+import { AuthInterceptor, JwtInterceptor } from './app.interceptors';
 import { ModalCreateProjectComponent } from './components/modal-create-project/modal-create-project.component';
-import { ReactiveFormsModule, FormsModule} from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ModalFileBrowserComponent } from './components/modal-file-browser/modal-file-browser.component';
 import { ModalCreatePointCloudComponent } from './components/modal-create-point-cloud/modal-create-point-cloud.component';
 import { FeatureGeometryComponent } from './components/feature-geometry/feature-geometry.component';
@@ -49,7 +56,7 @@ import { EditNameInputComponent } from './components/edit-name-input/edit-name-i
 import { StreetviewPanelComponent } from './components/streetview-panel/streetview-panel.component';
 import { MainWelcomeComponent } from './components/main-welcome/main-welcome.component';
 import { MainProjectComponent } from './components/main-project/main-project.component';
-import {DragDropModule, CDK_DRAG_CONFIG} from '@angular/cdk/drag-drop';
+import { DragDropModule, CDK_DRAG_CONFIG } from '@angular/cdk/drag-drop';
 import { StreetviewCallbackComponent } from './components/streetview-callback/streetview-callback.component';
 import { StreetviewAccountsComponent } from './components/streetview-accounts/streetview-accounts.component';
 import { StreetviewLogsComponent } from './components/streetview-logs/streetview-logs.component';
@@ -69,7 +76,11 @@ import { StreetviewFiltersComponent } from './components/streetview-filters/stre
 
 @NgModule({
   declarations: [
-    AppComponent, MapComponent, NotFoundComponent, MainComponent, DockComponent,
+    AppComponent,
+    MapComponent,
+    NotFoundComponent,
+    MainComponent,
+    DockComponent,
     AssetsPanelComponent,
     ControlBarComponent,
     LayersPanelComponent,
@@ -119,7 +130,7 @@ import { StreetviewFiltersComponent } from './components/streetview-filters/stre
   imports: [
     CommonModule,
     // this is for the ng-tapis library
-    ApiModule.forRoot({rootUrl: 'https://agave.designsafe-ci.org/'}),
+    ApiModule.forRoot({ rootUrl: 'https://agave.designsafe-ci.org/' }),
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
@@ -128,13 +139,14 @@ import { StreetviewFiltersComponent } from './components/streetview-filters/stre
     ModalModule.forRoot(),
     ReactiveFormsModule,
     FormsModule,
+    ScrollingModule,
     FileSizeModule,
     BsDropdownModule.forRoot(),
     TooltipModule.forRoot(),
     TabsModule.forRoot(),
     ToastrModule.forRoot(),
     DragDropModule,
-    PaginationModule.forRoot()
+    PaginationModule.forRoot(),
   ],
   providers: [
     AuthService,
@@ -142,26 +154,26 @@ import { StreetviewFiltersComponent } from './components/streetview-filters/stre
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
-      multi: true
+      multi: true,
     },
     {
       provide: HTTP_INTERCEPTORS,
       multi: true,
-      useClass: AuthInterceptor
+      useClass: AuthInterceptor,
     },
     {
       provide: CDK_DRAG_CONFIG,
       useValue: {
         dragStartThreshold: 30,
         pointerDirectionChangeThreshold: 5,
-        zIndex: 10000
-      }
+        zIndex: 10000,
+      },
     },
     {
       provide: APP_INITIALIZER,
       useFactory: (envService: EnvService) => () => envService.init(),
       deps: [EnvService],
-      multi: true
+      multi: true,
     },
     {
       provide: APP_BASE_HREF,
@@ -170,7 +182,7 @@ import { StreetviewFiltersComponent } from './components/streetview-filters/stre
         return envService.baseHref;
       },
       deps: [EnvService],
-    }
+    },
   ],
   bootstrap: [AppComponent],
   entryComponents: [
@@ -187,6 +199,7 @@ import { StreetviewFiltersComponent } from './components/streetview-filters/stre
     ModalStreetviewUsernameComponent,
     ModalStreetviewOrganizationComponent,
     ModalPointCloudInfoComponent,
-    ModalLinkProjectComponent]
+    ModalLinkProjectComponent,
+  ],
 })
-export class AppModule { }
+export class AppModule {}
