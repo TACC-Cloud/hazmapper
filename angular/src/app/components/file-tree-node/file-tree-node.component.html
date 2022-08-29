@@ -16,10 +16,23 @@
     </div>
   </div>
   <div class="children" *ngIf="displayChildren && node.getSize()" [style.padding-left]="node.getPath() ? '1em' : '0px'">
+  <ng-container *ngIf="node.getSize() > 500; else smallList">
+    <cdk-virtual-scroll-viewport class="scroll-viewport" itemSize="10">       
       <app-file-tree-node
-        *ngFor="let child of node.getChildren();let i = index; trackBy: i"
+        *cdkVirtualFor="let child of node.getChildrenAsArray()"
         [node]="child"
+        class="scroll-item"
         (clickEvent)="onClickChild($event)">
       </app-file-tree-node>
+    </cdk-virtual-scroll-viewport>
+  </ng-container>
+  <ng-template #smallList>
+    <app-file-tree-node
+      *ngFor="let child of node.getChildren()"
+      [node]="child"
+      class="example-item"
+      (clickEvent)="onClickChild($event)">
+    </app-file-tree-node>
+  </ng-template>
   </div>
 </div>

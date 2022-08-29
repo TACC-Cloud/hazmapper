@@ -39,7 +39,6 @@ export class FileTreeNodeComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-
     this.activeFeatureSub = this.geoDataService.activeFeature.subscribe( (next) => {
       this.activeFeature = next;
       // NOTE: This is important for the change detection to get triggered. Without this and OnPush,

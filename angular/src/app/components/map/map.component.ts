@@ -91,6 +91,7 @@ export class MapComponent implements OnInit, OnDestroy {
       center: [40, -80],
       zoom: 3,
       maxZoom: 24,
+      renderer: L.canvas()
     });
 
     this.subscription.add(
