@@ -61,6 +61,7 @@ export interface Project {
   system_file?: string;
   system_id?: string;
   system_path?: string;
+  deletable?: boolean;
   deleting?: boolean;
   deletingFailed?: boolean;
   streetview_instances?: any;
