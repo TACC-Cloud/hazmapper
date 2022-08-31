@@ -17,6 +17,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MapComponent } from './components/map/map.component';
 import { DockComponent } from './components/dock/dock.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MainComponent } from './components/main/main.component';
 import { AssetsPanelComponent } from './components/assets-panel/assets-panel.component';
 import { NotFoundComponent } from './components/notfound/notfound.component';
@@ -138,6 +139,7 @@ import { StreetviewFiltersComponent } from './components/streetview-filters/stre
     ModalModule.forRoot(),
     ReactiveFormsModule,
     FormsModule,
+    ScrollingModule,
     FileSizeModule,
     BsDropdownModule.forRoot(),
     TooltipModule.forRoot(),
