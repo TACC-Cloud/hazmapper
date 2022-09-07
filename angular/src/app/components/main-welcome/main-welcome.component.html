@@ -150,6 +150,7 @@
                                                 <button
                                                     class="project-list-item-button"
                                                     [tooltip]="'Delete Map'"
+                                                    [disabled]="!p.deletable"
                                                     (click)="
                                                         openDeleteProjectModal(
                                                             p,
