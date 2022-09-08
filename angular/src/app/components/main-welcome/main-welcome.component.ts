@@ -93,7 +93,6 @@ export class MainWelcomeComponent implements OnInit {
     message += ' THIS CANNOT BE UNDONE.',
     this.modalService.confirm(
       `Delete map: ${p.name}`,
-      // tslint:disable-next-line:max-line-length
       message,
       ['Cancel', 'Delete']).subscribe( (answer) => {
       if (answer === 'Delete') {
