@@ -1,3 +1,4 @@
+import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import * as ROUTES from '../constants/routes';
 import Map from './Map/Map';
