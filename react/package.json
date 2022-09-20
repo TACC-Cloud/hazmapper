@@ -1,38 +1,41 @@
 {
-  "name": "hazmapper",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "lint": "npm run lint.js && npm run prettier:check",
-    "lint:js": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "prettier:check": "prettier --single-quote --check .",
-    "prettier:fix": "prettier --single-quote --write ."
-  },
-  "dependencies": {
-    "@reduxjs/toolkit": "^1.8.4",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "prettier": "^2.7.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-redux": "^8.0.2",
-    "react-router-dom": "^6.3.0"
-  },
-  "devDependencies": {
-    "@redux-devtools/core": "^3.13.1",
-    "@types/react": "^18.0.17",
-    "@types/react-dom": "^18.0.6",
-    "@typescript-eslint/eslint-plugin": "^5.38.0",
-    "@typescript-eslint/parser": "^5.38.0",
-    "@vitejs/plugin-react": "^2.0.1",
-    "eslint": "^8.23.1",
-    "eslint-plugin-react": "^7.31.8",
-    "typescript": "^4.6.4",
-    "vite": "^3.0.7"
-  }
+    "name": "hazmapper",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "preview": "vite preview",
+        "lint": "npm run lint:js",
+        "lint:js": "eslint . --ext .js,.jsx,.ts,.tsx",
+        "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix"
+    },
+    "eslintConfig": {
+        "extends": "react-app"
+    },
+    "dependencies": {
+        "@reduxjs/toolkit": "^1.8.4",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-jsx-a11y": "^6.6.1",
+        "eslint-plugin-prettier": "^4.2.1",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "prettier": "^2.7.1",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-redux": "^8.0.2",
+        "react-router-dom": "^6.3.0"
+    },
+    "devDependencies": {
+        "@redux-devtools/core": "^3.13.1",
+        "@types/react": "^18.0.17",
+        "@types/react-dom": "^18.0.6",
+        "@typescript-eslint/eslint-plugin": "^5.38.0",
+        "@typescript-eslint/parser": "^5.38.0",
+        "@vitejs/plugin-react": "^2.0.1",
+        "eslint": "^8.23.1",
+        "eslint-plugin-react": "^7.31.8",
+        "typescript": "^4.6.4",
+        "vite": "^3.0.7"
+    }
 }
