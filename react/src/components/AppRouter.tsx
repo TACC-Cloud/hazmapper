@@ -21,7 +21,7 @@ function AppRouter() {
         <Route
           path={ROUTES.STREETVIEW_CALLBACK}
           element={<StreetviewCallback />}
-          />
+        />
       </Routes>
     </BrowserRouter>
   );
