@@ -14,5 +14,5 @@ export const geoapi = createApi({
     },
   }),
   tagTypes: ['Test'],
-  endpoints: (_) => ({}),
+  endpoints: () => ({}),
 });

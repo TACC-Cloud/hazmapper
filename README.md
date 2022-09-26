@@ -30,6 +30,31 @@ The `backend` in [src/environments/environment.ts](src/environments/environment.
 
 \*See https://github.com/TACC-Cloud/geoapi for more details on running geoapi locally.
 
+## React client
+
+`react/` has the react client
+
+#### Run
+
+```
+npm ci
+npm run dev
+```
+
+#### Running unit tests
+
+Run `npm run test`
+
+
+#### Running linters
+
+Run `npm run lint` to run linter
+
+Run `npm run lint:fix` to fix any linting/pretty errors
+
+## Angular client
+
+`angular/` has the angular client
 
 ### Code scaffolding
 
