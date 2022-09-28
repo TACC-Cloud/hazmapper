@@ -83,7 +83,7 @@ export class FileBrowserComponent implements OnInit {
         this.selectedSystem = this.myDataSystem;
         this.systemSelection.next(this.myDataSystem);
         this.currentUser = user;
-        const init = <RemoteFile>{
+        const init = <RemoteFile> {
           system: this.myDataSystem.id,
           type: 'dir',
           path: this.currentUser.username,
@@ -97,7 +97,7 @@ export class FileBrowserComponent implements OnInit {
     system.id === this.myDataSystem.id
       ? (pth = this.currentUser.username)
       : (pth = '/');
-    const init = <RemoteFile>{
+    const init = <RemoteFile> {
       system: system.id,
       type: 'dir',
       path: pth,

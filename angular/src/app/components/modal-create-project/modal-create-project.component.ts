@@ -13,8 +13,7 @@ import { Subject } from 'rxjs';
   styleUrls: ['./modal-create-project.component.styl'],
 })
 export class ModalCreateProjectComponent
-  implements OnInit, AfterContentChecked
-{
+  implements OnInit, AfterContentChecked {
   public readonly onClose: Subject<any> = new Subject<any>();
 
   projCreateForm: FormGroup;

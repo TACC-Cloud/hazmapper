@@ -166,7 +166,7 @@ export class MapComponent implements OnInit, OnDestroy {
         .subscribe((asset: any) => {
           this.activeStreetviewAsset = asset;
           if (asset.feature) {
-            const bbox = turf.bbox(<AllGeoJSON>asset.feature);
+            const bbox = turf.bbox(<AllGeoJSON> asset.feature);
             this.map.fitBounds([
               [bbox[1], bbox[0]],
               [bbox[3], bbox[2]],
@@ -203,7 +203,7 @@ export class MapComponent implements OnInit, OnDestroy {
         .pipe(filter((n) => n != null))
         .subscribe((next) => {
           this.activeFeature = next;
-          const bbox = turf.bbox(<AllGeoJSON>next);
+          const bbox = turf.bbox(<AllGeoJSON> next);
           this.map.fitBounds([
             [bbox[1], bbox[0]],
             [bbox[3], bbox[2]],

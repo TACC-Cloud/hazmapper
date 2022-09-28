@@ -9,7 +9,7 @@ export interface IpanelsDisplay {
   users: boolean;
 }
 
-export const defaultPanelsDisplay: IpanelsDisplay = <IpanelsDisplay>{
+export const defaultPanelsDisplay: IpanelsDisplay = <IpanelsDisplay> {
   assets: false,
   layers: false,
   filters: false,
