@@ -86,20 +86,23 @@ export class MainWelcomeComponent implements OnInit {
 
   openDeleteProjectModal(p: Project, event) {
     event.stopPropagation();
-    let message = 'Are you sure you want to delete this map?  All associated features, metadata, and saved files will be deleted.';
+    let message =
+      'Are you sure you want to delete this map?  All associated features, metadata, and saved files will be deleted.';
     if (p.public) {
       message += ' Note that this is a public map.';
     }
-    message += ' THIS CANNOT BE UNDONE.',
-    this.modalService.confirm(
-      `Delete map: ${p.name}`,
-      // tslint:disable-next-line:max-line-length
-      message,
-      ['Cancel', 'Delete']).subscribe( (answer) => {
-      if (answer === 'Delete') {
-        this.projectsService.deleteProject(p);
-
-      }
-    });
+    (message += ' THIS CANNOT BE UNDONE.'),
+      this.modalService
+        .confirm(
+          `Delete map: ${p.name}`,
+          // tslint:disable-next-line:max-line-length
+          message,
+          ['Cancel', 'Delete']
+        )
+        .subscribe((answer) => {
+          if (answer === 'Delete') {
+            this.projectsService.deleteProject(p);
+          }
+        });
   }
 }

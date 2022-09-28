@@ -32,7 +32,7 @@ export class ModalLinkProjectComponent implements OnInit {
     { name: 'Sync Only Members', value: false },
   ];
   myDataObserveOptions = [
-    { name: 'Don\'t Sync', value: false },
+    { name: "Don't Sync", value: false },
     { name: 'Sync Files', value: true },
   ];
   observeOptions = this.myDataObserveOptions;
