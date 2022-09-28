@@ -21,14 +21,12 @@ export class StreetviewLogsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.notificationsService.progressNotifications.subscribe(
-      (next: Array<IProgressNotification>) => {
-        this.progressNotifications = next;
-        if (next.some((pn) => pn.status === 'success')) {
-          this.streetviewAuthenticationService.getStreetviews();
-        }
+    this.notificationsService.progressNotifications.subscribe((next: Array<IProgressNotification>) => {
+      this.progressNotifications = next;
+      if (next.some((pn) => pn.status === 'success')) {
+        this.streetviewAuthenticationService.getStreetviews();
       }
-    );
+    });
     this.notificationsService.getRecentProgress();
     this.timerSub = this.notificationsService.initProgressPoll();
   }

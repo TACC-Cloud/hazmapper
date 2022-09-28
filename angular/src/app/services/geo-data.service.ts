@@ -3,14 +3,7 @@ import { HttpClient, HttpEventType } from '@angular/common/http';
 import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
 import { LatLng } from 'leaflet';
 import { FilterService } from './filter.service';
-import {
-  AssetFilters,
-  IFileImportRequest,
-  IPointCloud,
-  Overlay,
-  TileServer,
-  QMSTile,
-} from '../models/models';
+import { AssetFilters, IFileImportRequest, IPointCloud, Overlay, TileServer, QMSTile } from '../models/models';
 import { Feature, FeatureCollection } from '../models/models';
 import { map, take } from 'rxjs/operators';
 import * as querystring from 'querystring';
@@ -27,84 +20,45 @@ import { existingFeatures } from '../constants/assets';
 })
 export class GeoDataService {
   // TODO: clean this up and put the observables up here. Also look into Replay/Behavior
-  private _features: BehaviorSubject<FeatureCollection> =
-    new BehaviorSubject<FeatureCollection>({
-      type: 'FeatureCollection',
-      features: [],
-    });
-  private features$: Observable<FeatureCollection> =
-    this._features.asObservable();
-  private _activeFeature: BehaviorSubject<Feature> =
-    new BehaviorSubject<Feature>(null);
-  private activeFeature$: Observable<Feature> =
-    this._activeFeature.asObservable();
-  private _mapMouseLocation: BehaviorSubject<any> = new BehaviorSubject<any>(
-    null
-  );
+  private _features: BehaviorSubject<FeatureCollection> = new BehaviorSubject<FeatureCollection>({
+    type: 'FeatureCollection',
+    features: [],
+  });
+  private features$: Observable<FeatureCollection> = this._features.asObservable();
+  private _activeFeature: BehaviorSubject<Feature> = new BehaviorSubject<Feature>(null);
+  private activeFeature$: Observable<Feature> = this._activeFeature.asObservable();
+  private _mapMouseLocation: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   private mapMouseLocation$ = this._mapMouseLocation.asObservable();
-  private _basemap: BehaviorSubject<string> = new BehaviorSubject<string>(
-    'roads'
-  );
+  private _basemap: BehaviorSubject<string> = new BehaviorSubject<string>('roads');
   private basemap$ = this._basemap.asObservable();
-  private _overlays: BehaviorSubject<any> = new BehaviorSubject<Array<Overlay>>(
-    null
-  );
+  private _overlays: BehaviorSubject<any> = new BehaviorSubject<Array<Overlay>>(null);
   private overlays$: Observable<Array<Overlay>> = this._overlays.asObservable();
   private _activeOverlay: BehaviorSubject<any> = new BehaviorSubject<any>(null);
-  private activeOverlay$: Observable<Overlay> =
-    this._activeOverlay.asObservable();
-  private _selectedOverlays: BehaviorSubject<Array<Overlay>> =
-    new BehaviorSubject<Array<Overlay>>([]);
-  public readonly selectedOverlays$: Observable<Array<Overlay>> =
-    this._selectedOverlays.asObservable();
-  private _tileServers: BehaviorSubject<any> = new BehaviorSubject<
-    Array<TileServer>
-  >([]);
-  private tileServers$: Observable<Array<TileServer>> =
-    this._tileServers.asObservable();
-  private _pointClouds: BehaviorSubject<Array<IPointCloud>> =
-    new BehaviorSubject<Array<IPointCloud>>(null);
+  private activeOverlay$: Observable<Overlay> = this._activeOverlay.asObservable();
+  private _selectedOverlays: BehaviorSubject<Array<Overlay>> = new BehaviorSubject<Array<Overlay>>([]);
+  public readonly selectedOverlays$: Observable<Array<Overlay>> = this._selectedOverlays.asObservable();
+  private _tileServers: BehaviorSubject<any> = new BehaviorSubject<Array<TileServer>>([]);
+  private tileServers$: Observable<Array<TileServer>> = this._tileServers.asObservable();
+  private _pointClouds: BehaviorSubject<Array<IPointCloud>> = new BehaviorSubject<Array<IPointCloud>>(null);
   private _assetFilters: AssetFilters;
-  public readonly pointClouds: Observable<Array<IPointCloud>> =
-    this._pointClouds.asObservable();
-  private _featureTree: ReplaySubject<PathTree<Feature>> = new ReplaySubject<
-    PathTree<Feature>
-  >(1);
-  public readonly featureTree$: Observable<PathTree<Feature>> =
-    this._featureTree.asObservable();
-  private _loadingFeatureData: BehaviorSubject<boolean> = new BehaviorSubject(
-    false
-  );
-  public loadingFeatureData: Observable<boolean> =
-    this._loadingFeatureData.asObservable();
-  private _loadingPointCloudData: BehaviorSubject<boolean> =
-    new BehaviorSubject(false);
-  public loadingPointCloudData: Observable<boolean> =
-    this._loadingPointCloudData.asObservable();
-  private _loadingOverlayData: BehaviorSubject<boolean> = new BehaviorSubject(
-    false
-  );
-  public loadingOverlayData: Observable<boolean> =
-    this._loadingOverlayData.asObservable();
-  private _qmsSearchResults: BehaviorSubject<any> = new BehaviorSubject<
-    Array<any>
-  >(null);
-  private qmsSearchResults$: Observable<Array<any>> =
-    this._qmsSearchResults.asObservable();
-  private _qmsServerResult: BehaviorSubject<any> = new BehaviorSubject<any>(
-    null
-  );
-  private qmsServerResult$: Observable<any> =
-    this._qmsServerResult.asObservable();
-  private _dirtyTileOptions: BehaviorSubject<boolean> =
-    new BehaviorSubject<boolean>(false);
-  public readonly dirtyTileOptions$: Observable<boolean> =
-    this._dirtyTileOptions.asObservable();
+  public readonly pointClouds: Observable<Array<IPointCloud>> = this._pointClouds.asObservable();
+  private _featureTree: ReplaySubject<PathTree<Feature>> = new ReplaySubject<PathTree<Feature>>(1);
+  public readonly featureTree$: Observable<PathTree<Feature>> = this._featureTree.asObservable();
+  private _loadingFeatureData: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public loadingFeatureData: Observable<boolean> = this._loadingFeatureData.asObservable();
+  private _loadingPointCloudData: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public loadingPointCloudData: Observable<boolean> = this._loadingPointCloudData.asObservable();
+  private _loadingOverlayData: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public loadingOverlayData: Observable<boolean> = this._loadingOverlayData.asObservable();
+  private _qmsSearchResults: BehaviorSubject<any> = new BehaviorSubject<Array<any>>(null);
+  private qmsSearchResults$: Observable<Array<any>> = this._qmsSearchResults.asObservable();
+  private _qmsServerResult: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  private qmsServerResult$: Observable<any> = this._qmsServerResult.asObservable();
+  private _dirtyTileOptions: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public readonly dirtyTileOptions$: Observable<boolean> = this._dirtyTileOptions.asObservable();
 
-  private _existingFeatureTypes: BehaviorSubject<Record<string, boolean>> =
-    new BehaviorSubject<Record<string, boolean>>(existingFeatures);
-  public readonly existingFeatureTypes: Observable<Record<string, boolean>> =
-    this._existingFeatureTypes.asObservable();
+  private _existingFeatureTypes: BehaviorSubject<Record<string, boolean>> = new BehaviorSubject<Record<string, boolean>>(existingFeatures);
+  public readonly existingFeatureTypes: Observable<Record<string, boolean>> = this._existingFeatureTypes.asObservable();
 
   constructor(
     private http: HttpClient,
@@ -134,12 +88,7 @@ export class GeoDataService {
     const projectRoute = usePublicRoute ? 'public-projects' : 'projects';
     this.setLoadFeatureData(true);
     this.http
-      .get<FeatureCollection>(
-        this.envService.apiUrl +
-          `/${projectRoute}/${projectId}/features/` +
-          '?' +
-          qstring
-      )
+      .get<FeatureCollection>(this.envService.apiUrl + `/${projectRoute}/${projectId}/features/` + '?' + qstring)
       .subscribe((fc: FeatureCollection) => {
         fc.features = fc.features.map((feat: Feature) => {
           const feature = new Feature(feat);
@@ -165,34 +114,23 @@ export class GeoDataService {
   }
 
   deleteFeature(feature: Feature) {
-    this.http
-      .delete(
-        this.envService.apiUrl +
-          `/projects/${feature.project_id}/features/${feature.id}/`
-      )
-      .subscribe((resp) => {
-        this.getFeatures(feature.project_id);
-        this.getPointClouds(feature.project_id);
-      });
+    this.http.delete(this.envService.apiUrl + `/projects/${feature.project_id}/features/${feature.id}/`).subscribe((resp) => {
+      this.getFeatures(feature.project_id);
+      this.getPointClouds(feature.project_id);
+    });
   }
 
   getPointClouds(projectId: number, usePublicRoute: boolean = false) {
     this.setLoadPointCloudData(true);
     const projectRoute = usePublicRoute ? 'public-projects' : 'projects';
-    this.http
-      .get<Array<IPointCloud>>(
-        this.envService.apiUrl + `/${projectRoute}/${projectId}/point-cloud/`
-      )
-      .subscribe((resp) => {
-        this.setLoadPointCloudData(false);
-        this._pointClouds.next(resp);
-      });
+    this.http.get<Array<IPointCloud>>(this.envService.apiUrl + `/${projectRoute}/${projectId}/point-cloud/`).subscribe((resp) => {
+      this.setLoadPointCloudData(false);
+      this._pointClouds.next(resp);
+    });
   }
 
   streetviewSequenceFromFeature(projectId: number, featureId: number | string) {
-    return this.http.get(
-      this.envService.apiUrl + `/projects/${projectId}/streetview/${featureId}`
-    );
+    return this.http.get(this.envService.apiUrl + `/projects/${projectId}/streetview/${featureId}`);
   }
 
   streetviewSequenceToFeature(sequenceId: number, projectId: number): void {
@@ -203,25 +141,16 @@ export class GeoDataService {
       token,
     };
 
-    this.http
-      .post(
-        this.envService.apiUrl + `/projects/${projectId}/streetview/`,
-        payload
-      )
-      .subscribe(
-        (resp) => {
-          this.getFeatures(projectId);
-          this.notificationsService.showSuccessToast(
-            'Started processing streetview sequence to map!'
-          );
-        },
-        (error) => {
-          console.error(error);
-          this.notificationsService.showErrorToast(
-            'Failed to add streetview sequence to map!'
-          );
-        }
-      );
+    this.http.post(this.envService.apiUrl + `/projects/${projectId}/streetview/`, payload).subscribe(
+      (resp) => {
+        this.getFeatures(projectId);
+        this.notificationsService.showSuccessToast('Started processing streetview sequence to map!');
+      },
+      (error) => {
+        console.error(error);
+        this.notificationsService.showErrorToast('Failed to add streetview sequence to map!');
+      }
+    );
   }
 
   addFeature(feat: Feature): void {
@@ -235,90 +164,54 @@ export class GeoDataService {
     });
   }
 
-  addPointCloud(
-    projectId: number,
-    title: string,
-    conversionParams: string
-  ): void {
+  addPointCloud(projectId: number, title: string, conversionParams: string): void {
     const payload = {
       description: title,
       conversion_parameters: conversionParams,
     };
-    this.http
-      .post(
-        this.envService.apiUrl + `/projects/${projectId}/point-cloud/`,
-        payload
-      )
-      .subscribe(
-        (resp) => {
-          this.getPointClouds(projectId);
-        },
-        (error) => {
-          this.notificationsService.showErrorToast(
-            'Could not create point cloud!'
-          );
-        }
-      );
+    this.http.post(this.envService.apiUrl + `/projects/${projectId}/point-cloud/`, payload).subscribe(
+      (resp) => {
+        this.getPointClouds(projectId);
+      },
+      (error) => {
+        this.notificationsService.showErrorToast('Could not create point cloud!');
+      }
+    );
   }
 
   deletePointCloud(pc: IPointCloud): void {
     console.log(pc);
-    this.http
-      .delete(
-        this.envService.apiUrl +
-          `/projects/${pc.project_id}/point-cloud/${pc.id}/`
-      )
-      .subscribe((resp) => {
-        this.getPointClouds(pc.project_id);
-      });
+    this.http.delete(this.envService.apiUrl + `/projects/${pc.project_id}/point-cloud/${pc.id}/`).subscribe((resp) => {
+      this.getPointClouds(pc.project_id);
+    });
   }
 
   addFileToPointCloud(pc: IPointCloud, file: File) {
     const form = new FormData();
     form.append('file', file);
     console.log(pc);
-    this.http
-      .post(
-        this.envService.apiUrl +
-          `/projects/${pc.project_id}/point-cloud/${pc.id}/`,
-        form
-      )
-      .subscribe(
-        (resp) => {
-          this.getPointClouds(pc.project_id);
-          this.notificationsService.showSuccessToast(
-            'Point cloud file uploaded!'
-          );
-        },
-        (error) => {
-          this.notificationsService.showErrorToast(
-            'Could not import point cloud file!'
-          );
-        }
-      );
+    this.http.post(this.envService.apiUrl + `/projects/${pc.project_id}/point-cloud/${pc.id}/`, form).subscribe(
+      (resp) => {
+        this.getPointClouds(pc.project_id);
+        this.notificationsService.showSuccessToast('Point cloud file uploaded!');
+      },
+      (error) => {
+        this.notificationsService.showErrorToast('Could not import point cloud file!');
+      }
+    );
   }
 
-  importPointCloudFileFromTapis(
-    projectId: number,
-    pointCloudId: number,
-    files: Array<RemoteFile>
-  ): void {
+  importPointCloudFileFromTapis(projectId: number, pointCloudId: number, files: Array<RemoteFile>): void {
     const tmp = files.map((f) => ({ system: f.system, path: f.path }));
     const payload = {
       files: tmp,
     };
-    this.http
-      .post(
-        this.envService.apiUrl +
-          `/projects/${projectId}/point-cloud/${pointCloudId}/import/`,
-        payload
-      )
-      .subscribe(
-        (resp) => {},
-        (error) => {
-          // TODO: Add notification / toast
-        }
-      );
+    this.http.post(this.envService.apiUrl + `/projects/${projectId}/point-cloud/${pointCloudId}/import/`, payload).subscribe(
+      (resp) => {},
+      (error) => {
+        // TODO: Add notification / toast
+      }
+    );
   }
 
   importFileFromTapis(projectId: number, files: Array<RemoteFile>): void {
@@ -326,57 +219,40 @@ export class GeoDataService {
     const payload = {
       files: tmp,
     };
-    this.http
-      .post(
-        this.envService.apiUrl +
-          `/projects/${projectId}/features/files/import/`,
-        payload
-      )
-      .subscribe(
-        (resp) => {
-          this.notificationsService.showSuccessToast('Import started!');
-        },
-        (error) => {
-          this.notificationsService.showErrorToast('Import failed! Try again?');
-        }
-      );
+    this.http.post(this.envService.apiUrl + `/projects/${projectId}/features/files/import/`, payload).subscribe(
+      (resp) => {
+        this.notificationsService.showSuccessToast('Import started!');
+      },
+      (error) => {
+        this.notificationsService.showErrorToast('Import failed! Try again?');
+      }
+    );
   }
 
   downloadGeoJSON(projectId: number, query: AssetFilters = new AssetFilters()) {
     const qstring: string = querystring.stringify(query.toJson());
     const downloadLink = document.createElement('a');
 
-    this.http
-      .get<FeatureCollection>(
-        this.envService.apiUrl +
-          `/projects/${projectId}/features/` +
-          '?' +
-          qstring
-      )
-      .subscribe((resp) => {
-        const blob = new Blob([JSON.stringify(resp)], {
-          type: 'application/json',
-        });
-        downloadLink.href = URL.createObjectURL(blob);
-        downloadLink.setAttribute('download', 'hazmapper.json');
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
+    this.http.get<FeatureCollection>(this.envService.apiUrl + `/projects/${projectId}/features/` + '?' + qstring).subscribe((resp) => {
+      const blob = new Blob([JSON.stringify(resp)], {
+        type: 'application/json',
       });
+      downloadLink.href = URL.createObjectURL(blob);
+      downloadLink.setAttribute('download', 'hazmapper.json');
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    });
   }
 
   uploadFile(projectId: number, file: File): void {
     const form: FormData = new FormData();
     form.append('file', file, file.name);
     this.http
-      .post<Array<Feature>>(
-        this.envService.apiUrl + `/projects/${projectId}/features/files/`,
-        form,
-        {
-          reportProgress: true,
-          observe: 'events',
-        }
-      )
+      .post<Array<Feature>>(this.envService.apiUrl + `/projects/${projectId}/features/files/`, form, {
+        reportProgress: true,
+        observe: 'events',
+      })
       .pipe(
         map((event) => {
           switch (event.type) {
@@ -407,54 +283,32 @@ export class GeoDataService {
     });
   }
 
-  importFeatureAsset(
-    projectId: number,
-    featureId: number,
-    payload: IFileImportRequest
-  ): void {
-    this.http
-      .post<Feature>(
-        this.envService.apiUrl +
-          `/projects/${projectId}/features/${featureId}/assets/`,
-        payload
-      )
-      .subscribe(
-        (feature) => {
-          // TODO workaround to update activeFeature, this should be done with a subscription like in addFeature()
-          const f = this._activeFeature.getValue();
-          if (f && f.id === featureId) {
-            this._activeFeature.next(new Feature(feature));
-            this.getFeatures(projectId);
-          }
-        },
-        (error) => {
-          this.notificationsService.showErrorToast(
-            `Error importing ${payload.path}`
-          );
+  importFeatureAsset(projectId: number, featureId: number, payload: IFileImportRequest): void {
+    this.http.post<Feature>(this.envService.apiUrl + `/projects/${projectId}/features/${featureId}/assets/`, payload).subscribe(
+      (feature) => {
+        // TODO workaround to update activeFeature, this should be done with a subscription like in addFeature()
+        const f = this._activeFeature.getValue();
+        if (f && f.id === featureId) {
+          this._activeFeature.next(new Feature(feature));
+          this.getFeatures(projectId);
         }
-      );
+      },
+      (error) => {
+        this.notificationsService.showErrorToast(`Error importing ${payload.path}`);
+      }
+    );
   }
 
   getOverlays(projectId: number, usePublicRoute: boolean = false): void {
     this.setLoadOverlayData(true);
     const projectRoute = usePublicRoute ? 'public-projects' : 'projects';
-    this.http
-      .get(this.envService.apiUrl + `/${projectRoute}/${projectId}/overlays/`)
-      .subscribe((ovs: Array<Overlay>) => {
-        this._overlays.next(ovs);
-        this.setLoadOverlayData(false);
-      });
+    this.http.get(this.envService.apiUrl + `/${projectRoute}/${projectId}/overlays/`).subscribe((ovs: Array<Overlay>) => {
+      this._overlays.next(ovs);
+      this.setLoadOverlayData(false);
+    });
   }
 
-  addOverlay(
-    projectId: number,
-    file: File,
-    label: string,
-    minLat: number,
-    maxLat: number,
-    minLon: number,
-    maxLon: number
-  ) {
+  addOverlay(projectId: number, file: File, label: string, minLat: number, maxLat: number, minLon: number, maxLon: number) {
     const payload = new FormData();
     payload.append('file', file);
     payload.append('label', label);
@@ -463,14 +317,9 @@ export class GeoDataService {
     payload.append('minLon', minLon.toFixed(6));
     payload.append('maxLon', maxLon.toFixed(6));
 
-    this.http
-      .post(
-        this.envService.apiUrl + `/projects/${projectId}/overlays/`,
-        payload
-      )
-      .subscribe((resp) => {
-        this.getOverlays(projectId);
-      });
+    this.http.post(this.envService.apiUrl + `/projects/${projectId}/overlays/`, payload).subscribe((resp) => {
+      this.getOverlays(projectId);
+    });
   }
 
   importOverlayFileFromTapis(
@@ -491,56 +340,40 @@ export class GeoDataService {
       minLon,
       maxLon,
     };
-    this.http
-      .post(
-        this.envService.apiUrl + `/projects/${projectId}/overlays/import/`,
-        payload
-      )
-      .subscribe(
-        (resp) => {
-          this.getOverlays(projectId);
-        },
-        (error) => {
-          this.notificationsService.showErrorToast(
-            'Overlay import failed! Try again?'
-          );
-        }
-      );
+    this.http.post(this.envService.apiUrl + `/projects/${projectId}/overlays/import/`, payload).subscribe(
+      (resp) => {
+        this.getOverlays(projectId);
+      },
+      (error) => {
+        this.notificationsService.showErrorToast('Overlay import failed! Try again?');
+      }
+    );
   }
 
   deleteOverlay(projectId: number, overlay: Overlay) {
-    this.http
-      .delete(
-        this.envService.apiUrl +
-          `/projects/${projectId}/overlays/${overlay.id}/`
-      )
-      .subscribe(
-        (resp) => {
-          // Update the list of overlays, remove the one deleted
-          this.overlays$
-            .pipe(
-              take(1),
-              map((items: Array<Overlay>) =>
-                items.filter((item: Overlay) => item.id !== overlay.id)
-              )
-            )
-            .subscribe((results) => {
-              this._overlays.next(results);
-            });
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+    this.http.delete(this.envService.apiUrl + `/projects/${projectId}/overlays/${overlay.id}/`).subscribe(
+      (resp) => {
+        // Update the list of overlays, remove the one deleted
+        this.overlays$
+          .pipe(
+            take(1),
+            map((items: Array<Overlay>) => items.filter((item: Overlay) => item.id !== overlay.id))
+          )
+          .subscribe((results) => {
+            this._overlays.next(results);
+          });
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
   public selectOverlay(ov: Overlay) {
     this.overlays$
       .pipe(
         take(1),
-        map((items: Array<Overlay>) =>
-          items.filter((item: Overlay) => item.isActive)
-        )
+        map((items: Array<Overlay>) => items.filter((item: Overlay) => item.isActive))
       )
       .subscribe((results) => {
         console.log(results);
@@ -549,38 +382,29 @@ export class GeoDataService {
   }
 
   deleteTileServer(projectId: number, tileServerId: number) {
-    this.http
-      .delete(
-        this.envService.apiUrl +
-          `/projects/${projectId}/tile-servers/${tileServerId}/`
-      )
-      .subscribe(
-        (resp) => {
-          this.tileServers$
-            .pipe(
-              take(1),
-              map((items: Array<TileServer>) =>
-                items.filter((item: TileServer) => item.id !== tileServerId)
-              )
-            )
-            .subscribe((results) => {
-              if (!Array.isArray(results) || !results.length) {
-                // if empty, then we should set dirty flag to false
-                // (see https://jira.tacc.utexas.edu/browse/DES-1910 for additional improvement)
-                this._dirtyTileOptions.next(false);
-              }
+    this.http.delete(this.envService.apiUrl + `/projects/${projectId}/tile-servers/${tileServerId}/`).subscribe(
+      (resp) => {
+        this.tileServers$
+          .pipe(
+            take(1),
+            map((items: Array<TileServer>) => items.filter((item: TileServer) => item.id !== tileServerId))
+          )
+          .subscribe((results) => {
+            if (!Array.isArray(results) || !results.length) {
+              // if empty, then we should set dirty flag to false
+              // (see https://jira.tacc.utexas.edu/browse/DES-1910 for additional improvement)
+              this._dirtyTileOptions.next(false);
+            }
 
-              this._tileServers.next(results);
-              this.notificationsService.showSuccessToast('Tile layer deleted!');
-            });
-        },
-        (error) => {
-          console.log(error);
-          this.notificationsService.showErrorToast(
-            'Tile layer could not be deleted!'
-          );
-        }
-      );
+            this._tileServers.next(results);
+            this.notificationsService.showSuccessToast('Tile layer deleted!');
+          });
+      },
+      (error) => {
+        console.log(error);
+        this.notificationsService.showErrorToast('Tile layer could not be deleted!');
+      }
+    );
   }
 
   public updateTileServers(projectId: number, tileServers: Array<TileServer>) {
@@ -592,11 +416,7 @@ export class GeoDataService {
     this.tileServers$
       .pipe(
         take(1),
-        map((tss: Array<TileServer>) =>
-          tss.map((ts: TileServer) =>
-            ts.id === tileServer.id ? tileServer : ts
-          )
-        )
+        map((tss: Array<TileServer>) => tss.map((ts: TileServer) => (ts.id === tileServer.id ? tileServer : ts)))
       )
       .subscribe((results) => {
         this._tileServers.next(results);
@@ -604,32 +424,20 @@ export class GeoDataService {
       });
   }
 
-  public saveTileServers(
-    projectId: number,
-    tileServers: Array<TileServer>
-  ): void {
-    this.http
-      .put(
-        this.envService.apiUrl + `/projects/${projectId}/tile-servers/`,
-        tileServers
-      )
-      .subscribe(
-        (resp) => {
-          this.getTileServers(projectId);
-          if (this._dirtyTileOptions.value) {
-            this.notificationsService.showSuccessToast(
-              'Tile layer options saved!'
-            );
-          }
-        },
-        (error) => {
-          if (this._dirtyTileOptions.value) {
-            this.notificationsService.showErrorToast(
-              'Tile layer options could not be saved!'
-            );
-          }
+  public saveTileServers(projectId: number, tileServers: Array<TileServer>): void {
+    this.http.put(this.envService.apiUrl + `/projects/${projectId}/tile-servers/`, tileServers).subscribe(
+      (resp) => {
+        this.getTileServers(projectId);
+        if (this._dirtyTileOptions.value) {
+          this.notificationsService.showSuccessToast('Tile layer options saved!');
         }
-      );
+      },
+      (error) => {
+        if (this._dirtyTileOptions.value) {
+          this.notificationsService.showErrorToast('Tile layer options could not be saved!');
+        }
+      }
+    );
   }
 
   public toggleTileServer(projectId: number, ts: TileServer) {
@@ -639,18 +447,14 @@ export class GeoDataService {
 
   getTileServers(projectId: number, usePublicRoute: boolean = false): void {
     const projectRoute = usePublicRoute ? 'public-projects' : 'projects';
-    this.http
-      .get(
-        this.envService.apiUrl + `/${projectRoute}/${projectId}/tile-servers/`
-      )
-      .subscribe((tsv: Array<TileServer>) => {
-        tsv.sort((a, b) => {
-          return b.uiOptions.zIndex - a.uiOptions.zIndex;
-        });
-
-        this._tileServers.next(tsv);
-        this._dirtyTileOptions.next(false);
+    this.http.get(this.envService.apiUrl + `/${projectRoute}/${projectId}/tile-servers/`).subscribe((tsv: Array<TileServer>) => {
+      tsv.sort((a, b) => {
+        return b.uiOptions.zIndex - a.uiOptions.zIndex;
       });
+
+      this._tileServers.next(tsv);
+      this._dirtyTileOptions.next(false);
+    });
   }
 
   /**
@@ -658,11 +462,7 @@ export class GeoDataService {
    *
    * @param quiet if set to true then toasts notifying of creation are skipped
    */
-  addTileServer(
-    projectId: number,
-    tileServer: TileServer,
-    quiet: boolean = false
-  ) {
+  addTileServer(projectId: number, tileServer: TileServer, quiet: boolean = false) {
     // NOTE: Here to give new layers zIndices without affecting previous order
     this.tileServers$.pipe(take(1)).subscribe((tileServerList) => {
       if (tileServerList) {
@@ -677,26 +477,17 @@ export class GeoDataService {
       tileServer.uiOptions.zIndex = 0;
     });
 
-    this.http
-      .post(
-        this.envService.apiUrl + `/projects/${projectId}/tile-servers/`,
-        tileServer
-      )
-      .subscribe(
-        (resp) => {
-          this.getTileServers(projectId);
-          if (!quiet) {
-            this.notificationsService.showSuccessToast(
-              'Tile server ' + tileServer.name + ' added!'
-            );
-          }
-        },
-        (error) => {
-          this.notificationsService.showErrorToast(
-            'Could not add tile server!'
-          );
+    this.http.post(this.envService.apiUrl + `/projects/${projectId}/tile-servers/`, tileServer).subscribe(
+      (resp) => {
+        this.getTileServers(projectId);
+        if (!quiet) {
+          this.notificationsService.showSuccessToast('Tile server ' + tileServer.name + ' added!');
         }
-      );
+      },
+      (error) => {
+        this.notificationsService.showErrorToast('Could not add tile server!');
+      }
+    );
   }
 
   searchQMS(query: string, queryOptions: any): void {

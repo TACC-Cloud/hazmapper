@@ -15,10 +15,7 @@ export class DockComponent implements OnInit {
   activeProject: Project;
   existingFeatureTypes: Record<string, boolean>;
 
-  constructor(
-    private projectsService: ProjectsService,
-    private geoDataService: GeoDataService
-  ) {}
+  constructor(private projectsService: ProjectsService, private geoDataService: GeoDataService) {}
 
   ngOnInit() {
     this.projectsService.activeProject.subscribe((next) => {

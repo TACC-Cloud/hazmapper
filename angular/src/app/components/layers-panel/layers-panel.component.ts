@@ -1,12 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ElementRef,
-  ViewChildren,
-  QueryList,
-  TemplateRef,
-  OnDestroy,
-} from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChildren, QueryList, TemplateRef, OnDestroy } from '@angular/core';
 import { GeoDataService } from '../../services/geo-data.service';
 import { Overlay, Project, TileServer } from '../../models/models';
 import { BsModalRef, BsModalService } from 'ngx-foundation';
@@ -106,25 +98,18 @@ export class LayersPanelComponent implements OnInit, OnDestroy {
       zIndexMax--;
     });
 
-    this.geoDataService.updateTileServers(
-      this.activeProject.id,
-      this.tileServers
-    );
+    this.geoDataService.updateTileServers(this.activeProject.id, this.tileServers);
   }
 
   openCreateOverlayModal() {
-    const modal: BsModalRef = this.bsModalService.show(
-      ModalCreateOverlayComponent
-    );
+    const modal: BsModalRef = this.bsModalService.show(ModalCreateOverlayComponent);
     modal.content.onClose.subscribe((next) => {
       console.log(next);
     });
   }
 
   openCreateTileServerModal() {
-    const modal: BsModalRef = this.bsModalService.show(
-      ModalCreateTileServerComponent
-    );
+    const modal: BsModalRef = this.bsModalService.show(ModalCreateTileServerComponent);
     modal.content.onClose.subscribe((files: Array<RemoteFile>) => {
       if (files != null) {
         this.geoDataService.importFileFromTapis(this.activeProject.id, files);
@@ -171,16 +156,11 @@ export class LayersPanelComponent implements OnInit, OnDestroy {
 
   changeMovePointer(ev: any, gripHandle: any, moving: boolean) {
     gripHandle.style.cursor = moving ? 'move' : 'auto';
-    this.dragHeight = moving
-      ? ev.source.element.nativeElement.offsetHeight
-      : this.releaseHeight;
+    this.dragHeight = moving ? ev.source.element.nativeElement.offsetHeight : this.releaseHeight;
     this.releaseHeight = ev.source.element.nativeElement.offsetHeight;
   }
 
   saveTileOptions() {
-    this.geoDataService.saveTileServers(
-      this.activeProject.id,
-      this.tileServers
-    );
+    this.geoDataService.saveTileServers(this.activeProject.id, this.tileServers);
   }
 }

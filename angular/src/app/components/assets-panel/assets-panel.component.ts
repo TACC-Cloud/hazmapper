@@ -34,11 +34,9 @@ export class AssetsPanelComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.scrollableFeatures.currentSelection.subscribe(
-      (next: Array<Feature>) => {
-        this.displayFeatures = next;
-      }
-    );
+    this.scrollableFeatures.currentSelection.subscribe((next: Array<Feature>) => {
+      this.displayFeatures = next;
+    });
     this.geoDataService.features.subscribe((fc: FeatureCollection) => {
       this.features = fc;
       this.scrollableFeatures.setContent(this.features.features);
@@ -74,10 +72,7 @@ export class AssetsPanelComponent implements OnInit {
     const initialState = {
       allowedExtensions: this.tapisFilesService.IMPORTABLE_FEATURE_TYPES,
     };
-    const modal: BsModalRef = this.bsModalService.show(
-      ModalFileBrowserComponent,
-      { initialState }
-    );
+    const modal: BsModalRef = this.bsModalService.show(ModalFileBrowserComponent, { initialState });
     modal.content.onClose.subscribe((files: Array<RemoteFile>) => {
       this.geoDataService.importFileFromTapis(this.activeProject.id, files);
     });
@@ -90,14 +85,12 @@ export class AssetsPanelComponent implements OnInit {
   selectTreeNode(node: PathTree<Feature>) {
     if (node.getPayload().featureType() === 'streetview') {
       this.geoDataService.activeFeature = null;
-      this.streetviewService
-        .sequenceFeatureToActiveAsset(node.getPayload())
-        .subscribe(
-          (asset) => {
-            this.streetviewService.activeAsset = asset;
-          },
-          (err) => console.log(err)
-        );
+      this.streetviewService.sequenceFeatureToActiveAsset(node.getPayload()).subscribe(
+        (asset) => {
+          this.streetviewService.activeAsset = asset;
+        },
+        (err) => console.log(err)
+      );
     } else {
       this.streetviewService.activeAsset = null;
       this.geoDataService.activeFeature = node.getPayload();

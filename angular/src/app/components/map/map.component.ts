@@ -10,13 +10,7 @@ import { ProjectsService } from '../../services/projects.service';
 import { GeoDataService } from '../../services/geo-data.service';
 import { createMarker } from '../../utils/leafletUtils';
 import { Feature } from 'geojson';
-import {
-  FeatureGroup,
-  Layer,
-  LayerGroup,
-  LeafletMouseEvent,
-  TileLayer,
-} from 'leaflet';
+import { FeatureGroup, Layer, LayerGroup, LeafletMouseEvent, TileLayer } from 'leaflet';
 import * as turf from '@turf/turf';
 import { AllGeoJSON } from '@turf/helpers';
 import { filter, map } from 'rxjs/operators';
@@ -138,56 +132,44 @@ export class MapComponent implements OnInit, OnDestroy {
     );
 
     this.subscription.add(
-      this.streetviewService.activeMapillaryOrganizations.subscribe(
-        (sv: any) => {
-          this.deleteStreetviewLayer();
-          this.activeStreetviewOrganizations = sv;
-          if (this.displayStreetview) {
-            this.createStreetviewLayer();
-          }
+      this.streetviewService.activeMapillaryOrganizations.subscribe((sv: any) => {
+        this.deleteStreetviewLayer();
+        this.activeStreetviewOrganizations = sv;
+        if (this.displayStreetview) {
+          this.createStreetviewLayer();
         }
-      )
+      })
     );
 
     // Subscribe to active project and features
     this.subscription.add(this.loadFeatures());
 
     this.subscription.add(
-      this.streetviewAuthenticationService.activeStreetview.subscribe(
-        (sv: Streetview) => {
-          this.activeStreetview = sv;
-        }
-      )
+      this.streetviewAuthenticationService.activeStreetview.subscribe((sv: Streetview) => {
+        this.activeStreetview = sv;
+      })
     );
 
     this.subscription.add(
-      this.streetviewService.activeAsset
-        .pipe(filter((n) => n != null))
-        .subscribe((asset: any) => {
-          this.activeStreetviewAsset = asset;
-          if (asset.feature) {
-            const bbox = turf.bbox(<AllGeoJSON> asset.feature);
-            this.map.fitBounds([
-              [bbox[1], bbox[0]],
-              [bbox[3], bbox[2]],
-            ]);
-          }
-        })
+      this.streetviewService.activeAsset.pipe(filter((n) => n != null)).subscribe((asset: any) => {
+        this.activeStreetviewAsset = asset;
+        if (asset.feature) {
+          const bbox = turf.bbox(<AllGeoJSON>asset.feature);
+          this.map.fitBounds([
+            [bbox[1], bbox[0]],
+            [bbox[3], bbox[2]],
+          ]);
+        }
+      })
     );
 
     // Publish the mouse location on the mapMouseLocation stream
-    this.map.on('mousemove', (ev: LeafletMouseEvent) =>
-      this.mouseEventHandler(ev)
-    );
+    this.map.on('mousemove', (ev: LeafletMouseEvent) => this.mouseEventHandler(ev));
 
     // Filter out and display only the active overlays
     this.subscription.add(
       this.geoDataService.selectedOverlays$
-        .pipe(
-          map((items: Array<Overlay>) =>
-            items.filter((item: Overlay) => item.isActive)
-          )
-        )
+        .pipe(map((items: Array<Overlay>) => items.filter((item: Overlay) => item.isActive)))
         .subscribe((filteredOverlays: Array<Overlay>) => {
           this.overlays.clearLayers();
           filteredOverlays.forEach((item: Overlay) => {
@@ -199,16 +181,14 @@ export class MapComponent implements OnInit, OnDestroy {
 
     // Listen on the activeFeature stream and zoom map to that feature when it changes
     this.subscription.add(
-      this.geoDataService.activeFeature
-        .pipe(filter((n) => n != null))
-        .subscribe((next) => {
-          this.activeFeature = next;
-          const bbox = turf.bbox(<AllGeoJSON> next);
-          this.map.fitBounds([
-            [bbox[1], bbox[0]],
-            [bbox[3], bbox[2]],
-          ]);
-        })
+      this.geoDataService.activeFeature.pipe(filter((n) => n != null)).subscribe((next) => {
+        this.activeFeature = next;
+        const bbox = turf.bbox(<AllGeoJSON>next);
+        this.map.fitBounds([
+          [bbox[1], bbox[0]],
+          [bbox[3], bbox[2]],
+        ]);
+      })
     );
 
     this.subscription.add(
@@ -220,15 +200,9 @@ export class MapComponent implements OnInit, OnDestroy {
               break;
             case 'viewer':
               if (ev.asset.properties.image_id) {
-                this.openOrMoveStreetviewViewer(
-                  ev.asset.properties.image_id,
-                  ev.asset.latlng
-                );
+                this.openOrMoveStreetviewViewer(ev.asset.properties.image_id, ev.asset.latlng);
               } else {
-                this.openOrMoveStreetviewViewer(
-                  ev.asset.properties.id,
-                  ev.asset.latlng
-                );
+                this.openOrMoveStreetviewViewer(ev.asset.properties.id, ev.asset.latlng);
               }
               break;
             default:
@@ -258,16 +232,8 @@ export class MapComponent implements OnInit, OnDestroy {
     if (this.activeStreetview) {
       const vectorTileStyling = {
         sequence: (properties, zoom, geometryType) => {
-          if (
-            this.activeStreetviewOrganizations.some(
-              (org) => org === properties.organization_id
-            )
-          ) {
-            if (
-              this.streetviewAuthenticationService.sequenceInStreetview(
-                properties.id
-              )
-            ) {
+          if (this.activeStreetviewOrganizations.some((org) => org === properties.organization_id)) {
+            if (this.streetviewAuthenticationService.sequenceInStreetview(properties.id)) {
               return streetviewAssetStyles.instance.sequence.default;
             } else {
               return streetviewAssetStyles.sequence.default;
@@ -283,19 +249,15 @@ export class MapComponent implements OnInit, OnDestroy {
       const vectorTileOptions = {
         attribution: 'Mapillary layer',
         vectorTileLayerStyles: vectorTileStyling,
-        token:
-          this.streetviewAuthenticationService.getLocalToken('mapillary').token,
+        token: this.streetviewAuthenticationService.getLocalToken('mapillary').token,
         interactive: true,
         getFeatureId: (f: any) => {
           return f.properties.id;
         },
       };
 
-      const vectorTileUrl =
-        'https://tiles.mapillary.com/maps/vtp/mly1_public/2/{z}/{x}/{y}?access_token={token}';
-      this.mapillaryLayer = L.vectorGrid
-        .protobuf(vectorTileUrl, vectorTileOptions)
-        .addTo(this.map);
+      const vectorTileUrl = 'https://tiles.mapillary.com/maps/vtp/mly1_public/2/{z}/{x}/{y}?access_token={token}';
+      this.mapillaryLayer = L.vectorGrid.protobuf(vectorTileUrl, vectorTileOptions).addTo(this.map);
 
       this.mapillaryLayer.on('click', (e) => {
         this.mapillaryClickHandler(e, 'click');
@@ -306,9 +268,7 @@ export class MapComponent implements OnInit, OnDestroy {
       });
 
       this.mapillaryLayer.on('mouseout', (e) => {
-        const prop = e.layer.feature
-          ? e.layer.feature.properties
-          : e.layer.properties;
+        const prop = e.layer.feature ? e.layer.feature.properties : e.layer.properties;
         if (prop.image_id) {
           this.mapillaryHoverAsset('sequence', prop.id, prop.id, false);
         } else {
@@ -317,9 +277,7 @@ export class MapComponent implements OnInit, OnDestroy {
       });
 
       this.mapillaryLayer.on('mouseover', (e) => {
-        const prop = e.layer.feature
-          ? e.layer.feature.properties
-          : e.layer.properties;
+        const prop = e.layer.feature ? e.layer.feature.properties : e.layer.properties;
         if (prop.image_id) {
           this.mapillaryHoverAsset('sequence', prop.id, prop.id, true);
         } else {
@@ -371,57 +329,55 @@ export class MapComponent implements OnInit, OnDestroy {
       pointToLayer: createMarker,
     };
 
-    const subscription = this.geoDataService.features.subscribe(
-      (collection) => {
-        this.features.clearLayers();
-        this.overlays.clearLayers();
-        const markers = L.markerClusterGroup({
-          iconCreateFunction: (cluster) => {
-            return L.divIcon({
-              html: `<div><b>${cluster.getChildCount()}</b></div>`,
-              className: 'marker-cluster',
-            });
-          },
+    const subscription = this.geoDataService.features.subscribe((collection) => {
+      this.features.clearLayers();
+      this.overlays.clearLayers();
+      const markers = L.markerClusterGroup({
+        iconCreateFunction: (cluster) => {
+          return L.divIcon({
+            html: `<div><b>${cluster.getChildCount()}</b></div>`,
+            className: 'marker-cluster',
+          });
+        },
+      });
+
+      collection.features.forEach((d) => {
+        let feat: LayerGroup;
+        if (d.geometry.type === 'Polygon' && d.properties.style) {
+          feat = L.geoJSON(d, { style: d.properties.style });
+        } else if (d.featureType() === 'streetview') {
+          feat = L.geoJSON(d, {
+            style: streetviewAssetStyles.feature.default,
+          });
+        } else {
+          feat = L.geoJSON(d, geojsonOptions);
+        }
+
+        feat.on('click', (ev) => {
+          this.featureClickHandler(ev, 'click');
         });
 
-        collection.features.forEach((d) => {
-          let feat: LayerGroup;
-          if (d.geometry.type === 'Polygon' && d.properties.style) {
-            feat = L.geoJSON(d, { style: d.properties.style });
-          } else if (d.featureType() === 'streetview') {
-            feat = L.geoJSON(d, {
-              style: streetviewAssetStyles.feature.default,
-            });
-          } else {
-            feat = L.geoJSON(d, geojsonOptions);
-          }
-
-          feat.on('click', (ev) => {
-            this.featureClickHandler(ev, 'click');
-          });
-
-          feat.on('contextmenu', (ev) => {
-            this.featureClickHandler(ev, 'contextmenu');
-          });
-
-          feat.setZIndex(1);
-
-          if (d.geometry.type === 'Point') {
-            markers.addLayer(feat);
-          } else {
-            this.features.addLayer(feat);
-          }
+        feat.on('contextmenu', (ev) => {
+          this.featureClickHandler(ev, 'contextmenu');
         });
-        this.features.addLayer(markers);
-        this.map.addLayer(this.features);
-        try {
-          if (this.fitToFeatureExtent) {
-            this.fitToFeatureExtent = false;
-            this.map.fitBounds(this.features.getBounds());
-          }
-        } catch (e) {}
-      }
-    );
+
+        feat.setZIndex(1);
+
+        if (d.geometry.type === 'Point') {
+          markers.addLayer(feat);
+        } else {
+          this.features.addLayer(feat);
+        }
+      });
+      this.features.addLayer(markers);
+      this.map.addLayer(this.features);
+      try {
+        if (this.fitToFeatureExtent) {
+          this.fitToFeatureExtent = false;
+          this.map.fitBounds(this.features.getBounds());
+        }
+      } catch (e) {}
+    });
 
     subscription.add(
       this.projectsService.activeProject.subscribe((next: Project) => {
@@ -438,11 +394,9 @@ export class MapComponent implements OnInit, OnDestroy {
 
   featureClickHandler(ev: any, clickType: string): void {
     if (ev.layer.feature.featureType() === 'streetview') {
-      this.streetviewService
-        .sequenceFeatureToActiveAsset(ev.layer.feature)
-        .subscribe((e) => {
-          this.mapillaryClickHandler(e, clickType);
-        });
+      this.streetviewService.sequenceFeatureToActiveAsset(ev.layer.feature).subscribe((e) => {
+        this.mapillaryClickHandler(e, clickType);
+      });
     } else {
       const f = ev.layer.feature;
       this.geoDataService.activeFeature = f;
@@ -450,9 +404,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   mapillaryClickHandler(e: any, clickType: string): void {
-    const prop = e.layer.feature
-      ? e.layer.feature.properties
-      : e.layer.properties;
+    const prop = e.layer.feature ? e.layer.feature.properties : e.layer.properties;
 
     const assetType = e.feature ? 'geojson' : 'mvt';
     const type = prop.image_id ? 'sequence' : 'image';
@@ -483,12 +435,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   openOrMoveStreetviewViewer(imageId: string, latlng: any) {
-    if (
-      this.streetviewAuthenticationService.isLoggedIn(
-        'mapillary',
-        this.isPublicView
-      )
-    ) {
+    if (this.streetviewAuthenticationService.isLoggedIn('mapillary', this.isPublicView)) {
       if (this.streetviewViewer) {
         this.streetviewViewer.moveTo(imageId).catch(() => {});
       } else {
@@ -524,8 +471,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.streetviewViewerOn = true;
     setTimeout(() => {
       const options: ViewerOptions = {
-        accessToken:
-          this.streetviewAuthenticationService.getLocalToken('mapillary').token,
+        accessToken: this.streetviewAuthenticationService.getLocalToken('mapillary').token,
         component: {
           cover: false,
         },
@@ -538,10 +484,7 @@ export class MapComponent implements OnInit, OnDestroy {
       }
 
       this.streetviewViewer.on('image', (img) => {
-        this.openOrMoveStreetviewMarker([
-          img.image._core.geometry.lat,
-          img.image._core.geometry.lng,
-        ]);
+        this.openOrMoveStreetviewMarker([img.image._core.geometry.lat, img.image._core.geometry.lng]);
         window.addEventListener('resize', () => this.streetviewViewer.resize());
       });
     }, 400);
@@ -566,14 +509,8 @@ export class MapComponent implements OnInit, OnDestroy {
     this.mapillaryDeselectAll();
   }
 
-  mapillaryHoverAsset(
-    assetType: string,
-    assetId: string,
-    sequenceId: string,
-    mouseAction: boolean
-  ) {
-    const isInstance =
-      this.streetviewAuthenticationService.sequenceInStreetview(sequenceId);
+  mapillaryHoverAsset(assetType: string, assetId: string, sequenceId: string, mouseAction: boolean) {
+    const isInstance = this.streetviewAuthenticationService.sequenceInStreetview(sequenceId);
 
     const prevAsset = this.selectedStreetviewAsset[assetType];
 
@@ -582,9 +519,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
     const newAssetStyle = isInstance ? instanceAssetStyle : assetStyle;
 
-    const hoverStyle = mouseAction
-      ? newAssetStyle.hover
-      : newAssetStyle.default;
+    const hoverStyle = mouseAction ? newAssetStyle.hover : newAssetStyle.default;
 
     if (assetId !== prevAsset.id) {
       this.mapillaryLayer.setFeatureStyle(assetId, hoverStyle);
@@ -592,24 +527,19 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   mapillarySelectAsset(assetType: string, assetId: string, sequenceId: string) {
-    const isInstance =
-      this.streetviewAuthenticationService.sequenceInStreetview(sequenceId);
+    const isInstance = this.streetviewAuthenticationService.sequenceInStreetview(sequenceId);
     const prevAsset = this.selectedStreetviewAsset[assetType];
 
     const assetStyle = streetviewAssetStyles[assetType];
     const instanceAssetStyle = streetviewAssetStyles.instance[assetType];
 
     if (prevAsset.id) {
-      const defaultAsset = prevAsset.instance
-        ? instanceAssetStyle.default
-        : assetStyle.default;
+      const defaultAsset = prevAsset.instance ? instanceAssetStyle.default : assetStyle.default;
 
       this.mapillaryLayer.setFeatureStyle(prevAsset.id, defaultAsset);
     }
 
-    const selectStyle = isInstance
-      ? instanceAssetStyle.select
-      : assetStyle.select;
+    const selectStyle = isInstance ? instanceAssetStyle.select : assetStyle.select;
 
     this.mapillaryLayer.setFeatureStyle(assetId, selectStyle);
 
@@ -618,10 +548,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   mapillaryDeselectAsset(assetType: string) {
-    this.mapillaryLayer.setFeatureStyle(
-      this.selectedStreetviewAsset[assetType].id,
-      streetviewAssetStyles[assetType].default
-    );
+    this.mapillaryLayer.setFeatureStyle(this.selectedStreetviewAsset[assetType].id, streetviewAssetStyles[assetType].default);
     this.selectedStreetviewAsset[assetType].id = '';
   }
 

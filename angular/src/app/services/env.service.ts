@@ -94,8 +94,7 @@ export class EnvService {
         tokenUrl: 'https://graph.mapillary.com/token',
         apiUrl: 'https://graph.mapillary.com/',
         tileUrl: 'https://tiles.mapillary.com/',
-        scope:
-          'user:email+user:read+user:write+public:write+public:upload+private:read+private:write+private:upload',
+        scope: 'user:email+user:read+user:write+public:write+public:upload+private:read+private:write+private:upload',
       },
       secrets: {},
     };
@@ -112,8 +111,7 @@ export class EnvService {
       this._streetviewEnv.secrets = {
         google: {
           clientSecret: '',
-          clientId:
-            '573001329633-1p0k8rko13s6n2p2cugp3timji3ip9f0.apps.googleusercontent.com',
+          clientId: '573001329633-1p0k8rko13s6n2p2cugp3timji3ip9f0.apps.googleusercontent.com',
         },
         mapillary: {
           clientSecret: 'MLY|4866220476802272|909ed0e2baefa5d5c195710f5c83f98b',
@@ -124,13 +122,8 @@ export class EnvService {
       // local devevelopers can use localhost or hazmapper.local but
       // hazmapper.local is preferred as TAPIS supports it as a frame ancestor
       // (i.e. it allows for point cloud iframe preview)
-      this._clientId = /^localhost/.test(hostname)
-        ? 'RMCJHgW9CwJ6mKjhLTDnUYBo9Hka'
-        : 'Eb9NCCtWkZ83c01UbIAITFvhD9ka';
-    } else if (
-      /^hazmapper.tacc.utexas.edu/.test(hostname) &&
-      pathname.startsWith('/staging')
-    ) {
+      this._clientId = /^localhost/.test(hostname) ? 'RMCJHgW9CwJ6mKjhLTDnUYBo9Hka' : 'Eb9NCCtWkZ83c01UbIAITFvhD9ka';
+    } else if (/^hazmapper.tacc.utexas.edu/.test(hostname) && pathname.startsWith('/staging')) {
       this._env = EnvironmentType.Staging;
       this._apiUrl = this.getApiUrl(this.env);
       this._portalUrl = this.getPortalUrl(this.env);
@@ -139,8 +132,7 @@ export class EnvService {
       this._streetviewEnv.secrets = {
         google: {
           clientSecret: '',
-          clientId:
-            '573001329633-1p0k8rko13s6n2p2cugp3timji3ip9f0.apps.googleusercontent.com',
+          clientId: '573001329633-1p0k8rko13s6n2p2cugp3timji3ip9f0.apps.googleusercontent.com',
         },
         mapillary: {
           clientSecret: 'MLY|4936281379826603|cafd014ccd8cfc983e47c69c16082c7b',
@@ -157,8 +149,7 @@ export class EnvService {
       this._streetviewEnv.secrets = {
         google: {
           clientSecret: '',
-          clientId:
-            '573001329633-1p0k8rko13s6n2p2cugp3timji3ip9f0.apps.googleusercontent.com',
+          clientId: '573001329633-1p0k8rko13s6n2p2cugp3timji3ip9f0.apps.googleusercontent.com',
         },
         mapillary: {
           clientSecret: 'MLY|5156692464392931|6be48c9f4074f4d486e0c42a012b349f',

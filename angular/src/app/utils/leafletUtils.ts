@@ -1,12 +1,4 @@
-import {
-  CircleMarker,
-  Path,
-  circleMarker,
-  divIcon,
-  LatLng,
-  Marker,
-  marker,
-} from 'leaflet';
+import { CircleMarker, Path, circleMarker, divIcon, LatLng, Marker, marker } from 'leaflet';
 import { Feature } from '../models/models';
 import { MarkerStyle } from '../models/style';
 
@@ -53,17 +45,11 @@ function createCustomIconMarker(latlng: LatLng, style: MarkerStyle): Marker {
   return marker(latlng, { icon: ico, ...style });
 }
 
-function createCustomCircleMarker(
-  latlng: LatLng,
-  style: MarkerStyle
-): CircleMarker {
+function createCustomCircleMarker(latlng: LatLng, style: MarkerStyle): CircleMarker {
   return circleMarker(latlng, style);
 }
 
-export function createMarker(
-  feature: Feature,
-  latlng: LatLng
-): Marker | CircleMarker {
+export function createMarker(feature: Feature, latlng: LatLng): Marker | CircleMarker {
   if (feature.properties.style) {
     const style = feature.properties.style;
     if (style.faIcon) {

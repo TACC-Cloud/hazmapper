@@ -32,17 +32,13 @@ export class ModalLinkProjectComponent implements OnInit {
     { name: 'Sync Only Members', value: false },
   ];
   myDataObserveOptions = [
-    { name: 'Don\'t Sync', value: false },
+    { name: "Don't Sync", value: false },
     { name: 'Sync Files', value: true },
   ];
   observeOptions = this.myDataObserveOptions;
   observeOption = false;
 
-  constructor(
-    private modalRef: BsModalRef,
-    private projectsService: ProjectsService,
-    private cdref: ChangeDetectorRef
-  ) {}
+  constructor(private modalRef: BsModalRef, private projectsService: ProjectsService, private cdref: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.projectsService.activeProject.subscribe((next) => {
@@ -75,10 +71,7 @@ export class ModalLinkProjectComponent implements OnInit {
   }
 
   submit() {
-    const path =
-      this.selectedFiles.length > 0
-        ? this.selectedFiles[0].path
-        : this.currentPath;
+    const path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path : this.currentPath;
 
     this.activeProject.system_path = path;
     this.activeProject.system_id = this.selectedSystem.id;

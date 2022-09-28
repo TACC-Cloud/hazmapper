@@ -12,9 +12,7 @@
             <b> <span> Conversion Parameters </span></b>
         </div>
         <div class="cell small-7 text-left break">
-            <span *ngIf="pc.conversion_parameters === ''">
-                ---------------------
-            </span>
+            <span *ngIf="pc.conversion_parameters === ''"> --------------------- </span>
             <span *ngIf="pc.conversion_parameters != null">
                 {{ pc.conversion_parameters }}
             </span>
@@ -46,7 +44,5 @@
 </div>
 
 <div class="button-group small">
-    <button class="button small warning" type="button" (click)="close()">
-        Close
-    </button>
+    <button class="button small warning" type="button" (click)="close()">Close</button>
 </div>

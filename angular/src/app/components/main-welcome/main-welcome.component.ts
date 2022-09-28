@@ -19,8 +19,7 @@ import { StreetviewService } from 'src/app/services/streetview.service';
 })
 export class MainWelcomeComponent implements OnInit {
   release_url = 'https://github.com/TACC-cloud/hazmapper';
-  guide_url =
-    'https://www.designsafe-ci.org/rw/user-guides/tools-applications/visualization/hazmapper/';
+  guide_url = 'https://www.designsafe-ci.org/rw/user-guides/tools-applications/visualization/hazmapper/';
 
   spinner = true;
   notConnected: boolean;
@@ -43,27 +42,18 @@ export class MainWelcomeComponent implements OnInit {
     this.projectsService.getProjects();
     this.agaveSystemsService.list();
     this.streetviewAuthenticationService.getStreetviews().subscribe();
-    this.streetviewAuthenticationService.activeStreetview.subscribe(
-      (asv: Streetview) => {
-        if (asv) {
-          this.streetviewService.activeMapillaryOrganizations =
-            asv.organizations.map((o) => o.key);
-        }
+    this.streetviewAuthenticationService.activeStreetview.subscribe((asv: Streetview) => {
+      if (asv) {
+        this.streetviewService.activeMapillaryOrganizations = asv.organizations.map((o) => o.key);
       }
-    );
+    });
 
     this.projectsService.loadingProjectsFailed.subscribe((notConnected) => {
       this.notConnected = notConnected;
     });
 
-    combineLatest([
-      this.projectsService.projects,
-      this.agaveSystemsService.projects,
-    ]).subscribe(([projects, dsProjects]) => {
-      this.projects = this.agaveSystemsService.getProjectMetadata(
-        projects,
-        dsProjects
-      );
+    combineLatest([this.projectsService.projects, this.agaveSystemsService.projects]).subscribe(([projects, dsProjects]) => {
+      this.projects = this.agaveSystemsService.getProjectMetadata(projects, dsProjects);
       this.spinner = false;
     });
   }
@@ -73,10 +63,7 @@ export class MainWelcomeComponent implements OnInit {
   }
 
   openCreateProjectModal() {
-    const modal: BsModalRef = this.bsModalService.show(
-      ModalCreateProjectComponent,
-      { class: 'reveal-medium' }
-    );
+    const modal: BsModalRef = this.bsModalService.show(ModalCreateProjectComponent, { class: 'reveal-medium' });
     modal.content.onClose.subscribe((project: Project) => {
       if (project) {
         this.routeToProject(project.uuid);
@@ -86,8 +73,7 @@ export class MainWelcomeComponent implements OnInit {
 
   openDeleteProjectModal(p: Project, event) {
     event.stopPropagation();
-    let message =
-      'Are you sure you want to delete this map?  All associated features, metadata, and saved files will be deleted.';
+    let message = 'Are you sure you want to delete this map?  All associated features, metadata, and saved files will be deleted.';
     if (p.public) {
       message += ' Note that this is a public map.';
     }

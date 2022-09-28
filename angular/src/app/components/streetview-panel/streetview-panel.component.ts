@@ -34,11 +34,9 @@ export class StreetviewPanelComponent implements OnInit {
       this.displayStreetview = display;
     });
 
-    this.streetviewAuthenticationService.activeStreetview.subscribe(
-      (sv: Streetview) => {
-        this.activeStreetview = sv;
-      }
-    );
+    this.streetviewAuthenticationService.activeStreetview.subscribe((sv: Streetview) => {
+      this.activeStreetview = sv;
+    });
 
     this.projectsService.activeProject.subscribe((project: Project) => {
       this.activeProject = project;
@@ -46,22 +44,14 @@ export class StreetviewPanelComponent implements OnInit {
   }
 
   openStreetviewPublishModal() {
-    const modal: BsModalRef = this.bsModalService.show(
-      ModalStreetviewPublishComponent
-    );
+    const modal: BsModalRef = this.bsModalService.show(ModalStreetviewPublishComponent);
     modal.content.onClose.subscribe((publishData: any) => {
-      this.streetviewService.publishPathToStreetviewService(
-        publishData.selectedPath,
-        publishData.selectedOrganization,
-        'mapillary'
-      );
+      this.streetviewService.publishPathToStreetviewService(publishData.selectedPath, publishData.selectedOrganization, 'mapillary');
     });
   }
 
   openStreetviewUsernameModal(service: string) {
-    const modal: BsModalRef = this.bsModalService.show(
-      ModalStreetviewUsernameComponent
-    );
+    const modal: BsModalRef = this.bsModalService.show(ModalStreetviewUsernameComponent);
     modal.content.onClose.subscribe((data: any) => {
       this.streetviewAuthenticationService.updateStreetviewByService(service, {
         service_user: data.username,
@@ -74,11 +64,7 @@ export class StreetviewPanelComponent implements OnInit {
   }
 
   login(svService: string) {
-    this.streetviewAuthenticationService.login(
-      svService,
-      this.activeProject.id,
-      this.isPublicView
-    );
+    this.streetviewAuthenticationService.login(svService, this.activeProject.id, this.isPublicView);
   }
 
   logout(svService: string) {
@@ -86,10 +72,7 @@ export class StreetviewPanelComponent implements OnInit {
   }
 
   isLoggedIn(svService: string) {
-    return this.streetviewAuthenticationService.isLoggedIn(
-      svService,
-      this.isPublicView
-    );
+    return this.streetviewAuthenticationService.isLoggedIn(svService, this.isPublicView);
   }
 
   toggleStreetviewDisplay() {
@@ -107,9 +90,7 @@ export class StreetviewPanelComponent implements OnInit {
       )
       .subscribe((answer) => {
         if (answer === 'Confirm') {
-          this.streetviewAuthenticationService.deleteStreetviewByService(
-            service
-          );
+          this.streetviewAuthenticationService.deleteStreetviewByService(service);
         }
       });
   }

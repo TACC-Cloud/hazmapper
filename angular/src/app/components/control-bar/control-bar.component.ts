@@ -41,16 +41,8 @@ export class ControlBarComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.subscription.add(
-      this.projectsService.loadingActiveProject.subscribe(
-        (value) => (this.loadingActiveProject = value)
-      )
-    );
-    this.subscription.add(
-      this.projectsService.loadingActiveProjectFailed.subscribe(
-        (value) => (this.loadingActiveProjectFailed = value)
-      )
-    );
+    this.subscription.add(this.projectsService.loadingActiveProject.subscribe((value) => (this.loadingActiveProject = value)));
+    this.subscription.add(this.projectsService.loadingActiveProjectFailed.subscribe((value) => (this.loadingActiveProjectFailed = value)));
 
     this.subscription.add(
       combineLatest([
@@ -59,8 +51,7 @@ export class ControlBarComponent implements OnInit, OnDestroy {
         this.geoDataService.loadingFeatureData,
       ]).subscribe(([loadingOverlay, loadingPointCloud, loadingFeature]) => {
         // They are running
-        this.loadingData =
-          loadingOverlay || loadingPointCloud || loadingFeature;
+        this.loadingData = loadingOverlay || loadingPointCloud || loadingFeature;
       })
     );
 
@@ -69,29 +60,17 @@ export class ControlBarComponent implements OnInit, OnDestroy {
       this.agaveSystemsService.list();
 
       this.subscription.add(
-        combineLatest([
-          this.projectsService.activeProject,
-          this.agaveSystemsService.projects,
-        ]).subscribe(([activeProject, dsProjects]) => {
+        combineLatest([this.projectsService.activeProject, this.agaveSystemsService.projects]).subscribe(([activeProject, dsProjects]) => {
           if (activeProject) {
-            this.geoDataService.getDataForProject(
-              activeProject.id,
-              this.isPublicView
-            );
+            this.geoDataService.getDataForProject(activeProject.id, this.isPublicView);
             this.streetviewAuthenticationService.getStreetviews().subscribe();
-            this.streetviewAuthenticationService.activeStreetview.subscribe(
-              (asv: Streetview) => {
-                if (asv) {
-                  this.streetviewService.activeMapillaryOrganizations =
-                    asv.organizations.map((o) => o.key);
-                }
+            this.streetviewAuthenticationService.activeStreetview.subscribe((asv: Streetview) => {
+              if (asv) {
+                this.streetviewService.activeMapillaryOrganizations = asv.organizations.map((o) => o.key);
               }
-            );
+            });
 
-            this.activeProject = this.agaveSystemsService.getProjectMetadata(
-              [activeProject],
-              dsProjects
-            )[0];
+            this.activeProject = this.agaveSystemsService.getProjectMetadata([activeProject], dsProjects)[0];
           } else {
             this.geoDataService.clearData();
           }
@@ -111,17 +90,10 @@ export class ControlBarComponent implements OnInit, OnDestroy {
     }
 
     this.subscription.add(
-      combineLatest([
-        this.authService.currentUser,
-        this.projectsService.projectUsers$,
-      ]).subscribe(([currentUser, projectUsers]) => {
+      combineLatest([this.authService.currentUser, this.projectsService.projectUsers$]).subscribe(([currentUser, projectUsers]) => {
         // check if user is logged in viewing a public map but is allowed to switch to private view
         if (this.isPublicView && projectUsers) {
-          this.canSwitchToPrivateMap = projectUsers.find(
-            (u) => u.username === currentUser.username
-          )
-            ? true
-            : false;
+          this.canSwitchToPrivateMap = projectUsers.find((u) => u.username === currentUser.username) ? true : false;
         } else {
           this.canSwitchToPrivateMap = false;
         }
@@ -130,9 +102,7 @@ export class ControlBarComponent implements OnInit, OnDestroy {
 
     this.subscription.add(
       this.notificationsService.notifications.subscribe((next) => {
-        const hasSuccessNotification = next.some(
-          (note) => note.status === 'success'
-        );
+        const hasSuccessNotification = next.some((note) => note.status === 'success');
         if (hasSuccessNotification) {
           this.geoDataService.getDataForProject(this.activeProject.id, false);
         }

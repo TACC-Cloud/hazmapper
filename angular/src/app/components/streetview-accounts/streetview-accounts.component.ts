@@ -30,11 +30,9 @@ export class StreetviewAccountsComponent implements OnInit {
       this.streetviews = next;
     });
 
-    this.streetviewAuthenticationService.activeStreetview.subscribe(
-      (next: Streetview) => {
-        this.activeStreetview = next;
-      }
-    );
+    this.streetviewAuthenticationService.activeStreetview.subscribe((next: Streetview) => {
+      this.activeStreetview = next;
+    });
 
     this.projectsService.activeProject.subscribe((project: Project) => {
       this.activeProject = project;
@@ -42,9 +40,7 @@ export class StreetviewAccountsComponent implements OnInit {
   }
 
   openStreetviewUsernameModal(service: string) {
-    const modal: BsModalRef = this.bsModalService.show(
-      ModalStreetviewUsernameComponent
-    );
+    const modal: BsModalRef = this.bsModalService.show(ModalStreetviewUsernameComponent);
     modal.content.onClose.subscribe((data: any) => {
       this.streetviewAuthenticationService.updateStreetviewByService(service, {
         service_user: data.username,
@@ -61,11 +57,7 @@ export class StreetviewAccountsComponent implements OnInit {
   }
 
   login(service: string) {
-    this.streetviewAuthenticationService.login(
-      service,
-      this.activeProject.id,
-      false
-    );
+    this.streetviewAuthenticationService.login(service, this.activeProject.id, false);
   }
 
   logout(service: string) {
@@ -83,9 +75,7 @@ export class StreetviewAccountsComponent implements OnInit {
       )
       .subscribe((answer) => {
         if (answer === 'Confirm') {
-          this.streetviewAuthenticationService.deleteStreetviewByService(
-            service
-          );
+          this.streetviewAuthenticationService.deleteStreetviewByService(service);
         }
       });
   }

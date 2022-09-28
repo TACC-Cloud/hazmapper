@@ -19,11 +19,7 @@ export class FiltersPanelComponent implements OnInit {
 
   enabledFilters: Array<string>;
 
-  constructor(
-    private filterService: FilterService,
-    private geoDataService: GeoDataService,
-    private projectsService: ProjectsService
-  ) {}
+  constructor(private filterService: FilterService, private geoDataService: GeoDataService, private projectsService: ProjectsService) {}
 
   ngOnInit() {
     this.filterService.assetFilter.subscribe((next) => {

@@ -3,11 +3,7 @@
         <div class="asset-detail-header">
             <app-feature-icon [feature]="feature"></app-feature-icon>
             <div class="feature-label">
-                {{
-                    feature.properties.label ||
-                        feature.properties.title ||
-                        feature.id
-                }}
+                {{ feature.properties.label || feature.properties.title || feature.id }}
             </div>
             <div>
                 <button class="close-button" (click)="close()">
@@ -19,22 +15,9 @@
     </div>
     <div class="cell medium-5 auto asset-detail-content">
         <img *ngIf="feature.featureType() === 'image'" [src]="featureSource" />
-        <video
-            *ngIf="feature.featureType() === 'video'"
-            [src]="featureSource"
-            controls
-            width="100%"
-        ></video>
-        <div
-            style="position: relative"
-            *ngIf="feature.featureType() === 'point_cloud'"
-        >
-            <iframe
-                class="e2e-iframe-trusted-src"
-                [src]="safePointCloudUrl"
-                style="width: 100%; height: 300px"
-            >
-            </iframe>
+        <video *ngIf="feature.featureType() === 'video'" [src]="featureSource" controls width="100%"></video>
+        <div style="position: relative" *ngIf="feature.featureType() === 'point_cloud'">
+            <iframe class="e2e-iframe-trusted-src" [src]="safePointCloudUrl" style="width: 100%; height: 300px"> </iframe>
         </div>
     </div>
     <div class="cell medium-1 text-center asset-detail-action">
@@ -49,16 +32,8 @@
             </a>
         </div>
         <div *ngIf="!feature.assets.length" class="text-center">
-            <div data-alert class="alert-box secondary">
-                Feature has no asset.
-            </div>
-            <button
-                class="button expanded hollow"
-                (click)="openFileBrowserModal()"
-                *ngIf="!isPublicView"
-            >
-                Add asset from DesignSafe
-            </button>
+            <div data-alert class="alert-box secondary">Feature has no asset.</div>
+            <button class="button expanded hollow" (click)="openFileBrowserModal()" *ngIf="!isPublicView">Add asset from DesignSafe</button>
         </div>
         <hr />
     </div>

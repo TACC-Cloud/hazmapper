@@ -8,10 +8,7 @@ import { TileServer, Project } from '../../models/models';
 import { GeoDataService } from '../../services/geo-data.service';
 import { ProjectsService } from '../../services/projects.service';
 import { RemoteFile } from 'ng-tapis';
-import {
-  defaultTileServers,
-  suggestedTileServers,
-} from '../../constants/tile-servers';
+import { defaultTileServers, suggestedTileServers } from '../../constants/tile-servers';
 
 @Component({
   selector: 'app-modal-create-tile-server',
@@ -113,12 +110,8 @@ export class ModalCreateTileServerComponent implements OnInit {
   generateAttribution() {
     let copyright = '';
 
-    const attributionText = this.removeTags(
-      this.tsCreateForm.get('attribution').value
-    );
-    const attributionLink = this.removeTags(
-      this.tsCreateForm.get('attributionLink').value
-    );
+    const attributionText = this.removeTags(this.tsCreateForm.get('attribution').value);
+    const attributionLink = this.removeTags(this.tsCreateForm.get('attributionLink').value);
 
     if (attributionText) {
       copyright = '&copy; ';

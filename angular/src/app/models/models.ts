@@ -1,9 +1,4 @@
-import {
-  Feature as GeoJSONFeature,
-  GeoJsonProperties,
-  Geometry,
-  FeatureCollection as IFeatureCollection,
-} from 'geojson';
+import { Feature as GeoJSONFeature, GeoJsonProperties, Geometry, FeatureCollection as IFeatureCollection } from 'geojson';
 
 // TODO: break these out into their own files
 

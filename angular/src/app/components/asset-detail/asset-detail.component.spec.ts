@@ -70,8 +70,6 @@ describe('AssetDetailComponent', () => {
       )
     );
     fixture.detectChanges();
-    expect(element.querySelector('.feature-label').innerHTML).toContain(
-      'Test Label'
-    );
+    expect(element.querySelector('.feature-label').innerHTML).toContain('Test Label');
   });
 });

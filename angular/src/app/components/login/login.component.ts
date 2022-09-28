@@ -9,16 +9,10 @@ import { MAIN } from '../../constants/routes';
   styleUrls: ['./login.component.styl'],
 })
 export class LoginComponent implements OnInit {
-  constructor(
-    private authSvc: AuthService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
+  constructor(private authSvc: AuthService, private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit() {
-    const requestedUrl = this.route.snapshot.queryParamMap.has('to')
-      ? this.route.snapshot.queryParamMap.get('to')
-      : MAIN;
+    const requestedUrl = this.route.snapshot.queryParamMap.has('to') ? this.route.snapshot.queryParamMap.get('to') : MAIN;
     if (this.authSvc.isLoggedIn()) {
       this.router.navigate([requestedUrl]);
     } else {

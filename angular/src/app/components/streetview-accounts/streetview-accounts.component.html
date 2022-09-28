@@ -4,11 +4,7 @@
         <div class="auth-info">
             <div
                 *ngIf="activeStreetview && activeStreetview.service_user"
-                style="
-                    align-items: center;
-                    padding: 10px;
-                    background-color: #f0f0f0;
-                "
+                style="align-items: center; padding: 10px; background-color: #f0f0f0"
             >
                 <div
                     style="display: block; font-size: 20px; height 100%; width: 100%; text-align: center; text-overflow: ellipsis; overflow: hidden"
@@ -21,33 +17,16 @@
             </div>
         </div>
         <div class="auth-info-button-container">
-            <button class="button small" (click)="logout('mapillary')">
-                Logout
-            </button>
+            <button class="button small" (click)="logout('mapillary')">Logout</button>
         </div>
         <div class="auth-info-button-container">
-            <button
-                class="button small"
-                (click)="openStreetviewUsernameModal('mapillary')"
-            >
-                Change username
-            </button>
+            <button class="button small" (click)="openStreetviewUsernameModal('mapillary')">Change username</button>
         </div>
         <div class="auth-info-button-container">
-            <button
-                class="button small"
-                (click)="openStreetviewOrganizationModal('mapillary')"
-            >
-                Manage Organizations
-            </button>
+            <button class="button small" (click)="openStreetviewOrganizationModal('mapillary')">Manage Organizations</button>
         </div>
         <div class="auth-info-button-container">
-            <button
-                class="button small"
-                (click)="openDeleteStreetviewModal('mapillary')"
-            >
-                Delete Streetview Service
-            </button>
+            <button class="button small" (click)="openDeleteStreetviewModal('mapillary')">Delete Streetview Service</button>
         </div>
 
         <div class="organization-list">
@@ -59,9 +38,7 @@
     <ng-template #authMapillary>
         <div class="auth-info">Not logged in to Mapillary!</div>
         <div class="auth-info-button-container">
-            <button class="button small" (click)="login('mapillary')">
-                Login
-            </button>
+            <button class="button small" (click)="login('mapillary')">Login</button>
         </div>
     </ng-template>
 </div>

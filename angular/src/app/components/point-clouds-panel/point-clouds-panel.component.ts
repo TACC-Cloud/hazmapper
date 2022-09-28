@@ -14,11 +14,7 @@ export class PointCloudsPanelComponent implements OnInit {
   activeProject: Project;
   pointClouds: Array<IPointCloud>;
 
-  constructor(
-    private geoDataService: GeoDataService,
-    private projectsService: ProjectsService,
-    private bsModalService: BsModalService
-  ) {}
+  constructor(private geoDataService: GeoDataService, private projectsService: ProjectsService, private bsModalService: BsModalService) {}
 
   ngOnInit() {
     this.projectsService.activeProject.subscribe((next) => {
@@ -31,9 +27,7 @@ export class PointCloudsPanelComponent implements OnInit {
   }
 
   openPointCloudCreateModal() {
-    const modal: BsModalRef = this.bsModalService.show(
-      ModalCreatePointCloudComponent
-    );
+    const modal: BsModalRef = this.bsModalService.show(ModalCreatePointCloudComponent);
     modal.content.onClose.subscribe((next) => {
       console.log(next);
       this.geoDataService.getPointClouds(this.activeProject.id, false);

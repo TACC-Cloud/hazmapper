@@ -16,11 +16,7 @@ export class ModalCreatePointCloudComponent implements OnInit {
   project: Project;
   public readonly onClose: Subject<any> = new Subject<any>();
 
-  constructor(
-    private bsModalRef: BsModalRef,
-    private geoDataService: GeoDataService,
-    private projectsService: ProjectsService
-  ) {}
+  constructor(private bsModalRef: BsModalRef, private geoDataService: GeoDataService, private projectsService: ProjectsService) {}
 
   ngOnInit() {
     this.projectsService.activeProject.subscribe((next) => {

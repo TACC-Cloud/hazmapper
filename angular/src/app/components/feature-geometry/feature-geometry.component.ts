@@ -31,12 +31,8 @@ export class FeatureGeometryComponent implements OnInit {
     this.area = null;
     this.length = null;
     this.bbox = null;
-    this.hasArea =
-      this._feature.geometry.type === 'Polygon' ||
-      feature.geometry.type === 'MultiPolygon';
-    this.hasLength =
-      feature.geometry.type === 'LineString' ||
-      feature.geometry.type === 'MultiLineString';
+    this.hasArea = this._feature.geometry.type === 'Polygon' || feature.geometry.type === 'MultiPolygon';
+    this.hasLength = feature.geometry.type === 'LineString' || feature.geometry.type === 'MultiLineString';
     this.calculateGeometryInfo(this._feature).then((value) => {
       this.area = value[0];
       this.length = value[1];

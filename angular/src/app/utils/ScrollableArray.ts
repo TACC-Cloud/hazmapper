@@ -25,9 +25,7 @@ export class ScrollableArray<T> {
     this.content = data;
     this.startIdx = 0;
 
-    this.currentSelection.next(
-      this.content.slice(this.startIdx, this.windowSize)
-    );
+    this.currentSelection.next(this.content.slice(this.startIdx, this.windowSize));
   }
 
   setFetchSize(num: number) {
@@ -43,30 +41,19 @@ export class ScrollableArray<T> {
     if (idx >= 0) {
       // this.startIdx = idx;
       this.startIdx = Math.min(this.content.length - this.fetchSize, idx);
-      this.currentSelection.next(
-        this.content.slice(this.startIdx, this.startIdx + this.windowSize)
-      );
+      this.currentSelection.next(this.content.slice(this.startIdx, this.startIdx + this.windowSize));
     }
   }
 
   scrollUp() {
     this.startIdx = Math.max(0, this.startIdx - this.fetchSize);
-    const tmp = this.content.slice(
-      this.startIdx,
-      this.startIdx + this.windowSize
-    );
+    const tmp = this.content.slice(this.startIdx, this.startIdx + this.windowSize);
     this.currentSelection.next(tmp);
   }
 
   scrollDown() {
-    this.startIdx = Math.min(
-      this.content.length - this.fetchSize,
-      this.startIdx + this.fetchSize
-    );
-    const tmp = this.content.slice(
-      this.startIdx,
-      this.startIdx + this.windowSize
-    );
+    this.startIdx = Math.min(this.content.length - this.fetchSize, this.startIdx + this.fetchSize);
+    const tmp = this.content.slice(this.startIdx, this.startIdx + this.windowSize);
     this.currentSelection.next(tmp);
   }
 }

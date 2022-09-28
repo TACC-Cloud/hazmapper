@@ -20,26 +20,17 @@
         Custom file name:
         <div style="display: flex; flex-direction: row">
             <input type="text" [(ngModel)]="fileName" />
-            <span style="line-height: 1.5; font-size: 1rem; margin: 5px"
-                >.hazmapper</span
-            >
+            <span style="line-height: 1.5; font-size: 1rem; margin: 5px">.hazmapper</span>
         </div>
     </label>
-    <small
-        ><em
-            >If a name is not given, file will be saved as the map uuid.</em
-        ></small
-    >
+    <small><em>If a name is not given, file will be saved as the map uuid.</em></small>
 </div>
 
 <div class="observable-project">
     <label>
         Sync Options:
         <select [(ngModel)]="observeOption">
-            <option
-                *ngFor="let option of observeOptions"
-                [ngValue]="option.value"
-            >
+            <option *ngFor="let option of observeOptions" [ngValue]="option.value">
                 {{ option.name }}
             </option>
         </select>

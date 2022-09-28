@@ -30,9 +30,7 @@ export class ModalStreetviewInfoComponent implements OnInit {
   ngOnInit() {
     this.streetviewAuthService.activeStreetview.subscribe((sv) => {
       this.activeStreetview = sv;
-      this.streetviewInstance = sv.instances.find(
-        (e) => this.streetviewInstanceId === e.id
-      );
+      this.streetviewInstance = sv.instances.find((e) => this.streetviewInstanceId === e.id);
     });
 
     this.projectService.activeProject.subscribe((p) => {
@@ -65,10 +63,7 @@ export class ModalStreetviewInfoComponent implements OnInit {
   }
 
   sequenceToFeature(streetviewSequence: StreetviewSequence) {
-    this.geoDataService.streetviewSequenceToFeature(
-      streetviewSequence.id,
-      this.activeProject.id
-    );
+    this.geoDataService.streetviewSequenceToFeature(streetviewSequence.id, this.activeProject.id);
   }
 
   close() {
@@ -76,29 +71,19 @@ export class ModalStreetviewInfoComponent implements OnInit {
   }
 
   checkSequenceState(streetviewSequence: StreetviewSequence) {
-    this.streetviewService.checkStreetviewSequence(
-      streetviewSequence,
-      this.activeStreetview
-    );
+    this.streetviewService.checkStreetviewSequence(streetviewSequence, this.activeStreetview);
   }
 
   showInMap(sequence: StreetviewSequence) {
-    this.streetviewService
-      .getMapillaryImages(sequence.sequence_id)
-      .subscribe((e) => {
-        if (e.data.length > 0) {
-          this.streetviewService
-            .getMapillaryImageData(e.data[0].id, ['geometry'])
-            .subscribe((ab) => {
-              this.streetviewService.sequenceFocusEvent = {
-                id: sequence.sequence_id,
-                latlng: [
-                  ab.geometry.coordinates[1],
-                  ab.geometry.coordinates[0],
-                ],
-              };
-            });
-        }
-      });
+    this.streetviewService.getMapillaryImages(sequence.sequence_id).subscribe((e) => {
+      if (e.data.length > 0) {
+        this.streetviewService.getMapillaryImageData(e.data[0].id, ['geometry']).subscribe((ab) => {
+          this.streetviewService.sequenceFocusEvent = {
+            id: sequence.sequence_id,
+            latlng: [ab.geometry.coordinates[1], ab.geometry.coordinates[0]],
+          };
+        });
+      }
+    });
   }
 }

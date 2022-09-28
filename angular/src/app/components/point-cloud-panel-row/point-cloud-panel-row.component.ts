@@ -27,16 +27,9 @@ export class PointCloudPanelRowComponent implements OnInit {
     const initialState = {
       allowedExtensions: this.tapisFilesService.IMPORTABLE_POINT_CLOUD_TYPES,
     };
-    const modal: BsModalRef = this.bsModalService.show(
-      ModalFileBrowserComponent,
-      { initialState }
-    );
+    const modal: BsModalRef = this.bsModalService.show(ModalFileBrowserComponent, { initialState });
     modal.content.onClose.subscribe((files: Array<RemoteFile>) => {
-      this.geoDataService.importPointCloudFileFromTapis(
-        this.pc.project_id,
-        this.pc.id,
-        files
-      );
+      this.geoDataService.importPointCloudFileFromTapis(this.pc.project_id, this.pc.id, files);
     });
   }
 
@@ -55,9 +48,6 @@ export class PointCloudPanelRowComponent implements OnInit {
     const initialState = {
       pc: this.pc,
     };
-    const modal: BsModalRef = this.bsModalService.show(
-      ModalPointCloudInfoComponent,
-      { initialState }
-    );
+    const modal: BsModalRef = this.bsModalService.show(ModalPointCloudInfoComponent, { initialState });
   }
 }

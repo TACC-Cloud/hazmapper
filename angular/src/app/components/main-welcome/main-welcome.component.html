@@ -3,9 +3,7 @@
         <div id="welcome-information" class="grid-y">
             <div id="welcome-logo">
                 <img src="assets/Hazmapper-Stack@4x.png" width="250px" />
-                <div style="margin-top: 10px" id="release-version">
-                    Version 2.8
-                </div>
+                <div style="margin-top: 10px" id="release-version">Version 2.8</div>
             </div>
         </div>
 
@@ -43,106 +41,49 @@
                     </div>
 
                     <ng-template #projectConnected>
-                        <div
-                            *ngIf="projects.length > 0; else noProject"
-                            class="project-list-container"
-                        >
-                            <div
-                                *ngFor="
-                                    let p of projects;
-                                    let indexOfElement = index
-                                "
-                            >
+                        <div *ngIf="projects.length > 0; else noProject" class="project-list-container">
+                            <div *ngFor="let p of projects; let indexOfElement = index">
                                 <div
                                     (click)="routeToProject(p.uuid)"
                                     class="project-list-item"
                                     [ngClass]="{
-                                        'welcome-project-light':
-                                            indexOfElement % 2 == 0,
-                                        'welcome-project-dark':
-                                            indexOfElement % 2 == 1,
+                                        'welcome-project-light': indexOfElement % 2 == 0,
+                                        'welcome-project-dark': indexOfElement % 2 == 1,
                                         'welcome-project': true,
                                         'grid-x': true
                                     }"
                                 >
                                     <div class="map-column">
-                                        <span
-                                            [tooltip]="p.name"
-                                            class="project-name"
-                                            >{{ p.name }}</span
-                                        >
+                                        <span [tooltip]="p.name" class="project-name">{{ p.name }}</span>
                                     </div>
 
                                     <div class="project-column">
                                         <ng-container
-                                            *ngIf="
-                                                p.system_id &&
-                                                    p.system_id.startsWith(
-                                                        'project'
-                                                    );
-                                                else noProject
-                                            "
+                                            *ngIf="p.system_id && p.system_id.startsWith('project'); else noProject"
                                             class="list-column link-hover"
                                         >
-                                            <span
-                                                class="project-name"
-                                                [tooltip]="p.title"
-                                            >
-                                                {{ p.ds_id }} | {{ p.title }}
-                                            </span>
+                                            <span class="project-name" [tooltip]="p.title"> {{ p.ds_id }} | {{ p.title }} </span>
                                         </ng-container>
-                                        <ng-template #noProject>
-                                            ----------
-                                        </ng-template>
+                                        <ng-template #noProject> ---------- </ng-template>
                                     </div>
-                                    <div
-                                        class="button-column"
-                                        style="text-align: right"
-                                    >
-                                        <button
-                                            class="project-list-item-button"
-                                            [tooltip]="'Edit Map'"
-                                        >
+                                    <div class="button-column" style="text-align: right">
+                                        <button class="project-list-item-button" [tooltip]="'Edit Map'">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <ng-container
-                                            *ngIf="
-                                                p.deletingFailed;
-                                                else deletingNotFailed
-                                            "
-                                        >
+                                        <ng-container *ngIf="p.deletingFailed; else deletingNotFailed">
                                             <button
                                                 style="color: #cc4b37"
                                                 class="project-list-item-button"
-                                                [tooltip]="
-                                                    'Map Failed to Delete'
-                                                "
-                                                (click)="
-                                                    openDeleteProjectModal(
-                                                        p,
-                                                        $event
-                                                    )
-                                                "
+                                                [tooltip]="'Map Failed to Delete'"
+                                                (click)="openDeleteProjectModal(p, $event)"
                                             >
-                                                <i
-                                                    class="fas fa-exclamation-triangle"
-                                                ></i>
+                                                <i class="fas fa-exclamation-triangle"></i>
                                             </button>
                                         </ng-container>
                                         <ng-template #deletingNotFailed>
-                                            <ng-container
-                                                *ngIf="
-                                                    p.deleting;
-                                                    else notDeleting
-                                                "
-                                            >
-                                                <button
-                                                    class="project-list-item-button"
-                                                    [tooltip]="'Deleting Map'"
-                                                >
-                                                    <i
-                                                        class="fas fa-spin fa-spinner"
-                                                    ></i>
+                                            <ng-container *ngIf="p.deleting; else notDeleting">
+                                                <button class="project-list-item-button" [tooltip]="'Deleting Map'">
+                                                    <i class="fas fa-spin fa-spinner"></i>
                                                 </button>
                                             </ng-container>
                                             <ng-template #notDeleting>
@@ -150,12 +91,7 @@
                                                     class="project-list-item-button"
                                                     [tooltip]="'Delete Map'"
                                                     [disabled]="!p.deletable"
-                                                    (click)="
-                                                        openDeleteProjectModal(
-                                                            p,
-                                                            $event
-                                                        )
-                                                    "
+                                                    (click)="openDeleteProjectModal(p, $event)"
                                                 >
                                                     <i class="fas fa-trash"></i>
                                                 </button>
@@ -168,9 +104,7 @@
                         <ng-template #noProject>
                             <div id="welcome-no-information">
                                 <div>No Map Exists!</div>
-                                <a (click)="openCreateProjectModal()">
-                                    Create a New Map.
-                                </a>
+                                <a (click)="openCreateProjectModal()"> Create a New Map. </a>
                             </div>
                         </ng-template>
                     </ng-template>

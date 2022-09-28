@@ -12,10 +12,7 @@ import { StreetviewAuthenticationService } from 'src/app/services/streetview-aut
 export class StreetviewAssetsComponent implements OnInit {
   public activeStreetview: Streetview;
 
-  constructor(
-    private streetviewAuthService: StreetviewAuthenticationService,
-    private bsModalService: BsModalService
-  ) {}
+  constructor(private streetviewAuthService: StreetviewAuthenticationService, private bsModalService: BsModalService) {}
 
   ngOnInit() {
     this.streetviewAuthService.activeStreetview.subscribe((sv: Streetview) => {

@@ -15,37 +15,20 @@
         <img *ngIf="!imageLoading" [src]="imageUrl" />
         <div class="cell medium-1 text-center asset-detail-action">
             <div class="asset-info" style="padding: 20px">
-                <div
-                    *ngIf="assetType === 'Image'"
-                    style="display: flex; flex-direction: column; padding: 20px"
-                >
-                    <div style="padding: 10px">
-                        {{ assetType }}: {{ imageId }}
-                    </div>
-                    <div style="padding: 10px">
-                        Containing Sequence: {{ sequenceId }}
-                    </div>
+                <div *ngIf="assetType === 'Image'" style="display: flex; flex-direction: column; padding: 20px">
+                    <div style="padding: 10px">{{ assetType }}: {{ imageId }}</div>
+                    <div style="padding: 10px">Containing Sequence: {{ sequenceId }}</div>
                 </div>
-                <div *ngIf="assetType === 'Sequence'">
-                    {{ assetType }}: {{ sequenceId }}
-                </div>
+                <div *ngIf="assetType === 'Sequence'">{{ assetType }}: {{ sequenceId }}</div>
             </div>
 
-            <div
-                class="button-collection"
-                style="display: flex; flex-direction: column"
-            >
+            <div class="button-collection" style="display: flex; flex-direction: column">
                 <a [href]="siteUrl">
                     <button class="button small">Open in Mapillary</button>
                 </a>
 
                 <div *ngIf="showLinkModal">
-                    <button
-                        class="button small"
-                        (click)="openStreetviewLinkModal()"
-                    >
-                        Link sequence to HazMapper
-                    </button>
+                    <button class="button small" (click)="openStreetviewLinkModal()">Link sequence to HazMapper</button>
                 </div>
 
                 <!-- <div *ngIf="assetType === 'Sequence'"> -->

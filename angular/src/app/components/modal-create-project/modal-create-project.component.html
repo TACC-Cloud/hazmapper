@@ -5,39 +5,20 @@
         <div style="width: 100%; padding: 20px">
             <label>
                 Name:
-                <input
-                    type="text"
-                    formControlName="name"
-                    required="true"
-                    (input)="setFileName($event)"
-                />
+                <input type="text" formControlName="name" required="true" (input)="setFileName($event)" />
             </label>
 
             <label>
                 Description
-                <textarea
-                    formControlName="description"
-                    required="true"
-                ></textarea>
+                <textarea formControlName="description" required="true"></textarea>
             </label>
 
             <div style="padding: 20px 0px">
                 <label>
                     Custom file name:
                     <div style="display: flex; flex-direction: row">
-                        <input
-                            type="text"
-                            formControlName="fileName"
-                            [value]="fileName"
-                        />
-                        <span
-                            style="
-                                line-height: 1.5;
-                                font-size: 1rem;
-                                margin: 5px;
-                            "
-                            >.hazmapper</span
-                        >
+                        <input type="text" formControlName="fileName" [value]="fileName" />
+                        <span style="line-height: 1.5; font-size: 1rem; margin: 5px">.hazmapper</span>
                     </div>
                 </label>
             </div>
@@ -45,11 +26,7 @@
             <div style="padding: 20px 0px">
                 <label>
                     Save Location:
-                    <span style="color: #007cb6">{{
-                        selectedFiles.length > 0
-                            ? selectedFiles[0].path || '/'
-                            : currentPath || '/'
-                    }}</span>
+                    <span style="color: #007cb6">{{ selectedFiles.length > 0 ? selectedFiles[0].path || '/' : currentPath || '/' }}</span>
                 </label>
             </div>
 
@@ -58,12 +35,7 @@
                     <span style="padding-right: 10px">Sync Folder:</span>
                     <input formControlName="watchContent" type="checkbox" />
                 </label>
-                <small
-                    ><em
-                        >When enabled, files in this folder are automatically
-                        synced into the map periodically.</em
-                    ></small
-                >
+                <small><em>When enabled, files in this folder are automatically synced into the map periodically.</em></small>
             </div>
 
             <div>
@@ -93,15 +65,7 @@
     </div>
 
     <div class="button-group small">
-        <button class="button small warning" type="button" (click)="close()">
-            Close
-        </button>
-        <button
-            class="button small align-right"
-            type="submit"
-            [disabled]="!projCreateForm.valid || submitting"
-        >
-            Submit
-        </button>
+        <button class="button small warning" type="button" (click)="close()">Close</button>
+        <button class="button small align-right" type="submit" [disabled]="!projCreateForm.valid || submitting">Submit</button>
     </div>
 </form>

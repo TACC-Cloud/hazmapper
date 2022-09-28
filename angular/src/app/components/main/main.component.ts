@@ -1,8 +1,5 @@
 import { Component, AfterContentInit } from '@angular/core';
-import {
-  AuthenticatedUser,
-  AuthService,
-} from '../../services/authentication.service';
+import { AuthenticatedUser, AuthService } from '../../services/authentication.service';
 import { MAIN, LOGIN } from '../../constants/routes';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -14,11 +11,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class MainComponent implements AfterContentInit {
   public currentUser: AuthenticatedUser;
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private authService: AuthService
-  ) {}
+  constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService) {}
 
   ngAfterContentInit() {
     if (this.authService.isLoggedIn()) {
@@ -38,8 +31,6 @@ export class MainComponent implements AfterContentInit {
 
   routeToLogin() {
     // route to login and then to this page
-    this.router.navigateByUrl(
-      LOGIN + '?to=' + encodeURIComponent(this.router.url)
-    );
+    this.router.navigateByUrl(LOGIN + '?to=' + encodeURIComponent(this.router.url));
   }
 }

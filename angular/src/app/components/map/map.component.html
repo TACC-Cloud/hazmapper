@@ -1,23 +1,7 @@
 <div style="display: flex; flex-direction: row">
-    <div
-        id="map"
-        style="min-height: calc(100vh - 67px); width: 100%"
-        [style.width.%]="mapWidth"
-    ></div>
-    <div
-        *ngIf="streetviewViewerOn"
-        style="width: 50%; min-height: calc(100vh - 67px)"
-    >
-        <button
-            (click)="closeStreetviewViewer()"
-            class="button"
-            style="position: absolute; z-index: 1000; right: 0px"
-        >
-            x
-        </button>
-        <div
-            id="mapillary"
-            style="width: 100%; min-height: calc(100vh - 67px)"
-        ></div>
+    <div id="map" style="min-height: calc(100vh - 67px); width: 100%" [style.width.%]="mapWidth"></div>
+    <div *ngIf="streetviewViewerOn" style="width: 50%; min-height: calc(100vh - 67px)">
+        <button (click)="closeStreetviewViewer()" class="button" style="position: absolute; z-index: 1000; right: 0px">x</button>
+        <div id="mapillary" style="width: 100%; min-height: calc(100vh - 67px)"></div>
     </div>
 </div>

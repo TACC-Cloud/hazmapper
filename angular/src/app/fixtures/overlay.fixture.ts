@@ -1,7 +1,7 @@
 import { Overlay } from '../models/models';
 
 let overlayFixture: Overlay;
-overlayFixture = <Overlay> {
+overlayFixture = <Overlay>{
   id: 1,
   label: 'test',
   maxLat: 10,

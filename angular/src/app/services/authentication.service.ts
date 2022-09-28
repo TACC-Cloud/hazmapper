@@ -22,20 +22,14 @@ interface OpenIDUser {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private _currentUser: ReplaySubject<AuthenticatedUser> =
-    new ReplaySubject<AuthenticatedUser>(1);
-  public readonly currentUser: Observable<AuthenticatedUser> =
-    this._currentUser.asObservable();
+  private _currentUser: ReplaySubject<AuthenticatedUser> = new ReplaySubject<AuthenticatedUser>(1);
+  public readonly currentUser: Observable<AuthenticatedUser> = this._currentUser.asObservable();
   userToken: AuthToken;
   private LS_TOKEN_KEY = 'hazmapperToken';
   private LS_USER_KEY = 'hazmapperUser';
   private LS_REDIRECT_KEY = 'hazmapperRedirectUrl';
 
-  constructor(
-    private http: HttpClient,
-    private envService: EnvService,
-    private router: Router
-  ) {}
+  constructor(private http: HttpClient, private envService: EnvService, private router: Router) {}
 
   public login(requestedUrl: string) {
     localStorage.setItem(this.LS_REDIRECT_KEY, requestedUrl);

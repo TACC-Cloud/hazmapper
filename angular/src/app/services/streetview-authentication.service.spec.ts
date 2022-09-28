@@ -6,9 +6,7 @@ describe('StreetviewAuthenticationService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: StreetviewAuthenticationService = TestBed.get(
-      StreetviewAuthenticationService
-    );
+    const service: StreetviewAuthenticationService = TestBed.get(StreetviewAuthenticationService);
     expect(service).toBeTruthy();
   });
 });

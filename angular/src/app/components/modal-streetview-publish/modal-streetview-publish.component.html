@@ -3,9 +3,7 @@
     [allowFolders]="allowFolders"
     [onlyFolder]="true"
     [heading]="'Select a Folder Containing Streetview Images'"
-    [helpText]="
-        'Streetview image files (with gpano metadata) inside this folder will be imported (only single level).'
-    "
+    [helpText]="'Streetview image files (with gpano metadata) inside this folder will be imported (only single level).'"
     (selection)="onSelect($event)"
 >
 </app-file-browser>
@@ -14,10 +12,7 @@
     <label>
         <h5>Select Publish Organization</h5>
         <select [(ngModel)]="selectedOrganization">
-            <option
-                *ngFor="let org of activeStreetview.organizations"
-                [ngValue]="org.key"
-            >
+            <option *ngFor="let org of activeStreetview.organizations" [ngValue]="org.key">
                 {{ org.name }}
             </option>
         </select>
@@ -26,11 +21,5 @@
 
 <div>
     <button class="button warning" (click)="cancel()">Cancel</button>
-    <button
-        class="button"
-        [disabled]="!(selectedFiles.length && selectedOrganization)"
-        (click)="publish()"
-    >
-        Publish
-    </button>
+    <button class="button" [disabled]="!(selectedFiles.length && selectedOrganization)" (click)="publish()">Publish</button>
 </div>

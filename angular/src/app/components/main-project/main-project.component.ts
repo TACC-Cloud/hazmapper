@@ -25,12 +25,8 @@ export class MainProjectComponent implements OnInit {
 
   ngOnInit() {
     const projectUUID = this.route.snapshot.paramMap.get('projectUUID');
-    const publicProjectURlSegment = this.route.snapshot.url.filter(
-      (segment: UrlSegment) => segment.path === 'project-public'
-    );
-    this.isPublicView =
-      Array.isArray(publicProjectURlSegment) &&
-      publicProjectURlSegment.length >= 1;
+    const publicProjectURlSegment = this.route.snapshot.url.filter((segment: UrlSegment) => segment.path === 'project-public');
+    this.isPublicView = Array.isArray(publicProjectURlSegment) && publicProjectURlSegment.length >= 1;
     this.projectsService.setActiveProjectUUID(projectUUID, this.isPublicView);
     this.geoDataService.activeFeature.subscribe((next) => {
       this.activeFeature = next;

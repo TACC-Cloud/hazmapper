@@ -18,10 +18,7 @@
                     <div id="tile-server-suggestion-name">
                         {{ ts.name }}
                     </div>
-                    <button
-                        class="button success cell large-3 align-right add-button"
-                        (click)="addSuggestedServer($event, ts)"
-                    >
+                    <button class="button success cell large-3 align-right add-button" (click)="addSuggestedServer($event, ts)">
                         <i class="fas fa-plus"></i>
                         Import
                     </button>
@@ -47,40 +44,20 @@
         <!-- TODO: this should be parsed based on server type -->
         <label>
             Tile Server URL:
-            <input
-                type="url"
-                pattern="https?://.+"
-                formControlName="url"
-                required="true"
-            />
+            <input type="url" pattern="https?://.+" formControlName="url" required="true" />
         </label>
 
-        <div
-            *ngIf="
-                tsCreateForm.get('type').value == 'tms' ||
-                tsCreateForm.get('type').value == 'wms'
-            "
-            class="grid-x grid-margin-x"
-        >
+        <div *ngIf="tsCreateForm.get('type').value == 'tms' || tsCreateForm.get('type').value == 'wms'" class="grid-x grid-margin-x">
             <div class="small-6 cell">
                 <label>
                     Attribution:
-                    <input
-                        type="text"
-                        formControlName="attribution"
-                        required="false"
-                    />
+                    <input type="text" formControlName="attribution" required="false" />
                 </label>
             </div>
             <div class="small-6 cell">
                 <label>
                     Attribution Link:
-                    <input
-                        type="url"
-                        pattern="https?://.+"
-                        formControlName="attributionLink"
-                        required="false"
-                    />
+                    <input type="url" pattern="https?://.+" formControlName="attributionLink" required="false" />
                 </label>
             </div>
         </div>
@@ -123,23 +100,12 @@
 
     <div *ngIf="tsCreateForm.get('method').value == 'qms'">
         <div class="grid-x">
-            <input
-                #qmsSearch
-                class="cell auto qms-search-input"
-                name=""
-                type="text"
-                value=""
-            />
-            <button
-                class="button small cell large-1 qms-search-button"
-                (click)="searchQMS($event, qmsSearch.value)"
-            >
+            <input #qmsSearch class="cell auto qms-search-input" name="" type="text" value="" />
+            <button class="button small cell large-1 qms-search-button" (click)="searchQMS($event, qmsSearch.value)">
                 <i class="fas fa-search"></i>
             </button>
         </div>
-        <div *ngIf="loadingSearch" style="font-size: 12px; margin-bottom: 10px">
-            Searching <i class="fas fa-spin fa-spinner ml-4"></i>
-        </div>
+        <div *ngIf="loadingSearch" style="font-size: 12px; margin-bottom: 10px">Searching <i class="fas fa-spin fa-spinner ml-4"></i></div>
 
         <div class="qms-options">
             <label>
@@ -177,10 +143,7 @@
                             {{ qs.name }}
                         </div>
                         <div>
-                            <span
-                                *ngIf="qs.show; else openDescription"
-                                (click)="qs.show = !qs.show"
-                            >
+                            <span *ngIf="qs.show; else openDescription" (click)="qs.show = !qs.show">
                                 {{ qs.type }}
                                 <i class="fas fa-angle-down"></i>
                                 <div class="qms-description">
@@ -195,10 +158,7 @@
                             </ng-template>
                         </div>
                     </div>
-                    <button
-                        class="button success small cell large-1 align-right qms-add-button"
-                        (click)="addQMSServer(qs)"
-                    >
+                    <button class="button success small cell large-1 align-right qms-add-button" (click)="addQMSServer(qs)">
                         <i class="fas fa-plus"></i>
                     </button>
                 </div>
@@ -207,22 +167,9 @@
     </div>
 
     <div class="button-group small">
-        <button class="button small warning" type="button" (click)="close()">
-            Close
-        </button>
-        <ng-container
-            *ngIf="
-                tsCreateForm.get('method').value == 'ini' ||
-                tsCreateForm.get('method').value == 'manual'
-            "
-        >
-            <button
-                class="button small align-right"
-                type="submit"
-                [disabled]="!tsCreateForm.valid"
-            >
-                Submit
-            </button>
+        <button class="button small warning" type="button" (click)="close()">Close</button>
+        <ng-container *ngIf="tsCreateForm.get('method').value == 'ini' || tsCreateForm.get('method').value == 'manual'">
+            <button class="button small align-right" type="submit" [disabled]="!tsCreateForm.valid">Submit</button>
         </ng-container>
     </div>
 </form>

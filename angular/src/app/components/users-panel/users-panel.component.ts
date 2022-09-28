@@ -24,8 +24,7 @@ export class UsersPanelComponent implements OnInit {
   nameInputError = false;
   descriptionInputError = false;
   nameErrorMessage = 'Project name must be under 512 characters!';
-  descriptionErrorMessage =
-    'Project description must be under 4096 characters!';
+  descriptionErrorMessage = 'Project description must be under 4096 characters!';
   publicStatusChanging = false;
   publicStatusChangingError = false;
   dsHref: string;
@@ -44,31 +43,15 @@ export class UsersPanelComponent implements OnInit {
   ngOnInit() {
     this.agaveSystemsService.list();
 
-    combineLatest([
-      this.projectsService.activeProject,
-      this.agaveSystemsService.projects,
-    ]).subscribe(([activeProject, dsProjects]) => {
+    combineLatest([this.projectsService.activeProject, this.agaveSystemsService.projects]).subscribe(([activeProject, dsProjects]) => {
       if (activeProject) {
         const portalUrl = this.envService.portalUrl + 'data/browser/';
-        this.activeProject = this.agaveSystemsService.getProjectMetadata(
-          [activeProject],
-          dsProjects
-        )[0];
+        this.activeProject = this.agaveSystemsService.getProjectMetadata([activeProject], dsProjects)[0];
         if (activeProject.system_id) {
           if (activeProject.system_id.startsWith('project')) {
-            this.dsHref =
-              portalUrl +
-              'projects/' +
-              activeProject.system_id.substr(8) +
-              '/' +
-              activeProject.system_path +
-              '/';
+            this.dsHref = portalUrl + 'projects/' + activeProject.system_id.substr(8) + '/' + activeProject.system_path + '/';
             if (activeProject.ds_id) {
-              this.projectHref =
-                portalUrl +
-                'projects/' +
-                activeProject.system_id.substr(8) +
-                '/';
+              this.projectHref = portalUrl + 'projects/' + activeProject.system_id.substr(8) + '/';
             }
           } else {
             this.myDataHref = portalUrl + 'agave/' + activeProject.system_id;
@@ -84,10 +67,7 @@ export class UsersPanelComponent implements OnInit {
   }
 
   getPublicUrl() {
-    const publicUrl =
-      location.origin +
-      this.envService.baseHref +
-      `project-public/${this.activeProject.uuid}/`;
+    const publicUrl = location.origin + this.envService.baseHref + `project-public/${this.activeProject.uuid}/`;
     return publicUrl;
   }
 
@@ -97,9 +77,7 @@ export class UsersPanelComponent implements OnInit {
 
   copyLinkToClipboard(link: string) {
     copyToClipboard(link);
-    this.notificationsService.showSuccessToast(
-      `Copied ${link} to the clipboard!`
-    );
+    this.notificationsService.showSuccessToast(`Copied ${link} to the clipboard!`);
   }
 
   updateMapPublicAccess(makePublic: boolean) {
@@ -108,25 +86,21 @@ export class UsersPanelComponent implements OnInit {
       ? 'Are you sure you want to make this map public?'
       : 'Are you sure you want to make this map private? This map will no longer be viewable by the public.';
     const action = makePublic ? 'Make public' : 'Make private';
-    this.modalService
-      .confirm(title, message, ['Cancel', action])
-      .subscribe((answer) => {
-        if (answer === action) {
-          this.publicStatusChanging = true;
-          this.publicStatusChangingError = false;
-          this.projectsService
-            .updateActiveProject(undefined, undefined, makePublic)
-            .subscribe(
-              (resp) => {
-                this.publicStatusChanging = false;
-              },
-              (err) => {
-                this.publicStatusChanging = false;
-                this.publicStatusChangingError = true;
-              }
-            );
-        }
-      });
+    this.modalService.confirm(title, message, ['Cancel', action]).subscribe((answer) => {
+      if (answer === action) {
+        this.publicStatusChanging = true;
+        this.publicStatusChangingError = false;
+        this.projectsService.updateActiveProject(undefined, undefined, makePublic).subscribe(
+          (resp) => {
+            this.publicStatusChanging = false;
+          },
+          (err) => {
+            this.publicStatusChanging = false;
+            this.publicStatusChangingError = true;
+          }
+        );
+      }
+    });
   }
 
   deleteProject() {

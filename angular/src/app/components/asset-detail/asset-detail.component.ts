@@ -33,17 +33,13 @@ export class AssetDetailComponent implements OnInit {
     this.geoDataService.activeFeature.subscribe((next) => {
       this.feature = next;
       try {
-        let featureSource =
-          this.envService.apiUrl + '/assets/' + this.feature.assets[0].path;
+        let featureSource = this.envService.apiUrl + '/assets/' + this.feature.assets[0].path;
         // Strip out any possible double slashes or wso2 gets messed up
         featureSource = featureSource.replace(/([^:])(\/{2,})/g, '$1/');
         this.featureSource = featureSource;
 
         if (this.feature.featureType() === 'point_cloud') {
-          this.safePointCloudUrl =
-            this.sanitizer.bypassSecurityTrustResourceUrl(
-              featureSource + '/preview.html'
-            );
+          this.safePointCloudUrl = this.sanitizer.bypassSecurityTrustResourceUrl(featureSource + '/preview.html');
         } else {
           this.safePointCloudUrl = null;
         }
@@ -61,24 +57,16 @@ export class AssetDetailComponent implements OnInit {
     const modalConfig: ModalOptions = {
       initialState: {
         single: true,
-        allowedExtensions:
-          this.tapisFilesService.IMPORTABLE_FEATURE_ASSET_TYPES,
+        allowedExtensions: this.tapisFilesService.IMPORTABLE_FEATURE_ASSET_TYPES,
       },
     };
-    const modal: BsModalRef = this.bsModalService.show(
-      ModalFileBrowserComponent,
-      modalConfig
-    );
+    const modal: BsModalRef = this.bsModalService.show(ModalFileBrowserComponent, modalConfig);
     modal.content.onClose.subscribe((file: RemoteFile) => {
       const payload: IFileImportRequest = {
         system_id: file[0].system,
         path: file[0].path,
       };
-      this.geoDataService.importFeatureAsset(
-        this.activeProject.id,
-        Number(this.feature.id),
-        payload
-      );
+      this.geoDataService.importFeatureAsset(this.activeProject.id, Number(this.feature.id), payload);
     });
   }
 

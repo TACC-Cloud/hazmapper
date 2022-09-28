@@ -1,12 +1,5 @@
 import { Injectable, NgModule } from '@angular/core';
-import {
-  Routes,
-  RouterModule,
-  CanActivate,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  Router,
-} from '@angular/router';
+import { Routes, RouterModule, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { NotFoundComponent } from './components/notfound/notfound.component';
 import { AuthService } from './services/authentication.service';
 import { MainComponent } from './components/main/main.component';
@@ -22,10 +15,7 @@ import { LOGIN } from './constants/routes';
 export class Activate implements CanActivate {
   constructor(private authSvc: AuthService, private router: Router) {}
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): boolean {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     if (this.authSvc.isLoggedIn()) {
       return true;
     }

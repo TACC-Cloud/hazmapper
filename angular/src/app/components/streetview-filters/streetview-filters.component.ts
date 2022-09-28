@@ -12,34 +12,23 @@ export class StreetviewFiltersComponent implements OnInit {
   public activeStreetview: Streetview;
   public organizations = [];
 
-  constructor(
-    private streetviewAuthenticationService: StreetviewAuthenticationService,
-    private streetviewService: StreetviewService
-  ) {}
+  constructor(private streetviewAuthenticationService: StreetviewAuthenticationService, private streetviewService: StreetviewService) {}
 
   ngOnInit() {
-    this.streetviewAuthenticationService.activeStreetview.subscribe(
-      (sv: Streetview) => {
-        this.activeStreetview = sv;
-      }
-    );
+    this.streetviewAuthenticationService.activeStreetview.subscribe((sv: Streetview) => {
+      this.activeStreetview = sv;
+    });
 
-    this.streetviewService.activeMapillaryOrganizations.subscribe(
-      (orgs: any) => {
-        this.organizations = orgs;
-      }
-    );
+    this.streetviewService.activeMapillaryOrganizations.subscribe((orgs: any) => {
+      this.organizations = orgs;
+    });
   }
 
   addOrRemoveOrganization(id: string) {
     if (this.organizations.includes(id)) {
-      this.streetviewService.activeMapillaryOrganizations =
-        this.organizations.filter((org) => org !== id);
+      this.streetviewService.activeMapillaryOrganizations = this.organizations.filter((org) => org !== id);
     } else {
-      this.streetviewService.activeMapillaryOrganizations = [
-        ...this.organizations,
-        id,
-      ];
+      this.streetviewService.activeMapillaryOrganizations = [...this.organizations, id];
     }
   }
 

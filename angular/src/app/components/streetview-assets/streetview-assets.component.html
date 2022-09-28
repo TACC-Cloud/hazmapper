@@ -1,16 +1,7 @@
-<div
-    *ngIf="
-        activeStreetview && activeStreetview.instances.length;
-        else noInstances
-    "
->
+<div *ngIf="activeStreetview && activeStreetview.instances.length; else noInstances">
     <div *ngFor="let svi of activeStreetview.instances; let i = index">
         <div class="instance-container">
-            <div
-                (click)="openStreetviewInstanceInfoModal(svi.id)"
-                class="instance-name"
-                style="display: flex"
-            >
+            <div (click)="openStreetviewInstanceInfoModal(svi.id)" class="instance-name" style="display: flex">
                 <i
                     class="fas fa-list"
                     style="

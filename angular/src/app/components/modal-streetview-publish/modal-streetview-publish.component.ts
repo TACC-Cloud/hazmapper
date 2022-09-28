@@ -19,18 +19,13 @@ export class ModalStreetviewPublishComponent implements OnInit {
   publishErrorMessage = '';
   activeStreetview: Streetview;
 
-  constructor(
-    public bsModalRef: BsModalRef,
-    private streetviewAuthenticationService: StreetviewAuthenticationService
-  ) {}
+  constructor(public bsModalRef: BsModalRef, private streetviewAuthenticationService: StreetviewAuthenticationService) {}
 
   ngOnInit() {
-    this.streetviewAuthenticationService.activeStreetview.subscribe(
-      (sv: Streetview) => {
-        this.activeStreetview = sv;
-        this.selectedOrganization = sv.organizations[0].key;
-      }
-    );
+    this.streetviewAuthenticationService.activeStreetview.subscribe((sv: Streetview) => {
+      this.activeStreetview = sv;
+      this.selectedOrganization = sv.organizations[0].key;
+    });
   }
 
   onSelect(items: Array<RemoteFile>) {

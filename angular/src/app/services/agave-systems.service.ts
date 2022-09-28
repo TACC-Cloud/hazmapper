@@ -5,26 +5,16 @@ import { NotificationsService } from './notifications.service';
 import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EnvService } from '../services/env.service';
-import {
-  DesignSafeProjectCollection,
-  Project,
-  AgaveFileOperations,
-} from '../models/models';
+import { DesignSafeProjectCollection, Project, AgaveFileOperations } from '../models/models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AgaveSystemsService {
-  private _systems: ReplaySubject<SystemSummary[]> = new ReplaySubject<
-    SystemSummary[]
-  >(1);
-  public readonly systems: Observable<SystemSummary[]> =
-    this._systems.asObservable();
-  private _projects: ReplaySubject<SystemSummary[]> = new ReplaySubject<
-    SystemSummary[]
-  >(1);
-  public readonly projects: Observable<SystemSummary[]> =
-    this._projects.asObservable();
+  private _systems: ReplaySubject<SystemSummary[]> = new ReplaySubject<SystemSummary[]>(1);
+  public readonly systems: Observable<SystemSummary[]> = this._systems.asObservable();
+  private _projects: ReplaySubject<SystemSummary[]> = new ReplaySubject<SystemSummary[]>(1);
+  public readonly projects: Observable<SystemSummary[]> = this._projects.asObservable();
   constructor(
     private tapis: ApiService,
     private notificationsService: NotificationsService,
@@ -41,31 +31,24 @@ export class AgaveSystemsService {
         this._systems.next(null);
       }
     );
-    this.http
-      .get<DesignSafeProjectCollection>(
-        this.envService.designSafeUrl + `/projects/v2/`
-      )
-      .subscribe(
-        (resp) => {
-          const projectSystems = resp.projects.map((project) => {
-            return {
-              id: 'project-' + project.uuid,
-              name: project.value.projectId,
-              description: project.value.title,
-            };
-          });
-          this._projects.next(projectSystems);
-        },
-        (error) => {
-          this._projects.next(null);
-        }
-      );
+    this.http.get<DesignSafeProjectCollection>(this.envService.designSafeUrl + `/projects/v2/`).subscribe(
+      (resp) => {
+        const projectSystems = resp.projects.map((project) => {
+          return {
+            id: 'project-' + project.uuid,
+            name: project.value.projectId,
+            description: project.value.title,
+          };
+        });
+        this._projects.next(projectSystems);
+      },
+      (error) => {
+        this._projects.next(null);
+      }
+    );
   }
 
-  getProjectMetadata(
-    projects: Project[],
-    dsProjects: SystemSummary[]
-  ): Project[] {
+  getProjectMetadata(projects: Project[], dsProjects: SystemSummary[]): Project[] {
     if (dsProjects.length > 0) {
       return projects.map((p) => {
         const dsProject = dsProjects.find((dp) => dp.id === p.system_id);
@@ -83,50 +66,37 @@ export class AgaveSystemsService {
     const path = proj.system_path;
     const name = proj.name;
 
-    this.http
-      .get<any>(this.envService.designSafeUrl + `projects/v2/${DSuuid}/`)
-      .subscribe((dsProject) => {
-        const previousMaps = dsProject.value.hazmapperMaps
-          ? dsProject.value.hazmapperMaps.filter((e) => e.uuid !== uuid)
+    this.http.get<any>(this.envService.designSafeUrl + `projects/v2/${DSuuid}/`).subscribe((dsProject) => {
+      const previousMaps = dsProject.value.hazmapperMaps ? dsProject.value.hazmapperMaps.filter((e) => e.uuid !== uuid) : [];
+
+      const payloadProject =
+        operation === AgaveFileOperations.Update
+          ? [
+              {
+                name,
+                uuid,
+                path,
+                deployment: this.envService.env,
+              },
+            ]
           : [];
 
-        const payloadProject =
-          operation === AgaveFileOperations.Update
-            ? [
-                {
-                  name,
-                  uuid,
-                  path,
-                  deployment: this.envService.env,
-                },
-              ]
-            : [];
+      const payload = {
+        DSuuid,
+        hazmapperMaps: [...previousMaps, ...payloadProject],
+      };
 
-        const payload = {
-          DSuuid,
-          hazmapperMaps: [...previousMaps, ...payloadProject],
-        };
+      const headers = new HttpHeaders().set('X-Requested-With', 'XMLHttpRequest');
 
-        const headers = new HttpHeaders().set(
-          'X-Requested-With',
-          'XMLHttpRequest'
-        );
-
-        this.http
-          .post<any>(
-            this.envService.designSafeUrl + `projects/v2/${DSuuid}/`,
-            payload,
-            { headers }
-          )
-          .subscribe(
-            (resp) => {
-              console.log(resp);
-            },
-            (error) => {
-              console.log(error);
-            }
-          );
-      });
+      this.http.post<any>(this.envService.designSafeUrl + `projects/v2/${DSuuid}/`, payload, { headers }).subscribe(
+        (resp) => {
+          console.log(resp);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    });
   }
 
   public saveFile(proj: Project) {
@@ -149,14 +119,10 @@ export class AgaveSystemsService {
       })
       .subscribe(
         (resp) => {
-          this.notificationsService.showSuccessToast(
-            `Successfully saved file to ${proj.system_id}${proj.system_path}.`
-          );
+          this.notificationsService.showSuccessToast(`Successfully saved file to ${proj.system_id}${proj.system_path}.`);
         },
         (error) => {
-          this.notificationsService.showErrorToast(
-            `Failed to save file to ${proj.system_id}${proj.system_path}.`
-          );
+          this.notificationsService.showErrorToast(`Failed to save file to ${proj.system_id}${proj.system_path}.`);
         }
       );
   }

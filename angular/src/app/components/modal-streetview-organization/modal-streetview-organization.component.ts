@@ -22,11 +22,9 @@ export class ModalStreetviewOrganizationComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.streetviewAuthenticationService.activeStreetview.subscribe(
-      (sv: Streetview) => {
-        this.activeStreetview = sv;
-      }
-    );
+    this.streetviewAuthenticationService.activeStreetview.subscribe((sv: Streetview) => {
+      this.activeStreetview = sv;
+    });
   }
 
   cancel() {
@@ -35,18 +33,12 @@ export class ModalStreetviewOrganizationComponent implements OnInit {
 
   addOrganization() {
     if (this.key !== '') {
-      this.streetviewService.addOrganization(
-        this.activeStreetview.service,
-        this.key
-      );
+      this.streetviewService.addOrganization(this.activeStreetview.service, this.key);
     }
   }
 
   removeOrganization(organization: any) {
-    this.streetviewService.removeOrganization(
-      this.activeStreetview.service,
-      organization.id
-    );
+    this.streetviewService.removeOrganization(this.activeStreetview.service, organization.id);
   }
 
   submit() {
