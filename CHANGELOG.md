@@ -2,6 +2,23 @@
 
 ## [Unreleased]
 
+## [2.9] - 2022-09-29
+
+### Added
+
+DES-2334: Add testing linting. (#107)
+DES-2309: Add virtual list rendering. (#104)
+DES-2307: Add basic router. (#103)
+DES-2131: Adjust workflow to use angular folder. (#102)
+DES-1996: Restrict deletion of projects to admins/creators (#101)
+Update makefile (#100)
+React/Angular Hybrid (#97)
+
+### Fixed
+
+Merge conflict resolution related to DES-2131 (#105)
+Hotfix/Pin chai version (#94)
+
 ## [2.8] - 2022-06-03
 
 ### Added
@@ -90,7 +107,8 @@
 
 
 
-[unreleased]: https://github.com/TACC-Cloud/hazmapper/compare/v2.8...HEAD
+[unreleased]: https://github.com/TACC-Cloud/hazmapper/compare/v2.9...HEAD
+[2.9]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.9
 [2.8]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.8
 [2.7]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.7
 [2.6]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.6
