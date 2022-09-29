@@ -6,15 +6,18 @@
 
 ### Added
 
-- DES-2231: handle potential listing errors (#105)
-- Add util image (#102)
-- Use env file for docker compose (#101)
-- DES-1996: Restrict project deletion (#100)
-- DES-2236: Add retry attempts to file getting (#99)
+DES-2334: Add testing linting. (#107)
+DES-2309: Add virtual list rendering. (#104)
+DES-2307: Add basic router. (#103)
+DES-2131: Adjust workflow to use angular folder. (#102)
+DES-1996: Restrict deletion of projects to admins/creators (#101)
+Update makefile (#100)
+React/Angular Hybrid (#97)
 
 ### Fixed
 
-- Hotfix: Project deletion (#104)
+Merge conflict resolution related to DES-2131 (#105)
+Hotfix/Pin chai version (#94)
 
 ## [2.8] - 2022-06-03
 
