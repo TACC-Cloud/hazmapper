@@ -1,0 +1,11 @@
+<app-file-browser
+  [single]=single
+  [allowFolders]=allowFolders
+  [allowedExtensions]=allowedExtensions
+  [onlyFolder]=onlyFolder
+  (selection)="onSelect($event)">
+</app-file-browser>
+<div>
+    <button class="button warning" (click)="cancel()">Cancel</button>
+    <button class="button" [disabled]="!selectedFiles.length" (click)="close()">Import</button>
+</div>

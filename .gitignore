@@ -5,6 +5,11 @@
 src/environments/jwt.ts
 /tmp
 /out-tsc
+
+angular/dist
+angular/src/environments/jwt.ts
+angular/tmp
+angular/out-tsc
 # Only exists if Bazel was run
 /bazel-out
 __pycache__

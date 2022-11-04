@@ -1,0 +1,56 @@
+<div>
+  <button class="close-button" (click)="close()">
+    <span>&times;</span>
+  </button>
+</div>
+
+<div *ngIf="streetviewInstance">
+  <div style="margin: 10px 0">
+    <h5>Path</h5>
+    <div style="margin-left: 20px">
+      {{streetviewInstance.path}}
+    </div>
+  </div>
+  <div>
+    <h5>Sequences</h5>
+    <div style="text-align: center" *ngIf="streetviewInstance.sequences.length === 0; else showSequences">
+      No sequences connected with this folder!
+    </div>
+
+    <ng-template #showSequences>
+      <div *ngFor="let seq of streetviewInstance.sequences; let q = index">
+        <div *ngIf="seq.sequence_id; else pendingApproval" style="display: flex; flex-direction: row; justify-content: space-between">
+          <div style="margin-left: 20px; width: 100px; padding-bottom: 5px;">
+            {{seq.sequence_id}}
+          </div>
+          <div class="grid-x align-spaced" style="cursor: pointer; margin-right: 30px">
+            <div [tooltip]="'Link to Map Assets'" style="padding: 0px 5px 0px 5px;">
+              <i class="fas fa-link" (click)="openSequenceFeatureModal(seq)"></i>
+            </div>
+            <div [tooltip]="'Center to location'" style="padding: 0px 5px 0px 5px;">
+              <i class="fas fa-map-marker-alt" (click)="showInMap(seq)"></i>
+            </div>
+            <div [tooltip]="'Remove association'" style="padding: 0px 5px 0px 5px">
+              <i class="fas fa-trash" (click)="removeSequence(seq)"></i>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #pendingApproval>
+          <div style="display: flex; flex-direction: row; justify-content: space-between; padding-bottom: 5px;">
+            <div style="margin-left: 20px; width: 300px">
+              {{q + 1}}. Sequence processing in Mapillary
+            </div>
+            <button class="button tiny" (click)="checkSequenceState(seq)">Check if ready</button>
+          </div>
+        </ng-template>
+
+      </div>
+    </ng-template>
+  </div>
+
+
+  <div class="grid-x align-center" style="padding: 20px;">
+    <button (click)="removeInstance()" class="button alert">Remove Streetview Instance</button>
+  </div>
+</div>
