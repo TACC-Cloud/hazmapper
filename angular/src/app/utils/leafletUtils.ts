@@ -1,7 +1,16 @@
-import {CircleMarker, Path, circleMarker, divIcon, LatLng, Marker, marker} from 'leaflet';
-import {Feature} from '../models/models';
-import {MarkerStyle} from '../models/style';
+import {
+  CircleMarker,
+  Path,
+  circleMarker,
+  divIcon,
+  LatLng,
+  Marker,
+  marker,
+} from 'leaflet';
+import { Feature } from '../models/models';
+import { MarkerStyle } from '../models/style';
 import { assetStyles } from 'src/app/constants/styles';
+import { adjustBrightness } from '../utils/color';
 
 interface MarkerIcon {
   color: string;
@@ -15,92 +24,101 @@ function createCircleMarker(feature: Feature, latlng: LatLng): CircleMarker {
     color: 'black',
     weight: 1,
     opacity: 1,
-    fillOpacity: 0.1
+    fillOpacity: 0.1,
   };
-  return circleMarker( latlng, options );
+  return circleMarker(latlng, options);
 }
 
 function createImageMarker(feature: Feature, latlng: LatLng): Marker {
   const divHtml = '<i class="fas fa-camera-retro fa-2x light-blue"></i>';
-  const ico = divIcon({className: 'leaflet-fa-marker-icon', html: divHtml});
-  return marker(latlng, {icon: ico});
+  const ico = divIcon({ className: 'leaflet-fa-marker-icon', html: divHtml });
+  return marker(latlng, { icon: ico });
 }
 
 function createCollectionMarker(feature: Feature, latlng: LatLng): Marker {
   const divHtml = '<i class="fa fa-folder-open fa-2x light-blue"></i>';
-  const ico = divIcon({className: 'icon-marker', html: divHtml});
-  return marker(latlng, {icon: ico});
+  const ico = divIcon({ className: 'icon-marker', html: divHtml });
+  return marker(latlng, { icon: ico });
 }
 
 function createVideoMarker(feature: Feature, latlng: LatLng): Marker {
   const divHtml = '<i class="fas fa-video fa-2x light-blue"></i>';
-  const ico = divIcon({className: 'leaflet-fa-marker-icon', html: divHtml});
-  return marker(latlng, {icon: ico});
+  const ico = divIcon({ className: 'leaflet-fa-marker-icon', html: divHtml });
+  return marker(latlng, { icon: ico });
 }
 
 function createCustomImageMarker(latlng: LatLng, style: MarkerStyle): Marker {
   const divHtml = `<i style="color: ${style.color}" class="fas fa-camera-retro fa-2x"></i>`;
-  const ico = divIcon({className: 'leaflet-fa-marker-icon', html: divHtml});
-  return marker(latlng, {icon: ico});
+  const ico = divIcon({ className: 'leaflet-fa-marker-icon', html: divHtml });
+  return marker(latlng, { icon: ico });
 }
 
-function createCustomCollectionMarker(latlng: LatLng, style: MarkerStyle): Marker {
+function createCustomCollectionMarker(
+  latlng: LatLng,
+  style: MarkerStyle
+): Marker {
   const divHtml = `<i style="color: ${style.color}" class="fa fa-folder-open fa-2x"></i>`;
-  const ico = divIcon({className: 'icon-marker', html: divHtml});
-  return marker(latlng, {icon: ico});
+  const ico = divIcon({ className: 'icon-marker', html: divHtml });
+  return marker(latlng, { icon: ico });
 }
 
 function createCustomVideoMarker(latlng: LatLng, style: MarkerStyle): Marker {
   const divHtml = `<i style="color: ${style.color}" class="fas fa-video fa-2x"></i>`;
-  const ico = divIcon({className: 'leaflet-fa-marker-icon', html: divHtml});
-  return marker(latlng, {icon: ico});
+  const ico = divIcon({ className: 'leaflet-fa-marker-icon', html: divHtml });
+  return marker(latlng, { icon: ico });
 }
 
 function createCustomIconMarker(latlng: LatLng, style: MarkerStyle): Marker {
   const icon = style.faIcon;
   const color = style.color;
   const divHtml = `<i class="fas ${icon} fa-2x" style="color: ${color}"></i>`;
-  const ico = divIcon({className: 'leaflet-fa-marker-icon', html: divHtml});
-  return marker(latlng, {icon: ico, ...style});
+  const ico = divIcon({ className: 'leaflet-fa-marker-icon', html: divHtml });
+  return marker(latlng, { icon: ico, ...style });
 }
 
-function createCustomCircleMarker(latlng: LatLng, style: MarkerStyle): CircleMarker {
+function createCustomCircleMarker(
+  latlng: LatLng,
+  style: MarkerStyle
+): CircleMarker {
   return circleMarker(latlng, style);
 }
 
 export function setMarkerStyle(layer: any, active: boolean) {
   // const custom = layer.feature.properties.customStyle;
-  const custom = layer.feature.properties.style;
+  const layerStyle = layer.feature.properties.style;
   const featureType = layer.feature.featureType();
   let icon = null;
-  if (featureType === 'Point' && custom && custom.faIcon) {
-    icon = custom.faIcon;
+  if (layerStyle.faIcon) {
+    icon = layerStyle.faIcon;
   } else {
     if (featureType === 'video') {
       icon = 'fa-video';
     } else if (featureType === 'image') {
-      icon = 'fa-camera-retro'
+      icon = 'fa-camera-retro';
     }
   }
 
-  const color = active
-    ? assetStyles.active.color
-    : (custom
-      ? custom.color
-      : assetStyles.default.color);
+  layerStyle.color = active
+    ? adjustBrightness(layerStyle.color, 20)
+    : adjustBrightness(layerStyle.color, -20);
 
   if (icon) {
-    const divHtml = `<i style="color: ${color}" class="fas ${icon} fa-2x"></i>`;
-    layer.setIcon(divIcon({
-      html: divHtml,
-      className: 'leaflet-fa-marker-icon'
-    }));
+    const divHtml = `<i style="color: ${layerStyle.color}" class="fas ${icon} fa-2x"></i>`;
+    layer.setIcon(
+      divIcon({
+        html: divHtml,
+        className: 'leaflet-fa-marker-icon',
+      })
+    );
   } else {
-    layer.setStyle({fillColor: color, color});
+    layer.setStyle({ fillColor: layerStyle.color, color: layerStyle.color });
   }
 }
 
-export function createMarker(feature: Feature, latlng: LatLng): Marker | CircleMarker {
+export function createMarker(
+  feature: Feature,
+  latlng: LatLng
+): Marker | CircleMarker {
   if (feature.properties.style || feature.properties.defaultStyle) {
     const style = feature.properties.style
       ? feature.properties.style

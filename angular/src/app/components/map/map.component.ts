@@ -393,8 +393,7 @@ export class MapComponent implements OnInit, OnDestroy {
         collection.features.forEach((d) => {
           let feat: LayerGroup;
 
-          d.properties.defaultStyle = assetStyles.default;
-          const featureStyle = d.properties.style
+          d.properties.style = d.properties.style
             ? d.properties.style
             : assetStyles.default;
 
@@ -402,7 +401,7 @@ export class MapComponent implements OnInit, OnDestroy {
             d.geometry.type === 'Polygon' ||
             d.geometry.type === 'LineString'
           ) {
-            feat = L.geoJSON(d, { style: featureStyle });
+            feat = L.geoJSON(d, { style: d.properties.style });
           } else if (d.featureType() === 'streetview') {
             feat = L.geoJSON(d, {
               style: streetviewAssetStyles.feature.default,
@@ -477,9 +476,15 @@ export class MapComponent implements OnInit, OnDestroy {
           overlapFeatures.push(ofLayer.feature);
           this.map.contextmenu.addItem({
             text: ofLayer.feature.id,
-            callback: (ev) => {
+            callback: (contextEvent) => {
               const f = ofLayer.feature;
               this.geoDataService.activeFeature = f;
+
+              if (this.previousFeatureLayer) {
+                setMarkerStyle(this.previousFeatureLayer, false);
+              }
+              setMarkerStyle(ofLayer, true);
+              this.previousFeatureLayer = ofLayer;
             },
           });
         }
