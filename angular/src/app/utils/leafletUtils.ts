@@ -45,6 +45,12 @@ function createCustomIconMarker(latlng: LatLng, style: MarkerStyle): Marker {
   return marker(latlng, {icon: ico, ...style});
 }
 
+function createQuestionnaireMarker(feature: Feature, latlng: LatLng): Marker {
+  const divHtml = '<i class="fas fa-question fa-2x light-blue"></i>';
+  const ico = divIcon({ className: 'leaflet-fa-marker-icon', html: divHtml });
+  return marker(latlng, { icon: ico });
+}
+
 function createCustomCircleMarker(latlng: LatLng, style: MarkerStyle): CircleMarker {
   return circleMarker(latlng, style);
 }
@@ -64,6 +70,8 @@ export function createMarker(feature: Feature, latlng: LatLng): Marker | CircleM
       return createCollectionMarker(feature, latlng);
     } else if (feature.featureType() === 'video') {
       return createVideoMarker(feature, latlng);
+    } else if (feature.featureType() === 'questionnaire') {
+      return createQuestionnaireMarker(feature, latlng);
     } else {
       return createCircleMarker(feature, latlng);
     }

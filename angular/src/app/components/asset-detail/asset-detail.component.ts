@@ -6,6 +6,7 @@ import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 import {BsModalRef, BsModalService, ModalOptions} from 'ngx-foundation';
 import {ModalFileBrowserComponent} from '../modal-file-browser/modal-file-browser.component';
 import {RemoteFile} from 'ng-tapis';
+import {ModalQuestionnaireViewerComponent} from '../modal-questionnaire-viewer/modal-questionnaire-viewer.component';
 import {TapisFilesService} from '../../services/tapis-files.service';
 import { EnvService} from '../../services/env.service';
 
@@ -66,6 +67,16 @@ export class AssetDetailComponent implements OnInit {
       };
       this.geoDataService.importFeatureAsset(this.activeProject.id, Number(this.feature.id), payload);
     });
+  }
+
+  openQuestionnaireModal(feature: Feature) {
+    const modalConfig: ModalOptions = {
+      initialState: {
+        feature: feature,
+      },
+    };
+
+    this.bsModalService.show(ModalQuestionnaireViewerComponent, modalConfig);
   }
 
   close() {
