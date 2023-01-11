@@ -9,8 +9,10 @@
     "test": "ng test --watch=false --browsers=ChromeHeadless",
     "test:ci": "ng test --browsers=ChromeHeadless --progress=false --watch=false --code-coverage --source-map=false",
     "lint": "npm run prettier && npm run lint:js && npm run lint:css",
-    "prettier": "prettier --write ./src",
-    "lint:js": "ng lint --fix",
+    "prettier:check": "prettier --single-quote --check src",
+    "prettier:fix": "prettier --single-quote --write src",
+    "lint:js": "ng lint",
+    "lint:js:fix": "ng lint --fix",
     "lint:css": "stylelint '**/*.{styl,stylus,css}' --fix",
     "e2e": "ng e2e"
   },
