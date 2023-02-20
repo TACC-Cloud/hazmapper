@@ -23,13 +23,13 @@ interface MapProps {
   baseLayers: tileServerLayer[];
 }
 
-
 /**
  * A component that displays a leaflet map of hazmapper data
  */
 const Map: React.FC<MapProps> = ({ baseLayers }) => {
-
-  const activeBaseLayers = baseLayers.filter((layer) => layer.uiOptions.isActive);
+  const activeBaseLayers = baseLayers.filter(
+    (layer) => layer.uiOptions.isActive
+  );
 
   return (
     <MapContainer

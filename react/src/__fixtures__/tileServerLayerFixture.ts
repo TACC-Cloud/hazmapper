@@ -33,7 +33,7 @@ export const tileServerLayers = [
     },
     uiOptions: {
       zIndex: 1,
-      opacity: .5,
+      opacity: 0.5,
       isActive: true,
       showInput: false,
       showDescription: false,
