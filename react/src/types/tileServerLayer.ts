@@ -1,7 +1,7 @@
 /**
  * Represents a tile server layer, with its metadata and options.
  */
-export interface tileServerLayer {
+export interface TileServerLayer {
   /** The unique identifier of the layer. */
   id: number;
   /** The name of the layer. */

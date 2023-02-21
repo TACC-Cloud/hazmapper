@@ -1,6 +1,7 @@
 import React from 'react';
 import Map from '../Map';
 import { tileServerLayers } from '../../__fixtures__/tileServerLayerFixture';
+import { featureCollection } from '../../__fixtures__/featuresFixture';
 
 interface Props {
   /**
@@ -22,7 +23,10 @@ export default class MapProject extends React.Component<Props> {
     return (
       <div style={{ width: '100vw', height: '100vh' }}>
         {/* TODO for above and project, should we use style-components and/or CSS modules? */}
-        <Map baseLayers={tileServerLayers} />
+        <Map
+          baseLayers={tileServerLayers}
+          featureCollection={featureCollection}
+        />
       </div>
     );
   }
