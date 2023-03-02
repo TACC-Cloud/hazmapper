@@ -56,7 +56,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.800.0",
-    "@angular/cli": "~8.0.3",
+    "@angular/cli": "~15.2.1",
     "@angular/compiler-cli": "~8.2.5",
     "@angular/language-service": "~8.2.5",
     "@fortawesome/fontawesome-free": "^5.8.1",
