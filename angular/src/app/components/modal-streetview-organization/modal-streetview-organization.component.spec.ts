@@ -8,9 +8,8 @@ describe('ModalStreetviewOrganizationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ModalStreetviewOrganizationComponent ]
-    })
-    .compileComponents();
+      declarations: [ModalStreetviewOrganizationComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

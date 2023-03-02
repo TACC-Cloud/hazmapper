@@ -1,31 +1,28 @@
 <div class="dock-panel">
-  <div class="dock-panel-header">
-    <span class="dock-panel-title"> Assets </span>
-  </div>
-  <div *ngIf="!isPublicView">
-    <button class="button expanded hollow" (click)="openFileBrowserModal()">Import from DesignSafe </button>
-  </div>
-
-  <!-- TODO: Dear lord, we now have a recursive template. God help us. -->
-  <div
-    class="dock-panel-content"
-    infiniteScroll
-    [infiniteScrollDistance]="1"
-    [infiniteScrollUpDistance]="1"
-    [infiniteScrollThrottle]="100"
-    (scrolled)="scrollDown()"
-    (scrolledUp)="scrollUp()"
-    [alwaysCallback]="true"
-    [scrollWindow]="false"
-  >
-    <app-file-tree-node
-      [node]="currentTreeListing"
-      (clickEvent)="selectTreeNode($event)">
-    </app-file-tree-node>
-  </div>
-  <div class="dock-panel-controls">
-    <div class="expanded button-group tiny">
-      <button class="button hollow" (click)="exportGeoJSON()">Export to GeoJSON</button>
+    <div class="dock-panel-header">
+        <span class="dock-panel-title"> Assets </span>
     </div>
-  </div>
+    <div *ngIf="!isPublicView">
+        <button class="button expanded hollow" (click)="openFileBrowserModal()">Import from DesignSafe</button>
+    </div>
+
+    <!-- TODO: Dear lord, we now have a recursive template. God help us. -->
+    <div
+        class="dock-panel-content"
+        infiniteScroll
+        [infiniteScrollDistance]="1"
+        [infiniteScrollUpDistance]="1"
+        [infiniteScrollThrottle]="100"
+        (scrolled)="scrollDown()"
+        (scrolledUp)="scrollUp()"
+        [alwaysCallback]="true"
+        [scrollWindow]="false"
+    >
+        <app-file-tree-node [node]="currentTreeListing" (clickEvent)="selectTreeNode($event)"> </app-file-tree-node>
+    </div>
+    <div class="dock-panel-controls">
+        <div class="expanded button-group tiny">
+            <button class="button hollow" (click)="exportGeoJSON()">Export to GeoJSON</button>
+        </div>
+    </div>
 </div>

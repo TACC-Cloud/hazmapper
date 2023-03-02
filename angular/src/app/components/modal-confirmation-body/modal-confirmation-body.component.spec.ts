@@ -8,9 +8,8 @@ describe('ModalConfirmationBodyComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ModalConfirmationBodyComponent ]
-    })
-    .compileComponents();
+      declarations: [ModalConfirmationBodyComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

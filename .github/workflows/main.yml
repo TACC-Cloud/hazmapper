@@ -7,6 +7,56 @@ on:
     branches: [ '**' ]
 
 jobs:
+  Angular-Unit_Tests:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Node.js for use with actions
+      uses: actions/setup-node@v1
+      with:
+        node-version: 16.x
+
+    - uses: actions/cache@v1
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: npm ci
+      run: |
+        cd angular
+        touch src/environments/jwt.js
+        npm ci
+    - name: Unit Tests
+      run: |
+        cd angular
+        npm run test:ci
+
+  Angular-Linting:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Node.js for use with actions
+      uses: actions/setup-node@v1
+      with:
+        node-version: 16.x
+
+    - uses: actions/cache@v1
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: npm ci
+      run: |
+        cd angular
+        npm ci
+    - name: Linting
+      run: |
+        cd angular
+        npm run lint
   React-Unit_Tests:
     runs-on: ubuntu-18.04
     steps:

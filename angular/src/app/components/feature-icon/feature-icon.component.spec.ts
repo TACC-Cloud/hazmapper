@@ -1,7 +1,7 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
-import {FeatureIconComponent} from './feature-icon.component';
-import {Feature, IFeatureAsset} from "../../models/models";
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { FeatureIconComponent } from './feature-icon.component';
+import { Feature, IFeatureAsset } from '../../models/models';
 
 describe('FeatureIconComponent', () => {
   let component: FeatureIconComponent;
@@ -10,9 +10,9 @@ describe('FeatureIconComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FeatureIconComponent ],
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
-    }).compileComponents()
+      declarations: [FeatureIconComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -27,10 +27,10 @@ describe('FeatureIconComponent', () => {
 
   it('should render an image icon', () => {
     component.feature = new Feature({
-      type: "Feature",
-      geometry: {type: 'Point', coordinates: [0, 0]},
+      type: 'Feature',
+      geometry: { type: 'Point', coordinates: [0, 0] },
       properties: {},
-      assets: [<IFeatureAsset>{asset_type: 'image'}]
+      assets: [<IFeatureAsset>{ asset_type: 'image' }],
     });
     fixture.detectChanges();
     const i = element.querySelector('i');
@@ -39,14 +39,13 @@ describe('FeatureIconComponent', () => {
 
   it('should render an video icon', () => {
     component.feature = new Feature({
-      type: "Feature",
-      geometry: {type: 'Point', coordinates: [0, 0]},
+      type: 'Feature',
+      geometry: { type: 'Point', coordinates: [0, 0] },
       properties: {},
-      assets: [<IFeatureAsset>{asset_type: 'video'}]
+      assets: [<IFeatureAsset>{ asset_type: 'video' }],
     });
     fixture.detectChanges();
     const i = element.querySelector('i');
     expect(i.classList).toContain('fa-video');
   });
 });
-

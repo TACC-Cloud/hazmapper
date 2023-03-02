@@ -1,21 +1,25 @@
 <app-file-browser
-  [single]="true"
-  [allowFolders]=allowFolders
-  [onlyFolder]="true"
-  [heading]="'Select a Folder Containing Streetview Images'"
-  [helpText]="'Streetview image files (with gpano metadata) inside this folder will be imported (only single level).'"
-  (selection)="onSelect($event)">
+    [single]="true"
+    [allowFolders]="allowFolders"
+    [onlyFolder]="true"
+    [heading]="'Select a Folder Containing Streetview Images'"
+    [helpText]="'Streetview image files (with gpano metadata) inside this folder will be imported (only single level).'"
+    (selection)="onSelect($event)"
+>
 </app-file-browser>
 
 <div style="margin: 25px 0">
-  <label> <h5>Select Publish Organization</h5>
-    <select [(ngModel)]="selectedOrganization">
-      <option *ngFor="let org of activeStreetview.organizations" [ngValue]="org.key">{{org.name}}</option>
-    </select>
-  </label>
+    <label>
+        <h5>Select Publish Organization</h5>
+        <select [(ngModel)]="selectedOrganization">
+            <option *ngFor="let org of activeStreetview.organizations" [ngValue]="org.key">
+                {{ org.name }}
+            </option>
+        </select>
+    </label>
 </div>
 
 <div>
-  <button class="button warning" (click)="cancel()">Cancel</button>
-  <button class="button" [disabled]="!(selectedFiles.length && selectedOrganization)" (click)="publish()">Publish</button>
+    <button class="button warning" (click)="cancel()">Cancel</button>
+    <button class="button" [disabled]="!(selectedFiles.length && selectedOrganization)" (click)="publish()">Publish</button>
 </div>

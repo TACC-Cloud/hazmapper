@@ -1,4 +1,3 @@
-
 class RapidProjectRequest {
   system_id: string;
   project_id: number;
@@ -15,4 +14,4 @@ class RapidProjectRequest {
   }
 }
 
-export {RapidProjectRequest};
+export { RapidProjectRequest };

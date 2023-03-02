@@ -11,10 +11,10 @@ export interface AppEnvironment {
   production: boolean;
 }
 
-export const environment: AppEnvironment =  {
+export const environment: AppEnvironment = {
   backend: EnvironmentType.Local,
   jwt: devJWT,
-  production: false
+  production: false,
 };
 
 /*

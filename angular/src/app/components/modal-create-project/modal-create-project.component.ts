@@ -3,17 +3,16 @@ import { BsModalRef } from 'ngx-foundation';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ProjectsService } from '../../services/projects.service';
 import { Project, ProjectRequest } from '../../models/models';
-import {RemoteFile} from 'ng-tapis';
-import {ChangeDetectorRef } from '@angular/core';
+import { RemoteFile } from 'ng-tapis';
+import { ChangeDetectorRef } from '@angular/core';
 import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-modal-create-project',
   templateUrl: './modal-create-project.component.html',
-  styleUrls: ['./modal-create-project.component.styl']
+  styleUrls: ['./modal-create-project.component.styl'],
 })
 export class ModalCreateProjectComponent implements OnInit, AfterContentChecked {
-
   public readonly onClose: Subject<any> = new Subject<any>();
 
   projCreateForm: FormGroup;
@@ -26,17 +25,15 @@ export class ModalCreateProjectComponent implements OnInit, AfterContentChecked 
   selectedSystem: any;
   filesList = [];
 
-  constructor(private bsModalRef: BsModalRef,
-              private cdref: ChangeDetectorRef,
-              private projectsService: ProjectsService) { }
+  constructor(private bsModalRef: BsModalRef, private cdref: ChangeDetectorRef, private projectsService: ProjectsService) {}
 
   ngOnInit() {
     this.submitting = false;
-    this.projCreateForm = new FormGroup( {
+    this.projCreateForm = new FormGroup({
       name: new FormControl(''),
       description: new FormControl(''),
       watchContent: new FormControl(false),
-      fileName: new FormControl('')
+      fileName: new FormControl(''),
     });
   }
 
@@ -75,14 +72,10 @@ export class ModalCreateProjectComponent implements OnInit, AfterContentChecked 
 
     p.description = this.projCreateForm.get('description').value;
     p.name = this.projCreateForm.get('name').value;
-    p.system_path = this.selectedFiles.length > 0 ?
-      (this.selectedFiles[0].path || '/') :
-      (this.currentPath || '/')
+    p.system_path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path || '/' : this.currentPath || '/';
 
     p.system_id = this.selectedSystem.id;
-    p.system_file = this.projCreateForm.get('fileName').value
-      ? this.projCreateForm.get('fileName').value
-      : p.name;
+    p.system_file = this.projCreateForm.get('fileName').value ? this.projCreateForm.get('fileName').value : p.name;
 
     if (this.selectedSystem.id.includes('project')) {
       pr.observable = true;
@@ -96,16 +89,16 @@ export class ModalCreateProjectComponent implements OnInit, AfterContentChecked 
 
     pr.project = p;
 
-    this.projectsService.create(pr).subscribe((project) => {
-      this.close(project);
-    }, err => {
+    this.projectsService.create(pr).subscribe(
+      (project) => {
+        this.close(project);
+      },
+      (err) => {
+        this.errorMessage = err.error && err.error.message ? err.error.message : 'That folder is already syncing with a different map!';
 
-      this.errorMessage = err.error && err.error.message
-        ? err.error.message
-        : 'That folder is already syncing with a different map!';
-
-      this.submitting = false;
-    });
+        this.submitting = false;
+      }
+    );
   }
 
   updateFilesList(filesList: any) {

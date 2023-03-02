@@ -8,9 +8,8 @@ describe('MeasurePanelComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MeasurePanelComponent ]
-    })
-    .compileComponents();
+      declarations: [MeasurePanelComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

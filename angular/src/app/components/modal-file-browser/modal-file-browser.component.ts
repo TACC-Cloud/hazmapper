@@ -1,5 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import { RemoteFile} from 'ng-tapis/models/remote-file';
+import { Component, Input, OnInit } from '@angular/core';
+import { RemoteFile } from 'ng-tapis/models/remote-file';
 import { BsModalRef } from 'ngx-foundation/modal/bs-modal-ref.service';
 import { Subject } from 'rxjs';
 import { TapisFilesService } from '../../services/tapis-files.service';
@@ -16,10 +16,9 @@ export class ModalFileBrowserComponent implements OnInit {
   @Input() onlyFolder: false;
   selectedFiles: Array<RemoteFile> = [];
   public onClose: Subject<Array<RemoteFile>> = new Subject<Array<RemoteFile>>();
-  constructor(private modalRef: BsModalRef, private tapisFilesService: TapisFilesService) { }
+  constructor(private modalRef: BsModalRef, private tapisFilesService: TapisFilesService) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   onSelect(items: Array<RemoteFile>) {
     this.selectedFiles = items;

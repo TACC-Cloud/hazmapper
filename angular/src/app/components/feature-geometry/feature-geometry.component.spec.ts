@@ -8,9 +8,8 @@ describe('FeatureGeometryComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FeatureGeometryComponent ]
-    })
-    .compileComponents();
+      declarations: [FeatureGeometryComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

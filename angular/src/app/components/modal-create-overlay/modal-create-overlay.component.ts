@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
-import {Project} from '../../models/models';
-import {Subject} from 'rxjs';
-import {BsModalRef, BsModalService} from 'ngx-foundation';
-import {GeoDataService} from '../../services/geo-data.service';
-import {ProjectsService} from '../../services/projects.service';
-import {TapisFilesService} from "../../services/tapis-files.service";
-import {RemoteFile} from "ng-tapis";
+import { FormControl, FormGroup } from '@angular/forms';
+import { Project } from '../../models/models';
+import { Subject } from 'rxjs';
+import { BsModalRef, BsModalService } from 'ngx-foundation';
+import { GeoDataService } from '../../services/geo-data.service';
+import { ProjectsService } from '../../services/projects.service';
+import { TapisFilesService } from '../../services/tapis-files.service';
+import { RemoteFile } from 'ng-tapis';
 
 @Component({
   selector: 'app-modal-create-overlay',
   templateUrl: './modal-create-overlay.component.html',
-  styleUrls: ['./modal-create-overlay.component.styl']
+  styleUrls: ['./modal-create-overlay.component.styl'],
 })
 export class ModalCreateOverlayComponent implements OnInit {
   remoteFileData: Array<RemoteFile> = new Array<RemoteFile>();
@@ -19,23 +19,25 @@ export class ModalCreateOverlayComponent implements OnInit {
   project: Project;
   public readonly onClose: Subject<any> = new Subject<any>();
 
-  constructor(private bsModalRef: BsModalRef,
-              private geoDataService: GeoDataService,
-              private projectsService: ProjectsService,
-              private bsModalService: BsModalService,
-              private tapisFilesService: TapisFilesService) { }
+  constructor(
+    private bsModalRef: BsModalRef,
+    private geoDataService: GeoDataService,
+    private projectsService: ProjectsService,
+    private bsModalService: BsModalService,
+    private tapisFilesService: TapisFilesService
+  ) {}
 
   ngOnInit() {
     this.remoteFileData = Array<RemoteFile>();
-    this.projectsService.activeProject.subscribe( (next) => {
+    this.projectsService.activeProject.subscribe((next) => {
       this.project = next;
     });
-    this.ovCreateForm = new FormGroup( {
+    this.ovCreateForm = new FormGroup({
       label: new FormControl(''),
       minLat: new FormControl(''),
       maxLat: new FormControl(''),
       minLon: new FormControl(''),
-      maxLon: new FormControl( '')
+      maxLon: new FormControl(''),
     });
   }
 
@@ -61,5 +63,3 @@ export class ModalCreateOverlayComponent implements OnInit {
     this.bsModalRef.hide();
   }
 }
-
-

@@ -1,10 +1,12 @@
 {
-  "extends": "tslint:recommended",
+  "extends": [
+    "tslint:recommended"
+  ],
   "rulesDirectory": [
     "codelyzer"
   ],
   "rules": {
-    "no-trailing-whitespace": false,
+    "no-trailing-whitespace": true,
     "no-angle-bracket-type-assertion": false,
     "variable-name": false,
     "array-type": false,
@@ -20,7 +22,12 @@
     "max-classes-per-file": false,
     "max-line-length": [
       true,
-      140
+      {
+        "limit": 140,
+        "ignore-pattern": "^import |^export {(.*?)}",
+        "check-strings": true,
+        "check-regex": true
+      }
     ],
     "member-access": false,
     "member-ordering": [
@@ -59,10 +66,8 @@
     ],
     "object-literal-sort-keys": false,
     "ordered-imports": false,
-    "quotemark": [
-      true,
-      "single"
-    ],
+    "quotemark": [true, "single", "avoid-escape"],
+    "whitespace": false,
     "trailing-comma": false,
     "no-output-on-prefix": true,
     "no-inputs-metadata-property": true,

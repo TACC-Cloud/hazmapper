@@ -1,9 +1,10 @@
 <app-file-browser
-  [single]=single
-  [allowFolders]=allowFolders
-  [allowedExtensions]=allowedExtensions
-  [onlyFolder]=onlyFolder
-  (selection)="onSelect($event)">
+    [single]="single"
+    [allowFolders]="allowFolders"
+    [allowedExtensions]="allowedExtensions"
+    [onlyFolder]="onlyFolder"
+    (selection)="onSelect($event)"
+>
 </app-file-browser>
 <div>
     <button class="button warning" (click)="cancel()">Cancel</button>

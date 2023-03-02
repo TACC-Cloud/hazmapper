@@ -1,32 +1,32 @@
-import {Component, EventEmitter, Input, OnInit, Output, ElementRef, ViewChild} from '@angular/core';
-import {ProjectsService} from '../../services/projects.service';
-import {Project} from '../../models/models';
+import { Component, EventEmitter, Input, OnInit, Output, ElementRef, ViewChild } from '@angular/core';
+import { ProjectsService } from '../../services/projects.service';
+import { Project } from '../../models/models';
 
 @Component({
   selector: 'app-edit-name-input',
   templateUrl: './edit-name-input.component.html',
-  styleUrls: ['./edit-name-input.component.styl']
+  styleUrls: ['./edit-name-input.component.styl'],
 })
 export class EditNameInputComponent implements OnInit {
   @Input() inputType: string;
   @Input() currentName: string;
   @Input() errorMessage: string;
-  @Input() inputError: boolean = false;
+  @Input() inputError = false;
   @Output() nameChange: EventEmitter<string> = new EventEmitter<string>();
-  @ViewChild('activeText', {static: false}) activeInput: ElementRef<HTMLInputElement>;
+  @ViewChild('activeText', { static: false })
+  activeInput: ElementRef<HTMLInputElement>;
 
   activeProject: Project;
 
-  inputShown: boolean = false;
+  inputShown = false;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   onEnter(value: string) {
     value = value.trim();
-    if (value && value != this.currentName) {
+    if (value && value !== this.currentName) {
       this.nameChange.next(value);
     }
 
@@ -40,8 +40,8 @@ export class EditNameInputComponent implements OnInit {
     this.inputShown = true;
     setTimeout(() => {
       this.activeInput.nativeElement.value = this.currentName;
-      this.activeInput.nativeElement.focus()
-      this.activeInput.nativeElement.select()
+      this.activeInput.nativeElement.focus();
+      this.activeInput.nativeElement.select();
     }, 1);
   }
 

@@ -8,21 +8,22 @@ import { StreetviewAuthenticationService } from 'src/app/services/streetview-aut
 @Component({
   selector: 'app-streetview-logs',
   templateUrl: './streetview-logs.component.html',
-  styleUrls: ['./streetview-logs.component.styl']
+  styleUrls: ['./streetview-logs.component.styl'],
 })
 export class StreetviewLogsComponent implements OnInit, OnDestroy {
   public progressNotifications: Array<IProgressNotification> = [];
   private timerSub: any;
 
-  constructor(private notificationsService: NotificationsService,
-              private bsModalService: BsModalService,
-              private streetviewAuthenticationService: StreetviewAuthenticationService,
-             ) { }
+  constructor(
+    private notificationsService: NotificationsService,
+    private bsModalService: BsModalService,
+    private streetviewAuthenticationService: StreetviewAuthenticationService
+  ) {}
 
   ngOnInit() {
     this.notificationsService.progressNotifications.subscribe((next: Array<IProgressNotification>) => {
       this.progressNotifications = next;
-      if(next.some(pn => pn.status === 'success')) {
+      if (next.some((pn) => pn.status === 'success')) {
         this.streetviewAuthenticationService.getStreetviews();
       }
     });
@@ -32,9 +33,9 @@ export class StreetviewLogsComponent implements OnInit, OnDestroy {
 
   openDetailLogModal(pn: IProgressNotification) {
     const initialState = {
-      notification: pn
+      notification: pn,
     };
-    this.bsModalService.show(ModalStreetviewLogComponent, {initialState});
+    this.bsModalService.show(ModalStreetviewLogComponent, { initialState });
   }
 
   deleteDoneLog(pn: IProgressNotification) {
@@ -51,5 +52,4 @@ export class StreetviewLogsComponent implements OnInit, OnDestroy {
       this.timerSub.unsubscribe();
     }
   }
-
 }

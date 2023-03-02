@@ -1,63 +1,71 @@
-<h4> Create a new Map </h4>
+<h4>Create a new Map</h4>
 
 <form [formGroup]="projCreateForm" (ngSubmit)="submit()">
-  <div style="display: flex; flex-direction: row">
-    <div style="width: 100%; padding: 20px">
-      <label> Name:
-        <input type="text" formControlName="name" required="true" (input)="setFileName($event)">
-      </label>
+    <div style="display: flex; flex-direction: row">
+        <div style="width: 100%; padding: 20px">
+            <label>
+                Name:
+                <input type="text" formControlName="name" required="true" (input)="setFileName($event)" />
+            </label>
 
-      <label> Description
-        <textarea formControlName="description" required="true"></textarea>
-      </label>
+            <label>
+                Description
+                <textarea formControlName="description" required="true"></textarea>
+            </label>
 
-        <div style="padding: 20px 0px">
-          <label> Custom file name:
-            <div style="display: flex; flex-direction: row">
-              <input type="text" formControlName="fileName" [value]="fileName">
-              <span style="line-height: 1.5; font-size: 1rem; margin: 5px">.hazmapper</span>
+            <div style="padding: 20px 0px">
+                <label>
+                    Custom file name:
+                    <div style="display: flex; flex-direction: row">
+                        <input type="text" formControlName="fileName" [value]="fileName" />
+                        <span style="line-height: 1.5; font-size: 1rem; margin: 5px">.hazmapper</span>
+                    </div>
+                </label>
             </div>
-          </label>
+
+            <div style="padding: 20px 0px">
+                <label>
+                    Save Location:
+                    <span style="color: #007cb6">{{ selectedFiles.length > 0 ? selectedFiles[0].path || '/' : currentPath || '/' }}</span>
+                </label>
+            </div>
+
+            <div style="padding: 20px 0px">
+                <label>
+                    <span style="padding-right: 10px">Sync Folder:</span>
+                    <input formControlName="watchContent" type="checkbox" />
+                </label>
+                <small><em>When enabled, files in this folder are automatically synced into the map periodically.</em></small>
+            </div>
+
+            <div>
+                <span style="color: red">{{ errorMessage }}</span>
+            </div>
         </div>
 
-        <div style="padding: 20px 0px">
-          <label> Save Location:
-            <span style="color: #007cb6">{{selectedFiles.length > 0 ? (selectedFiles[0].path || '/') : (currentPath || '/')}}</span>
-          </label>
+        <div>
+            <app-file-browser
+                [single]="true"
+                [allowFolders]="true"
+                [allowedExtensions]="[]"
+                [onlyFolder]="true"
+                [showPublicSystems]="false"
+                [heading]="'Select Link Save Location'"
+                [helpText]="
+                    'If no folder is selected, the link file will be saved to the root of the selected system.' +
+                    'If you select a project, you can link the current map to the project.'
+                "
+                (selection)="onSelect($event)"
+                (currentPath)="setCurrentPath($event)"
+                (getFilesList)="updateFilesList($event)"
+                (systemSelection)="onSystemSelect($event)"
+            >
+            </app-file-browser>
         </div>
-
-        <div style="padding: 20px 0px">
-          <label>
-            <span style="padding-right: 10px">Sync Folder:</span>
-            <input formControlName="watchContent" type="checkbox">
-          </label>
-          <small><em>When enabled, files in this folder are automatically synced into the map periodically.</em></small>
-        </div>
-
-        <div><span style="color: red">{{errorMessage}}</span></div>
-
     </div>
 
-    <div>
-        <app-file-browser
-          [single]=true
-          [allowFolders]=true
-          [allowedExtensions]=[]
-          [onlyFolder]=true
-          [showPublicSystems]=false
-          [heading]="'Select Link Save Location'"
-          [helpText]="'If no folder is selected, the link file will be saved to the root of the selected system.' +
-          'If you select a project, you can link the current map to the project.'"
-          (selection)="onSelect($event)"
-          (currentPath)="setCurrentPath($event)"
-          (getFilesList)="updateFilesList($event)"
-          (systemSelection)="onSystemSelect($event)">
-        </app-file-browser>
+    <div class="button-group small">
+        <button class="button small warning" type="button" (click)="close()">Close</button>
+        <button class="button small align-right" type="submit" [disabled]="!projCreateForm.valid || submitting">Submit</button>
     </div>
-  </div>
-
-  <div class="button-group small">
-    <button class="button small warning" type="button" (click)="close()">Close</button>
-    <button class="button small align-right" type="submit" [disabled]="(!projCreateForm.valid || submitting)">Submit</button>
-  </div>
 </form>

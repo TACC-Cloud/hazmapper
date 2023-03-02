@@ -8,9 +8,8 @@ describe('PointCloudPanelRowComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PointCloudPanelRowComponent ]
-    })
-    .compileComponents();
+      declarations: [PointCloudPanelRowComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

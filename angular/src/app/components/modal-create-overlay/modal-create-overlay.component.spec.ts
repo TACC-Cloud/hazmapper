@@ -8,9 +8,8 @@ describe('ModalCreateOverlayComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ModalCreateOverlayComponent ]
-    })
-    .compileComponents();
+      declarations: [ModalCreateOverlayComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

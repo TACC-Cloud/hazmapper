@@ -1,8 +1,7 @@
-import {featureArray} from '../fixtures/feature-array';
+import { featureArray } from '../fixtures/feature-array';
 import { PathTree } from './path-tree';
 
 describe('FeatureTree', () => {
-
   it('should init a tree', () => {
     const tree = new PathTree<number>(null);
 
@@ -34,11 +33,9 @@ describe('FeatureTree', () => {
     const tree = new PathTree<number>(null);
     tree.insert('a/b/c/file1.txt', 1, null);
     tree.insert('a/b/c/file2.txt', 2, null);
-    console.log(tree)
+    console.log(tree);
     for (const child of tree.getChildren()) {
       console.log(child);
-
     }
   });
-
 });

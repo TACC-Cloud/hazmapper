@@ -1,11 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PointCloudsPanelComponent } from './point-clouds-panel.component';
-import {instance, mock} from 'ts-mockito';
-import {GeoDataService} from '../../services/geo-data.service';
-import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
-import {ProjectsService} from '../../services/projects.service';
-import {BsModalService} from 'ngx-foundation';
+import { instance, mock } from 'ts-mockito';
+import { GeoDataService } from '../../services/geo-data.service';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ProjectsService } from '../../services/projects.service';
+import { BsModalService } from 'ngx-foundation';
 
 describe('PointCloudsPanelComponent', () => {
   let component: PointCloudsPanelComponent;
@@ -17,20 +17,22 @@ describe('PointCloudsPanelComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      declarations: [ PointCloudsPanelComponent ],
+      declarations: [PointCloudsPanelComponent],
       providers: [
         {
-          provide: GeoDataService, useFactory: () => instance(MockGeoDataService)
+          provide: GeoDataService,
+          useFactory: () => instance(MockGeoDataService),
         },
         {
-          provide: ProjectsService, useFactory: () => instance(MockProjectsService)
+          provide: ProjectsService,
+          useFactory: () => instance(MockProjectsService),
         },
         {
-          provide: BsModalService, useFactory: () => instance(MockModalService)
-        }
-      ]
-    })
-    .compileComponents();
+          provide: BsModalService,
+          useFactory: () => instance(MockModalService),
+        },
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

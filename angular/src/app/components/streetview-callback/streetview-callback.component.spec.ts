@@ -8,9 +8,8 @@ describe('StreetviewCallbackComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ StreetviewCallbackComponent ]
-    })
-    .compileComponents();
+      declarations: [StreetviewCallbackComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

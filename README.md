@@ -15,8 +15,8 @@ See https://github.com/TACC-Cloud/geoapi which is an associated restful API.
 ### Development server
 
 Two ways to run a dev server:
-* `ng serve --host hazmapper.local`. Navigate to `http://hazmapper.local:4200/`.  (Note that `hazmapper.local` needs to be added to your `/etc/hosts`)
-* `ng serve`. Navigate to `http://localhost:4200/`.
+* `npm run start:local`. Navigate to `http://hazmapper.local:4200/`.  (Note that `hazmapper.local` needs to be added to your `/etc/hosts`)
+* `npm run start`. Navigate to `http://localhost:4200/`.
 
 The app will automatically reload if you change any of the source files.
 
@@ -62,11 +62,21 @@ Run `ng generate component components/component-name` to generate a new componen
 
 ### Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
 ### Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Run `npm run test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+### Running linters
+
+Run `npm run lint` to run all of the linters.
+
+Run `npm run lint:js` to run linter for angular files.
+Run `npm run lint:css` to run linter for css files.
+
+Run `npm run lint:js -- --fix` to fix angular files.
+Run `npm run lint:css -- --fix` to fix css files.
 
 ## Kubernetes (Production/Staging environments)
 

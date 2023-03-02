@@ -7,13 +7,12 @@ import { StreetviewAuthenticationService } from 'src/app/services/streetview-aut
 @Component({
   selector: 'app-streetview-assets',
   templateUrl: './streetview-assets.component.html',
-  styleUrls: ['./streetview-assets.component.styl']
+  styleUrls: ['./streetview-assets.component.styl'],
 })
 export class StreetviewAssetsComponent implements OnInit {
   public activeStreetview: Streetview;
 
-  constructor(private streetviewAuthService: StreetviewAuthenticationService,
-              private bsModalService: BsModalService) { }
+  constructor(private streetviewAuthService: StreetviewAuthenticationService, private bsModalService: BsModalService) {}
 
   ngOnInit() {
     this.streetviewAuthService.activeStreetview.subscribe((sv: Streetview) => {
@@ -23,7 +22,7 @@ export class StreetviewAssetsComponent implements OnInit {
 
   openStreetviewInstanceInfoModal(streetviewInstanceId: number) {
     const initialState = {
-      streetviewInstanceId
+      streetviewInstanceId,
     };
     this.bsModalService.show(ModalStreetviewInfoComponent, { initialState });
   }

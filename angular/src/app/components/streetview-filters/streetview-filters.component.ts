@@ -1,19 +1,18 @@
-import {Component, OnInit} from '@angular/core';
-import {Streetview, StreetviewOrganization} from '../../models/streetview';
-import {StreetviewService} from '../../services/streetview.service';
-import {StreetviewAuthenticationService} from '../../services/streetview-authentication.service';
+import { Component, OnInit } from '@angular/core';
+import { Streetview, StreetviewOrganization } from '../../models/streetview';
+import { StreetviewService } from '../../services/streetview.service';
+import { StreetviewAuthenticationService } from '../../services/streetview-authentication.service';
 
 @Component({
   selector: 'app-streetview-filters',
   templateUrl: './streetview-filters.component.html',
-  styleUrls: ['./streetview-filters.component.styl']
+  styleUrls: ['./streetview-filters.component.styl'],
 })
 export class StreetviewFiltersComponent implements OnInit {
   public activeStreetview: Streetview;
   public organizations = [];
 
-  constructor(private streetviewAuthenticationService: StreetviewAuthenticationService,
-              private streetviewService: StreetviewService) {}
+  constructor(private streetviewAuthenticationService: StreetviewAuthenticationService, private streetviewService: StreetviewService) {}
 
   ngOnInit() {
     this.streetviewAuthenticationService.activeStreetview.subscribe((sv: Streetview) => {
@@ -27,7 +26,7 @@ export class StreetviewFiltersComponent implements OnInit {
 
   addOrRemoveOrganization(id: string) {
     if (this.organizations.includes(id)) {
-      this.streetviewService.activeMapillaryOrganizations = this.organizations.filter(org => org !== id);
+      this.streetviewService.activeMapillaryOrganizations = this.organizations.filter((org) => org !== id);
     } else {
       this.streetviewService.activeMapillaryOrganizations = [...this.organizations, id];
     }
@@ -37,4 +36,3 @@ export class StreetviewFiltersComponent implements OnInit {
     return this.organizations.includes(so.key);
   }
 }
-
