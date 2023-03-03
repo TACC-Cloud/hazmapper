@@ -8,7 +8,7 @@
 
 - DES-2131: Fix linting and testing and add github ci testing. (#95) 
 
-## [2.10]
+## 2.10
 
 _No release_
 
