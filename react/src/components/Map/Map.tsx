@@ -1,8 +1,14 @@
 import React from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useLeaflet } from 'react-leaflet';
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useLeaflet,
+} from 'react-leaflet';
 import MarkerClusterGroup from '@changey/react-leaflet-markercluster';
 import { TileServerLayer, FeatureCollection } from '../../types';
-import * as L from "leaflet";
+import * as L from 'leaflet';
 import 'leaflet.markercluster';
 
 import 'leaflet/dist/leaflet.css';
@@ -66,12 +72,14 @@ const Map: React.FC<MapProps> = ({ baseLayers, featureCollection }) => {
         }
       >
         {pointGeometryFeatures.map((f) => (
-          <Marker key={f.id} position={[f.geometry.coordinates[1], f.geometry.coordinates[0]]}>
+          <Marker
+            key={f.id}
+            position={[f.geometry.coordinates[1], f.geometry.coordinates[0]]}
+          >
             <Popup>{f.id}</Popup>
           </Marker>
         ))}
       </MarkerClusterGroup>
-
     </MapContainer>
   );
 };
