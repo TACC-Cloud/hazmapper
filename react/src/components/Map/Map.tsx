@@ -4,7 +4,6 @@ import {
   TileLayer,
   Marker,
   Popup,
-  useLeaflet,
 } from 'react-leaflet';
 import MarkerClusterGroup from '@changey/react-leaflet-markercluster';
 import { TileServerLayer, FeatureCollection } from '../../types';
