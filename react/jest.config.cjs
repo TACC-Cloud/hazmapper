@@ -138,6 +138,9 @@ module.exports = {
   // A list of paths to snapshot serializer modules Jest should use for snapshot testing
   // snapshotSerializers: [],
 
+  // Using ts-jset https://kulshekhar.github.io/ts-jest/docs/getting-started/installation
+  preset: 'ts-jest',
+
   // The test environment that will be used for testing
   testEnvironment: 'jsdom'
 
