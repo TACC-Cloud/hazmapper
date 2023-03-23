@@ -35,7 +35,7 @@ export interface Feature {
    */
   geometry: {
     type: string;
-    coordinates: [number, number];
+    coordinates: number[];
   };
   /**
    * Additional properties associated with the feature, represented as a generic object.
@@ -58,7 +58,7 @@ export class FeatureClass implements Feature {
     public type: string,
     public geometry: {
       type: string;
-      coordinates: [number, number];
+      coordinates: number[];
     },
     public properties: any,
     public styles: any,

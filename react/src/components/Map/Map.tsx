@@ -8,6 +8,7 @@ import {
 import MarkerClusterGroup from '@changey/react-leaflet-markercluster';
 import { TileServerLayer, FeatureCollection } from '../../types';
 import * as L from 'leaflet';
+import { LatLngTuple, MarkerCluster } from 'leaflet';
 import 'leaflet.markercluster';
 
 import 'leaflet/dist/leaflet.css';
@@ -16,9 +17,9 @@ import 'leaflet/dist/leaflet.css';
 /* TODO: consider createTileLayerComponent
 /* TODO: support layers with type 'arcgis' and 'wms' (WMSTileLayer)*/
 
-const centerPosition = [32.6185055555556, -80.780375];
+const centerPosition: LatLngTuple = [32.6185055555556, -80.780375];
 
-interface MapProps {
+interface LeafletMapProps {
   /**
    * Tile servers used as base layers of map
    */
@@ -39,8 +40,10 @@ const ClusterMarkerIcon = (childCount: number) => {
 
 /**
  * A component that displays a leaflet map of hazmapper data
+ *
+ * Note this is not called Map as causes an issue with react-leaflet
  */
-const Map: React.FC<MapProps> = ({ baseLayers, featureCollection }) => {
+const LeafletMap: React.FC<LeafletMapProps> = ({ baseLayers, featureCollection }) => {
   const activeBaseLayers = baseLayers.filter(
     (layer) => layer.uiOptions.isActive
   );
@@ -60,13 +63,12 @@ const Map: React.FC<MapProps> = ({ baseLayers, featureCollection }) => {
           key={layer.id}
           url={layer.url}
           attribution={layer.attribution}
-          options={layer.tileOptions}
           zIndex={layer.uiOptions.zIndex}
           opacity={layer.uiOptions.opacity}
         />
       ))}
       <MarkerClusterGroup
-        iconCreateFunction={(cluster) =>
+        iconCreateFunction={(cluster: MarkerCluster) =>
           ClusterMarkerIcon(cluster.getChildCount())
         }
       >
@@ -83,4 +85,4 @@ const Map: React.FC<MapProps> = ({ baseLayers, featureCollection }) => {
   );
 };
 
-export default Map;
+export default LeafletMap;
