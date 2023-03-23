@@ -26,7 +26,7 @@ export interface TileServerLayer {
     /** The z-index of the layer. */
     zIndex: number;
     /** The opacity of the layer. */
-    opacity: string;
+    opacity: number;
     /** Whether the layer is active or not. */
     isActive: boolean;
     /** Whether to show an input for the layer or not. */
