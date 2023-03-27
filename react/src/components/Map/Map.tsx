@@ -10,7 +10,7 @@ import 'leaflet/dist/leaflet.css';
 
 /* TODO: review if best approach is to style map with .leaflet-container */
 /* TODO: consider createTileLayerComponent
-/* TODO: support layers with type 'arcgis' and 'wms' (WMSTileLayer)*/
+/* TODO: support layers with type 'arcgis' and 'wms' (WMSTileLayer) https://jira.tacc.utexas.edu/browse/WG-6 */
 
 const centerPosition: LatLngTuple = [32.6185055555556, -80.780375];
 
