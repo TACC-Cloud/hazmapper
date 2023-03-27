@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-} from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import MarkerClusterGroup from '@changey/react-leaflet-markercluster';
 import { TileServerLayer, FeatureCollection } from '../../types';
 import * as L from 'leaflet';
@@ -43,7 +38,10 @@ const ClusterMarkerIcon = (childCount: number) => {
  *
  * Note this is not called Map as causes an issue with react-leaflet
  */
-const LeafletMap: React.FC<LeafletMapProps> = ({ baseLayers, featureCollection }) => {
+const LeafletMap: React.FC<LeafletMapProps> = ({
+  baseLayers,
+  featureCollection,
+}) => {
   const activeBaseLayers = baseLayers.filter(
     (layer) => layer.uiOptions.isActive
   );
