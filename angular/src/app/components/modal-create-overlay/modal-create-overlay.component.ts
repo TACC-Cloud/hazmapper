@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Project } from '../../models/models';
 import { Subject } from 'rxjs';
-import { BsModalRef, BsModalService } from 'ngx-foundation';
+import { BsModalRef } from 'ngx-foundation';
 import { GeoDataService } from '../../services/geo-data.service';
 import { ProjectsService } from '../../services/projects.service';
 import { TapisFilesService } from '../../services/tapis-files.service';
@@ -23,8 +23,7 @@ export class ModalCreateOverlayComponent implements OnInit {
     private bsModalRef: BsModalRef,
     private geoDataService: GeoDataService,
     private projectsService: ProjectsService,
-    private bsModalService: BsModalService,
-    private tapisFilesService: TapisFilesService
+    public tapisFilesService: TapisFilesService
   ) {}
 
   ngOnInit() {

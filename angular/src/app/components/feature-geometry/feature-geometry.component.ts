@@ -10,7 +10,7 @@ import * as turf from '@turf/turf';
 export class FeatureGeometryComponent implements OnInit {
   private _feature: Feature;
   private area: any;
-  private bbox: any;
+  public bbox: any;
   private length: any;
   private hasLength: boolean;
   private hasArea: boolean;

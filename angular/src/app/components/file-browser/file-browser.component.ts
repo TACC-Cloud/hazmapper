@@ -16,17 +16,17 @@ import { max, take } from 'rxjs/operators';
 export class FileBrowserComponent implements OnInit {
   static limit = 200;
 
-  @Input() single = false;
-  @Input() allowFolders = false;
-  @Input() onlyFolder = false;
-  @Input() showPublicSystems = true;
-  @Input() heading = 'Select Files';
-  @Input() helpText = 'Note: Only files are selectable, not folders. Double click on a folder to navigate into it.';
-  @Input() allowedExtensions: Array<string> = [];
-  @Output() selection: EventEmitter<Array<RemoteFile>> = new EventEmitter<Array<RemoteFile>>();
-  @Output() systemSelection: EventEmitter<any> = new EventEmitter<any>();
-  @Output() getFilesList: EventEmitter<any> = new EventEmitter<any>();
-  @Output() currentPath: EventEmitter<string> = new EventEmitter<string>();
+  @Input() public single = false;
+  @Input() public allowFolders = false;
+  @Input() public onlyFolder = false;
+  @Input() public showPublicSystems = true;
+  @Input() public heading = 'Select Files';
+  @Input() public helpText = 'Note: Only files are selectable, not folders. Double click on a folder to navigate into it.';
+  @Input() public allowedExtensions: Array<string> = [];
+  @Output() public selection: EventEmitter<Array<RemoteFile>> = new EventEmitter<Array<RemoteFile>>();
+  @Output() public systemSelection: EventEmitter<any> = new EventEmitter<any>();
+  @Output() public getFilesList: EventEmitter<any> = new EventEmitter<any>();
+  @Output() public currentPath: EventEmitter<string> = new EventEmitter<string>();
 
   private currentUser: AuthenticatedUser;
   private currentDirectory: RemoteFile;
@@ -40,7 +40,7 @@ export class FileBrowserComponent implements OnInit {
   public fileDeselectMode = false;
 
   public projects: Array<SystemSummary>;
-  private selectedSystem: SystemSummary;
+  public selectedSystem: SystemSummary;
   public myDataSystem: SystemSummary;
   public communityDataSystem: SystemSummary;
   public publishedDataSystem: SystemSummary;
