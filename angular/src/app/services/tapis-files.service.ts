@@ -18,12 +18,7 @@ export class TapisFilesService {
   }
 
   listFiles(system: string, path: string, offset: number, limit: number) {
-    return this.tapis.filesList(
-      system,
-      path,
-      offset,
-      limit,
-    );
+    return this.tapis.filesList(system, path, offset, limit);
   }
 
   public getParentPath(path: string): string {

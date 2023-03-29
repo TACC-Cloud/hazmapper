@@ -112,7 +112,7 @@ export class AgaveSystemsService {
         /*callbackURL*/ '',
         /*fileName*/ `${proj.system_file}.hazmapper`,
         /*urlToIngest:*/ '',
-        data,
+        data
       )
       .subscribe(
         (resp) => {
@@ -125,20 +125,18 @@ export class AgaveSystemsService {
   }
 
   public deleteFile(proj: Project) {
-    this.tapis
-      .filesDelete(proj.system_id, `${proj.system_path}/${proj.system_file}.hazmapper`)
-      .subscribe(
-        (resp) => {
-          this.notificationsService.showSuccessToast(
-            `Successfully deleted file ${proj.system_id}${proj.system_path}/${proj.system_file}.hazmapper.`
-          );
-        },
-        (error) => {
-          // TODO: Handle this
-          // 404 happens when redundant delete
-          // 502/500 I'm not sure why...
-          console.log(error);
-        }
-      );
+    this.tapis.filesDelete(proj.system_id, `${proj.system_path}/${proj.system_file}.hazmapper`).subscribe(
+      (resp) => {
+        this.notificationsService.showSuccessToast(
+          `Successfully deleted file ${proj.system_id}${proj.system_path}/${proj.system_file}.hazmapper.`
+        );
+      },
+      (error) => {
+        // TODO: Handle this
+        // 404 happens when redundant delete
+        // 502/500 I'm not sure why...
+        console.log(error);
+      }
+    );
   }
 }

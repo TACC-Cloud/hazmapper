@@ -118,7 +118,7 @@ import { StreetviewFiltersComponent } from './components/streetview-filters/stre
     ModalStreetviewUsernameComponent,
     ModalStreetviewOrganizationComponent,
     StreetviewAssetDetailComponent,
-    StreetviewFiltersComponent
+    StreetviewFiltersComponent,
   ],
   imports: [
     CommonModule,
