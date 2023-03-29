@@ -6,12 +6,12 @@
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
-    "module": "esnext",
+    "module": "es6",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es6",
+    "target": "es2015",
     "strict": false,
     "typeRoots": [
       "node_modules/@types",
@@ -22,9 +22,5 @@
       "dom"
     ],
     "skipLibCheck": true
-  },
-  "include": [
-    "./src/",
-    "node_modules/ng-tapis/**/*.ts"
-  ]
+  }
 }
