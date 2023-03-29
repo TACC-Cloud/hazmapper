@@ -5,7 +5,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { APP_BASE_HREF } from '@angular/common';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ModalModule, BsDropdownModule, TooltipModule, TabsModule, PaginationModule } from 'ngx-foundation';
-import { ApiModule } from 'ng-tapis';
+import { ApiModule, Configuration, ConfigurationParameters } from 'ng-tapis';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MapComponent } from './components/map/map.component';
@@ -118,12 +118,15 @@ import { StreetviewFiltersComponent } from './components/streetview-filters/stre
     ModalStreetviewUsernameComponent,
     ModalStreetviewOrganizationComponent,
     StreetviewAssetDetailComponent,
-    StreetviewFiltersComponent,
+    StreetviewFiltersComponent
   ],
   imports: [
     CommonModule,
-    // this is for the ng-tapis library
-    ApiModule,
+    ApiModule.forRoot(() => {
+      return new Configuration({
+        basePath: `https://agave.designsafe-ci.org/`,
+      });
+    }),
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
