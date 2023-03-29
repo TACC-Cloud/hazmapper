@@ -4,14 +4,33 @@ Hazmapper is an application for creating, visualizing, and analyzing geospatial 
 
 See https://github.com/TACC-Cloud/geoapi which is an associated restful API.
 
+## Local Development
 ### Getting started
 - Get a JWT from Joe M or someone on the CIC team
 - GOTO jwt.io and edit that JWT to have your username/details
 - Create a file in src/environments called jwt.ts that has this in it: 
+        
+        export const jwt = "YOUR JWT FROM ABOVE"
 
-    export const jwt = "YOUR JWT FROM ABOVE"
+### Development server
 
-## Local React Development (work-in-progress)
+Two ways to run a dev server:
+* `npm run start:local`. Navigate to `http://hazmapper.local:4200/`.  (Note that `hazmapper.local` needs to be added to your `/etc/hosts`)
+* `npm run start`. Navigate to `http://localhost:4200/`.
+
+The app will automatically reload if you change any of the source files.
+
+### Configuring geoapi backend
+
+The `backend` in [src/environments/environment.ts](src/environments/environment.ts) can be used to select which backend `geoapi` is used by the app:
+
+* `EnvironmentType.Production`
+* `EnvironmentType.Staging`
+* `EnvironmentType.Local`\*
+
+\*See https://github.com/TACC-Cloud/geoapi for more details on running geoapi locally.
+
+## React client
 
 `react/` has the react client
 
@@ -33,25 +52,17 @@ Run `npm run lint` to run linter
 
 Run `npm run lint:fix` to fix any linting/pretty errors
 
-## Local Angular Development
+## Angular client
 
 `angular/` has the angular client
 
-Two ways to run a dev server:
-* `npm run start:local`. Navigate to `http://hazmapper.local:4200/`.  (Note that `hazmapper.local` needs to be added to your `/etc/hosts`)
-* `npm run start`. Navigate to `http://localhost:4200/`.
+### Code scaffolding
 
-The app will automatically reload if you change any of the source files.
+Run `ng generate component components/component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-### Configuring which geoapi-backend is used
+### Build
 
-The `backend` in [src/environments/environment.ts](src/environments/environment.ts) can be used to select which backend `geoapi` is used by the app:
-
-* `EnvironmentType.Production`
-* `EnvironmentType.Staging`
-* `EnvironmentType.Local`\*
-
-\*See https://github.com/TACC-Cloud/geoapi for more details on running geoapi locally.
+Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
 ### Running unit tests
 
@@ -66,10 +77,6 @@ Run `npm run lint:css` to run linter for css files.
 
 Run `npm run lint:js -- --fix` to fix angular files.
 Run `npm run lint:css -- --fix` to fix css files.
-
-### Code scaffolding
-
-Run `ng generate component components/component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
 ## Kubernetes (Production/Staging environments)
 
