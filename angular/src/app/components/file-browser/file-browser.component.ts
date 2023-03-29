@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AuthenticatedUser, AuthService } from '../../services/authentication.service';
-import { RemoteFile } from 'ng-tapis/models/remote-file';
+import { RemoteFile } from 'ng-tapis';
 import { combineLatest } from 'rxjs';
 import { SystemSummary } from 'ng-tapis';
 import { TapisFilesService } from '../../services/tapis-files.service';

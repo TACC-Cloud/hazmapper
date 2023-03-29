@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { System, SystemSummary } from 'ng-tapis';
-import { ApiService } from 'ng-tapis';
+import { DefaultService, SystemSummary } from 'ng-tapis';
 import { NotificationsService } from './notifications.service';
-import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EnvService } from '../services/env.service';
 import { DesignSafeProjectCollection, Project, AgaveFileOperations } from '../models/models';
@@ -16,14 +15,14 @@ export class AgaveSystemsService {
   private _projects: ReplaySubject<SystemSummary[]> = new ReplaySubject<SystemSummary[]>(1);
   public readonly projects: Observable<SystemSummary[]> = this._projects.asObservable();
   constructor(
-    private tapis: ApiService,
+    private tapis: DefaultService,
     private notificationsService: NotificationsService,
     private envService: EnvService,
     private http: HttpClient
   ) {}
 
   list() {
-    this.tapis.systemsList({ type: 'STORAGE' }).subscribe(
+    this.tapis.systemsList('STORAGE').subscribe(
       (resp) => {
         this._systems.next(resp.result);
       },
@@ -106,17 +105,15 @@ export class AgaveSystemsService {
     });
 
     this.tapis
-      .filesImport({
-        systemId: proj.system_id,
-        filePath: proj.system_path,
-        body: {
-          fileType: 'plain/text',
-          callbackURL: '',
-          fileName: `${proj.system_file}.hazmapper`,
-          urlToIngest: '',
-          fileToUpload: data,
-        },
-      })
+      .filesImport(
+        proj.system_id,
+        proj.system_path,
+        'plain/text',
+        /*callbackURL*/ '',
+        /*fileName*/ `${proj.system_file}.hazmapper`,
+        /*urlToIngest:*/ '',
+        data,
+      )
       .subscribe(
         (resp) => {
           this.notificationsService.showSuccessToast(`Successfully saved file to ${proj.system_id}${proj.system_path}.`);
@@ -129,10 +126,7 @@ export class AgaveSystemsService {
 
   public deleteFile(proj: Project) {
     this.tapis
-      .filesDelete({
-        systemId: proj.system_id,
-        filePath: `${proj.system_path}/${proj.system_file}.hazmapper`,
-      })
+      .filesDelete(proj.system_id, `${proj.system_path}/${proj.system_file}.hazmapper`)
       .subscribe(
         (resp) => {
           this.notificationsService.showSuccessToast(

@@ -11,7 +11,8 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es2015",
+    "target": "es6",
+    "strict": false,
     "typeRoots": [
       "node_modules/@types",
       "src/app/typings"
@@ -21,5 +22,9 @@
       "dom"
     ],
     "skipLibCheck": true
-  }
+  },
+  "include": [
+    "./src/",
+    "node_modules/ng-tapis/**/*.ts"
+  ]
 }

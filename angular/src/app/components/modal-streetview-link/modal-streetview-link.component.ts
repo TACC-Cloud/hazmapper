@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { BsModalRef } from 'ngx-foundation/modal';
-import { RemoteFile } from 'ng-tapis/models/remote-file';
+import { RemoteFile } from 'ng-tapis';
 import { Subject } from 'rxjs';
 import { StreetviewAuthenticationService } from '../../services/streetview-authentication.service';
 import { Streetview } from '../../models/streetview';
