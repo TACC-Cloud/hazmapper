@@ -5,7 +5,7 @@ Hazmapper is an application for creating, visualizing, and analyzing geospatial 
 See https://github.com/TACC-Cloud/geoapi which is an associated restful API.
 
 ### Getting started
-- Get a JWT from Joe M or someone on the CIC team
+- Get a JWT from someone on WMA-Geospatial subgroup
 - GOTO jwt.io and edit that JWT to have your username/details
 - Create a file in src/environments called jwt.ts that has this in it: 
 
