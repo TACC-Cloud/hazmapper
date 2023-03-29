@@ -7,7 +7,7 @@ See https://github.com/TACC-Cloud/geoapi which is an associated restful API.
 ### Getting started
 - Get a JWT from someone on WMA-Geospatial subgroup
 - GOTO jwt.io and edit that JWT to have your username/details
-- Create a file in src/environments called jwt.ts that has this in it: 
+- Create a file in angular/src/environments called jwt.ts that has this in it:
 
     export const jwt = "YOUR JWT FROM ABOVE"
 
