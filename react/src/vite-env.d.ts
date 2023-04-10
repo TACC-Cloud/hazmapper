@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+
 interface Env {
   designSafeUrl: string;
   backend: string;
@@ -18,4 +19,8 @@ interface Env {
   mapillaryClientToken: string;
 }
 
-declare const __ENV__: AppEnv;
+interface ProcessEnv {
+  env: Env
+}
+
+declare const process: ProcessEnv;

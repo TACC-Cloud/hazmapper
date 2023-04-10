@@ -41,7 +41,7 @@ JWT="YOUR JWT FROM ABOVE"
 ```
 
 
-Furthermore, additional environments defined in `vite.config.ts` will be accessible in the react codebase via `__ENV__.*`. (e.g. `__ENV__.apiUrl`)
+Furthermore, additional environments defined in `vite.config.ts` will be accessible in the react codebase via `process.env.*`. (e.g. `process.env.apiUrl`)
 
 
 #### Run

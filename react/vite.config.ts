@@ -88,7 +88,7 @@ export default defineConfig(({ command, mode }) => {
       host: env.host,
     },
     define: {
-      __ENV__: env,
+      'process.env': env,
     },
   };
 });
