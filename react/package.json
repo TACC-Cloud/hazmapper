@@ -7,7 +7,7 @@
         "dev": "vite --mode development",
         "build:production": "tsc && vite build --mode production",
         "build:staging": "tsc && vite build --mode staging",
-        "build:local": "tsc && vite build --mode local",
+        "build:local": "tsc && vite build --mode development",
         "preview": "vite preview",
         "test": "jest",
         "lint": "npm run lint:js",
