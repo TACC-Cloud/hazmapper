@@ -20,7 +20,7 @@ interface Env {
 }
 
 interface ProcessEnv {
-  env: Env
+  env: Env;
 }
 
 declare const process: ProcessEnv;
