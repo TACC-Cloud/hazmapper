@@ -18,27 +18,31 @@ See https://github.com/TACC-Cloud/geoapi which is an associated restful API.
 
 #### Environments
 
-Environments are handled by vite via `react/vite.config.ts` and the `react/.env` files.
+Environments are handled by vite via `vite.config.ts` and the `.env` files.
 
 
 The vite commands defined in `package.json` with the `--mode` prefix determines which environment we are running/building in.
 
 
-Then, for local development, the `BACKEND` specified in `react/.env` will allow testing different backends.
+Then, for local development, the `BACKEND` specified in `.env` will allow testing different backends.
 
 
-First, to set the target backend for local development, edit the `react/.env` file and add the target backend.
+First, to set the target backend for local development, edit the `.env` file and add the target backend.
 Possible target backends are `development`, `staging`, and `production`.
 ```
 BACKEND="TARGET BACKEND"
 ```
 
 
-Then add the jwt retreived from [Getting started](###getting-started) to `react/.env`.
+Then add the jwt retreived from [Getting started](###getting-started) to `.env`.
 
 ```
 JWT="YOUR JWT FROM ABOVE"
 ```
+
+
+Furthermore, additional environments defined in `vite.config.ts` will be accessible in the react codebase via `__ENV__.*`. (e.g. `__ENV__.apiUrl`)
+
 
 #### Run
 
