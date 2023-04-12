@@ -2,6 +2,7 @@ import React from 'react';
 import Map from '../Map';
 import { tileServerLayers } from '../../__fixtures__/tileServerLayerFixture';
 import { featureCollection } from '../../__fixtures__/featuresFixture';
+import { useParams } from 'react-router-dom';
 
 interface Props {
   /**
@@ -14,20 +15,20 @@ interface Props {
 /**
  * A component that displays a map project (a map and related data)
  */
-export default class MapProject extends React.Component<Props> {
-  static defaultProps: Props = {
-    isPublic: false,
-  };
+const MapProject: React.FC<Props> = ({ isPublic = false }) => {
+  const { projectUUID } = useParams<{ projectUUID: string }>();
 
-  render() {
-    return (
-      <div style={{ width: '100vw', height: '100vh' }}>
-        {/* TODO for above and project, should we use style-components and/or CSS modules? */}
-        <Map
-          baseLayers={tileServerLayers}
-          featureCollection={featureCollection}
-        />
-      </div>
-    );
-  }
+  console.log(projectUUID);
+
+  return (
+    <div style={{ width: '100vw', height: '100vh' }}>
+      {/* TODO for above and project, should we use style-components and/or CSS modules? */}
+      <Map
+        baseLayers={tileServerLayers}
+        featureCollection={featureCollection}
+      />
+    </div>
+  );
 }
+
+export default MapProject;
