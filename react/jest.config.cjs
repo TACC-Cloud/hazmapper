@@ -3,6 +3,9 @@
  * https://jestjs.io/docs/configuration
  */
 
+// https://stackoverflow.com/questions/73504569/syntaxerror-unexpected-token-export-from-react-leaflet-while-using-jest
+const esModules = ['@react-leaflet', 'react-leaflet'].join('|');
+
 module.exports = {
   // All imported modules in your tests should be mocked automatically
   // automock: false,
@@ -82,7 +85,8 @@ module.exports = {
     '.*\\.(css|scss|sass)$': 'identity-obj-proxy',
     '^_common(.*)$': '<rootDir>/src/components/_common$1',
     '^utils(.*)$': '<rootDir>/src/utils$1',
-    '^hooks(.*)$': '<rootDir>/src/hooks$1'
+    '^hooks(.*)$': '<rootDir>/src/hooks$1',
+    '^react-leaflet$': require.resolve('react-leaflet')
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
@@ -95,7 +99,9 @@ module.exports = {
   // notifyMode: "failure-change",
 
   // A preset that is used as a base for Jest's configuration
-  // preset: undefined,
+  // Using ts-jset https://kulshekhar.github.io/ts-jest/docs/getting-started/installation
+  preset: 'ts-jest',
+
 
   // Run tests from one or more projects
   // projects: undefined,
@@ -139,7 +145,7 @@ module.exports = {
   // snapshotSerializers: [],
 
   // The test environment that will be used for testing
-  testEnvironment: 'jsdom'
+  testEnvironment: 'jsdom',
 
   // Options that will be passed to the testEnvironment
   // testEnvironmentOptions: {},
@@ -174,19 +180,16 @@ module.exports = {
   // timers: "real",
 
   // A map from regular expressions to paths to transformers
-  // transform: undefined,
+  transform: {'^.+\\.js?$': 'babel-jest'},
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
-  // transformIgnorePatterns: [
-  //   "\\\\node_modules\\\\",
-  //   "\\.pnp\\.[^\\\\]+$"
-  // ],
+  transformIgnorePatterns: [`/node_modules/(?!${esModules})`],
 
   // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
   // unmockedModulePathPatterns: undefined,
 
   // Indicates whether each individual test should be reported during the run
-  // verbose: undefined,
+  verbose: true,
 
   // An array of regexp patterns that are matched against all source file paths before re-running tests in watch mode
   // watchPathIgnorePatterns: [],
