@@ -7,6 +7,366 @@ import * as L from 'leaflet';
  *
  * **/
 
+function SVG() {}
+//icons
+SVG.getCloseOutIcon = function () {
+
+    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" class='buttonRemoveFile'>" +
+        "<polygon points=\"12,0 50,38 88,0 100,12 62,50 100,88 88,100 50,62 12,100 0,88 38,50 0,12\"></polygon>" +
+        "</svg>"
+};
+SVG.getBlackCloseOutIcon = function () {
+
+    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" class='deleteItemIcon'>" +
+        "<polygon points=\"12,0 50,38 88,0 100,12 62,50 100,88 88,100 50,62 12,100 0,88 38,50 0,12\"></polygon>" +
+        "</svg>"
+};
+SVG.getRedCloseOutIcon = function () {
+
+    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" class='buttonDeleteSubQuestionIcon'>" +
+        "<polygon points=\"12,0 50,38 88,0 100,12 62,50 100,88 88,100 50,62 12,100 0,88 38,50 0,12\"></polygon>" +
+        "</svg>"
+};
+SVG.getGreyCloseOutIcon = function () {
+    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" class='branch-tooltip-close-icon'>" +
+        "<polygon points=\"12,0 50,38 88,0 100,12 62,50 100,88 88,100 50,62 12,100 0,88 38,50 0,12\"></polygon>" +
+        "</svg>"
+};
+SVG.getDisabledCloseOutIcon = function () {
+
+    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" class='buttonRemoveFileDisabled'>" +
+        "<polygon points=\"12,0 50,38 88,0 100,12 62,50 100,88 88,100 50,62 12,100 0,88 38,50 0,12\"></polygon>" +
+        "</svg>"
+};
+
+SVG.getMoveItemsIcon = function () {
+
+    return "<svg class=testSVG xlmns=\"http://www.w3.org/2000/svg\" " + "viewbox=\"0 0 100 100\">" +
+        "<polygon points=\"0,12 100,12 100,28 0,28\"></polygon>" +
+        "<polygon points=\"0,42 100,42 100,58 0,58\"></polygon>" +
+        "<polygon points=\"0,72 100,72 100,88 0,88\"></polygon>" +
+        "</svg>";
+};
+SVG.getMoveQuestionnaireItemsIcon = function () {
+
+    return "<svg class=fillBlack xlmns=\"http://www.w3.org/2000/svg\" " + "viewbox=\"0 0 100 100\">" +
+        "<polygon points=\"0,12 100,12 100,28 0,28\"></polygon>" +
+        "<polygon points=\"0,42 100,42 100,58 0,58\"></polygon>" +
+        "<polygon points=\"0,72 100,72 100,88 0,88\"></polygon>" +
+        "</svg>";
+
+};
+
+// generic icons
+SVG.getPencil = function () {
+
+    return "<svg xmlns='http://www.w3.org/2000/svg' version='1.1'  viewBox='0 0 72.7 72.7' class='sectionEditButtonSvg'>" +
+        "\t<path d='M45.1,12.4l14.6,14.7L22.7,64.3L8.1,49.6L45.1,12.4z M70.9,8.8l-6.5-6.6c-2.5-2.5-6.6-2.5-9.2,0l-6.3,6.3l14.6,14.7 " +
+        "l7.3-7.3C72.8,14,72.8,10.8,70.9,8.8z M0.4,70.3c-0.3,1.2,0.8,2.3,2,2l16.3-4L4.1,53.6L0.4,70.3z'/>" +
+        "</svg>";
+};
+SVG.getPencilSmall = function () {
+
+    return "<svg xmlns='http://www.w3.org/2000/svg' version='1.1'  viewBox='0 0 72.7 72.7' class='button-edit-question-icon'>" +
+        "\t<path d='M45.1,12.4l14.6,14.7L22.7,64.3L8.1,49.6L45.1,12.4z M70.9,8.8l-6.5-6.6c-2.5-2.5-6.6-2.5-9.2,0l-6.3,6.3l14.6,14.7 " +
+        "l7.3-7.3C72.8,14,72.8,10.8,70.9,8.8z M0.4,70.3c-0.3,1.2,0.8,2.3,2,2l16.3-4L4.1,53.6L0.4,70.3z'/>" +
+        "</svg>";
+}
+SVG.getEyeIcon = function () {
+
+    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" class=\"sectionEditButtonSvg\">\n" +
+        "<path d=\"M15 12c0 1.654-1.346 3-3 3s-3-1.346-3-3 1.346-3 3-3 3 1.346 3 3zm9-.449s-4.252 8.449-11.985 8.449c-7.18 0-12.015-8.449-12.015-8.449s4.446-7.551 12.015-7.551c7.694 0 11.985 7.551 11.985 7.551zm-7 .449c0-2.757-2.243-5-5-5s-5 2.243-5 5 2.243 5 5 5 5-2.243 5-5z\"/>\n" +
+        "</svg>"
+
+}
+
+
+SVG.getPdfIcon = function () {
+
+    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 648 648\" class=\"headerIcon\"> \n" +
+        "<path d=\"M154.72,395.47V266.35h48.7q12.87,0,19.65,1.23a39,39,0,0,1,15.94,6,31.78,31.78,0,0,1,10.35,12.47,39.56,39.56,0,0,1,3.92,17.61q0,16.47-10.49,27.88T204.92,343H171.81v52.5Zm17.09-67.73h33.38q16.55,0" +
+        ",23.51-6.17t7-17.35a23.33,23.33,0,0,0-4.1-13.87,19.1,19.1,0,0,0-10.78-7.62q-4.32-1.14-15.95-1.15h-33Z\"/>\n" +
+        "<path d=\"M275,395.47V266.35h44.48q15.06,0,23,1.85a43.61,43.61,0,0,1,18.93,9.25,52.41,52.41,0,0,1,15.28,22.06q5.07,13.42,5.07,30.69a90.13,90.13,0,0,1-3.44,26.07,63.36,63.36,0,0,1-8.8,18.81,47.09,47.09,0" +
+        ",0,1-11.76,11.71,47.75,47.75,0,0,1-15.42,6.47,87.82,87.82,0,0,1-20.74,2.21Zm17.09-15.24h27.56q12.78,0,20-2.38a28.58,28.58,0,0,0,11.58-6.69q6.09-6.07,9.47-16.34t3.39-24.88q0-20.26-6.65-31.14t-16.16-14.57q-6.87-2.64-22.11-2.65H292.12Z\"/>\n" +
+        "<path d=\"M406.17,395.47V266.35h87.11v15.23h-70v40h60.6v15.24h-60.6v58.66Z\"/>\n" +
+        "<polygon points=\"324 646.4 430.37 540.05 366.75 540.05 366.72 438.35 281.25 438.35 281.25 540.05 217.63 540.05 324 646.4\"/>\n" +
+        "<path d=\"M381.87,21H89.06V621.4H221.23V595H115.28V47.41H362.65V216.84H532.08V595H426.77V621.4H558.94V197.63Zm7.84,169.43V69.81L511.62,190.43Z\"/>\n" +
+        "</svg>"
+};
+SVG.getDownloadFileIcon = function () {
+
+    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 648 648\" class=\"sectionEditButtonSvg\"> " +
+        "<polygon points=\"324 646.4 430.37 540.05 366.75 540.05 366.72 438.35 281.25 438.35 281.25 540.05 217.63 540.05 324 646.4\"/>" +
+        "<path d=\"M381.87,21H89.06V621.4H221.23V595H115.28V47.41H362.65V216.84H532.08V595H426.77V621.4H558.94V197.63Zm7.84,169.43V69.81L511.62,190.43Z\"/>" +
+        "</svg>"
+};
+
+SVG.getTrashcan = function () {
+
+    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 188.4 248.2\" class=\"sectionEditButtonSvg\"> " +
+        "<path d='M10.2,39.6c-3,0-5.7,0.1-8.3-0.1c-0.7,0-1.8-1-1.8-1.6c-0.2-2.6-0.1-5.1-0.1-8c16.6,0,32.9,0,49.7,0c0-3.7,0-7.1,0-10.5 " +
+        "C49.9,10.3,56,2.7,65,0.6C66.8,0.2,68.6,0,70.5,0c16,0,32-0.1,48,0c10.1,0,18.1,6.3,19.9,15.9c0.6,3.4,0.3,7,0.4,10.5 c0,1.1,0,2.1,0" +
+        ",3.4c16.7,0,33.1,0,49.6,0c0,3.3,0,6.3,0,9.7c-3.1,0-6.3,0-9.6,0c-0.2,2.9-0.4,5.6-0.6,8.2 c-1.2,24.3-2.4,48.6-3.7,72.9c-1.4,27.2-2.9,54.4-4.3,81.6c-0.5,9.4-0.7," +
+        "18.8-1.5,28.2c-1,10.5-9.3,17.8-20,17.8 c-22.1,0-44.2,0-66.2,0c-13.8,0-27.7,0-41.5,0c-12.2,0-20.3-8-20.8-20.1c-1-20.4-2.2-40.8-3.3-61.1c-0.9-17.4-1.8-34.8-2.7-52.2 c-1.1-20.5-2.2-41.1-3.3-61.6C10.7,48." +
+        "8,10.5,44.4,10.2,39.6z M20.1,39.8c0,1,0,1.8,0,2.6c0.9,17.5,1.8,34.9,2.7,52.4 c0.7,12.6,1.3,25.3,2,37.9c0.9,17.9,1.9,35.8,2.9,53.6c0.7,14,1.4,28,2.2,41.9c0.4,6.5,4.4,10.1,10.9,10.2c12,0,24,0,36,0 c24,0" +
+        ",48,0,72,0c5.8,0,10.2-3.8,10.5-9.2c0.8-13.3,1.4-26.6,2.1-39.9c0.7-14.1,1.4-28.3,2.2-42.4c0.9-18.1,1.9-36.1,2.8-54.1 c0.6-11.5,1.2-23,1.8-34.4c0.3-6.1,0.6-12.3,0.9-18.5C119.2,39.8,69.8,39.8,20.1,39.8z " +
+        "M59.7,29.6c23.2,0,46.3,0,69.5,0 c0-3.6,0.2-7.1,0-10.4c-0.4-5.3-4.5-9.4-9.6-9.4c-16.8-0.1-33.6-0.1-50.4,0c-4.5,0-8.8,3.3-9.3,7.6C59.3,21.4,59.7,25.5,59.7,29.6z'/>" +
+        "<path d='M98.9,218.2c-3.2,0-6.2,0-9.4,0c0-52.8,0-105.4,0-158.3c3.1,0,6.1,0,9.4,0C98.9,112.6,98.9,165.3,98.9,218.2z'/>" +
+        "<path d='M129.2,59.4c3.3,0.2,6.2,0.4,9.7,0.7c-3.3,52.9-6.7,105.6-10,158.6c-3.2-0.2-6.2-0.4-9.7-0.6 C122.6,165.2,125.9,112.5,129.2,59.4z'/>" +
+        "<path d='M49.7,60.3c3.3-0.2,6.3-0.4,9.7-0.6c3.4,52.8,6.8,105.5,10.1,158.3c-3.2,0.2-6.3,0.4-9.7,0.7C56.5,166,53.1,113.4,49.7,60.3z'/>" +
+        "</svg>"
+};
+SVG.getBlackTrashcan = function () {
+
+    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 188.4 248.2\" class=\"fillBlack\"> " +
+        "<path d='M10.2,39.6c-3,0-5.7,0.1-8.3-0.1c-0.7,0-1.8-1-1.8-1.6c-0.2-2.6-0.1-5.1-0.1-8c16.6,0,32.9,0,49.7,0c0-3.7,0-7.1,0-10.5 " +
+        "C49.9,10.3,56,2.7,65,0.6C66.8,0.2,68.6,0,70.5,0c16,0,32-0.1,48,0c10.1,0,18.1,6.3,19.9,15.9c0.6,3.4,0.3,7,0.4,10.5 c0,1.1,0,2.1,0" +
+        ",3.4c16.7,0,33.1,0,49.6,0c0,3.3,0,6.3,0,9.7c-3.1,0-6.3,0-9.6,0c-0.2,2.9-0.4,5.6-0.6,8.2 c-1.2,24.3-2.4,48.6-3.7,72.9c-1.4,27.2-2.9,54.4-4.3,81.6c-0.5,9.4-0.7," +
+        "18.8-1.5,28.2c-1,10.5-9.3,17.8-20,17.8 c-22.1,0-44.2,0-66.2,0c-13.8,0-27.7,0-41.5,0c-12.2,0-20.3-8-20.8-20.1c-1-20.4-2.2-40.8-3.3-61.1c-0.9-17.4-1.8-34.8-2.7-52.2 c-1.1-20.5-2.2-41.1-3.3-61.6C10.7,48." +
+        "8,10.5,44.4,10.2,39.6z M20.1,39.8c0,1,0,1.8,0,2.6c0.9,17.5,1.8,34.9,2.7,52.4 c0.7,12.6,1.3,25.3,2,37.9c0.9,17.9,1.9,35.8,2.9,53.6c0.7,14,1.4,28,2.2,41.9c0.4,6.5,4.4,10.1,10.9,10.2c12,0,24,0,36,0 c24,0" +
+        ",48,0,72,0c5.8,0,10.2-3.8,10.5-9.2c0.8-13.3,1.4-26.6,2.1-39.9c0.7-14.1,1.4-28.3,2.2-42.4c0.9-18.1,1.9-36.1,2.8-54.1 c0.6-11.5,1.2-23,1.8-34.4c0.3-6.1,0.6-12.3,0.9-18.5C119.2,39.8,69.8,39.8,20.1,39.8z " +
+        "M59.7,29.6c23.2,0,46.3,0,69.5,0 c0-3.6,0.2-7.1,0-10.4c-0.4-5.3-4.5-9.4-9.6-9.4c-16.8-0.1-33.6-0.1-50.4,0c-4.5,0-8.8,3.3-9.3,7.6C59.3,21.4,59.7,25.5,59.7,29.6z'/>" +
+        "<path d='M98.9,218.2c-3.2,0-6.2,0-9.4,0c0-52.8,0-105.4,0-158.3c3.1,0,6.1,0,9.4,0C98.9,112.6,98.9,165.3,98.9,218.2z'/>" +
+        "<path d='M129.2,59.4c3.3,0.2,6.2,0.4,9.7,0.7c-3.3,52.9-6.7,105.6-10,158.6c-3.2-0.2-6.2-0.4-9.7-0.6 C122.6,165.2,125.9,112.5,129.2,59.4z'/>" +
+        "<path d='M49.7,60.3c3.3-0.2,6.3-0.4,9.7-0.6c3.4,52.8,6.8,105.5,10.1,158.3c-3.2,0.2-6.3,0.4-9.7,0.7C56.5,166,53.1,113.4,49.7,60.3z'/>" +
+        "</svg>"
+};
+
+//cloud icons
+SVG.getCloudIconBlack = function () {
+
+    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 1000\" class=\"cloudIconShared\">" +
+        "<path d=\"M622.49,193.79c-91.8,0-170.8,51.1-212.8,125.7a180.25,180.25,0,0,0-32.2-3.2c-80.3,0-147.8,51.8-172.8,123.6-3.6-.2-" +
+        "7.2-1.1-10.9-1.1-101.5,0-183.8,82.3-183.8,183.7s82.3,183.8,183.8,183.8h612.5c101.4,0,183.8-82.3,183.8-183.8,0-80.3-51.8-147.9-123.6-1" +
+        "72.9.1-3.7,1.1-7.2,1.1-10.9-.1-135.2-109.8-244.9-245.1-244.9Z\"/>" +
+        "</svg>";
+};
+SVG.getCloudIconGrey = function () {
+
+    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 1000\" class=\"cloudIconLocal\"> " +
+        "<path d=\"M622.49,255c100.6,0,181.81,85.35,183.8,181.5,1,49.83-2.6,56.2-2.6,56.2s9.3-.37,42.6,14.8c48.7,22.18,82.4,63.4,82.4,115A122.57,122.57,0,0" +
+        ",1,806.19,745H193.79a122.63,122.63,0,0,1-122.5-122.5c0-66.9,48-118.83,120.6-122.5,31.79-1.61,52.1,6.33,52.1,6.33s.07-9.76,13-41C277,417,331.3,381," +
+        "375.61,377.76s66.28,9.83,66.28,9.83,1.43-8.6,21.4-38c39.5-58.16,93.6-94.6,159.2-94.6m0-61.2c-91.8,0-170.8,51.1-212.8,125.7a180.25,180.25,0,0,0-32.2-3.2c-" +
+        "80.3,0-147.8,51.8-172.8,123.6-3.6-.2-7.2-1.1-10.9-1.1-101.5,0-183.8,82.3-183.8,183.7s82.3,183.8,183.8,183.8h612.5c101.4,0,183.8-82.3,183.8-183.8,0-80.3-51.8-" +
+        "147.9-123.6-172.9.1-3.7,1.1-7.2,1.1-10.9-.1-135.2-109.8-244.9-245.1-244.9Z\"/>" +
+        "</svg>";
+};
+SVG.getCloudIconBlackQuestionnaires = function () {
+
+    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 1000\" class=\"cloudIconQuestionnaireShared\">" +
+        "<path d=\"M622.49,193.79c-91.8,0-170.8,51.1-212.8,125.7a180.25,180.25,0,0,0-32.2-3.2c-80.3,0-147.8,51.8-172.8,123.6-3.6-.2-" +
+        "7.2-1.1-10.9-1.1-101.5,0-183.8,82.3-183.8,183.7s82.3,183.8,183.8,183.8h612.5c101.4,0,183.8-82.3,183.8-183.8,0-80.3-51.8-147.9-123.6-1" +
+        "72.9.1-3.7,1.1-7.2,1.1-10.9-.1-135.2-109.8-244.9-245.1-244.9Z\"/>" +
+        "</svg>";
+};
+SVG.getCloudIconGreyQuestionnaires = function () {
+
+    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 1000\" class=\"cloudIconQuestionnaireLocal\"> " +
+        "<path d=\"M622.49,255c100.6,0,181.81,85.35,183.8,181.5,1,49.83-2.6,56.2-2.6,56.2s9.3-.37,42.6,14.8c48.7,22.18,82.4,63.4,82.4,115A122.57,122.57,0,0" +
+        ",1,806.19,745H193.79a122.63,122.63,0,0,1-122.5-122.5c0-66.9,48-118.83,120.6-122.5,31.79-1.61,52.1,6.33,52.1,6.33s.07-9.76,13-41C277,417,331.3,381," +
+        "375.61,377.76s66.28,9.83,66.28,9.83,1.43-8.6,21.4-38c39.5-58.16,93.6-94.6,159.2-94.6m0-61.2c-91.8,0-170.8,51.1-212.8,125.7a180.25,180.25,0,0,0-32.2-3.2c-" +
+        "80.3,0-147.8,51.8-172.8,123.6-3.6-.2-7.2-1.1-10.9-1.1-101.5,0-183.8,82.3-183.8,183.7s82.3,183.8,183.8,183.8h612.5c101.4,0,183.8-82.3,183.8-183.8,0-80.3-51.8-" +
+        "147.9-123.6-172.9.1-3.7,1.1-7.2,1.1-10.9-.1-135.2-109.8-244.9-245.1-244.9Z\"/>" +
+        "</svg>";
+};
+SVG.getDownloadFromCloudIcon = function () {
+
+    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 1000\" class=\"sectionEditButtonSvg\"> \n" +
+        "<polygon points=\"504 996.25 693.5 806.79 582.82 806.79 582.78 535.63 425.18 535.63 425.18 806.79 314.5 806.79 504 996.25\"/>\n" +
+        "<path d=\"M866.5,377.6c.1-3.7,1.1-7.2,1.1-10.9-.1-135.2-109.8-244.9-245.1-244.9-91.8,0-170.8,51.1-212.8,125.7a180.25,180.25,0,0,0-3" +
+        "2.2-3.2c-80.3,0-147.8,51.8-172.8,123.6-3.6-.2-7.2-1.1-10.9-1.1C92.3,366.8,10,449.1,10,550.5S92.3,734.3,193.8,734.3h159V673h-159A122.63,12" +
+        "2.63,0,0,1,71.3,550.5c0-66.9,48-118.83,120.6-122.5,31.79-1.61,52.1,6.33,52.1,6.33s.07-9.76,13-41C277,345,331.31,309,375.62,305.77s66.28,9." +
+        "83,66.28,9.83,1.43-8.6,21.4-38c39.5-58.16,93.6-94.6,159.2-94.6,100.6,0,181.81,85.35,183.8,181.5,1,49.83-2.6,56.2-2.6,56.2s9.3-.37,42.6,14.8c48." +
+        "7,22.18,82.4,63.4,82.4,115A122.57,122.57,0,0,1,806.2,673h-151v61.3H806.3c101.4,0,183.8-82.3,183.8-183.8C990.1,470.2,938.3,402.6,866.5,377.6Z\"/>\n" +
+        "</svg>";
+};
+
+SVG.getUploadToCloudIcon = function () {
+
+    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 1000\" class=\"sectionEditButtonSvg\"> \n" +
+        "<polygon points=\"504 483.07 314.5 672.54 425.18 672.54 425.22 943.69 582.82 943.69 582.82 672.54 693.5 672.54 504 483.07\"/>\n" +
+        "<path d=\"M866.5,449.6c.1-3.7,1.1-7.2,1.1-10.9-.1-135.2-109.8-244.9-245.1-244.9-91.8,0-170.8,51.1-212.8,125.7a180.25,180.25,0,0,0-32.2-3.2c-80.3," +
+        "0-147.8,51.8-172.8,123.6-3.6-.2-7.2-1.1-10.9-1.1C92.3,438.8,10,521.1,10,622.5S92.3,806.3,193.8,806.3h159V745h-159A122.63,122.63,0,0,1,71.3,622.5c0-66.9,48-118.83," +
+        "120.6-122.5,31.79-1.61,52.1,6.33,52.1,6.33s.07-9.76,13-41C277,417,331.31,381,375.62,377.77s66.28,9.83,66.28,9.83,1.43-8.6,21.4-38c39.5-58.16,93.6-94.6,159.2-94.6,100.6,0,181.81,85.35,183" +
+        ".8,181.5,1,49.83-2.6,56.2-2.6,56.2s9.3-.37,42.6,14.8c48.7,22.18,82.4,63.4,82.4,115A122.57,122.57,0,0,1,806.2,745h-151v61.3H806.3c101.4,0,183.8-82.3,183.8-183.8C990.1,542.2,938.3,474.6,866.5,449.6Z\"/>\n" +
+        "</svg>";
+
+};
+SVG.getUploadToCloudIconSelected = function () {
+
+    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 1000\" class=\"sectionEditButtonSvgSelected\"> \n" +
+        "<polygon points=\"504 483.07 314.5 672.54 425.18 672.54 425.22 943.69 582.82 943.69 582.82 672.54 693.5 672.54 504 483.07\"/>\n" +
+        "<path d=\"M866.5,449.6c.1-3.7,1.1-7.2,1.1-10.9-.1-135.2-109.8-244.9-245.1-244.9-91.8,0-170.8,51.1-212.8,125.7a180.25,180.25,0,0,0-32.2-3.2c-80.3," +
+        "0-147.8,51.8-172.8,123.6-3.6-.2-7.2-1.1-10.9-1.1C92.3,438.8,10,521.1,10,622.5S92.3,806.3,193.8,806.3h159V745h-159A122.63,122.63,0,0,1,71.3,622.5c0-66.9,48-118.83," +
+        "120.6-122.5,31.79-1.61,52.1,6.33,52.1,6.33s.07-9.76,13-41C277,417,331.31,381,375.62,377.77s66.28,9.83,66.28,9.83,1.43-8.6,21.4-38c39.5-58.16,93.6-94.6,159.2-94.6,100.6,0,181.81,85.35,183" +
+        ".8,181.5,1,49.83-2.6,56.2-2.6,56.2s9.3-.37,42.6,14.8c48.7,22.18,82.4,63.4,82.4,115A122.57,122.57,0,0,1,806.2,745h-151v61.3H806.3c101.4,0,183.8-82.3,183.8-183.8C990.1,542.2,938.3,474.6,866.5,449.6Z\"/>\n" +
+        "</svg>";
+
+};
+
+//plus, minus signs
+SVG.getPlusSign = function () {
+
+    return "<svg class=testSVG xlmns=\"http://www.w3.org/2000/svg\" " + "viewbox=\"0 0 100 100\">" +
+        "<polygon points=\"0,42 42,42 42,0 58,0 58,42 100,42 100,58 58,58 58,100 42,100 42,58 0,58\"></polygon>" +
+        "</svg>";
+};
+SVG.plusSignInnerHtml = function () {
+
+    return "0,42 42,42 42,0 58,0 58,42 100,42 100,58 58,58 58,100 42,100 42,58 0,58";
+
+};
+SVG.getMainItemPlusSign = function () {
+    return "<svg class=MainItemSVG xlmns=\"http://www.w3.org/2000/svg\" " + "viewbox=\"0 0 100 100\">" +
+        "<polygon points=\"0,42 42,42 42,0 58,0 58,42 100,42 100,58 58,58 58,100 42,100 42,58 0,58\"></polygon>" +
+        "</svg>";
+
+};
+SVG.getBlackPlusSign = function () {
+
+    return "<svg class=fillBlack xlmns=\"http://www.w3.org/2000/svg\" " + "viewbox=\"0 0 100 100\">" +
+        "<polygon points=\"0,42 42,42 42,0 58,0 58,42 100,42 100,58 58,58 58,100 42,100 42,58 0,58\"></polygon>" +
+        "</svg>";
+};
+SVG.getMinusSign = function () {
+
+    return "<svg class=testSVG xlmns=\"http://www.w3.org/2000/svg\" " + "viewbox=\"0 0 100 100\">" +
+        "<polygon points=\"0,42 100,42 100,58 0,58\"></polygon>" +
+        "</svg>";
+};
+SVG.getBlackMinusSign = function () {
+
+    return "<svg class=fillBlack xlmns=\"http://www.w3.org/2000/svg\" " + "viewbox=\"0 0 100 100\">" +
+        "<polygon points=\"0,42 100,42 100,58 0,58\"></polygon>" +
+        "</svg>";
+};
+SVG.getBlackMinusSign = function () {
+
+    return "<svg class=fillBlack xlmns=\"http://www.w3.org/2000/svg\" " + "viewbox=\"0 0 100 100\">" +
+        "<polygon points=\"0,42 100,42 100,58 0,58\"></polygon>" +
+        "</svg>";
+};
+SVG.getRedMinusSign = function () {
+
+    return "<svg class=fillRed xlmns=\"http://www.w3.org/2000/svg\" " + "viewbox=\"0 0 100 100\">" +
+        "<polygon points=\"0,42 100,42 100,58 0,58\"></polygon>" +
+        "</svg>";
+};
+
+//shapes
+SVG.hexagon = function () {
+
+    return "<div class=svgContainerOuter>" +
+        "<svg class=testSVG xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 88'>" +
+        "<polygon points=\"27,3 74,3 97,44 74,84 27,84 3,44\"></polygon>" +
+        "<div class=svgContainerInner>" +
+        "<svg class=testSVG2 xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 88'>" +
+        "<polygon class=inner points=\"27,3 74,3 97,44 74,84 27,84 3,44\"></polygon>" +
+        "</svg>" +
+        "<div class = svgContainerInnerMost>" +
+        "<svg id=\"test\" class= testSVG shape=\"leftArrow\" xlmns=\"http://www.w3.org/2000/svg\" " + "viewbox=\"0 0 100 100\">" +
+        "<polygon points=\"0,42 42,42 42,0 58,0 58,42 100,42 100,58 58,58 58,100 42,100 42,58 0,58\"></polygon>" +
+        "</svg>" +
+        "</div>" +
+        "</div>" +
+        "</svg>" +
+        "</div>";
+
+};
+SVG.hexagonExpanded = function () {
+
+    return "<div class=svgContainerOuter>" +
+        "<svg class=testSVG xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 88'>" +
+        "<polygon points=\"27,3 74,3 97,44 74,84 27,84 3,44\"></polygon>" +
+        "<div class=svgContainerInner>" +
+        "<svg class=testSVG2 xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 88'>" +
+        "<polygon class=inner points=\"27,3 74,3 97,44 74,84 27,84 3,44\"></polygon>" +
+        "</svg>" +
+        "<div class = svgContainerInnerMost>" +
+        "<svg id=\"test\" class= testSVG shape=\"leftArrow\" xlmns=\"http://www.w3.org/2000/svg\" " + "viewbox=\"0 0 100 100\">" +
+        "<polygon points=\"0,42 100,42 100,58 0,58\"></polygon>" +
+        "</svg>" +
+        "</div>" +
+        "</div>" +
+        "</svg>" +
+        "</div>";
+
+};
+SVG.subProjectHexagon = function () {
+
+    return "<div class=svgSubContainerOuter>" +
+        "<svg class=testSVG xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 88'>" +
+        "<polygon points=\"27,3 74,3 97,44 74,84 27,84 3,44\"></polygon>" +
+        "<div class=svgContainerInner>" +
+        "<svg class=testSVG3 xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 88'>" +
+        "<polygon class=inner points=\"27,3 74,3 97,44 74,84 27,84 3,44\"></polygon>" +
+        "</svg>" +
+        "</div>" +
+        "</svg>" +
+        "</div>";
+};
+
+//questionnaire branching elements
+SVG.getBranchingLine = function (height, width, is_clone, num_nodes) {
+
+
+    let styles = "";
+    //
+    // width = SVG.line_width;
+    // if (!is_clone) SVG.line_width - offset;
+
+
+    //
+
+    // if (num_nodes === 1 || num_nodes === 2) width = 125;
+    // if (num_nodes === 3 || num_nodes === 4) width = 100;
+    // if (num_nodes === 5 || num_nodes === 6) width = 75;
+    //
+
+    if (is_clone) width += 5
+
+    let x_offset = width + 52;
+
+    //reflect over y axis
+    if (num_nodes % 2 === 1) styles += " transform: rotateY(180deg) translateX("+ (x_offset) + "px); margin-left: 0;"
+
+    // if (is_clone) styles += " transform: rotateY(180deg) translateX("+ (width + 52) + "px); margin-left: 0;"
+
+
+
+    // let style = (num_nodes % 2 === 0) ? styles: "";
+
+    let points = "0,0 "+width+",0 "+width+","+height+" 0,"+height;
+    let arrow_points = "0," + (height) + " 5," + (height - 5) + " 5," + (height + 5);
+
+
+    //returns 3 sides line based upon starting and ending points
+    // return "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"branch-line\" style=\" "+ styles+"\" preserveAspectRatio='xMinYMin'>  \n" +
+    //     "  <polyline points=\" " + points + " \"/>\n" +
+    //     " <polygon points=\" " + arrow_points + "\"/>" +
+    //     "</svg>"
+
+    return "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"branch-line\" style=\" "+ styles+"\">  \n" +
+        "<polyline points=\" " + points + " \"/>\n" +
+        "</svg>"
+
+
+    // return "<svg class=\"branch-line\" style=\" "+ styles+"\">  \n" +
+    //     "<defs>" +
+    //     " <polyline id=\"branch-line\" points=\" " + points + " \"/>" +
+    //     " <polyline id=\"branch-line-clone\" points=\" " + clone_points + " \"/>" +
+    //
+    //     "</defs>" +
+    //     "<g  id=\"clickable\">\n" +
+    //     "<use xlink:href=\"#branch-line\" stroke=\"#000\" stroke-width=\"5\" fill=\"none\"  fill-opacity=\"0.5\" />\n" +
+    //     "<use xlink:href=\"#branch-line-clone\" stroke=\"#000\" stroke-width=\"30\" fill=\"none\"  stroke-opacity=\"0.5\" />\n" +
+    //     "</g>" +
+    //     "</svg>"
+
+}
+
+
+
 function getNextChar(char) {
   return String.fromCharCode(char.charCodeAt(0) + 1);
 }
@@ -61,6 +421,7 @@ DOM.TAG_ATTRIBUTES = {
   path: ['d'],
   polygon: ['points'],
   iframe: ['id', 'class', 'style', 'src'],
+  button: ['id', 'label', 'class', 'style'],
   form: ['id', 'class', 'method', 'action', 'enctype', 'style'],
   video: ['id', 'class', 'src', 'type', 'controls'],
 };
@@ -79,10 +440,13 @@ DOM.new = function (params) {
   // creates a div with two children, an empty div and a p with innerHTML 'test'
 
   // note the children property for the params JSON expects an array, even with a single child element
+  //
 
-  if (params['children']) {
+  if (params && params['children']) {
     for (let child of params['children']) {
-      if (child) object.appendChild(DOM.new(child));
+        if (child) {
+          object.appendChild(DOM.new(child));
+      }
     }
   }
 
@@ -696,8 +1060,7 @@ class Question {
                 {
                   tag: 'button',
                   class: 'view-embedded-asset-icon',
-                  // label: SVG.getEyeIcon(),
-                  label: 'eye',
+                  label: SVG.getEyeIcon(),
                   style: ['buttonEditItems', 'margin10'],
                 },
               ],
@@ -1960,7 +2323,7 @@ class NumberField extends Question {
       .find('.questionType')
       .html(
         // Utils.capitalize(this.mode)
-        this.mode.word.charAt(0).toUpperCase() + this.mode.word.slice(1)
+        this.mode.word ? this.mode.word.charAt(0).toUpperCase() + this.mode.word.slice(1) : 'test'
       );
 
     if (!this.required || !this.hasOwnProperty('required'))
@@ -2360,6 +2723,7 @@ class RangeAnswer extends Question {
       if (k + 1 === 10) display_class = 'rangeAnswerDoubleDigit';
       range_answers.push({
         tag: 'button',
+        label: SVG.getEyeIcon(),
         style: ['rangeAnswer'],
         children: [{ tag: 'p', class: display_class, html: k + 1 }],
       });
