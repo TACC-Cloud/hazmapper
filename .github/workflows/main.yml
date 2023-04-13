@@ -8,7 +8,7 @@ on:
 
 jobs:
   Angular-Unit-Tests:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: Setup Node.js for use with actions
@@ -34,7 +34,7 @@ jobs:
         npm run test:ci
 
   Angular-Linting:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: Setup Node.js for use with actions
@@ -58,7 +58,7 @@ jobs:
         cd angular
         npm run lint
   React-Unit-Tests:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Setup Node.js for use with actions
@@ -82,7 +82,7 @@ jobs:
           cd react
           npm run test
   React-Linting:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: Setup Node.js for use with actions
