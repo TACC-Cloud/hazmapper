@@ -8,309 +8,309 @@ import * as L from 'leaflet';
  * **/
 
 function SVG() {}
-//icons
-SVG.getCloseOutIcon = function () {
+// icons
+SVG.getCloseOutIcon = function() {
 
     return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" class='buttonRemoveFile'>" +
-        "<polygon points=\"12,0 50,38 88,0 100,12 62,50 100,88 88,100 50,62 12,100 0,88 38,50 0,12\"></polygon>" +
-        "</svg>"
+        '<polygon points="12,0 50,38 88,0 100,12 62,50 100,88 88,100 50,62 12,100 0,88 38,50 0,12"></polygon>' +
+        '</svg>';
 };
-SVG.getBlackCloseOutIcon = function () {
+SVG.getBlackCloseOutIcon = function() {
 
     return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" class='deleteItemIcon'>" +
-        "<polygon points=\"12,0 50,38 88,0 100,12 62,50 100,88 88,100 50,62 12,100 0,88 38,50 0,12\"></polygon>" +
-        "</svg>"
+        '<polygon points="12,0 50,38 88,0 100,12 62,50 100,88 88,100 50,62 12,100 0,88 38,50 0,12"></polygon>' +
+        '</svg>';
 };
-SVG.getRedCloseOutIcon = function () {
+SVG.getRedCloseOutIcon = function() {
 
     return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" class='buttonDeleteSubQuestionIcon'>" +
-        "<polygon points=\"12,0 50,38 88,0 100,12 62,50 100,88 88,100 50,62 12,100 0,88 38,50 0,12\"></polygon>" +
-        "</svg>"
+        '<polygon points="12,0 50,38 88,0 100,12 62,50 100,88 88,100 50,62 12,100 0,88 38,50 0,12"></polygon>' +
+        '</svg>';
 };
-SVG.getGreyCloseOutIcon = function () {
+SVG.getGreyCloseOutIcon = function() {
     return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" class='branch-tooltip-close-icon'>" +
-        "<polygon points=\"12,0 50,38 88,0 100,12 62,50 100,88 88,100 50,62 12,100 0,88 38,50 0,12\"></polygon>" +
-        "</svg>"
+        '<polygon points="12,0 50,38 88,0 100,12 62,50 100,88 88,100 50,62 12,100 0,88 38,50 0,12"></polygon>' +
+        '</svg>';
 };
-SVG.getDisabledCloseOutIcon = function () {
+SVG.getDisabledCloseOutIcon = function() {
 
     return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" class='buttonRemoveFileDisabled'>" +
-        "<polygon points=\"12,0 50,38 88,0 100,12 62,50 100,88 88,100 50,62 12,100 0,88 38,50 0,12\"></polygon>" +
-        "</svg>"
+        '<polygon points="12,0 50,38 88,0 100,12 62,50 100,88 88,100 50,62 12,100 0,88 38,50 0,12"></polygon>' +
+        '</svg>';
 };
 
-SVG.getMoveItemsIcon = function () {
+SVG.getMoveItemsIcon = function() {
 
-    return "<svg class=testSVG xlmns=\"http://www.w3.org/2000/svg\" " + "viewbox=\"0 0 100 100\">" +
-        "<polygon points=\"0,12 100,12 100,28 0,28\"></polygon>" +
-        "<polygon points=\"0,42 100,42 100,58 0,58\"></polygon>" +
-        "<polygon points=\"0,72 100,72 100,88 0,88\"></polygon>" +
-        "</svg>";
+    return '<svg class=testSVG xlmns="http://www.w3.org/2000/svg" ' + 'viewbox="0 0 100 100">' +
+        '<polygon points="0,12 100,12 100,28 0,28"></polygon>' +
+        '<polygon points="0,42 100,42 100,58 0,58"></polygon>' +
+        '<polygon points="0,72 100,72 100,88 0,88"></polygon>' +
+        '</svg>';
 };
-SVG.getMoveQuestionnaireItemsIcon = function () {
+SVG.getMoveQuestionnaireItemsIcon = function() {
 
-    return "<svg class=fillBlack xlmns=\"http://www.w3.org/2000/svg\" " + "viewbox=\"0 0 100 100\">" +
-        "<polygon points=\"0,12 100,12 100,28 0,28\"></polygon>" +
-        "<polygon points=\"0,42 100,42 100,58 0,58\"></polygon>" +
-        "<polygon points=\"0,72 100,72 100,88 0,88\"></polygon>" +
-        "</svg>";
+    return '<svg class=fillBlack xlmns="http://www.w3.org/2000/svg" ' + 'viewbox="0 0 100 100">' +
+        '<polygon points="0,12 100,12 100,28 0,28"></polygon>' +
+        '<polygon points="0,42 100,42 100,58 0,58"></polygon>' +
+        '<polygon points="0,72 100,72 100,88 0,88"></polygon>' +
+        '</svg>';
 
 };
 
 // generic icons
-SVG.getPencil = function () {
+SVG.getPencil = function() {
 
     return "<svg xmlns='http://www.w3.org/2000/svg' version='1.1'  viewBox='0 0 72.7 72.7' class='sectionEditButtonSvg'>" +
         "\t<path d='M45.1,12.4l14.6,14.7L22.7,64.3L8.1,49.6L45.1,12.4z M70.9,8.8l-6.5-6.6c-2.5-2.5-6.6-2.5-9.2,0l-6.3,6.3l14.6,14.7 " +
         "l7.3-7.3C72.8,14,72.8,10.8,70.9,8.8z M0.4,70.3c-0.3,1.2,0.8,2.3,2,2l16.3-4L4.1,53.6L0.4,70.3z'/>" +
-        "</svg>";
+        '</svg>';
 };
-SVG.getPencilSmall = function () {
+SVG.getPencilSmall = function() {
 
     return "<svg xmlns='http://www.w3.org/2000/svg' version='1.1'  viewBox='0 0 72.7 72.7' class='button-edit-question-icon'>" +
         "\t<path d='M45.1,12.4l14.6,14.7L22.7,64.3L8.1,49.6L45.1,12.4z M70.9,8.8l-6.5-6.6c-2.5-2.5-6.6-2.5-9.2,0l-6.3,6.3l14.6,14.7 " +
         "l7.3-7.3C72.8,14,72.8,10.8,70.9,8.8z M0.4,70.3c-0.3,1.2,0.8,2.3,2,2l16.3-4L4.1,53.6L0.4,70.3z'/>" +
-        "</svg>";
-}
-SVG.getEyeIcon = function () {
-
-    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" class=\"sectionEditButtonSvg\">\n" +
-        "<path d=\"M15 12c0 1.654-1.346 3-3 3s-3-1.346-3-3 1.346-3 3-3 3 1.346 3 3zm9-.449s-4.252 8.449-11.985 8.449c-7.18 0-12.015-8.449-12.015-8.449s4.446-7.551 12.015-7.551c7.694 0 11.985 7.551 11.985 7.551zm-7 .449c0-2.757-2.243-5-5-5s-5 2.243-5 5 2.243 5 5 5 5-2.243 5-5z\"/>\n" +
-        "</svg>"
-
-}
-
-
-SVG.getPdfIcon = function () {
-
-    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 648 648\" class=\"headerIcon\"> \n" +
-        "<path d=\"M154.72,395.47V266.35h48.7q12.87,0,19.65,1.23a39,39,0,0,1,15.94,6,31.78,31.78,0,0,1,10.35,12.47,39.56,39.56,0,0,1,3.92,17.61q0,16.47-10.49,27.88T204.92,343H171.81v52.5Zm17.09-67.73h33.38q16.55,0" +
-        ",23.51-6.17t7-17.35a23.33,23.33,0,0,0-4.1-13.87,19.1,19.1,0,0,0-10.78-7.62q-4.32-1.14-15.95-1.15h-33Z\"/>\n" +
-        "<path d=\"M275,395.47V266.35h44.48q15.06,0,23,1.85a43.61,43.61,0,0,1,18.93,9.25,52.41,52.41,0,0,1,15.28,22.06q5.07,13.42,5.07,30.69a90.13,90.13,0,0,1-3.44,26.07,63.36,63.36,0,0,1-8.8,18.81,47.09,47.09,0" +
-        ",0,1-11.76,11.71,47.75,47.75,0,0,1-15.42,6.47,87.82,87.82,0,0,1-20.74,2.21Zm17.09-15.24h27.56q12.78,0,20-2.38a28.58,28.58,0,0,0,11.58-6.69q6.09-6.07,9.47-16.34t3.39-24.88q0-20.26-6.65-31.14t-16.16-14.57q-6.87-2.64-22.11-2.65H292.12Z\"/>\n" +
-        "<path d=\"M406.17,395.47V266.35h87.11v15.23h-70v40h60.6v15.24h-60.6v58.66Z\"/>\n" +
-        "<polygon points=\"324 646.4 430.37 540.05 366.75 540.05 366.72 438.35 281.25 438.35 281.25 540.05 217.63 540.05 324 646.4\"/>\n" +
-        "<path d=\"M381.87,21H89.06V621.4H221.23V595H115.28V47.41H362.65V216.84H532.08V595H426.77V621.4H558.94V197.63Zm7.84,169.43V69.81L511.62,190.43Z\"/>\n" +
-        "</svg>"
+        '</svg>';
 };
-SVG.getDownloadFileIcon = function () {
+SVG.getEyeIcon = function() {
 
-    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 648 648\" class=\"sectionEditButtonSvg\"> " +
-        "<polygon points=\"324 646.4 430.37 540.05 366.75 540.05 366.72 438.35 281.25 438.35 281.25 540.05 217.63 540.05 324 646.4\"/>" +
-        "<path d=\"M381.87,21H89.06V621.4H221.23V595H115.28V47.41H362.65V216.84H532.08V595H426.77V621.4H558.94V197.63Zm7.84,169.43V69.81L511.62,190.43Z\"/>" +
-        "</svg>"
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="sectionEditButtonSvg">\n' +
+        '<path d="M15 12c0 1.654-1.346 3-3 3s-3-1.346-3-3 1.346-3 3-3 3 1.346 3 3zm9-.449s-4.252 8.449-11.985 8.449c-7.18 0-12.015-8.449-12.015-8.449s4.446-7.551 12.015-7.551c7.694 0 11.985 7.551 11.985 7.551zm-7 .449c0-2.757-2.243-5-5-5s-5 2.243-5 5 2.243 5 5 5 5-2.243 5-5z"/>\n' +
+        '</svg>';
+
 };
 
-SVG.getTrashcan = function () {
 
-    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 188.4 248.2\" class=\"sectionEditButtonSvg\"> " +
+SVG.getPdfIcon = function() {
+
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 648 648" class="headerIcon"> \n' +
+        '<path d="M154.72,395.47V266.35h48.7q12.87,0,19.65,1.23a39,39,0,0,1,15.94,6,31.78,31.78,0,0,1,10.35,12.47,39.56,39.56,0,0,1,3.92,17.61q0,16.47-10.49,27.88T204.92,343H171.81v52.5Zm17.09-67.73h33.38q16.55,0' +
+        ',23.51-6.17t7-17.35a23.33,23.33,0,0,0-4.1-13.87,19.1,19.1,0,0,0-10.78-7.62q-4.32-1.14-15.95-1.15h-33Z"/>\n' +
+        '<path d="M275,395.47V266.35h44.48q15.06,0,23,1.85a43.61,43.61,0,0,1,18.93,9.25,52.41,52.41,0,0,1,15.28,22.06q5.07,13.42,5.07,30.69a90.13,90.13,0,0,1-3.44,26.07,63.36,63.36,0,0,1-8.8,18.81,47.09,47.09,0' +
+        ',0,1-11.76,11.71,47.75,47.75,0,0,1-15.42,6.47,87.82,87.82,0,0,1-20.74,2.21Zm17.09-15.24h27.56q12.78,0,20-2.38a28.58,28.58,0,0,0,11.58-6.69q6.09-6.07,9.47-16.34t3.39-24.88q0-20.26-6.65-31.14t-16.16-14.57q-6.87-2.64-22.11-2.65H292.12Z"/>\n' +
+        '<path d="M406.17,395.47V266.35h87.11v15.23h-70v40h60.6v15.24h-60.6v58.66Z"/>\n' +
+        '<polygon points="324 646.4 430.37 540.05 366.75 540.05 366.72 438.35 281.25 438.35 281.25 540.05 217.63 540.05 324 646.4"/>\n' +
+        '<path d="M381.87,21H89.06V621.4H221.23V595H115.28V47.41H362.65V216.84H532.08V595H426.77V621.4H558.94V197.63Zm7.84,169.43V69.81L511.62,190.43Z"/>\n' +
+        '</svg>';
+};
+SVG.getDownloadFileIcon = function() {
+
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 648 648" class="sectionEditButtonSvg"> ' +
+        '<polygon points="324 646.4 430.37 540.05 366.75 540.05 366.72 438.35 281.25 438.35 281.25 540.05 217.63 540.05 324 646.4"/>' +
+        '<path d="M381.87,21H89.06V621.4H221.23V595H115.28V47.41H362.65V216.84H532.08V595H426.77V621.4H558.94V197.63Zm7.84,169.43V69.81L511.62,190.43Z"/>' +
+        '</svg>';
+};
+
+SVG.getTrashcan = function() {
+
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 188.4 248.2" class="sectionEditButtonSvg"> ' +
         "<path d='M10.2,39.6c-3,0-5.7,0.1-8.3-0.1c-0.7,0-1.8-1-1.8-1.6c-0.2-2.6-0.1-5.1-0.1-8c16.6,0,32.9,0,49.7,0c0-3.7,0-7.1,0-10.5 " +
-        "C49.9,10.3,56,2.7,65,0.6C66.8,0.2,68.6,0,70.5,0c16,0,32-0.1,48,0c10.1,0,18.1,6.3,19.9,15.9c0.6,3.4,0.3,7,0.4,10.5 c0,1.1,0,2.1,0" +
-        ",3.4c16.7,0,33.1,0,49.6,0c0,3.3,0,6.3,0,9.7c-3.1,0-6.3,0-9.6,0c-0.2,2.9-0.4,5.6-0.6,8.2 c-1.2,24.3-2.4,48.6-3.7,72.9c-1.4,27.2-2.9,54.4-4.3,81.6c-0.5,9.4-0.7," +
-        "18.8-1.5,28.2c-1,10.5-9.3,17.8-20,17.8 c-22.1,0-44.2,0-66.2,0c-13.8,0-27.7,0-41.5,0c-12.2,0-20.3-8-20.8-20.1c-1-20.4-2.2-40.8-3.3-61.1c-0.9-17.4-1.8-34.8-2.7-52.2 c-1.1-20.5-2.2-41.1-3.3-61.6C10.7,48." +
-        "8,10.5,44.4,10.2,39.6z M20.1,39.8c0,1,0,1.8,0,2.6c0.9,17.5,1.8,34.9,2.7,52.4 c0.7,12.6,1.3,25.3,2,37.9c0.9,17.9,1.9,35.8,2.9,53.6c0.7,14,1.4,28,2.2,41.9c0.4,6.5,4.4,10.1,10.9,10.2c12,0,24,0,36,0 c24,0" +
-        ",48,0,72,0c5.8,0,10.2-3.8,10.5-9.2c0.8-13.3,1.4-26.6,2.1-39.9c0.7-14.1,1.4-28.3,2.2-42.4c0.9-18.1,1.9-36.1,2.8-54.1 c0.6-11.5,1.2-23,1.8-34.4c0.3-6.1,0.6-12.3,0.9-18.5C119.2,39.8,69.8,39.8,20.1,39.8z " +
+        'C49.9,10.3,56,2.7,65,0.6C66.8,0.2,68.6,0,70.5,0c16,0,32-0.1,48,0c10.1,0,18.1,6.3,19.9,15.9c0.6,3.4,0.3,7,0.4,10.5 c0,1.1,0,2.1,0' +
+        ',3.4c16.7,0,33.1,0,49.6,0c0,3.3,0,6.3,0,9.7c-3.1,0-6.3,0-9.6,0c-0.2,2.9-0.4,5.6-0.6,8.2 c-1.2,24.3-2.4,48.6-3.7,72.9c-1.4,27.2-2.9,54.4-4.3,81.6c-0.5,9.4-0.7,' +
+        '18.8-1.5,28.2c-1,10.5-9.3,17.8-20,17.8 c-22.1,0-44.2,0-66.2,0c-13.8,0-27.7,0-41.5,0c-12.2,0-20.3-8-20.8-20.1c-1-20.4-2.2-40.8-3.3-61.1c-0.9-17.4-1.8-34.8-2.7-52.2 c-1.1-20.5-2.2-41.1-3.3-61.6C10.7,48.' +
+        '8,10.5,44.4,10.2,39.6z M20.1,39.8c0,1,0,1.8,0,2.6c0.9,17.5,1.8,34.9,2.7,52.4 c0.7,12.6,1.3,25.3,2,37.9c0.9,17.9,1.9,35.8,2.9,53.6c0.7,14,1.4,28,2.2,41.9c0.4,6.5,4.4,10.1,10.9,10.2c12,0,24,0,36,0 c24,0' +
+        ',48,0,72,0c5.8,0,10.2-3.8,10.5-9.2c0.8-13.3,1.4-26.6,2.1-39.9c0.7-14.1,1.4-28.3,2.2-42.4c0.9-18.1,1.9-36.1,2.8-54.1 c0.6-11.5,1.2-23,1.8-34.4c0.3-6.1,0.6-12.3,0.9-18.5C119.2,39.8,69.8,39.8,20.1,39.8z ' +
         "M59.7,29.6c23.2,0,46.3,0,69.5,0 c0-3.6,0.2-7.1,0-10.4c-0.4-5.3-4.5-9.4-9.6-9.4c-16.8-0.1-33.6-0.1-50.4,0c-4.5,0-8.8,3.3-9.3,7.6C59.3,21.4,59.7,25.5,59.7,29.6z'/>" +
         "<path d='M98.9,218.2c-3.2,0-6.2,0-9.4,0c0-52.8,0-105.4,0-158.3c3.1,0,6.1,0,9.4,0C98.9,112.6,98.9,165.3,98.9,218.2z'/>" +
         "<path d='M129.2,59.4c3.3,0.2,6.2,0.4,9.7,0.7c-3.3,52.9-6.7,105.6-10,158.6c-3.2-0.2-6.2-0.4-9.7-0.6 C122.6,165.2,125.9,112.5,129.2,59.4z'/>" +
         "<path d='M49.7,60.3c3.3-0.2,6.3-0.4,9.7-0.6c3.4,52.8,6.8,105.5,10.1,158.3c-3.2,0.2-6.3,0.4-9.7,0.7C56.5,166,53.1,113.4,49.7,60.3z'/>" +
-        "</svg>"
+        '</svg>';
 };
-SVG.getBlackTrashcan = function () {
+SVG.getBlackTrashcan = function() {
 
-    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 188.4 248.2\" class=\"fillBlack\"> " +
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 188.4 248.2" class="fillBlack"> ' +
         "<path d='M10.2,39.6c-3,0-5.7,0.1-8.3-0.1c-0.7,0-1.8-1-1.8-1.6c-0.2-2.6-0.1-5.1-0.1-8c16.6,0,32.9,0,49.7,0c0-3.7,0-7.1,0-10.5 " +
-        "C49.9,10.3,56,2.7,65,0.6C66.8,0.2,68.6,0,70.5,0c16,0,32-0.1,48,0c10.1,0,18.1,6.3,19.9,15.9c0.6,3.4,0.3,7,0.4,10.5 c0,1.1,0,2.1,0" +
-        ",3.4c16.7,0,33.1,0,49.6,0c0,3.3,0,6.3,0,9.7c-3.1,0-6.3,0-9.6,0c-0.2,2.9-0.4,5.6-0.6,8.2 c-1.2,24.3-2.4,48.6-3.7,72.9c-1.4,27.2-2.9,54.4-4.3,81.6c-0.5,9.4-0.7," +
-        "18.8-1.5,28.2c-1,10.5-9.3,17.8-20,17.8 c-22.1,0-44.2,0-66.2,0c-13.8,0-27.7,0-41.5,0c-12.2,0-20.3-8-20.8-20.1c-1-20.4-2.2-40.8-3.3-61.1c-0.9-17.4-1.8-34.8-2.7-52.2 c-1.1-20.5-2.2-41.1-3.3-61.6C10.7,48." +
-        "8,10.5,44.4,10.2,39.6z M20.1,39.8c0,1,0,1.8,0,2.6c0.9,17.5,1.8,34.9,2.7,52.4 c0.7,12.6,1.3,25.3,2,37.9c0.9,17.9,1.9,35.8,2.9,53.6c0.7,14,1.4,28,2.2,41.9c0.4,6.5,4.4,10.1,10.9,10.2c12,0,24,0,36,0 c24,0" +
-        ",48,0,72,0c5.8,0,10.2-3.8,10.5-9.2c0.8-13.3,1.4-26.6,2.1-39.9c0.7-14.1,1.4-28.3,2.2-42.4c0.9-18.1,1.9-36.1,2.8-54.1 c0.6-11.5,1.2-23,1.8-34.4c0.3-6.1,0.6-12.3,0.9-18.5C119.2,39.8,69.8,39.8,20.1,39.8z " +
+        'C49.9,10.3,56,2.7,65,0.6C66.8,0.2,68.6,0,70.5,0c16,0,32-0.1,48,0c10.1,0,18.1,6.3,19.9,15.9c0.6,3.4,0.3,7,0.4,10.5 c0,1.1,0,2.1,0' +
+        ',3.4c16.7,0,33.1,0,49.6,0c0,3.3,0,6.3,0,9.7c-3.1,0-6.3,0-9.6,0c-0.2,2.9-0.4,5.6-0.6,8.2 c-1.2,24.3-2.4,48.6-3.7,72.9c-1.4,27.2-2.9,54.4-4.3,81.6c-0.5,9.4-0.7,' +
+        '18.8-1.5,28.2c-1,10.5-9.3,17.8-20,17.8 c-22.1,0-44.2,0-66.2,0c-13.8,0-27.7,0-41.5,0c-12.2,0-20.3-8-20.8-20.1c-1-20.4-2.2-40.8-3.3-61.1c-0.9-17.4-1.8-34.8-2.7-52.2 c-1.1-20.5-2.2-41.1-3.3-61.6C10.7,48.' +
+        '8,10.5,44.4,10.2,39.6z M20.1,39.8c0,1,0,1.8,0,2.6c0.9,17.5,1.8,34.9,2.7,52.4 c0.7,12.6,1.3,25.3,2,37.9c0.9,17.9,1.9,35.8,2.9,53.6c0.7,14,1.4,28,2.2,41.9c0.4,6.5,4.4,10.1,10.9,10.2c12,0,24,0,36,0 c24,0' +
+        ',48,0,72,0c5.8,0,10.2-3.8,10.5-9.2c0.8-13.3,1.4-26.6,2.1-39.9c0.7-14.1,1.4-28.3,2.2-42.4c0.9-18.1,1.9-36.1,2.8-54.1 c0.6-11.5,1.2-23,1.8-34.4c0.3-6.1,0.6-12.3,0.9-18.5C119.2,39.8,69.8,39.8,20.1,39.8z ' +
         "M59.7,29.6c23.2,0,46.3,0,69.5,0 c0-3.6,0.2-7.1,0-10.4c-0.4-5.3-4.5-9.4-9.6-9.4c-16.8-0.1-33.6-0.1-50.4,0c-4.5,0-8.8,3.3-9.3,7.6C59.3,21.4,59.7,25.5,59.7,29.6z'/>" +
         "<path d='M98.9,218.2c-3.2,0-6.2,0-9.4,0c0-52.8,0-105.4,0-158.3c3.1,0,6.1,0,9.4,0C98.9,112.6,98.9,165.3,98.9,218.2z'/>" +
         "<path d='M129.2,59.4c3.3,0.2,6.2,0.4,9.7,0.7c-3.3,52.9-6.7,105.6-10,158.6c-3.2-0.2-6.2-0.4-9.7-0.6 C122.6,165.2,125.9,112.5,129.2,59.4z'/>" +
         "<path d='M49.7,60.3c3.3-0.2,6.3-0.4,9.7-0.6c3.4,52.8,6.8,105.5,10.1,158.3c-3.2,0.2-6.3,0.4-9.7,0.7C56.5,166,53.1,113.4,49.7,60.3z'/>" +
-        "</svg>"
+        '</svg>';
 };
 
-//cloud icons
-SVG.getCloudIconBlack = function () {
+// cloud icons
+SVG.getCloudIconBlack = function() {
 
-    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 1000\" class=\"cloudIconShared\">" +
-        "<path d=\"M622.49,193.79c-91.8,0-170.8,51.1-212.8,125.7a180.25,180.25,0,0,0-32.2-3.2c-80.3,0-147.8,51.8-172.8,123.6-3.6-.2-" +
-        "7.2-1.1-10.9-1.1-101.5,0-183.8,82.3-183.8,183.7s82.3,183.8,183.8,183.8h612.5c101.4,0,183.8-82.3,183.8-183.8,0-80.3-51.8-147.9-123.6-1" +
-        "72.9.1-3.7,1.1-7.2,1.1-10.9-.1-135.2-109.8-244.9-245.1-244.9Z\"/>" +
-        "</svg>";
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" class="cloudIconShared">' +
+        '<path d="M622.49,193.79c-91.8,0-170.8,51.1-212.8,125.7a180.25,180.25,0,0,0-32.2-3.2c-80.3,0-147.8,51.8-172.8,123.6-3.6-.2-' +
+        '7.2-1.1-10.9-1.1-101.5,0-183.8,82.3-183.8,183.7s82.3,183.8,183.8,183.8h612.5c101.4,0,183.8-82.3,183.8-183.8,0-80.3-51.8-147.9-123.6-1' +
+        '72.9.1-3.7,1.1-7.2,1.1-10.9-.1-135.2-109.8-244.9-245.1-244.9Z"/>' +
+        '</svg>';
 };
-SVG.getCloudIconGrey = function () {
+SVG.getCloudIconGrey = function() {
 
-    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 1000\" class=\"cloudIconLocal\"> " +
-        "<path d=\"M622.49,255c100.6,0,181.81,85.35,183.8,181.5,1,49.83-2.6,56.2-2.6,56.2s9.3-.37,42.6,14.8c48.7,22.18,82.4,63.4,82.4,115A122.57,122.57,0,0" +
-        ",1,806.19,745H193.79a122.63,122.63,0,0,1-122.5-122.5c0-66.9,48-118.83,120.6-122.5,31.79-1.61,52.1,6.33,52.1,6.33s.07-9.76,13-41C277,417,331.3,381," +
-        "375.61,377.76s66.28,9.83,66.28,9.83,1.43-8.6,21.4-38c39.5-58.16,93.6-94.6,159.2-94.6m0-61.2c-91.8,0-170.8,51.1-212.8,125.7a180.25,180.25,0,0,0-32.2-3.2c-" +
-        "80.3,0-147.8,51.8-172.8,123.6-3.6-.2-7.2-1.1-10.9-1.1-101.5,0-183.8,82.3-183.8,183.7s82.3,183.8,183.8,183.8h612.5c101.4,0,183.8-82.3,183.8-183.8,0-80.3-51.8-" +
-        "147.9-123.6-172.9.1-3.7,1.1-7.2,1.1-10.9-.1-135.2-109.8-244.9-245.1-244.9Z\"/>" +
-        "</svg>";
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" class="cloudIconLocal"> ' +
+        '<path d="M622.49,255c100.6,0,181.81,85.35,183.8,181.5,1,49.83-2.6,56.2-2.6,56.2s9.3-.37,42.6,14.8c48.7,22.18,82.4,63.4,82.4,115A122.57,122.57,0,0' +
+        ',1,806.19,745H193.79a122.63,122.63,0,0,1-122.5-122.5c0-66.9,48-118.83,120.6-122.5,31.79-1.61,52.1,6.33,52.1,6.33s.07-9.76,13-41C277,417,331.3,381,' +
+        '375.61,377.76s66.28,9.83,66.28,9.83,1.43-8.6,21.4-38c39.5-58.16,93.6-94.6,159.2-94.6m0-61.2c-91.8,0-170.8,51.1-212.8,125.7a180.25,180.25,0,0,0-32.2-3.2c-' +
+        '80.3,0-147.8,51.8-172.8,123.6-3.6-.2-7.2-1.1-10.9-1.1-101.5,0-183.8,82.3-183.8,183.7s82.3,183.8,183.8,183.8h612.5c101.4,0,183.8-82.3,183.8-183.8,0-80.3-51.8-' +
+        '147.9-123.6-172.9.1-3.7,1.1-7.2,1.1-10.9-.1-135.2-109.8-244.9-245.1-244.9Z"/>' +
+        '</svg>';
 };
-SVG.getCloudIconBlackQuestionnaires = function () {
+SVG.getCloudIconBlackQuestionnaires = function() {
 
-    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 1000\" class=\"cloudIconQuestionnaireShared\">" +
-        "<path d=\"M622.49,193.79c-91.8,0-170.8,51.1-212.8,125.7a180.25,180.25,0,0,0-32.2-3.2c-80.3,0-147.8,51.8-172.8,123.6-3.6-.2-" +
-        "7.2-1.1-10.9-1.1-101.5,0-183.8,82.3-183.8,183.7s82.3,183.8,183.8,183.8h612.5c101.4,0,183.8-82.3,183.8-183.8,0-80.3-51.8-147.9-123.6-1" +
-        "72.9.1-3.7,1.1-7.2,1.1-10.9-.1-135.2-109.8-244.9-245.1-244.9Z\"/>" +
-        "</svg>";
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" class="cloudIconQuestionnaireShared">' +
+        '<path d="M622.49,193.79c-91.8,0-170.8,51.1-212.8,125.7a180.25,180.25,0,0,0-32.2-3.2c-80.3,0-147.8,51.8-172.8,123.6-3.6-.2-' +
+        '7.2-1.1-10.9-1.1-101.5,0-183.8,82.3-183.8,183.7s82.3,183.8,183.8,183.8h612.5c101.4,0,183.8-82.3,183.8-183.8,0-80.3-51.8-147.9-123.6-1' +
+        '72.9.1-3.7,1.1-7.2,1.1-10.9-.1-135.2-109.8-244.9-245.1-244.9Z"/>' +
+        '</svg>';
 };
-SVG.getCloudIconGreyQuestionnaires = function () {
+SVG.getCloudIconGreyQuestionnaires = function() {
 
-    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 1000\" class=\"cloudIconQuestionnaireLocal\"> " +
-        "<path d=\"M622.49,255c100.6,0,181.81,85.35,183.8,181.5,1,49.83-2.6,56.2-2.6,56.2s9.3-.37,42.6,14.8c48.7,22.18,82.4,63.4,82.4,115A122.57,122.57,0,0" +
-        ",1,806.19,745H193.79a122.63,122.63,0,0,1-122.5-122.5c0-66.9,48-118.83,120.6-122.5,31.79-1.61,52.1,6.33,52.1,6.33s.07-9.76,13-41C277,417,331.3,381," +
-        "375.61,377.76s66.28,9.83,66.28,9.83,1.43-8.6,21.4-38c39.5-58.16,93.6-94.6,159.2-94.6m0-61.2c-91.8,0-170.8,51.1-212.8,125.7a180.25,180.25,0,0,0-32.2-3.2c-" +
-        "80.3,0-147.8,51.8-172.8,123.6-3.6-.2-7.2-1.1-10.9-1.1-101.5,0-183.8,82.3-183.8,183.7s82.3,183.8,183.8,183.8h612.5c101.4,0,183.8-82.3,183.8-183.8,0-80.3-51.8-" +
-        "147.9-123.6-172.9.1-3.7,1.1-7.2,1.1-10.9-.1-135.2-109.8-244.9-245.1-244.9Z\"/>" +
-        "</svg>";
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" class="cloudIconQuestionnaireLocal"> ' +
+        '<path d="M622.49,255c100.6,0,181.81,85.35,183.8,181.5,1,49.83-2.6,56.2-2.6,56.2s9.3-.37,42.6,14.8c48.7,22.18,82.4,63.4,82.4,115A122.57,122.57,0,0' +
+        ',1,806.19,745H193.79a122.63,122.63,0,0,1-122.5-122.5c0-66.9,48-118.83,120.6-122.5,31.79-1.61,52.1,6.33,52.1,6.33s.07-9.76,13-41C277,417,331.3,381,' +
+        '375.61,377.76s66.28,9.83,66.28,9.83,1.43-8.6,21.4-38c39.5-58.16,93.6-94.6,159.2-94.6m0-61.2c-91.8,0-170.8,51.1-212.8,125.7a180.25,180.25,0,0,0-32.2-3.2c-' +
+        '80.3,0-147.8,51.8-172.8,123.6-3.6-.2-7.2-1.1-10.9-1.1-101.5,0-183.8,82.3-183.8,183.7s82.3,183.8,183.8,183.8h612.5c101.4,0,183.8-82.3,183.8-183.8,0-80.3-51.8-' +
+        '147.9-123.6-172.9.1-3.7,1.1-7.2,1.1-10.9-.1-135.2-109.8-244.9-245.1-244.9Z"/>' +
+        '</svg>';
 };
-SVG.getDownloadFromCloudIcon = function () {
+SVG.getDownloadFromCloudIcon = function() {
 
-    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 1000\" class=\"sectionEditButtonSvg\"> \n" +
-        "<polygon points=\"504 996.25 693.5 806.79 582.82 806.79 582.78 535.63 425.18 535.63 425.18 806.79 314.5 806.79 504 996.25\"/>\n" +
-        "<path d=\"M866.5,377.6c.1-3.7,1.1-7.2,1.1-10.9-.1-135.2-109.8-244.9-245.1-244.9-91.8,0-170.8,51.1-212.8,125.7a180.25,180.25,0,0,0-3" +
-        "2.2-3.2c-80.3,0-147.8,51.8-172.8,123.6-3.6-.2-7.2-1.1-10.9-1.1C92.3,366.8,10,449.1,10,550.5S92.3,734.3,193.8,734.3h159V673h-159A122.63,12" +
-        "2.63,0,0,1,71.3,550.5c0-66.9,48-118.83,120.6-122.5,31.79-1.61,52.1,6.33,52.1,6.33s.07-9.76,13-41C277,345,331.31,309,375.62,305.77s66.28,9." +
-        "83,66.28,9.83,1.43-8.6,21.4-38c39.5-58.16,93.6-94.6,159.2-94.6,100.6,0,181.81,85.35,183.8,181.5,1,49.83-2.6,56.2-2.6,56.2s9.3-.37,42.6,14.8c48." +
-        "7,22.18,82.4,63.4,82.4,115A122.57,122.57,0,0,1,806.2,673h-151v61.3H806.3c101.4,0,183.8-82.3,183.8-183.8C990.1,470.2,938.3,402.6,866.5,377.6Z\"/>\n" +
-        "</svg>";
-};
-
-SVG.getUploadToCloudIcon = function () {
-
-    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 1000\" class=\"sectionEditButtonSvg\"> \n" +
-        "<polygon points=\"504 483.07 314.5 672.54 425.18 672.54 425.22 943.69 582.82 943.69 582.82 672.54 693.5 672.54 504 483.07\"/>\n" +
-        "<path d=\"M866.5,449.6c.1-3.7,1.1-7.2,1.1-10.9-.1-135.2-109.8-244.9-245.1-244.9-91.8,0-170.8,51.1-212.8,125.7a180.25,180.25,0,0,0-32.2-3.2c-80.3," +
-        "0-147.8,51.8-172.8,123.6-3.6-.2-7.2-1.1-10.9-1.1C92.3,438.8,10,521.1,10,622.5S92.3,806.3,193.8,806.3h159V745h-159A122.63,122.63,0,0,1,71.3,622.5c0-66.9,48-118.83," +
-        "120.6-122.5,31.79-1.61,52.1,6.33,52.1,6.33s.07-9.76,13-41C277,417,331.31,381,375.62,377.77s66.28,9.83,66.28,9.83,1.43-8.6,21.4-38c39.5-58.16,93.6-94.6,159.2-94.6,100.6,0,181.81,85.35,183" +
-        ".8,181.5,1,49.83-2.6,56.2-2.6,56.2s9.3-.37,42.6,14.8c48.7,22.18,82.4,63.4,82.4,115A122.57,122.57,0,0,1,806.2,745h-151v61.3H806.3c101.4,0,183.8-82.3,183.8-183.8C990.1,542.2,938.3,474.6,866.5,449.6Z\"/>\n" +
-        "</svg>";
-
-};
-SVG.getUploadToCloudIconSelected = function () {
-
-    return "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1000 1000\" class=\"sectionEditButtonSvgSelected\"> \n" +
-        "<polygon points=\"504 483.07 314.5 672.54 425.18 672.54 425.22 943.69 582.82 943.69 582.82 672.54 693.5 672.54 504 483.07\"/>\n" +
-        "<path d=\"M866.5,449.6c.1-3.7,1.1-7.2,1.1-10.9-.1-135.2-109.8-244.9-245.1-244.9-91.8,0-170.8,51.1-212.8,125.7a180.25,180.25,0,0,0-32.2-3.2c-80.3," +
-        "0-147.8,51.8-172.8,123.6-3.6-.2-7.2-1.1-10.9-1.1C92.3,438.8,10,521.1,10,622.5S92.3,806.3,193.8,806.3h159V745h-159A122.63,122.63,0,0,1,71.3,622.5c0-66.9,48-118.83," +
-        "120.6-122.5,31.79-1.61,52.1,6.33,52.1,6.33s.07-9.76,13-41C277,417,331.31,381,375.62,377.77s66.28,9.83,66.28,9.83,1.43-8.6,21.4-38c39.5-58.16,93.6-94.6,159.2-94.6,100.6,0,181.81,85.35,183" +
-        ".8,181.5,1,49.83-2.6,56.2-2.6,56.2s9.3-.37,42.6,14.8c48.7,22.18,82.4,63.4,82.4,115A122.57,122.57,0,0,1,806.2,745h-151v61.3H806.3c101.4,0,183.8-82.3,183.8-183.8C990.1,542.2,938.3,474.6,866.5,449.6Z\"/>\n" +
-        "</svg>";
-
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" class="sectionEditButtonSvg"> \n' +
+        '<polygon points="504 996.25 693.5 806.79 582.82 806.79 582.78 535.63 425.18 535.63 425.18 806.79 314.5 806.79 504 996.25"/>\n' +
+        '<path d="M866.5,377.6c.1-3.7,1.1-7.2,1.1-10.9-.1-135.2-109.8-244.9-245.1-244.9-91.8,0-170.8,51.1-212.8,125.7a180.25,180.25,0,0,0-3' +
+        '2.2-3.2c-80.3,0-147.8,51.8-172.8,123.6-3.6-.2-7.2-1.1-10.9-1.1C92.3,366.8,10,449.1,10,550.5S92.3,734.3,193.8,734.3h159V673h-159A122.63,12' +
+        '2.63,0,0,1,71.3,550.5c0-66.9,48-118.83,120.6-122.5,31.79-1.61,52.1,6.33,52.1,6.33s.07-9.76,13-41C277,345,331.31,309,375.62,305.77s66.28,9.' +
+        '83,66.28,9.83,1.43-8.6,21.4-38c39.5-58.16,93.6-94.6,159.2-94.6,100.6,0,181.81,85.35,183.8,181.5,1,49.83-2.6,56.2-2.6,56.2s9.3-.37,42.6,14.8c48.' +
+        '7,22.18,82.4,63.4,82.4,115A122.57,122.57,0,0,1,806.2,673h-151v61.3H806.3c101.4,0,183.8-82.3,183.8-183.8C990.1,470.2,938.3,402.6,866.5,377.6Z"/>\n' +
+        '</svg>';
 };
 
-//plus, minus signs
-SVG.getPlusSign = function () {
+SVG.getUploadToCloudIcon = function() {
 
-    return "<svg class=testSVG xlmns=\"http://www.w3.org/2000/svg\" " + "viewbox=\"0 0 100 100\">" +
-        "<polygon points=\"0,42 42,42 42,0 58,0 58,42 100,42 100,58 58,58 58,100 42,100 42,58 0,58\"></polygon>" +
-        "</svg>";
-};
-SVG.plusSignInnerHtml = function () {
-
-    return "0,42 42,42 42,0 58,0 58,42 100,42 100,58 58,58 58,100 42,100 42,58 0,58";
-
-};
-SVG.getMainItemPlusSign = function () {
-    return "<svg class=MainItemSVG xlmns=\"http://www.w3.org/2000/svg\" " + "viewbox=\"0 0 100 100\">" +
-        "<polygon points=\"0,42 42,42 42,0 58,0 58,42 100,42 100,58 58,58 58,100 42,100 42,58 0,58\"></polygon>" +
-        "</svg>";
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" class="sectionEditButtonSvg"> \n' +
+        '<polygon points="504 483.07 314.5 672.54 425.18 672.54 425.22 943.69 582.82 943.69 582.82 672.54 693.5 672.54 504 483.07"/>\n' +
+        '<path d="M866.5,449.6c.1-3.7,1.1-7.2,1.1-10.9-.1-135.2-109.8-244.9-245.1-244.9-91.8,0-170.8,51.1-212.8,125.7a180.25,180.25,0,0,0-32.2-3.2c-80.3,' +
+        '0-147.8,51.8-172.8,123.6-3.6-.2-7.2-1.1-10.9-1.1C92.3,438.8,10,521.1,10,622.5S92.3,806.3,193.8,806.3h159V745h-159A122.63,122.63,0,0,1,71.3,622.5c0-66.9,48-118.83,' +
+        '120.6-122.5,31.79-1.61,52.1,6.33,52.1,6.33s.07-9.76,13-41C277,417,331.31,381,375.62,377.77s66.28,9.83,66.28,9.83,1.43-8.6,21.4-38c39.5-58.16,93.6-94.6,159.2-94.6,100.6,0,181.81,85.35,183' +
+        '.8,181.5,1,49.83-2.6,56.2-2.6,56.2s9.3-.37,42.6,14.8c48.7,22.18,82.4,63.4,82.4,115A122.57,122.57,0,0,1,806.2,745h-151v61.3H806.3c101.4,0,183.8-82.3,183.8-183.8C990.1,542.2,938.3,474.6,866.5,449.6Z"/>\n' +
+        '</svg>';
 
 };
-SVG.getBlackPlusSign = function () {
+SVG.getUploadToCloudIconSelected = function() {
 
-    return "<svg class=fillBlack xlmns=\"http://www.w3.org/2000/svg\" " + "viewbox=\"0 0 100 100\">" +
-        "<polygon points=\"0,42 42,42 42,0 58,0 58,42 100,42 100,58 58,58 58,100 42,100 42,58 0,58\"></polygon>" +
-        "</svg>";
-};
-SVG.getMinusSign = function () {
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" class="sectionEditButtonSvgSelected"> \n' +
+        '<polygon points="504 483.07 314.5 672.54 425.18 672.54 425.22 943.69 582.82 943.69 582.82 672.54 693.5 672.54 504 483.07"/>\n' +
+        '<path d="M866.5,449.6c.1-3.7,1.1-7.2,1.1-10.9-.1-135.2-109.8-244.9-245.1-244.9-91.8,0-170.8,51.1-212.8,125.7a180.25,180.25,0,0,0-32.2-3.2c-80.3,' +
+        '0-147.8,51.8-172.8,123.6-3.6-.2-7.2-1.1-10.9-1.1C92.3,438.8,10,521.1,10,622.5S92.3,806.3,193.8,806.3h159V745h-159A122.63,122.63,0,0,1,71.3,622.5c0-66.9,48-118.83,' +
+        '120.6-122.5,31.79-1.61,52.1,6.33,52.1,6.33s.07-9.76,13-41C277,417,331.31,381,375.62,377.77s66.28,9.83,66.28,9.83,1.43-8.6,21.4-38c39.5-58.16,93.6-94.6,159.2-94.6,100.6,0,181.81,85.35,183' +
+        '.8,181.5,1,49.83-2.6,56.2-2.6,56.2s9.3-.37,42.6,14.8c48.7,22.18,82.4,63.4,82.4,115A122.57,122.57,0,0,1,806.2,745h-151v61.3H806.3c101.4,0,183.8-82.3,183.8-183.8C990.1,542.2,938.3,474.6,866.5,449.6Z"/>\n' +
+        '</svg>';
 
-    return "<svg class=testSVG xlmns=\"http://www.w3.org/2000/svg\" " + "viewbox=\"0 0 100 100\">" +
-        "<polygon points=\"0,42 100,42 100,58 0,58\"></polygon>" +
-        "</svg>";
-};
-SVG.getBlackMinusSign = function () {
-
-    return "<svg class=fillBlack xlmns=\"http://www.w3.org/2000/svg\" " + "viewbox=\"0 0 100 100\">" +
-        "<polygon points=\"0,42 100,42 100,58 0,58\"></polygon>" +
-        "</svg>";
-};
-SVG.getBlackMinusSign = function () {
-
-    return "<svg class=fillBlack xlmns=\"http://www.w3.org/2000/svg\" " + "viewbox=\"0 0 100 100\">" +
-        "<polygon points=\"0,42 100,42 100,58 0,58\"></polygon>" +
-        "</svg>";
-};
-SVG.getRedMinusSign = function () {
-
-    return "<svg class=fillRed xlmns=\"http://www.w3.org/2000/svg\" " + "viewbox=\"0 0 100 100\">" +
-        "<polygon points=\"0,42 100,42 100,58 0,58\"></polygon>" +
-        "</svg>";
 };
 
-//shapes
-SVG.hexagon = function () {
+// plus, minus signs
+SVG.getPlusSign = function() {
 
-    return "<div class=svgContainerOuter>" +
+    return '<svg class=testSVG xlmns="http://www.w3.org/2000/svg" ' + 'viewbox="0 0 100 100">' +
+        '<polygon points="0,42 42,42 42,0 58,0 58,42 100,42 100,58 58,58 58,100 42,100 42,58 0,58"></polygon>' +
+        '</svg>';
+};
+SVG.plusSignInnerHtml = function() {
+
+    return '0,42 42,42 42,0 58,0 58,42 100,42 100,58 58,58 58,100 42,100 42,58 0,58';
+
+};
+SVG.getMainItemPlusSign = function() {
+    return '<svg class=MainItemSVG xlmns="http://www.w3.org/2000/svg" ' + 'viewbox="0 0 100 100">' +
+        '<polygon points="0,42 42,42 42,0 58,0 58,42 100,42 100,58 58,58 58,100 42,100 42,58 0,58"></polygon>' +
+        '</svg>';
+
+};
+SVG.getBlackPlusSign = function() {
+
+    return '<svg class=fillBlack xlmns="http://www.w3.org/2000/svg" ' + 'viewbox="0 0 100 100">' +
+        '<polygon points="0,42 42,42 42,0 58,0 58,42 100,42 100,58 58,58 58,100 42,100 42,58 0,58"></polygon>' +
+        '</svg>';
+};
+SVG.getMinusSign = function() {
+
+    return '<svg class=testSVG xlmns="http://www.w3.org/2000/svg" ' + 'viewbox="0 0 100 100">' +
+        '<polygon points="0,42 100,42 100,58 0,58"></polygon>' +
+        '</svg>';
+};
+SVG.getBlackMinusSign = function() {
+
+    return '<svg class=fillBlack xlmns="http://www.w3.org/2000/svg" ' + 'viewbox="0 0 100 100">' +
+        '<polygon points="0,42 100,42 100,58 0,58"></polygon>' +
+        '</svg>';
+};
+SVG.getBlackMinusSign = function() {
+
+    return '<svg class=fillBlack xlmns="http://www.w3.org/2000/svg" ' + 'viewbox="0 0 100 100">' +
+        '<polygon points="0,42 100,42 100,58 0,58"></polygon>' +
+        '</svg>';
+};
+SVG.getRedMinusSign = function() {
+
+    return '<svg class=fillRed xlmns="http://www.w3.org/2000/svg" ' + 'viewbox="0 0 100 100">' +
+        '<polygon points="0,42 100,42 100,58 0,58"></polygon>' +
+        '</svg>';
+};
+
+// shapes
+SVG.hexagon = function() {
+
+    return '<div class=svgContainerOuter>' +
         "<svg class=testSVG xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 88'>" +
-        "<polygon points=\"27,3 74,3 97,44 74,84 27,84 3,44\"></polygon>" +
-        "<div class=svgContainerInner>" +
+        '<polygon points="27,3 74,3 97,44 74,84 27,84 3,44"></polygon>' +
+        '<div class=svgContainerInner>' +
         "<svg class=testSVG2 xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 88'>" +
-        "<polygon class=inner points=\"27,3 74,3 97,44 74,84 27,84 3,44\"></polygon>" +
-        "</svg>" +
-        "<div class = svgContainerInnerMost>" +
-        "<svg id=\"test\" class= testSVG shape=\"leftArrow\" xlmns=\"http://www.w3.org/2000/svg\" " + "viewbox=\"0 0 100 100\">" +
-        "<polygon points=\"0,42 42,42 42,0 58,0 58,42 100,42 100,58 58,58 58,100 42,100 42,58 0,58\"></polygon>" +
-        "</svg>" +
-        "</div>" +
-        "</div>" +
-        "</svg>" +
-        "</div>";
+        '<polygon class=inner points="27,3 74,3 97,44 74,84 27,84 3,44"></polygon>' +
+        '</svg>' +
+        '<div class = svgContainerInnerMost>' +
+        '<svg id="test" class= testSVG shape="leftArrow" xlmns="http://www.w3.org/2000/svg" ' + 'viewbox="0 0 100 100">' +
+        '<polygon points="0,42 42,42 42,0 58,0 58,42 100,42 100,58 58,58 58,100 42,100 42,58 0,58"></polygon>' +
+        '</svg>' +
+        '</div>' +
+        '</div>' +
+        '</svg>' +
+        '</div>';
 
 };
-SVG.hexagonExpanded = function () {
+SVG.hexagonExpanded = function() {
 
-    return "<div class=svgContainerOuter>" +
+    return '<div class=svgContainerOuter>' +
         "<svg class=testSVG xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 88'>" +
-        "<polygon points=\"27,3 74,3 97,44 74,84 27,84 3,44\"></polygon>" +
-        "<div class=svgContainerInner>" +
+        '<polygon points="27,3 74,3 97,44 74,84 27,84 3,44"></polygon>' +
+        '<div class=svgContainerInner>' +
         "<svg class=testSVG2 xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 88'>" +
-        "<polygon class=inner points=\"27,3 74,3 97,44 74,84 27,84 3,44\"></polygon>" +
-        "</svg>" +
-        "<div class = svgContainerInnerMost>" +
-        "<svg id=\"test\" class= testSVG shape=\"leftArrow\" xlmns=\"http://www.w3.org/2000/svg\" " + "viewbox=\"0 0 100 100\">" +
-        "<polygon points=\"0,42 100,42 100,58 0,58\"></polygon>" +
-        "</svg>" +
-        "</div>" +
-        "</div>" +
-        "</svg>" +
-        "</div>";
+        '<polygon class=inner points="27,3 74,3 97,44 74,84 27,84 3,44"></polygon>' +
+        '</svg>' +
+        '<div class = svgContainerInnerMost>' +
+        '<svg id="test" class= testSVG shape="leftArrow" xlmns="http://www.w3.org/2000/svg" ' + 'viewbox="0 0 100 100">' +
+        '<polygon points="0,42 100,42 100,58 0,58"></polygon>' +
+        '</svg>' +
+        '</div>' +
+        '</div>' +
+        '</svg>' +
+        '</div>';
 
 };
-SVG.subProjectHexagon = function () {
+SVG.subProjectHexagon = function() {
 
-    return "<div class=svgSubContainerOuter>" +
+    return '<div class=svgSubContainerOuter>' +
         "<svg class=testSVG xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 88'>" +
-        "<polygon points=\"27,3 74,3 97,44 74,84 27,84 3,44\"></polygon>" +
-        "<div class=svgContainerInner>" +
+        '<polygon points="27,3 74,3 97,44 74,84 27,84 3,44"></polygon>' +
+        '<div class=svgContainerInner>' +
         "<svg class=testSVG3 xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 88'>" +
-        "<polygon class=inner points=\"27,3 74,3 97,44 74,84 27,84 3,44\"></polygon>" +
-        "</svg>" +
-        "</div>" +
-        "</svg>" +
-        "</div>";
+        '<polygon class=inner points="27,3 74,3 97,44 74,84 27,84 3,44"></polygon>' +
+        '</svg>' +
+        '</div>' +
+        '</svg>' +
+        '</div>';
 };
 
-//questionnaire branching elements
-SVG.getBranchingLine = function (height, width, is_clone, num_nodes) {
+// questionnaire branching elements
+SVG.getBranchingLine = function(height, width, is_clone, num_nodes) {
 
 
-    let styles = "";
+    let styles = '';
     //
     // width = SVG.line_width;
     // if (!is_clone) SVG.line_width - offset;
@@ -323,12 +323,12 @@ SVG.getBranchingLine = function (height, width, is_clone, num_nodes) {
     // if (num_nodes === 5 || num_nodes === 6) width = 75;
     //
 
-    if (is_clone) width += 5
+    if (is_clone) { width += 5; }
 
-    let x_offset = width + 52;
+    const x_offset = width + 52;
 
-    //reflect over y axis
-    if (num_nodes % 2 === 1) styles += " transform: rotateY(180deg) translateX("+ (x_offset) + "px); margin-left: 0;"
+    // reflect over y axis
+    if (num_nodes % 2 === 1) { styles += ' transform: rotateY(180deg) translateX('+ (x_offset) + 'px); margin-left: 0;'; }
 
     // if (is_clone) styles += " transform: rotateY(180deg) translateX("+ (width + 52) + "px); margin-left: 0;"
 
@@ -336,19 +336,19 @@ SVG.getBranchingLine = function (height, width, is_clone, num_nodes) {
 
     // let style = (num_nodes % 2 === 0) ? styles: "";
 
-    let points = "0,0 "+width+",0 "+width+","+height+" 0,"+height;
-    let arrow_points = "0," + (height) + " 5," + (height - 5) + " 5," + (height + 5);
+    const points = '0,0 '+width+',0 '+width+','+height+' 0,'+height;
+    const arrow_points = '0,' + (height) + ' 5,' + (height - 5) + ' 5,' + (height + 5);
 
 
-    //returns 3 sides line based upon starting and ending points
+    // returns 3 sides line based upon starting and ending points
     // return "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"branch-line\" style=\" "+ styles+"\" preserveAspectRatio='xMinYMin'>  \n" +
     //     "  <polyline points=\" " + points + " \"/>\n" +
     //     " <polygon points=\" " + arrow_points + "\"/>" +
     //     "</svg>"
 
-    return "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"branch-line\" style=\" "+ styles+"\">  \n" +
-        "<polyline points=\" " + points + " \"/>\n" +
-        "</svg>"
+    return '<svg xmlns="http://www.w3.org/2000/svg" class="branch-line" style=" '+ styles+'">  \n' +
+        '<polyline points=" ' + points + ' "/>\n' +
+        '</svg>';
 
 
     // return "<svg class=\"branch-line\" style=\" "+ styles+"\">  \n" +
@@ -363,7 +363,7 @@ SVG.getBranchingLine = function (height, width, is_clone, num_nodes) {
     //     "</g>" +
     //     "</svg>"
 
-}
+};
 
 
 
@@ -373,10 +373,10 @@ function getNextChar(char) {
 
 function DOM() {}
 
-//flat list of all DOM IDs for reference
+// flat list of all DOM IDs for reference
 DOM.items = {};
 
-//supported attributes for each html type
+// supported attributes for each html type
 DOM.TAG_ATTRIBUTES = {
   a: ['id', 'class', 'style', 'href'],
   p: ['id', 'class', 'style', 'events'],
@@ -427,13 +427,13 @@ DOM.TAG_ATTRIBUTES = {
 };
 
 /** Main method for creating new DOM objects using this library **/
-DOM.new = function (params) {
+DOM.new = function(params) {
   // pass in a parameters JSON object contains html attributes
   // i.e DOM.new({tag: "div"}) creates an empty div
 
-  let object = DOM.createElement(params);
-  if (params['id']) DOM.items[params['id']] = object;
-  if (params['parent']) $(object).appendTo($(params['parent']));
+  const object = DOM.createElement(params);
+  if (params.id) { DOM.items[params.id] = object; }
+  if (params.parent) { $(object).appendTo($(params.parent)); }
 
   // add a child DOM element by adding a parameters JSON object to the children property
   // i.e. DOM.new({tag: "div", children: [{tag: "div"}, {tag: "p", html: "test"}]})
@@ -442,80 +442,91 @@ DOM.new = function (params) {
   // note the children property for the params JSON expects an array, even with a single child element
   //
 
-  if (params && params['children']) {
-    for (let child of params['children']) {
+  if (params && params.children) {
+    for (const child of params.children) {
         if (child) {
           object.appendChild(DOM.new(child));
       }
     }
   }
 
-  if (object) return object;
+  if (object) { return object; }
 };
 
-DOM.createElement = function (params) {
+DOM.createElement = function(params) {
   let object = null;
   if (params) {
-    if (params['tag'] in DOM.TAG_ATTRIBUTES) object = DOM.createTag(params);
+    if (params.tag in DOM.TAG_ATTRIBUTES) { object = DOM.createTag(params); }
   }
   return object;
 };
 
-DOM.createTag = function (params) {
+DOM.createTag = function(params) {
   if (params) {
-    let object = document.createElement(params['tag']);
-    if (params['html']) object.innerHTML = params.html;
+    const object = document.createElement(params.tag);
+    if (params.html) { object.innerHTML = params.html; }
     // if (params["tag"] === "input") object.onclick = function () {
     //     Utils.configureInput(event, $(this));
     // };
 
-    //attributes
-    for (let param in params) {
-      if (DOM.TAG_ATTRIBUTES[params['tag']].includes(param))
+    // attributes
+    for (const param in params) {
+      if (DOM.TAG_ATTRIBUTES[params.tag].includes(param)) {
         object.setAttribute(param, params[param]);
+      }
     }
 
-    //mouse events
-    if (DOM.TAG_ATTRIBUTES[params['tag']].includes('events')) {
-      if (params['click']) object.addEventListener('click', params['click']);
-      if (params['down']) object.addEventListener('down', params['down']);
-      if (params['up']) object.addEventListener('up', params['up']);
-      if (params['dblclick'])
-        object.addEventListener('dblclick', params['dblclick']);
-      if (params['keydown'])
-        object.addEventListener('keydown', params['keydown']);
-      if (params['mouseup'])
-        object.addEventListener('mouseup', params['mouseup']);
-      if (params['mousedown'])
-        object.addEventListener('mousedown', params['mousedown']);
-      if (params['mouseout'])
-        object.addEventListener('mouseout', params['mouseout']);
-      if (params['mouseleave'])
-        object.addEventListener('mouseleave', params['mouseleave']);
-      if (params['multiple']) object.setAttribute('multiple', '');
-      if (params['mouseover'])
-        object.addEventListener('mouseover', params['mouseover']);
-      if (params['scroll']) object.addEventListener('scroll', params['scroll']);
-      if (params['focus']) object.addEventListener('focus', params['focus']);
-      if (params['dragstart'])
-        object.addEventListener('dragstart', params['dragstart']);
-      if (params['dragend'])
-        object.addEventListener('dragend', params['dragend']);
-      if (params['dragleave'])
-        object.addEventListener('dragleave', params['dragleave']);
-      if (params['scroll']) object.addEventListener('scroll', params['scroll']);
-      if (params['input']) object.addEventListener('input', params['input']);
+    // mouse events
+    if (DOM.TAG_ATTRIBUTES[params.tag].includes('events')) {
+      if (params.click) { object.addEventListener('click', params.click); }
+      if (params.down) { object.addEventListener('down', params.down); }
+      if (params.up) { object.addEventListener('up', params.up); }
+      if (params.dblclick) {
+        object.addEventListener('dblclick', params.dblclick);
+      }
+      if (params.keydown) {
+        object.addEventListener('keydown', params.keydown);
+      }
+      if (params.mouseup) {
+        object.addEventListener('mouseup', params.mouseup);
+      }
+      if (params.mousedown) {
+        object.addEventListener('mousedown', params.mousedown);
+      }
+      if (params.mouseout) {
+        object.addEventListener('mouseout', params.mouseout);
+      }
+      if (params.mouseleave) {
+        object.addEventListener('mouseleave', params.mouseleave);
+      }
+      if (params.multiple) { object.setAttribute('multiple', ''); }
+      if (params.mouseover) {
+        object.addEventListener('mouseover', params.mouseover);
+      }
+      if (params.scroll) { object.addEventListener('scroll', params.scroll); }
+      if (params.focus) { object.addEventListener('focus', params.focus); }
+      if (params.dragstart) {
+        object.addEventListener('dragstart', params.dragstart);
+      }
+      if (params.dragend) {
+        object.addEventListener('dragend', params.dragend);
+      }
+      if (params.dragleave) {
+        object.addEventListener('dragleave', params.dragleave);
+      }
+      if (params.scroll) { object.addEventListener('scroll', params.scroll); }
+      if (params.input) { object.addEventListener('input', params.input); }
 
-      //need to fix this so that only fires on enter, not on all keydowns
-      if (params['enter']) object.addEventListener('keydown', params['enter']);
-      if (params['blur']) object.addEventListener('blur', params['blur']);
-      if (params['keyup']) object.addEventListener('keyup', params['keyup']);
+      // need to fix this so that only fires on enter, not on all keydowns
+      if (params.enter) { object.addEventListener('keydown', params.enter); }
+      if (params.blur) { object.addEventListener('blur', params.blur); }
+      if (params.keyup) { object.addEventListener('keyup', params.keyup); }
     }
-    if (object) return object;
+    if (object) { return object; }
   }
 };
 
-DOM.appendObject = function (parent, child) {
+DOM.appendObject = function(parent, child) {
   parent.appendChild(child);
 };
 
@@ -528,7 +539,7 @@ QuestionnaireBuilder.ASSET_EMBEDDING_DEFAULT = true;
 QuestionnaireBuilder.ALLOW_BACK_DEFAULT = true;
 QuestionnaireBuilder.EDITABLE_DEFAULT = false;
 
-QuestionnaireBuilder.renderQuestionnaire = function (questionnaire_json) {
+QuestionnaireBuilder.renderQuestionnaire = function(questionnaire_json) {
   /** Method to generate read only questionnaire for viewing in DesignSafe
    *
    * Takes a json object containing questionnaire structure and responses
@@ -537,8 +548,8 @@ QuestionnaireBuilder.renderQuestionnaire = function (questionnaire_json) {
    *
    * **/
 
-  let questionnaire = new Questionnaire(questionnaire_json);
-  if (questionnaire) return questionnaire.renderView();
+  const questionnaire = new Questionnaire(questionnaire_json);
+  if (questionnaire) { return questionnaire.renderView(); }
 };
 
 class Questionnaire {
@@ -553,12 +564,12 @@ class Questionnaire {
   embedded_asset_uuids;
 
   constructor(metadata) {
-    //add metadata
-    let qnaire = this;
-    for (let property in metadata) qnaire[property] = metadata[property];
+    // add metadata
+    const qnaire = this;
+    for (const property in metadata) { qnaire[property] = metadata[property]; }
     qnaire.num_questions = 0;
 
-    //maps question number to question object
+    // maps question number to question object
     qnaire.question_map = {};
     qnaire.question_id_map = {};
     qnaire.section_id_map = {};
@@ -567,15 +578,16 @@ class Questionnaire {
     qnaire.MAP_ADDED_TO_PANEL = false;
     qnaire.embedded_asset_map = null;
 
-    if (metadata.sections)
-      for (let section of metadata.sections) new Section(qnaire, section);
+    if (metadata.sections) {
+      for (const section of metadata.sections) { new Section(qnaire, section); }
+    }
 
     // list of all embedded asset uuids throughout questionnaire
     // embedded assets are added at the question level when a questionnaire is completed
     qnaire.embedded_asset_uuids = [];
 
-    for (let question of Object.values(qnaire.question_id_map)) {
-      if (!question.hasOwnProperty('assetUuids')) continue;
+    for (const question of Object.values(qnaire.question_id_map)) {
+      if (!question.hasOwnProperty('assetUuids')) { continue; }
       // if (question.assetUuids.length) {
       //   for (let asset of question.assetUuids)
       //     qnaire.embedded_asset_uuids.push(asset);
@@ -585,19 +597,19 @@ class Questionnaire {
 
   /** Method for generating read only questionnaire **/
   renderView() {
-    let questionnaire = this;
+    const questionnaire = this;
 
     // add a section, then add all questions in section
     let section_list_item;
-    let container = DOM.new({
+    const container = DOM.new({
       tag: 'div',
       class: 'view-only-questionnaire-container',
     });
-    for (let section of questionnaire.sections) {
+    for (const section of questionnaire.sections) {
       section_list_item = $(section.view_question_DOM).clone();
       $(section_list_item).find('p.goto-label').parent().remove();
       $(section_list_item).appendTo(container);
-      for (let question of section.questions) {
+      for (const question of section.questions) {
         question.drawViewResponse(container);
       }
     }
@@ -608,11 +620,11 @@ class Questionnaire {
     if (this.question_id_map[id]) {
       return this.question_id_map[id];
     } else {
-      for (let section of this.sections) {
-        if (section.id === id) return section;
+      for (const section of this.sections) {
+        if (section.id === id) { return section; }
 
-        for (let question of section.questions) {
-          if (question.id === id) return question;
+        for (const question of section.questions) {
+          if (question.id === id) { return question; }
         }
       }
 
@@ -630,7 +642,7 @@ class Questionnaire {
   }
 }
 
-//parent types
+// parent types
 class Section {
   questions;
   questions_metadata;
@@ -641,10 +653,10 @@ class Section {
   go_to;
   view_question_DOM;
   id;
-  //starting with default 1 section
+  // starting with default 1 section
   constructor(parent_template, metadata) {
-    if (metadata) this.metadata = metadata;
-    for (let property in metadata) this[property] = metadata[property];
+    if (metadata) { this.metadata = metadata; }
+    for (const property in metadata) { this[property] = metadata[property]; }
 
     // this.order = metadata.order
     this.questions = [];
@@ -652,7 +664,7 @@ class Section {
     this.parent_template = parent_template;
     this.label = metadata.label ? metadata.label : '';
 
-    if (!this.hasOwnProperty('go_to')) this.go_to = null;
+    if (!this.hasOwnProperty('go_to')) { this.go_to = null; }
 
     this.num = parent_template.sections.length + 1;
 
@@ -695,10 +707,10 @@ class Section {
   }
 
   getQuestions() {
-    let template = this.parent_template;
+    const template = this.parent_template;
     let question_num = 0;
 
-    for (let question of this.questions_metadata) {
+    for (const question of this.questions_metadata) {
       template.num_questions++;
       question_num++;
       switch (question.type) {
@@ -882,7 +894,7 @@ class Question {
   ) {
     // if parent question is passed in, question is a sub question of parent_question
 
-    for (let property in metadata) this[property] = metadata[property];
+    for (const property in metadata) { this[property] = metadata[property]; }
     this.answer_index = answer_index;
     this.metadata = metadata;
     this.parent_template = parent_template;
@@ -895,14 +907,14 @@ class Question {
 
     this.read_only_view = null;
 
-    //add required property if it is missing
+    // add required property if it is missing
     if (!metadata.hasOwnProperty('required')) {
       this.required = QuestionnaireBuilder.REQUIRED_DEFAULT;
       this.metadata.required = QuestionnaireBuilder.REQUIRED_DEFAULT;
     }
 
     if (parent_template.constructor.name === 'Questionnaire') {
-      if (section) section.questions.push(this);
+      if (section) { section.questions.push(this); }
       this.parent_template.question_map[this.template_question_num] = this;
       this.parent_template.question_id_map[this.id] = this;
       return;
@@ -910,7 +922,7 @@ class Question {
 
     // note that any question type class that has a defined 'parent question' parameter is a SUB QUESTION
     // ONLY MULTIPLE CHOICE QUESTION TYPES HAVE SUB QUESTIONS
-    //if sub question, don't create standard UI elements
+    // if sub question, don't create standard UI elements
     if (parent_question) {
       this.is_sub_question = true;
       $('.subQuestionModalForm').fadeOut();
@@ -924,30 +936,32 @@ class Question {
       return;
     }
 
-    if (parent_template.current_question_index !== -1)
+    if (parent_template.current_question_index !== -1) {
       ++parent_template.current_question_index;
+    }
 
     // if (!this.id) this.id = Utils.generateUUID();
-    if (!this.id) this.id = uuidv4();
+    if (!this.id) { this.id = uuidv4(); }
 
     section.questions.push(this);
-    //add to question map
+    // add to question map
     this.parent_template.question_map[this.template_question_num] = this;
     this.parent_template.question_id_map[this.id] = this;
   }
 
   getSubQuestionNumber() {
-    //returns the sub question number to be displayed above sub questions in view/edit mode
+    // returns the sub question number to be displayed above sub questions in view/edit mode
 
     let sub_question_number = '';
 
     if (this.is_sub_question) {
-      let parent_question = this.parent_question;
+      const parent_question = this.parent_question;
       let char = 'a';
 
-      for (let i = 0; i < this.answer_index; i++)
+      for (let i = 0; i < this.answer_index; i++) {
         // char = Utils.nextAlphabetChar(char);
         char = getNextChar(char);
+      }
 
       sub_question_number =
         'Q' + parent_question.template_question_num + '-' + char.toUpperCase();
@@ -956,15 +970,16 @@ class Question {
     return sub_question_number;
   }
 
-  //decline options
+  // decline options
   addDeclineOption() {
-    let question = this;
+    const question = this;
 
     if (!question.decline) {
       question.decline = { label: 'Prefer not to answer' };
     } else {
-      if (!question.decline.label)
+      if (!question.decline.label) {
         question.decline = { label: 'Prefer not to answer' };
+      }
     }
 
     question.metadata.decline = question.decline;
@@ -976,16 +991,17 @@ class Question {
     );
   }
 
-  //formatting
+  // formatting
   setTextAreaWidth() {
-    let question = this;
+    const question = this;
     let max_width = 0;
 
     $.each(
       $(question.view_question_DOM).find('.questionOption'),
-      function (index, value) {
-        if ($(value).find('td p.questionnaireQuestion').width() > max_width)
+      function(index, value) {
+        if ($(value).find('td p.questionnaireQuestion').width() > max_width) {
           max_width = $(value).find('td p.questionnaireQuestion').width();
+        }
       }
     );
 
@@ -1012,7 +1028,7 @@ class Question {
     // but also require a DOM container to append to for viewing
 
     this.read_only_view = $(this.view_question_DOM).clone();
-    let question_num = this.is_sub_question
+    const question_num = this.is_sub_question
       ? this.getSubQuestionNumber()
       : 'Q' + this.template_question_num;
     this.read_only_view.find('.questionNumber').first().html(question_num);
@@ -1021,27 +1037,28 @@ class Question {
       .removeClass('textFieldPlaceHolder');
   }
   getResponse() {
-    //response values for assets
+    // response values for assets
 
     // most questions use the responseString json property
     // question types that use responseIndex
 
     let response = '';
     if (this.responseStrings != null) {
-      for (let string of this.responseStrings)
-        if (string) response += this.responseStrings;
+      for (const string of this.responseStrings) {
+        if (string) { response += this.responseStrings; }
+      }
     }
     return response ? response : '';
   }
 
   /** !!!!! This method will need to be updated to get embedded assets to work in designsafe !!!!!  **/
   addEmbeddedAssets(container) {
-    let question = this;
+    const question = this;
 
     if (question.hasOwnProperty('assetUuids')) {
       if (question.assetUuids) {
         if (question.assetUuids.length) {
-          for (let uuid of question.assetUuids) {
+          for (const uuid of question.assetUuids) {
             // let asset = Assets.getAsset(uuid);
 
             // TODO modify this url path to work with DesingSafe
@@ -1072,7 +1089,7 @@ class Question {
   }
 }
 
-//multiple choice question types
+// multiple choice question types
 class SingleAnswer extends Question {
   options;
   instructions;
@@ -1103,13 +1120,13 @@ class SingleAnswer extends Question {
       answer_index
     );
 
-    let single_answer = this;
+    const single_answer = this;
     single_answer.is_sub_question = false;
     single_answer.view_question_DOM = null;
 
     let view_mode_fields = [];
 
-    //answer option fields
+    // answer option fields
     for (let j = 0; j < this.options.length; j++) {
       view_mode_fields.push({
         tag: 'tr',
@@ -1138,9 +1155,9 @@ class SingleAnswer extends Question {
     }
 
     let instruction_class = 'instructionText';
-    if (this.instructions === null) instruction_class += ' hidden';
+    if (this.instructions === null) { instruction_class += ' hidden'; }
     let required_class = 'optionsWrapper';
-    if (!this.required) required_class += ' hidden';
+    if (!this.required) { required_class += ' hidden'; }
 
     this.view_question_DOM = DOM.new({
       tag: 'div',
@@ -1192,14 +1209,14 @@ class SingleAnswer extends Question {
     });
 
     if (parent_question) {
-      //if parent_question is defined, this is a sub question
+      // if parent_question is defined, this is a sub question
 
       single_answer.is_sub_question = true;
       single_answer.parent_question = parent_question;
 
       view_mode_fields = [];
 
-      for (let j = 0; j < this.options.length; j++)
+      for (let j = 0; j < this.options.length; j++) {
         view_mode_fields.push({
           tag: 'tr',
           class: 'questionOption',
@@ -1221,8 +1238,9 @@ class SingleAnswer extends Question {
             { tag: 'td' },
           ],
         });
+      }
 
-      let instruction_class = this.instructions
+      const instruction_class = this.instructions
         ? 'instructionText'
         : 'instructionText hidden';
 
@@ -1270,7 +1288,7 @@ class SingleAnswer extends Question {
 
       let view_field;
 
-      //not a decline
+      // not a decline
       if (answer_index > -1) {
         parent_question.options[answer_index].sub_question = this.metadata;
         view_field = $(
@@ -1279,7 +1297,7 @@ class SingleAnswer extends Question {
           ]
         );
 
-        //decline option
+        // decline option
       } else if (answer_index === -1) {
         parent_question.decline.sub_question = this.metadata;
         view_field = $(
@@ -1297,10 +1315,10 @@ class SingleAnswer extends Question {
         .removeClass('questionnaireOptions')
         .addClass('subQuestionOptions');
     } else {
-      //adding sub questions for questions that are being created from json structure
+      // adding sub questions for questions that are being created from json structure
       for (let i = 0; i < this.options.length; i++) {
         if (this.options[i].sub_question) {
-          let sub_question = this.options[i].sub_question;
+          const sub_question = this.options[i].sub_question;
           this.new_sub_question_index = i;
           // this.addNewSubQuestion(sub_question.type, this, i)
           this.createSubQuestion(sub_question, this, i);
@@ -1317,13 +1335,13 @@ class SingleAnswer extends Question {
     }
   }
 
-  //sub questions
+  // sub questions
   createSubQuestion(metadata, parent_question, answer_index) {
     // let answer_index = parent_question.new_sub_question_index
 
-    //pass in parent_question object to hold new sub question
+    // pass in parent_question object to hold new sub question
 
-    let template = this.parent_template;
+    const template = this.parent_template;
 
     if (parent_question && metadata) {
       switch (metadata.type) {
@@ -1409,13 +1427,13 @@ class SingleAnswer extends Question {
     }
   }
 
-  //answer options
+  // answer options
   addDeclineOption() {
-    let single_answer = this;
-    let parent_template = this.parent_template;
+    const single_answer = this;
+    const parent_template = this.parent_template;
     // let answer_class = (this.is_sub_question) ? "subQuestionOption declineOption" : "questionOption declineOption"
 
-    //default text
+    // default text
     if (!single_answer.decline) {
       single_answer.decline = { label: 'Prefer not to answer' };
       single_answer.metadata.decline = { label: 'Prefer not to answer' };
@@ -1426,7 +1444,7 @@ class SingleAnswer extends Question {
       }
     }
 
-    let goto_label = 'Go To';
+    const goto_label = 'Go To';
 
     single_answer.decline.value = single_answer.decline.value
       ? single_answer.decline.value.toLowerCase()
@@ -1434,19 +1452,19 @@ class SingleAnswer extends Question {
     // ? Utils.formatVariableName(single_answer.decline.value)
     // : Utils.formatVariableName(single_answer.decline.label);
 
-    let option_class = single_answer.is_sub_question
+    const option_class = single_answer.is_sub_question
       ? 'declineOption subQuestionOption'
       : 'declineOption questionOption';
-    let view_mode_selector_class = single_answer.is_sub_question
+    const view_mode_selector_class = single_answer.is_sub_question
       ? '.declineOption.questionnaireSubOption'
       : '.declineOption.questionOption';
-    let view_class = single_answer.is_sub_question
+    const view_class = single_answer.is_sub_question
       ? 'declineOption questionnaireSubOption'
       : 'declineOption questionOption';
 
-    let shape_class = 'questionOptionShape';
+    const shape_class = 'questionOptionShape';
 
-    let view_mode_answer = DOM.new({
+    const view_mode_answer = DOM.new({
       tag: 'tr',
       class: view_class,
       children: [
@@ -1482,38 +1500,43 @@ class SingleAnswer extends Question {
         )
       );
     }
-    if (single_answer.decline.sub_question)
+    if (single_answer.decline.sub_question) {
       single_answer.createSubQuestion(
         single_answer.decline.sub_question,
         single_answer,
         -1
       );
+    }
   }
 
-  //response values for assets
+  // response values for assets
   getResponse(viewer_option?) {
-    let question = this;
+    const question = this;
     let response = null;
 
     if (question.hasOwnProperty('responseIndexes')) {
       if (question.responseIndexes != null) {
         if (question.responseIndexes.length) {
-          //index of selected option
-          let index = question.responseIndexes[0];
+          // index of selected option
+          const index = question.responseIndexes[0];
 
-          //if index is equal to length of options array, assume decline option was selected
+          // if index is equal to length of options array, assume decline option was selected
           if (index > -1) {
             if (index === question.options.length) {
               response = question.decline.label;
-              if (viewer_option)
-                if (viewer_option === 'variable')
+              if (viewer_option) {
+                if (viewer_option === 'variable') {
                   response = question.decline.value;
+                }
+              }
             } else {
               response = question.options[question.responseIndexes[0]].label;
-              if (viewer_option)
-                if (viewer_option === 'variable')
+              if (viewer_option) {
+                if (viewer_option === 'variable') {
                   response =
                     question.options[question.responseIndexes[0]].value;
+                }
+              }
             }
           }
         }
@@ -1525,15 +1548,15 @@ class SingleAnswer extends Question {
   drawViewResponse(container?) {
     super.drawViewResponse();
 
-    let question = this;
-    let view = $(question.read_only_view);
-    let parent_template = question.parent_template;
-    let selector_class = question.is_sub_question
+    const question = this;
+    const view = $(question.read_only_view);
+    const parent_template = question.parent_template;
+    const selector_class = question.is_sub_question
       ? 'tr.questionnaireSubOption td > .questionOptionShape'
       : 'tr.questionOption td > .questionOptionShape';
 
     if (question.responseIndexes) {
-      for (let index of question.responseIndexes) {
+      for (const index of question.responseIndexes) {
         $($(view).find(selector_class)[index]).addClass('optionSelected');
         $(view).find(selector_class);
       }
@@ -1541,9 +1564,9 @@ class SingleAnswer extends Question {
 
     if (!question.is_sub_question) {
       // sub questions
-      for (let option of question.options) {
+      for (const option of question.options) {
         if (option.sub_question) {
-          let sub_question = parent_template.getItemById(
+          const sub_question = parent_template.getItemById(
             option.sub_question.id
           );
           sub_question.drawViewResponse(view);
@@ -1552,11 +1575,12 @@ class SingleAnswer extends Question {
       $(view).appendTo(container);
     } else {
       // remove sub questions because we will re-add them with completed answers
-      let option_element =
+      const option_element =
         $(container).find('tr.questionOption')[question.answer_index];
 
-      if ($(option_element).next().hasClass('subQuestion'))
+      if ($(option_element).next().hasClass('subQuestion')) {
         $(option_element).next().remove();
+      }
       $(view).insertAfter($(option_element));
     }
 
@@ -1610,8 +1634,8 @@ class MultiAnswer extends SingleAnswer {
   }
 
   updateView() {
-    //updates view from inherited single select template to multi select UI
-    //removes go-tos and replace circles with rounded squares for answer options
+    // updates view from inherited single select template to multi select UI
+    // removes go-tos and replace circles with rounded squares for answer options
 
     if (this.is_sub_question) {
       $(this.view_question_DOM)
@@ -1631,21 +1655,21 @@ class MultiAnswer extends SingleAnswer {
   drawViewResponse(container) {
     super.drawViewResponse();
 
-    let question = this;
-    let view = $(question.read_only_view);
+    const question = this;
+    const view = $(question.read_only_view);
 
-    let parent_template = question.parent_template;
+    const parent_template = question.parent_template;
     // let selector_class = (question.is_sub_question) ? ".questionnaireSubOption .answerBubbleViewMode" : ".questionnaireOptions td > .answerBubbleViewMode"
-    let selector_class = question.is_sub_question
+    const selector_class = question.is_sub_question
       ? 'tr.questionnaireSubOption td > .answerBubbleViewMode'
       : 'tr.questionOption td > .answerBubbleViewMode';
 
     // let selector_class = (this.is_sub_question) ? ".subQuestionOptions .answerBubbleViewMode" : ".questionnaireOptions .answerBubbleViewMode"
-    let options: any = $(view).find(selector_class);
+    const options: any = $(view).find(selector_class);
 
     $(view)
       .find(selector_class)
-      .click(function () {
+      .click(function() {
         $(view)
           .find(selector_class + '.answerBubbleViewModeSelected')
           .removeClass('answerBubbleViewModeSelected');
@@ -1654,7 +1678,7 @@ class MultiAnswer extends SingleAnswer {
       });
 
     if (question.responseIndexes) {
-      for (let index of question.responseIndexes) {
+      for (const index of question.responseIndexes) {
         $($(view).find(selector_class)[index]).addClass(
           'answerBubbleViewModeSelected'
         );
@@ -1663,9 +1687,9 @@ class MultiAnswer extends SingleAnswer {
 
     if (!question.is_sub_question) {
       // sub questions
-      for (let option of question.options) {
+      for (const option of question.options) {
         if (option.sub_question) {
-          let sub_question = parent_template.getItemById(
+          const sub_question = parent_template.getItemById(
             option.sub_question.id
           );
           sub_question.drawViewResponse(view);
@@ -1674,10 +1698,11 @@ class MultiAnswer extends SingleAnswer {
       $(view).appendTo(container);
     } else {
       // remove sub questions because we will re-add them with completed answers
-      let option_element =
+      const option_element =
         $(container).find('tr.questionOption')[question.answer_index];
-      if ($(option_element).next().hasClass('subQuestion'))
+      if ($(option_element).next().hasClass('subQuestion')) {
         $(option_element).next().remove();
+      }
       $(view).insertAfter($(option_element));
     }
 
@@ -1698,14 +1723,15 @@ class MultiAnswer extends SingleAnswer {
 
           if (this.responseIndexes.length > 1) {
             response = '';
-            for (let index of this.responseIndexes) {
+            for (const index of this.responseIndexes) {
               if (this.options[index]) {
-                if (viewer_option)
+                if (viewer_option) {
                   if (viewer_option === 'variable') {
                     response += this.options[index].value + '<br><br>';
                   } else {
                     response += this.options[index].label + '<br><br>';
                   }
+                }
               }
             }
             response = response.substring(0, response.length - 8);
@@ -1743,7 +1769,7 @@ class YesNo extends SingleAnswer {
   }
 }
 
-//text entry question type
+// text entry question type
 class MultiText extends Question {
   heading: null;
   questions;
@@ -1770,7 +1796,7 @@ class MultiText extends Question {
       answer_index
     );
 
-    let multi_text = this;
+    const multi_text = this;
     multi_text.answer_index = answer_index;
 
     multi_text.is_sub_question = false;
@@ -1797,7 +1823,7 @@ class MultiText extends Question {
       ],
     });
 
-    //list item for reorder question panel
+    // list item for reorder question panel
 
     if (parent_question) {
       multi_text.is_sub_question = true;
@@ -1808,7 +1834,7 @@ class MultiText extends Question {
       });
 
       if (answer_index > -1) {
-        let view_field = $(
+        const view_field = $(
           $(parent_question.view_question_DOM)
             .find('.questionnaireOptions')
             .children('.questionOption')[answer_index]
@@ -1836,7 +1862,7 @@ class MultiText extends Question {
           class: 'questionWrapper subQuestion indent',
         });
 
-        let view_field = $(
+        const view_field = $(
           $(parent_question.view_question_DOM)
             .children('.dropDownViewModeContainer')
             .children('.questionnaireOptions')
@@ -1856,18 +1882,18 @@ class MultiText extends Question {
       }
     }
 
-    //add existing text fields
-    for (let question of multi_text.questions) multi_text.createField(question);
+    // add existing text fields
+    for (const question of multi_text.questions) { multi_text.createField(question); }
   }
 
   createField(question) {
-    let multi_text = this;
+    const multi_text = this;
 
-    let index = question
+    const index = question
       ? multi_text.questions.indexOf(question)
       : multi_text.questions.length;
 
-    let template = this.parent_template;
+    const template = this.parent_template;
 
     if (!question) {
       // if field is being created from scratch
@@ -1884,7 +1910,7 @@ class MultiText extends Question {
     }
 
     let instruction_class = 'instructionText';
-    if (!question.instructions) instruction_class += ' hidden';
+    if (!question.instructions) { instruction_class += ' hidden'; }
 
     let decline_class = 'buttonDecline disabled';
     let decline_label = 'Prefer not to answer';
@@ -1894,10 +1920,10 @@ class MultiText extends Question {
       decline_class += ' hidden';
     }
 
-    let text_class = 'textFieldPlaceHolder shortAnswer';
+    const text_class = 'textFieldPlaceHolder shortAnswer';
 
     let required_class = 'optionsWrapper';
-    if (!this.required) required_class += ' hidden';
+    if (!this.required) { required_class += ' hidden'; }
 
     let view_mode_field = DOM.new({
       tag: 'div',
@@ -1984,21 +2010,22 @@ class MultiText extends Question {
       }
     }
 
-    if (question.decline) multi_text.addDeclineOption(index);
+    if (question.decline) { multi_text.addDeclineOption(index); }
 
     multi_text.setMode(question.mode, index);
   }
 
   addDeclineOption(DOM_index?) {
-    let multi_text = this;
-    let question = multi_text.questions[DOM_index];
-    let parent_template = multi_text.parent_template;
+    const multi_text = this;
+    const question = multi_text.questions[DOM_index];
+    const parent_template = multi_text.parent_template;
 
     if (!question.decline) {
       question.decline = { label: 'Prefer not to answer' };
     } else {
-      if (!question.decline.label)
+      if (!question.decline.label) {
         question.decline = { label: 'Prefer not to answer' };
+      }
     }
 
     $($(multi_text.view_question_DOM).find('.buttonDecline')[DOM_index]).html(
@@ -2012,7 +2039,7 @@ class MultiText extends Question {
   setMode(mode, index) {
     let textarea_class;
     let option_index;
-    let text_field_mode = mode !== undefined ? mode : 'short';
+    const text_field_mode = mode !== undefined ? mode : 'short';
     this.questions[index].mode = text_field_mode;
 
     let view_mode_field;
@@ -2070,11 +2097,12 @@ class MultiText extends Question {
 
     if (sub_question_number) {
       let sub_question_char = 'a';
-      let index = this.questions.indexOf(question);
+      const index = this.questions.indexOf(question);
 
-      for (let i = 0; i < index; i++)
+      for (let i = 0; i < index; i++) {
         // sub_question_char = Utils.nextAlphabetChar(sub_question_char);
         sub_question_char = getNextChar(sub_question_char);
+      }
       sub_question_number += '-' + sub_question_char.toUpperCase();
     }
 
@@ -2082,14 +2110,14 @@ class MultiText extends Question {
   }
 
   getResponse(): any {
-    //returns array of responses
+    // returns array of responses
 
     // return this.responseStrings
 
-    let responses = [];
-    for (let question of this.questions) {
+    const responses = [];
+    for (const question of this.questions) {
       if (question.responseStrings) {
-        for (let string of question.responseStrings) responses.push(string);
+        for (const string of question.responseStrings) { responses.push(string); }
       } else {
         // responses.push("")
         // responses.push("")
@@ -2102,15 +2130,15 @@ class MultiText extends Question {
   drawViewResponse(container?) {
     super.drawViewResponse();
 
-    let question = this;
-    let parent_template = this.parent_template;
+    const question = this;
+    const parent_template = this.parent_template;
 
-    let view = $(this.read_only_view);
-    if (!this.heading) $(view).find('p.headingText').remove();
-    let responses = this.getResponse();
+    const view = $(this.read_only_view);
+    if (!this.heading) { $(view).find('p.headingText').remove(); }
+    const responses = this.getResponse();
     let i = 0;
-    for (let response of responses) {
-      let item = $(view).find('.multiText .centerText').get(i);
+    for (const response of responses) {
+      const item = $(view).find('.multiText .centerText').get(i);
       $(item).empty();
       DOM.new({ tag: 'p', class: 'blackText', html: response, parent: item });
       i++;
@@ -2122,16 +2150,17 @@ class MultiText extends Question {
       $(view).appendTo($(container));
     } else {
       // remove sub questions because we will re-add them with completed answers
-      let option_element =
+      const option_element =
         $(container).find('tr.questionOption')[question.answer_index];
-      if ($(option_element).next().hasClass('subQuestion'))
+      if ($(option_element).next().hasClass('subQuestion')) {
         $(option_element).next().remove();
+      }
       $(view).insertAfter($(option_element));
     }
   }
 }
 
-//number fields
+// number fields
 class NumberField extends Question {
   mode;
   type;
@@ -2160,8 +2189,8 @@ class NumberField extends Question {
       answer_index
     );
 
-    let text_field = this;
-    if (!this.mode) this.mode = 'integer';
+    const text_field = this;
+    if (!this.mode) { this.mode = 'integer'; }
 
     let instruction_class = 'instructionText';
     instruction_class += ' hidden';
@@ -2221,8 +2250,9 @@ class NumberField extends Question {
       ],
     });
 
-    if (!this.heading)
+    if (!this.heading) {
       $(this.view_question_DOM).find('p.headingText').addClass('hidden');
+    }
 
     if (parent_question && answer_index > -1) {
       this.view_question_DOM = DOM.new({
@@ -2245,7 +2275,7 @@ class NumberField extends Question {
         ],
       });
 
-      let view_field = $(
+      const view_field = $(
         $(parent_question.view_question_DOM).find('.questionOption')[
           answer_index
         ]
@@ -2255,7 +2285,7 @@ class NumberField extends Question {
       parent_question.options[answer_index].sub_question = this.metadata;
     }
 
-    if (this.decline) this.addDeclineOption();
+    if (this.decline) { this.addDeclineOption(); }
 
     if (this.type === 'Number') {
       this.setMode(this.mode);
@@ -2263,14 +2293,15 @@ class NumberField extends Question {
   }
 
   addDeclineOption() {
-    let question = this;
-    let parent_template = question.parent_template;
+    const question = this;
+    const parent_template = question.parent_template;
 
     if (!question.decline) {
       question.decline = { label: 'Prefer not to answer' };
     } else {
-      if (!question.decline.label)
+      if (!question.decline.label) {
         question.decline = { label: 'Prefer not to answer' };
+      }
     }
 
     $($(question.view_question_DOM).find('.buttonDecline')).html(
@@ -2326,18 +2357,19 @@ class NumberField extends Question {
         this.mode.word ? this.mode.word.charAt(0).toUpperCase() + this.mode.word.slice(1) : 'test'
       );
 
-    if (!this.required || !this.hasOwnProperty('required'))
+    if (!this.required || !this.hasOwnProperty('required')) {
       $(this.view_question_DOM).find('.optionsWrapper').hide();
+    }
   }
 
   drawViewResponse(container?) {
     super.drawViewResponse();
 
-    let question = this;
-    let parent_template = question.parent_template;
-    let view = $(this.read_only_view);
-    if (!question.heading) $(view).find('p.headingText').remove();
-    let item = $(view).find('.wrapper.alignLeft');
+    const question = this;
+    const parent_template = question.parent_template;
+    const view = $(this.read_only_view);
+    if (!question.heading) { $(view).find('p.headingText').remove(); }
+    const item = $(view).find('.wrapper.alignLeft');
 
     $(item).empty();
     DOM.new({
@@ -2353,10 +2385,11 @@ class NumberField extends Question {
       $(view).appendTo($(container));
     } else {
       // remove sub questions because we will re-add them with completed answers
-      let option_element =
+      const option_element =
         $(container).find('tr.questionOption')[question.answer_index];
-      if ($(option_element).next().hasClass('subQuestion'))
+      if ($(option_element).next().hasClass('subQuestion')) {
         $(option_element).next().remove();
+      }
       $(view).insertAfter($(option_element));
     }
   }
@@ -2383,9 +2416,9 @@ class DateTime extends NumberField {
       answer_index
     );
 
-    let datetime = this;
+    const datetime = this;
 
-    let mode_selector = DOM.new({
+    const mode_selector = DOM.new({
       tag: 'div',
       class: 'modeSelector',
       children: [
@@ -2393,7 +2426,7 @@ class DateTime extends NumberField {
           tag: 'div',
           class: 'modeOption',
           html: 'Date',
-          click: function () {
+          click() {
             datetime.setMode('date');
           },
         },
@@ -2401,20 +2434,20 @@ class DateTime extends NumberField {
           tag: 'div',
           class: 'modeOption',
           html: 'Time',
-          click: function () {
+          click() {
             datetime.setMode('time');
           },
         },
       ],
     });
 
-    if (!this.mode || this.mode === 'integer') this.mode = 'date';
+    if (!this.mode || this.mode === 'integer') { this.mode = 'date'; }
 
     this.setMode(this.mode);
   }
 }
 
-//special question types
+// special question types
 class LocationField extends Question {
   mode;
   type;
@@ -2445,10 +2478,10 @@ class LocationField extends Question {
       answer_index
     );
 
-    let text_field = this;
+    const text_field = this;
 
     let instruction_class = 'instructionText';
-    if (!this.instructions) instruction_class += ' hidden';
+    if (!this.instructions) { instruction_class += ' hidden'; }
 
     this.view_question_DOM = DOM.new({
       tag: 'div',
@@ -2511,8 +2544,9 @@ class LocationField extends Question {
       ],
     });
 
-    if (!this.heading)
+    if (!this.heading) {
       $(this.view_question_DOM).find('p.headingText').addClass('hidden');
+    }
 
     if (parent_question && answer_index > -1) {
       this.view_question_DOM = DOM.new({
@@ -2530,7 +2564,7 @@ class LocationField extends Question {
         ],
       });
 
-      let view_field = $(
+      const view_field = $(
         $(parent_question.view_question_DOM).find('.questionOption')[
           answer_index
         ]
@@ -2541,20 +2575,21 @@ class LocationField extends Question {
       parent_question.options[answer_index].sub_question = this.metadata;
     }
 
-    if (this.decline) this.addDeclineOption();
+    if (this.decline) { this.addDeclineOption(); }
     // this.decline
     this.initMap();
   }
 
   addDeclineOption() {
-    let question = this;
-    let parent_template = question.parent_template;
+    const question = this;
+    const parent_template = question.parent_template;
 
     if (!question.decline) {
       question.decline = { label: 'Prefer not to answer' };
     } else {
-      if (!question.decline.label)
+      if (!question.decline.label) {
         question.decline = { label: 'Prefer not to answer' };
+      }
     }
 
     $($(question.view_question_DOM).find('.buttonDecline')).html(
@@ -2566,7 +2601,7 @@ class LocationField extends Question {
   }
 
   initMap() {
-    let view_mode_map_canvas = DOM.new({
+    const view_mode_map_canvas = DOM.new({
       tag: 'div',
       class: 'mapCanvas',
       parent: $(this.view_question_DOM).find('.locationMapContainer'),
@@ -2581,15 +2616,15 @@ class LocationField extends Question {
       'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
     ).addTo(this.view_mode_map);
 
-    //tile hack
-    (function () {
+    // tile hack
+    (function() {
       // @ts-ignore
-      let originalInitTile: any = L.GridLayer.prototype._initTile;
+      const originalInitTile: any = L.GridLayer.prototype._initTile;
       L.GridLayer.include({
-        _initTile: function (tile) {
+        _initTile(tile) {
           originalInitTile.call(this, tile);
 
-          let tileSize = this.getTileSize();
+          const tileSize = this.getTileSize();
 
           tile.style.width = tileSize.x + 1 + 'px';
           tile.style.height = tileSize.y + 1 + 'px';
@@ -2599,29 +2634,33 @@ class LocationField extends Question {
 
     this.view_mode_map.invalidateSize();
 
-    if (!this.required || !this.hasOwnProperty('required'))
+    if (!this.required || !this.hasOwnProperty('required')) {
       $(this.view_question_DOM).find('.optionsWrapper').hide();
+    }
   }
 
   getResponse() {
     let response = '';
     if (this.responseStrings) {
       if (this.responseStrings.length === 3) {
-        //check for decline
-        if (!this.responseStrings[0] && !this.responseStrings[1])
+        // check for decline
+        if (!this.responseStrings[0] && !this.responseStrings[1]) {
           return this.decline.label;
+        }
 
         response += 'Lat: ';
-        if (this.responseStrings[0])
+        if (this.responseStrings[0]) {
           response +=
             Number.parseFloat(this.responseStrings[0]).toFixed(6) + '<br>';
+        }
         response += 'Lon: ';
-        if (this.responseStrings[1])
+        if (this.responseStrings[1]) {
           response +=
             Number.parseFloat(this.responseStrings[1]).toFixed(6) + '<br><br>';
-        if (this.responseStrings[2]) response += this.responseStrings[2];
+        }
+        if (this.responseStrings[2]) { response += this.responseStrings[2]; }
       } else {
-        for (let string of this.responseStrings) response += string + ' ';
+        for (const string of this.responseStrings) { response += string + ' '; }
         response = response.substring(0, response.length - 1);
       }
     }
@@ -2631,27 +2670,27 @@ class LocationField extends Question {
   drawViewResponse(container?) {
     super.drawViewResponse();
 
-    let response_timer = null;
-    let question = this;
-    let parent_template = question.parent_template;
-    let view = $(this.read_only_view);
+    const response_timer = null;
+    const question = this;
+    const parent_template = question.parent_template;
+    const view = $(this.read_only_view);
 
     $(view).find('.mapCanvas').remove();
 
-    let view_mode_map_canvas = DOM.new({
+    const view_mode_map_canvas = DOM.new({
       tag: 'div',
       class: 'mapCanvas',
       parent: $(view).find('.locationMapContainer'),
     });
 
-    let lat = question.responseStrings[0]
+    const lat = question.responseStrings[0]
       ? question.responseStrings[0]
       : 47.6468;
-    let lon = question.responseStrings[1]
+    const lon = question.responseStrings[1]
       ? question.responseStrings[1]
       : -122.3353;
 
-    let view_map = L.map(view_mode_map_canvas).setView([lat, lon], 16);
+    const view_map = L.map(view_mode_map_canvas).setView([lat, lon], 16);
 
     L.tileLayer(
       'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
@@ -2712,15 +2751,15 @@ class RangeAnswer extends Question {
       answer_index
     );
 
-    let range = this;
-    let max = range.range.max;
+    const range = this;
+    const max = range.range.max;
     range.update_timer = null;
 
-    let range_answers = [];
+    const range_answers = [];
 
     let display_class = 'rangeAnswer';
     for (let k = 0; k < max; k++) {
-      if (k + 1 === 10) display_class = 'rangeAnswerDoubleDigit';
+      if (k + 1 === 10) { display_class = 'rangeAnswerDoubleDigit'; }
       range_answers.push({
         tag: 'button',
         label: SVG.getEyeIcon(),
@@ -2731,7 +2770,7 @@ class RangeAnswer extends Question {
 
     let instruction_class = 'instructionText';
 
-    if (!this.instructions) instruction_class += ' hidden';
+    if (!this.instructions) { instruction_class += ' hidden'; }
 
     this.view_question_DOM = DOM.new({
       tag: 'div',
@@ -2782,8 +2821,9 @@ class RangeAnswer extends Question {
       ],
     });
 
-    if (!this.heading)
+    if (!this.heading) {
       $(this.view_question_DOM).find('p.headingText').addClass('hidden');
+    }
 
     if (parent_question) {
       range.is_sub_question = true;
@@ -2814,7 +2854,7 @@ class RangeAnswer extends Question {
       });
 
       if (answer_index > -1) {
-        let view_field = $(
+        const view_field = $(
           $(parent_question.view_question_DOM)
             .find('.questionnaireOptions ')
             .children('.questionOption')[answer_index]
@@ -2843,7 +2883,7 @@ class RangeAnswer extends Question {
           class: 'questionWrapper subQuestion indent',
         });
 
-        let view_field = $(
+        const view_field = $(
           $(parent_question.view_question_DOM)
             .children('.dropDownViewModeContainer')
             .children('.questionnaireOptions')
@@ -2864,21 +2904,23 @@ class RangeAnswer extends Question {
       }
     }
 
-    if (!this.required || !this.hasOwnProperty('required'))
+    if (!this.required || !this.hasOwnProperty('required')) {
       $(this.view_question_DOM).find('.optionsWrapper').hide();
+    }
 
-    if (this.decline) this.addDeclineOption();
+    if (this.decline) { this.addDeclineOption(); }
   }
 
   addDeclineOption() {
-    let question = this;
-    let parent_template = question.parent_template;
+    const question = this;
+    const parent_template = question.parent_template;
 
     if (!question.decline) {
       question.decline = { label: 'Prefer not to answer' };
     } else {
-      if (!question.decline.label)
+      if (!question.decline.label) {
         question.decline = { label: 'Prefer not to answer' };
+      }
     }
 
     $($(question.view_question_DOM).find('.buttonDecline')).html(
@@ -2895,8 +2937,9 @@ class RangeAnswer extends Question {
     if (this.hasOwnProperty('responseIndexes')) {
       if (this.responseIndexes != null) {
         if (this.responseIndexes.length) {
-          if (this.responseIndexes[0] === this.range.max)
+          if (this.responseIndexes[0] === this.range.max) {
             return this.decline.label;
+          }
           response = this.responseIndexes[0] + 1;
         }
       }
@@ -2907,17 +2950,17 @@ class RangeAnswer extends Question {
 
   drawViewResponse(container?) {
     super.drawViewResponse();
-    let question = this;
-    let parent_template = question.parent_template;
-    let view = $(this.view_question_DOM);
+    const question = this;
+    const parent_template = question.parent_template;
+    const view = $(this.view_question_DOM);
 
     $(
       $(view)
         .find('div.rangeAnswer')
-        .click(function () {
+        .click(function() {
           $(view).find('div.rangeAnswer').removeClass('optionSelected');
           $(this).addClass('optionSelected');
-          let index = $(view).find('div.rangeAnswer').index($(this));
+          const index = $(view).find('div.rangeAnswer').index($(this));
           question.responseIndexes = [index];
         })
     );
@@ -2932,10 +2975,11 @@ class RangeAnswer extends Question {
       $(view).appendTo($(container));
     } else {
       // remove sub questions because we will re-add them with completed answers
-      let option_element =
+      const option_element =
         $(container).find('tr.questionOption')[question.answer_index];
-      if ($(option_element).next().hasClass('subQuestion'))
+      if ($(option_element).next().hasClass('subQuestion')) {
         $(option_element).next().remove();
+      }
       $(view).insertAfter($(option_element));
     }
   }
@@ -2972,25 +3016,25 @@ class Matrix extends Question {
     // default matrix question is 2x2
     // matrix questions cannot contain sub questions and they cannot be sub-questions
 
-    let matrix_question = this;
+    const matrix_question = this;
 
     let instruction_class = 'instructionText';
-    if (!this.instructions) instruction_class += ' hidden';
+    if (!this.instructions) { instruction_class += ' hidden'; }
 
-    if (!this.mode) this.mode = 'single';
+    if (!this.mode) { this.mode = 'single'; }
 
     matrix_question.view_question_DOM = null;
 
-    //table for view mode display
-    let table_rows = [];
-    let table_columns_headers: any = [
+    // table for view mode display
+    const table_rows = [];
+    const table_columns_headers: any = [
       { tag: 'td', class: 'spacer', html: 'spacer' },
     ];
 
-    //input fields for edit mode
+    // input fields for edit mode
 
-    let option_class = 'matrixOption';
-    let container_class = '.wrapper';
+    const option_class = 'matrixOption';
+    const container_class = '.wrapper';
 
     table_rows.push({
       tag: 'tr',
@@ -2998,9 +3042,9 @@ class Matrix extends Question {
       children: table_columns_headers,
     });
 
-    //rows
+    // rows
     for (let j = 0; j < this.rows.length; j++) {
-      let row_values = [
+      const row_values = [
         {
           tag: 'td',
           class: 'matrixRow',
@@ -3014,17 +3058,18 @@ class Matrix extends Question {
         },
       ];
 
-      for (let i = 0; i < this.columns.length; i++)
+      for (let i = 0; i < this.columns.length; i++) {
         row_values.push({
           tag: 'td',
           class: '',
           children: [{ tag: 'div', class: 'matrixOptionBubble', html: '' }],
         });
+      }
 
       table_rows.push({ tag: 'tr', children: row_values });
     }
 
-    //columns
+    // columns
     for (let j = 0; j < this.columns.length; j++) {
       table_columns_headers.push({
         tag: 'td',
@@ -3094,10 +3139,11 @@ class Matrix extends Question {
       ],
     });
 
-    if (!this.heading)
+    if (!this.heading) {
       $(this.view_question_DOM).find('p.headingText').addClass('hidden');
+    }
 
-    if (this.decline) this.addDeclineOption();
+    if (this.decline) { this.addDeclineOption(); }
     this.setMode(this.mode);
   }
 
@@ -3129,37 +3175,39 @@ class Matrix extends Question {
     $(this.view_question_DOM)
       .find('.matrixOptionBubble, .matrixMultiOptionBubble')
       .attr('class', view_mode_class);
-    if (!this.required || !this.hasOwnProperty('required'))
+    if (!this.required || !this.hasOwnProperty('required')) {
       $(this.view_question_DOM).find('.optionsWrapper').hide();
+    }
   }
 
   addDeclineOption() {
-    let question = this;
-    let parent_template = this.parent_template;
+    const question = this;
+    const parent_template = this.parent_template;
 
     if (!question.decline) {
       question.decline = { label: 'Prefer not to answer' };
     } else {
-      if (!question.decline.label)
+      if (!question.decline.label) {
         question.decline = { label: 'Prefer not to answer' };
+      }
     }
 
     question.metadata.decline = question.decline;
-    let value = question.decline.label;
-    let view_mode_column = DOM.new({
+    const value = question.decline.label;
+    const view_mode_column = DOM.new({
       tag: 'td',
       class: 'declineColumn',
       children: [{ tag: 'p', class: 'questionMatrixColumnLabel', html: value }],
     });
 
-    //update json, UI
+    // update json, UI
     $(view_mode_column).appendTo(
       $(question.view_question_DOM).find('.viewModeColumns')
     );
     $.each(
       $(question.view_question_DOM).find('tr').not('.viewModeColumns'),
-      function (index, value) {
-        let item = DOM.new({
+      function(index, value) {
+        const item = DOM.new({
           tag: 'td',
           class: 'declineColumn',
           children: [{ tag: 'div', class: 'matrixOptionBubble' }],
@@ -3174,11 +3222,11 @@ class Matrix extends Question {
   drawViewResponse(container?) {
     super.drawViewResponse();
 
-    let question = this;
-    let parent_template = this.parent_template;
-    let view = $(question.read_only_view);
+    const question = this;
+    const parent_template = this.parent_template;
+    const view = $(question.read_only_view);
 
-    let view_mode_rows = $(view).find('tr').not('.viewModeColumns');
+    const view_mode_rows = $(view).find('tr').not('.viewModeColumns');
 
     // $(view).find("tr .matrixOptionBubble").click(function() {
     //
@@ -3210,18 +3258,18 @@ class Matrix extends Question {
     //
     // })
 
-    let option_class =
+    const option_class =
       question.mode === 'multi'
         ? '.matrixMultiOptionBubble'
         : '.matrixOptionBubble';
 
-    for (let row in question.responseMatrixIndexes) {
-      let row_responses = question.responseMatrixIndexes[row];
-      if (!row_responses.length) continue;
+    for (const row in question.responseMatrixIndexes) {
+      const row_responses = question.responseMatrixIndexes[row];
+      if (!row_responses.length) { continue; }
 
-      for (let col of row_responses) {
-        let matrix_option_row = $(view_mode_rows).get(Number(row));
-        let matrix_option = $($(matrix_option_row).find(option_class).get(col));
+      for (const col of row_responses) {
+        const matrix_option_row = $(view_mode_rows).get(Number(row));
+        const matrix_option = $($(matrix_option_row).find(option_class).get(col));
 
         matrix_option.addClass('optionSelected');
       }
@@ -3233,19 +3281,19 @@ class Matrix extends Question {
   }
 
   getResponse(): any {
-    //returns array of responses
+    // returns array of responses
 
-    let matrix = this;
-    let responses = [];
+    const matrix = this;
+    const responses = [];
     if (this.responseMatrixIndexes) {
-      for (let row of matrix.responseMatrixIndexes) {
-        let arr = [];
+      for (const row of matrix.responseMatrixIndexes) {
+        const arr = [];
 
-        for (let index of row) {
+        for (const index of row) {
           if (matrix.columns[index]) {
             arr.push(this.columns[index].label);
           } else if (index === matrix.columns.length) {
-            //decline column selected
+            // decline column selected
             arr.push(this.decline.label);
           }
         }
@@ -3257,7 +3305,7 @@ class Matrix extends Question {
   }
 }
 
-//pages
+// pages
 class TextPage extends Question {
   heading;
   type;
@@ -3316,7 +3364,7 @@ class TextPage extends Question {
         ],
       });
 
-      let view_field = $(
+      const view_field = $(
         $(parent_question.view_question_DOM)
           .children('.questionnaireOptions')
           .children('.questionOption')[answer_index]
@@ -3331,8 +3379,8 @@ class TextPage extends Question {
 
   drawViewResponse(container?) {
     super.drawViewResponse();
-    let question = this;
-    let view = $(this.read_only_view);
+    const question = this;
+    const view = $(this.read_only_view);
     $(view).find('p.questionNumber').html(question.scroll_label);
 
     // question.addEmbeddedAssets(container)

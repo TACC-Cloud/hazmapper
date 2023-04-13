@@ -8,9 +8,8 @@ describe('EditNameInputComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditNameInputComponent ]
-    })
-    .compileComponents();
+      declarations: [EditNameInputComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

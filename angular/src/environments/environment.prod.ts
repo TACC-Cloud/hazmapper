@@ -1,4 +1,4 @@
-import {EnvironmentType} from './environmentType';
+import { EnvironmentType } from './environmentType';
 
 export interface AppEnvironment {
   jwt?: string;
@@ -6,8 +6,8 @@ export interface AppEnvironment {
   backend: EnvironmentType;
 }
 
-export const environment: AppEnvironment =  {
+export const environment: AppEnvironment = {
   production: true,
   // only used during testing
-  backend: EnvironmentType.Production
+  backend: EnvironmentType.Production,
 };

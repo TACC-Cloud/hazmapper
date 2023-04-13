@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ModalCreateProjectComponent } from './modal-create-project.component';
-import {instance, mock, reset} from 'ts-mockito';
-import {BsModalRef, ModalModule} from 'ngx-foundation';
-import {ProjectsService} from '../../services/projects.service';
-import {ReactiveFormsModule} from '@angular/forms';
-import {projectFixture} from '../../fixtures/project.fixture';
+import { instance, mock, reset } from 'ts-mockito';
+import { BsModalRef, ModalModule } from 'ngx-foundation';
+import { ProjectsService } from '../../services/projects.service';
+import { ReactiveFormsModule } from '@angular/forms';
+import { projectFixture } from '../../fixtures/project.fixture';
 
 class MockModal {
   hide() {}
@@ -16,19 +16,20 @@ describe('ModalCreateProjectComponent', () => {
   let fixture: ComponentFixture<ModalCreateProjectComponent>;
   const MockProjectsService: ProjectsService = mock(ProjectsService);
 
-
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ ModalCreateProjectComponent ],
+      declarations: [ModalCreateProjectComponent],
       imports: [ReactiveFormsModule, ModalModule],
       providers: [
         {
-          provide: ProjectsService, useFactory: () => instance(ProjectsService)
+          provide: ProjectsService,
+          useFactory: () => instance(ProjectsService),
         },
         {
-          provide: BsModalRef, useClass: MockModal
-        }
-      ]
+          provide: BsModalRef,
+          useClass: MockModal,
+        },
+      ],
     });
 
     fixture = TestBed.createComponent(ModalCreateProjectComponent);

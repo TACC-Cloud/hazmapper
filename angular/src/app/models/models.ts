@@ -1,9 +1,4 @@
-import {
-  Feature as GeoJSONFeature,
-  GeoJsonProperties,
-  Geometry,
-  FeatureCollection as IFeatureCollection,
-} from 'geojson';
+import { Feature as GeoJSONFeature, GeoJsonProperties, Geometry, FeatureCollection as IFeatureCollection } from 'geojson';
 
 // TODO: break these out into their own files
 
@@ -140,6 +135,18 @@ export interface Overlay {
   project_id: number;
   label: string;
   isActive?: boolean;
+}
+
+export interface QMSTile {
+  name: string;
+  type: string;
+  url: string;
+  desc: string;
+  z_max: number;
+  z_min: number;
+  layers: string;
+  params: string;
+  format: string;
 }
 
 interface TileServerUI {

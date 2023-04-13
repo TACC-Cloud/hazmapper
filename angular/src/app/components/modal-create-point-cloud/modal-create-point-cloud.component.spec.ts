@@ -8,9 +8,8 @@ describe('ModalCreatePointCloudComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ModalCreatePointCloudComponent ]
-    })
-    .compileComponents();
+      declarations: [ModalCreatePointCloudComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

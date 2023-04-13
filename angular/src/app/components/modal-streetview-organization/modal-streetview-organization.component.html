@@ -1,44 +1,44 @@
 <h4>Streetview Organizations</h4>
 <div>
-  <label> Organization Key:
-    <input type="text" [(ngModel)]="key">
-  </label>
-  <div>
-    Information for organizations can be found in the <a href="https://www.mapillary.com/dashboard/profile">Mapillary Dashboard</a>.
-    Enter the correct information to utilize publish functionality.
-  </div>
-  <div style="display: flex; flex-direction: row; justify-content: center; margin: 10px;">
-    <button type="button" class="button primary" (click)="addOrganization()">Add Organization</button>
-  </div>
+    <label>
+        Organization Key:
+        <input type="text" [(ngModel)]="key" />
+    </label>
+    <div>
+        Information for organizations can be found in the
+        <a href="https://www.mapillary.com/dashboard/profile">Mapillary Dashboard</a>. Enter the correct information to utilize publish
+        functionality.
+    </div>
+    <div style="display: flex; flex-direction: row; justify-content: center; margin: 10px">
+        <button type="button" class="button primary" (click)="addOrganization()">Add Organization</button>
+    </div>
 </div>
 
 <h6>Organization List:</h6>
 <div style="margin: 25px">
-  <div *ngIf="activeStreetview.organizations.length; else noOrganizations">
-    <div *ngFor="let o of activeStreetview.organizations">
-      <div style="display: flex; flex-direction: row; justify-content: space-between">
-        <div style="margin-left: 20px; width: 100px; padding-bottom: 5px;">
-          {{o.name}}
+    <div *ngIf="activeStreetview.organizations.length; else noOrganizations">
+        <div *ngFor="let o of activeStreetview.organizations">
+            <div style="display: flex; flex-direction: row; justify-content: space-between">
+                <div style="margin-left: 20px; width: 100px; padding-bottom: 5px">
+                    {{ o.name }}
+                </div>
+                <div class="grid-x align-spaced" style="cursor: pointer; margin-right: 30px">
+                    <div [tooltip]="'Open in Mapillary'" style="padding: 0px 5px 0px 5px">
+                        <a [href]="'https://www.mapillary.com/dashboard/org/' + o.slug + '/profile'" style="color: #0a0a0a">
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                    <div [tooltip]="'Remove link to organization'" style="padding: 0px 5px 0px 5px">
+                        <i class="fas fa-trash" (click)="removeOrganization(o)"></i>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="grid-x align-spaced" style="cursor: pointer; margin-right: 30px">
-          <div [tooltip]="'Open in Mapillary'" style="padding: 0px 5px 0px 5px;">
-            <a [href]="'https://www.mapillary.com/dashboard/org/' + o.slug + '/profile'" style="color: #0A0A0A">
-              <i class="fas fa-external-link-alt"></i>
-            </a>
-          </div>
-          <div [tooltip]="'Remove link to organization'" style="padding: 0px 5px 0px 5px">
-            <i class="fas fa-trash" (click)="removeOrganization(o)"></i>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <ng-template #noOrganizations>
-    <div style="text-align: center">
-      No organizations! Please add organizations.
-    </div>
-  </ng-template>
+    <ng-template #noOrganizations>
+        <div style="text-align: center">No organizations! Please add organizations.</div>
+    </ng-template>
 </div>
 
 <button type="button" class="button primary" (click)="cancel()">Close</button>

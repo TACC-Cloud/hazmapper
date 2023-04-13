@@ -1,56 +1,46 @@
 <div class="grid-y asset-detail">
-  <div class="cell medium-1">
-    <div class="asset-detail-header">
-      <div>
-        <button class="close-button" (click)="close()">
-          <span>&times;</span>
-        </button>
-      </div>
+    <div class="cell medium-1">
+        <div class="asset-detail-header">
+            <div>
+                <button class="close-button" (click)="close()">
+                    <span>&times;</span>
+                </button>
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="cell medium-5 auto asset-detail-content">
-    <div *ngIf="imageLoading">
-      <i class="fas fa-spinner fa-spin"></i>
-    </div>
-    <img *ngIf="!imageLoading" [src]="imageUrl">
-    <div class="cell medium-1 text-center asset-detail-action">
-      <div class="asset-info" style="padding: 20px">
-        <div *ngIf="assetType === 'Image'" style="display: flex; flex-direction: column; padding: 20px">
-          <div style="padding: 10px">
-            {{assetType}}: {{imageId}}
-          </div>
-          <div style="padding: 10px">
-            Containing Sequence: {{sequenceId}}
-          </div>
+    <div class="cell medium-5 auto asset-detail-content">
+        <div *ngIf="imageLoading">
+            <i class="fas fa-spinner fa-spin"></i>
         </div>
-        <div *ngIf="assetType === 'Sequence'">
-          {{assetType}}: {{sequenceId}}
-        </div>
-      </div>
+        <img *ngIf="!imageLoading" [src]="imageUrl" />
+        <div class="cell medium-1 text-center asset-detail-action">
+            <div class="asset-info" style="padding: 20px">
+                <div *ngIf="assetType === 'Image'" style="display: flex; flex-direction: column; padding: 20px">
+                    <div style="padding: 10px">{{ assetType }}: {{ imageId }}</div>
+                    <div style="padding: 10px">Containing Sequence: {{ sequenceId }}</div>
+                </div>
+                <div *ngIf="assetType === 'Sequence'">{{ assetType }}: {{ sequenceId }}</div>
+            </div>
 
-      <div class="button-collection" style="display: flex; flex-direction: column">
-        <a [href]="siteUrl">
-          <button class="button small">
-            Open in Mapillary
-          </button>
-        </a>
+            <div class="button-collection" style="display: flex; flex-direction: column">
+                <a [href]="siteUrl">
+                    <button class="button small">Open in Mapillary</button>
+                </a>
 
-        <div *ngIf="showLinkModal">
-          <button class="button small" (click)="openStreetviewLinkModal()">
-            Link sequence to HazMapper
-          </button>
-        </div>
+                <div *ngIf="showLinkModal">
+                    <button class="button small" (click)="openStreetviewLinkModal()">Link sequence to HazMapper</button>
+                </div>
 
-        <!-- <div *ngIf="assetType === 'Sequence'"> -->
-        <!--   <button class="button small"> -->
-        <!--     Zoom into images -->
-        <!--   </button> -->
-        <!-- </div> -->
+                <!-- <div *ngIf="assetType === 'Sequence'"> -->
+                <!--   <button class="button small"> -->
+                <!--     Zoom into images -->
+                <!--   </button> -->
+                <!-- </div> -->
 
-        <!-- <button class="button small" (click)="sendEvent('view')">
+                <!-- <button class="button small" (click)="sendEvent('view')">
              Open in viewer
              </button> -->
-      </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>

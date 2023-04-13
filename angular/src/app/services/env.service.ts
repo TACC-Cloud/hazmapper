@@ -86,6 +86,7 @@ export class EnvService {
         authUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
         tokenUrl: 'https://oauth2.googleapis.com/token',
         scope:
+          // tslint:disable-next-line:max-line-length
           'https://www.googleapis.com/auth/streetviewpublish+https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile',
       },
       mapillary: {
@@ -93,8 +94,7 @@ export class EnvService {
         tokenUrl: 'https://graph.mapillary.com/token',
         apiUrl: 'https://graph.mapillary.com/',
         tileUrl: 'https://tiles.mapillary.com/',
-        scope:
-          'user:email+user:read+user:write+public:write+public:upload+private:read+private:write+private:upload',
+        scope: 'user:email+user:read+user:write+public:write+public:upload+private:read+private:write+private:upload',
       },
       secrets: {},
     };
@@ -111,25 +111,19 @@ export class EnvService {
       this._streetviewEnv.secrets = {
         google: {
           clientSecret: '',
-          clientId:
-            '573001329633-1p0k8rko13s6n2p2cugp3timji3ip9f0.apps.googleusercontent.com',
+          clientId: '573001329633-1p0k8rko13s6n2p2cugp3timji3ip9f0.apps.googleusercontent.com',
         },
         mapillary: {
           clientSecret: 'MLY|4866220476802272|909ed0e2baefa5d5c195710f5c83f98b',
           clientId: '4866220476802272',
-          clientToken: 'MLY|4866220476802272|cedfb10deac752ca3ddf83997cef60a4'
+          clientToken: 'MLY|4866220476802272|cedfb10deac752ca3ddf83997cef60a4',
         },
       };
       // local devevelopers can use localhost or hazmapper.local but
       // hazmapper.local is preferred as TAPIS supports it as a frame ancestor
       // (i.e. it allows for point cloud iframe preview)
-      this._clientId = /^localhost/.test(hostname)
-        ? 'RMCJHgW9CwJ6mKjhLTDnUYBo9Hka'
-        : 'Eb9NCCtWkZ83c01UbIAITFvhD9ka';
-    } else if (
-      /^hazmapper.tacc.utexas.edu/.test(hostname) &&
-      pathname.startsWith('/staging')
-    ) {
+      this._clientId = /^localhost/.test(hostname) ? 'RMCJHgW9CwJ6mKjhLTDnUYBo9Hka' : 'Eb9NCCtWkZ83c01UbIAITFvhD9ka';
+    } else if (/^hazmapper.tacc.utexas.edu/.test(hostname) && pathname.startsWith('/staging')) {
       this._env = EnvironmentType.Staging;
       this._apiUrl = this.getApiUrl(this.env);
       this._portalUrl = this.getPortalUrl(this.env);
@@ -138,13 +132,12 @@ export class EnvService {
       this._streetviewEnv.secrets = {
         google: {
           clientSecret: '',
-          clientId:
-            '573001329633-1p0k8rko13s6n2p2cugp3timji3ip9f0.apps.googleusercontent.com',
+          clientId: '573001329633-1p0k8rko13s6n2p2cugp3timji3ip9f0.apps.googleusercontent.com',
         },
         mapillary: {
           clientSecret: 'MLY|4936281379826603|cafd014ccd8cfc983e47c69c16082c7b',
           clientId: '4936281379826603',
-          clientToken: 'MLY|4936281379826603|f8c4732d3c9d96582b86158feb1c1a7a'
+          clientToken: 'MLY|4936281379826603|f8c4732d3c9d96582b86158feb1c1a7a',
         },
       };
     } else if (/^hazmapper.tacc.utexas.edu/.test(hostname)) {
@@ -156,13 +149,12 @@ export class EnvService {
       this._streetviewEnv.secrets = {
         google: {
           clientSecret: '',
-          clientId:
-            '573001329633-1p0k8rko13s6n2p2cugp3timji3ip9f0.apps.googleusercontent.com',
+          clientId: '573001329633-1p0k8rko13s6n2p2cugp3timji3ip9f0.apps.googleusercontent.com',
         },
         mapillary: {
           clientSecret: 'MLY|5156692464392931|6be48c9f4074f4d486e0c42a012b349f',
           clientId: '5156692464392931',
-          clientToken: 'MLY|5156692464392931|4f1118aa1b06f051a44217cb56bedf79'
+          clientToken: 'MLY|5156692464392931|4f1118aa1b06f051a44217cb56bedf79',
         },
       };
     } else {

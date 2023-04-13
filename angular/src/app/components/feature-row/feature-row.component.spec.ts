@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import {featureFixture} from "../../fixtures/feature.fixture";
+import { featureFixture } from '../../fixtures/feature.fixture';
 import { FeatureRowComponent } from './feature-row.component';
-import {NO_ERRORS_SCHEMA} from "@angular/core";
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('FeatureRowComponent', () => {
   let component: FeatureRowComponent;
@@ -9,9 +9,9 @@ describe('FeatureRowComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FeatureRowComponent ], schemas: [NO_ERRORS_SCHEMA]
-    })
-    .compileComponents();
+      declarations: [FeatureRowComponent],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

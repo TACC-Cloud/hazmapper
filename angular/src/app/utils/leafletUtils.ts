@@ -1,6 +1,6 @@
-import {CircleMarker, Path, circleMarker, divIcon, LatLng, Marker, marker} from 'leaflet';
-import {Feature} from '../models/models';
-import {MarkerStyle} from '../models/style';
+import { CircleMarker, Path, circleMarker, divIcon, LatLng, Marker, marker } from 'leaflet';
+import { Feature } from '../models/models';
+import { MarkerStyle } from '../models/style';
 
 interface MarkerIcon {
   color: string;
@@ -14,35 +14,35 @@ function createCircleMarker(feature: Feature, latlng: LatLng): CircleMarker {
     color: 'black',
     weight: 1,
     opacity: 1,
-    fillOpacity: 0.8
+    fillOpacity: 0.8,
   };
-  return circleMarker( latlng, options );
+  return circleMarker(latlng, options);
 }
 
 function createImageMarker(feature: Feature, latlng: LatLng): Marker {
   const divHtml = '<i class="fas fa-camera-retro fa-2x light-blue"></i>';
-  const ico = divIcon({className: 'leaflet-fa-marker-icon', html: divHtml});
-  return marker(latlng, {icon: ico});
+  const ico = divIcon({ className: 'leaflet-fa-marker-icon', html: divHtml });
+  return marker(latlng, { icon: ico });
 }
 
 function createCollectionMarker(feature: Feature, latlng: LatLng): Marker {
   const divHtml = '<i class="fa fa-folder-open fa-2x light-blue"></i>';
-  const ico = divIcon({className: 'icon-marker', html: divHtml});
-  return marker(latlng, {icon: ico});
+  const ico = divIcon({ className: 'icon-marker', html: divHtml });
+  return marker(latlng, { icon: ico });
 }
 
 function createVideoMarker(feature: Feature, latlng: LatLng): Marker {
   const divHtml = '<i class="fas fa-video fa-2x light-blue"></i>';
-  const ico = divIcon({className: 'leaflet-fa-marker-icon', html: divHtml});
-  return marker(latlng, {icon: ico});
+  const ico = divIcon({ className: 'leaflet-fa-marker-icon', html: divHtml });
+  return marker(latlng, { icon: ico });
 }
 
 function createCustomIconMarker(latlng: LatLng, style: MarkerStyle): Marker {
   const icon = style.faIcon;
   const color = style.color;
   const divHtml = `<i class="fas ${icon} fa-2x" style="color: ${color}"></i>`;
-  const ico = divIcon({className: 'leaflet-fa-marker-icon', html: divHtml});
-  return marker(latlng, {icon: ico, ...style});
+  const ico = divIcon({ className: 'leaflet-fa-marker-icon', html: divHtml });
+  return marker(latlng, { icon: ico, ...style });
 }
 
 function createQuestionnaireMarker(feature: Feature, latlng: LatLng): Marker {

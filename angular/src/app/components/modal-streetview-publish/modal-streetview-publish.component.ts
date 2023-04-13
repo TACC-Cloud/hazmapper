@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { BsModalRef } from 'ngx-foundation/modal';
-import { RemoteFile} from 'ng-tapis/models/remote-file';
+import { RemoteFile } from 'ng-tapis/models/remote-file';
 import { Subject } from 'rxjs';
 import { StreetviewAuthenticationService } from '../../services/streetview-authentication.service';
 import { Streetview } from 'src/app/models/streetview';
@@ -8,7 +8,7 @@ import { Streetview } from 'src/app/models/streetview';
 @Component({
   selector: 'app-modal-streetview-publish',
   templateUrl: './modal-streetview-publish.component.html',
-  styleUrls: ['./modal-streetview-publish.component.styl']
+  styleUrls: ['./modal-streetview-publish.component.styl'],
 })
 export class ModalStreetviewPublishComponent implements OnInit {
   @Input() single: true;
@@ -19,8 +19,7 @@ export class ModalStreetviewPublishComponent implements OnInit {
   publishErrorMessage = '';
   activeStreetview: Streetview;
 
-  constructor(public bsModalRef: BsModalRef,
-              private streetviewAuthenticationService: StreetviewAuthenticationService) { }
+  constructor(public bsModalRef: BsModalRef, private streetviewAuthenticationService: StreetviewAuthenticationService) {}
 
   ngOnInit() {
     this.streetviewAuthenticationService.activeStreetview.subscribe((sv: Streetview) => {
@@ -40,7 +39,7 @@ export class ModalStreetviewPublishComponent implements OnInit {
   publish() {
     this.onClose.next({
       selectedPath: this.selectedFiles[0],
-      selectedOrganization: this.selectedOrganization
+      selectedOrganization: this.selectedOrganization,
     });
     this.bsModalRef.hide();
   }

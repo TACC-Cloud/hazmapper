@@ -26,13 +26,14 @@ class PathTree<T> {
     this.uuid = uuidv4();
   }
 
-
   /**
    * pathlib.dirname returns '.' for the root dir for some reason
    * @param path string path like '/a/b/c/file.txt'
    */
   private normalizePath(path: string): string {
-    if (path === '.') {path = ''; }
+    if (path === '.') {
+      path = '';
+    }
     return path;
   }
 
@@ -43,18 +44,18 @@ class PathTree<T> {
    */
   private getRootDir(path: string): string {
     path = path.replace(/^\/+/, '');
-    return  path.split('/')[0];
+    return path.split('/')[0];
   }
 
   private reducePath(path: string): string {
     path = path.replace(/^\/+/, '');
-    return  path.split('/').slice(1, path.length).join('/');
+    return path.split('/').slice(1, path.length).join('/');
   }
 
   private getBaseName(path: string): string {
     path = path.replace(/^\/+/, '');
     // remove trailing slashes and split
-    return  path.replace(/\/$/, '').split('/').pop();
+    return path.replace(/\/$/, '').split('/').pop();
   }
 
   public getPath() {
@@ -80,7 +81,6 @@ class PathTree<T> {
   public getId(): string {
     return this.uuid;
   }
-
 
   public getChildrenAsArray(): Array<PathTree<T>> {
     return [...this.getChildren()];
@@ -159,21 +159,19 @@ class PathTree<T> {
     }
   }
 
-  public * getChildren(): IterableIterator<PathTree<T>> {
+  public *getChildren(): IterableIterator<PathTree<T>> {
     // console.log("Called getChildren");
     for (const [key, node] of this.children) {
       yield node;
     }
   }
 
-  public * walk(): IterableIterator<PathTree<T>> {
+  public *walk(): IterableIterator<PathTree<T>> {
     yield this;
     for (const [key, value] of this.children) {
-      yield * value.walk();
+      yield* value.walk();
     }
   }
-
-
 }
 
 export { PathTree };

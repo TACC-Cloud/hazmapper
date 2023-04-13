@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Project } from '../../models/models';
 import { Streetview } from '../../models/streetview';
-import {ProjectsService} from '../../services/projects.service';
-import {BsModalRef, BsModalService} from 'ngx-foundation';
-import {AgaveSystemsService} from '../../services/agave-systems.service';
-import {ModalCreateProjectComponent} from '../modal-create-project/modal-create-project.component';
+import { ProjectsService } from '../../services/projects.service';
+import { BsModalRef, BsModalService } from 'ngx-foundation';
+import { AgaveSystemsService } from '../../services/agave-systems.service';
+import { ModalCreateProjectComponent } from '../modal-create-project/modal-create-project.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ModalService } from 'src/app/services/modal.service';
 import { combineLatest } from 'rxjs';
@@ -15,9 +15,8 @@ import { StreetviewService } from 'src/app/services/streetview.service';
 @Component({
   selector: 'app-main-welcome',
   templateUrl: './main-welcome.component.html',
-  styleUrls: ['./main-welcome.component.styl']
+  styleUrls: ['./main-welcome.component.styl'],
 })
-
 export class MainWelcomeComponent implements OnInit {
   release_url = 'https://github.com/TACC-cloud/hazmapper';
   guide_url = 'https://www.designsafe-ci.org/rw/user-guides/tools-applications/visualization/hazmapper/';
@@ -37,7 +36,7 @@ export class MainWelcomeComponent implements OnInit {
     private streetviewAuthenticationService: StreetviewAuthenticationService,
     private streetviewService: StreetviewService,
     private agaveSystemsService: AgaveSystemsService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.projectsService.getProjects();
@@ -45,7 +44,7 @@ export class MainWelcomeComponent implements OnInit {
     this.streetviewAuthenticationService.getStreetviews().subscribe();
     this.streetviewAuthenticationService.activeStreetview.subscribe((asv: Streetview) => {
       if (asv) {
-        this.streetviewService.activeMapillaryOrganizations = asv.organizations.map(o => o.key);
+        this.streetviewService.activeMapillaryOrganizations = asv.organizations.map((o) => o.key);
       }
     });
 
@@ -53,13 +52,10 @@ export class MainWelcomeComponent implements OnInit {
       this.notConnected = notConnected;
     });
 
-    combineLatest(
-      this.projectsService.projects,
-      this.agaveSystemsService.projects)
-        .subscribe(([projects, dsProjects]) => {
-          this.projects = this.agaveSystemsService.getProjectMetadata(projects, dsProjects);
-          this.spinner = false;
-        });
+    combineLatest([this.projectsService.projects, this.agaveSystemsService.projects]).subscribe(([projects, dsProjects]) => {
+      this.projects = this.agaveSystemsService.getProjectMetadata(projects, dsProjects);
+      this.spinner = false;
+    });
   }
 
   routeToProject(projectUUID: string) {
@@ -67,8 +63,8 @@ export class MainWelcomeComponent implements OnInit {
   }
 
   openCreateProjectModal() {
-    const modal: BsModalRef = this.bsModalService.show(ModalCreateProjectComponent, {class: 'reveal-medium'});
-    modal.content.onClose.subscribe( (project: Project) => {
+    const modal: BsModalRef = this.bsModalService.show(ModalCreateProjectComponent, { class: 'reveal-medium' });
+    modal.content.onClose.subscribe((project: Project) => {
       if (project) {
         this.routeToProject(project.uuid);
       }
@@ -81,16 +77,18 @@ export class MainWelcomeComponent implements OnInit {
     if (p.public) {
       message += ' Note that this is a public map.';
     }
-    message += ' THIS CANNOT BE UNDONE.',
-    this.modalService.confirm(
-      `Delete map: ${p.name}`,
-      // tslint:disable-next-line:max-line-length
-      message,
-      ['Cancel', 'Delete']).subscribe( (answer) => {
-      if (answer === 'Delete') {
-        this.projectsService.deleteProject(p);
-
-      }
-    });
+    (message += ' THIS CANNOT BE UNDONE.'),
+      this.modalService
+        .confirm(
+          `Delete map: ${p.name}`,
+          // tslint:disable-next-line:max-line-length
+          message,
+          ['Cancel', 'Delete']
+        )
+        .subscribe((answer) => {
+          if (answer === 'Delete') {
+            this.projectsService.deleteProject(p);
+          }
+        });
   }
 }

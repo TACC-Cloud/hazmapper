@@ -112,7 +112,9 @@
               "src/tsconfig.spec.json"
             ],
             "exclude": [
-              "**/node_modules/**"
+              "**/node_modules/**",
+              "**/{*.spec,*.stub,*.mock,mocks}.ts",
+              "src/environments/jwt.ts"
             ]
           }
         }

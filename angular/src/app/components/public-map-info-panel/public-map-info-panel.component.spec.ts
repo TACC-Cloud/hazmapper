@@ -8,9 +8,8 @@ describe('PublicMapInfoPanelComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PublicMapInfoPanelComponent ]
-    })
-    .compileComponents();
+      declarations: [PublicMapInfoPanelComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
