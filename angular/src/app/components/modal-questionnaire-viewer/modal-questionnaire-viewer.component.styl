@@ -1,3 +1,16 @@
+/* 
+ * NOTE: questionnaireBuilder.ts and modal-questionnaire-viewer.component.style
+ * derived from source provided written by Rapid Developers and provided to us on 2022.11.02
+ * We are using this code provide a quick prototype of questionnaire viewers using existing code.
+ * This code on independent on jquery, which is not used anywhere else in the codebase.
+ * Do not to utilize this code within hazmapper, we take the following approach:
+ *
+ * 1. modal-questionnaire-viewer.component.ts imports the questionnaireBuilder.ts file and jquery and renders it.
+ * 2. There have been some modifications to questionnaireBuilder.ts file to adapt to typescript errors.
+ * 3. modal-questionnaire-viewer.component.styl utilizes ng-deep to expose css beyond the scope of the component.
+ *    Thus, in the mean time, one has to take caution in utilizing those keywords when choosing style class/ids.
+ */
+
 ::ng-deep p.questionnaireTitle {
     position: absolute;
     text-align: center;
