@@ -3,12 +3,20 @@
 * derived from source provided written by Rapid Developers and provided to us on 2022.11.02
 * We are using this code provide a quick prototype of questionnaire viewers using existing code.
 * This code on independent on jquery, which is not used anywhere else in the codebase.
+*
 * Do not to utilize this code within hazmapper, we take the following approach:
 *
 * 1. modal-questionnaire-viewer.component.ts imports the questionnaireBuilder.ts file and jquery and renders it.
 * 2. There have been some modifications to questionnaireBuilder.ts file to adapt to typescript errors.
 * 3. modal-questionnaire-viewer.component.styl utilizes ng-deep to expose css beyond the scope of the component.
 *    Thus, in the mean time, one has to take caution in utilizing those keywords when choosing style class/ids.
+*
+* Some possible TODOs in maintaining and improving this feature are:
+*
+* 1. Isolate the css to the independent component.
+* 2. Update the js as the Rapid developers seem to modify code either 
+*    by requesting the team or 
+*    by accessing https://rapid.apl.uw.edu/rapp/ and retreiving the code as the code is not minimized.
 */
 
 import * as $ from 'jquery';
