@@ -22,7 +22,7 @@ export class ModalQuestionnaireViewerComponent implements OnInit {
 
   ngOnInit() {
     this.projectService.activeProject.subscribe((p) => {
-      this.geoDataService.getFeatureAssetSource(p.id, this.feature.id).subscribe((featureSource: any) => {
+      this.geoDataService.getFeatureAssetSource(this.feature).subscribe((featureSource: any) => {
         const questionnaire = QuestionnaireBuilder.renderQuestionnaire(
           featureSource.data
         );

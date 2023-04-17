@@ -536,9 +536,9 @@ export class GeoDataService {
     });
   }
 
-  getFeatureAssetSource(projectId: string | number, featureId: string | number, usePublicRoute: boolean = false): Observable<any> {
-    const projectRoute = usePublicRoute ? 'public-projects' : 'projects';
-    return this.http.get(this.envService.apiUrl + `/${projectRoute}/${projectId}/assets/${featureId}/`);
+  getFeatureAssetSource(feature: Feature): Observable<any> {
+    const featureSource = this.envService.apiUrl + '/assets/' + feature.assets[0].path;
+    return this.http.get(featureSource, {headers: {'content-type': 'application/json'}});
   }
 
 
