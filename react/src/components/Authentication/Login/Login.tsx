@@ -4,10 +4,6 @@ import { useSelector } from 'react-redux';
 import {RootState} from "../../../redux/store";
 import {isTokenValid} from "../../../utils/authUtils";
 
-// TODO make auth/server configurable
-const client_id = 'RMCJHgW9CwJ6mKjhLTDnUYBo9Hka';
-
-
 function Login() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -27,6 +23,9 @@ function Login() {
 
       // TODO check for staging/prod
       const callbackUrl = `${window.location.origin}/callback`;
+
+      // TODO make auth/server configurable
+      const client_id = 'RMCJHgW9CwJ6mKjhLTDnUYBo9Hka';
 
       // Construct the authentication URL with the client_id, redirect_uri, scope, response_type, and state parameters
       const authUrl = `https://agave.designsafe-ci.org/authorize?client_id=${client_id}&redirect_uri=${callbackUrl}&scope=openid&response_type=token&state=${state}`;
