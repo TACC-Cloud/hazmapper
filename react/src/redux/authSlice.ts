@@ -1,5 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { getAuthFromLocalStorage, setAuthToLocalStorage, removeAuthFromLocalStorage } from "../utils/authUtils";
+import {
+  getAuthFromLocalStorage,
+  setAuthToLocalStorage,
+  removeAuthFromLocalStorage,
+} from '../utils/authUtils';
 
 // TODO consider moving to ../types/
 export interface AuthState {
@@ -13,7 +17,10 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    loginSuccess(state, action: PayloadAction<{ token: string; expires: number }>) {
+    loginSuccess(
+      state,
+      action: PayloadAction<{ token: string; expires: number }>
+    ) {
       state.token = action.payload.token;
       state.expires = action.payload.expires;
 

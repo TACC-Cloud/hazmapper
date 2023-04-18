@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../../redux/authSlice';
@@ -17,9 +17,7 @@ function Logout() {
 
   return (
     <div>
-      <button onClick={handleLogin}>
-        {'Log in'}
-      </button>
+      <button onClick={handleLogin}>{'Log in'}</button>
     </div>
   );
 }

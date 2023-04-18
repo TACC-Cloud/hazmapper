@@ -1,20 +1,22 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import {RootState} from "../../../redux/store";
-import {isTokenValid} from "../../../utils/authUtils";
+import { RootState } from '../../../redux/store';
+import { isTokenValid } from '../../../utils/authUtils';
 
 function Login() {
   const location = useLocation();
   const navigate = useNavigate();
-  const isAuthenticated = useSelector((state: RootState) => isTokenValid(state.auth));
+  const isAuthenticated = useSelector((state: RootState) =>
+    isTokenValid(state.auth)
+  );
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const toParam = queryParams.get('to') || '/';
 
-    if(isAuthenticated) {
-      navigate(toParam)
+    if (isAuthenticated) {
+      navigate(toParam);
     } else {
       const state = Math.random().toString(36);
       // Save the authState parameter to localStorage
@@ -34,11 +36,7 @@ function Login() {
     }
   }, []);
 
-  return (
-    <div>
-        'Logging in...'
-    </div>
-  );
+  return <div>'Logging in...'</div>;
 }
 
 export default Login;

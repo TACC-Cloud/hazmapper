@@ -30,8 +30,8 @@ export default function CallbackPage() {
     if (token && expiresIn) {
       const expires = Date.now() + parseInt(expiresIn) * 1000;
       // Save the token to the Redux store
-      dispatch(loginSuccess({token, expires}));
-      navigate(redirectTo)
+      dispatch(loginSuccess({ token, expires }));
+      navigate(redirectTo);
     }
   }, []);
 

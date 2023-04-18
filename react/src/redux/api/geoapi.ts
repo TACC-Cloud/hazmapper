@@ -9,7 +9,6 @@ export const geoapi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_URL,
     prepareHeaders: (headers) => {
-
       // TODO check if logged in as we don't want to add if public
       const token = store.getState().auth.token;
       if (token) {

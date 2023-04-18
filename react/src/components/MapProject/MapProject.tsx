@@ -29,6 +29,6 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
       />
     </div>
   );
-}
+};
 
 export default MapProject;
