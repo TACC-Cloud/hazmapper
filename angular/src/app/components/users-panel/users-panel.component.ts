@@ -103,6 +103,11 @@ export class UsersPanelComponent implements OnInit {
     });
   }
 
+  openTaggit() {
+    window.localStorage.setItem('lastProj', JSON.stringify(this.activeProject));
+    window.location.href = this.envService.taggitUrl;
+  }
+
   deleteProject() {
     this.modalService
       .confirm(

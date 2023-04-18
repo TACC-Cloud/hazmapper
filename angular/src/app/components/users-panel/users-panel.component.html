@@ -25,6 +25,11 @@
                     (nameChange)="changeProjectDescription($event)"
                 >
                 </app-edit-name-input>
+
+                <div style="display: flex; flex-direction: column; justify-content: center">
+                    <button class="button hollow" (click)="openTaggit()">Open Map in Taggit</button>
+                </div>
+
                 <div *ngIf="activeProject.deletable" style="display: flex; flex-direction: column; justify-content: center">
                     <button class="button warning alert hollow" (click)="deleteProject()"><i class="fas fa-trash"></i> Delete map</button>
                 </div>
