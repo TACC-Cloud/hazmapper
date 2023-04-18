@@ -14,6 +14,4 @@ test('renders callback', async () => {
     </Provider>
   );
   expect(getByText(/Logging in/)).toBeDefined();
-
-  // TODO check local storage etc
 });
