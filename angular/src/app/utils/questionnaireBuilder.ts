@@ -3403,9 +3403,7 @@ class TextPage extends Question {
     const question = this;
     const view = $(this.read_only_view);
     $(view).find('p.questionNumber').html(question.scroll_label);
-
     // question.addEmbeddedAssets(container)
-
     $(view).appendTo(container);
   }
 }

@@ -24,7 +24,7 @@ export class ModalQuestionnaireViewerComponent implements OnInit {
     this.projectService.activeProject.subscribe((p) => {
       this.geoDataService.getFeatureAssetSource(this.feature).subscribe((featureSource: any) => {
         const questionnaire = QuestionnaireBuilder.renderQuestionnaire(
-          featureSource.data
+          featureSource
         );
         $('#questionnaire-view').after(questionnaire); // Insert new elements after <img>
       });

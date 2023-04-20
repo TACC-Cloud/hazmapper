@@ -46,7 +46,7 @@ function createCustomIconMarker(latlng: LatLng, style: MarkerStyle): Marker {
 }
 
 function createQuestionnaireMarker(feature: Feature, latlng: LatLng): Marker {
-  const divHtml = '<i class="fas fa-question fa-2x light-blue"></i>';
+  const divHtml = '<i class="fas fa-clipboard-list fa-2x light-blue"></i>';
   const ico = divIcon({ className: 'leaflet-fa-marker-icon', html: divHtml });
   return marker(latlng, { icon: ico });
 }
