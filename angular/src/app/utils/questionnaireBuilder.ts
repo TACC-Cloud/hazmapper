@@ -1,4 +1,4 @@
-/* 
+/*
 * NOTE: questionnaireBuilder.ts and modal-questionnaire-viewer.component.style
 * derived from source provided written by Rapid Developers and provided to us on 2022.11.02
 * We are using this code provide a quick prototype of questionnaire viewers using existing code.
@@ -14,8 +14,8 @@
 * Some possible TODOs in maintaining and improving this feature are:
 *
 * 1. Isolate the css to the independent component.
-* 2. Update the js as the Rapid developers seem to modify code either 
-*    by requesting the team or 
+* 2. Update the js as the Rapid developers seem to modify code either
+*    by requesting the team or
 *    by accessing https://rapid.apl.uw.edu/rapp/ and retreiving the code as the code is not minimized.
 */
 

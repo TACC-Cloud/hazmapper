@@ -536,8 +536,11 @@ export class GeoDataService {
     });
   }
 
-  getFeatureAssetSource(feature: Feature): Observable<any> {
-    const featureSource = this.envService.apiUrl + '/assets/' + feature.assets[0].path;
+  getFeatureAssetSource(feature: Feature, optionalPath=null) {
+    const baseFeatureSource = this.envService.apiUrl + '/assets/' + feature.assets[0].path;
+    const featureSource = optionalPath
+      ? baseFeatureSource + optionalPath
+      : baseFeatureSource;
     return this.http.get(featureSource, {headers: {'content-type': 'application/json'}});
   }
 
