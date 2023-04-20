@@ -24,6 +24,7 @@ function getPortalUrl(backend: string): string {
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
   const envFile = loadEnv(mode, process.cwd(), '');
+  const targetEnvironment = envFile.TARGET;
   const env = {
     designSafeUrl: 'https://agave.designsafe-ci.org/',
     backend: envFile.BACKEND,
@@ -44,9 +45,9 @@ export default defineConfig(({ command, mode }) => {
     mapillaryClientToken: '',
   };
 
-  if (mode === 'production') {
-    env.apiUrl = getApiUrl(mode);
-    env.portalUrl = getPortalUrl(mode);
+  if (targetEnvironment === 'production') {
+    env.apiUrl = getApiUrl(targetEnvironment);
+    env.portalUrl = getPortalUrl(targetEnvironment);
     env.clientId = 'tMvAiRdcsZ52S_89lCkO4x3d6VMa';
     env.host = 'hazmapper.utexas.edu/hazmapper/';
     env.baseHref = '/hazmapper/';
@@ -55,9 +56,9 @@ export default defineConfig(({ command, mode }) => {
       'MLY|5156692464392931|6be48c9f4074f4d486e0c42a012b349f';
     env.mapillaryClientToken =
       'MLY|5156692464392931|4f1118aa1b06f051a44217cb56bedf79';
-  } else if (mode === 'staging') {
-    env.apiUrl = getApiUrl(mode);
-    env.portalUrl = getPortalUrl(mode);
+  } else if (targetEnvironment === 'staging') {
+    env.apiUrl = getApiUrl(targetEnvironment);
+    env.portalUrl = getPortalUrl(targetEnvironment);
     env.clientId = 'foitdqFcimPzKZuMhbQ1oyh3Anka';
     env.host = 'hazmapper.utexas.edu/staging/';
     env.baseHref = '/staging/';
