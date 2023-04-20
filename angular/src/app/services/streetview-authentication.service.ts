@@ -17,11 +17,6 @@ export class StreetviewAuthenticationService {
   public activeStreetview$: Observable<Streetview> = this._activeStreetview.asObservable();
   private _streetviews: BehaviorSubject<Array<Streetview>> = new BehaviorSubject([]);
   public streetviews$: Observable<Array<Streetview>> = this._streetviews.asObservable();
-
-  private TOKEN_STORE = {
-    google: 'googleToken',
-    mapillary: 'mapillaryToken',
-  };
   private _username: string;
 
   constructor(
@@ -32,6 +27,10 @@ export class StreetviewAuthenticationService {
     private router: Router
   ) {
     this.authService.currentUser.subscribe((u) => (this._username = u ? u.username : null));
+  }
+
+  public getTokenKeyword() {
+    return `${this.envService.env}MapillaryToken`;
   }
 
   public isLoggedIn(service: string, isPublicView: boolean = false): boolean {
@@ -49,7 +48,7 @@ export class StreetviewAuthenticationService {
   }
 
   public logout(service: string): void {
-    localStorage.removeItem(this.TOKEN_STORE[service]);
+    localStorage.removeItem(this.getTokenKeyword());
   }
 
   public sequenceInStreetview(sequenceId: string): boolean {
@@ -168,7 +167,7 @@ export class StreetviewAuthenticationService {
   }
 
   public getLocalToken(service: string): AuthToken {
-    const tokenStr = localStorage.getItem(this.TOKEN_STORE[service]);
+    const tokenStr = localStorage.getItem(this.getTokenKeyword());
 
     if (tokenStr) {
       const token: any = JSON.parse(tokenStr);
@@ -188,7 +187,7 @@ export class StreetviewAuthenticationService {
   }
 
   public setLocalToken(service: string, token: any) {
-    localStorage.setItem(this.TOKEN_STORE[service], JSON.stringify(token));
+    localStorage.setItem(this.getTokenKeyword(), JSON.stringify(token));
   }
 
   public set activeStreetview(streetview: any) {

@@ -25,17 +25,26 @@ export class AuthService {
   private _currentUser: ReplaySubject<AuthenticatedUser> = new ReplaySubject<AuthenticatedUser>(1);
   public readonly currentUser: Observable<AuthenticatedUser> = this._currentUser.asObservable();
   userToken: AuthToken;
-  private LS_TOKEN_KEY = 'hazmapperToken';
-  private LS_USER_KEY = 'hazmapperUser';
-  private LS_REDIRECT_KEY = 'hazmapperRedirectUrl';
 
   constructor(private http: HttpClient, private envService: EnvService, private router: Router) {}
 
+  public getTokenKeyword() {
+    return `${this.envService.env}HazmapperToken`;
+  }
+
+  public getUserKeyword() {
+    return `${this.envService.env}HazmapperUser`;
+  }
+
+  public getRedirectKeyword() {
+    return `${this.envService.env}HazmapperRedirect`;
+  }
+
   public login(requestedUrl: string) {
-    localStorage.setItem(this.LS_REDIRECT_KEY, requestedUrl);
+    localStorage.setItem(this.getRedirectKeyword(), requestedUrl);
 
     // First, check if the user has a token in localStorage
-    const tokenStr = localStorage.getItem(this.LS_TOKEN_KEY);
+    const tokenStr = localStorage.getItem(this.getTokenKeyword());
     if (!tokenStr) {
       this.redirectToAuthenticator();
     } else {
@@ -62,7 +71,7 @@ export class AuthService {
    * Checks to make sure that the user has a token and the token is not expired;
    */
   public isLoggedIn(): boolean {
-    const tokenStr = localStorage.getItem(this.LS_TOKEN_KEY);
+    const tokenStr = localStorage.getItem(this.getTokenKeyword());
     if (tokenStr) {
       const token = JSON.parse(tokenStr);
       this.userToken = new AuthToken(token.token, new Date(token.expires));
@@ -73,32 +82,32 @@ export class AuthService {
 
   public logout(): void {
     this.userToken = null;
-    localStorage.removeItem(this.LS_TOKEN_KEY);
-    localStorage.removeItem(this.LS_USER_KEY);
+    localStorage.removeItem(this.getTokenKeyword());
+    localStorage.removeItem(this.getUserKeyword());
     this._currentUser.next(null);
   }
 
   public setToken(token: string, expires: number): void {
     this.userToken = AuthToken.fromExpiresIn(token, expires);
-    localStorage.setItem(this.LS_TOKEN_KEY, JSON.stringify(this.userToken));
+    localStorage.setItem(this.getTokenKeyword(), JSON.stringify(this.userToken));
 
     this.getUserInfo();
 
-    const redirectedPath = localStorage.getItem(this.LS_REDIRECT_KEY);
+    const redirectedPath = localStorage.getItem(this.getRedirectKeyword());
     this.router.navigate([redirectedPath]);
   }
 
   public getUserInfo() {
     // hit the wso2 api to retrieve the username if we don't have it already in local storage
     const INFO_URL = `https://agave.designsafe-ci.org/oauth2/userinfo?schema=openid`;
-    const userStr = localStorage.getItem(this.LS_USER_KEY);
+    const userStr = localStorage.getItem(this.getUserKeyword());
     const user = JSON.parse(userStr);
     if (user !== null) {
       this._currentUser.next(new AuthenticatedUser(user.username, user.email));
     } else {
       this.http.get<OpenIDUser>(INFO_URL).subscribe((resp) => {
         const u = new AuthenticatedUser(resp.name, resp.email);
-        localStorage.setItem(this.LS_USER_KEY, JSON.stringify(u));
+        localStorage.setItem(this.getUserKeyword(), JSON.stringify(u));
         this._currentUser.next(u);
       });
     }

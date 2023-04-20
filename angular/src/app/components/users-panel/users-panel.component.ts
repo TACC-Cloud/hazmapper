@@ -104,7 +104,7 @@ export class UsersPanelComponent implements OnInit {
   }
 
   openTaggit() {
-    window.localStorage.setItem('lastProj', JSON.stringify(this.activeProject));
+    window.localStorage.setItem(this.projectsService.getLastProjectKeyword(), JSON.stringify(this.activeProject));
     window.location.href = this.envService.taggitUrl;
   }
 
