@@ -36,7 +36,7 @@ function Login() {
     }
   }, []);
 
-  return <div>'Logging in...'</div>;
+  return <div>Logging in...</div>;
 }
 
 export default Login;
