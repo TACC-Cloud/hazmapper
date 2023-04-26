@@ -1,3 +1,4 @@
+export type { TileServerLayer } from './tileServerLayer';
 export type {
   Asset,
   Feature,
