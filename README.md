@@ -34,7 +34,7 @@ BACKEND="TARGET BACKEND"
 ```
 
 
-Then add the jwt retreived from [Getting started](###getting-started) to `.env`.
+Then add the jwt retrieved from [Getting started](###getting-started) to `.env`.
 
 ```
 JWT="YOUR JWT FROM ABOVE"
