@@ -28,13 +28,13 @@ TARGET="TARGET ENVIRONMENT"
 Possible target environments are `development`, `staging`, and `production`.
 
 
-Then, for local development, the `BACKEND` specified in `.env` will allow testing different backends.
+Then, for local development, the `GEOAPI_BACKEND` specified in `.env` will allow testing different backends.
 
 
 First, to set the target backend for local development, edit the `.env` file and add the target backend.
 Possible target backends are `development`, `staging`, and `production`.
 ```
-BACKEND="TARGET BACKEND"
+GEOAPI_BACKEND="TARGET BACKEND"
 ```
 
 
