@@ -21,7 +21,11 @@ See https://github.com/TACC-Cloud/geoapi which is an associated restful API.
 Environments are handled by vite via `vite.config.ts` and the `.env` files.
 
 
-The vite commands defined in `package.json` with the `--mode` prefix determines which environment we are running/building in.
+The `TARGET` specified in `.env` prefix determines which environment we are running/building in (this must be set inside the directory of each deployment).
+```
+TARGET="TARGET ENVIRONMENT"
+```
+Possible target environments are `development`, `staging`, and `production`.
 
 
 Then, for local development, the `BACKEND` specified in `.env` will allow testing different backends.

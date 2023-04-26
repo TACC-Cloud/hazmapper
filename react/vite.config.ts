@@ -1,7 +1,9 @@
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 
-function getApiUrl(backend: string): string {
+// Retrieves the target back.
+// Used for getting a dynamic backend for local development.
+function getGeoapiUrl(backend: string): string {
   if (backend === 'development') {
     return 'http://localhost:8888';
   } else if (backend === 'staging') {
@@ -9,11 +11,11 @@ function getApiUrl(backend: string): string {
   } else if (backend === 'production') {
     return 'https://agave.designsafe-ci.org/geo/v2';
   } else {
-    throw new Error('Unsupported Type');
+    throw new Error('Unsupported TARGET Type. Please check the .env file.');
   }
 }
 
-function getPortalUrl(backend: string): string {
+function getDesignsafePortalUrl(backend: string): string {
   if (backend === 'production') {
     return 'https://www.designsafe-ci.org/';
   } else {
@@ -27,9 +29,9 @@ export default defineConfig(({ command, mode }) => {
   const targetEnvironment = envFile.TARGET;
   const env = {
     designSafeUrl: 'https://agave.designsafe-ci.org/',
-    backend: envFile.BACKEND,
-    apiUrl: '',
-    portalUrl: '',
+    backend: envFile.GEOAPI_BACKEND,
+    geoapiUrl: '',
+    designsafePortalUrl: '',
     clientId: '',
     host: '',
     baseHref: '',
@@ -46,8 +48,8 @@ export default defineConfig(({ command, mode }) => {
   };
 
   if (targetEnvironment === 'production') {
-    env.apiUrl = getApiUrl(targetEnvironment);
-    env.portalUrl = getPortalUrl(targetEnvironment);
+    env.geoapiUrl = getGeoapiUrl(targetEnvironment);
+    env.designsafePortalUrl = getDesignsafePortalUrl(targetEnvironment);
     env.clientId = 'tMvAiRdcsZ52S_89lCkO4x3d6VMa';
     env.host = 'hazmapper.utexas.edu/hazmapper/';
     env.baseHref = '/hazmapper/';
@@ -57,8 +59,8 @@ export default defineConfig(({ command, mode }) => {
     env.mapillaryClientToken =
       'MLY|5156692464392931|4f1118aa1b06f051a44217cb56bedf79';
   } else if (targetEnvironment === 'staging') {
-    env.apiUrl = getApiUrl(targetEnvironment);
-    env.portalUrl = getPortalUrl(targetEnvironment);
+    env.geoapiUrl = getGeoapiUrl(targetEnvironment);
+    env.designsafePortalUrl = getDesignsafePortalUrl(targetEnvironment);
     env.clientId = 'foitdqFcimPzKZuMhbQ1oyh3Anka';
     env.host = 'hazmapper.utexas.edu/staging/';
     env.baseHref = '/staging/';
@@ -68,8 +70,8 @@ export default defineConfig(({ command, mode }) => {
     env.mapillaryClientToken =
       'MLY|4936281379826603|f8c4732d3c9d96582b86158feb1c1a7a';
   } else {
-    env.apiUrl = getApiUrl(envFile.BACKEND);
-    env.portalUrl = getPortalUrl(envFile.BACKEND);
+    env.geoapiUrl = getGeoapiUrl(envFile.GEOAPI_BACKEND);
+    env.designsafePortalUrl = getDesignsafePortalUrl(envFile.GEOAPI_BACKEND);
     env.clientId = 'Eb9NCCtWkZ83c01UbIAITFvhD9ka';
     env.host = 'hazmapper.local';
     env.baseHref = '/';

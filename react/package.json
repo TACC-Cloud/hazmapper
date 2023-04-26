@@ -4,10 +4,8 @@
     "version": "0.0.0",
     "type": "module",
     "scripts": {
-        "dev": "vite --mode development",
-        "build:production": "tsc && vite build --mode production",
-        "build:staging": "tsc && vite build --mode staging",
-        "build:local": "tsc && vite build --mode development",
+        "dev": "vite",
+        "build": "tsc && vite build",
         "preview": "vite preview",
         "test": "jest",
         "lint": "npm run lint:js",
