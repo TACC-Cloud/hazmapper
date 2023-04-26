@@ -128,4 +128,4 @@ jobs:
     - name: Build
       run: |
         cd react
-        npm build
+        npm run build
