@@ -2,7 +2,7 @@
 * NOTE: questionnaireBuilder.ts and modal-questionnaire-viewer.component.style
 * derived from source provided written by Rapid Developers and provided to us on 2022.11.02
 * We are using this code provide a quick prototype of questionnaire viewers using existing code.
-* This code on independent on jquery, which is not used anywhere else in the codebase.
+* This code is dependent on jquery, which is not used anywhere else in Hazmapper's codebase.
 *
 * Do not to utilize this code within hazmapper, we take the following approach:
 *
