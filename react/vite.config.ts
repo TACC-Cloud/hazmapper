@@ -11,7 +11,7 @@ function getGeoapiUrl(backend: string): string {
   } else if (backend === 'production') {
     return 'https://agave.designsafe-ci.org/geo/v2';
   } else {
-    throw new Error('Unsupported TARGET Type. Please check the .env file.');
+    throw new Error('Unsupported TARGET/GEOAPI_BACKEND Type. Please check the .env file.');
   }
 }
 
