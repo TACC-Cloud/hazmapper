@@ -3,8 +3,8 @@
 interface Env {
   designSafeUrl: string;
   backend: string;
-  apiUrl: string;
-  portalUrl: string;
+  geoapiUrl: string;
+  designsafePortalUrl: string;
   clientId: string;
   host: string;
   baseHref: string;
