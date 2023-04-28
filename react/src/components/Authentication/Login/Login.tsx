@@ -8,7 +8,7 @@ function Login() {
   const location = useLocation();
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state: RootState) =>
-    isTokenValid(state.auth)
+    isTokenValid(state.auth.token)
   );
 
   useEffect(() => {
