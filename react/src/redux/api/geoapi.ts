@@ -4,7 +4,6 @@ import type { RootState } from '../store';
 // TODO: make configurable so can be https://agave.designsafe-ci.org/geo-staging/v2 or https://agave.designsafe-ci.org/geo/v2
 const BASE_URL = 'https://agave.designsafe-ci.org/geo/v2';
 
-
 export const geoapi = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
