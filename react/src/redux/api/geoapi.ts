@@ -4,6 +4,7 @@ import type { RootState } from '../store';
 // TODO: make configurable so can be https://agave.designsafe-ci.org/geo-staging/v2 or https://agave.designsafe-ci.org/geo/v2
 const BASE_URL = 'https://agave.designsafe-ci.org/geo/v2';
 
+
 export const geoapi = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
@@ -17,6 +18,10 @@ export const geoapi = createApi({
       }
 
       headers.set('Content-Type', 'application/json;charset=UTF-8');
+
+      // TODO below adding of JWT if localhost and then add JWT
+      // we put the JWT on the request to our geoapi API because it is not behind ws02 if in local dev
+      // and if user is logged in
 
       // TODO below adding of JWT if localhost and then add JWT
       // we put the JWT on the request to our geoapi API because it is not behind ws02 if in local dev
