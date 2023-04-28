@@ -1,18 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
-  getAuthFromLocalStorage,
-  setAuthToLocalStorage,
-  removeAuthFromLocalStorage,
+  getTokenFromLocalStorage,
+  setTokenToLocalStorage,
+  removeTokenFromLocalStorage,
 } from '../utils/authUtils';
+import { AuthState, AuthenticatedUser } from '../types';
+import { geoapi } from './api/geoapi';
 
 // TODO consider moving to ../types/
-export interface AuthState {
-  token: string | null;
-  expires: number | null;
-}
-
 // check local storage for our initial state
-const initialState: AuthState = getAuthFromLocalStorage();
+const initialState: AuthState = {
+  token: getTokenFromLocalStorage(),
+  user: null,
+};
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -21,19 +22,36 @@ const authSlice = createSlice({
       state,
       action: PayloadAction<{ token: string; expires: number }>
     ) {
-      state.token = action.payload.token;
-      state.expires = action.payload.expires;
+      state.token = {
+        token: action.payload.token,
+        expires: action.payload.expires,
+      };
 
       // save to local storage
-      setAuthToLocalStorage(state);
+      setTokenToLocalStorage(state.token);
     },
     logout(state) {
+      state.user = null;
       state.token = null;
-      state.expires = null;
-
       //remove from local storage
-      removeAuthFromLocalStorage();
+      removeTokenFromLocalStorage();
     },
+
+    setUser(state, action: PayloadAction<{ user: AuthenticatedUser }>) {
+      state.user = action.payload.user;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addMatcher(
+      geoapi.endpoints.getGeoapiUserInfo.matchFulfilled,
+      (state, action: PayloadAction<any>) => {
+        const u: any = {
+          name: action.payload.name,
+          email: action.payload.email,
+        };
+        state.user = u;
+      }
+    );
   },
 });
 
