@@ -1,4 +1,4 @@
-import { AuthState, AuthToken } from '../types';
+import { AuthToken } from '../types';
 
 export const AUTH_KEY = 'auth';
 
