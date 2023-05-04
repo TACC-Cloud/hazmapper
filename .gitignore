@@ -5,6 +5,11 @@
 src/environments/jwt.ts
 /tmp
 /out-tsc
+
+angular/dist
+angular/src/environments/jwt.ts
+angular/tmp
+angular/out-tsc
 # Only exists if Bazel was run
 /bazel-out
 __pycache__
@@ -35,7 +40,7 @@ speed-measure-plugin.json
 # misc
 /.sass-cache
 /connect.lock
-/coverage
+/*/coverage
 /libpeerconnection.log
 npm-debug.log
 yarn-error.log

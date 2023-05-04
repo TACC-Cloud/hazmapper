@@ -1,0 +1,175 @@
+<h4>Create a Tile Layer</h4>
+<form [formGroup]="tsCreateForm" (ngSubmit)="submit()">
+    <label>
+        Import Method:
+        <select formControlName="method" required="true">
+            <option value="suggestions">Suggestions</option>
+            <option value="manual">Manual</option>
+            <option value="ini">INI File</option>
+            <option value="qms">QMS Search</option>
+        </select>
+    </label>
+
+    <div *ngIf="tsCreateForm.get('method').value == 'suggestions'">
+        <h4>Suggestions</h4>
+        <div id="tile-server-suggestions">
+            <div *ngFor="let ts of defaultServers">
+                <div class="grid-x align-justify">
+                    <div id="tile-server-suggestion-name">
+                        {{ ts.name }}
+                    </div>
+                    <button class="button success cell large-3 align-right add-button" (click)="addSuggestedServer($event, ts)">
+                        <i class="fas fa-plus"></i>
+                        Import
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="tsCreateForm.get('method').value == 'manual'">
+        <label>
+            Server Type:
+            <select formControlName="type" required="true">
+                <option value="tms">TMS</option>
+                <option value="wms">WMS</option>
+                <option value="arcgis">ArcGIS</option>
+            </select>
+        </label>
+        <label>
+            Name:
+            <input type="text" formControlName="name" required="true" />
+        </label>
+
+        <!-- TODO: this should be parsed based on server type -->
+        <label>
+            Tile Server URL:
+            <input type="url" pattern="https?://.+" formControlName="url" required="true" />
+        </label>
+
+        <div *ngIf="tsCreateForm.get('type').value == 'tms' || tsCreateForm.get('type').value == 'wms'" class="grid-x grid-margin-x">
+            <div class="small-6 cell">
+                <label>
+                    Attribution:
+                    <input type="text" formControlName="attribution" required="false" />
+                </label>
+            </div>
+            <div class="small-6 cell">
+                <label>
+                    Attribution Link:
+                    <input type="url" pattern="https?://.+" formControlName="attributionLink" required="false" />
+                </label>
+            </div>
+        </div>
+        <label *ngIf="tsCreateForm.get('type').value == 'tms'">
+            Zoom Max:
+            <input type="number" formControlName="maxZoom" required="false" />
+        </label>
+        <label *ngIf="tsCreateForm.get('type').value == 'tms'">
+            Zoom Min:
+            <input type="number" formControlName="minZoom" required="false" />
+        </label>
+        <label *ngIf="tsCreateForm.get('type').value == 'wms'">
+            Layers (comma-separated):
+            <input type="text" formControlName="layers" required="false" />
+        </label>
+        <label *ngIf="tsCreateForm.get('type').value == 'wms'">
+            Params:
+            <input type="text" formControlName="params" required="false" />
+        </label>
+        <label *ngIf="tsCreateForm.get('type').value == 'wms'">
+            Format:
+            <select formControlName="format" required="false">
+                <option value="image/png">png</option>
+                <option value="image/jpeg">jpeg</option>
+            </select>
+        </label>
+    </div>
+
+    <div *ngIf="tsCreateForm.get('method').value == 'ini'">
+        <app-file-browser
+            [allowFolders]="false"
+            [allowedExtensions]="tapisFilesService.IMPORTABLE_TILE_TYPES"
+            [single]="true"
+            [helpText]="null"
+            [heading]="null"
+            (selection)="onDSFileSelection($event)"
+        >
+        </app-file-browser>
+    </div>
+
+    <div *ngIf="tsCreateForm.get('method').value == 'qms'">
+        <div class="grid-x">
+            <input #qmsSearch class="cell auto qms-search-input" name="" type="text" value="" />
+            <button class="button small cell large-1 qms-search-button" (click)="searchQMS($event, qmsSearch.value)">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+        <div *ngIf="loadingSearch" style="font-size: 12px; margin-bottom: 10px">Searching <i class="fas fa-spin fa-spinner ml-4"></i></div>
+
+        <div class="qms-options">
+            <label>
+                Server Type:
+                <select formControlName="type" required="false">
+                    <option value="">All</option>
+                    <option value="tms">TMS</option>
+                    <option value="wms">WMS</option>
+                </select>
+            </label>
+
+            <label>
+                Order By:
+                <select formControlName="ordering" required="false">
+                    <option value="name">Name</option>
+                    <option value="id">ID</option>
+                    <option value="created_at">Created At</option>
+                    <option value="updated_at">Updated At</option>
+                </select>
+            </label>
+
+            <label>
+                Order:
+                <select formControlName="order" required="false">
+                    <option value="">Ascending</option>
+                    <option value="-">Descending</option>
+                </select>
+            </label>
+        </div>
+        <div class="qms-search-results">
+            <div *ngFor="let qs of qmsSearchResults">
+                <div class="grid-x qms-search-result-container">
+                    <div class="cell auto grid-y">
+                        <div class="qms-name">
+                            {{ qs.name }}
+                        </div>
+                        <div>
+                            <span *ngIf="qs.show; else openDescription" (click)="qs.show = !qs.show">
+                                {{ qs.type }}
+                                <i class="fas fa-angle-down"></i>
+                                <div class="qms-description">
+                                    {{ qs.desc }}
+                                </div>
+                            </span>
+                            <ng-template #openDescription>
+                                {{ qs.type }}
+                                <span (click)="qs.show = !qs.show">
+                                    <i class="fas fa-angle-right"></i>
+                                </span>
+                            </ng-template>
+                        </div>
+                    </div>
+                    <button class="button success small cell large-1 align-right qms-add-button" (click)="addQMSServer(qs)">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="button-group small">
+        <button class="button small warning" type="button" (click)="close()">Close</button>
+        <ng-container *ngIf="tsCreateForm.get('method').value == 'ini' || tsCreateForm.get('method').value == 'manual'">
+            <button class="button small align-right" type="submit" [disabled]="!tsCreateForm.valid">Submit</button>
+        </ng-container>
+    </div>
+</form>

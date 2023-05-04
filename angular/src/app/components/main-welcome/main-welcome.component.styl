@@ -1,0 +1,99 @@
+:host
+  p
+    margin-bottom 0px
+  #new-map
+    transition 0.3s
+    cursor pointer
+    &:hover
+      color #666    
+  #release-version
+    color #999
+  #user-guide-container
+    padding 20px
+    margin-bottom 50px
+    #user-guide
+      width 100%
+      text-align right
+  .map-column
+    max-width 120px
+    min-width 120px
+    width 120px
+  .project-column
+    width 100%
+  .button-column
+    width 280px
+    white-space nowrap
+  .project-name
+    display inline-block
+    text-overflow ellipsis
+    overflow hidden
+    width 80%
+    white-space nowrap
+  #sponsor
+    height 50px
+    display flex
+    align-items center
+    justify-content center
+    background-color #f7f7f7
+    img
+      padding-left 10px
+  #welcome-background
+    background-color #f7f7f7
+    height calc(100% - 40px)
+    #welcome-projects-list
+      background-color #ffffff
+      width 100%
+    .project-list-container
+      height 270px
+      overflow-y scroll
+      .project-list-item
+        font-size 14px
+        padding 12px
+        display flex
+        flex-wrap nowrap
+        jusitfy-content space-between
+        cursor pointer
+        .project-list-item-button
+          cursor pointer
+          margin 0px 10px
+          :hover
+            color #fff
+    .welcome-project-header
+      font-size 14px
+      padding 12px
+      display flex
+      flex-wrap nowrap
+      background-color #d0d0d0
+    .welcome-project-light
+      background-color #ffffff
+    .welcome-project-dark
+      background-color #eeeeee
+    .welcome-project:hover
+      color #ffffff
+      background-color #3c6fdb
+      a
+        color #ADDFFF
+    #welcome-no-information
+      display flex
+      flex-direction column
+      font-size 24px
+      padding 90px
+      height 270px
+      align-items center
+      width 100%
+    #welcome-information
+      background-color #f7f7f7
+      width 100%
+      #welcome-logo
+        display flex
+        flex-direction column
+        padding-bottom 50px
+        justify-content center
+        align-items center
+      #welcome-learn
+        padding-top 30px
+        
+
+::ng-deep
+  .reveal-medium
+    width 70%

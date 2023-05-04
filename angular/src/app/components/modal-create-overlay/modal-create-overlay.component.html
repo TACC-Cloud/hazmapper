@@ -1,0 +1,54 @@
+<h4>Create a Overlay</h4>
+<form [formGroup]="ovCreateForm" (ngSubmit)="submit()">
+    <label>
+        Label:
+        <input type="text" formControlName="label" required="true" />
+    </label>
+    <div class="grid-x grid-margin-x">
+        <div class="small-3 cell">
+            <label
+                >Min Lat:
+                <input type="number" formControlName="minLat" required="true" />
+            </label>
+        </div>
+        <div class="small-3 cell">
+            <label
+                >Max Lat:
+                <input type="number" formControlName="maxLat" required="true" />
+            </label>
+        </div>
+        <div class="small-3 cell">
+            <label
+                >Min Lon:
+                <input type="number" formControlName="minLon" required="true" />
+            </label>
+        </div>
+        <div class="small-3 cell">
+            <label
+                >Max Lon:
+                <input type="number" formControlName="maxLon" required="true" />
+            </label>
+        </div>
+    </div>
+
+    <h5>Image:</h5>
+    <app-file-browser
+        [allowFolders]="false"
+        [allowedExtensions]="tapisFilesService.IMPORTABLE_OVERLAY_TYPES"
+        [single]="true"
+        [helpText]="null"
+        [heading]="null"
+        (selection)="onDSFileSelection($event)"
+    >
+    </app-file-browser>
+    <small><em>Select overlay image. Double click on a folder to navigate into it.</em></small>
+
+    <hr />
+
+    <div class="button-group small">
+        <button class="button small warning" type="button" (click)="close()">Close</button>
+        <button class="button small align-right" type="submit" [disabled]="!ovCreateForm.valid || this.remoteFileData.length === 0">
+            Submit
+        </button>
+    </div>
+</form>

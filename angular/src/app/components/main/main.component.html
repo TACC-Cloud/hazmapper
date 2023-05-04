@@ -1,0 +1,15 @@
+<div class="top-bar" style="background-color: black" id="navbar">
+    <div class="top-bar-left" (click)="routeToWelcome()" style="cursor: pointer">
+        <img src="assets/hazmapper-header-logo.png" width="150px" />
+    </div>
+    <div class="top-bar-right">
+        <div class="light-blue" *ngIf="currentUser">
+            {{ currentUser.username }}
+        </div>
+        <div class="light-blue" *ngIf="!currentUser">
+            <a (click)="routeToLogin()">Login</a>
+        </div>
+    </div>
+</div>
+
+<router-outlet> </router-outlet>

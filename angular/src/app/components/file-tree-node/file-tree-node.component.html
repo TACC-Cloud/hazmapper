@@ -1,0 +1,41 @@
+<div *ngIf="node" [ngClass]="{ active: isActiveFeature() }">
+    <div *ngIf="node.isDir() && node.getPath()" class="clickable" (click)="onClick(node)">
+        <i class="fas fa-folder-open" *ngIf="displayChildren"></i>
+        <i class="fas fa-folder" *ngIf="!displayChildren"></i>
+        {{ node.getPath() }}
+    </div>
+    <div *ngIf="!node.isDir()" class="grid-x align-justify align-middle tree-file-node">
+        <div (click)="onClick(node)" class="grid-x cell auto clickable align-middle">
+            <app-feature-icon [feature]="node.getPayload()"></app-feature-icon>
+            {{ node.getPath() }}
+        </div>
+        <div class="grid-x align-middle" *ngIf="isActiveFeature()">
+            <button class="button tiny alert hollow" (click)="delete(node)">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+    </div>
+    <div class="children" *ngIf="displayChildren && node.getSize()" [style.padding-left]="node.getPath() ? '1em' : '0px'">
+        <ng-container *ngIf="node.getSize() > 500; else smallList">
+            <cdk-virtual-scroll-viewport class="scroll-viewport" itemSize="10">
+                <app-file-tree-node
+                    *cdkVirtualFor="let child of node.getChildrenAsArray()"
+                    [node]="child"
+                    class="scroll-item"
+                    (clickEvent)="onClickChild($event)"
+                >
+                    >
+                </app-file-tree-node>
+            </cdk-virtual-scroll-viewport>
+        </ng-container>
+        <ng-template #smallList>
+            <app-file-tree-node
+                *ngFor="let child of node.getChildren()"
+                [node]="child"
+                class="example-item"
+                (clickEvent)="onClickChild($event)"
+            >
+            </app-file-tree-node>
+        </ng-template>
+    </div>
+</div>

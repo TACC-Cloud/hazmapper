@@ -1,0 +1,44 @@
+<div id="property-container">
+    <div id="property-subcontainer">
+        <div
+            id="property-name"
+            data-tooltip
+            tabindex="1"
+            title="{{ currentName }}"
+            data-position="top"
+            data-alignment="left"
+            [tooltip]="currentName"
+            *ngIf="!inputShown"
+            (dblclick)="showInput()"
+        >
+            {{ currentName }}
+        </div>
+        <ng-container *ngIf="inputType == 'textarea'">
+            <textarea
+                #activeText
+                id="property-textarea"
+                type="text"
+                *ngIf="inputShown"
+                (blur)="onEnter(activeText.value)"
+                (keyup.enter)="onEnter(activeText.value)"
+            >
+            </textarea>
+        </ng-container>
+
+        <ng-container *ngIf="inputType == 'text'">
+            <input
+                #activeText
+                id="property-input"
+                type="text"
+                *ngIf="inputShown"
+                (blur)="onEnter(activeText.value)"
+                (keyup.enter)="onEnter(activeText.value)"
+            />
+        </ng-container>
+    </div>
+    <i class="fas fa-edit" (click)="showInput()" *ngIf="!inputShown"></i>
+    <i class="fas fa-check" (click)="hideInput()" *ngIf="inputShown"></i>
+</div>
+<div class="display-error" *ngIf="inputError">
+    {{ errorMessage }}
+</div>

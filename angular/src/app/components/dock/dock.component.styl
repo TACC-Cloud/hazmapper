@@ -1,0 +1,26 @@
+@import '../../../variables.styl'
+
+:host
+  height auto
+  .dock-button
+    padding 10px
+    cursor pointer
+    border-bottom 1px solid lightGrey
+    text-align center
+    &.active
+      background-color backgroundHighlight
+    button[disabled]
+      opacity 0.3
+
+    .dock-button-label
+      padding-top 5px
+      font-size 0.6em
+      line-height 0.6
+      color #6a6a6a
+
+    .dock-button-icon
+      display inline-block
+      border none
+      cursor pointer
+
+

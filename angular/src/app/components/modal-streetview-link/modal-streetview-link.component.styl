@@ -1,0 +1,92 @@
+@import '../../../variables.styl'
+
+:host
+  .selected
+    background #c0c0c0
+  .center-container
+    display flex
+    align-items center
+    height 100%
+    justify-content center
+    text-align center
+  #sequence-container
+    height 250px
+    overflow-y scroll
+    #sequence-selection
+      padding 5px
+      cursor pointer
+      display flex
+      flex-direction row
+      justify-content space-between
+      a
+        color inherit
+        text-decoration inherit
+      &:hover
+        background-color lightGrey
+        cursor pointer
+    #sequence-update
+      padding 5px
+      text-align center
+      cursor pointer
+      &:hover
+        background-color lightGrey
+    #sequence-update-done
+      padding 5px
+      text-align center
+    #sequence-page-selector
+      display flex
+      flex-direction row
+      justify-content center
+      padding 10px
+      .sequence-page-selector-arrow
+        padding 15px
+        cursor pointer
+  .select-publish-server
+    width 100%
+    .publish-container
+      user-select none
+      -webkit-user-select none
+      -moz-user-select none    
+      margin 1rem
+      background-color #e6e6e6
+      border-radius 0.0rem      
+      border 1px solid #D0D0D0
+      float left
+    
+    .publish-container label
+      float left
+      width 15.5rem
+    
+    .publish-container label span
+      text-align center
+      padding 0.5rem 1rem      
+      display block
+      border-radius 0.0rem
+      transition 0.3s
+      
+    .publish-container label input
+      position absolute
+      top -20px
+
+    .publish-container input:disabled+span
+      background-color #999999
+      color #555555
+
+    .publish-container input:disabled:hover+span
+      background-color #999999
+      color #555555
+                
+    .publish-container input:hover+span
+      background-color #dddddd
+    
+    .publish-container input:checked+span
+      background-color #1779ba
+      color #fff
+    
+    .publish-container input:checked:hover+span
+      background-color #156396
+      color #fff
+    
+            
+        
+          

@@ -3,7 +3,7 @@ IMAGE ?= taccaci/hazmapper:$(TAG)
 
 .PHONY: image
 image:
-	docker build -t $(IMAGE) .
+	docker build -t $(IMAGE) -f angular/Dockerfile .
 
 .PHONY: deploy
 deploy:

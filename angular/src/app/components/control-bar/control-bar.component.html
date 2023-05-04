@@ -1,0 +1,36 @@
+<div class="grid-x align-justify" style="height: 100%">
+    <div *ngIf="loadingActiveProjectFailed" class="cell label alert">Unable to access this map</div>
+    <div *ngIf="loadingActiveProject" style="margin-left: 1rem" class="align-middle">
+        <i class="fas fa-spin fa-spinner"></i>
+    </div>
+    <div *ngIf="!loadingActiveProject && !loadingActiveProjectFailed" class="cell small-8 align-middle grid-x">
+        <a *ngIf="!isPublicView" class="button tiny" routerLink="{{ MAIN }}"><i class="fas fa-arrow-left"></i></a>
+        <ng-container *ngIf="activeProject">
+            <span style="margin-left: 1rem">{{ isPublicView ? 'Public Map' : 'Map' }}: {{ activeProject.name }}</span>
+            <div *ngIf="activeProject.ds_id" style="padding-left: 30px">
+                <span>Project: {{ activeProject.ds_id }} | {{ activeProject.title }}</span>
+            </div>
+            <div *ngIf="canSwitchToPrivateMap" class="grid-x align-left align-middle">
+                <a class="light-blue private-view-link" tooltip="View private map" [delay]="100" (click)="routeToPrivateView()">
+                    <i class="fas fa-lock"></i>
+                </a>
+            </div>
+        </ng-container>
+        <div *ngIf="loadingData" style="margin-left: 1rem">
+            <i class="fas fa-spin fa-spinner" style="margin-right: 0.3rem"></i>
+            <span>Loading Data</span>
+        </div>
+    </div>
+    <div *ngIf="!loadingActiveProject && !loadingActiveProjectFailed" class="cell small-4 align-right align-middle grid-x">
+        <div class="grid-x align-right align-middle">
+            <span class="lat-lon-label"> Lat: </span>
+            <div class="lat-lon-number">
+                {{ mapMouseLocation.lat | number : '.4' }}
+            </div>
+            <span class="lat-lon-label"> Lon: </span>
+            <div class="lat-lon-number">
+                {{ mapMouseLocation.lng | number : '.4' }}
+            </div>
+        </div>
+    </div>
+</div>
