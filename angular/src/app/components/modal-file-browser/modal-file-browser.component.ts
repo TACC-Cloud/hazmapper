@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { RemoteFile } from 'ng-tapis/models/remote-file';
+import { RemoteFile } from 'ng-tapis';
 import { BsModalRef } from 'ngx-foundation/modal/bs-modal-ref.service';
 import { Subject } from 'rxjs';
 import { TapisFilesService } from '../../services/tapis-files.service';

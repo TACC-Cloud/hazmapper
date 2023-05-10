@@ -13,7 +13,7 @@ import { StreetviewService } from '../../services/streetview.service';
 export class MainProjectComponent implements OnInit {
   public activeFeature: Feature;
   public activeStreetviewAsset: any;
-  private isPublicView = false;
+  public isPublicView = false;
 
   constructor(
     private route: ActivatedRoute,

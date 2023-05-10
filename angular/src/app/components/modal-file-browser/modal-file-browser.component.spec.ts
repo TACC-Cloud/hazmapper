@@ -5,7 +5,6 @@ import { instance, mock, spy, when } from 'ts-mockito';
 import { AuthService } from '../../services/authentication.service';
 import { TapisFilesService } from '../../services/tapis-files.service';
 import { AgaveSystemsService } from '../../services/agave-systems.service';
-import { FileSizeModule } from 'ngx-filesize';
 import { userFixture } from '../../fixtures/user.fixture';
 import { of } from 'rxjs';
 import { BsModalRef } from 'ngx-foundation';
@@ -20,7 +19,6 @@ describe('ModalFileBrowserComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ModalFileBrowserComponent],
-      imports: [FileSizeModule],
       providers: [
         {
           provide: AgaveSystemsService,

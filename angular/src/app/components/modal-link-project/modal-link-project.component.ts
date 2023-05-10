@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { RemoteFile } from 'ng-tapis/models/remote-file';
+import { RemoteFile } from 'ng-tapis';
 import { Project, ProjectRequest } from '../../models/models';
 import { ProjectsService } from '../../services/projects.service';
 import { BsModalRef } from 'ngx-foundation/modal/bs-modal-ref.service';
