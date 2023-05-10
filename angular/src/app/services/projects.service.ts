@@ -54,6 +54,10 @@ export class ProjectsService {
     private envService: EnvService
   ) {}
 
+  public getLastProjectKeyword() {
+    return `${this.envService.env}LastProject`;
+  }
+
   updateProjectsList(resp: Project[] = []) {
     const myProjs = resp.length !== 0 ? resp : this._projects.value;
 

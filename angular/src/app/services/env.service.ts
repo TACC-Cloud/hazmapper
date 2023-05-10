@@ -7,6 +7,7 @@ export class EnvService {
   private _env: EnvironmentType;
   private _apiUrl: string;
   private _portalUrl: string;
+  private _taggitUrl: string;
   private _jwt?: string;
   private _clientId: string;
   private _baseHref: string;
@@ -68,6 +69,10 @@ export class EnvService {
     return this._portalUrl;
   }
 
+  get taggitUrl(): string {
+    return this._taggitUrl;
+  }
+
   constructor() {}
 
   init(): Promise<void> {
@@ -80,6 +85,7 @@ export class EnvService {
   private setEnvVariables(): void {
     const hostname = window && window.location && window.location.hostname;
     const pathname = window && window.location && window.location.pathname;
+    const origin = window && window.location.origin;
 
     this._streetviewEnv = {
       google: {
@@ -103,6 +109,9 @@ export class EnvService {
       this._env = EnvironmentType.Local;
       this._apiUrl = this.getApiUrl(environment.backend);
       this._portalUrl = this.getPortalUrl(environment.backend);
+      // TODO: Currently taggit is hosted on same port 4200
+      // Have to change port on taggit or hazmapper (requires adding callbackUrl to that port)
+      this._taggitUrl = 'http://localhost:4200/taggit';
       // when we are using the local backend, a jwt is required
       if (environment.backend === EnvironmentType.Local) {
         this._jwt = environment.jwt;
@@ -126,6 +135,7 @@ export class EnvService {
     } else if (/^hazmapper.tacc.utexas.edu/.test(hostname) && pathname.startsWith('/staging')) {
       this._env = EnvironmentType.Staging;
       this._apiUrl = this.getApiUrl(this.env);
+      this._taggitUrl = origin + '/taggit-staging';
       this._portalUrl = this.getPortalUrl(this.env);
       this._clientId = 'foitdqFcimPzKZuMhbQ1oyh3Anka';
       this._baseHref = '/staging/';
@@ -144,6 +154,7 @@ export class EnvService {
       this._env = EnvironmentType.Production;
       this._apiUrl = this.getApiUrl(this.env);
       this._portalUrl = this.getPortalUrl(this.env);
+      this._taggitUrl = origin + '/taggit';
       this._clientId = 'tMvAiRdcsZ52S_89lCkO4x3d6VMa';
       this._baseHref = '/hazmapper/';
       this._streetviewEnv.secrets = {
