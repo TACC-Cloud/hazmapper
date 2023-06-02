@@ -186,11 +186,13 @@ export class MapComponent implements OnInit, OnDestroy {
       this.geoDataService.activeFeature.pipe(filter((n) => n != null)).subscribe((next) => {
         this.activeFeature = next;
         const bbox = turf.bbox(<AllGeoJSON>next);
-        this.map.fitBounds([
-          [bbox[1], bbox[0]],
-          [bbox[3], bbox[2]],
-        ],
-          {maxZoom: this.MAX_FIT_TO_BOUNDS_ZOOM});
+        this.map.fitBounds(
+          [
+            [bbox[1], bbox[0]],
+            [bbox[3], bbox[2]],
+          ],
+          { maxZoom: this.MAX_FIT_TO_BOUNDS_ZOOM }
+        );
       })
     );
 
@@ -377,7 +379,7 @@ export class MapComponent implements OnInit, OnDestroy {
       try {
         if (this.fitToFeatureExtent) {
           this.fitToFeatureExtent = false;
-          this.map.fitBounds(this.features.getBounds(), {maxZoom: this.MAX_FIT_TO_BOUNDS_ZOOM});
+          this.map.fitBounds(this.features.getBounds(), { maxZoom: this.MAX_FIT_TO_BOUNDS_ZOOM });
         }
       } catch (e) {}
     });
