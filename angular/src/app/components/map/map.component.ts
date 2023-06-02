@@ -187,7 +187,8 @@ export class MapComponent implements OnInit, OnDestroy {
         this.map.fitBounds([
           [bbox[1], bbox[0]],
           [bbox[3], bbox[2]],
-        ]);
+        ],
+          {maxZoom: 18});
       })
     );
 
