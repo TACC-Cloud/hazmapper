@@ -23,6 +23,7 @@ import { StreetviewService } from 'src/app/services/streetview.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FileTreeNodeComponent implements OnInit, OnDestroy {
+  @Input() isPublicView = false;
   @Input() node: PathTree<Feature>;
   @Output() clickEvent: EventEmitter<PathTree<Feature>> = new EventEmitter<PathTree<Feature>>();
   public activeFeature: Feature;
