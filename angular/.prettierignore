@@ -1,0 +1,2 @@
+# ignore quetionairre related code
+src/app/utils/questionnaireBuilder.ts

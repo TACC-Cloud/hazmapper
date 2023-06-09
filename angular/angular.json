@@ -114,7 +114,8 @@
             "exclude": [
               "**/node_modules/**",
               "**/{*.spec,*.stub,*.mock,mocks}.ts",
-              "src/environments/jwt.ts"
+              "src/environments/jwt.ts",
+              "src/app/utils/questionnaireBuilder.ts"
             ]
           }
         }

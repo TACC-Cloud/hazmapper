@@ -1,11 +1,11 @@
 <div [ngSwitch]="feature.featureType()" style="width: 25px">
     <i class="fas fa-camera-retro" *ngSwitchCase="'image'"></i>
     <i class="fas fa-video" *ngSwitchCase="'video'"></i>
+    <i class="fas fa-clipboard-list" *ngSwitchCase="'questionnaire'"></i>
     <i class="fas fa-map-marker-alt" *ngSwitchCase="'Point'"></i>
     <i class="fas fa-draw-polygon" *ngSwitchCase="'Polygon'"></i>
     <i class="fas fa-bezier-curve" *ngSwitchCase="'LineString'"></i>
     <i class="fas fa-bezier-curve" *ngSwitchCase="'MultiLineString'"></i>
-    <i class="fas fa-clipboard-list" *ngSwitchCase="'survey'"></i>
     <i class="fab fa-mixcloud" *ngSwitchCase="'point_cloud'"></i>
     <i class="fas fa-road" *ngSwitchCase="'streetview'"></i>
 </div>

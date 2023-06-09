@@ -56,6 +56,8 @@ export class GeoDataService {
   private qmsServerResult$: Observable<any> = this._qmsServerResult.asObservable();
   private _dirtyTileOptions: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public readonly dirtyTileOptions$: Observable<boolean> = this._dirtyTileOptions.asObservable();
+  private _featureSource: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  public readonly featureSource: Observable<any> = this._featureSource.asObservable();
 
   private _existingFeatureTypes: BehaviorSubject<Record<string, boolean>> = new BehaviorSubject<Record<string, boolean>>(existingFeatures);
   public readonly existingFeatureTypes: Observable<Record<string, boolean>> = this._existingFeatureTypes.asObservable();
@@ -532,6 +534,12 @@ export class GeoDataService {
       this.addTileServer(projectId, newServer);
       this._qmsServerResult.next(q);
     });
+  }
+
+  getFeatureAssetSource(feature: Feature, optionalPath = null) {
+    const baseFeatureSource = this.envService.apiUrl + '/assets/' + feature.assets[0].path;
+    const featureSource = optionalPath ? baseFeatureSource + optionalPath : baseFeatureSource;
+    return this.http.get(featureSource, { headers: { 'content-type': 'application/json' } });
   }
 
   public get qmsSearchResults(): Observable<Array<any>> {

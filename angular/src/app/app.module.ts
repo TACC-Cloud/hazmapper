@@ -67,6 +67,7 @@ import { ModalStreetviewUsernameComponent } from './components/modal-streetview-
 import { ModalStreetviewOrganizationComponent } from './components/modal-streetview-organization/modal-streetview-organization.component';
 import { StreetviewAssetDetailComponent } from './components/streetview-asset-detail/streetview-asset-detail.component';
 import { StreetviewFiltersComponent } from './components/streetview-filters/streetview-filters.component';
+import { ModalQuestionnaireViewerComponent } from './components/modal-questionnaire-viewer/modal-questionnaire-viewer.component';
 
 @NgModule({
   declarations: [
@@ -120,6 +121,7 @@ import { StreetviewFiltersComponent } from './components/streetview-filters/stre
     ModalStreetviewOrganizationComponent,
     StreetviewAssetDetailComponent,
     StreetviewFiltersComponent,
+    ModalQuestionnaireViewerComponent,
   ],
   imports: [
     CommonModule,
@@ -194,6 +196,7 @@ import { StreetviewFiltersComponent } from './components/streetview-filters/stre
     ModalStreetviewOrganizationComponent,
     ModalPointCloudInfoComponent,
     ModalLinkProjectComponent,
+    ModalQuestionnaireViewerComponent,
   ],
 })
 export class AppModule {}
