@@ -1,11 +1,4 @@
-export const featureTypes = [
-  'image',
-  'video',
-  'point_cloud',
-  'streetview',
-  'questionnaire',
-  'no_asset_vector',
-] as const;
+export const featureTypes = ['image', 'video', 'point_cloud', 'streetview', 'questionnaire', 'no_asset_vector'] as const;
 
 type featuresTypeID = (typeof featureTypes)[number];
 

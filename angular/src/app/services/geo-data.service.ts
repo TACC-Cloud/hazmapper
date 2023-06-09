@@ -536,14 +536,11 @@ export class GeoDataService {
     });
   }
 
-  getFeatureAssetSource(feature: Feature, optionalPath=null) {
+  getFeatureAssetSource(feature: Feature, optionalPath = null) {
     const baseFeatureSource = this.envService.apiUrl + '/assets/' + feature.assets[0].path;
-    const featureSource = optionalPath
-      ? baseFeatureSource + optionalPath
-      : baseFeatureSource;
-    return this.http.get(featureSource, {headers: {'content-type': 'application/json'}});
+    const featureSource = optionalPath ? baseFeatureSource + optionalPath : baseFeatureSource;
+    return this.http.get(featureSource, { headers: { 'content-type': 'application/json' } });
   }
-
 
   public get qmsSearchResults(): Observable<Array<any>> {
     return this.qmsSearchResults$;

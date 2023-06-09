@@ -14,23 +14,15 @@ import * as $ from 'jquery';
 export class ModalQuestionnaireViewerComponent implements OnInit {
   @Input() feature: Feature;
 
-  constructor(
-    private modalRef: BsModalRef,
-    private geoDataService: GeoDataService,
-    private projectService: ProjectsService
-  ) {}
+  constructor(private modalRef: BsModalRef, private geoDataService: GeoDataService, private projectService: ProjectsService) {}
 
   ngOnInit() {
     this.projectService.activeProject.subscribe((p) => {
-      this.geoDataService.getFeatureAssetSource(this.feature, '/questionnaire.rq')
-        .subscribe((featureSource: any) => {
-          const questionnaire = QuestionnaireBuilder.renderQuestionnaire(
-            featureSource
-          );
-          $('#questionnaire-view').after(questionnaire); // Insert new elements after <img>
-        });
+      this.geoDataService.getFeatureAssetSource(this.feature, '/questionnaire.rq').subscribe((featureSource: any) => {
+        const questionnaire = QuestionnaireBuilder.renderQuestionnaire(featureSource);
+        $('#questionnaire-view').after(questionnaire); // Insert new elements after <img>
+      });
     });
-
   }
 
   cancel() {

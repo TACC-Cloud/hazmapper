@@ -8,9 +8,8 @@ describe('ModalQuestionnaireViewerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ModalQuestionnaireViewerComponent ]
-    })
-    .compileComponents();
+      declarations: [ModalQuestionnaireViewerComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
