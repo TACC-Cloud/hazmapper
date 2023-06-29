@@ -16336,4 +16336,461 @@ class EndPage {
   }
 }
 
+function Utils() {}
+
+//id
+Utils.generateUUID = function () {
+
+    var d = new Date().getTime(); //Timestamp
+    var d2 = (performance && performance.now && (performance.now()*1000)) || 0; //Time in microseconds since page-load or 0 if unsupported
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16;//random number between 0 and 16
+        if(d > 0){//Use timestamp until depleted
+            r = (d + r)%16 | 0;
+            d = Math.floor(d/16);
+        } else {//Use microseconds since page-load if supported
+            r = (d2 + r)%16 | 0;
+            d2 = Math.floor(d2/16);
+        }
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+}
+Utils.compareUUIDs = function (uuid_1, uuid_2) {
+    return (uuid_1.toString().toLowerCase() === uuid_2.toString().toLowerCase());
+};
+Utils.nextAlphabetChar = function (char) {
+    return String.fromCharCode(char.charCodeAt(0) + 1);
+};
+
+//scrolling
+Utils.scrollIntoViewIfNeeded = function(target) {
+    let rect = target.getBoundingClientRect();
+
+    if (rect.bottom > window.innerHeight - 70) {
+        target.scrollIntoView({behavior: "smooth"});
+    }
+    if (rect.top < 0) {
+        target.scrollIntoView({behavior: "smooth"});
+    }
+};
+Utils.isScrollBarVisible = function (container) {
+
+    //returns boolean value of scroll bar visibility for a given view container
+    return ($(container).get(0).scrollHeight > $(container).outerHeight() + 1)
+};
+
+//time
+Utils.createTimestamp = function () {
+
+    let date = new Date();
+
+    let month = ((date.getMonth() + 1 ) < 10) ? "0" + (date.getMonth() + 1) : (date.getMonth() + 1);
+
+    let hr = date.getHours();
+    if( hr > 12 ) hr -= 12;
+
+    let hours = (date.getHours() < 10) ? "0" + date.getHours() : date.getHours();
+
+    let minutes = (date.getMinutes() < 10) ? "0" + date.getMinutes() : date.getMinutes();
+    let date_num = (date.getDate() < 10) ? "0" + date.getDate() : date.getDate();
+    let seconds = (date.getSeconds() < 10) ? "0" + date.getSeconds() : date.getSeconds();
+
+    return "" + date.getFullYear() + month + date_num + hours + minutes + seconds;
+}
+Utils.formatAudioDuration = function (time) {
+    // Hours, minutes and seconds
+    let hrs = ~~(time / 3600);
+    let mins = ~~((time % 3600) / 60);
+    let secs = ~~time % 60;
+
+    // Output like "1:01" or "4:03:59" or "123:03:59"
+    let ret = "";
+    if (hrs > 0) {
+        ret += "" + hrs + ":" + (mins < 10 ? "0" : "");
+    }
+    ret += "" + mins + ":" + (secs < 10 ? "0" : "");
+    ret += "" + secs;
+    return ret;
+};
+
+//arrays
+Utils.inArray = function (value, array) {
+
+    for (let i in array) {
+        if (array[i] === value) return true;
+    }
+    return false
+};
+Utils.moveInArray = function (arr, from_index, to_index) {
+    arr.splice(from_index, 0, arr.splice(to_index, 1)[0]);
+};
+Utils.removeFromArray = function (array, value) {
+
+    let removed = array.filter(function (item) {
+        return item!== value;
+    });
+
+    return removed;
+};
+Utils.isJson = function (item) {
+
+    item = typeof item !== "string"
+        ? JSON.stringify(item)
+        : item;
+
+    try {
+        item = JSON.parse(item);
+    } catch (e) {
+        return false;
+    }
+
+    if (typeof item === "object" && item !== null) {
+        return true;
+    }
+
+    return false;
+
+};
+
+//calendar
+Utils.calPad = function (value) {
+
+    if (value < 10) {
+        return "0"+value;
+    } else {
+        return ""+value;
+    }
+};
+Utils.getMonthName = function (i) {
+
+    let monthNames = [
+        "January", "February", "March",
+        "April", "May", "June", "July",
+        "August", "September", "October",
+        "November", "December"
+    ];
+    if (i === 0) return "January";
+    if (i) return monthNames[i];
+    return "";
+};
+Utils.getUTCDateString = function (date) {
+
+    // if (date) {
+    //     return date.getUTCDate() + " "
+    //         + Utils.getMonthName(date.getUTCMonth()).substring(0, 3) + " "
+    //         + date.getUTCFullYear() + " "
+    //         + ("0" + date.getUTCHours()).slice(-2) + ":"
+    //         + ("0" + date.getUTCMinutes()).slice(-2) + ":"
+    //         + ("0" + date.getUTCSeconds()).slice(-2) + " UTC";
+    // }
+    // return "";
+
+
+
+    if (date) {
+        return date.getDate() + " "
+            + Utils.getMonthName(date.getMonth()).substring(0, 3) + " "
+            + date.getFullYear() + " "
+            + ("0" + date.getHours()).slice(-2) + ":"
+            + ("0" + date.getMinutes()).slice(-2) + ":"
+            + ("0" + date.getSeconds()).slice(-2) + " UTC";
+    }
+    return "";
+};
+Utils.getAssetViewerDateString = function (date) {
+
+
+    let date_string = "";
+    if (date) {
+
+        let hr = date.getHours();
+        let ampm = " am";
+        if( hr > 12 ) {
+            hr -= 12;
+            ampm = " pm";
+        }
+        let min = date.getMinutes();
+        if (min < 10) min = "0" + min;
+
+        date_string = hr + ":" + min + ampm + "<br>" + Utils.getMonthName(date.getMonth()) + " " + date.getDate() + ", " + date.getFullYear();
+
+    }
+    return date_string;
+};
+
+//animations
+Utils.fadeOutCrossBrowser = function (obj, duration) {
+
+    // obj.css("opacity", 1);
+    obj.animate({"opacity" : 0}, duration);
+    setTimeout(function () {
+            obj.css("display", "none");
+        }
+        , duration)
+    // setInterval(function () {
+    //     obj.css("opacity", 0);
+    // }, 500)
+
+};
+Utils.fadeIn = function (obj, display_mode, duration) {
+
+    obj.css("opacity", 0);
+    obj.css("display", display_mode);
+    obj.animate({"opacity" : 1}, duration);
+
+};
+Utils.fadeInPrimaryModal = function () {
+    $("#modal-primary").css("opacity", 0);
+    $("#modal-primary").css("display", "block");
+    $("#modal-primary").animate({"opacity" : 0.7}, 350);
+};
+Utils.fadeOutPrimaryModal = function () {
+    $("#modal-primary").css("opacity", 0.7);
+    $("#modal-primary").css("display", "block");
+    $("#modal-primary").animate({"opacity" : 0}, 350);
+    setTimeout(function () {
+        $("#modal-primary").css("display", "none");
+    }, 350)
+};
+Utils.fadeInSecondaryModal = function () {
+    $("#modal-secondary").css("opacity", 0);
+    $("#modal-secondary").css("display", "block");
+    $("#modal-secondary").animate({"opacity" : 0.7}, 350);
+};
+
+Utils.getModal = function(modal_id, animation_mode) {
+
+    let id = "#" + modal_id
+    if ($(id).css("opacity") === 0.7) return
+
+    if (animation_mode) {
+
+        if (animation_mode === "fade") {
+            $(id).css("opacity", 0);
+            $(id).css("display", "block");
+            $(id).animate({"opacity" : 0.7}, 350);
+        }
+
+    } else {
+        $(id).css("opacity", 0.7);
+        $(id).css("display", "block");
+    }
+}
+Utils.removeModal = function(modal_id, animation_mode) {
+
+    let id = "#" + modal_id
+    if (animation_mode) {
+
+        if (animation_mode === "fade") {
+            $(id).css("opacity", 0.7);
+            $(id).css("display", "block");
+            $(id).animate({"opacity" : 0}, 350);
+            setTimeout(function () {
+                $(id).css("display", "none");
+            }, 350)
+        }
+
+    } else {
+
+        $(id).css("opacity", 0);
+        $(id).css("display", "block");
+        $(id).css("display", "none");
+    }
+}
+
+Utils.catchClicks = function (event) {
+
+    event.stopPropagation();
+};
+Utils.loadingAnimStart = function (path) {
+
+    $("#" + path + "-loading-message").show();
+    $("#" + path + "-loading-message").children(".uploadSpinner").children(".uploadSecondarySpinner").addClass("uploadSpinnerRotate");
+    let spinner = $("#" + path + "-loading-message").children(".uploadSpinner").children(".uploadSecondarySpinner");
+
+};
+Utils.loadingAnimEnd = function (path) {
+
+    setTimeout(function () {
+        $("#" + path + "-loading-message").children(".uploadSpinner").children(".uploadSecondarySpinner").removeClass("transparent");
+        $("#" + path + "-loading-message").children(".uploadSpinner").children(".uploadSecondarySpinner").css("border", "4px solid hsl(140, 75%, 55%)");
+        $("#" + path + "-loading-message").children(".uploadSpinner").children(".uploadSecondarySpinner").css("background-color", " hsl(140, 75%, 55%)");
+    }, 500);
+
+    setTimeout(function () {
+        $("#" + path + "-loading-message").children(".uploadSpinner").children(".uploadSecondarySpinner").removeClass("uploadSpinnerRotate");
+    }, 700);
+
+    setTimeout(function () {
+        Utils.fadeOutCrossBrowser($("#" + path + "-loading-message"), 350);
+    }, 1200);
+
+};
+
+//rect
+Utils.getObjWidth = function(obj) {
+    return (obj)? parseInt(obj.offsetWidth): 0;
+};
+Utils.getObjHeight = function(obj) {
+    return (obj)? parseInt(obj.offsetHeight): 0;
+};
+Utils.getObjectDimensions = function(obj) {
+    if (obj) {
+        let w = Utils.getObjWidth(obj);
+        let h = Utils.getObjHeight(obj);
+        return {width: w, height: h};
+    } else {
+        return {width: 0, height: 0};
+    }
+};
+Utils.pointInRect = function(point, rect) {
+
+    //point = {x, y}, rect = {x1, y1, x2, y2}
+    let result = false;
+
+    let x_min = (rect.x1 <= rect.x2)? rect.x1: rect.x2;
+    let x_max = (rect.x1 <= rect.x2)? rect.x2: rect.x1;
+    let y_min = (rect.y1 <= rect.y2)? rect.y1: rect.y2;
+    let y_max = (rect.y1 <= rect.y2)? rect.y2: rect.y1;
+
+    if (point.x >= x_min && point.x <= x_max) {
+        if (point.y >= y_min && point.y <= y_max) {
+            result = true;
+        }
+    }
+    return result;
+};
+
+//element positioning
+Utils.isEventInElement = function(event, element) {
+
+    let rect = element.getBoundingClientRect();
+    let x = event.clientX;
+    if (x < rect.left || x >= rect.right) return false;
+    let y = event.clientY;
+    return !(y < rect.top || y >= rect.bottom);
+
+}
+
+//files
+Utils.attachImageFromFile = function () {
+
+};
+
+//text
+Utils.reverseString = function (str) {
+    return str.split("").reverse().join("");
+};
+Utils.capitalize = function (str) {
+
+    if (str) {
+        str = str.toString();
+        return str.substr(0, 1).toUpperCase() + str.substr(1);
+    }
+};
+Utils.lowercaseStripSpaces = function (str, char) {
+
+    //replaces spaces with passed character
+    if (char === null) char = "-";
+    let formatted = str.replace(/ /g, char);
+
+    // let value = formatted.replace(":", "-");
+    return formatted.toLowerCase();
+
+};
+Utils.noReferenceClone = function (obj) {
+    //clones an object with no reference to original
+    return JSON.parse(JSON.stringify(obj))
+
+};
+Utils.formatVariableName = function (str) {
+
+    if (str) {
+        let variable_name = str.trim().replace(/[^a-zA-Z\d\s:_-]/g, "");
+        // let replace_hyphens = variable_name.replace("-", "_");
+        return variable_name.replace(/ /g,"_").substring(0, 30).toLowerCase();
+    }
+
+    return null;
+};
+Utils.fillTextWithLorem = function () {
+
+    //fills questionnaire text field with sample lorem text
+
+    //array of sample lorem text strings
+    let lorem = ["Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis eget vehicula sem. Etiam laoreet lorem sem, sit amet convallis eros aliquet eu. " +
+    "Aliquam rutrum, lacus id scelerisque dapibus, odio erat laoreet ante, eu tincidunt lacus quam eget sapien. Vestibulum faucibus fringilla justo in pellentesque. Maecenas consectetur est sed augue faucibus varius. " +
+    "Donec sed massa quis nulla finibus tempus. Nulla facilisi. " +
+    "Mauris quis tellus sollicitudin, vulputate tellus sit amet, laoreet mauris. Sed dui mauris, placerat quis feugiat ac, fermentum non tellus. Pellentesque in massa aliquet, " +
+    "tristique lectus quis, vulputate eros. Nulla at vehicula quam. Nunc lobortis nec orci quis fringilla",
+
+        "Duis vulputate, elit sit amet facilisis luctus, lorem augue rutrum est, a commodo metus est viverra purus. " +
+        "Aenean finibus aliquam lobortis. Aliquam ac pellentesque nisl. Praesent molestie dolor eget nibh convallis consectetur. Sed nisl tortor, " +
+        "facilisis et condimentum eget, scelerisque ut erat. Phasellus vestibulum eros a elit lobortis, eget mollis tellus ultrices. Fusce nec tempus nibh.",
+        "Pellentesque hendrerit ex sem, eu sodales justo iaculis nec. Ut mattis gravida nisi, sit amet imperdiet nibh fermentum sed. ",
+
+        "Mauris id erat a dolor mollis venenatis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. ",
+
+        "Phasellus et tempus nisl. Vivamus rutrum lectus at pulvinar scelerisque. Quisque hendrerit eleifend convallis. Sed vel lectus nec est egestas finibus. " ,
+
+        "Ut diam magna, malesuada eget tristique in, dictum quis lectus. Etiam aliquet odio sit amet purus cursus auctor eget at massa. Suspendisse potenti." ,
+
+        "Morbi viverra, lacus eu aliquet rutrum, dui sapien elementum metus, sit amet tempor risus purus vel massa. Integer et libero ut sem lacinia imperdiet",
+
+        "Suspendisse ac quam rhoncus, ullamcorper augue eget, lacinia diam. Praesent lacinia at sem eget maximus. Nunc lobortis elit vitae ligula maximus luctus ut id tellus. " +
+        "Duis eu commodo tortor, vel commodo ligula. Nulla sed augue convallis, imperdiet enim eget, dapibus nisl. Fusce quis mi massa. Sed sit amet luctus enim. " +
+        "Maecenas tempor ante ex, vel pellentesque leo pellentesque quis. Ut in libero vel felis sollicitudin posuere. Integer at vehicula velit. " +
+        "Donec non leo sit amet ante semper volutpat. Phasellus sagittis semper eleifend. Interdum et malesuada fames ac ante ipsum primis in faucibus.",
+
+        "Suspendisse id justo velit. Aliquam pharetra felis sit amet velit commodo, a ultrices diam lacinia",
+
+        "Etiam lacus mauris, maximus ut scelerisque eget, tristique et felis. Curabitur ac metus nunc",
+
+        "Proin fermentum lacinia elit et placerat. Nullam sodales dui at ornare dapibus. ",
+
+        "Etiam gravida ligula ex, sed rhoncus ante tincidunt dignissim. Quisque viverra congue massa, quis consequat turpis imperdiet at. Phasellus vel nulla id tellus euismod condimentum eu at velit. " +
+        "Aliquam id leo sed urna vulputate sodales vel quis neque. Integer mattis urna urna, id facilisis massa consequat consequat. " +
+        "In molestie congue elit sed feugiat. Sed at dolor fermentum, ultrices neque sed, vestibulum sem. Fusce non mollis ipsum."]
+
+    $.each($("p.textField"))
+
+
+}
+
+//csv
+Utils.convertToCSVString = function (str) {
+
+    if (!str) return "";
+
+    let csv_string = str.trim();
+
+    //line break
+    if (csv_string.indexOf("<br>") !== -1) csv_string = csv_string.replaceAll("<br>", " ");
+
+    //double quotes
+    if (csv_string.indexOf('"') !== -1) csv_string = csv_string.replaceAll('"', '\"');
+
+    //if string has comma
+    if (csv_string.indexOf(",") !== -1 || csv_string.indexOf('"') !== -1 || csv_string.indexOf('\'') !== -1 ) {
+        if (csv_string[csv_string.length - 1] === ",") csv_string = csv_string.substring(0, csv_string.length - 1)
+        csv_string = '"' + csv_string + '"';
+    }
+
+    return csv_string;
+};
+
+//logging
+Utils.logIfDev = function (string_log) {
+    if (Parameters.deployment === "dev") console.log(string_log)
+}
+
+//includes tab, left/right arrow keys
+
+//alpha numeric, lower case, include underscores
+Utils.charWhitelist = [16, 9, 35, 37, 39, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 65, 66, 67, 68, 69, 70,
+    71, 72, 73, 74 ,75, 76, 77, 78, 79, 80, 81,82 ,83, 84, 85, 86 , 87, 88 ,89, 90, 95, 96,97, 98, 99, 100, 101, 102, 103, 104, 105, 8, 32, 189];
+
+Utils.numberChars = [48, 49, 50, 51, 52, 52, 53, 54, 55, 56, 57, 8];
+
+
 export { QuestionnaireBuilder };
