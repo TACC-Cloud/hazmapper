@@ -1381,7 +1381,7 @@ QuestionnaireBuilder.renderQuestionnaire = function(questionnaire_json) {
    *
    * **/
 
-  const questionnaire = new Questionnaire(questionnaire_json);
+  const questionnaire = new Questionnaire(questionnaire_json, null);
   if (questionnaire) { return questionnaire.renderView(); }
 };
 
@@ -1944,6 +1944,27 @@ class Questionnaire {
 
     return this.table_cells;
   }
+
+    /** Method for generating read only questionnaire **/
+    renderView() {
+        const questionnaire = this;
+
+        // add a section, then add all questions in section
+        let section_list_item;
+        const container = DOM.new({
+            tag: 'div',
+            class: 'view-only-questionnaire-container',
+        });
+        for (const section of questionnaire.sections) {
+            section_list_item = $(section.view_question_DOM).clone();
+            $(section_list_item).find('p.goto-label').parent().remove();
+            $(section_list_item).appendTo(container);
+            for (const question of section.questions) {
+                question.drawViewResponse(container);
+            }
+        }
+        return container;
+    }
 
   viewCompletedQuestionnaire() {
     let questionnaire = this;
@@ -5294,9 +5315,7 @@ class QuestionnaireTemplate {
           copied_questionnaire_template.end_uuid = original_template_response.questionnaire.end_uuid;
           copied_questionnaire_template.display_mode = original_template_response.questionnaire.display_mode;
 
-          copied_questionnaire_template.editable = original_template_response.questionnaire.editable
-            ? original_template_response.questionnaire.editable
-            : Questionnaires.EDITABLE_DEFAULT;
+          copied_questionnaire_template.editable = Questionnaires.EDITABLE_DEFAULT;
 
           copied_questionnaire_template.asset_embedding =
             original_template_response.questionnaire.asset_embedding !== undefined
@@ -6205,7 +6224,7 @@ class QuestionnaireTemplate {
         template.required_default !== undefined ? template.required_default : Questionnaires.REQUIRED_DEFAULT;
       questionnaire.asset_embedding =
         template.asset_embedding !== undefined ? template.asset_embedding : Questionnaires.ASSET_EMBEDDING_DEFAULT;
-      questionnaire.editable = template.editable !== undefined ? template.editable : Questionnaires.EDITABLE_DEFAULT;
+      questionnaire.editable = Questionnaires.EDITABLE_DEFAULT;
       questionnaire.display_mode = template.display_mode ? template.display_mode : 'multi';
       questionnaire.end_text = template.end_text !== undefined ? template.end_text : 'End';
       questionnaire.end_uuid = template.end_uuid !== undefined ? template.end_uuid : Utils.generateUUID();
@@ -8843,7 +8862,8 @@ class SingleAnswer2 extends Question {
       $(this.branching_icon).find('img').attr('src', this.scroll_icon_src);
       this.inspectErrors();
     }
-    this.makeEditable();
+
+    //this.makeEditable();
   }
 
   updateOptions() {
