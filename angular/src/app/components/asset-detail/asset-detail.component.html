@@ -20,14 +20,9 @@
             <iframe class="e2e-iframe-trusted-src" [src]="safePointCloudUrl" style="width: 100%; height: 300px"> </iframe>
         </div>
         <div *ngIf="feature.featureType() === 'questionnaire'">
-            <ngb-carousel>
-                <ng-template ngbSlide *ngFor="let asset of feature.properties._hazmapper.questionnaire.assets">
-                    <img [src]="featureSource + '/' + asset.filename" [alt]="asset.filename">
-                    <div class="carousel-caption">
-                        <h3>{{ asset.filename }}</h3>
-                    </div>
-                </ng-template>
-            </ngb-carousel>
+            <app-questionnaire-detail [feature]="feature" [featureSource]="featureSource"></app-questionnaire-detail>
+        </div>
+        <div *ngIf="feature.featureType() === 'questionnaire'">
             <button class="button small" (click)="openQuestionnaireModal(feature)">View Questionnaire</button>
         </div>
     </div>

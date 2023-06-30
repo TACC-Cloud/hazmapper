@@ -9,13 +9,11 @@ import { ModalQuestionnaireViewerComponent } from '../modal-questionnaire-viewer
 import { RemoteFile } from 'ng-tapis';
 import { TapisFilesService } from '../../services/tapis-files.service';
 import { EnvService } from '../../services/env.service';
-import { NgbCarouselConfig, NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-asset-detail',
   templateUrl: './asset-detail.component.html',
   styleUrls: ['./asset-detail.component.styl'],
-  providers: [NgbCarouselConfig]
 })
 export class AssetDetailComponent implements OnInit {
   @Input() isPublicView = false;
@@ -23,23 +21,21 @@ export class AssetDetailComponent implements OnInit {
   featureSource: string;
   activeProject: Project;
   safePointCloudUrl: SafeResourceUrl;
-  constructor(config: NgbCarouselConfig,
+  constructor(
     private geoDataService: GeoDataService,
     private tapisFilesService: TapisFilesService,
     private projectsService: ProjectsService,
     private bsModalService: BsModalService,
     private envService: EnvService,
     public sanitizer: DomSanitizer
-  ) {
-    config.showNavigationArrows = true;
-    config.showNavigationIndicators = true;
-  }
+  ) {}
 
   ngOnInit() {
     this.geoDataService.activeFeature.subscribe((next) => {
       this.feature = next;
       try {
         let featureSource = this.envService.apiUrl + '/assets/' + this.feature.assets[0].path;
+
         // Strip out any possible double slashes or wso2 gets messed up
         featureSource = featureSource.replace(/([^:])(\/{2,})/g, '$1/');
         this.featureSource = featureSource;
@@ -77,6 +73,7 @@ export class AssetDetailComponent implements OnInit {
   }
 
   openQuestionnaireModal(feature: Feature) {
+    console.log("opening questionaire");
     const modalConfig: ModalOptions = {
       initialState: {
         feature,
