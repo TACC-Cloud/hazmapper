@@ -5,6 +5,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { APP_BASE_HREF } from '@angular/common';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ModalModule, BsDropdownModule, TooltipModule, TabsModule, PaginationModule } from 'ngx-foundation';
+import { NgbModule, NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 import { FileSizeModule } from 'ngx-filesize';
 import { ApiModule } from 'ng-tapis';
 import { AppRoutingModule } from './app-routing.module';
@@ -133,6 +134,8 @@ import { ModalQuestionnaireViewerComponent } from './components/modal-questionna
     BrowserAnimationsModule,
     InfiniteScrollModule,
     ModalModule.forRoot(),
+    NgbModule,
+    NgbCarouselModule,
     ReactiveFormsModule,
     FormsModule,
     ScrollingModule,

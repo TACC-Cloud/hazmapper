@@ -9,11 +9,13 @@ import { ModalQuestionnaireViewerComponent } from '../modal-questionnaire-viewer
 import { RemoteFile } from 'ng-tapis';
 import { TapisFilesService } from '../../services/tapis-files.service';
 import { EnvService } from '../../services/env.service';
+import { NgbCarouselConfig, NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-asset-detail',
   templateUrl: './asset-detail.component.html',
   styleUrls: ['./asset-detail.component.styl'],
+  providers: [NgbCarouselConfig]
 })
 export class AssetDetailComponent implements OnInit {
   @Input() isPublicView = false;
@@ -21,14 +23,17 @@ export class AssetDetailComponent implements OnInit {
   featureSource: string;
   activeProject: Project;
   safePointCloudUrl: SafeResourceUrl;
-  constructor(
+  constructor(config: NgbCarouselConfig,
     private geoDataService: GeoDataService,
     private tapisFilesService: TapisFilesService,
     private projectsService: ProjectsService,
     private bsModalService: BsModalService,
     private envService: EnvService,
     public sanitizer: DomSanitizer
-  ) {}
+  ) {
+    config.showNavigationArrows = true;
+    config.showNavigationIndicators = true;
+  }
 
   ngOnInit() {
     this.geoDataService.activeFeature.subscribe((next) => {
