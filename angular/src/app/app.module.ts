@@ -7,6 +7,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ModalModule, BsDropdownModule, TooltipModule, TabsModule, PaginationModule } from 'ngx-foundation';
 import { FileSizeModule } from 'ngx-filesize';
 import { ApiModule } from 'ng-tapis';
+import { CarouselModule } from 'ngx-owl-carousel-o';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MapComponent } from './components/map/map.component';
@@ -145,6 +146,7 @@ import { QuestionnaireDetailComponent } from './components/questionnaire-detail/
     ToastrModule.forRoot(),
     DragDropModule,
     PaginationModule.forRoot(),
+    CarouselModule
   ],
   providers: [
     AuthService,

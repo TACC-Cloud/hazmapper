@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
+import { OwlOptions } from 'ngx-owl-carousel-o';
 import { Feature } from '../../models/models';
 import {QuestionnaireAsset} from '../../models/questionnaire';
 
@@ -7,16 +7,26 @@ import {QuestionnaireAsset} from '../../models/questionnaire';
   selector: 'app-questionnaire-detail',
   templateUrl: './questionnaire-detail.component.html',
   styleUrls: ['./questionnaire-detail.component.styl'],
-  providers: [NgbCarouselConfig]
+  providers: []
 })
 export class QuestionnaireDetailComponent implements OnInit {
   @Input() feature: Feature;
   @Input() featureSource: string;
   assetImages: Array<QuestionnaireAsset>;
+  customOptions: OwlOptions = {
+    items: 1,
+    loop: false,
+    autoplay: false,
+    nav: true,
+    dots: false,
+    responsive: {},
+    mouseDrag: true,
+    touchDrag: true,
+    pullDrag: true,
+    center: false,
+  };
 
-  constructor(config: NgbCarouselConfig) {
-    config.showNavigationArrows = true;
-    config.showNavigationIndicators = true;
+  constructor() {
   }
 
   ngOnInit() {

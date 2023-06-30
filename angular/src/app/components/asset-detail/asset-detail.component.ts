@@ -73,7 +73,6 @@ export class AssetDetailComponent implements OnInit {
   }
 
   openQuestionnaireModal(feature: Feature) {
-    console.log("opening questionaire");
     const modalConfig: ModalOptions = {
       initialState: {
         feature,

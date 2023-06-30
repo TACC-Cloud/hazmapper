@@ -1,10 +1,12 @@
-<ngb-carousel>
-    <ng-template ngbSlide *ngFor="let asset of assetImages">
-        <img [src]="asset.previewPath" [alt]="asset.filename">
-        <div class="carousel-caption">
-            <h3>{{ asset.filename }}</h3>
+<owl-carousel-o [options]="customOptions">
+    <ng-template carouselSlide *ngFor="let asset of assetImages">
+        <div class="slide">
+            <img [src]="asset.previewPath" [alt]="asset.filename">
+            <div class="caption">
+                <h6>{{ asset.filename }}</h6>
+            </div>
         </div>
     </ng-template>
-</ngb-carousel>
+</owl-carousel-o>
 
 

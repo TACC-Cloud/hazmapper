@@ -13,7 +13,7 @@
         </div>
         <hr />
     </div>
-    <div class="cell medium-5 auto asset-detail-content">
+    <div class="cell medium-6 auto asset-detail-content">
         <img *ngIf="feature.featureType() === 'image'" [src]="featureSource" />
         <video *ngIf="feature.featureType() === 'video'" [src]="featureSource" controls width="100%"></video>
         <div style="position: relative" *ngIf="feature.featureType() === 'point_cloud'">
@@ -21,9 +21,6 @@
         </div>
         <div *ngIf="feature.featureType() === 'questionnaire'">
             <app-questionnaire-detail [feature]="feature" [featureSource]="featureSource"></app-questionnaire-detail>
-        </div>
-        <div *ngIf="feature.featureType() === 'questionnaire'">
-            <button class="button small" (click)="openQuestionnaireModal(feature)">View Questionnaire</button>
         </div>
     </div>
     <div class="cell medium-1 text-center asset-detail-action">
@@ -36,6 +33,9 @@
             <a [href]="featureSource + '/index.html'" target="_blank">
                 <button class="button small">View</button>
             </a>
+        </div>
+        <div *ngIf="feature.featureType() === 'questionnaire'">
+            <button class="button small" (click)="openQuestionnaireModal(feature)">View Questionnaire</button>
         </div>
         <div *ngIf="!feature.assets.length" class="text-center">
             <div data-alert class="alert-box secondary">Feature has no asset.</div>
