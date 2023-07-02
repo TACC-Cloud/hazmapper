@@ -1,13 +1,13 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { Feature } from '../../models/models';
-import {QuestionnaireAsset} from '../../models/questionnaire';
+import { QuestionnaireAsset } from '../../models/questionnaire';
 
 @Component({
   selector: 'app-questionnaire-detail',
   templateUrl: './questionnaire-detail.component.html',
   styleUrls: ['./questionnaire-detail.component.styl'],
-  providers: []
+  providers: [],
 })
 export class QuestionnaireDetailComponent implements OnInit {
   @Input() feature: Feature;
@@ -26,8 +26,7 @@ export class QuestionnaireDetailComponent implements OnInit {
     center: false,
   };
 
-  constructor() {
-  }
+  constructor() {}
 
   ngOnInit() {
     // Retrieve asset images and map them to a new array with proper paths to full/preview images
@@ -43,9 +42,8 @@ export class QuestionnaireDetailComponent implements OnInit {
         filename: asset.filename,
         coordinates: asset.coordinates,
         path: pathToFullImage,
-        previewPath: pathToPreviewImage
+        previewPath: pathToPreviewImage,
       };
     });
   }
-
 }

@@ -146,7 +146,7 @@ import { QuestionnaireDetailComponent } from './components/questionnaire-detail/
     ToastrModule.forRoot(),
     DragDropModule,
     PaginationModule.forRoot(),
-    CarouselModule
+    CarouselModule,
   ],
   providers: [
     AuthService,

@@ -39,9 +39,7 @@
         </div>
         <div *ngIf="!feature.assets.length" class="text-center">
             <div data-alert class="alert-box secondary">Feature has no asset.</div>
-            <button class="button expanded hollow" (click)="openFileBrowserModal()" *ngIf="!isPublicView">
-                Add asset from DesignSafe
-            </button>
+            <button class="button expanded hollow" (click)="openFileBrowserModal()" *ngIf="!isPublicView">Add asset from DesignSafe</button>
         </div>
         <hr />
     </div>

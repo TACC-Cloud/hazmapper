@@ -4,7 +4,9 @@
 <div class="grid-x grid-margin-x kv-table" *ngFor="let item of feature.properties | keyvalue">
     <ng-container *ngIf="!item.key.startsWith('_hazmapper')">
         <div class="cell small-4 text-left break">
-            <b><span>{{ item.key | titlecase }}</span></b>
+            <b
+                ><span>{{ item.key | titlecase }}</span></b
+            >
         </div>
         <div class="cell small-8 text-left break">
             <code>{{ item.value | json }}</code>

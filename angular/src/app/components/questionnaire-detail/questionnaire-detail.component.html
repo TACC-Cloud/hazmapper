@@ -1,12 +1,10 @@
 <owl-carousel-o [options]="customOptions">
     <ng-template carouselSlide *ngFor="let asset of assetImages">
         <div class="slide">
-            <img [src]="asset.previewPath" [alt]="asset.filename">
+            <img [src]="asset.previewPath" [alt]="asset.filename" />
             <div class="caption">
                 <h6>{{ asset.filename }}</h6>
             </div>
         </div>
     </ng-template>
 </owl-carousel-o>
-
-
