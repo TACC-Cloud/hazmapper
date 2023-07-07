@@ -80,7 +80,7 @@
     "protractor": "~5.4.0",
     "puppeteer": "^14.4.1",
     "querystring": "^0.2.0",
-    "stylelint": "^14.9.1",
+    "stylelint": "^15.10.1",
     "stylelint-stylus": "^0.16.1",
     "ts-mockito": "^2.4.2",
     "ts-node": "~7.0.0",
