@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Project } from '../../models/models';
 import { Streetview } from '../../models/streetview';
-import { ProjectsService } from '../../services/projects.service';
+import { ProjectsService, ProjectsData } from '../../services/projects.service';
 import { BsModalRef, BsModalService } from 'ngx-foundation';
 import { AgaveSystemsService } from '../../services/agave-systems.service';
 import { ModalCreateProjectComponent } from '../modal-create-project/modal-create-project.component';
@@ -21,10 +21,10 @@ export class MainWelcomeComponent implements OnInit {
   release_url = 'https://github.com/TACC-cloud/hazmapper';
   guide_url = 'https://www.designsafe-ci.org/rw/user-guides/tools-applications/visualization/hazmapper/';
 
-  spinner = true;
-  notConnected: boolean;
+  loadingProjects = true;
 
-  public projects = [];
+  public projectsData: ProjectsData;
+
   public activeProject: Project;
 
   constructor(
@@ -48,13 +48,11 @@ export class MainWelcomeComponent implements OnInit {
       }
     });
 
-    this.projectsService.loadingProjectsFailed.subscribe((notConnected) => {
-      this.notConnected = notConnected;
-    });
-
-    combineLatest([this.projectsService.projects, this.agaveSystemsService.projects]).subscribe(([projects, dsProjects]) => {
-      this.projects = this.agaveSystemsService.getProjectMetadata(projects, dsProjects);
-      this.spinner = false;
+    combineLatest([this.projectsService.projectsData, this.agaveSystemsService.projects]).subscribe(([projectsData, dsProjects]) => {
+      this.projectsData = projectsData;
+      // add extra info from related DS projects
+      this.projectsData.projects = this.agaveSystemsService.getProjectMetadata(projectsData.projects, dsProjects);
+      this.loadingProjects = false;
     });
   }
 

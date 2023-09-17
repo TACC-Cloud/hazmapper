@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
+import { BehaviorSubject, Observable, ReplaySubject, combineLatest } from 'rxjs';
 import { DesignSafeProjectCollection, Project, ProjectRequest, AgaveFileOperations } from '../models/models';
 import { RapidProjectRequest } from '../models/rapid-project-request';
 import { IpanelsDisplay, defaultPanelsDisplay } from '../models/ui';
@@ -14,9 +14,19 @@ import { MAIN, LOGIN } from '../constants/routes';
 import { AgaveSystemsService } from '../services/agave-systems.service';
 import { Router } from '@angular/router';
 
+
+export interface ProjectsData {
+  projects: Project[];
+  loadingProjectsFailed: boolean;
+  loadingProjectsFailedMessage: string | null;
+  loading: boolean;
+}
+
+
 @Injectable({
   providedIn: 'root',
 })
+
 export class ProjectsService {
   private _projects: BehaviorSubject<Project[]> = new BehaviorSubject([]);
   public readonly projects: Observable<Project[]> = this._projects.asObservable();
@@ -29,8 +39,16 @@ export class ProjectsService {
   private _currentProjectUser: BehaviorSubject<IProjectUser> = new BehaviorSubject<IProjectUser>(null);
   public readonly currentProjectUser: Observable<IProjectUser> = this._currentProjectUser.asObservable();
 
+  private _loadingProjects: BehaviorSubject<boolean> = new BehaviorSubject(true);
+  public loadingProjects: Observable<boolean> = this._loadingProjects.asObservable();
+
   private _loadingProjectsFailed: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public loadingProjectsFailed: Observable<boolean> = this._loadingProjectsFailed.asObservable();
+
+  private _loadingProjectsFailedMessage: BehaviorSubject<string> = new BehaviorSubject("");
+  public loadingProjectsFailedMessage: Observable<string> = this._loadingProjectsFailedMessage.asObservable();
+
+  public readonly projectsData: Observable<ProjectsData>;
 
   private _loadingActiveProject: BehaviorSubject<boolean> = new BehaviorSubject(true);
   public loadingActiveProject: Observable<boolean> = this._loadingActiveProject.asObservable();
@@ -52,7 +70,21 @@ export class ProjectsService {
     private router: Router,
     private authService: AuthService,
     private envService: EnvService
-  ) {}
+  ) {
+    this.projectsData = combineLatest([
+      this.projects,
+      this.loadingProjectsFailed,
+      this.loadingProjectsFailedMessage,
+      this.loadingProjects,
+    ]).pipe(
+      map(([projects, loadingProjectsFailed, loadingProjectsFailedMessage, loading]) => ({
+        projects,
+        loadingProjectsFailed,
+        loadingProjectsFailedMessage,
+        loading,
+      }))
+    );
+  }
 
   public getLastProjectKeyword() {
     return `${this.envService.env}LastProject`;
@@ -72,14 +104,20 @@ export class ProjectsService {
   }
 
   getProjects(): void {
+    this._loadingProjects.next(true);
     this._loadingProjectsFailed.next(false);
+    this._loadingProjectsFailedMessage.next(null);
     this.http.get<Project[]>(this.envService.apiUrl + `/projects/`).subscribe(
       (resp) => {
         this.updateProjectsList(resp);
+        this._loadingProjects.next(false);
         this._loadingProjectsFailed.next(false);
+        this._loadingProjectsFailedMessage.next(null);
       },
       (error) => {
+        this._loadingProjects.next(false);
         this._loadingProjectsFailed.next(true);
+        this._loadingProjectsFailedMessage.next(error.message || 'An error occured.');
         this.notificationsService.showErrorToast('Failed to retrieve project data! Geoapi might be down.');
       }
     );
