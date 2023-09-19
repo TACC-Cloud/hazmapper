@@ -3,7 +3,7 @@ import { Project } from '../../models/models';
 import { Streetview } from '../../models/streetview';
 import { ProjectsService, ProjectsData } from '../../services/projects.service';
 import { BsModalRef, BsModalService } from 'ngx-foundation';
-import { AgaveSystemsService } from '../../services/agave-systems.service';
+import { AgaveSystemsService, AgaveProjectsData } from '../../services/agave-systems.service';
 import { ModalCreateProjectComponent } from '../modal-create-project/modal-create-project.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ModalService } from 'src/app/services/modal.service';
@@ -21,11 +21,9 @@ export class MainWelcomeComponent implements OnInit {
   release_url = 'https://github.com/TACC-cloud/hazmapper';
   guide_url = 'https://www.designsafe-ci.org/rw/user-guides/tools-applications/visualization/hazmapper/';
 
-  loadingProjects = true;
-
-  public projectsData: ProjectsData;
-
-  public activeProject: Project;
+  private projectsData: ProjectsData;
+  private dsProjectsData: AgaveProjectsData;
+  private loading = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -48,11 +46,17 @@ export class MainWelcomeComponent implements OnInit {
       }
     });
 
-    combineLatest([this.projectsService.projectsData, this.agaveSystemsService.projects]).subscribe(([projectsData, dsProjects]) => {
+    combineLatest(
+      [this.projectsService.projectsData, this.agaveSystemsService.projectsData]).subscribe(([projectsData, dsProjectsData]) => {
       this.projectsData = projectsData;
-      // add extra info from related DS projects
-      this.projectsData.projects = this.agaveSystemsService.getProjectMetadata(projectsData.projects, dsProjects);
-      this.loadingProjects = false;
+      this.dsProjectsData = dsProjectsData;
+      if (!this.projectsData.loading && !this.dsProjectsData.loading) {
+        if(this.projectsData.failedMessage && !this.dsProjectsData.failedMessage) {
+          // add extra info (i.e. DS project id/description) from related DS projects
+          this.projectsData.projects = this.agaveSystemsService.getProjectMetadata(projectsData.projects, dsProjectsData.projects);
+        }
+        this.loading = false;
+      }
     });
   }
 

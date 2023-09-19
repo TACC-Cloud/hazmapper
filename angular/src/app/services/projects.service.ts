@@ -17,8 +17,7 @@ import { Router } from '@angular/router';
 
 export interface ProjectsData {
   projects: Project[];
-  loadingProjectsFailed: boolean;
-  loadingProjectsFailedMessage: string | null;
+  failedMessage: string | null;
   loading: boolean;
 }
 
@@ -42,10 +41,7 @@ export class ProjectsService {
   private _loadingProjects: BehaviorSubject<boolean> = new BehaviorSubject(true);
   public loadingProjects: Observable<boolean> = this._loadingProjects.asObservable();
 
-  private _loadingProjectsFailed: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  public loadingProjectsFailed: Observable<boolean> = this._loadingProjectsFailed.asObservable();
-
-  private _loadingProjectsFailedMessage: BehaviorSubject<string> = new BehaviorSubject("");
+  private _loadingProjectsFailedMessage: BehaviorSubject<string> = new BehaviorSubject('');
   public loadingProjectsFailedMessage: Observable<string> = this._loadingProjectsFailedMessage.asObservable();
 
   public readonly projectsData: Observable<ProjectsData>;
@@ -73,14 +69,12 @@ export class ProjectsService {
   ) {
     this.projectsData = combineLatest([
       this.projects,
-      this.loadingProjectsFailed,
       this.loadingProjectsFailedMessage,
       this.loadingProjects,
     ]).pipe(
-      map(([projects, loadingProjectsFailed, loadingProjectsFailedMessage, loading]) => ({
+      map(([projects, failedMessage, loading]) => ({
         projects,
-        loadingProjectsFailed,
-        loadingProjectsFailedMessage,
+        failedMessage,
         loading,
       }))
     );
@@ -105,20 +99,16 @@ export class ProjectsService {
 
   getProjects(): void {
     this._loadingProjects.next(true);
-    this._loadingProjectsFailed.next(false);
     this._loadingProjectsFailedMessage.next(null);
     this.http.get<Project[]>(this.envService.apiUrl + `/projects/`).subscribe(
       (resp) => {
         this.updateProjectsList(resp);
         this._loadingProjects.next(false);
-        this._loadingProjectsFailed.next(false);
         this._loadingProjectsFailedMessage.next(null);
       },
       (error) => {
         this._loadingProjects.next(false);
-        this._loadingProjectsFailed.next(true);
         this._loadingProjectsFailedMessage.next(error.message || 'An error occured.');
-        this.notificationsService.showErrorToast('Failed to retrieve project data! Geoapi might be down.');
       }
     );
   }
