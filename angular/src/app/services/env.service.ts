@@ -20,6 +20,8 @@ export class EnvService {
       return 'https://agave.designsafe-ci.org/geo-staging/v2';
     } else if (backend === EnvironmentType.Production) {
       return 'https://agave.designsafe-ci.org/geo/v2';
+    } else if (backend === EnvironmentType.Dev) {
+      return 'http://dev.geoapi-services.tacc.utexas.edu:8888';
     } else {
       throw new Error('Unsupported Type');
     }
@@ -113,7 +115,7 @@ export class EnvService {
       // Have to change port on taggit or hazmapper (requires adding callbackUrl to that port)
       this._taggitUrl = 'http://localhost:4200/taggit';
       // when we are using the local backend, a jwt is required
-      if (environment.backend === EnvironmentType.Local) {
+      if (environment.backend === EnvironmentType.Local || environment.backend === EnvironmentType.Dev) {
         this._jwt = environment.jwt;
       }
       this._baseHref = '/';
