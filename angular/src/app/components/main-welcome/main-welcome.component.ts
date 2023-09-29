@@ -46,18 +46,19 @@ export class MainWelcomeComponent implements OnInit {
       }
     });
 
-    combineLatest(
-      [this.projectsService.projectsData, this.agaveSystemsService.projectsData]).subscribe(([projectsData, dsProjectsData]) => {
-      this.projectsData = projectsData;
-      this.dsProjectsData = dsProjectsData;
-      if (!this.projectsData.loading && !this.dsProjectsData.loading) {
-        if(this.projectsData.failedMessage && !this.dsProjectsData.failedMessage) {
-          // add extra info (i.e. DS project id/description) from related DS projects
-          this.projectsData.projects = this.agaveSystemsService.getProjectMetadata(projectsData.projects, dsProjectsData.projects);
+    combineLatest([this.projectsService.projectsData, this.agaveSystemsService.projectsData]).subscribe(
+      ([projectsData, dsProjectsData]) => {
+        this.projectsData = projectsData;
+        this.dsProjectsData = dsProjectsData;
+        if (!this.projectsData.loading && !this.dsProjectsData.loading) {
+          if (this.projectsData.failedMessage && !this.dsProjectsData.failedMessage) {
+            // add extra info (i.e. DS project id/description) from related DS projects
+            this.projectsData.projects = this.agaveSystemsService.getProjectMetadata(projectsData.projects, dsProjectsData.projects);
+          }
+          this.loading = false;
         }
-        this.loading = false;
       }
-    });
+    );
   }
 
   routeToProject(projectUUID: string) {

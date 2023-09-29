@@ -14,18 +14,15 @@ import { MAIN, LOGIN } from '../constants/routes';
 import { AgaveSystemsService } from '../services/agave-systems.service';
 import { Router } from '@angular/router';
 
-
 export interface ProjectsData {
   projects: Project[];
   failedMessage: string | null;
   loading: boolean;
 }
 
-
 @Injectable({
   providedIn: 'root',
 })
-
 export class ProjectsService {
   private _projects: BehaviorSubject<Project[]> = new BehaviorSubject([]);
   public readonly projects: Observable<Project[]> = this._projects.asObservable();
@@ -67,11 +64,7 @@ export class ProjectsService {
     private authService: AuthService,
     private envService: EnvService
   ) {
-    this.projectsData = combineLatest([
-      this.projects,
-      this.loadingProjectsFailedMessage,
-      this.loadingProjects,
-    ]).pipe(
+    this.projectsData = combineLatest([this.projects, this.loadingProjectsFailedMessage, this.loadingProjects]).pipe(
       map(([projects, failedMessage, loading]) => ({
         projects,
         failedMessage,

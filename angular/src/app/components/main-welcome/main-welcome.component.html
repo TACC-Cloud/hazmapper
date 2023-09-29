@@ -37,8 +37,12 @@
                     <div *ngIf="projectsData.failedMessage || dsProjectsData.failedMessage; else projectConnected">
                         <div id="welcome-no-information">
                             <div>Failed to Connect to Server!</div>
-                            <div *ngIf="projectsData.failedMessage"><small>Unable to get maps: {{projectsData.failedMessage}}</small></div>
-                            <div *ngIf="dsProjectsData.failedMessage"><small>Unable to get projects: {{dsProjectsData.failedMessage}}</small></div>
+                            <div *ngIf="projectsData.failedMessage">
+                                <small>Unable to get maps: {{ projectsData.failedMessage }}</small>
+                            </div>
+                            <div *ngIf="dsProjectsData.failedMessage">
+                                <small>Unable to get projects: {{ dsProjectsData.failedMessage }}</small>
+                            </div>
                         </div>
                     </div>
 

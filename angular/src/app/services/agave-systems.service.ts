@@ -35,11 +35,7 @@ export class AgaveSystemsService {
     private envService: EnvService,
     private http: HttpClient
   ) {
-    this.projectsData = combineLatest([
-      this.projects,
-      this.loadingProjectsFailedMessage,
-      this.loadingProjects,
-    ]).pipe(
+    this.projectsData = combineLatest([this.projects, this.loadingProjectsFailedMessage, this.loadingProjects]).pipe(
       map(([projects, failedMessage, loading]) => ({
         projects,
         failedMessage,
