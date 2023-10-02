@@ -20,6 +20,8 @@ export class EnvService {
       return 'https://agave.designsafe-ci.org/geo-staging/v2';
     } else if (backend === EnvironmentType.Production) {
       return 'https://agave.designsafe-ci.org/geo/v2';
+    } else if (backend === EnvironmentType.Dev) {
+      return 'https://agave.designsafe-ci.org/geo-dev/v2';
     } else {
       throw new Error('Unsupported Type');
     }
@@ -131,7 +133,7 @@ export class EnvService {
       // local devevelopers can use localhost or hazmapper.local but
       // hazmapper.local is preferred as TAPIS supports it as a frame ancestor
       // (i.e. it allows for point cloud iframe preview)
-      this._clientId = /^localhost/.test(hostname) ? 'RMCJHgW9CwJ6mKjhLTDnUYBo9Hka' : 'Eb9NCCtWkZ83c01UbIAITFvhD9ka';
+      this._clientId = /^localhost/.test(hostname) ? 'XgCBlhfAaqfv7jTu3NRc4IJDGdwa' : 'Eb9NCCtWkZ83c01UbIAITFvhD9ka';
     } else if (/^hazmapper.tacc.utexas.edu/.test(hostname) && pathname.startsWith('/staging')) {
       this._env = EnvironmentType.Staging;
       this._apiUrl = this.getApiUrl(this.env);
@@ -139,6 +141,24 @@ export class EnvService {
       this._portalUrl = this.getPortalUrl(this.env);
       this._clientId = 'foitdqFcimPzKZuMhbQ1oyh3Anka';
       this._baseHref = '/staging/';
+      this._streetviewEnv.secrets = {
+        google: {
+          clientSecret: '',
+          clientId: '573001329633-1p0k8rko13s6n2p2cugp3timji3ip9f0.apps.googleusercontent.com',
+        },
+        mapillary: {
+          clientSecret: 'MLY|4936281379826603|cafd014ccd8cfc983e47c69c16082c7b',
+          clientId: '4936281379826603',
+          clientToken: 'MLY|4936281379826603|f8c4732d3c9d96582b86158feb1c1a7a',
+        },
+      };
+    } else if (/^hazmapper.tacc.utexas.edu/.test(hostname) && pathname.startsWith('/dev')) {
+      this._env = EnvironmentType.Dev;
+      this._apiUrl = this.getApiUrl(this.env);
+      this._taggitUrl = origin + '/taggit-dev'; /* doesn't yet exist */
+      this._portalUrl = this.getPortalUrl(this.env);
+      this._clientId = 'oEuGsl7xi015wnrEpxIeUmvzc6Qa';
+      this._baseHref = '/dev/';
       this._streetviewEnv.secrets = {
         google: {
           clientSecret: '',
