@@ -2,10 +2,17 @@ import { Injectable } from '@angular/core';
 import { System, SystemSummary } from 'ng-tapis';
 import { ApiService } from 'ng-tapis';
 import { NotificationsService } from './notifications.service';
-import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
+import { BehaviorSubject, Observable, ReplaySubject, combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EnvService } from '../services/env.service';
 import { DesignSafeProjectCollection, Project, AgaveFileOperations } from '../models/models';
+
+export interface AgaveProjectsData {
+  projects: SystemSummary[];
+  failedMessage: string | null;
+  loading: boolean;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -13,14 +20,29 @@ import { DesignSafeProjectCollection, Project, AgaveFileOperations } from '../mo
 export class AgaveSystemsService {
   private _systems: ReplaySubject<SystemSummary[]> = new ReplaySubject<SystemSummary[]>(1);
   public readonly systems: Observable<SystemSummary[]> = this._systems.asObservable();
+
   private _projects: ReplaySubject<SystemSummary[]> = new ReplaySubject<SystemSummary[]>(1);
   public readonly projects: Observable<SystemSummary[]> = this._projects.asObservable();
+  private _loadingProjects: BehaviorSubject<boolean> = new BehaviorSubject(true);
+  public loadingProjects: Observable<boolean> = this._loadingProjects.asObservable();
+  private _loadingProjectsFailedMessage: BehaviorSubject<string> = new BehaviorSubject('');
+  public loadingProjectsFailedMessage: Observable<string> = this._loadingProjectsFailedMessage.asObservable();
+  public readonly projectsData: Observable<AgaveProjectsData>;
+
   constructor(
     private tapis: ApiService,
     private notificationsService: NotificationsService,
     private envService: EnvService,
     private http: HttpClient
-  ) {}
+  ) {
+    this.projectsData = combineLatest([this.projects, this.loadingProjectsFailedMessage, this.loadingProjects]).pipe(
+      map(([projects, failedMessage, loading]) => ({
+        projects,
+        failedMessage,
+        loading,
+      }))
+    );
+  }
 
   list() {
     this.tapis.systemsList({ type: 'STORAGE' }).subscribe(
@@ -31,6 +53,11 @@ export class AgaveSystemsService {
         this._systems.next(null);
       }
     );
+
+    this._projects.next(null);
+    this._loadingProjects.next(true);
+    this._loadingProjectsFailedMessage.next(null);
+
     this.http.get<DesignSafeProjectCollection>(this.envService.designSafeUrl + `/projects/v2/`).subscribe(
       (resp) => {
         const projectSystems = resp.projects.map((project) => {
@@ -41,9 +68,12 @@ export class AgaveSystemsService {
           };
         });
         this._projects.next(projectSystems);
+        this._loadingProjects.next(false);
       },
       (error) => {
         this._projects.next(null);
+        this._loadingProjectsFailedMessage.next(error.message || 'An error occured.');
+        this._loadingProjects.next(false);
       }
     );
   }
