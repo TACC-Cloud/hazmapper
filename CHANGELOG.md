@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+## [2.14] - 2023-10-03
+
+### Changed
+
+- WG-155: Add dev server as option for backend (#149)
+
+### Fixed
+
+- WG-145: fix spinner error on project listing page (#148)
+
 ## [2.13] - 2022-06-05
 
 ### Added
@@ -134,7 +144,8 @@ _No release_
 
 
 
-[unreleased]: https://github.com/TACC-Cloud/hazmapper/compare/v2.13...HEAD
+[unreleased]: https://github.com/TACC-Cloud/hazmapper/compare/v2.14...HEAD
+[2.14]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.14
 [2.13]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.13
 [2.11]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.11
 [2.9]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.9
