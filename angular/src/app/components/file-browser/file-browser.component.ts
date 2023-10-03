@@ -57,8 +57,8 @@ export class FileBrowserComponent implements OnInit {
 
     // TODO: change those hard coded systemIds to environment vars or some sort of config
     // wait on the currentUser, systems and projects to resolve
-    combineLatest([this.authService.currentUser, this.agaveSystemsService.systems, this.agaveSystemsService.projects])
-      .subscribe(([user, systems, projects]) => {
+    combineLatest([this.authService.currentUser, this.agaveSystemsService.systems, this.agaveSystemsService.projects]).subscribe(
+      ([user, systems, projects]) => {
         this.myDataSystem = systems.find((sys) => sys.id === 'designsafe.storage.default');
         this.communityDataSystem = systems.find((sys) => sys.id === 'designsafe.storage.community');
         this.publishedDataSystem = systems.find((sys) => sys.id === 'designsafe.storage.published');
@@ -72,7 +72,8 @@ export class FileBrowserComponent implements OnInit {
           path: this.currentUser.username,
         };
         this.browse(init);
-      });
+      }
+    );
   }
 
   selectSystem(system: SystemSummary): void {
