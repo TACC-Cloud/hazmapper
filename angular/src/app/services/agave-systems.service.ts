@@ -79,7 +79,7 @@ export class AgaveSystemsService {
   }
 
   getProjectMetadata(projects: Project[], dsProjects: SystemSummary[]): Project[] {
-    if (dsProjects.length > 0) {
+    if (dsProjects && dsProjects.length > 0) {
       return projects.map((p) => {
         const dsProject = dsProjects.find((dp) => dp.id === p.system_id);
         p.title = dsProject ? dsProject.description : null;
