@@ -35,7 +35,6 @@ export class AssetDetailComponent implements OnInit {
       this.feature = next;
       try {
         let featureSource = this.envService.apiUrl + '/assets/' + this.feature.assets[0].path;
-
         // Strip out any possible double slashes or wso2 gets messed up
         featureSource = featureSource.replace(/([^:])(\/{2,})/g, '$1/');
         this.featureSource = featureSource;
