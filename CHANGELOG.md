@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+## [2.15] - 2023-10-13
+
+### Fixed
+
+- WG-143: Added new Google Analytics 4 tracking property (#158)
+- Remove duplicate download button (#154)
+
 ## [2.14] - 2023-10-03
 
 ### Changed
@@ -144,7 +151,8 @@ _No release_
 
 
 
-[unreleased]: https://github.com/TACC-Cloud/hazmapper/compare/v2.14...HEAD
+[unreleased]: https://github.com/TACC-Cloud/hazmapper/compare/v2.15...HEAD
+[2.15]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.15
 [2.14]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.14
 [2.13]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.13
 [2.11]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.11
