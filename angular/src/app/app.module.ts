@@ -7,6 +7,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ModalModule, BsDropdownModule, TooltipModule, TabsModule, PaginationModule } from 'ngx-foundation';
 import { FileSizeModule } from 'ngx-filesize';
 import { ApiModule } from 'ng-tapis';
+import { CarouselModule } from 'ngx-owl-carousel-o';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MapComponent } from './components/map/map.component';
@@ -68,6 +69,7 @@ import { ModalStreetviewOrganizationComponent } from './components/modal-streetv
 import { StreetviewAssetDetailComponent } from './components/streetview-asset-detail/streetview-asset-detail.component';
 import { StreetviewFiltersComponent } from './components/streetview-filters/streetview-filters.component';
 import { ModalQuestionnaireViewerComponent } from './components/modal-questionnaire-viewer/modal-questionnaire-viewer.component';
+import { QuestionnaireDetailComponent } from './components/questionnaire-detail/questionnaire-detail.component';
 
 @NgModule({
   declarations: [
@@ -122,6 +124,7 @@ import { ModalQuestionnaireViewerComponent } from './components/modal-questionna
     StreetviewAssetDetailComponent,
     StreetviewFiltersComponent,
     ModalQuestionnaireViewerComponent,
+    QuestionnaireDetailComponent,
   ],
   imports: [
     CommonModule,
@@ -143,6 +146,7 @@ import { ModalQuestionnaireViewerComponent } from './components/modal-questionna
     ToastrModule.forRoot(),
     DragDropModule,
     PaginationModule.forRoot(),
+    CarouselModule,
   ],
   providers: [
     AuthService,
