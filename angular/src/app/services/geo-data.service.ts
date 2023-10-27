@@ -536,10 +536,32 @@ export class GeoDataService {
     });
   }
 
-  getFeatureAssetSource(feature: Feature, optionalPath = null) {
+  /**
+   * Get the source path for a feature asset.
+   *
+   * @param {Feature} feature - The feature for which to get the source path (assumes that there is a single asset).
+   * @param {string | null} optionalPath - An optional additional path to append to the source path.
+   * @returns {string} The source path for the feature asset.
+   */
+  getFeatureAssetSourcePath(feature: Feature, optionalPath: string | null = null): string {
     const baseFeatureSource = this.envService.apiUrl + '/assets/' + feature.assets[0].path;
-    const featureSource = optionalPath ? baseFeatureSource + optionalPath : baseFeatureSource;
-    return this.http.get(featureSource, { headers: { 'content-type': 'application/json' } });
+    const featureSourcePath = optionalPath ? baseFeatureSource + optionalPath : baseFeatureSource;
+    return featureSourcePath;
+  }
+
+
+  /**
+   * Get the feature source
+   *
+   * Note: only supports json
+   *
+   * @param {Feature} feature - The feature for which to get the source path (assumes that there is a single asset).
+   * @param {string | null} optionalPath - An optional additional path to append to the source path.
+   * @returns {string} The source path for the feature asset.
+   */
+  getFeatureAssetSource(feature: Feature, optionalPath = null) {
+    const featureSourcePath = this.getFeatureAssetSourcePath(feature, optionalPath);
+    return this.http.get(featureSourcePath, { headers: { 'content-type': 'application/json' } });
   }
 
   public get qmsSearchResults(): Observable<Array<any>> {
