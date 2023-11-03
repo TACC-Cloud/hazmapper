@@ -539,9 +539,9 @@ export class GeoDataService {
   /**
    * Get the source path for a feature asset.
    *
-   * @param {Feature} feature - The feature for which to get the source path (assumes that there is a single asset).
-   * @param {string | null} optionalPath - An optional additional path to append to the source path.
-   * @returns {string} The source path for the feature asset.
+   * @param feature - The feature for which to get the source path (assumes that there is a single asset).
+   * @param optionalPath - An optional additional path to append to the source path.
+   * @returns The source path for the feature asset.
    */
   getFeatureAssetSourcePath(feature: Feature, optionalPath: string | null = null): string {
     const baseFeatureSource = this.envService.apiUrl + '/assets/' + feature.assets[0].path;
@@ -554,9 +554,9 @@ export class GeoDataService {
    *
    * Note: only supports json
    *
-   * @param {Feature} feature - The feature for which to get the source path (assumes that there is a single asset).
-   * @param {string | null} optionalPath - An optional additional path to append to the source path.
-   * @returns {string} The source path for the feature asset.
+   * @param feature - The feature for which to get the source path (assumes that there is a single asset).
+   * @param optionalPath - An optional additional path to append to the source path.
+   * @returns The source path for the feature asset.
    */
   getFeatureAssetSource(feature: Feature, optionalPath = null) {
     const featureSourcePath = this.getFeatureAssetSourcePath(feature, optionalPath);
