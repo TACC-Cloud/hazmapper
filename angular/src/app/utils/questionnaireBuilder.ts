@@ -560,7 +560,7 @@ QuestionnaireBuilder.ASSET_EMBEDDING_DEFAULT = true;
 QuestionnaireBuilder.ALLOW_BACK_DEFAULT = true;
 QuestionnaireBuilder.EDITABLE_DEFAULT = false;
 
-QuestionnaireBuilder.renderQuestionnaire = function(questionnaire_json) {
+QuestionnaireBuilder.renderQuestionnaire = function(questionnaire_json, asset_path) {
   /** Method to generate read only questionnaire for viewing in DesignSafe
    *
    * Takes a json object containing questionnaire structure and responses
@@ -569,7 +569,7 @@ QuestionnaireBuilder.renderQuestionnaire = function(questionnaire_json) {
    *
    * **/
 
-  const questionnaire = new Questionnaire(questionnaire_json);
+  const questionnaire = new Questionnaire(questionnaire_json, asset_path);
   if (questionnaire) { return questionnaire.renderView(); }
 };
 
@@ -583,10 +583,17 @@ class Questionnaire {
   MAP_ADDED_TO_PANEL;
   embedded_asset_map;
   embedded_asset_uuids;
+  asset_path;
 
-  constructor(metadata) {
-    // add metadata
+  constructor(metadata, asset_path) {
+
+
     const qnaire = this;
+
+    // add base path to assets
+    qnaire.asset_path = asset_path
+
+    // add metadata
     for (const property in metadata) { qnaire[property] = metadata[property]; }
     qnaire.num_questions = 0;
 
@@ -901,7 +908,7 @@ class Question {
   parent_question;
   decline;
   responseStrings;
-  assetUuids;
+  assets;
 
   constructor(
     metadata,
@@ -1075,24 +1082,16 @@ class Question {
   /** !!!!! This method will need to be updated to get embedded assets to work in designsafe !!!!!  **/
   addEmbeddedAssets(container) {
     const question = this;
-
-    if (question.hasOwnProperty('assetUuids')) {
-      if (question.assetUuids) {
-        if (question.assetUuids.length) {
-          for (const uuid of question.assetUuids) {
-            // let asset = Assets.getAsset(uuid);
-
-            // TODO modify this url path to work with DesingSafe
-            // let url =
-            //   Parameters.deployment === 'live'
-            //     ? 'https://rapid.apl.uw.edu' + asset.file_url
-            //     : 'https://rapid2.apl.uw.edu' + asset.file_url;
+    if (question.hasOwnProperty('assets')) {
+      if (question.assets) {
+        if (question.assets.length) {
+          for (const asset of question.assets) {
+            const url = question.parent_template.asset_path + '/' + asset.filename;
 
             DOM.new({
               tag: 'img',
               class: 'embeddedAssetViewImg',
-              // src: url,
-              src: 'https://google.com',
+              src: url,
               parent: container,
               children: [
                 {
@@ -1610,7 +1609,7 @@ class SingleAnswer extends Question {
      * has been added
      * **/
 
-    // question.addEmbeddedAssets(container)
+    question.addEmbeddedAssets(container)
   }
 }
 class MultiAnswer extends SingleAnswer {
@@ -1727,7 +1726,7 @@ class MultiAnswer extends SingleAnswer {
       $(view).insertAfter($(option_element));
     }
 
-    // question.addEmbeddedAssets(container)
+    question.addEmbeddedAssets(container)
   }
 
   getResponse(viewer_option) {
@@ -2165,7 +2164,7 @@ class MultiText extends Question {
       i++;
     }
 
-    // question.addEmbeddedAssets(container)
+    question.addEmbeddedAssets(container)
 
     if (!question.is_sub_question) {
       $(view).appendTo($(container));
@@ -2400,7 +2399,7 @@ class NumberField extends Question {
       parent: item,
     });
 
-    // question.addEmbeddedAssets(container)
+    question.addEmbeddedAssets(container)
 
     if (!question.is_sub_question) {
       $(view).appendTo($(container));
@@ -2737,7 +2736,7 @@ class LocationField extends Question {
       question.responseStrings[2]
     );
 
-    // question.addEmbeddedAssets(container)
+    question.addEmbeddedAssets(container)
   }
 }
 class RangeAnswer extends Question {
@@ -2990,7 +2989,7 @@ class RangeAnswer extends Question {
       'optionSelected'
     );
 
-    // question.addEmbeddedAssets(container)
+    question.addEmbeddedAssets(container)
 
     if (!question.is_sub_question) {
       $(view).appendTo($(container));
@@ -3296,7 +3295,7 @@ class Matrix extends Question {
       }
     }
 
-    // question.addEmbeddedAssets(container)
+    question.addEmbeddedAssets(container)
 
     $(view).appendTo(container);
   }
@@ -3403,7 +3402,7 @@ class TextPage extends Question {
     const question = this;
     const view = $(this.read_only_view);
     $(view).find('p.questionNumber').html(question.scroll_label);
-    // question.addEmbeddedAssets(container)
+    question.addEmbeddedAssets(container)
     $(view).appendTo(container);
   }
 }
