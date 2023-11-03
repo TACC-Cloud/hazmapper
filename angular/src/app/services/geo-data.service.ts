@@ -549,7 +549,6 @@ export class GeoDataService {
     return featureSourcePath;
   }
 
-
   /**
    * Get the feature source
    *
