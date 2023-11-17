@@ -1424,11 +1424,14 @@ textarea.instructionField, textarea.optionField {
 /********** Angular Render Layout & Design Updates for Questionnaire **********/
 
 // Fix modal layout for Questionnaire viewer.
+// Do we want to account for multiple screen render sizes??
+// Testing against 1080px, 1440px and 1920px width.
 
 ::ng-deep body > modal-container > div.reveal {
     margin: auto !important;
-    margin-left: 7% !important;
+    margin-left: 5% !important;
     margin-right: auto !important;
     padding: 0 !important;
     width: 63% !important;
 }
+
