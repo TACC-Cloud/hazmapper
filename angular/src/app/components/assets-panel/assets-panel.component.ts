@@ -24,6 +24,7 @@ export class AssetsPanelComponent implements OnInit {
   displayFeatures: Array<Feature>;
   activeProject: Project;
   currentTreeListing: PathTree<Feature>;
+  selectedTreeNode: PathTree<Feature>;
 
   constructor(
     private geoDataService: GeoDataService,
@@ -53,6 +54,9 @@ export class AssetsPanelComponent implements OnInit {
 
     this.geoDataService.featureTree$.subscribe((next) => {
       this.currentTreeListing = next;
+    });
+    this.geoDataService.selectNodeEvent.subscribe((selectedNode) => {
+      this.selectedTreeNode = selectedNode;
     });
   }
 
@@ -94,6 +98,7 @@ export class AssetsPanelComponent implements OnInit {
     } else {
       this.streetviewService.activeAsset = null;
       this.geoDataService.activeFeature = node.getPayload();
+      this.geoDataService.selectNodeEvent.emit(node);
     }
   }
 }

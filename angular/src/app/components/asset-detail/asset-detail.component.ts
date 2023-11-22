@@ -9,6 +9,7 @@ import { ModalQuestionnaireViewerComponent } from '../modal-questionnaire-viewer
 import { RemoteFile } from 'ng-tapis';
 import { TapisFilesService } from '../../services/tapis-files.service';
 import { EnvService } from '../../services/env.service';
+import { PathTree } from '../../models/path-tree';
 
 @Component({
   selector: 'app-asset-detail',
@@ -21,6 +22,8 @@ export class AssetDetailComponent implements OnInit {
   featureSource: string;
   activeProject: Project;
   safePointCloudUrl: SafeResourceUrl;
+  selectedTreeNode: PathTree<Feature>;
+  title: string;
   constructor(
     private geoDataService: GeoDataService,
     private tapisFilesService: TapisFilesService,
@@ -51,6 +54,10 @@ export class AssetDetailComponent implements OnInit {
     });
     this.projectsService.activeProject.subscribe((current) => {
       this.activeProject = current;
+    });
+    this.geoDataService.selectNodeEvent.subscribe((selectedNode: PathTree<Feature>) => {
+      this.selectedTreeNode = selectedNode;
+      this.title = selectedNode.getPath();
     });
   }
 

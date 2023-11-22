@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient, HttpEventType } from '@angular/common/http';
 import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
 import { LatLng } from 'leaflet';
@@ -61,6 +61,8 @@ export class GeoDataService {
 
   private _existingFeatureTypes: BehaviorSubject<Record<string, boolean>> = new BehaviorSubject<Record<string, boolean>>(existingFeatures);
   public readonly existingFeatureTypes: Observable<Record<string, boolean>> = this._existingFeatureTypes.asObservable();
+  public readonly selectNodeEvent: EventEmitter<PathTree<Feature>> = new EventEmitter<PathTree<Feature>>();
+
 
   constructor(
     private http: HttpClient,
