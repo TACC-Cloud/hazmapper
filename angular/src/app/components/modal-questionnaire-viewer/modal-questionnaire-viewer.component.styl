@@ -89,7 +89,6 @@
     margin-left: 10px !important;
 }
 
-// On the fence between labelling this vs hiding it.
 ::ng-deep p.instructionText:before {
     content:"Instructions: ";
 }
@@ -127,6 +126,29 @@
 
 ::ng-deep .questionnaireQuestion {
     margin-top: 2px !important;
+}
+
+::ng-deep input.RangeAnswerField {
+    color: hsl(180, 100%, 32%);
+    width: 30px;
+    margin: 0 10px;
+    text-align: center
+}
+
+::ng-deep .rangeAnswers {
+    margin-left: 20px !important;
+}
+
+::ng-deep p.rangeAnswer,
+::ng-deep p.rangeAnswerDoubleDigit {
+    margin: 0px 10px 0px !important;
+    padding: 0px 10px 0px !important;
+}
+
+::ng-deep p.rangeAnswer.selected,
+::ng-deep p.rangeAnswerDoubleDigit.selected {
+    border: 3px solid #1779ba;
+    border-radius: 50%;
 }
 
 ::ng-deep div.buttonDecline {
