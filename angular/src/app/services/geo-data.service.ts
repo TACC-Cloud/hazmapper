@@ -63,7 +63,6 @@ export class GeoDataService {
   public readonly existingFeatureTypes: Observable<Record<string, boolean>> = this._existingFeatureTypes.asObservable();
   public readonly selectNodeEvent: EventEmitter<PathTree<Feature>> = new EventEmitter<PathTree<Feature>>();
 
-
   constructor(
     private http: HttpClient,
     private filterService: FilterService,
