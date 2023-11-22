@@ -54,7 +54,7 @@ export class JwtInterceptor implements HttpInterceptor {
       });
     }
 
-    if(request.url.indexOf(this.envService.apiUrl) > -1) {
+    if (request.url.indexOf(this.envService.apiUrl) > -1) {
       // Add information about what app is making the request
       request = request.clone({
         setHeaders: {
@@ -62,7 +62,6 @@ export class JwtInterceptor implements HttpInterceptor {
         },
       });
     }
-
 
     if (
       request.url.indexOf(this.envService.streetviewEnv.mapillary.apiUrl) > -1 &&
