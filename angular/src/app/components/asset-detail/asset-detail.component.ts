@@ -22,7 +22,6 @@ export class AssetDetailComponent implements OnInit {
   featureSource: string;
   activeProject: Project;
   safePointCloudUrl: SafeResourceUrl;
-  selectedTreeNode: PathTree<Feature>;
   title: string;
   constructor(
     private geoDataService: GeoDataService,
@@ -42,6 +41,12 @@ export class AssetDetailComponent implements OnInit {
         featureSource = featureSource.replace(/([^:])(\/{2,})/g, '$1/');
         this.featureSource = featureSource;
 
+        if (this.feature.assets.length && this.feature.assets[0].display_path) {
+          const fileName = this.extractFileName(this.feature.assets[0].display_path);
+          this.title = fileName;
+        } else {
+          this.title = this.feature.id.toString();
+        }
         if (this.feature.featureType() === 'point_cloud') {
           this.safePointCloudUrl = this.sanitizer.bypassSecurityTrustResourceUrl(featureSource + '/preview.html');
         } else {
@@ -54,10 +59,6 @@ export class AssetDetailComponent implements OnInit {
     });
     this.projectsService.activeProject.subscribe((current) => {
       this.activeProject = current;
-    });
-    this.geoDataService.selectNodeEvent.subscribe((selectedNode: PathTree<Feature>) => {
-      this.selectedTreeNode = selectedNode;
-      this.title = selectedNode.getPath();
     });
   }
 
@@ -86,6 +87,11 @@ export class AssetDetailComponent implements OnInit {
     };
 
     this.bsModalService.show(ModalQuestionnaireViewerComponent, modalConfig);
+  }
+
+  extractFileName(path: string): string {
+    const pathSegments = path.split('/');
+    return pathSegments.pop();
   }
 
   close() {

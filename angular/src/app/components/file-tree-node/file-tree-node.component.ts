@@ -26,7 +26,6 @@ export class FileTreeNodeComponent implements OnInit, OnDestroy {
   @Input() isPublicView = false;
   @Input() node: PathTree<Feature>;
   @Output() clickEvent: EventEmitter<PathTree<Feature>> = new EventEmitter<PathTree<Feature>>();
-  @Output() selectNodeEvent: EventEmitter<PathTree<Feature>> = new EventEmitter<PathTree<Feature>>();
   public activeFeature: Feature;
   public activeStreetviewAsset: any;
   private activeFeatureSub: Subscription;
@@ -84,13 +83,11 @@ export class FileTreeNodeComponent implements OnInit, OnDestroy {
       this.displayChildren = !this.displayChildren;
     } else {
       this.clickEvent.emit(node);
-      this.selectNodeEvent.emit(node);
     }
   }
 
   onClickChild(item: PathTree<Feature>) {
     this.clickEvent.emit(item);
-    this.selectNodeEvent.emit(item);
   }
 
   delete(item: PathTree<Feature>) {
