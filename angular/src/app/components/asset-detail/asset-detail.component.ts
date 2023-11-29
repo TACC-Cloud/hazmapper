@@ -39,6 +39,7 @@ export class AssetDetailComponent implements OnInit {
         // Strip out any possible double slashes or wso2 gets messed up
         featureSource = featureSource.replace(/([^:])(\/{2,})/g, '$1/');
         this.featureSource = featureSource;
+
         if (this.feature.featureType() === 'point_cloud') {
           this.safePointCloudUrl = this.sanitizer.bypassSecurityTrustResourceUrl(featureSource + '/preview.html');
         } else {
