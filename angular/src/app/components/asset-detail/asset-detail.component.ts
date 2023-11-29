@@ -39,13 +39,6 @@ export class AssetDetailComponent implements OnInit {
         // Strip out any possible double slashes or wso2 gets messed up
         featureSource = featureSource.replace(/([^:])(\/{2,})/g, '$1/');
         this.featureSource = featureSource;
-
-        if (this.feature.assets.length && this.feature.assets[0].display_path) {
-          const fileName = this.extractFileName(this.feature.assets[0].display_path);
-          this.title = fileName;
-        } else {
-          this.title = this.feature.id.toString();
-        }
         if (this.feature.featureType() === 'point_cloud') {
           this.safePointCloudUrl = this.sanitizer.bypassSecurityTrustResourceUrl(featureSource + '/preview.html');
         } else {
@@ -54,6 +47,12 @@ export class AssetDetailComponent implements OnInit {
       } catch (e) {
         this.featureSource = null;
         this.safePointCloudUrl = null;
+      }
+      if (this.feature.assets.length && this.feature.assets[0].display_path) {
+        const fileName = this.extractFileName(this.feature.assets[0].display_path);
+        this.title = fileName;
+      } else {
+        this.title = this.feature.id.toString();
       }
     });
     this.projectsService.activeProject.subscribe((current) => {
