@@ -19,7 +19,7709 @@
 *    by accessing https://rapid.apl.uw.edu/rapp/ and retreiving the code as the code is not minimized.
 */
 
-//***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+/***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+/***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+/***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+/***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+/***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+/***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+/***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+/***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+/***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+/***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+/***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+/***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+/***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+/***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+/***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+     /***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal 
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *  
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper 
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion 
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content " (sub-question)"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper 
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper 
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText 
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText 
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText 
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**//***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
 
 // NOV 2023 Redesign for Hazmapper Integration.
 // Fix modal layout for Questionnaire viewer.
@@ -209,7 +7911,7 @@
 
 
 ::ng-deep td.spacer 
-    visibility: hidden
+    visibility hidden
 
 
 ::ng-deep div.buttonDecline 
@@ -263,4 +7965,3 @@
     font-weight bold
     margin-left 10px !important
     margin-top 10px !important
-
