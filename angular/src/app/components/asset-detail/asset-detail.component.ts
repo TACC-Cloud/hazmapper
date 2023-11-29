@@ -9,7 +9,6 @@ import { ModalQuestionnaireViewerComponent } from '../modal-questionnaire-viewer
 import { RemoteFile } from 'ng-tapis';
 import { TapisFilesService } from '../../services/tapis-files.service';
 import { EnvService } from '../../services/env.service';
-import { PathTree } from '../../models/path-tree';
 
 @Component({
   selector: 'app-asset-detail',
