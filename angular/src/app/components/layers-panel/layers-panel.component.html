@@ -123,11 +123,7 @@
                     <span class="overlay-label"> {{ ov.label }} </span>
                 </div>
                 <div class="cell grid-x auto align-right">
-                    <button 
-                        class="button hollow tiny alert button-no-margin" 
-                        (click)="deleteOverlay(ov)" 
-                        [disabled]="isPublicView"
-                    >
+                    <button class="button hollow tiny alert button-no-margin" (click)="deleteOverlay(ov)" [disabled]="isPublicView">
                         <i class="fa fa-trash"></i>
                     </button>
                 </div>
