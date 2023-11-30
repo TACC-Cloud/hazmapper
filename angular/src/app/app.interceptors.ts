@@ -54,6 +54,15 @@ export class JwtInterceptor implements HttpInterceptor {
       });
     }
 
+    if (request.url.indexOf(this.envService.apiUrl) > -1) {
+      // Add information about what app is making the request
+      request = request.clone({
+        setHeaders: {
+          'X-Geoapi-Application': 'hazmapper',
+        },
+      });
+    }
+
     if (
       request.url.indexOf(this.envService.streetviewEnv.mapillary.apiUrl) > -1 &&
       !(request.url.indexOf(this.envService.streetviewEnv.mapillary.tokenUrl) > -1)
