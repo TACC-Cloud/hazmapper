@@ -3,7 +3,7 @@
         <div class="asset-detail-header">
             <app-feature-icon [feature]="feature"></app-feature-icon>
             <div class="feature-label">
-                {{ feature.properties.label || feature.properties.title || feature.id }}
+                {{ title }}
             </div>
             <div>
                 <button class="close-button" (click)="close()">
