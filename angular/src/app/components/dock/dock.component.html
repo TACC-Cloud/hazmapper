@@ -20,7 +20,7 @@
                 </div>
             </button>
         </div>
-        <div class="dock-button" [ngClass]="{ active: panelsDisplay.layers }" *ngIf="!isPublicView">
+        <div class="dock-button" [ngClass]="{ active: panelsDisplay.layers }">
             <button (click)="showPanel('layers')" [disabled]="!activeProject">
                 <div>
                     <img class="dock-button-icon" src="assets/layers.png" width="32px" />
@@ -68,7 +68,7 @@
     </div>
     <div class="cell auto dock-panel">
         <app-assets-panel *ngIf="panelsDisplay.assets" [isPublicView]="isPublicView"></app-assets-panel>
-        <app-layers-panel *ngIf="panelsDisplay.layers"></app-layers-panel>
+        <app-layers-panel *ngIf="panelsDisplay.layers" [isPublicView]="isPublicView"></app-layers-panel>
         <app-filters-panel *ngIf="panelsDisplay.filters"></app-filters-panel>
         <app-measure-panel *ngIf="panelsDisplay.measure"></app-measure-panel>
         <app-settings-panel *ngIf="panelsDisplay.settings"></app-settings-panel>
