@@ -21,6 +21,7 @@ export class AssetDetailComponent implements OnInit {
   featureSource: string;
   activeProject: Project;
   safePointCloudUrl: SafeResourceUrl;
+  title: string;
   constructor(
     private geoDataService: GeoDataService,
     private tapisFilesService: TapisFilesService,
@@ -47,6 +48,12 @@ export class AssetDetailComponent implements OnInit {
       } catch (e) {
         this.featureSource = null;
         this.safePointCloudUrl = null;
+      }
+      if (this.feature.assets.length && this.feature.assets[0].display_path) {
+        const fileName = this.extractFileName(this.feature.assets[0].display_path);
+        this.title = fileName;
+      } else {
+        this.title = this.feature.id.toString();
       }
     });
     this.projectsService.activeProject.subscribe((current) => {
@@ -79,6 +86,11 @@ export class AssetDetailComponent implements OnInit {
     };
 
     this.bsModalService.show(ModalQuestionnaireViewerComponent, modalConfig);
+  }
+
+  extractFileName(path: string): string {
+    const pathSegments = path.split('/');
+    return pathSegments.pop();
   }
 
   close() {
