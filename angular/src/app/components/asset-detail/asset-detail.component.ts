@@ -17,8 +17,8 @@ import { EnvService } from '../../services/env.service';
 })
 export class AssetDetailComponent implements OnInit {
   @Input() isPublicView = false;
-  feature: Feature;
-  featureSource: string;
+  @Input() feature: Feature = null;
+  featureSource: string = null;
   activeProject: Project;
   safePointCloudUrl: SafeResourceUrl;
   title: string;
@@ -33,6 +33,12 @@ export class AssetDetailComponent implements OnInit {
 
   ngOnInit() {
     this.geoDataService.activeFeature.subscribe((next) => {
+      if (next == null ){
+        this.feature = next;
+        this.featureSource = null;
+        this.safePointCloudUrl = null;
+        return;
+      }
       this.feature = next;
       try {
         let featureSource = this.envService.apiUrl + '/assets/' + this.feature.assets[0].path;
