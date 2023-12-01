@@ -37,7 +37,12 @@ export class QuestionnaireDetailComponent implements OnInit, OnChanges {
   }
 
   private processAssetImages() {
-    if(this.feature.properties && this.feature.properties._hazmapper && this.feature.properties._hazmapper.questionnaire && this.feature.properties._hazmapper.questionnaire.assets){
+    if (
+      this.feature.properties &&
+      this.feature.properties._hazmapper &&
+      this.feature.properties._hazmapper.questionnaire &&
+      this.feature.properties._hazmapper.questionnaire.assets
+    ) {
       // Retrieve asset images and map them to a new array with proper paths to full/preview images
       this.assetImages = this.feature.properties._hazmapper.questionnaire.assets.map((asset) => {
         const pathToFullImage = this.featureSource + '/' + asset.filename;

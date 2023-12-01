@@ -33,7 +33,7 @@ export class AssetDetailComponent implements OnInit {
 
   ngOnInit() {
     this.geoDataService.activeFeature.subscribe((next) => {
-      if (next == null ){
+      if (next == null) {
         this.feature = next;
         this.featureSource = null;
         this.safePointCloudUrl = null;
