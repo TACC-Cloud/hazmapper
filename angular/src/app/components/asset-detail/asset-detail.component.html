@@ -43,10 +43,8 @@
         </div>
         <hr />
     </div>
-    <div *ngIf="feature.assets[0].asset_type !== 'questionnaire'">
-        <div class="cell medium-5 asset-detail-content">
-            <app-feature-metadata [feature]="feature"></app-feature-metadata>
-            <app-feature-geometry [feature]="feature"></app-feature-geometry>
-        </div>
+    <div class="cell medium-5 asset-detail-content" *ngIf="feature.featureType() !== 'questionnaire'">
+        <app-feature-metadata [feature]="feature"></app-feature-metadata>
+        <app-feature-geometry [feature]="feature"></app-feature-geometry>
     </div>
 </div>
