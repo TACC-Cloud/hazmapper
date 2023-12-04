@@ -11,19 +11,20 @@
                 </button>
             </div>
         </div>
-        <hr />
+        <hr *ngIf="feature.featureType() !== 'questionnaire'" />
     </div>
-    <div class="cell medium-6 auto asset-detail-content">
+    <div class="cell medium-5 auto asset-detail-content" *ngIf="feature.featureType() !== 'questionnaire'">
         <img *ngIf="feature.featureType() === 'image'" [src]="featureSource" />
         <video *ngIf="feature.featureType() === 'video'" [src]="featureSource" controls width="100%"></video>
         <div style="position: relative" *ngIf="feature.featureType() === 'point_cloud'">
             <iframe class="e2e-iframe-trusted-src" [src]="safePointCloudUrl" style="width: 100%; height: 300px"> </iframe>
         </div>
-        <div *ngIf="feature.featureType() === 'questionnaire'">
-            <app-questionnaire-detail [feature]="feature" [featureSource]="featureSource"></app-questionnaire-detail>
-        </div>
     </div>
-    <div class="cell medium-1 text-center asset-detail-action">
+    <div *ngIf="feature.featureType() === 'questionnaire'" class="cell medium-11 auto asset-detail-content text-center">
+        <app-questionnaire-detail [feature]="feature" [featureSource]="featureSource"></app-questionnaire-detail>
+        <button class="button small" (click)="openQuestionnaireModal(feature)">View Questionnaire</button>
+    </div>
+    <div *ngIf="feature.featureType() !== 'questionnaire'" class="cell medium-1 text-center asset-detail-action">
         <div *ngIf="feature.featureType() === 'image'">
             <a [href]="featureSource" download="feature-{{ feature.id }}.jpeg">
                 <button class="button small">Download</button>
@@ -35,15 +36,14 @@
             </a>
         </div>
         <div *ngIf="feature.featureType() === 'questionnaire'">
-            <button class="button small" (click)="openQuestionnaireModal(feature)">View Questionnaire</button>
         </div>
         <div *ngIf="!feature.assets.length" class="text-center">
             <div data-alert class="alert-box secondary">Feature has no asset.</div>
             <button class="button expanded hollow" (click)="openFileBrowserModal()" *ngIf="!isPublicView">Add asset from DesignSafe</button>
         </div>
-        <hr />
+        <hr/>
     </div>
-    <div class="cell medium-5 asset-detail-content" *ngIf="feature.featureType() !== 'questionnaire'">
+    <div *ngIf="feature.featureType() !== 'questionnaire'" class="cell medium-5 asset-detail-content" >
         <app-feature-metadata [feature]="feature"></app-feature-metadata>
         <app-feature-geometry [feature]="feature"></app-feature-geometry>
     </div>
