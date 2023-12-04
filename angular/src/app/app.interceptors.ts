@@ -38,6 +38,7 @@ export class JwtInterceptor implements HttpInterceptor {
       });
     }
 
+    /* Disabling custom headers due to  https://jira.tacc.utexas.edu/browse/WG-189
     // for guest users, add a custom header with a unique id
     if (!this.authSvc.isLoggedIn()) {
       // Get (or create of needed) the guestUserID in local storage
@@ -62,6 +63,7 @@ export class JwtInterceptor implements HttpInterceptor {
         },
       });
     }
+    */
 
     if (
       request.url.indexOf(this.envService.streetviewEnv.mapillary.apiUrl) > -1 &&
