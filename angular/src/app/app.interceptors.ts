@@ -41,15 +41,8 @@ export class JwtInterceptor implements HttpInterceptor {
     if (request.url.indexOf(this.envService.apiUrl) > -1) {
       // Add information about what app is making the request
 
-      // Disabling custom headers due to https://tacc-main.atlassian.net/browse/WG-191
-      // and using additional query params
+      // Using query params instead of custom headers due to https://tacc-main.atlassian.net/browse/WG-191
       let analytics_params = {};
-
-      /*request = request.clone({
-        setHeaders: {
-          'X-Geoapi-Application': 'hazmapper',
-        },
-      });*/
 
       analytics_params = { ...analytics_params, application: 'hazmapper' };
 
@@ -62,13 +55,7 @@ export class JwtInterceptor implements HttpInterceptor {
           guestUuid = uuidv4();
           localStorage.setItem('guestUuid', guestUuid);
         }
-        /*Disabling custom headers due to https://tacc-main.atlassian.net/browse/WG-191
-        request = request.clone({
-          setHeaders: {
-            'X-Guest-UUID': guestUuid,
-          },
-        });
-        */
+
         analytics_params = { ...analytics_params, guest_uuid: guestUuid };
       }
       /* Send analytics-related params to projects endpoint only (until we use headers
