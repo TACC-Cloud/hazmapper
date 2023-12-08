@@ -41,7 +41,7 @@ export class JwtInterceptor implements HttpInterceptor {
     if (request.url.indexOf(this.envService.apiUrl) > -1) {
       // Add information about what app is making the request
 
-      //Disabling custom headers due to https://tacc-main.atlassian.net/browse/WG-191
+      // Disabling custom headers due to https://tacc-main.atlassian.net/browse/WG-191
       // and using additional query params
       let analytics_params = {};
 
@@ -71,9 +71,9 @@ export class JwtInterceptor implements HttpInterceptor {
         */
         analytics_params = { ...analytics_params, guest_uuid: guestUuid };
       }
-      /* Send analytics-related params to projects endpoint only (until we use headers again in https://tacc-main.atlassian.net/browse/WG-192) */
+      /* Send analytics-related params to projects endpoint only (until we use headers
+        again in https://tacc-main.atlassian.net/browse/WG-192) */
       if (this.isProjectFeaturesRequest(request)) {
-        debugger;
         // Clone the request and add query parameters
         request = request.clone({
           setParams: { ...request.params, ...analytics_params },
