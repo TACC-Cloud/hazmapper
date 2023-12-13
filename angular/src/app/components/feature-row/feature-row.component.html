@@ -3,7 +3,7 @@
         <app-feature-icon [feature]="feature"></app-feature-icon>
         <div>{{ feature.properties.label || feature.id }}</div>
     </div>
-    <div class="cell large-3 grid-x align-right">
+    <div *ngIf="!isPublicView" class="cell large-3 grid-x align-right">
         <button class="button tiny alert hollow" (click)="delete()">
             <i class="fas fa-trash"></i>
         </button>

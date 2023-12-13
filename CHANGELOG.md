@@ -2,6 +2,41 @@
 
 ## [Unreleased]
 
+## [2.15] - 2023-10-13
+
+### Fixed
+
+- WG-143: Added new Google Analytics 4 tracking property (#158)
+- Remove duplicate download button (#154)
+
+## [2.14] - 2023-10-03
+
+### Changed
+
+- WG-155: Add dev server as option for backend (#149)
+
+### Fixed
+
+- WG-145: fix spinner error on project listing page (#148)
+
+## [2.13] - 2022-06-05
+
+### Added
+
+- Add link to open map/gallery in Taggit (#135)
+
+### Changed
+
+- Use ubuntu-latest in CI testing (#133)
+
+### Fixed
+- WG-79: fix zoom level when selecting assets (#138)
+- WG-78: remove asset delete button from public map view (#139)
+
+## 2.12
+
+_No release_
+
 ## [2.11] - 2022-03-02
 
 ### Added
@@ -116,8 +151,11 @@ _No release_
 
 
 
-[unreleased]: https://github.com/TACC-Cloud/hazmapper/compare/v2.11...HEAD
-[2.11]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.9
+[unreleased]: https://github.com/TACC-Cloud/hazmapper/compare/v2.15...HEAD
+[2.15]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.15
+[2.14]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.14
+[2.13]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.13
+[2.11]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.11
 [2.9]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.9
 [2.8]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.8
 [2.7]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.7

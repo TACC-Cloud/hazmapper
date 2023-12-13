@@ -9,7 +9,7 @@
             <app-feature-icon [feature]="node.getPayload()"></app-feature-icon>
             {{ node.getPath() }}
         </div>
-        <div class="grid-x align-middle" *ngIf="isActiveFeature()">
+        <div class="grid-x align-middle" *ngIf="isActiveFeature() && !isPublicView">
             <button class="button tiny alert hollow" (click)="delete(node)">
                 <i class="fas fa-trash"></i>
             </button>
@@ -20,6 +20,7 @@
             <cdk-virtual-scroll-viewport class="scroll-viewport" itemSize="10">
                 <app-file-tree-node
                     *cdkVirtualFor="let child of node.getChildrenAsArray()"
+                    [isPublicView]="isPublicView"
                     [node]="child"
                     class="scroll-item"
                     (clickEvent)="onClickChild($event)"
@@ -30,6 +31,7 @@
         </ng-container>
         <ng-template #smallList>
             <app-file-tree-node
+                [isPublicView]="isPublicView"
                 *ngFor="let child of node.getChildren()"
                 [node]="child"
                 class="example-item"

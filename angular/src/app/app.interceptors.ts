@@ -6,6 +6,7 @@ import { EnvService } from './services/env.service';
 import { catchError } from 'rxjs/operators';
 import { StreetviewAuthenticationService } from './services/streetview-authentication.service';
 import { NotificationsService } from './services/notifications.service';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
@@ -33,6 +34,31 @@ export class JwtInterceptor implements HttpInterceptor {
       request = request.clone({
         setHeaders: {
           'X-JWT-Assertion-designsafe': this.envService.jwt,
+        },
+      });
+    }
+
+    // for guest users, add a custom header with a unique id
+    if (!this.authSvc.isLoggedIn()) {
+      // Get (or create of needed) the guestUserID in local storage
+      let guestUuid = localStorage.getItem('guestUuid');
+
+      if (!guestUuid) {
+        guestUuid = uuidv4();
+        localStorage.setItem('guestUuid', guestUuid);
+      }
+      request = request.clone({
+        setHeaders: {
+          'X-Guest-UUID': guestUuid,
+        },
+      });
+    }
+
+    if (request.url.indexOf(this.envService.apiUrl) > -1) {
+      // Add information about what app is making the request
+      request = request.clone({
+        setHeaders: {
+          'X-Geoapi-Application': 'hazmapper',
         },
       });
     }

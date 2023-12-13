@@ -8,6 +8,7 @@ import { GeoDataService } from '../../services/geo-data.service';
   styleUrls: ['./feature-row.component.styl'],
 })
 export class FeatureRowComponent implements OnInit {
+  @Input() isPublicView = false;
   @Input() feature: Feature;
   @Output() clickRequest = new EventEmitter<Feature>();
   constructor(private geoDataService: GeoDataService) {}

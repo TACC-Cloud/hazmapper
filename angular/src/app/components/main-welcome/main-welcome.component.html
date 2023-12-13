@@ -24,7 +24,7 @@
                     </div>
                 </div>
 
-                <div *ngIf="spinner; else projectLoaded">
+                <div *ngIf="loading; else projectLoaded">
                     <div id="welcome-no-information">
                         <div>
                             Loading Projects
@@ -34,15 +34,21 @@
                 </div>
 
                 <ng-template #projectLoaded>
-                    <div *ngIf="notConnected; else projectConnected">
+                    <div *ngIf="projectsData.failedMessage || dsProjectsData.failedMessage; else projectConnected">
                         <div id="welcome-no-information">
                             <div>Failed to Connect to Server!</div>
+                            <div *ngIf="projectsData.failedMessage">
+                                <small>Unable to get maps: {{ projectsData.failedMessage }}</small>
+                            </div>
+                            <div *ngIf="dsProjectsData.failedMessage">
+                                <small>Unable to get projects: {{ dsProjectsData.failedMessage }}</small>
+                            </div>
                         </div>
                     </div>
 
                     <ng-template #projectConnected>
-                        <div *ngIf="projects.length > 0; else noProject" class="project-list-container">
-                            <div *ngFor="let p of projects; let indexOfElement = index">
+                        <div *ngIf="projectsData.projects.length > 0; else noProject" class="project-list-container">
+                            <div *ngFor="let p of projectsData.projects; let indexOfElement = index">
                                 <div
                                     (click)="routeToProject(p.uuid)"
                                     class="project-list-item"
