@@ -2,7 +2,7 @@
     <div class="dock-panel-content">
         <p class="dock-panel-title">Layers</p>
         <h6>Tile Layers</h6>
-        <button class="button expanded hollow tiny success" (click)="openCreateTileServerModal()">
+        <button class="button expanded hollow tiny success" (click)="openCreateTileServerModal()" *ngIf="!isPublicView">
             <i class="fa fa-plus"></i>
         </button>
         <div #cdkList cdkDropList class="tile-servers-list" (cdkDropListDropped)="drop($event)">
@@ -35,6 +35,7 @@
                                 (blur)="updateName(activeText.value, ts)"
                                 (keyup.enter)="updateName(activeText.value, ts)"
                                 [value]="ts.name"
+                                [readOnly]="isPublicView"
                             />
                             <div
                                 id="tile-server-name"
@@ -53,7 +54,7 @@
                     </div>
 
                     <div class="cell small-4 grid-x tile-server-right">
-                        <button class="button secondary clear edit-buttons">
+                        <button class="button secondary clear edit-buttons" *ngIf="!isPublicView">
                             <i class="fas fa-edit edit-button" (click)="showInput(ts, true)" *ngIf="!ts.uiOptions.showInput"></i>
                             <i class="fas fa-check edit-button" (click)="showInput(ts, false)" *ngIf="ts.uiOptions.showInput"></i>
                         </button>
@@ -63,6 +64,7 @@
                         <button
                             class="button secondary clear button-no-margin delete-button"
                             (click)="openDeleteTileServerModal(deleteTiles)"
+                            *ngIf="!isPublicView"
                         >
                             <i class="fa fa-trash"></i>
                         </button>
@@ -95,7 +97,7 @@
             </div>
         </div>
 
-        <div *ngIf="dirtyOptions" class="tile-server-dirty-options">
+        <div *ngIf="dirtyOptions && !isPublicView" class="tile-server-dirty-options">
             <i class="tile-server-dirty-options-warning">
                 Layer options have been changed!
                 <br />
@@ -103,13 +105,13 @@
             </i>
         </div>
 
-        <div class="tile-server-save-button">
+        <div *ngIf="dirtyOptions && !isPublicView" class="tile-server-save-button">
             <button class="button small success" [disabled]="!dirtyOptions" (click)="saveTileOptions()">Save Layer Options</button>
         </div>
         <hr />
 
         <h6>Overlays</h6>
-        <button class="button expanded hollow tiny success" (click)="openCreateOverlayModal()">
+        <button class="button expanded hollow tiny success" (click)="openCreateOverlayModal()" *ngIf="!isPublicView">
             <i class="fa fa-plus"></i>
         </button>
         <div *ngFor="let ov of overlays" class="overlay">
@@ -121,7 +123,7 @@
                     <span class="overlay-label"> {{ ov.label }} </span>
                 </div>
                 <div class="cell grid-x auto align-right">
-                    <button class="button hollow tiny alert button-no-margin" (click)="deleteOverlay(ov)">
+                    <button class="button hollow tiny alert button-no-margin" (click)="deleteOverlay(ov)" [disabled]="isPublicView">
                         <i class="fa fa-trash"></i>
                     </button>
                 </div>
