@@ -354,7 +354,7 @@ export class MapComponent implements OnInit, OnDestroy {
           feat = L.geoJSON(d, { style: d.properties.style });
           this.features.addLayer(feat);
           const markerPosition = calculateMarkerPosition(d.geometry);
-          let pointCloudMarker = createMarker(d, markerPosition);
+          const pointCloudMarker = createMarker(d, markerPosition);
           pointCloudMarker.on('click', (ev) => {
             this.featureClickHandler(ev, 'click');
           });

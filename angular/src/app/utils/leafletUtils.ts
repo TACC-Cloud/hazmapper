@@ -45,9 +45,9 @@ function createVideoMarker(feature: Feature, latlng: LatLng): Marker {
 }
 
 function createCustomIconMarker(latlng: LatLng, style: MarkerStyle): Marker {
-  const icon = style.faIcon;
+  const faIcon = style.faIcon;
   const color = style.color;
-  const divHtml = `<i class="fas ${icon} fa-2x" style="color: ${color}"></i>`;
+  const divHtml = `<i class="fas ${faIcon} fa-2x" style="color: ${color}"></i>`;
   const ico = divIcon({ className: 'leaflet-fa-marker-icon', html: divHtml });
   return marker(latlng, { icon: ico, ...style });
 }
@@ -73,7 +73,7 @@ function createPointCloudMarker(feature: Feature, latlng: LatLng): Marker {
   // Adding feature data to options prop of marker to statisfy TS type errors
   return marker(latlng, {
     icon: customIcon,
-    feature: feature,
+    feature, // shorthand
   });
 }
 
