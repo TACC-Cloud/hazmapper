@@ -1,10 +1,17 @@
-import { CircleMarker, Path, circleMarker, divIcon, LatLng, Marker, marker } from 'leaflet';
+import { CircleMarker, Path, circleMarker, divIcon, LatLng, Marker, MarkerOptions, marker, icon, geoJSON } from 'leaflet';
 import { Feature } from '../models/models';
 import { MarkerStyle } from '../models/style';
 
 interface MarkerIcon {
   color: string;
   name: string;
+}
+
+// Needed to add feature to marker options (for click events)
+declare module 'leaflet' {
+  interface MarkerOptions {
+    feature?: Feature;
+  }
 }
 
 function createCircleMarker(feature: Feature, latlng: LatLng): CircleMarker {
@@ -55,8 +62,32 @@ function createCustomCircleMarker(latlng: LatLng, style: MarkerStyle): CircleMar
   return circleMarker(latlng, style);
 }
 
+function createPointCloudMarker(feature: Feature, latlng: LatLng): Marker {
+  const divHtml = '<i class="fab fa-mixcloud fa-2x light-blue"></i>';
+  const customIcon = divIcon({
+    className: 'leaflet-fa-marker-icon',
+    html: divHtml,
+    iconSize: [32, 32],
+    iconAnchor: [16, 16],
+  });
+  // Adding feature data to options prop of marker to statisfy TS type errors
+  return marker(latlng, {
+    icon: customIcon,
+    feature: feature,
+  });
+}
+
+// Used to find the top-left corner of our point-clouds to help with overlapping
+export function calculateMarkerPosition(geoJsonPolygon): LatLng {
+  const layer = geoJSON(geoJsonPolygon); // Convert GeoJSON Polygon to Leaflet Layer
+  const bounds = layer.getBounds();
+  return new LatLng(bounds.getNorth(), bounds.getWest()); // Top-left corner
+}
+
 export function createMarker(feature: Feature, latlng: LatLng): Marker | CircleMarker {
-  if (feature.properties.style) {
+  if (feature.featureType() === 'point_cloud') {
+    return createPointCloudMarker(feature, latlng);
+  } else if (feature.properties.style) {
     const style = feature.properties.style;
     if (style.faIcon) {
       return createCustomIconMarker(latlng, style);
