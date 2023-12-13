@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChildren, QueryList, TemplateRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChildren, QueryList, TemplateRef, OnDestroy, Input } from '@angular/core';
 import { GeoDataService } from '../../services/geo-data.service';
 import { Overlay, Project, TileServer } from '../../models/models';
 import { BsModalRef, BsModalService } from 'ngx-foundation';
@@ -17,6 +17,7 @@ import { Subscription } from 'rxjs';
 })
 export class LayersPanelComponent implements OnInit, OnDestroy {
   @ViewChildren('activeText') activeInputs: QueryList<ElementRef>;
+  @Input() isPublicView = false;
 
   dragHeight: number;
   releaseHeight: number;
