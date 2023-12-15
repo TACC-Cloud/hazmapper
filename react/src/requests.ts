@@ -1,13 +1,7 @@
 import axios from 'axios';
 import store from './redux/store';
-import { AxiosError, AxiosRequestHeaders } from 'axios';
-import {
-  useQuery,
-  useMutation,
-  UseQueryOptions,
-  UseMutationOptions,
-  QueryKey,
-} from 'react-query';
+import { AxiosError } from 'axios';
+import { useQuery, UseQueryOptions, QueryKey } from 'react-query';
 
 type UseGetParams<ResponseType> = {
   endpoint: string;

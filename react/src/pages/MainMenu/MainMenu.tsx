@@ -2,7 +2,7 @@ import React from 'react';
 import { useProjects } from '../../hooks';
 
 function MainMenu() {
-  const { data, isLoading, error } = useProjects();
+  const { data } = useProjects();
   return (
     <>
       <h2>Main Menu</h2>
