@@ -10,7 +10,9 @@
         "test": "jest",
         "lint": "npm run lint:js",
         "lint:js": "eslint . --ext .js,.jsx,.ts,.tsx",
-        "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix"
+        "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+        "prettier:check": "prettier --single-quote --check src",
+        "prettier:fix": "prettier --single-quote --write src"
     },
     "eslintConfig": {
         "extends": "react-app"
