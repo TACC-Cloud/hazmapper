@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../redux/store';
-import { isTokenValid } from '../../../utils/authUtils';
+import { RootState } from '../../redux/store';
+import { isTokenValid } from '../../utils/authUtils';
 
 function Login() {
   const location = useLocation();
