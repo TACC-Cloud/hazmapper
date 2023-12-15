@@ -19,7 +19,6 @@ export const geoapi = createApi({
 
       headers.set('Content-Type', 'application/json;charset=UTF-8');
 
-
       // TODO below adding of JWT if localhost and then add JWT
       // we put the JWT on the request to our geoapi API because it is not behind ws02 if in local dev
       // and if user is logged in
