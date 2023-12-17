@@ -2711,6 +2711,7 @@ class LocationField extends Question {
       : -122.3353;
 
     const view_map = L.map(view_mode_map_canvas).setView([lat, lon], 16);
+    L.marker([lat, lon]).addTo(view_map);
 
     L.tileLayer(
       'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
