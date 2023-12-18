@@ -19,1403 +19,252 @@
 *    by accessing https://rapid.apl.uw.edu/rapp/ and retreiving the code as the code is not minimized.
 */
 
-::ng-deep p.questionnaireTitle {
-    position: absolute;
-    text-align: center;
-}
-
-::ng-deep p.questionLabel,::ng-deep p.headerLabel {
-    text-align: left;
-    font-size: 14pt;
-    color: hsl(0, 0%, 100%);
-}
-
-::ng-deep p.headerLabel {
-    color: hsl(0, 0%, 0%);
-    display: block;
-    text-align: center;
-    font-size: 25px;
-    line-height: 25px;
-    margin: 20px 0 10px;
-    font-weight: bold;
-}
-
-/***********************************************/
-
-/*INFO PAGE*/
-
-::ng-deep div.inlineContainer {
-    width: auto;
-    display: inline-block;
-}
-
-::ng-deep .disabled div.inlineContainer {
-    pointer-events: none !important;
-    cursor: default !important;
-}
-
-::ng-deep div.inlineContainer:hover div.radioButtonQuestionnaire,
-::ng-deep div.inlineContainer:hover div.radioButtonQuestionnaireSmall {
-    background-color: hsl(0, 0%, 90%);
-}
-
-::ng-deep .disabled div.radioButtonActive {
-    background-color: hsl(0, 0%, 50%) !important;
-}
-
-::ng-deep .disabled p.questionnaireInfoHeader {
-    color: hsl(0, 0%, 50%) !important;
-}
-
-::ng-deep .disabled div.inlineContainer {
-    pointer-events: none;
-    cursor: default;
-}
-
-::ng-deep p.questionnaireInfo {
-    margin-left: 20px;
-    padding: 5px 0;
-    position: relative;
-    font-family: "StandardFontRegular", "Arial", sans-serif;
-    font-size: 15pt;
-    color: hsl(0, 0%, 10%);
-    display: inline-block;
-    line-height: 50px;
-}
-
-::ng-deep p.questionnaireInfoHeader {
-    /*text-align: right;*/
-    width: 210px;
-    display: inline-block;
-    line-height: 50px;
-    vertical-align: top;
-    font-family: "StandardFontBold", "Arial", sans-serif;
-    font-size: 17pt;
-    letter-spacing: 1px;
-    padding: 5px 0px;
-    color: hsl(0, 0%, 25%);
-}
-
-::ng-deep div.radioButtonQuestionnaire,::ng-deep div.radioButtonQuestionnaireSmall {
-    cursor: pointer;
-    display: inline-block;
-    border: 1px solid hsl(0, 0%, 0%);
-    border-radius: 20px;
-    width: 35px;
-    height: 35px;
-    margin: 12px 15px 0px 30px;
-}
-
-::ng-deep div.radioButtonQuestionnaireSmall {
-    width: 25px;
-    height: 25px;
-    margin: 0px 8px 0px 20px;
-}
-
-::ng-deep div.radioButtonActive {
-    background-color: hsl(195, 100%, 30%);
-}
-
-::ng-deep p.questionnaireDetailText {
-    position: relative;
-    display: inline-block;
-    color: hsl(0, 0%, 0%);
-    line-height: 60px;
-    font-size: 15pt;
-    vertical-align: top;
-}
-
-::ng-deep div.optionsWrapper {
-    position: relative;
-    text-align: left;
-    display: block;
-    padding: 20px 10px;
-}
-
-::ng-deep div.optionsWrapper p.redText {
-    color:  hsl(0, 100%, 40%);
-}
-
-::ng-deep div.optionsWrapper p.boldText {
-    font-weight: bold
-}
-
-::ng-deep div.optionsWrapper p.editFieldLabel {
-    line-height: 27px;
-    margin: 0;
-    vertical-align: top;
-}
-
-::ng-deep div.questionHeaderWrapper {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-::ng-deep p.questionNumber, ::ng-deep p.questionType {
-    position: relative;
-    text-align: left;
-    color: hsl(150, 100%, 46%);
-    padding: 20px 10px;
-    top: 0;
-    left: 0px;
-    right: 50px;
-    font-size: 25pt;
-    font-weight: bold
-}
-
-
-::ng-deep .subQuestion p.questionNumber {
-    font-size: 18pt;
-}
-
-::ng-deep p.questionType {
-    font-size: 18pt;
-    font-weight: bold;
-    left: unset;
-    right: 20px;
-    top: 10px;
-}
-
-::ng-deep p.questionText, ::ng-deep p.headingText, ::ng-deep p.reorderQuestionText, ::ng-deep p.reorderSectionText, ::ng-deep p.instructionText {
-    color: hsl(0, 0%, 0%);
-    text-align: left;
-    font-size: 17pt;
-    letter-spacing: 1px;
-    font-weight: bold;
-    padding: 20px 5px;
-    line-height: 130%;
-}
-
-::ng-deep p.instructionText {
-    color: hsl(0, 0%, 50%);
-}
-
-::ng-deep p.questionText {
-    color: hsl(195, 100%, 30%);
-}
-
-::ng-deep p.instructionText {
-    font-size: 15pt;
-    font-style: italic;
-}
-
-::ng-deep p.questionText, ::ng-deep p.headingText, ::ng-deep p.instructionText {
-    padding: 20px 10px !important;
-}
-
-::ng-deep p.reorderQuestionText {
-    margin-left: 80px;
-    font-size: 12pt;
-    line-height: 130%;
-    padding: 10px 10px 10px 5px;
-}
-
-::ng-deep p.reorderSectionText {
-    margin-left: 40px;
-    font-size: 16pt;
-    color: hsl(195, 100%, 35%);
-    padding: 0 40px 0px 5px;
-    line-height: 55px;
-}
-
-::ng-deep div.originalQuestionPlaceholder {
-    border-radius: 5px;
-    background-color: hsl(195, 100%, 40%) !important;
-}
-
-::ng-deep .originalQuestionPlaceholder p.reorderSectionText {
-    color: hsl(195, 100%, 90%);
-}
-
-::ng-deep div.reorderItemClone {
-    position: absolute;
-    display: block;
-    height: 50px;
-    background-color: hsl(195, 45%, 65%) !important;
-    opacity: 0.4 !important;
-    border-radius: 5px;
-}
-
-::ng-deep p.editFieldLabel, ::ng-deep p.requiredLabel, ::ng-deep p.declineLabel {
-    position: relative;
-    margin-bottom: 2px;
-    text-align: left;
-    font-size: 12pt;
-    color: hsl(0, 0%, 25%);
-}
-
-::ng-deep p.editFieldLabel p.declineLabel {
-    pointer-events: none;
-    cursor: default;
-}
-
-::ng-deep p.declineLabel {
-    margin-left: 45px;
-}
-
-/*********QUESTION TEXT AREAS/INPUTS**********/
-
-::ng-deep textarea.questionHeading, ::ng-deep textarea.questionField, ::ng-deep textarea.instructionField, ::ng-deep textarea.optionField {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    border: 1px solid hsl(0, 0%, 0%);
-    border-radius: 5px;
-    color: hsl(195, 100%, 30%);
-    width: 100%;
-    line-height: 135%;
-    text-align: left;
-    padding: 10px;
-    height: 42px;
-    min-height: 52px;
-    overflow: hidden;
-    resize: none;
-    box-sizing: border-box;
-}
-
-textarea.shortAnswer, textarea.mediumAnswer, textarea.longAnswer,
-textarea.textFieldPlaceHolder, textarea.numberField, input.locationLatLon, textarea.locationAddress, textarea.questionField,
-textarea.instructionField, textarea.optionField {
-    color: hsl(195, 100%, 30%);
-    padding: 10px;
-    border: 1px solid hsl(0, 0%, 0%);
-    border-radius: 5px;
-    width: 100%;
-    /*transition: width 0.3s linear;*/
-    text-align: left;
-    max-width: 100%;
-    max-height: 100%;
-    resize: none;
-    box-sizing: border-box;
-}
-
-::ng-deep textarea.optionField {
-    padding: 15px 10px;
-    font-size: 16px;
-    width: calc(100% - 367px);
-    /*max-width: 600px;*/
-    min-width: 120px;
-    max-height: none;
-}
-
-::ng-deep .question-edit-field-container textarea.optionField {
-    width: calc(100% - 415px);
-}
-
-::ng-deep .question-edit-field-container input.optionValueField {
-    margin-left: 50px;
-}
-
-::ng-deep .multi-select textarea.optionField {
-    width: calc(100% - 261px);
-}
-
-
-::ng-deep .multi-select .declineOptionWrapper > textarea.optionField {
-    width: calc(100% - 217px);
-}
-
-::ng-deep .declineOptionWrapper > textarea {
-    margin-left: 45px;
-}
-
-::ng-deep .declineOption.subQuestionOption .removableAnswer {
-    left: 0px !important;
-
-}
-
-::ng-deep .subQuestion .declineViewModeOption {
-    padding: 0 !important;
-}
-
-::ng-deep .subQuestion textarea.optionField {
-    width: calc(100% - 93px);
-}
-
-::ng-deep textarea.instructionField {
-    font-style: italic;
-}
-
-::ng-deep div.multiTextField {
-    padding: 80px 0px 10px 0px !important;
-}
-
-::ng-deep div.multiTextField p.questionNumber {
-    position: absolute;
-    top: 10px;
-}
-
-::ng-deep .subQuestion p.questionText {
-    font-size: 14pt;
-}
-
-::ng-deep input.locationLatLon {
-    padding: 3px;
-    margin: 20px 30px 20px 10px;
-    background-color: hsl(0, 0%, 100%);
-    pointer-events: none;
-    max-width: 120px;
-    display: inline-block;
-}
-
-::ng-deep textarea.locationAddress {
-    background-color: hsl(0, 0%, 100%);
-    pointer-events: none;
-    display: block;
-    height: 100px !important;
-    width: 400px;
-}
-
-/************ LOCATION QUESTION MAP ************/
-
-::ng-deep div.locationMapContainer .leaflet-control-container {
-    display: none;
-}
-
-::ng-deep div.locationMapContainer {
-    display: block;
-    position: relative;
-    width: 100%;
-    height: 500px;
-}
-
-::ng-deep p.locationQuestionDetails {
-    text-align: left;
-    font-size: 13pt;
-    letter-spacing: 1px;
-    margin: 20px 0px;
-    color: hsl(0, 0%, 25%);
-}
-
-::ng-deep div.mapSelectionIcon {
-    z-index: 1000;
-    top: 235px;
-    left: 50%;
-    margin-left: -15px;
-    position: absolute;
-    height: 30px;
-    width: 30px;
-    background-color: transparent;
-    border: 2px solid hsl(0 , 0%, 100%);
-}
-
-::ng-deep div.mapContainer::-webkit-scrollbar {
-    display: none !important;
-}
-
-::ng-deep div.mapCanvas::-webkit-scrollbar {
-    display: none !important;
-}
-
-::ng-deep textarea.numberField {
-    height: 52px;
-    width: 300px;
-}
-
-
-::ng-deep input, ::ng-deep textarea {
-    pointer-events: all;
-}
-
-::ng-deep input.shortAnswer, ::ng-deep input.Standard {
-    color: hsl(195, 100%, 30%);
-    padding: 10px;
-    border: 1px solid hsl(0, 0%, 0%);
-    border-radius: 5px;
-    width: 100%;
-    transition: width 0.3s linear;
-    text-align: left;
-    max-width: 100%;
-    max-height: 100%;
-    resize: none;
-}
-
-::ng-deep textarea.textFieldPlaceHolder {
-    height: 52px !important;
-    overflow-y: hidden;
-    background-color: hsl(0, 0%, 80%);
-    border: solid 1px hsl(0, 0%, 50%);
-    pointer-events: none;
-}
-
-::ng-deep textarea.questionHeading:focus, ::ng-deep textarea.shortAnswer:focus, ::ng-deep textarea.longAnswer:focus, ::ng-deep input.MultipleChoiceInput:focus, ::ng-deep textarea.MultipleChoiceInput:focus,
-::ng-deep input.RangeAnswerField:focus, ::ng-deep input.shortAnswer:focus, ::ng-deep textarea.mediumAnswer:focus, ::ng-deep textarea:focus {
-    outline: none;
-    box-shadow: 0px 0px 0px 4px hsl(195, 100%, 60%) !important;
-}
-
-::ng-deep div.wrapperNoPad > input.shortAnswer {
-    margin: 5px 10px;
-    width: calc(100% - 230px);
-}
-
-::ng-deep textarea.shortAnswer:focus {
-    outline: none;
-}
-
-::ng-deep textarea.shortAnswer {
-    height: 52px !important;
-}
-
-::ng-deep div.AddQuestionTemplate {
-    color: hsl(0, 0%, 0%);
-    height: 75px;
-    box-sizing: border-box;
-}
-
-::ng-deep div.AddQuestionTemplate, ::ng-deep div.AddQuestionnaire, ::ng-deep div.AddQuestionnaireToDOM {
-    /*min-height: 60px;*/
-    margin: 0;
-    transition: height 0.3s linear;
-}
-
-::ng-deep div.AddQuestionnaire {
-    display: flex;
-    justify-content: space-between;
-}
-
-::ng-deep div.AddQuestionnaireToDOM {
-    padding-top: 20px;
-    text-align: center;
-}
-
-::ng-deep div.AddQuestionnaireTemplate {
-    color: hsl(0, 0%, 0%);
-    z-index: 5000;
-    display: none;
-    width: 100%;
-    height: 100%;
-    background-color: hsl(0, 100%, 100%);
-    border-radius: 5px;
-    padding: 10px;
-}
-
-::ng-deep div.MultipleChoiceAnswerField {
-    cursor: pointer;
-    display: inline-block;
-    /*min-width: 200px;*/
-    width: 100%;
-    height: 40px;
-    /*margin: 0 20px;*/
-}
-
-::ng-deep input.MultipleChoiceInput, ::ng-deep input.RangeAnswerField, ::ng-deep input.YesOrNoInput, ::ng-deep input.goToInput, ::ng-deep textarea.MultipleChoiceInput {
-    /*pointer-events: none;*/
-    /*user-select: none;*/
-
-    color: hsl(195, 100%, 30%);
-    cursor: text;
-    display: inline-block;
-    width: 400px;
-    height: 100%;
-    padding: 5px;
-    font-size: 16px;
-    border: 1px solid hsl(0, 0%, 0%);
-    border-radius: 5px;
-}
-
-::ng-deep textarea.MultipleChoiceInput {
-
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    border: 1px solid hsl(0, 0%, 0%);
-    border-radius: 5px;
-    color: hsl(195, 100%, 30%);
-    width: 400px;
-    text-align: left;
-    padding: 10px;
-    min-height: 52px;
-    line-height: 175%;
-    /*min-height: 52px;*/
-    overflow: hidden;
-    resize: none;
-    box-sizing: border-box;
-
-}
-
-::ng-deep input.MultipleChoiceInput, ::ng-deep input.YesOrNoInput, ::ng-deep textarea.MultipleChoiceInput {
-    width: calc(100% - 70px);
-    max-width: 500px;
-}
-
-::ng-deep textarea.questionError {
-    background-color: hsla(0, 100%, 70%, 0.8);
-    border: 1px solid hsl(0, 100%, 40%);
-}
-
-::ng-deep textarea.MultipleChoiceInput.questionError {
-    background-color: hsla(0, 100%, 70%, 0.8);
-    border: 1px solid hsl(0, 100%, 40%);
-}
-
-::ng-deep input.YesOrNoInput {
-    color: hsl(0, 0%, 0%);
-    pointer-events:none;
-    border: transparent;
-    width: 50px
-}
-
-::ng-deep input.goToInput {
-    width: 200px;
-}
-
-/********RANGE QUESTION*********/
-
-::ng-deep input.RangeAnswerField {
-    color: hsl(180, 100%, 32%);
-    width: 30px;
-    margin: 0 10px;
-    text-align: center
-}
-
-::ng-deep div.MultipleChoiceBubble, ::ng-deep div.MultipleSelectionBubble, ::ng-deep div.removableAnswer,
-::ng-deep div.rangeAnswer {
-    display: inline-block;
-    border: 1px solid hsl(0, 0%, 0%);
-    width: 15px;
-    height: 15px;
-    padding: 10px;
-    border-radius: 20px;
-    margin: 7px 7px 7px 0;
-    cursor: default;
-}
-
-::ng-deep div.rangeAnswer {
-    position: relative;
-    color: grey;
-    margin: 5px 20px;
-}
-
-::ng-deep p.rangeAnswer, ::ng-deep p.rangeAnswerDoubleDigit {
-    font-size: 16px;
-    color: hsl(0, 0%, 60%);
-}
-
-::ng-deep p.rangeAnswerDoubleDigit {
-    top: 10px;
-    left: 8px;
-    position: absolute;
-    margin-right: 3px;
-}
-
-::ng-deep div.removableAnswer {
-    cursor: pointer;
-}
-
-::ng-deep div.MultipleSelectionBubble {
-    border-radius: 5px !important;
-}
-
-::ng-deep div.selected {
-    background-color: hsl(0, 100%, 40%);
-}
-/******INPUT FIELDS ********/
-
-::ng-deep input.numberField {
-}
-
-/******QUESTION OPTIONS/MODE ********/
-
-::ng-deep div.modeSelector, ::ng-deep div.multiTextModeSelector {
-    /*background-color: hsl(0, 0% ,100%);*/
-    z-index: 100;
-    position: absolute;
-    right: 20px;
-    top: 22px;
-    border-radius: 5px;
-}
-
-::ng-deep .subQuestion div.modeSelector {
-}
-
-::ng-deep div.multiTextModeSelector {
-    top: 238px;
-    right: unset;
-    left: 40px;
-}
-
-::ng-deep div.multiTextField div.modeSelector {
-    right: unset;
-    left: 50px;
-}
-
-::ng-deep .multiText  div.optionsWrapper {
-    text-align: right;
-    padding: 10px 10px 20px 10px;
-}
-
-::ng-deep .viewMode div.optionsWrapper {
-    padding: 10px !important;
-    text-align: left;
-}
-
-::ng-deep div.multiTextField div.modeSelector {
-    top: 81px;
-}
-
-::ng-deep div.buttonRemoveField {
-    pointer-events: all;
-    cursor: pointer;
-    position: absolute;
-    top: 80px;
-    left: 2px;
-    display: inline-block;
-    border: 1px solid hsl(0, 0%, 0%);
-    width: 15px;
-    height: 15px;
-    padding: 10px;
-    border-radius: 20px;
-    margin: 7px;
-}
-
-::ng-deep div.questionModeWrapper div.modeSelector {
-    display: inline-block;
-    position: relative;
-    right: unset;
-    top: unset;
-}
-
-::ng-deep div.modeOption:first-child {
-    border-left: 1px solid hsl(0, 0%, 70%);
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-}
-
-::ng-deep div.modeOption:last-child {
-    border-right: 1px solid hsl(0, 0%, 70%);
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
-
-::ng-deep div.modeOption:hover {
-    background-color: hsl(0, 0%, 90%);
-}
-
-
-::ng-deep div.modeOption {
-    border-bottom: 1px solid hsl(0, 0%, 70%);
-    border-top: 1px solid hsl(0, 0%, 70%);
-    position: relative;
-    display: inline-block;
-    color: hsl(0, 0%, 0%);
-    cursor: pointer;
-    pointer-events: all;
-    font-weight: bold;
-    padding: 15px 20px;
-    font-size: 18px;
-}
-
-/* MULTI TEXT*/
-
-
-::ng-deep .multiText p.questionText {
-    padding: 10px;
-}
-
-
-/******MULTIPLE CHOICE ANSWER DETAILS********/
-
-::ng-deep div.questionModeWrapper {
-    width: 100%;
-    text-align: center;
-    padding: 10px 10px 30px 10px;
-}
-
-::ng-deep div.declineButton {
-
-}
-
-::ng-deep div.declineOption {
-    padding-top: 0;
-    padding-bottom: 0;
-    /*height: 130px;*/
-}
-
-::ng-deep div.declineViewModeOption {
-
-}
-
-::ng-deep div.addTextFieldWrapper {
-    height: 70px;
-    cursor: pointer;
-    pointer-events: all;
-    display: inline-block;
-    width: auto;
-}
-
-::ng-deep div.addTextFieldWrapper {
-    height: auto;
-}
-
-::ng-deep div.addAnswerRow div.MultipleChoiceAnswerField{
-    width: auto;
-    pointer-events: all;
-    cursor: pointer;
-}
-
-::ng-deep div.multiChoiceDecline div.buttonAddAnswer {
-    top: 30px;
-}
-
-::ng-deep div.declineOption input.answerVariableName {
-    margin-top: 2px;
-}
-
-
-::ng-deep p.addNewOptionLabel {
-    text-align: left;
-    font-size: 14pt;
-    line-height: 52px;
-    display: inline-block;
-    color: hsl(0, 0%, 0%);
-    cursor: pointer;
-}
-
-::ng-deep input.answerVariableName, ::ng-deep input.questionValueField, ::ng-deep input.optionValueField {
-    font-size: 14px;
-    color: hsl(180, 100%, 32%);
-    pointer-events: all;
-    cursor: text;
-    border: none;
-    border-radius: 5px;
-    min-width: 250px;
-    width: auto;
-}
-
-
-/*QUESTION OPTION DIVS*/
-
-/*question classes pertain to question.label*/
-/*option classes pertain to question.options*/
-/*value classes pertain to value property for either questions or options*/
-
-::ng-deep div.questionOptionsWrapper {
-}
-
-::ng-deep div.questionValueWrapper, ::ng-deep div.optionValueWrapper {
-    display: block;
-    position: relative;
-    margin: 5px 0;
-    text-align: left;
-}
-
-::ng-deep div.optionValueWrapper {
-    margin: 5px 0px 5px 45px;
-}
-
-::ng-deep div.textOption div.optionValueWrapper {
-    margin: 5px 0px;
-}
-
-::ng-deep div.questionOption {
-    position: relative;
-    text-align: left;
-    width: 100%;
-    color: hsl(0, 100%, 100%);
-    display: block;
-    box-sizing: border-box;
-    padding: 10px;
-}
-
-::ng-deep tr.questionOption > td {
-    padding:  10px 0;
-}
-
-::ng-deep .question-view-mode div.questionOption {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    width: 100%;
-    padding: 10px 0;
-}
-
-::ng-deep .question-view-mode .questionnaireQuestion {
-    left: unset;
-    padding: 0px 10px;
-    /*display: flex;*/
-    /*flex: 1;*/
-    /*max-width: calc(100% - 116px) !important;*/
-}
-
-::ng-deep .question-view-mode td {
-    display: table-cell;
-    vertical-align: middle;
-}
-
-::ng-deep .question-view-mode .questionOptionShape {
-    margin: 0;
-    display: flex;
-    top: unset;
-    position: relative;
-}
-
-::ng-deep div.questionOptionWrapper, ::ng-deep div.declineOptionWrapper {
-    position: relative;
-    display: block;
-    width: 100%;
-    text-align: left;
-}
-
-::ng-deep input.questionValueField, ::ng-deep input.optionValueField {
-    padding: 5px;
-    min-width: 250px;
-}
-
-::ng-deep input.answerVariableName:focus, ::ng-deep input.questionValueField:focus, ::ng-deep input.optionValueField:focus {
-    outline: none;
-    box-shadow: 0px 0px 0px 2px hsl(195, 100%, 60%) !important;
-}
-
-::ng-deep div.subQuestion {
-    width: calc(100% - 130px) !important;
-    margin-left: 125px;
-    padding: 10px;
-    border-radius: 0px !important;
-    border-left: 3px solid hsl(195, 100%, 35%);
-}
-
-::ng-deep div.questionnaireOptions div.subQuestion {
-    border: none;
-}
-
-::ng-deep p.subQuestionLabel {
-    text-align: left;
-    color: white;
-    font-size: 14px;
-    line-height: 22px;
-}
-
-::ng-deep div.buttonDeleteSubQuestion p.subQuestionLabel {
-    color: hsl(0, 100%, 40%);
-}
-
-::ng-deep div.buttonAddSubQuestionIcon {
-    width: 38px;
-    height: 38px;
-    padding: 10px;
-    border-radius: 20px;
-    position: absolute;
-    top: -1px;
-    box-sizing: border-box;
-    right: 0;
-    border: 1px solid hsl(0, 100%, 100%);
-    margin: 7px 10px;
-    text-align: center;
-}
-
-/*GO TO DETAILS*/
-
-::ng-deep div.goToContainer {
-    background-color: hsl(0, 0%, 100%);
-    color: black;
-    font-size: 14pt;
-    margin: 0 20px;
-    position: relative;
-    display: inline-block;
-    vertical-align: top;
-    height: auto;
-    box-sizing: border-box;
-    width: 110px;
-    cursor: pointer;
-    pointer-events: all;
-}
-
-::ng-deep div.goToContainer.redText .buttonDropdown {
-    border-top-color:  hsl(0, 100%, 40%);
-}
-
-::ng-deep div.goToContainer.redText svg {
-    fill:  hsl(0, 100%, 40%);
-}
-
-::ng-deep div.goToMenuButton {
-    background-color: hsl(0, 0%, 100%);
-    color: black;
-    font-size: 14pt;
-    /*margin: 0 20px;*/
-    position: relative;
-    border: solid 1px hsl(0, 0%, 80%);
-    display: inline-block;
-    vertical-align: top;
-    height: 52px;
-    border-radius: 4px;
-    box-sizing: border-box;
-    width: 110px;
-    padding: 10px;
-    cursor: pointer;
-    pointer-events: all;
-    flex: 0 1 auto;
-}
-
-::ng-deep div.goToContainer.redText p.menuButtonLabel {
-    font-weight: bolder;
-    color: hsl(0, 100%, 40%);
-}
-
-::ng-deep div.goToContainer.redText div.goToMenuButton {
-    border: 1px solid hsl(0, 100%, 40%);
-}
-
-::ng-deep div.goToMenuButton:hover {
-    background-color: hsl(0, 0%, 95%);
-}
-
-::ng-deep p.menuButtonLabel, ::ng-deep p.section-goto-label {
-    text-align: center;
-    pointer-events: none;
-    color: black;
-    font-size: 14px;
-    width: 40px;
-    margin-right: 10px;
-}
-
-::ng-deep .section-wrapper .goToContainer, ::ng-deep .section-wrapper .goToMenuButton {
-    width: auto !important;
-    min-width: 90px;
-}
-
-::ng-deep p.section-goto-label {
-    width: auto;
-}
-
-::ng-deep table.fullSize {
-    pointer-events: none;
-    height: 100%;
-    width: 100%;
-}
-
-::ng-deep div.sectionMenuItem, ::ng-deep div.sectionMenuItemActive, ::ng-deep div.questionMenuItem {
-    font-size: 16px;
-    color: hsl(0, 0%, 0%);
-    border-radius: 5px;
-    padding: 12px;
-    line-height: 23px;
-    word-break: normal;
-    /*white-space: nowrap;*/
-    cursor: pointer;
-}
-
-::ng-deep div.sectionMenuItem:hover, ::ng-deep div.questionMenuItem:hover {
-    background-color: hsl(0, 0%, 95%);
-}
-
-::ng-deep div.goToDropDownMenu {
-    margin-top: 55px;
-    margin-bottom: 20px;
-    width: 100%;
-    left: -1px;
-    top: 0px;
-    z-index: 10000;
-    overflow-y: scroll;
-    min-height: 40px;
-    max-height: 40vh;
-    box-sizing: border-box;
-    opacity: 1;
-    display: none;
-    transition: top 0.5s ease-out;
-    position: absolute;
-    background-color: hsl(0, 0%, 100%);
-    border-radius: 5px;
-    padding: 10px;
-    box-shadow: 0px 1px 1px 1px hsla(0, 0%, 0%, 0.35);
-    pointer-events: all;
-    cursor: default;
-}
-
-::ng-deep div.buttonAddSubQuestion, ::ng-deep div.buttonDeleteSubQuestion {
-    height: 20px;
-    width: 130px;
-    margin-left: 10px;
-    position: relative;
-    display: inline-block;
-    vertical-align: top;
-    text-align: center;
-    font-size: 14px;
-    line-height: 14px;
-    white-space: nowrap;
-    padding: 15px;
-    border-radius: 5px;
-    overflow: hidden;
-    cursor: pointer;
-    pointer-events: all;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    color: hsl(0, 0%, 100%) !important;
-    background-color: hsl(195, 100%, 35%) !important;
-    border: solid 1px hsl(195, 100%, 35%) !important;
-}
-
-::ng-deep div.buttonDeleteSubQuestionIcon {
-    position: absolute;
-    top: 14px;
-    right: 20px;
-    height: 20px;
-    width: 20px;
-}
-
-
-::ng-deep svg.buttonDeleteSubQuestionIcon {
-    height: 20px;
-    width: 20px;
-    fill: hsl(0, 100%, 40%) !important;
-    margin: 5px;
-    padding: 0;
-}
-
-::ng-deep div.buttonDeleteSubQuestion {
-    border: solid 1px hsl(0, 0%, 80%) !important;
-    background-color: hsl(0, 0%, 100%) !important;
-    position: relative !important;
-}
-
-::ng-deep div.buttonDeleteSubQuestion p {
-    color: black !important;
-}
-
-::ng-deep div.buttonDeleteSubQuestion:hover {
-    background-color: hsl(0, 0%, 95%) !important;
-}
-
-::ng-deep div.buttonAddSubQuestion:hover {
-    background-color: hsla(195, 100%, 35%, 0.9) !important
-}
-
-/***************MATRIX QUESTION********/
-
-::ng-deep .matrixOption div.MultipleChoiceBubble, ::ng-deep .matrixOption div.MultipleSelectionBubble {
-    display: inline-block;
-    border: 1px solid hsl(0, 0%, 0%);
-    width: 15px;
-    height: 15px;
-    padding: 10px;
-    border-radius: 20px;
-    margin: 7px;
-    pointer-events: all;
-    cursor: pointer;
-    position: relative;
-    top: 3px;
-}
-
-::ng-deep .matrixOption > .MultipleChoiceAnswerField {
-    margin-left: 35px;
-}
-
-::ng-deep .matrixOption > .buttonMoveQuestionnaireOption {
-    top: 40px !important;
-    margin-left: 15px;
-}
-
-::ng-deep .matrixOption .answerVariableName {
-    margin-left: 67px !important;
-}
-
-::ng-deep .matrixOption svg {
-    top: 6px !important;
-    left: 5px !important;
-}
-
-::ng-deep table.matrixQuestionTable {
-
-    overflow: scroll;
-    max-width: 100%;
-}
-
-::ng-deep table.matrixQuestionTable td {
-    padding: 10px 5px;
-}
-
-::ng-deep td.matrixRow {
-    text-align: left;
-}
-
-::ng-deep p.questionMatrixColumnLabel {
-    font-size: 13pt;
-    line-height: 125%;
-    color: hsl(0, 0%, 0%);
-    text-align: center;
-    padding: 0px 10px;
-}
-
-::ng-deep p.questionMatrixRowLabel {
-    font-size: 13pt;
-    line-height: 125%;
-    color: hsl(0, 0%, 0%);
-}
-
-::ng-deep div.addItemRow {
-    pointer-events: all;
-    cursor: pointer;
-    display: inline-block;
-    height: 40px;
-}
-
-::ng-deep table.matrixQuestionTable tr {
-    border-top: 1px solid hsl(0, 0%, 90%);
-}
-
-::ng-deep table.matrixQuestionTable tr:first-child {
-    border-top: none
-}
-
-::ng-deep td.spacer {
-    width: auto;
-    color: white;
-}
-
-::ng-deep p.matrixQuestionValue {
-    color: black;
-    font-size: 14pt;
-}
-
-::ng-deep div.matrixOptionBubble, ::ng-deep div.matrixMultiOptionBubble {
-    display: inline-block;
-    border: 1px solid hsl(0, 0%, 0%);
-    width: 15px;
-    height: 15px;
-    padding: 7px;
-    border-radius: 20px;
-    margin: 7px;
-    cursor: default;
-}
-
-::ng-deep div.matrixMultiOptionBubble {
-    border-radius: 0px;
-}
-
-::ng-deep div.newRowWrapper .answerLabel, ::ng-deep div.newColumnWrapper .answerLabel {
-    margin: 7px;
-}
-
-::ng-deep div.newRowWrapper, ::ng-deep div.newColumnWrapper {
-    padding-bottom: 30px !important;
-}
-
-::ng-deep div.newColumnWrapper:last-child {
-    padding-bottom: 5px;
-}
-
-::ng-deep div.variableOptionWrapper {
-    position: relative;
-    width: 100%;
-    color: hsl(0, 100%, 100%);
-    display: block;
-    box-sizing: border-box;
-    padding: 10px;
-    margin: 10px 0px 0px 10px
-}
-
-
-/*************************** QUESTIONNAIRE VIEWER ITEMS *******************************/
-
-::ng-deep p.ownerLabel {
-    font-size: 20pt;
-    line-height: 40px;
-    letter-spacing: 0;
-    color: hsl(195, 100%, 50%);
-    text-align: left;
-    font-family: "StandardFontBold", "Arial", sans-serif;
-}
-
-::ng-deep p.questionnaireQuestion {
-    position: relative;
-    display: flex;
-    align-items: center;
-    min-height: 50px;
-    font-size: 16pt;
-    line-height: 135%;
-    color: hsl(0, 0%, 0%);
-    pointer-events: none;
-    padding: 0 5px;
-}
-
-::ng-deep p.goto-label {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    font-style: italic;
-    min-height: 50px;
-    width: auto;
-    justify-content: flex-end;
-    font-size: 16pt;
-    line-height: 135%;
-    color: hsl(0, 0%, 70%);
-    pointer-events: none;
-    margin-left: 50px;
-    white-space: nowrap;
-}
-
-::ng-deep .section-wrapper p.goto-label {
-    width: auto;
-    margin: 0 2px;
-}
-
-::ng-deep div.questionnaireSelector {
-    position: relative;
-    display: table-cell;
-    vertical-align: middle;
-    font-family: "StandardFontRegular", "Arial", sans-serif;
-}
-
-::ng-deep div.questionnaireOptions, ::ng-deep div.subQuestionOptions {
-    padding: 0px 15px;
-    text-align: left;
-    /*padding-left: 20px;*/
-    /*padding-bottom: 5px;*/
-}
-
-::ng-deep div.questionnaireOption, ::ng-deep div.infoPanelQuestionnaireOption, ::ng-deep div.questionnaireSubOption {
-    position: relative;
-    min-height: 50px;
-    display: block;
-    font-size: 14pt;
-    color: hsl(0, 0%, 20%);
-    vertical-align: middle;
-}
-
-::ng-deep div.questionnaireSubOption {
-    padding: 10px;
-}
-
-::ng-deep div.questionOption, ::ng-deep div.subQuestionOption {
-    padding: 10px;
-    display: block;
-}
-
-::ng-deep div.questionOption.selected, ::ng-deep div.subQuestionOption.selected {
-    background-color: hsl(190, 100%, 40%) !important;
-    border-radius: 5px;
-}
-
-::ng-deep div.addOptionWrapper, ::ng-deep div.addDeclineOptionWrapper {
-    padding: 10px;
-    text-align: left;
-    width: auto;
-    pointer-events: all;
-    cursor: pointer;
-    position: relative;
-}
-
-::ng-deep div.addDeclineOptionWrapper {
-    cursor: default;
-}
-
-
-/*DROP DOWN MENU VIEW FOR MULTIPLE CHOICE QUESTIONS*/
-
-::ng-deep div.dropDownViewModeContainer {
-    position: relative;
-    display: block;
-    text-align: left;
-}
-
-::ng-deep div.dropDownViewQuestionContainer {
-    padding: 10px !important;
-    position: relative;
-    display: inline-block;
-    width: auto;
-    min-width: 400px;
-    border: 1px solid hsl(0, 0%, 80%);
-    border-radius: 5px;
-    left: 0;
-}
-
-::ng-deep div.buttonQuestionnaireDropDown {
-    display: inline-block;
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    cursor: default;
-    pointer-events: none;
-    width: 0;
-    height: 0;
-    border-left: 7px solid transparent;
-    border-right: 7px solid transparent;
-    border-top: 10px solid hsl(0, 0%, 0%);
-}
-
-::ng-deep .question-view-mode div.div.buttonQuestionnaireDropDown {
-    display: none;
-}
-
-
-
-::ng-deep div.questionnairePlaceholder {
-    padding: 0 10px;
-    border-radius: 5px;
-    border: 1px solid hsl(0, 0%, 80%);
-    position: relative;
-    min-height: 50px;
-    min-width: 400px;
-    display: block;
-    font-size: 14pt;
-    color: hsl(0, 0%, 20%);
-    vertical-align: middle;
-    margin-bottom: 10px;
-}
-
-::ng-deep div.dropDownViewModeQuestion {
-    display: inline-block !important;
-    width: auto;
-    padding: 5px !important;
-    border-radius: 5px !important;
-    border:  1px solid hsl(0, 0%, 0%) !important;
-}
-
-::ng-deep div.answerBubbleViewMode, ::ng-deep div.answerBubbleViewModeSelected, ::ng-deep div.questionOptionShape {
-    position: relative;
-    line-height: 50px;
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    /*margin-top: 13px;*/
-    border: solid 1px hsl(0, 0%, 10%);
-}
-
-::ng-deep .question-view-mode div.answerBubbleViewMode {
-    margin: 0 !important;
-}
-
-::ng-deep div.questionOptionShape {
-    position: absolute;
-    display: inline-block;
-    border-radius: 15px;
-    height: 28px;
-    width: 28px;
-    margin-right: 3px;
-    top: 50%;
-    margin-top: -14px
-}
-
-::ng-deep div.answerBubbleViewModeSelected {
-    background-color: hsl(200, 100%, 55%);
-}
-
-
-/*MODIFIERS*/
-
-::ng-deep textarea.longAnswer {
-    height: 160px !important;
-}
-
-::ng-deep textarea.mediumAnswer {
-    height: 100px !important;
-}
-
-::ng-deep textarea.shortAnswer {
-    height: 52px !important;
-}
-
-
-/* QUESTION SELECTION CLASSES*/
-
-::ng-deep .optionSelected {
-    background-color: rgb(51, 204, 255) !important;
-}
-
-
-::ng-deep div.hidden {
-    display: none;
-}
+//***** CUSTOM SELECTORS FOR HAZMAPPER QUESTIONNAIRE VIEWER *****
+
+// NOV 2023 Redesign for Hazmapper Integration.
+// Fix modal layout for Questionnaire viewer.
+// Testing against 1080px, 1280px, 1440px and 1920px widths.
+
+// Positions the parent modal and adjusts the entire questionnaire.
+::ng-deep body > modal-container > div.reveal
+    margin 0
+    margin-left 8%
+    margin-right auto
+    padding 2%
+    width 57%
+
+
+::ng-deep body > modal-container > div.reveal > div.modal-content >  app-modal-questionnaire-viewer > div.view-only-questionnaire-container *
+    cursor default
+    font-size 0.8rem
+    line-height normal
+    margin 0
+    padding 0
+    pointer-events none
+
+
+::ng-deep div.questionWrapper
+    border-top 2px solid #cccccc
+
+
+::ng-deep div.subQuestion
+    border-top 1px solid #aaaaaa
+    margin-left 30px !important
+    padding-top 6px !important
+
+
+::ng-deep div.subQuestion:before
+    color #999999
+    content "Sub-question"
+    font-size 0.6rem
+    font-style italic
+    font-weight bold
+
+
+::ng-deep div.subQuestionOptions
+    margin-left 20px !important
+
+
+::ng-deep div.questionWrapper
+::ng-deep div.subQuestion
+    margin-top 10px !important
+    margin-bottom 10px !important
+
+
+::ng-deep div.questionHeaderWrapper
+    display flex
+    flex-direction row
+    justify-content space-between
+    padding-top 10px !important
+
+
+::ng-deep p.questionNumber
+    font-size 1.2rem !important
+    font-weight bold
+
+
+::ng-deep p.questionType
+    color #444444
+    font-size 0.7rem !important
+    font-style normal
+    font-weight bold
+
+
+::ng-deep p.questionType:before
+    color #999999
+    content "Question Type:  "
+    font-size 0.7rem
+    font-style italic
+    font-weight bold
+    margin-right 4px !important
+
+
+// This is the "Required" tag on questions.
+::ng-deep p.editFieldLabel
+    color #660000
+    font-size 0.6rem !important
+    font-style italic
+    font-weight bold
+    margin-top 4px !important
+
+
+::ng-deep p.headingText
+    font-weight bold
+    margin-bottom 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.questionText
+    margin-bottom 10px !important
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+::ng-deep p.instructionText
+    font-size 0.9rem
+    margin-left 10px !important
+    margin-top 10px !important
+
+
+/**
+::ng-deep p.instructionText:before
+    content "Instructions "
+    display block
+    text-decoration underline
+    margin-bottom 4px !important
+**/
+
+
+::ng-deep div.dropDownViewModeContainer
+    margin-left 20px !important
+    margin-top 10px !important
+
+
+::ng-deep textarea.instructionField
+    font-style italic
+
+
+::ng-deep div.answerBubbleViewMode
+::ng-deep div.answerBubbleViewModeSelected
+::ng-deep div.questionOptionShape
+::ng-deep div.matrixOptionBubble.optionSelected
+    border solid 1px hsl(0, 0%, 10%)
+
+
+::ng-deep div.answerBubbleViewMode
+::ng-deep div.questionOptionShape
+::ng-deep div.matrixOptionBubble.optionSelected
+    height 0.5rem
+    margin-right 4px !important
+    width 0.5rem
+
+
+::ng-deep div.questionOptionShape
+    border-radius 50%
+
+
+::ng-deep .optionSelected
+::ng-deep .answerBubbleViewModeSelected
+    background-color rgb(51, 204, 255) !important
+
+
+::ng-deep .questionnaireQuestion
+    margin-top 2px !important
+
+
+::ng-deep input.RangeAnswerField
+    color hsl(180, 100%, 32%)
+    margin 0 10px
+    text-align center
+    width 30px
+
+
+::ng-deep .rangeAnswers
+    margin-left 20px !important
+
+
+::ng-deep p.rangeAnswer
+::ng-deep p.rangeAnswerDoubleDigit
+    font-weight bold
+    margin 2px 4px !important
+    padding 0 5px 2px 3px !important
+
+
+::ng-deep p.rangeAnswer.selected
+::ng-deep p.rangeAnswerDoubleDigit.selected
+    border 2px solid #1779ba
+    border-radius 50%
+
+
+::ng-deep p.questionMatrixColumnLabel
+    font-weight bold
+    text-decoration underline
+
+
+::ng-deep table.matrixQuestionTable > tr
+    margin-bottom 4px !important
+    margin-top 4px !important
+
+
+::ng-deep table.matrixQuestionTable > tr:not(:first-child)
+    border-bottom 1px solid #dedede
+
+
+::ng-deep td.spacer
+    visibility: hidden
+
+
+::ng-deep div.buttonDecline
+    display none
+    font-color #660000 !important
+    font-size 0.9rem
+    font-style italic    
+    margin-left 4px !important
+    margin-top 6px !important
+
+
+::ng-deep div.locationMapContainer .leaflet-control-container
+    display none
+
+
+::ng-deep div.locationMapContainer
+    display block
+    height 500px
+    position relative
+    width 100%
+
+::ng-deep .mapCanvas
+    width 100%
+    height 100%
+
+::ng-deep p.locationQuestionDetails
+    font-weight bold
+    margin-bottom 5px !important
+    margin-left 10px !important
+    margin-top 5px !important
+
+
+::ng-deep input.locationLatLon
+    margin-left 10px !important
+
+
+::ng-deep textarea.locationAddress
+    display block
+    height auto
+    margin-bottom 5px !important
+    margin-left 10px !important
+    margin-top 5px !important
+    position relative
+    width 100%
+
+
+::ng-deep div.locationMapContainer
+::ng-deep app-modal-questionnaire-viewer > div.view-only-questionnaire-container > img
+    border 1px solid #777777
+    margin-top 5px !important
+
+
+::ng-deep p.blackText
+    font-weight bold
+    margin-left 10px !important
+    margin-top 10px !important
