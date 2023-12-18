@@ -7,15 +7,15 @@ import {
   Navigate,
   useLocation,
 } from 'react-router-dom';
-import * as ROUTES from '../constants/routes';
-import MapProject from './MapProject';
-import MainMenu from './MainMenu';
-import Logout from './Authentication/Logout/Logout';
-import Login from './Authentication/Login/Login';
-import Callback from './Authentication/Callback/Callback';
-import StreetviewCallback from './Authentication/StreetviewCallback/StreetviewCallback';
-import { RootState } from '../redux/store';
-import { isTokenValid } from '../utils/authUtils';
+import * as ROUTES from './constants/routes';
+import MapProject from './pages/MapProject';
+import MainMenu from './pages/MainMenu';
+import Logout from './pages/Logout/Logout';
+import Login from './pages/Login/Login';
+import Callback from './pages/Callback/Callback';
+import StreetviewCallback from './pages/StreetviewCallback/StreetviewCallback';
+import { RootState } from './redux/store';
+import { isTokenValid } from './utils/authUtils';
 
 interface ProtectedRouteProps {
   isAuthenticated: boolean;
@@ -38,7 +38,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
 function AppRouter() {
   const isAuthenticated = useSelector((state: RootState) =>
-    isTokenValid(state.auth)
+    isTokenValid(state.auth.token)
   );
 
   return (

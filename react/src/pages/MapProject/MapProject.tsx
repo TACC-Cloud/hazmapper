@@ -1,5 +1,5 @@
 import React from 'react';
-import Map from '../Map';
+import Map from '../../components/Map';
 import { tileServerLayers } from '../../__fixtures__/tileServerLayerFixture';
 import { featureCollection } from '../../__fixtures__/featuresFixture';
 import { useParams } from 'react-router-dom';

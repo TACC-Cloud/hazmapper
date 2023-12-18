@@ -1,22 +1,26 @@
-import { AuthState } from '../redux/authSlice';
+import { AuthToken } from '../types';
 
 export const AUTH_KEY = 'auth';
 
-export function isTokenValid(auth: AuthState): boolean {
-  if (!auth.expires) {
+export function isTokenValid(token: AuthToken | null): boolean {
+  if (token) {
+    if (!token.expires) {
+      return false;
+    }
+
+    const now = Date.now();
+    return now < token.expires;
+  } else {
     return false;
   }
-
-  const now = Date.now();
-  return now < auth.expires;
 }
 
-export function getAuthFromLocalStorage(): AuthState {
+export function getTokenFromLocalStorage(): AuthToken {
   try {
     const tokenStr = localStorage.getItem(AUTH_KEY);
     if (tokenStr) {
       const auth = JSON.parse(tokenStr);
-      return { token: auth.token, expires: auth.expires };
+      return auth;
     }
   } catch (e: any) {
     console.error('Error loading state from localStorage:', e);
@@ -24,10 +28,10 @@ export function getAuthFromLocalStorage(): AuthState {
   return { token: null, expires: null };
 }
 
-export function setAuthToLocalStorage(auth: AuthState) {
-  localStorage.setItem(AUTH_KEY, JSON.stringify(auth));
+export function setTokenToLocalStorage(token: AuthToken) {
+  localStorage.setItem(AUTH_KEY, JSON.stringify(token));
 }
 
-export function removeAuthFromLocalStorage() {
+export function removeTokenFromLocalStorage() {
   localStorage.removeItem(AUTH_KEY);
 }
