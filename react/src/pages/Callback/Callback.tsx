@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { loginSuccess, logout } from '../../../redux/authSlice';
+import { loginSuccess, logout } from '../../redux/authSlice';
 
 export default function CallbackPage() {
   const dispatch = useDispatch();

@@ -8,7 +8,7 @@
 
 ## Related Jira tickets: ##
 
-* [DES-9999](https://jira.tacc.utexas.edu/browse/DES-9999)
+* [WG-XYZ](https://tacc-main.atlassian.net/browse/WG-XYZ)
 
 ## Summary of Changes: ##
 
