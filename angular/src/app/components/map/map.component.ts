@@ -352,7 +352,6 @@ export class MapComponent implements OnInit, OnDestroy {
           feat = L.geoJSON(d, { style: d.properties.style });
         } else if (d.featureType() === 'point_cloud') {
           feat = L.geoJSON(d, { style: d.properties.style });
-          this.features.addLayer(feat);
           const markerPosition = calculateMarkerPosition(d.geometry);
           const pointCloudMarker = createMarker(d, markerPosition);
           pointCloudMarker.on('click', (ev) => {
