@@ -22,7 +22,7 @@ export function getTokenFromLocalStorage(): AuthToken {
       const auth = JSON.parse(tokenStr);
       return auth;
     }
-  } catch (e: any) {
+  } catch (e) {
     console.error('Error loading state from localStorage:', e);
   }
   return { token: null, expires: null };

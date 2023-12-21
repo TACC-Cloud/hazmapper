@@ -19,6 +19,7 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
   const { projectUUID } = useParams<{ projectUUID: string }>();
 
   console.log(projectUUID);
+  console.log(isPublic);
 
   return (
     <div style={{ width: '100vw', height: '100vh' }}>
