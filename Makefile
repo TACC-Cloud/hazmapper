@@ -8,7 +8,7 @@ build-angular:
 .PHONY: buil-react
 build-react:
 	docker build -t taccaci/hazmapper-react:$(TAG) -f react/Dockerfile .
-	docker tag taccaci/hazmapper-react:$(TAG) taccaci/hazmapper:latest
+	docker tag taccaci/hazmapper-react:$(TAG) taccaci/hazmapper-react:latest
 
 .PHONY: build
 build:
