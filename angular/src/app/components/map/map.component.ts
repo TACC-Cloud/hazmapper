@@ -8,7 +8,7 @@ import '@bagage/leaflet.vectorgrid';
 import { Viewer, ViewerOptions } from 'mapillary-js';
 import { ProjectsService } from '../../services/projects.service';
 import { GeoDataService } from '../../services/geo-data.service';
-import { createMarker } from '../../utils/leafletUtils';
+import { createMarker, calculateMarkerPosition } from '../../utils/leafletUtils';
 import { Feature } from 'geojson';
 import { FeatureGroup, Layer, LayerGroup, LeafletMouseEvent, TileLayer } from 'leaflet';
 import * as turf from '@turf/turf';
@@ -350,6 +350,14 @@ export class MapComponent implements OnInit, OnDestroy {
         let feat: LayerGroup;
         if (d.geometry.type === 'Polygon' && d.properties.style) {
           feat = L.geoJSON(d, { style: d.properties.style });
+        } else if (d.featureType() === 'point_cloud') {
+          feat = L.geoJSON(d, { style: d.properties.style });
+          const markerPosition = calculateMarkerPosition(d.geometry);
+          const pointCloudMarker = createMarker(d, markerPosition);
+          pointCloudMarker.on('click', (ev) => {
+            this.featureClickHandler(ev, 'click');
+          });
+          markers.addLayer(pointCloudMarker);
         } else if (d.featureType() === 'streetview') {
           feat = L.geoJSON(d, {
             style: streetviewAssetStyles.feature.default,
@@ -398,13 +406,22 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   featureClickHandler(ev: any, clickType: string): void {
-    if (ev.layer.feature.featureType() === 'streetview') {
-      this.streetviewService.sequenceFeatureToActiveAsset(ev.layer.feature).subscribe((e) => {
-        this.mapillaryClickHandler(e, clickType);
-      });
-    } else {
-      const f = ev.layer.feature;
-      this.geoDataService.activeFeature = f;
+    let f;
+    // First checks if clicked object is a marker
+    if (ev.target && ev.target.options.feature) {
+      f = ev.target.options.feature;
+      // Otherwise checks if a geoJSON layer with a feature prop
+    } else if (ev.layer && ev.layer.feature) {
+      f = ev.layer.feature;
+    }
+    if (f) {
+      if (f.featureType() === 'streetview') {
+        this.streetviewService.sequenceFeatureToActiveAsset(f).subscribe((e) => {
+          this.mapillaryClickHandler(e, clickType);
+        });
+      } else {
+        this.geoDataService.activeFeature = f;
+      }
     }
   }
 

@@ -19,7 +19,8 @@ export class ModalQuestionnaireViewerComponent implements OnInit {
   ngOnInit() {
     this.projectService.activeProject.subscribe((p) => {
       this.geoDataService.getFeatureAssetSource(this.feature, '/questionnaire.rq').subscribe((featureSource: any) => {
-        const questionnaire = QuestionnaireBuilder.renderQuestionnaire(featureSource);
+        const asset_path = this.geoDataService.getFeatureAssetSourcePath(this.feature);
+        const questionnaire = QuestionnaireBuilder.renderQuestionnaire(featureSource, asset_path);
         $('#questionnaire-view').after(questionnaire); // Insert new elements after <img>
       });
     });

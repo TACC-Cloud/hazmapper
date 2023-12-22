@@ -2,6 +2,22 @@
 
 ## [Unreleased]
 
+## [2.16] - 2023-12-19
+
+### Added
+
+- WG-96, WG-170: Support RAPID questionnaire file format (#167, #186, #178, #177, #176, #173, #174, #171, #169, #165, #144)
+- WG-138, WG-139, WG-140: Improve logs for analytics (#170, #166,  #179, #180)
+- WG-91: Allow non-persistent tile layer adjustments in public hazmapper maps (#175)
+
+### Changed
+
+- WG-194: Update Jira links in PR template (#182)
+
+### Fixed
+
+- WG-83: Handle overlapping point clouds (#181)
+
 ## [2.15] - 2023-10-13
 
 ### Fixed
@@ -149,9 +165,8 @@ _No release_
 
 ## [2.1] - 2020-10-05
 
-
-
-[unreleased]: https://github.com/TACC-Cloud/hazmapper/compare/v2.15...HEAD
+[unreleased]: https://github.com/TACC-Cloud/hazmapper/compare/v2.16...HEAD
+[2.16]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.16
 [2.15]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.15
 [2.14]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.14
 [2.13]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.13
