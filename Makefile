@@ -1,11 +1,20 @@
 TAG := $(shell git log --format=%h -1)
-IMAGE ?= taccaci/hazmapper:$(TAG)
+
+.PHONY: build-angular
+build-angular:
+	docker build -t taccaci/hazmapper:$(TAG) -f angular/Dockerfile .
+	docker tag taccaci/hazmapper:$(TAG) taccaci/hazmapper:latest
+
+.PHONY: buil-react
+build-react:
+	docker build -t taccaci/hazmapper-react:$(TAG) -f react/Dockerfile .
+	docker tag taccaci/hazmapper-react:$(TAG) taccaci/hazmapper:latest
 
 .PHONY: build
 build:
-	docker build -t $(IMAGE) -f angular/Dockerfile .
-	docker tag taccaci/hazmapper:${TAG} taccaci/hazmapper:latest
+	make build-angular && make build-react
 
 .PHONY: deploy
 deploy:
-	docker push $(IMAGE)
+	docker push taccaci/hazmapper:$(TAG)
+	docker push taccaci/hazmapper-react:$(TAG)
