@@ -26,7 +26,7 @@ function getDesignsafePortalUrl(backend: string): string {
 }
 
 // https://vitejs.dev/config/
-export default defineConfig(({ command, mode }) => {
+export default defineConfig(({ command, mode }) => { // eslint-disable-line
   const envFile = loadEnv(mode, process.cwd(), '');
   const targetEnvironment = envFile.TARGET;
   const env = {
