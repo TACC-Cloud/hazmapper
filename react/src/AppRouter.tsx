@@ -22,6 +22,13 @@ interface ProtectedRouteProps {
   children: ReactElement;
 }
 
+function getBasePath() {
+  const paths = ['/react-staging', '/react-dev', '/staging', '/dev'];
+  const currentPath = window.location.pathname;
+  const basePath = paths.find(path => currentPath.startsWith(path));
+  return basePath || '/';
+}
+
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
   isAuthenticated,
@@ -42,7 +49,7 @@ function AppRouter() {
   );
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={getBasePath()}>
       <Routes>
         <Route
           path={ROUTES.MAIN}
