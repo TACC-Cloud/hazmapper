@@ -103,8 +103,3 @@ Run `npm run lint:css -- --fix` to fix css files.
 ### Code scaffolding
 
 Run `ng generate component components/component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Kubernetes (Production/Staging environments)
-
-Information on Kubernetes configuration for production and staging environments can be found in the [kube/README.md](kube/README.md) including information
-on kube commands and Jenkins deployment workflows.
