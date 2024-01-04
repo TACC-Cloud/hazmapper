@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { isTokenValid } from '../../utils/authUtils';
+import { useAppConfiguration } from '../../hooks';
 
 function Login() {
   const location = useLocation();
@@ -10,31 +11,32 @@ function Login() {
   const isAuthenticated = useSelector((state: RootState) =>
     isTokenValid(state.auth.token)
   );
-
+  const configuration = useAppConfiguration();
   useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const toParam = queryParams.get('to') || '/';
+    if (configuration) {
+      const queryParams = new URLSearchParams(location.search);
+      const toParam = queryParams.get('to') || '/';
 
-    if (isAuthenticated) {
-      navigate(toParam);
-    } else {
-      const state = Math.random().toString(36);
-      // Save the authState parameter to localStorage
-      localStorage.setItem('authState', state);
-      localStorage.setItem('toParam', toParam);
+      if (isAuthenticated) {
+        navigate(toParam);
+      } else {
+        const state = Math.random().toString(36);
+        // Save the authState parameter to localStorage
+        localStorage.setItem('authState', state);
+        localStorage.setItem('toParam', toParam);
 
-      // TODO check for staging/prod
-      const callbackUrl = `${window.location.origin}/callback`;
+        const callbackUrl =
+          window.location.origin + configuration.basePath + 'callback';
 
-      // TODO make auth/server configurable
-      const client_id = 'RMCJHgW9CwJ6mKjhLTDnUYBo9Hka';
+        const clientId = configuration.clientId;
 
-      // Construct the authentication URL with the client_id, redirect_uri, scope, response_type, and state parameters
-      const authUrl = `https://agave.designsafe-ci.org/authorize?client_id=${client_id}&redirect_uri=${callbackUrl}&scope=openid&response_type=token&state=${state}`;
+        // Construct the authentication URL with the client_id, redirect_uri, scope, response_type, and state parameters
+        const authUrl = `https://agave.designsafe-ci.org/authorize?client_id=${clientId}&redirect_uri=${callbackUrl}&scope=openid&response_type=token&state=${state}`;
 
-      window.location.replace(authUrl);
+        window.location.replace(authUrl);
+      }
     }
-  }, []);
+  }, [configuration]);
 
   return <div>Logging in...</div>;
 }

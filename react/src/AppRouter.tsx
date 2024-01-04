@@ -16,17 +16,11 @@ import Callback from './pages/Callback/Callback';
 import StreetviewCallback from './pages/StreetviewCallback/StreetviewCallback';
 import { RootState } from './redux/store';
 import { isTokenValid } from './utils/authUtils';
+import { useBasePath } from './hooks/environment';
 
 interface ProtectedRouteProps {
   isAuthenticated: boolean;
   children: ReactElement;
-}
-
-function getBasePath() {
-  const paths = ['/react-staging', '/react-dev', '/staging', '/dev'];
-  const currentPath = window.location.pathname;
-  const basePath = paths.find(path => currentPath.startsWith(path));
-  return basePath || '/';
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
@@ -48,8 +42,10 @@ function AppRouter() {
     isTokenValid(state.auth.token)
   );
 
+  const basePath = useBasePath();
+
   return (
-    <BrowserRouter basename={getBasePath()}>
+    <BrowserRouter basename={basePath}>
       <Routes>
         <Route
           path={ROUTES.MAIN}
