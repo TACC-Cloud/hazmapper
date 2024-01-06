@@ -12,31 +12,28 @@ function Login() {
     isTokenValid(state.auth.token)
   );
   const configuration = useAppConfiguration();
-  useEffect(() => {
-    if (configuration) {
-      const queryParams = new URLSearchParams(location.search);
-      const toParam = queryParams.get('to') || '/';
 
-      if (isAuthenticated) {
-        navigate(toParam);
-      } else {
-        const state = Math.random().toString(36);
-        // Save the authState parameter to localStorage
-        localStorage.setItem('authState', state);
-        localStorage.setItem('toParam', toParam);
+  const queryParams = new URLSearchParams(location.search);
+  const toParam = queryParams.get('to') || '/';
 
-        const callbackUrl =
-          window.location.origin + configuration.basePath + 'callback';
+  if (isAuthenticated) {
+    navigate(toParam);
+  } else {
+    const state = Math.random().toString(36);
+    // Save the authState parameter to localStorage
+    localStorage.setItem('authState', state);
+    localStorage.setItem('toParam', toParam);
 
-        const clientId = configuration.clientId;
+    const callbackUrl =
+      window.location.origin + configuration.basePath + 'callback';
 
-        // Construct the authentication URL with the client_id, redirect_uri, scope, response_type, and state parameters
-        const authUrl = `https://agave.designsafe-ci.org/authorize?client_id=${clientId}&redirect_uri=${callbackUrl}&scope=openid&response_type=token&state=${state}`;
+    const clientId = configuration.clientId;
 
-        window.location.replace(authUrl);
-      }
-    }
-  }, [configuration]);
+    // Construct the authentication URL with the client_id, redirect_uri, scope, response_type, and state parameters
+    const authUrl = `https://agave.designsafe-ci.org/authorize?client_id=${clientId}&redirect_uri=${callbackUrl}&scope=openid&response_type=token&state=${state}`;
+
+    window.location.replace(authUrl);
+  }
 
   return <div>Logging in...</div>;
 }
