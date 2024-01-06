@@ -1,4 +1,7 @@
-export enum EnvironmentType {
+/**
+ * Environment for Geoapi Backend
+ */
+export enum GeoapiBackendEnvironment {
   Production = 'production',
   Staging = 'staging',
   Dev = 'dev',
@@ -6,18 +9,42 @@ export enum EnvironmentType {
 }
 
 /**
+ * Environment for Geoapi Backend
+ */
+export enum DesignSafePortalEnvironment {
+  Production = 'production',
+  Dev = 'dev',
+}
+
+/**
+ *  Known Apis
+ */
+export enum ApiService {
+  /* Geoapi api */
+  Geoapi = 'geoapi',
+
+  /* DesignSafe api - for project listings */
+  DesignSafe = 'designsafe',
+
+  /* Tapis api - for system listings and file operations */
+  Tapis = 'tapis',
+
+  /* Mapillary */
+  Mapillary = 'mapillary',
+}
+
+/**
  * Configuration settings for local development.
  *
- * @param jwt
- * @param geoapiBackend The type of backend environment (production, staging, or development).
- * @param production A boolean indicating whether the app is running in production mode.
+ * These can be configured by developer in secret_local.ts (see README)
+ *
  */
 export interface LocalAppConfiguration {
-  /* JWT token used for authentication during local development. */
+  /* Developer's JWT token used for authentication during local development. */
   jwt: string;
 
   /* The type of backend environment (production, staging, development, or local) */
-  geoapiBackend: EnvironmentType;
+  geoapiBackend: GeoapiBackendEnvironment;
 
   /* TODO */
   production: boolean;
@@ -48,10 +75,13 @@ export interface AppConfiguration {
   /** Client ID used for Tapis authentication. */
   clientId: string;
 
+  /* The type of backend environment */
+  geoapiBackend: GeoapiBackendEnvironment;
+
   /** URL for the GeoAPI service. */
   geoapiUrl: string;
 
-  /** URL for the DesignSafe API. */
+  /** URL for the DesignSafe/tapis API. */
   designSafeUrl: string;
 
   /** URL for the DesignSafe portal. */

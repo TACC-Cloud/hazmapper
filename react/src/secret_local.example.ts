@@ -1,9 +1,10 @@
-import { EnvironmentType, LocalAppConfiguration } from './types';
+import { GeoapiBackendEnvironment, LocalAppConfiguration } from './types';
 
-const jwt = 'INSERT YOUR JWT HERE; See Readme and ';
+// prettier-ignore
+const jwt = 'INSERT YOUR JWT HERE; See README ';
 
-export const localDevelopmentConfiguration = {
+export const localDevelopmentConfiguration: LocalAppConfiguration = {
   jwt: jwt,
-  geoapiBackend: EnvironmentType.Local,
+  geoapiBackend: GeoapiBackendEnvironment.Local,
   production: false,
 };

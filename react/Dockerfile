@@ -4,8 +4,8 @@ RUN mkdir /www
 COPY react /www
 WORKDIR /www
 
-# TODO remove or update
-RUN cp .env.example .env
+# Creating dummy local file as it is not dynamically loaded; not actually used in prod  TODO_V3
+RUN cp src/secret_local.example.ts src/secret_local.ts
 
 RUN npm ci
 RUN npm run build

@@ -9,6 +9,5 @@ export default defineConfig(({ command, mode }) => { // eslint-disable-line
       port: 4200,
       host: 'localhost',
     },
-
   };
 });
