@@ -71,8 +71,8 @@ export const useAppConfiguration = (): AppConfiguration => {
     }
 
     // local devevelopers can use localhost or hazmapper.local but
-    // hazmapper.local is preferred as TAPIS supports it as a frame ancestor
-    // (i.e. it allows for point cloud iframe preview)
+    // hazmapper.local has been preferred in the past as TAPIS only supported it as a frame ancestor
+    // then (i.e. it allows for point cloud iframe preview)
     const clientId = /^localhost/.test(hostname)
       ? 'XgCBlhfAaqfv7jTu3NRc4IJDGdwa'
       : 'Eb9NCCtWkZ83c01UbIAITFvhD9ka';
