@@ -64,7 +64,9 @@ export const useAppConfiguration = (): AppConfiguration => {
       localDevelopmentConfiguration.geoapiBackend ===
       GeoapiBackendEnvironment.Local
     ) {
-      if (localDevelopmentConfiguration.jwt.startsWith("INSERT YOUR JWT HERE")) {
+      if (
+        localDevelopmentConfiguration.jwt.startsWith('INSERT YOUR JWT HERE')
+      ) {
         console.log('JWT has not been added to secret_local.ts; see README');
         throw new Error('JWT has not been added to secret_local.ts');
       }
