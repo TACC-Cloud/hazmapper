@@ -10,11 +10,11 @@ import { useProjects } from '../../hooks';
 function MainMenu() {
   const { data, isLoading, error } = useProjects();
   if (isLoading) {
-    return;
-    <>
+    return(
+<>
       <SectionHeader isNestedHeader>Main Menu</SectionHeader>
-      <LoadingSpinner />;
-    </>;
+      <LoadingSpinner />
+      </>)
   }
   if (error) {
     return (
