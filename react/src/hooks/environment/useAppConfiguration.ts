@@ -67,7 +67,7 @@ export const useAppConfiguration = (): AppConfiguration => {
       if (
         localDevelopmentConfiguration.jwt.startsWith('INSERT YOUR JWT HERE')
       ) {
-        console.log('JWT has not been added to secret_local.ts; see README');
+        console.error('JWT has not been added to secret_local.ts; see README');
         throw new Error('JWT has not been added to secret_local.ts');
       }
     }
