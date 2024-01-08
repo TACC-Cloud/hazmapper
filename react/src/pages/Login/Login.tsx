@@ -25,7 +25,10 @@ function Login() {
     localStorage.setItem('toParam', toParam);
 
     const callbackUrl =
-      window.location.origin + configuration.basePath + 'callback';
+      window.location.origin + configuration.basePath + '/callback';
+
+    //remove any double slashes
+    callbackUrl.replace(/([^:])(\/{2,})/g, '$1/');
 
     const clientId = configuration.clientId;
 
