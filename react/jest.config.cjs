@@ -83,7 +83,6 @@ module.exports = {
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   moduleNameMapper: {
     '.*\\.(css|scss|sass)$': 'identity-obj-proxy',
-    '^_common(.*)$': '<rootDir>/src/components/_common$1',
     '^utils(.*)$': '<rootDir>/src/utils$1',
     '^hooks(.*)$': '<rootDir>/src/hooks$1',
     '^react-leaflet$': require.resolve('react-leaflet')
@@ -180,7 +179,7 @@ module.exports = {
   // timers: "real",
 
   // A map from regular expressions to paths to transformers
-  transform: {'^.+\\.js?$': 'babel-jest'},
+  transform: {'^.+\\.(js|jsx)?$': 'babel-jest'},
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   transformIgnorePatterns: [`/node_modules/(?!${esModules})`],

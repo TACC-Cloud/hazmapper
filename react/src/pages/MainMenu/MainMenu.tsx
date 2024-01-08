@@ -3,18 +3,18 @@ import {
   LoadingSpinner,
   InlineMessage,
   SectionHeader,
-  SectionTableWrapper,
 } from '../../core-components';
 import { useProjects } from '../../hooks';
 
 function MainMenu() {
   const { data, isLoading, error } = useProjects();
   if (isLoading) {
-    return(
-<>
-      <SectionHeader isNestedHeader>Main Menu</SectionHeader>
-      <LoadingSpinner />
-      </>)
+    return (
+      <>
+        <SectionHeader isNestedHeader>Main Menu</SectionHeader>
+        <LoadingSpinner />
+      </>
+    );
   }
   if (error) {
     return (
