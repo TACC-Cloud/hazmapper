@@ -20,10 +20,6 @@ button .loading-icon {
   width: auto;
 }
 
-
-
-
-
 /* FAQ: Clone missing Bootstrap v5 CSS
   - LoadingSpinner uses Reactstrap. TUP-UI installed Reactstrap v9.
   - Reactstrap v9 assumes Bootstrap v5, which uses class `visually-hidden`.

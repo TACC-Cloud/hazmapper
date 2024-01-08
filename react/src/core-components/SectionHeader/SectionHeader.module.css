@@ -11,10 +11,9 @@
 }
 .root:not(.for-form, .for-table, .for-list) {
   padding-bottom: 15px;
-  border-bottom: var(--global-border-width--normal) solid var(--global-color-primary--dark);
+  border-bottom: var(--global-border-width--normal) solid
+    var(--global-color-primary--dark);
 }
-
-
 
 /* Elements */
 
@@ -25,8 +24,6 @@
 .heading ~ a {
   font-weight: var(--bold);
 }
-
-
 
 /* Modifiers */
 

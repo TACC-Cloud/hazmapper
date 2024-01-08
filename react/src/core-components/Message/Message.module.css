@@ -132,9 +132,7 @@ p.is-scope-section {
 
 .is-scope-inline {
   &.is-error a {
-    color: var(
-      --global-color-danger--normal
-    );
+    color: var(--global-color-danger--normal);
   }
   /* Distinguish text and `.wb-link`, and link states default and hover */
   &.is-error a:link {

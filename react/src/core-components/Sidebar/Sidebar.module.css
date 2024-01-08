@@ -35,7 +35,6 @@
   color: var(--global-color-primary--light);
 }
 
-
 /* Elements: Icon & Text */
 
 .link > *:first-child /* icon (or text, if icon is missing) */ {
