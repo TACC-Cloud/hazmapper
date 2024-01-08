@@ -1,2 +1,9 @@
-node_modules/
 .git
+**/node_modules
+**/build
+
+# Angaular jwt file
+**/jwt.ts
+
+# React project secrets
+**/secret_local.ts

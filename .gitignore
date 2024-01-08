@@ -1,20 +1,14 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
+**/node_modules
+**/build
+**/dist
+**/tmp
+**/out-tsc
 
-# compiled output
-/dist
-src/environments/jwt.ts
-/tmp
-/out-tsc
+# Angaular jwt file
+**/jwt.ts
 
-angular/dist
-angular/src/environments/jwt.ts
-angular/tmp
-angular/out-tsc
-# Only exists if Bazel was run
-/bazel-out
-__pycache__
-# dependencies
-node_modules
+# React project secrets
+**/secret_local.ts
 
 # profiling files
 chrome-profiler-events.json
