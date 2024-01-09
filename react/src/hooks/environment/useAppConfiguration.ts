@@ -106,9 +106,12 @@ export const useAppConfiguration = (): AppConfiguration => {
       /^hazmapper.tacc.utexas.edu/.test(hostname) &&
       pathname.startsWith('/staging')
     ) {
+      const clientId = /^staging-react/.test(basePath)
+      ? 'AhV_h3Ilvrfs1S2Cj10yj82G0Uoa'
+      : 'foitdqFcimPzKZuMhbQ1oyh3Anka';
       const appConfig: AppConfiguration = {
         basePath: basePath,
-        clientId: 'foitdqFcimPzKZuMhbQ1oyh3Anka',
+        clientId: clientId,
         geoapiBackend: GeoapiBackendEnvironment.Staging,
         geoapiUrl: getGeoapiUrl(GeoapiBackendEnvironment.Staging),
         designSafeUrl: 'https://agave.designsafe-ci.org/',
@@ -128,9 +131,12 @@ export const useAppConfiguration = (): AppConfiguration => {
       /^hazmapper.tacc.utexas.edu/.test(hostname) &&
       pathname.startsWith('/dev')
     ) {
+      const clientId = /^dev-react/.test(basePath)
+      ? '9rWjQLiJb0XPXHicmUh1RUq6rOEa'
+      : 'oEuGsl7xi015wnrEpxIeUmvzc6Qa';
       const appConfig: AppConfiguration = {
         basePath: basePath,
-        clientId: 'oEuGsl7xi015wnrEpxIeUmvzc6Qa',
+        clientId: clientId,
         geoapiBackend: GeoapiBackendEnvironment.Dev,
         geoapiUrl: getGeoapiUrl(GeoapiBackendEnvironment.Dev),
         designSafeUrl: 'https://agave.designsafe-ci.org/',
@@ -148,9 +154,12 @@ export const useAppConfiguration = (): AppConfiguration => {
         'MLY|4936281379826603|f8c4732d3c9d96582b86158feb1c1a7a';
       return appConfig;
     } else if (/^hazmapper.tacc.utexas.edu/.test(hostname)) {
+      const clientId = /^hazmapper-react/.test(basePath)
+      ? 'XEMnINR8b8hA6kFxE69HVTyoNCga'
+      : 'tMvAiRdcsZ52S_89lCkO4x3d6VMa';
       const appConfig: AppConfiguration = {
         basePath: basePath,
-        clientId: 'tMvAiRdcsZ52S_89lCkO4x3d6VMa',
+        clientId: clientId,
         geoapiBackend: GeoapiBackendEnvironment.Production,
         geoapiUrl: getGeoapiUrl(GeoapiBackendEnvironment.Production),
         designSafeUrl: 'https://agave.designsafe-ci.org/',
