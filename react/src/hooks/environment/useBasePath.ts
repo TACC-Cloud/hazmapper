@@ -6,8 +6,9 @@ import { useMemo } from 'react';
 const useBasePath = (): string => {
   const basePath = useMemo(() => {
     const paths: string[] = [
-      '/react-staging',
-      '/react-dev',
+      '/hazmapper-react',
+      '/staging-react',
+      '/dev-react',
       '/staging',
       '/dev',
     ];
