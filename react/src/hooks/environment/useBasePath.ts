@@ -5,10 +5,13 @@ import { useMemo } from 'react';
  */
 const useBasePath = (): string => {
   const basePath = useMemo(() => {
+    // note that path order matters
+    // as we use startsWith to find a match
     const paths: string[] = [
       '/hazmapper-react',
       '/staging-react',
       '/dev-react',
+      '/hazmapper',
       '/staging',
       '/dev',
     ];
