@@ -49,6 +49,8 @@ export const useAppConfiguration = (): AppConfiguration => {
     const hostname = window && window.location && window.location.hostname;
     const pathname = window && window.location && window.location.pathname;
 
+    console.log("hostname: ", hostname, "pathname", pathname, "basePath", basePath);
+
     const mapillaryConfig: MapillaryConfiguration = {
       authUrl: 'https://www.mapillary.com/connect',
       tokenUrl: 'https://graph.mapillary.com/token',
@@ -131,6 +133,7 @@ export const useAppConfiguration = (): AppConfiguration => {
       /^hazmapper.tacc.utexas.edu/.test(hostname) &&
       pathname.startsWith('/dev')
     ) {
+      console.log("hosname: ", hostname, "basePath", basePath);
       const clientId = /^dev-react/.test(basePath)
       ? '9rWjQLiJb0XPXHicmUh1RUq6rOEa'
       : 'oEuGsl7xi015wnrEpxIeUmvzc6Qa';
