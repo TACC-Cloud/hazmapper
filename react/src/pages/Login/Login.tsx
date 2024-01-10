@@ -24,16 +24,9 @@ function Login() {
     localStorage.setItem('authState', state);
     localStorage.setItem('toParam', toParam);
 
-    const callbackUrl =
-      window.location.origin + configuration.basePath + '/callback';
-
-    //remove any double slashes
-    callbackUrl.replace(/([^:])(\/{2,})/g, '$1/');
-
-    const clientId = configuration.clientId;
-
+    const callbackUrl = (window.location.origin + configuration.basePath + '/callback').replace(/([^:])(\/{2,})/g, '$1/');
     // Construct the authentication URL with the client_id, redirect_uri, scope, response_type, and state parameters
-    const authUrl = `https://agave.designsafe-ci.org/authorize?client_id=${clientId}&redirect_uri=${callbackUrl}&scope=openid&response_type=token&state=${state}`;
+    const authUrl = `https://agave.designsafe-ci.org/authorize?client_id=${configuration.clientId}&redirect_uri=${callbackUrl}&scope=openid&response_type=token&state=${state}`;
 
     window.location.replace(authUrl);
   }
