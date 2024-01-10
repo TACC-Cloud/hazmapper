@@ -5,11 +5,11 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hazmapper</title>
+    <base id="base" />
     <script>
       var hostname = window.location.hostname;
       var pathname = window.location.pathname;
-      <base id="base" />
-
+      debugger
       // Set base URL dynamically
       if (/^hazmapper.tacc.utexas.edu/.test(hostname) && pathname.startsWith('/staging-react')) {
           document.getElementById('base').href = '/staging-react/';

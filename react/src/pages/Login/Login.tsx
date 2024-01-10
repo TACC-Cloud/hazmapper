@@ -19,6 +19,7 @@ function Login() {
   if (isAuthenticated) {
     navigate(toParam);
   } else {
+    debugger;
     const state = Math.random().toString(36);
     // Save the authState parameter to localStorage
     localStorage.setItem('authState', state);
