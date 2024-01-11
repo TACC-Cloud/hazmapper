@@ -107,9 +107,9 @@ export const useAppConfiguration = (): AppConfiguration => {
       /^hazmapper.tacc.utexas.edu/.test(hostname) &&
       pathname.startsWith('/staging')
     ) {
-      const clientId = basePath.includes("react")
-      ? 'AhV_h3Ilvrfs1S2Cj10yj82G0Uoa' // "staging-react" client
-      : 'foitdqFcimPzKZuMhbQ1oyh3Anka'; // "staging client" client
+      const clientId = basePath.includes('react')
+        ? 'AhV_h3Ilvrfs1S2Cj10yj82G0Uoa' // "staging-react" client
+        : 'foitdqFcimPzKZuMhbQ1oyh3Anka'; // "staging client" client
       const appConfig: AppConfiguration = {
         basePath: basePath,
         clientId: clientId,
@@ -120,7 +120,7 @@ export const useAppConfiguration = (): AppConfiguration => {
           DesignSafePortalEnvironment.Dev
         ),
         mapillary: mapillaryConfig,
-        taggitUrl: origin + '/taggit-staging'
+        taggitUrl: origin + '/taggit-staging',
       };
 
       appConfig.mapillary.clientId = '4936281379826603';
@@ -133,9 +133,9 @@ export const useAppConfiguration = (): AppConfiguration => {
       /^hazmapper.tacc.utexas.edu/.test(hostname) &&
       pathname.startsWith('/dev')
     ) {
-      const clientId = basePath.includes("react")
-      ? '9rWjQLiJb0XPXHicmUh1RUq6rOEa' // "react-dev" client
-      : 'oEuGsl7xi015wnrEpxIeUmvzc6Qa'; // "dev" client
+      const clientId = basePath.includes('react')
+        ? '9rWjQLiJb0XPXHicmUh1RUq6rOEa' // "react-dev" client
+        : 'oEuGsl7xi015wnrEpxIeUmvzc6Qa'; // "dev" client
       const appConfig: AppConfiguration = {
         basePath: basePath,
         clientId: clientId,
@@ -146,7 +146,7 @@ export const useAppConfiguration = (): AppConfiguration => {
           DesignSafePortalEnvironment.Dev
         ),
         mapillary: mapillaryConfig,
-        taggitUrl: origin + '/taggit-dev'
+        taggitUrl: origin + '/taggit-dev',
       };
 
       // TODO_REACT mapillary config a copy from /staging not /dev
@@ -157,9 +157,9 @@ export const useAppConfiguration = (): AppConfiguration => {
         'MLY|4936281379826603|f8c4732d3c9d96582b86158feb1c1a7a';
       return appConfig;
     } else if (/^hazmapper.tacc.utexas.edu/.test(hostname)) {
-      const clientId = basePath.includes("react")
-      ? 'XEMnINR8b8hA6kFxE69HVTyoNCga' // "hazmapper-react" client
-      : 'tMvAiRdcsZ52S_89lCkO4x3d6VMa'; // "hazmapper" client
+      const clientId = basePath.includes('react')
+        ? 'XEMnINR8b8hA6kFxE69HVTyoNCga' // "hazmapper-react" client
+        : 'tMvAiRdcsZ52S_89lCkO4x3d6VMa'; // "hazmapper" client
       const appConfig: AppConfiguration = {
         basePath: basePath,
         clientId: clientId,
