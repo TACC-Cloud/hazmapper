@@ -19,8 +19,6 @@ const useBasePath = (): string => {
     const base: string | undefined = paths.find((path) =>
       currentPath.startsWith(path)
     );
-    console.log(currentPath);
-    console.log(base);
     return base || '/';
   }, []);
 

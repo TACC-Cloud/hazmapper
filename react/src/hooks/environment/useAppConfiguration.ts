@@ -49,8 +49,6 @@ export const useAppConfiguration = (): AppConfiguration => {
     const hostname = window && window.location && window.location.hostname;
     const pathname = window && window.location && window.location.pathname;
 
-    console.log("hostname: ", hostname, "pathname", pathname, "basePath", basePath);
-
     const mapillaryConfig: MapillaryConfiguration = {
       authUrl: 'https://www.mapillary.com/connect',
       tokenUrl: 'https://graph.mapillary.com/token',
