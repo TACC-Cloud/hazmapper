@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-// TODO_V3 consider dynamically importing local configuration but then we would need to refactor things as initial configuration is async (context?)
+// TODO_REACT consider dynamically importing local configuration but then we would need to refactor things as initial configuration is async (context?)
 import { localDevelopmentConfiguration } from '../../secret_local';
 
 import {
@@ -149,7 +149,7 @@ export const useAppConfiguration = (): AppConfiguration => {
         taggitUrl: origin + '/taggit-dev',
       };
 
-      // TODO_REACT mapillary config a copy from /staging not /dev
+      // TODO_REACT mapillary config is currently copy from /staging and not correct for /dev
       appConfig.mapillary.clientId = '4936281379826603';
       appConfig.mapillary.clientSecret =
         'MLY|4936281379826603|cafd014ccd8cfc983e47c69c16082c7b';

@@ -4,7 +4,7 @@
 **/tmp
 **/out-tsc
 
-# Angaular jwt file
+# Angular jwt file
 **/jwt.ts
 
 # React project secrets
