@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
@@ -13,27 +13,29 @@ function Login() {
   );
   const configuration = useAppConfiguration();
 
-  const queryParams = new URLSearchParams(location.search);
-  const toParam = queryParams.get('to') || '/';
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const toParam = queryParams.get('to') || '/';
 
-  if (isAuthenticated) {
-    navigate(toParam);
-  } else {
-    const state = Math.random().toString(36);
-    // Save the authState parameter to localStorage
-    localStorage.setItem('authState', state);
-    localStorage.setItem('toParam', toParam);
+    if (isAuthenticated) {
+      navigate(toParam);
+    } else {
+      const state = Math.random().toString(36);
+      // Save the authState parameter to localStorage
+      localStorage.setItem('authState', state);
+      localStorage.setItem('toParam', toParam);
 
-    const callbackUrl = (
-      window.location.origin +
-      configuration.basePath +
-      '/callback'
-    ).replace(/([^:])(\/{2,})/g, '$1/');
-    // Construct the authentication URL with the client_id, redirect_uri, scope, response_type, and state parameters
-    const authUrl = `https://agave.designsafe-ci.org/authorize?client_id=${configuration.clientId}&redirect_uri=${callbackUrl}&scope=openid&response_type=token&state=${state}`;
+      const callbackUrl = (
+        window.location.origin +
+        configuration.basePath +
+        '/callback'
+      ).replace(/([^:])(\/{2,})/g, '$1/');
+      // Construct the authentication URL with the client_id, redirect_uri, scope, response_type, and state parameters
+      const authUrl = `https://agave.designsafe-ci.org/authorize?client_id=${configuration.clientId}&redirect_uri=${callbackUrl}&scope=openid&response_type=token&state=${state}`;
 
-    window.location.replace(authUrl);
-  }
+      window.location.replace(authUrl);
+    }
+  }, []);
 
   return <div>Logging in...</div>;
 }
