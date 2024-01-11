@@ -45,9 +45,6 @@ export interface LocalAppConfiguration {
 
   /* The type of backend environment (production, staging, development, or local) */
   geoapiBackend: GeoapiBackendEnvironment;
-
-  /* TODO */
-  production: boolean;
 }
 
 /**

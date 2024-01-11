@@ -6,5 +6,4 @@ const jwt = 'INSERT YOUR JWT HERE; See README ';
 export const localDevelopmentConfiguration: LocalAppConfiguration = {
   jwt: jwt,
   geoapiBackend: GeoapiBackendEnvironment.Production,
-  production: false,
 };
