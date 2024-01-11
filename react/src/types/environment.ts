@@ -90,6 +90,9 @@ export interface AppConfiguration {
   /** Mapillary related configuration */
   mapillary: MapillaryConfiguration;
 
+  /** URL for taggit */
+  taggitUrl: string;
+
   /** Optional JWT token used for development with local geoapi service. */
   jwt?: string;
 }

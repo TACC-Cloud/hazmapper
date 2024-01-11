@@ -94,6 +94,7 @@ export const useAppConfiguration = (): AppConfiguration => {
           DesignSafePortalEnvironment.Dev
         ),
         mapillary: mapillaryConfig,
+        taggitUrl: origin + '/taggit-staging',
         jwt: localDevelopmentConfiguration.jwt,
       };
       appConfig.mapillary.clientId = '5156692464392931';
@@ -119,6 +120,7 @@ export const useAppConfiguration = (): AppConfiguration => {
           DesignSafePortalEnvironment.Dev
         ),
         mapillary: mapillaryConfig,
+        taggitUrl: origin + '/taggit-staging'
       };
 
       appConfig.mapillary.clientId = '4936281379826603';
@@ -144,6 +146,7 @@ export const useAppConfiguration = (): AppConfiguration => {
           DesignSafePortalEnvironment.Dev
         ),
         mapillary: mapillaryConfig,
+        taggitUrl: origin + '/taggit-dev'
       };
 
       // TODO_REACT mapillary config a copy from /staging not /dev
@@ -167,6 +170,7 @@ export const useAppConfiguration = (): AppConfiguration => {
           DesignSafePortalEnvironment.Production
         ),
         mapillary: mapillaryConfig,
+        taggitUrl: origin + '/taggit',
       };
 
       appConfig.mapillary.clientId = '5156692464392931';
