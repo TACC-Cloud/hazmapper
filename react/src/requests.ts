@@ -27,7 +27,7 @@ function getBaseApiUrl(
   }
 }
 
-function getHeaders(
+export function getHeaders(
   apiService: ApiService,
   configuration: AppConfiguration,
   auth: AuthState
