@@ -5,5 +5,9 @@ export type {
   FeatureClass,
   FeatureCollection,
 } from './feature';
-export type { Project } from './projects';
+export type {
+  Project,
+  DesignSafeProjectCollection,
+  DesignSafeProject,
+} from './projects';
 export type { AuthState, AuthenticatedUser, AuthToken } from './auth';
