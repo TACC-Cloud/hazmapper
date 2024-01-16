@@ -46,12 +46,25 @@ const MapModal: React.FC<MapModalProps> = ({
             name: '',
             description: '',
             system_file: '',
+            system_id: 'designsafe.storage.default',
+            system_path: '/tgrafft',
             syncFolder: false,
           }}
           validationSchema={validationSchema}
           onSubmit={(values, actions) => {
-            console.log('Form data', values);
-            onSubmit(values);
+            const projectData = {
+              observable: values.syncFolder,
+              watch_content: values.syncFolder,
+              project: {
+                name: values.name,
+                description: values.description,
+                system_file: values.system_file,
+                system_id: values.system_id,
+                system_path: values.system_path,
+              },
+            };
+            console.log('Submitting project data', projectData);
+            onSubmit(projectData);
             actions.setSubmitting(false);
           }}
         >
@@ -61,6 +74,8 @@ const MapModal: React.FC<MapModalProps> = ({
                 <Label for="name">Name</Label>
                 <Field
                   name="name"
+                  id="name"
+                  data-testid="name-input"
                   as={Input}
                   invalid={touched.name && !!errors.name}
                 />
@@ -74,6 +89,7 @@ const MapModal: React.FC<MapModalProps> = ({
                 <Label for="description">Description</Label>
                 <Field
                   name="description"
+                  id="description"
                   as={Input}
                   invalid={touched.description && !!errors.description}
                 />
@@ -88,6 +104,7 @@ const MapModal: React.FC<MapModalProps> = ({
                 <div className="input-group">
                   <Field
                     name="system_file"
+                    id="system_file"
                     as={Input}
                     className="col-sm-8"
                     invalid={touched.system_file && !!errors.system_file}
