@@ -1,20 +1,48 @@
 import React from 'react';
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import MapModal from './MapModal';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import authReducer from '../../redux/authSlice';
+import { geoapi } from '../../redux/api/geoapi';
 
 describe('MapModal', () => {
   const dummyOnSubmit = jest.fn();
 
+  const mockUsername = 'mockUser';
+  const mockEmail = 'mockUser@example.com';
+
+  const mockToken = {
+    token: 'mockTokenValue',
+    expires: Date.now() + 1000 * 60 * 60,
+  };
+
+  const mockStore = configureStore({
+    reducer: {
+      auth: authReducer,
+      [geoapi.reducerPath]: geoapi.reducer,
+    },
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(geoapi.middleware),
+    preloadedState: {
+      auth: {
+        user: { name: mockUsername, email: mockEmail },
+        token: mockToken,
+      },
+    },
+  });
   beforeEach(() => {
     render(
-      <MapModal
-        isOpen={true}
-        toggle={() => {
-          // noop
-        }}
-        onSubmit={dummyOnSubmit}
-        isCreating={false}
-      />
+      <Provider store={mockStore}>
+        <MapModal
+          isOpen={true}
+          toggle={() => {
+            // noop
+          }}
+          onSubmit={dummyOnSubmit}
+          isCreating={false}
+        />
+      </Provider>
     );
   });
 
@@ -53,7 +81,7 @@ describe('MapModal', () => {
         description: 'Test Description',
         system_file: 'test-file',
         system_id: 'designsafe.storage.default',
-        system_path: '/tgrafft',
+        system_path: `/${mockUsername}`,
       },
     };
 

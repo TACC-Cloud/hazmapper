@@ -47,7 +47,7 @@ const MapModal: React.FC<MapModalProps> = ({
   // Access the user info from the Redux state
   const user = useSelector(
     (state: RootState) => state.auth.user
-  ) as AuthenticatedUser & { name: string };
+  ) as AuthenticatedUser;
 
   return (
     <Modal isOpen={isOpen} toggle={toggle}>
