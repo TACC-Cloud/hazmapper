@@ -1,4 +1,8 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
+import { useGetGeoapiUserInfoQuery } from '../../redux/api/geoapi';
+import { AuthenticatedUser } from '../../types/auth';
 import {
   Button,
   Modal,
@@ -37,6 +41,14 @@ const MapModal: React.FC<MapModalProps> = ({
   onSubmit,
   isCreating,
 }) => {
+  // Fetch user info from the API
+  useGetGeoapiUserInfoQuery();
+
+  // Access the user info from the Redux state
+  const user = useSelector(
+    (state: RootState) => state.auth.user
+  ) as AuthenticatedUser & { name: string };
+
   return (
     <Modal isOpen={isOpen} toggle={toggle}>
       <ModalHeader toggle={toggle}>Create a New Map</ModalHeader>
@@ -47,11 +59,16 @@ const MapModal: React.FC<MapModalProps> = ({
             description: '',
             system_file: '',
             system_id: 'designsafe.storage.default',
-            system_path: '/tgrafft',
+            system_path: '',
             syncFolder: false,
           }}
           validationSchema={validationSchema}
           onSubmit={(values, actions) => {
+            // Check if user information is available
+            if (!user) {
+              console.error('User information is not available');
+              return;
+            }
             const projectData = {
               observable: values.syncFolder,
               watch_content: values.syncFolder,
@@ -60,10 +77,9 @@ const MapModal: React.FC<MapModalProps> = ({
                 description: values.description,
                 system_file: values.system_file,
                 system_id: values.system_id,
-                system_path: values.system_path,
+                system_path: `/${user.name}`,
               },
             };
-            console.log('Submitting project data', projectData);
             onSubmit(projectData);
             actions.setSubmitting(false);
           }}
@@ -127,7 +143,9 @@ const MapModal: React.FC<MapModalProps> = ({
               </FormGroup>
               <FormGroup className="row align-items-center">
                 <Label className="col-sm-4">Save Location:</Label>
-                <div className="col-sm-8 text-primary">/tgrafft</div>
+                <div className="col-sm-8 text-primary">
+                  {user ? `/${user.name}` : 'Loading...'}
+                </div>
               </FormGroup>
               <FormGroup className="row mb-2">
                 <Label className="col-sm-4 col-form-label pt-0">
