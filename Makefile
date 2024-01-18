@@ -14,7 +14,7 @@ build-react:
 build:
 	make build-angular && make build-react
 
-.PHONY: deploy
-deploy:
+.PHONY: publish
+publish:
 	docker push taccaci/hazmapper:$(TAG)
 	docker push taccaci/hazmapper-react:$(TAG)
