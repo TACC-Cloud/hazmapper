@@ -155,7 +155,7 @@ export class EnvService {
     } else if (/^hazmapper.tacc.utexas.edu/.test(hostname) && pathname.startsWith('/dev')) {
       this._env = EnvironmentType.Dev;
       this._apiUrl = this.getApiUrl(this.env);
-      this._taggitUrl = origin + '/taggit-dev'; /* doesn't yet exist */
+      this._taggitUrl = origin + '/taggit-dev';
       this._portalUrl = this.getPortalUrl(this.env);
       this._clientId = 'oEuGsl7xi015wnrEpxIeUmvzc6Qa';
       this._baseHref = '/dev/';

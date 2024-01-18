@@ -64,7 +64,7 @@ jobs:
       - name: Setup Node.js for use with actions
         uses: actions/setup-node@v1
         with:
-          node-version: 16.x
+          node-version: 20.10.x
 
       - uses: actions/cache@v1
         with:
@@ -80,6 +80,7 @@ jobs:
       - name: Unit Tests
         run: |
           cd react
+          cp src/secret_local.example.ts src/secret_local.ts
           npm run test
   React-Linting:
     runs-on: ubuntu-latest
@@ -88,7 +89,7 @@ jobs:
     - name: Setup Node.js for use with actions
       uses: actions/setup-node@v1
       with:
-        node-version: 16.x
+        node-version: 20.10.x
 
     - uses: actions/cache@v1
       with:
@@ -112,7 +113,7 @@ jobs:
     - name: Setup Node.js for use with actions
       uses: actions/setup-node@v1
       with:
-        node-version: 16.x
+        node-version: 20.10.x
 
     - uses: actions/cache@v1
       with:
@@ -128,5 +129,5 @@ jobs:
     - name: Build
       run: |
         cd react
-        cp .env.example .env
+        cp src/secret_local.example.ts src/secret_local.ts
         npm run build

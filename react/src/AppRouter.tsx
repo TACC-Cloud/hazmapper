@@ -16,6 +16,7 @@ import Callback from './pages/Callback/Callback';
 import StreetviewCallback from './pages/StreetviewCallback/StreetviewCallback';
 import { RootState } from './redux/store';
 import { isTokenValid } from './utils/authUtils';
+import { useBasePath } from './hooks/environment';
 
 interface ProtectedRouteProps {
   isAuthenticated: boolean;
@@ -41,8 +42,10 @@ function AppRouter() {
     isTokenValid(state.auth.token)
   );
 
+  const basePath = useBasePath();
+
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={basePath}>
       <Routes>
         <Route
           path={ROUTES.MAIN}
