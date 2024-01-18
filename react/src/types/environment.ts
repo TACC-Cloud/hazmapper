@@ -13,7 +13,7 @@ export enum GeoapiBackendEnvironment {
  */
 export enum DesignSafePortalEnvironment {
   Production = 'production',
-  Dev = 'dev',
+  Dev = 'dev' /* DesignSafe has 2 deployed environments: prod and dev. This dev is comparable to Geoapi's staging */,
 }
 
 /**
