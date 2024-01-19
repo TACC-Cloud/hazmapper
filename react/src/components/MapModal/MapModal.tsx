@@ -180,7 +180,12 @@ const MapModal: React.FC<MapModalProps> = ({
                 <Button size="short" type="secondary" onClick={toggle}>
                   Close
                 </Button>
-                <Button size="short" type="primary" disabled={isCreating}>
+                <Button
+                  size="short"
+                  type="primary"
+                  attr="submit"
+                  disabled={isCreating}
+                >
                   {isCreating ? 'Creating...' : 'Create'}
                 </Button>
               </ModalFooter>

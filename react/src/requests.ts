@@ -1,12 +1,12 @@
 import axios from 'axios';
 import store from './redux/store';
 import { AxiosError } from 'axios';
-import { 
+import {
   useQuery,
   useMutation,
   UseQueryOptions,
   UseMutationOptions,
-  QueryKey 
+  QueryKey,
 } from 'react-query';
 import { useAppConfiguration } from './hooks';
 import {
