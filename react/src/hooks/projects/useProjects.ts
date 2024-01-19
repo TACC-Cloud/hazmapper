@@ -6,7 +6,6 @@ const useProjects = (): UseQueryResult<Project[]> => {
   const query = useGet<Project[]>({
     endpoint: '/projects/',
     key: ['projects'],
-    baseUrl: 'https://agave.designsafe-ci.org/geo/v2',
   });
   return query;
 };

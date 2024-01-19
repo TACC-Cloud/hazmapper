@@ -6,7 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hazmapper</title>
     <link rel="stylesheet" href="src/index.css" />
-
+    <base id="base" />
+    <script>
+      var hostname = window.location.hostname;
+      var pathname = window.location.pathname;
+      // Set base URL dynamically
+      if (/^hazmapper.tacc.utexas.edu/.test(hostname) && pathname.startsWith('/staging-react')) {
+          document.getElementById('base').href = '/staging-react/';
+      } else if (/^hazmapper.tacc.utexas.edu/.test(hostname) && pathname.startsWith('/dev-react')) {
+          document.getElementById('base').href = '/dev-react/';
+      } else if (/^hazmapper.tacc.utexas.edu/.test(hostname)) {
+          document.getElementById('base').href = '/hazmapper-react/';
+      } else if (/^hazmapper.tacc.utexas.edu/.test(hostname) && pathname.startsWith('/staging')) {
+          document.getElementById('base').href = '/staging/';
+      } else if (/^hazmapper.tacc.utexas.edu/.test(hostname) && pathname.startsWith('/dev')) {
+          document.getElementById('base').href = '/dev/';
+      } else if (/^hazmapper.tacc.utexas.edu/.test(hostname)) {
+          document.getElementById('base').href = '/hazmapper/';
+      } else {
+          document.getElementById('base').href = '/';
+      }
+      // TODO_REACT: Works but has issue. https://tacc-main.atlassian.net/browse/WG-224
+  </script>
   </head>
   <body>
     <div id="root"></div>

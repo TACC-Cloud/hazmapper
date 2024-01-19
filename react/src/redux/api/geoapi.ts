@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 import type { RootState } from '../store';
 
+// TODO_REACT: REMOVE AS NOT USED
 // TODO: make configurable so can be https://agave.designsafe-ci.org/geo-staging/v2 or https://agave.designsafe-ci.org/geo/v2
 // See https://tacc-main.atlassian.net/browse/WG-196
 const BASE_URL = 'https://agave.designsafe-ci.org/geo/v2';
