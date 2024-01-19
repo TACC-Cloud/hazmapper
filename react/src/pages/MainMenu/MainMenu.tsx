@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import {
   LoadingSpinner,
   InlineMessage,
   SectionHeader,
+  Button,
 } from '../../core-components';
 import { useProjects } from '../../hooks';
 import MapModal from '../../components/MapModal';
-import { Button } from 'reactstrap';
 import useCreateProject from '../../hooks/projects/useCreateProject';
 
 function MainMenu() {
@@ -52,7 +51,8 @@ function MainMenu() {
     <>
       <SectionHeader isNestedHeader>Main Menu</SectionHeader>
       <Button
-        color="primary"
+        type="primary"
+        size="small"
         onClick={toggleModal}
         disabled={isCreatingProject}
       >

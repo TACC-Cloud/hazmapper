@@ -4,7 +4,6 @@ import { RootState } from '../../redux/store';
 import { useGetGeoapiUserInfoQuery } from '../../redux/api/geoapi';
 import { AuthenticatedUser } from '../../types/auth';
 import {
-  Button,
   Modal,
   ModalHeader,
   ModalBody,
@@ -13,6 +12,7 @@ import {
   Label,
   Input,
 } from 'reactstrap';
+import { Button } from '../../core-components';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
@@ -91,6 +91,7 @@ const MapModal: React.FC<MapModalProps> = ({
                 <Field
                   name="name"
                   id="name"
+                  className="col-sm-11"
                   data-testid="name-input"
                   as={Input}
                   invalid={touched.name && !!errors.name}
@@ -106,6 +107,7 @@ const MapModal: React.FC<MapModalProps> = ({
                 <Field
                   name="description"
                   id="description"
+                  className="col-sm-11"
                   as={Input}
                   invalid={touched.description && !!errors.description}
                 />
@@ -125,7 +127,7 @@ const MapModal: React.FC<MapModalProps> = ({
                     className="col-sm-8"
                     invalid={touched.system_file && !!errors.system_file}
                   />
-                  <span className="input-group-text col-sm-4">.hazmapper</span>
+                  <span className="input-group-text col-sm-3">.hazmapper</span>
                 </div>
                 {/* Alt solution to render error message bc input group was causing text to not display properly */}
                 {touched.system_file && errors.system_file && (
@@ -133,8 +135,8 @@ const MapModal: React.FC<MapModalProps> = ({
                     className="custom-error-message"
                     style={{
                       marginTop: '0.25rem',
-                      fontSize: '0.875em',
-                      color: 'var(--bs-danger)',
+                      fontSize: '0.80em',
+                      color: '#dc3545',
                     }}
                   >
                     {errors.system_file}
@@ -162,6 +164,8 @@ const MapModal: React.FC<MapModalProps> = ({
                       onChange={handleChange}
                     />
                   </div>
+                  <br />
+                  <br />
                   <Label
                     className="form-check-label"
                     for="syncFolder"
@@ -173,10 +177,10 @@ const MapModal: React.FC<MapModalProps> = ({
                 </div>
               </FormGroup>
               <ModalFooter className="justify-content-start">
-                <Button color="warning" type="button" onClick={toggle}>
+                <Button size="short" type="secondary" onClick={toggle}>
                   Close
                 </Button>
-                <Button color="primary" type="submit" disabled={isCreating}>
+                <Button size="short" type="primary" disabled={isCreating}>
                   {isCreating ? 'Creating...' : 'Create'}
                 </Button>
               </ModalFooter>
