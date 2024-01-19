@@ -11,6 +11,9 @@ export const SystemSelect: React.FC<SystemSelectProps> = ({
 }) => {
   const { data: systems } = useSystems();
 
+  // use dsProjects hook here
+  const dsProjects: any[] = [];
+
   const findSystemById = (id: string): System | undefined => {
     return systems?.find((system) => system.id === id);
   };
@@ -35,6 +38,15 @@ export const SystemSelect: React.FC<SystemSelectProps> = ({
         {publishDataSystem && (
           <option value={publishDataSystem.id}>Published Data</option>
         )}
+        <optgroup label="My Projects">
+          {dsProjects.map((proj) => {
+            return (
+              <option key={proj.id} value={proj.id}>
+                {proj.ds_project.title}
+              </option>
+            );
+          })}
+        </optgroup>
       </select>
     </>
   );
