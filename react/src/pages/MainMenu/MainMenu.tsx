@@ -5,10 +5,20 @@ import {
   SectionHeader,
 } from '../../core-components';
 import { useProjects } from '../../hooks';
+import useName from '../../hooks/user/useName';
 
 function MainMenu() {
-  const { data, isLoading, error } = useProjects();
-  if (isLoading) {
+  const {
+    data: projectsData,
+    isLoading: projectsLoading,
+    error: projectsError,
+  } = useProjects();
+  const {
+    data: userData,
+    isLoading: isUserLoading,
+    error: userError,
+  } = useName();
+  if (projectsLoading || isUserLoading) {
     return (
       <>
         <SectionHeader isNestedHeader>Main Menu</SectionHeader>
@@ -16,21 +26,35 @@ function MainMenu() {
       </>
     );
   }
-  if (error) {
+  if (projectsError || userError) {
+    const errorMessage = projectsError
+      ? 'Unable to retrieve projects.'
+      : 'Unable to retrieve user information.';
     return (
       <>
         <SectionHeader isNestedHeader>Main Menu</SectionHeader>
-        <InlineMessage type="error">Unable to retrieve projects.</InlineMessage>
+        <InlineMessage type="error">{errorMessage}</InlineMessage>
       </>
     );
   }
   return (
     <>
       <SectionHeader isNestedHeader>Main Menu</SectionHeader>
+      <InlineMessage type="success">
+        Welcome, {userData?.name || 'User'}
+      </InlineMessage>
 
       <table>
-        <thead>Projects</thead>
-        <tbody>You have {data?.length} projects.</tbody>
+        <thead>
+          <tr>
+            <th>Projects</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>You have {projectsData?.length || 0} projects.</td>
+          </tr>
+        </tbody>
       </table>
     </>
   );
