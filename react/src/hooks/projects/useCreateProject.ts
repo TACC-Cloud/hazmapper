@@ -1,25 +1,12 @@
 import { usePost } from '../../requests';
-import { Project } from '../../types';
-
-type ProjectData = {
-  observable: boolean;
-  watch_content: boolean;
-  project: {
-    name: string;
-    description: string;
-    system_file: string;
-    system_id: string;
-    system_path: string;
-  };
-};
+import { ApiService, Project, ProjectRequest } from '../../types';
 
 const useCreateProject = () => {
-  const baseUrl = 'https://agave.designsafe-ci.org/geo/v2';
   const endpoint = '/projects/';
 
-  return usePost<ProjectData, Project>({
+  return usePost<ProjectRequest, Project>({
     endpoint,
-    baseUrl,
+    apiService: ApiService.Geoapi,
   });
 };
 

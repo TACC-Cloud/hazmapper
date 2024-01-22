@@ -66,7 +66,7 @@ type UseGetParams<ResponseType> = {
 type UsePostParams<RequestType, ResponseType> = {
   endpoint: string;
   options?: UseMutationOptions<ResponseType, AxiosError, RequestType>;
-  baseUrl: string;
+  apiService?: ApiService;
 };
 
 export function useGet<ResponseType>({
@@ -101,18 +101,21 @@ export function useGet<ResponseType>({
 export function usePost<RequestType, ResponseType>({
   endpoint,
   options = {},
-  baseUrl,
+  apiService = ApiService.Geoapi,
 }: UsePostParams<RequestType, ResponseType>) {
   const client = axios;
   const state = store.getState();
-  const token = state.auth.token?.token;
+  const configuration = useAppConfiguration();
+
+  const baseUrl = getBaseApiUrl(apiService, configuration);
+  const headers = getHeaders(apiService, configuration, state.auth);
 
   const postUtil = async (requestData: RequestType) => {
     const response = await client.post<ResponseType>(
       `${baseUrl}${endpoint}`,
       requestData,
       {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: headers,
       }
     );
     return response.data;
