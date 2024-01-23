@@ -71,7 +71,7 @@ export class ModalLinkProjectComponent implements OnInit {
   }
 
   submit() {
-    const path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path : this.currentPath;
+    /*const path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path : this.currentPath;
 
     this.activeProject.system_path = path;
     this.activeProject.system_id = this.selectedSystem.id;
@@ -92,6 +92,7 @@ export class ModalLinkProjectComponent implements OnInit {
     // this.projectsService.updateProject(this.activeProject, pr);
     this.projectsService.updateProject(pr);
     this.close();
+    */
   }
 
   close() {

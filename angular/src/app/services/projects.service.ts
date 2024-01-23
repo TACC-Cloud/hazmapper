@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, ReplaySubject, combineLatest } from 'rxjs';
-import { DesignSafeProjectCollection, Project, ProjectRequest, AgaveFileOperations } from '../models/models';
+import { Project, ProjectRequest, ProjectUpdateRequest, AgaveFileOperations } from '../models/models';
 import { RapidProjectRequest } from '../models/rapid-project-request';
 import { IpanelsDisplay, defaultPanelsDisplay } from '../models/ui';
 import { catchError, map, tap, filter, take } from 'rxjs/operators';
@@ -141,17 +141,15 @@ export class ProjectsService {
     return this.http.post<Project>(this.envService.apiUrl + `/projects/`, data).pipe(
       tap(
         (proj) => {
-          if (data.observable || proj.system_path) {
-            this.agaveSystemsService.saveFile(proj);
-          }
 
+/*
           if (proj.system_id && proj.system_id.startsWith('project')) {
             this.agaveSystemsService.updateProjectMetadata(proj, AgaveFileOperations.Update);
           }
+          */
 
           // Spread operator, just pushes the new project into the array
           this._projects.next([...this._projects.value, proj]);
-          this.geoDataService.addDefaultTileServers(proj.id);
         },
         (error) => {
           console.log(error);
@@ -238,8 +236,8 @@ export class ProjectsService {
     );
   }
 
-  updateProject(req: ProjectRequest): void {
-    this.http.put(this.envService.apiUrl + `/projects/${req.project.id}/`, req).subscribe((resp) => {
+  updateProject(project: Project, projectUpdate: ProjectUpdateRequest): void {
+    this.http.put(this.envService.apiUrl + `/projects/${project.id}/`, projectUpdate).subscribe((resp) => {
       this.notificationsService.showSuccessToast('Uploaded file!');
     });
   }
@@ -249,12 +247,10 @@ export class ProjectsService {
     description = description ? description : this._activeProject.value.description;
     isPublic = isPublic !== undefined ? isPublic : this._activeProject.value.public;
 
-    const payload: ProjectRequest = {
-      project: {
-        name,
-        description,
-        public: isPublic,
-      },
+    const payload: ProjectUpdateRequest = {
+      name,
+      description,
+      public: isPublic,
     };
 
     return this.http.put<Project>(this.envService.apiUrl + `/projects/${this._activeProject.value.id}/`, payload).pipe(

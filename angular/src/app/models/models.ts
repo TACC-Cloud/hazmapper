@@ -65,12 +65,26 @@ export interface Project {
 export class Project implements Project {}
 
 export interface ProjectRequest {
-  project: Project;
-  observable?: boolean;
-  watch_content?: boolean;
+  name: string;
+  description: string;
+  public: boolean;
+  system_file: string;
+  system_id: string;
+  system_path: string;
+  watch_content: boolean;
+  watch_users: boolean;
 }
 
 export class ProjectRequest implements ProjectRequest {}
+
+
+export interface ProjectUpdateRequest {
+  name?: string;
+  description?: string;
+  public?: boolean;
+}
+
+export class ProjectUpdateRequest implements ProjectUpdateRequest {}
 
 export class AuthToken {
   token: string;
