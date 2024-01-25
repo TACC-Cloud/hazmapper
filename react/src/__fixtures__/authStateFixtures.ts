@@ -2,7 +2,7 @@ import { AuthState } from '../types';
 
 export const authenticatedUser: AuthState = {
   user: {
-    name: 'user',
+    username: 'user',
     email: 'user@user.com',
   },
   token: {
