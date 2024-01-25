@@ -1,5 +1,5 @@
 export interface AuthenticatedUser {
-  name: string | null;
+  username: string | null;
   email: string | null;
 }
 

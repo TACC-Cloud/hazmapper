@@ -46,7 +46,7 @@ const authSlice = createSlice({
       geoapi.endpoints.getGeoapiUserInfo.matchFulfilled,
       (state, action: PayloadAction<any>) => {
         const u: any = {
-          name: action.payload.name,
+          username: action.payload.name,
           email: action.payload.email,
         };
         state.user = u;

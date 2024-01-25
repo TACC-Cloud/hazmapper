@@ -1,0 +1,27 @@
+:global(.btn-close) {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+:global(.btn-close::after) {
+  content: '\00D7'; /* Unicode character for 'X' */
+}
+
+.custom-error-message {
+  margin-top: 0.25rem;
+  font-size: 0.8em;
+  color: #dc3545;
+}
+
+.form-check-label {
+  font-style: italic;
+}
+
+.btn-close-custom {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
