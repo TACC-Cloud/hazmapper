@@ -60,6 +60,7 @@ type UseGetParams<ResponseType> = {
     UseQueryOptions<ResponseType, AxiosError>,
     'queryKey' | 'queryFn'
   >;
+  transform?: (data: any) => ResponseType;
   apiService?: ApiService;
 };
 
@@ -74,28 +75,23 @@ export function useGet<ResponseType>({
   key,
   options = {},
   apiService = ApiService.Geoapi,
+  transform,
 }: UseGetParams<ResponseType>) {
   const client = axios;
   const state = store.getState();
   const configuration = useAppConfiguration();
-
   const baseUrl = getBaseApiUrl(apiService, configuration);
   const headers = getHeaders(apiService, configuration, state.auth);
 
   /* TODO_REACT Send analytics-related params to projects endpoint only (until we use headers
-     again in https://tacc-main.atlassian.net/browse/WG-192) */
+    again in https://tacc-main.atlassian.net/browse/WG-192) */
 
   const getUtil = async () => {
-    const request = await client.get<ResponseType>(
-      `${baseUrl}${endpoint}`,
-
-      {
-        headers: headers,
-      }
-    );
-    return request.data;
+    const request = await client.get(`${baseUrl}${endpoint}`, { headers });
+    return transform ? transform(request.data) : request.data;
   };
-  return useQuery<ResponseType, AxiosError>(key, () => getUtil(), options);
+
+  return useQuery<ResponseType, AxiosError>(key, getUtil, options);
 }
 
 export function usePost<RequestType, ResponseType>({

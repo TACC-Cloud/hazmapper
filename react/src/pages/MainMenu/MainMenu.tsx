@@ -10,9 +10,15 @@ import { useNavigate } from 'react-router-dom';
 import { Project } from '../../types';
 import CreateMapModal from '../../components/CreateMapModal/CreateMapModal';
 import useCreateProject from '../../hooks/projects/useCreateProject';
+import useAuthenticatedUser from '../../hooks/user/useAuthenticatedUser';
 
 function MainMenu() {
   const { data, isLoading, error } = useProjects();
+  const {
+    data: userData,
+    isLoading: isUserLoading,
+    error: userError,
+  } = useAuthenticatedUser();
   const { mutate: createProject, isLoading: isCreatingProject } =
     useCreateProject();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -51,7 +57,7 @@ function MainMenu() {
     });
   };
 
-  if (isLoading) {
+ if (isLoading || isUserLoading) {
     return (
       <>
         <SectionHeader isNestedHeader>Main Menu</SectionHeader>
@@ -59,13 +65,11 @@ function MainMenu() {
       </>
     );
   }
-  if (error) {
-    return (
-      <>
-        <SectionHeader isNestedHeader>Main Menu</SectionHeader>
-        <InlineMessage type="error">Unable to retrieve projects.</InlineMessage>
-      </>
-    );
+  if (error || userError) {
+    <>
+      <SectionHeader isNestedHeader>Main Menu</SectionHeader>
+      <InlineMessage type="error">Unable to retrieve projects.</InlineMessage>
+    </>;
   }
   return (
     <>
@@ -85,6 +89,9 @@ function MainMenu() {
         onSubmit={handleCreateProject}
         isCreating={isCreatingProject}
       />
+      <InlineMessage type="success">
+        Welcome, {userData?.username || 'User'}
+      </InlineMessage>
 
       <table>
         <thead>Projects</thead>
