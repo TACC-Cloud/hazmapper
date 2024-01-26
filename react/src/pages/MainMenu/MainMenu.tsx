@@ -5,13 +5,20 @@ import {
   SectionHeader,
 } from '../../core-components';
 import { useProjects } from '../../hooks';
+import useAuthenticatedUser from '../../hooks/user/useAuthenticatedUser';
 import { SystemSelect } from '../../components/Systems';
 
 function MainMenu() {
   const { data, isLoading, error } = useProjects();
+  const {
+    data: userData,
+    isLoading: isUserLoading,
+    error: userError,
+  } = useAuthenticatedUser();
+
   const [selectedSystem, setSelectedSystem] = useState('');
 
-  if (isLoading) {
+  if (isLoading || isUserLoading) {
     return (
       <>
         <SectionHeader isNestedHeader>Main Menu</SectionHeader>
@@ -19,13 +26,11 @@ function MainMenu() {
       </>
     );
   }
-  if (error) {
-    return (
-      <>
-        <SectionHeader isNestedHeader>Main Menu</SectionHeader>
-        <InlineMessage type="error">Unable to retrieve projects.</InlineMessage>
-      </>
-    );
+  if (error || userError) {
+    <>
+      <SectionHeader isNestedHeader>Main Menu</SectionHeader>
+      <InlineMessage type="error">Unable to retrieve projects.</InlineMessage>
+    </>;
   }
 
   const handleSelectChange = (system: string) => {
@@ -35,6 +40,9 @@ function MainMenu() {
   return (
     <>
       <SectionHeader isNestedHeader>Main Menu</SectionHeader>
+      <InlineMessage type="success">
+        Welcome, {userData?.username || 'User'}
+      </InlineMessage>
 
       <table>
         <thead>Projects</thead>
