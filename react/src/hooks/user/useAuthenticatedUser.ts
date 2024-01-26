@@ -7,14 +7,10 @@ const useAuthenticatedUser = (): UseQueryResult<AuthenticatedUser> => {
     endpoint: '/oauth2/userinfo?schema=openid',
     key: ['username'],
     apiService: ApiService.Tapis,
-    options: {
-      transform: (data) => {
-        return {
-          username: data.name,
-          email: data.email,
-        };
-      },
-    },
+    transform: (data) => ({
+      username: data.name,
+      email: data.email,
+    }),
   });
 };
 
