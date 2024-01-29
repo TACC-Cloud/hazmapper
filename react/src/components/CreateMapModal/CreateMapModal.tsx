@@ -1,8 +1,4 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
-import { useGetGeoapiUserInfoQuery } from '../../redux/api/geoapi';
-import { AuthenticatedUser } from '../../types/auth';
 import {
   Modal,
   ModalHeader,
@@ -26,6 +22,7 @@ type CreateMapModalProps = {
     setError: (message: string) => void
   ) => void;
   isCreating: boolean;
+  userData: any;
 };
 
 interface CreateMapModalRef {
@@ -45,22 +42,15 @@ const validationSchema = Yup.object({
 });
 
 const CreateMapModal = forwardRef<CreateMapModalRef, CreateMapModalProps>(
-  ({ isOpen, toggle, onSubmit, isCreating }, ref) => {
+  ({ isOpen, toggle, onSubmit, isCreating, userData }, ref) => {
     const [errorMessage, setErrorMessage] = useState('');
 
     useImperativeHandle(ref, () => ({
       setErrorMessage,
     }));
-    // Fetch user info from the API
-    useGetGeoapiUserInfoQuery();
-
-    // Access the user info from the Redux state
-    const user = useSelector(
-      (state: RootState) => state.auth.user
-    ) as AuthenticatedUser;
 
     const handleSubmit = (values, actions) => {
-      if (!user) {
+      if (!userData) {
         console.error('User information is not available');
         setErrorMessage('User information is not available');
         actions.setSubmitting(false);
@@ -74,7 +64,7 @@ const CreateMapModal = forwardRef<CreateMapModalRef, CreateMapModalProps>(
           description: values.description,
           system_file: values.system_file,
           system_id: values.system_id,
-          system_path: `/${user.username}`,
+          system_path: `/${userData.username}`,
         },
       };
       onSubmit(projectData, actions, setErrorMessage);
@@ -154,7 +144,7 @@ const CreateMapModal = forwardRef<CreateMapModalRef, CreateMapModalProps>(
                 <FormGroup className="row align-items-center">
                   <Label className="col-sm-4">Save Location:</Label>
                   <div className="col-sm-8 text-primary">
-                    {user ? `/${user.username}` : 'Loading...'}
+                    {userData ? `/${userData.username}` : 'Loading...'}
                   </div>
                 </FormGroup>
                 <FormGroup className="row mb-2">

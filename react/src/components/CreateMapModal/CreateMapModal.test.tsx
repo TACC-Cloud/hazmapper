@@ -7,51 +7,33 @@ import {
   waitFor,
 } from '@testing-library/react';
 import CreateMapModal from './CreateMapModal';
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
-import authReducer from '../../redux/authSlice';
-import { geoapi } from '../../redux/api/geoapi';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 describe('CreateMapModal', () => {
   const dummyOnSubmit = jest.fn();
 
-  const mockUsername = 'mockUser';
-  const mockEmail = 'mockUser@example.com';
-
-  const mockToken = {
-    token: 'mockTokenValue',
-    expires: Date.now() + 1000 * 60 * 60,
+  const mockUserData = {
+    username: 'mockUser',
+    email: 'mockUser@example.com',
   };
 
-  const mockStore = configureStore({
-    reducer: {
-      auth: authReducer,
-      [geoapi.reducerPath]: geoapi.reducer,
-    },
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(geoapi.middleware),
-    preloadedState: {
-      auth: {
-        user: { username: mockUsername, email: mockEmail },
-        token: mockToken,
-      },
-    },
-  });
-  const renderComponent = () => {
-    return render(
-      <Provider store={mockStore}>
-        <Router>
-          <CreateMapModal
-            isOpen={true}
-            toggle={() => {
-              //no op
-            }}
-            onSubmit={dummyOnSubmit}
-            isCreating={false}
-          />
-        </Router>
-      </Provider>
+  const renderComponent = (
+    onSubmit = dummyOnSubmit,
+    userData = mockUserData,
+    isCreating = false
+  ) => {
+    render(
+      <Router>
+        <CreateMapModal
+          isOpen={true}
+          toggle={() => {
+            // no op
+          }}
+          onSubmit={onSubmit}
+          isCreating={isCreating}
+          userData={userData}
+        />
+      </Router>
     );
   };
 
@@ -96,7 +78,7 @@ describe('CreateMapModal', () => {
         description: 'Test Description',
         system_file: 'test-file',
         system_id: 'designsafe.storage.default',
-        system_path: `/${mockUsername}`,
+        system_path: `/${mockUserData.username}`,
       },
     };
 
@@ -121,18 +103,17 @@ describe('CreateMapModal', () => {
       });
 
     render(
-      <Provider store={mockStore}>
-        <Router>
-          <CreateMapModal
-            isOpen={true}
-            toggle={() => {
-              //no op
-            }}
-            onSubmit={mockOnSubmitWith409Error}
-            isCreating={false}
-          />
-        </Router>
-      </Provider>
+      <Router>
+        <CreateMapModal
+          isOpen={true}
+          toggle={() => {
+            //no op
+          }}
+          onSubmit={mockOnSubmitWith409Error}
+          isCreating={false}
+          userData={mockUserData}
+        />
+      </Router>
     );
 
     // Interact with the form fields
@@ -168,18 +149,17 @@ describe('CreateMapModal', () => {
       });
 
     render(
-      <Provider store={mockStore}>
-        <Router>
-          <CreateMapModal
-            isOpen={true}
-            toggle={() => {
-              //no op
-            }}
-            onSubmit={mockOnSubmitWith500Error}
-            isCreating={false}
-          />
-        </Router>
-      </Provider>
+      <Router>
+        <CreateMapModal
+          isOpen={true}
+          toggle={() => {
+            //no op
+          }}
+          onSubmit={mockOnSubmitWith500Error}
+          isCreating={false}
+          userData={mockUserData}
+        />
+      </Router>
     );
 
     // Interact with the form fields
@@ -213,18 +193,17 @@ describe('CreateMapModal', () => {
       });
 
     render(
-      <Provider store={mockStore}>
-        <Router>
-          <CreateMapModal
-            isOpen={true}
-            toggle={() => {
-              //no op
-            }}
-            onSubmit={mockOnSubmitWithGenericError}
-            isCreating={false}
-          />
-        </Router>
-      </Provider>
+      <Router>
+        <CreateMapModal
+          isOpen={true}
+          toggle={() => {
+            //no op
+          }}
+          onSubmit={mockOnSubmitWithGenericError}
+          isCreating={false}
+          userData={mockUserData}
+        />
+      </Router>
     );
 
     // Interact with the form fields

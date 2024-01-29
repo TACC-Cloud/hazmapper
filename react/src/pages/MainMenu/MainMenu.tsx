@@ -57,7 +57,7 @@ function MainMenu() {
     });
   };
 
- if (isLoading || isUserLoading) {
+  if (isLoading || isUserLoading) {
     return (
       <>
         <SectionHeader isNestedHeader>Main Menu</SectionHeader>
@@ -88,6 +88,7 @@ function MainMenu() {
         toggle={toggleModal}
         onSubmit={handleCreateProject}
         isCreating={isCreatingProject}
+        userData={userData}
       />
       <InlineMessage type="success">
         Welcome, {userData?.username || 'User'}
