@@ -142,12 +142,6 @@ export class ProjectsService {
       tap(
         (proj) => {
 
-/*
-          if (proj.system_id && proj.system_id.startsWith('project')) {
-            this.agaveSystemsService.updateProjectMetadata(proj, AgaveFileOperations.Update);
-          }
-          */
-
           // Spread operator, just pushes the new project into the array
           this._projects.next([...this._projects.value, proj]);
         },
@@ -201,10 +195,6 @@ export class ProjectsService {
   }
 
   deleteProject(proj: Project): void {
-    if (proj.system_id && proj.system_id.startsWith('project')) {
-      this.agaveSystemsService.updateProjectMetadata(proj, AgaveFileOperations.Delete);
-    }
-
     this._deletingProjects.next([...this._deletingProjects.value, { ...proj, deleting: true }]);
     this.updateProjectsList();
 
@@ -212,10 +202,6 @@ export class ProjectsService {
 
     this.http.delete(this.envService.apiUrl + `/projects/${proj.id}/`).subscribe(
       (resp) => {
-        if (proj.system_path || proj.ds_id) {
-          this.agaveSystemsService.deleteFile(proj);
-        }
-
         this._deletingProjects.next(this._deletingProjects.value.filter((p) => p.id !== proj.id));
         this.updateProjectsList();
         this.getProjects();
