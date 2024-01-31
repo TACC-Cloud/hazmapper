@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import {
   LoadingSpinner,
   InlineMessage,
@@ -6,58 +6,17 @@ import {
   Button,
 } from '../../core-components';
 import { useProjects } from '../../hooks';
-import { useNavigate } from 'react-router-dom';
-import { Project } from '../../types';
 import CreateMapModal from '../../components/CreateMapModal/CreateMapModal';
-import useCreateProject from '../../hooks/projects/useCreateProject';
-import useAuthenticatedUser from '../../hooks/user/useAuthenticatedUser';
 
 function MainMenu() {
   const { data, isLoading, error } = useProjects();
-  const {
-    data: userData,
-    isLoading: isUserLoading,
-    error: userError,
-  } = useAuthenticatedUser();
-  const { mutate: createProject, isLoading: isCreatingProject } =
-    useCreateProject();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const createMapModalRef = useRef<{
-    setErrorMessage: (message: string) => void;
-  }>(null);
 
   const toggleModal = () => {
-    if (createMapModalRef.current) {
-      createMapModalRef.current.setErrorMessage('');
-    }
     setIsModalOpen(!isModalOpen);
   };
 
-  const navigate = useNavigate();
-
-  const handleCreateProject = (projectData) => {
-    createProject(projectData, {
-      onSuccess: (newProject: Project) => {
-        // TO-ADD: Handle success (e.g., show success message, refetch projects, etc.)
-        navigate(`/project/${newProject.uuid}`);
-      },
-      onError: (err) => {
-        // Handle error (e.g., show error message)
-        console.error('Error creating project:', err);
-        let errorMessage = 'An error occurred while creating the project.';
-        if (err?.response?.status === 409) {
-          errorMessage = 'That folder is already syncing with a different map.';
-        } else if (err?.response?.status === 500) {
-          errorMessage = 'Internal server error. Please contact support.';
-        } else {
-          errorMessage = 'Something went wrong. Please contact support.';
-        }
-        createMapModalRef.current?.setErrorMessage(errorMessage);
-      },
-    });
-  };
-
-  if (isLoading || isUserLoading) {
+  if (isLoading) {
     return (
       <>
         <SectionHeader isNestedHeader>Main Menu</SectionHeader>
@@ -65,7 +24,7 @@ function MainMenu() {
       </>
     );
   }
-  if (error || userError) {
+  if (error) {
     <>
       <SectionHeader isNestedHeader>Main Menu</SectionHeader>
       <InlineMessage type="error">Unable to retrieve projects.</InlineMessage>
@@ -74,26 +33,10 @@ function MainMenu() {
   return (
     <>
       <SectionHeader isNestedHeader>Main Menu</SectionHeader>
-      <Button
-        type="primary"
-        size="small"
-        onClick={toggleModal}
-        disabled={isCreatingProject}
-      >
+      <Button type="primary" size="small" onClick={toggleModal}>
         Create Map
       </Button>
-      <CreateMapModal
-        ref={createMapModalRef}
-        isOpen={isModalOpen}
-        toggle={toggleModal}
-        onSubmit={handleCreateProject}
-        isCreating={isCreatingProject}
-        userData={userData}
-      />
-      <InlineMessage type="success">
-        Welcome, {userData?.username || 'User'}
-      </InlineMessage>
-
+      <CreateMapModal isOpen={isModalOpen} toggle={toggleModal} />
       <table>
         <thead>Projects</thead>
         <tbody>You have {data?.length} projects.</tbody>

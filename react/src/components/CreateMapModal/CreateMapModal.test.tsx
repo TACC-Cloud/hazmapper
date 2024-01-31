@@ -8,35 +8,54 @@ import {
 } from '@testing-library/react';
 import CreateMapModal from './CreateMapModal';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+jest.mock('../../hooks/user/useAuthenticatedUser', () => ({
+  __esModule: true,
+  default: () => ({
+    data: { username: 'mockUser', email: 'mockUser@example.com' },
+    isLoading: false,
+    error: null,
+  }),
+}));
+
+jest.mock('../../hooks/projects/useCreateProject', () => ({
+  __esModule: true,
+  default: () => ({
+    mutate: jest.fn((data, { onSuccess, onError }) => {
+      if (data.project.name === 'Error Map') {
+        // Simulate a submission error with a 500 status code
+        onError({ response: { status: 500 } });
+      } else {
+        // Simulate successful project creation
+        onSuccess({ uuid: '123' });
+      }
+    }),
+    isLoading: false,
+  }),
+}));
+
+const mockNavigate = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
+}));
+
+const toggleMock = jest.fn();
+const queryClient = new QueryClient();
+
+const renderComponent = (isOpen = true) => {
+  render(
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <CreateMapModal isOpen={isOpen} toggle={toggleMock} />
+      </Router>
+    </QueryClientProvider>
+  );
+};
 
 describe('CreateMapModal', () => {
-  const dummyOnSubmit = jest.fn();
-
-  const mockUserData = {
-    username: 'mockUser',
-    email: 'mockUser@example.com',
-  };
-
-  const renderComponent = (
-    onSubmit = dummyOnSubmit,
-    userData = mockUserData,
-    isCreating = false
-  ) => {
-    render(
-      <Router>
-        <CreateMapModal
-          isOpen={true}
-          toggle={() => {
-            // no op
-          }}
-          onSubmit={onSubmit}
-          isCreating={isCreating}
-          userData={userData}
-        />
-      </Router>
-    );
-  };
-
   afterEach(() => {
     cleanup();
   });
@@ -46,183 +65,40 @@ describe('CreateMapModal', () => {
     expect(screen.getByText(/Create a New Map/)).toBeTruthy();
   });
 
-  test('allows form field interaction and submission', async () => {
+  test('submits form data successfully', async () => {
     renderComponent();
-    // Interact with name field
-    const nameInput = screen.getByTestId('name-input') as HTMLInputElement;
-    fireEvent.change(nameInput, { target: { value: 'Test Map' } });
-    expect(nameInput.value).toBe('Test Map');
-
-    // Interact with description field
-    const descriptionInput = screen.getByLabelText(
-      /Description/
-    ) as HTMLInputElement;
-    fireEvent.change(descriptionInput, {
-      target: { value: 'Test Description' },
-    });
-    expect(descriptionInput.value).toBe('Test Description');
-
-    // Interact with custom file name field
-    const customFileNameInput = screen.getByLabelText(
-      /Custom File Name/
-    ) as HTMLInputElement;
-    fireEvent.change(customFileNameInput, { target: { value: 'test-file' } });
-    expect(customFileNameInput.value).toBe('test-file');
-
-    // Prepare expected data based on the form structure
-    const expectedData = {
-      observable: false,
-      watch_content: false,
-      project: {
-        name: 'Test Map',
-        description: 'Test Description',
-        system_file: 'test-file',
-        system_id: 'designsafe.storage.default',
-        system_path: `/${mockUserData.username}`,
-      },
-    };
-
-    // Submit form
-    fireEvent.click(screen.getByRole('button', { name: /Create/ }));
-    await waitFor(() => {
-      expect(dummyOnSubmit).toHaveBeenCalledWith(
-        expectedData,
-        expect.anything(),
-        expect.anything()
-      );
-    });
-  });
-  test('specific 409 error message is displayed', async () => {
-    const mockOnSubmitWith409Error = jest
-      .fn()
-      .mockImplementation((projectData, actions, setError) => {
-        const error = { response: { status: 409 } };
-        console.error('Error creating project:', error);
-        setError('That folder is already syncing with a different map.');
-        actions.setSubmitting(false);
-      });
-
-    render(
-      <Router>
-        <CreateMapModal
-          isOpen={true}
-          toggle={() => {
-            //no op
-          }}
-          onSubmit={mockOnSubmitWith409Error}
-          isCreating={false}
-          userData={mockUserData}
-        />
-      </Router>
-    );
-
-    // Interact with the form fields
     fireEvent.change(screen.getByTestId('name-input'), {
-      target: { value: 'Test Map' },
+      target: { value: 'Success Map' },
     });
-    fireEvent.change(screen.getByLabelText('Description'), {
-      target: { value: 'Test Description' },
+    fireEvent.change(screen.getByLabelText(/Description/), {
+      target: { value: 'A successful map' },
     });
-    fireEvent.change(screen.getByLabelText('Custom File Name'), {
-      target: { value: 'test-file' },
+    fireEvent.change(screen.getByLabelText(/Custom File Name/), {
+      target: { value: 'success-file' },
     });
-
-    // Submit form
     fireEvent.click(screen.getByRole('button', { name: /Create/ }));
 
-    // Wait for the error message to appear
     await waitFor(() => {
-      expect(
-        screen.getByText('That folder is already syncing with a different map.')
-      ).toBeTruthy();
+      expect(mockNavigate).toHaveBeenCalledWith('/project/123');
     });
   });
 
-  test('specific 500 error message is displayed', async () => {
-    const mockOnSubmitWith500Error = jest
-      .fn()
-      .mockImplementation((projectData, actions, setError) => {
-        const error = { response: { status: 500 } };
-        console.error('Error creating project:', error);
-        setError('Internal server error. Please contact support.');
-        actions.setSubmitting(false);
-      });
-
-    render(
-      <Router>
-        <CreateMapModal
-          isOpen={true}
-          toggle={() => {
-            //no op
-          }}
-          onSubmit={mockOnSubmitWith500Error}
-          isCreating={false}
-          userData={mockUserData}
-        />
-      </Router>
-    );
-
-    // Interact with the form fields
+  test('displays error message on submission error', async () => {
+    renderComponent();
     fireEvent.change(screen.getByTestId('name-input'), {
-      target: { value: 'Test Map' },
+      target: { value: 'Error Map' },
     });
-    fireEvent.change(screen.getByLabelText('Description'), {
-      target: { value: 'Test Description' },
+    fireEvent.change(screen.getByLabelText(/Description/), {
+      target: { value: 'A map with an error' },
     });
-    fireEvent.change(screen.getByLabelText('Custom File Name'), {
-      target: { value: 'test-file' },
+    fireEvent.change(screen.getByLabelText(/Custom File Name/), {
+      target: { value: 'error-file' },
     });
-
-    // Submit form
     fireEvent.click(screen.getByRole('button', { name: /Create/ }));
 
-    // Wait for the error message to appear
     await waitFor(() => {
       expect(
         screen.getByText('Internal server error. Please contact support.')
-      ).toBeTruthy();
-    });
-  });
-
-  test('generic error message is displayed on other submission errors', async () => {
-    const mockOnSubmitWithGenericError = jest
-      .fn()
-      .mockImplementation((projectData, actions, setError) => {
-        setError('Something went wrong. Please contact support.');
-        actions.setSubmitting(false);
-      });
-
-    render(
-      <Router>
-        <CreateMapModal
-          isOpen={true}
-          toggle={() => {
-            //no op
-          }}
-          onSubmit={mockOnSubmitWithGenericError}
-          isCreating={false}
-          userData={mockUserData}
-        />
-      </Router>
-    );
-
-    // Interact with the form fields
-    fireEvent.change(screen.getByTestId('name-input'), {
-      target: { value: 'Test Map' },
-    });
-    fireEvent.change(screen.getByLabelText('Description'), {
-      target: { value: 'Test Description' },
-    });
-    fireEvent.change(screen.getByLabelText('Custom File Name'), {
-      target: { value: 'test-file' },
-    });
-
-    // Submit form
-    fireEvent.click(screen.getByRole('button', { name: /Create/ }));
-
-    await waitFor(() => {
-      expect(
-        screen.getByText('Something went wrong. Please contact support.')
       ).toBeTruthy();
     });
   });
