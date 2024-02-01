@@ -1,5 +1,11 @@
 import React from 'react';
-import { MapContainer, ZoomControl, TileLayer, Marker, Popup } from 'react-leaflet';
+import {
+  MapContainer,
+  ZoomControl,
+  TileLayer,
+  Marker,
+  Popup,
+} from 'react-leaflet';
 import MarkerClusterGroup from '@changey/react-leaflet-markercluster';
 import { TileServerLayer, FeatureCollection } from '../../types';
 import * as L from 'leaflet';
