@@ -29,13 +29,24 @@
   flex: 1;
 }
 
-.leftPanel {
+.panelNavigation {
   width: 100px;
   background-color: #f0f0f09d;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 10px;
+}
+
+.panelContainer {
+  /* todo place into a PanelContainer and then the PanelNavigation where the buttons live either horizonal or vertical    */
+  width: 200px;
+  height: 95%;
+  background-color: #614949;
+  position: absolute;
+  left: 120px;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  z-index: 5000;
 }
 
 .map {
