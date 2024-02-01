@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Map from '../../components/Map';
 import AssetsPanel from '../../components/AssetsPanel';
