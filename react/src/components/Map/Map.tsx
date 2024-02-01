@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, ZoomControl, TileLayer, Marker, Popup } from 'react-leaflet';
 import MarkerClusterGroup from '@changey/react-leaflet-markercluster';
 import { TileServerLayer, FeatureCollection } from '../../types';
 import * as L from 'leaflet';
@@ -55,6 +55,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
       center={centerPosition}
       zoom={13}
       style={{ width: '100%', height: '100%' }}
+      zoomControl={false}
     >
       {activeBaseLayers.map((layer) => (
         <TileLayer
@@ -79,6 +80,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
           </Marker>
         ))}
       </MarkerClusterGroup>
+      <ZoomControl position="bottomright" />
     </MapContainer>
   );
 };
