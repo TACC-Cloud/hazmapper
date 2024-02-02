@@ -115,27 +115,6 @@ export class ProjectsService {
     );
   }
 
-  // TODO: Utilize project metdata
-  addUserToProject(proj: Project, uname: string): void {
-    const payload = {
-      username: uname,
-    };
-    this.http.post(this.envService.apiUrl + `/projects/${proj.id}/users/`, payload).subscribe((resp) => {
-      this.getProjectUsers(proj).subscribe();
-    });
-  }
-
-  // TODO: Utilize project metdata
-  deleteUserFromProject(proj: Project, uname: string): void {
-    this.http.delete(this.envService.apiUrl + `/projects/${proj.id}/users/${uname}/`).subscribe(
-      (resp) => {
-        this.getProjectUsers(proj).subscribe();
-      },
-      (error) => {
-        this.notificationsService.showErrorToast('Unable to delete user');
-      }
-    );
-  }
 
   create(data: ProjectRequest): Observable<Project> {
     return this.http.post<Project>(this.envService.apiUrl + `/projects/`, data).pipe(
