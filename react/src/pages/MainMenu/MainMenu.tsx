@@ -37,8 +37,8 @@ function MainMenu() {
       </InlineMessage>
 
       <table>
-        <thead>Projects</thead>
-        <tbody>You have {data?.length} projects.</tbody>
+        <thead><tr><th>Projects</th></tr></thead>
+        <tbody><tr><td>You have {data?.length} projects.</td></tr></tbody>
       </table>
     </>
   );
