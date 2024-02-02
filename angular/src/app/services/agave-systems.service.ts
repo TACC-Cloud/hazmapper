@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { System, SystemSummary } from 'ng-tapis';
+import { SystemSummary } from 'ng-tapis';
 import { ApiService } from 'ng-tapis';
 import { NotificationsService } from './notifications.service';
 import { BehaviorSubject, Observable, ReplaySubject, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { EnvService } from '../services/env.service';
-import { DesignSafeProjectCollection, Project, AgaveFileOperations } from '../models/models';
+import { DesignSafeProjectCollection, Project } from '../models/models';
 
 export interface AgaveProjectsData {
   projects: SystemSummary[];
@@ -88,44 +88,5 @@ export class AgaveSystemsService {
       });
     }
     return projects;
-  }
-
-  updateProjectMetadata(proj: Project, operation: AgaveFileOperations) {
-    const DSuuid = proj.system_id.replace('project-', '');
-    const uuid = proj.uuid;
-    const path = proj.system_path;
-    const name = proj.name;
-
-    this.http.get<any>(this.envService.designSafeUrl + `projects/v2/${DSuuid}/`).subscribe((dsProject) => {
-      const previousMaps = dsProject.value.hazmapperMaps ? dsProject.value.hazmapperMaps.filter((e) => e.uuid !== uuid) : [];
-
-      const payloadProject =
-        operation === AgaveFileOperations.Update
-          ? [
-              {
-                name,
-                uuid,
-                path,
-                deployment: this.envService.env,
-              },
-            ]
-          : [];
-
-      const payload = {
-        DSuuid,
-        hazmapperMaps: [...previousMaps, ...payloadProject],
-      };
-
-      const headers = new HttpHeaders().set('X-Requested-With', 'XMLHttpRequest');
-
-      this.http.post<any>(this.envService.designSafeUrl + `projects/v2/${DSuuid}/`, payload, { headers }).subscribe(
-        (resp) => {
-          console.log(resp);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    });
   }
 }

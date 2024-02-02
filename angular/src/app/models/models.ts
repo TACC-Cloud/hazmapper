@@ -2,10 +2,6 @@ import { Feature as GeoJSONFeature, GeoJsonProperties, Geometry, FeatureCollecti
 
 // TODO: break these out into their own files
 
-export enum AgaveFileOperations {
-  Delete,
-  Update,
-}
 
 export interface IFileImportRequest {
   system_id: string;

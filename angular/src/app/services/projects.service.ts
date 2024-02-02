@@ -1,17 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, ReplaySubject, combineLatest } from 'rxjs';
-import { Project, ProjectRequest, ProjectUpdateRequest, AgaveFileOperations } from '../models/models';
-import { RapidProjectRequest } from '../models/rapid-project-request';
+import { Project, ProjectRequest, ProjectUpdateRequest } from '../models/models';
 import { IpanelsDisplay, defaultPanelsDisplay } from '../models/ui';
-import { catchError, map, tap, filter, take } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { IProjectUser } from '../models/project-user';
 import { NotificationsService } from './notifications.service';
-import { GeoDataService } from './geo-data.service';
 import { EnvService } from '../services/env.service';
 import { AuthService } from '../services/authentication.service';
-import { MAIN, LOGIN } from '../constants/routes';
-import { AgaveSystemsService } from '../services/agave-systems.service';
+import { MAIN } from '../constants/routes';
 import { Router } from '@angular/router';
 
 export interface ProjectsData {
@@ -58,8 +55,6 @@ export class ProjectsService {
   constructor(
     private http: HttpClient,
     private notificationsService: NotificationsService,
-    private geoDataService: GeoDataService,
-    private agaveSystemsService: AgaveSystemsService,
     private router: Router,
     private authService: AuthService,
     private envService: EnvService
