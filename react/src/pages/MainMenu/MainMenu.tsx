@@ -37,8 +37,16 @@ function MainMenu() {
       </InlineMessage>
 
       <table>
-        <thead><tr><th>Projects</th></tr></thead>
-        <tbody><tr><td>You have {data?.length} projects.</td></tr></tbody>
+        <thead>
+          <tr>
+            <th>Projects</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>You have {data?.length} projects.</td>
+          </tr>
+        </tbody>
       </table>
     </>
   );
