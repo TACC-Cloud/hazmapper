@@ -2,7 +2,6 @@ import { Feature as GeoJSONFeature, GeoJsonProperties, Geometry, FeatureCollecti
 
 // TODO: break these out into their own files
 
-
 export interface IFileImportRequest {
   system_id: string;
   path: string;
@@ -72,7 +71,6 @@ export interface ProjectRequest {
 }
 
 export class ProjectRequest implements ProjectRequest {}
-
 
 export interface ProjectUpdateRequest {
   name?: string;

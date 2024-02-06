@@ -70,7 +70,6 @@ export class UsersPanelComponent implements OnInit {
     return publicUrl;
   }
 
-
   copyLinkToClipboard(link: string) {
     copyToClipboard(link);
     this.notificationsService.showSuccessToast(`Copied ${link} to the clipboard!`);

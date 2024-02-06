@@ -81,7 +81,6 @@ export class ModalCreateProjectComponent implements OnInit, AfterContentChecked 
     }
     pr.watch_content = this.projCreateForm.get('watchContent').value;
 
-
     this.errorMessage = '';
 
     this.projectsService.create(pr).subscribe(

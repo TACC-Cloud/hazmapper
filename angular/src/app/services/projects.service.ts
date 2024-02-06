@@ -110,12 +110,10 @@ export class ProjectsService {
     );
   }
 
-
   create(data: ProjectRequest): Observable<Project> {
     return this.http.post<Project>(this.envService.apiUrl + `/projects/`, data).pipe(
       tap(
         (proj) => {
-
           // Spread operator, just pushes the new project into the array
           this._projects.next([...this._projects.value, proj]);
         },

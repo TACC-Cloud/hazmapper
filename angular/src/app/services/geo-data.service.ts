@@ -279,7 +279,6 @@ export class GeoDataService {
       .subscribe();
   }
 
-
   importFeatureAsset(projectId: number, featureId: number, payload: IFileImportRequest): void {
     this.http.post<Feature>(this.envService.apiUrl + `/projects/${projectId}/features/${featureId}/assets/`, payload).subscribe(
       (feature) => {
