@@ -1,48 +1,32 @@
 {
-    "env": {
+  "env": {
       "browser": true,
       "es2021": true,
       "jest": true
-    },
-    "extends": [
-      "plugin:@nx/react",
+  },
+  "extends": [
       "eslint:recommended",
       "plugin:react/recommended",
       "plugin:jsx-a11y/recommended",
       "plugin:@typescript-eslint/recommended",
       "prettier/",
       "prettier/prettier"
-    ],
-    "ignorePatterns": ["!**/*"],
-    "overrides": [
-      {
-        "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
-        "rules": {}
-      },
-      {
-        "files": ["*.ts", "*.tsx"],
-        "rules": {}
-      },
-      {
-        "files": ["*.js", "*.jsx"],
-        "rules": {}
-      }
-    ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
+  ],
+  "overrides": [],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
       "ecmaVersion": "latest",
       "sourceType": "module"
-    },
-    "plugins": ["react", "react-hooks", "@typescript-eslint", "prettier"],
-    "rules": {
-      "prettier/prettier": ["error"],
+  },
+  "plugins": ["react", "react-hooks", "@typescript-eslint", "prettier"],
+  "rules": {
+"prettier/prettier": ["error"],
       "@typescript-eslint/no-unused-vars": "error",
       "@typescript-eslint/no-explicit-any": "off"
-    },
-    "settings": {
+  },
+  "settings": {
       "react": {
-        "version": "detect"
+          "version": "detect"
       }
-    }
   }
-  
+}
