@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
+  Button,
   LoadingSpinner,
   InlineMessage,
   SectionHeader,
 } from '../../core-components';
 import { useProjects } from '../../hooks';
 import useAuthenticatedUser from '../../hooks/user/useAuthenticatedUser';
+import MapModalExample from '../../components/MapModalExample/MapModalExample';
 
 function MainMenu() {
   const { data, isLoading, error } = useProjects();
@@ -14,6 +16,10 @@ function MainMenu() {
     isLoading: isUserLoading,
     error: userError,
   } = useAuthenticatedUser();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const toggleModal = () => setIsModalOpen(!isModalOpen);
+
   if (isLoading || isUserLoading) {
     return (
       <>
@@ -31,9 +37,13 @@ function MainMenu() {
   return (
     <>
       <SectionHeader isNestedHeader>Main Menu</SectionHeader>
-      <InlineMessage type="success">
+      <InlineMessage type="info">
         Welcome, {userData?.username || 'User'}
       </InlineMessage>
+      <div>
+        <Button onClick={toggleModal}>Create Map</Button>
+      </div>
+      <MapModalExample isOpen={isModalOpen} toggle={toggleModal} />
 
       <table>
         <thead>Projects</thead>
