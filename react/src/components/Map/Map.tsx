@@ -1,8 +1,9 @@
-import React from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import React, { useEffect } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import MarkerClusterGroup from '@changey/react-leaflet-markercluster';
 import { TileServerLayer, FeatureCollection } from '../../types';
 import * as L from 'leaflet';
+import * as turf from '@turf/turf';
 import { LatLngTuple, MarkerCluster } from 'leaflet';
 import 'leaflet.markercluster';
 
@@ -12,7 +13,12 @@ import 'leaflet/dist/leaflet.css';
 /* TODO: consider createTileLayerComponent
 /* TODO: support layers with type 'arcgis' and 'wms' (WMSTileLayer) https://jira.tacc.utexas.edu/browse/WG-6 */
 
-const centerPosition: LatLngTuple = [32.6185055555556, -80.780375];
+const startingCenterPosition: LatLngTuple = [40, -80];
+const maxFitToBoundsZoom = 18;
+const maxBounds: L.LatLngBoundsExpression = [
+  [-90, -180], // Southwest coordinates
+  [90, 180], // Northeast coordinates
+];
 
 interface LeafletMapProps {
   /**
@@ -31,6 +37,25 @@ const ClusterMarkerIcon = (childCount: number) => {
     html: `<div><b>${childCount}</b></div>`,
     className: 'marker-cluster',
   });
+};
+
+const FitBoundsOnInitialLoad = ({
+  featureCollection,
+}: {
+  featureCollection: FeatureCollection;
+}) => {
+  const map = useMap();
+
+  useEffect(() => {
+    if (featureCollection.features.length) {
+      const bbox = turf.bbox(featureCollection);
+      const southWest: [number, number] = [bbox[1], bbox[0]];
+      const northEast: [number, number] = [bbox[3], bbox[2]];
+      map.fitBounds([southWest, northEast], { maxZoom: maxFitToBoundsZoom });
+    }
+  }, [map, featureCollection]);
+
+  return null;
 };
 
 /**
@@ -52,9 +77,11 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
 
   return (
     <MapContainer
-      center={centerPosition}
-      zoom={13}
+      center={startingCenterPosition}
+      zoom={3}
       style={{ width: '100%', height: '100%' }}
+      minZoom={2} // 2 typically prevents zooming out to far to see multiple earths
+      maxBounds={maxBounds}
     >
       {activeBaseLayers.map((layer) => (
         <TileLayer
@@ -79,6 +106,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
           </Marker>
         ))}
       </MarkerClusterGroup>
+      <FitBoundsOnInitialLoad featureCollection={featureCollection} />
     </MapContainer>
   );
 };
