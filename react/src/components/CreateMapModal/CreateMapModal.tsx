@@ -15,6 +15,7 @@ import * as Yup from 'yup';
 import useCreateProject from '../../hooks/projects/useCreateProject';
 import useAuthenticatedUser from '../../hooks/user/useAuthenticatedUser';
 import { useNavigate } from 'react-router-dom';
+import { ProjectRequest } from '../../types';
 
 type CreateMapModalProps = {
   isOpen: boolean;
@@ -30,7 +31,7 @@ const validationSchema = Yup.object({
       /^[A-Za-z0-9-_]+$/,
       'Only letters, numbers, hyphens, and underscores are allowed'
     )
-    .required('Custom file name is required'),
+    .required(' file name is required'),
 });
 
 const CreateMapModal = ({ isOpen, toggle }: CreateMapModalProps) => {
@@ -40,7 +41,7 @@ const CreateMapModal = ({ isOpen, toggle }: CreateMapModalProps) => {
     useCreateProject();
   const navigate = useNavigate();
 
-  const handleCreateProject = (projectData, actions) => {
+  const handleCreateProject = (projectData: ProjectRequest, actions) => {
     createProject(projectData, {
       onSuccess: (newProject) => {
         navigate(`/project/${newProject.uuid}`);
@@ -95,7 +96,7 @@ const CreateMapModal = ({ isOpen, toggle }: CreateMapModalProps) => {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {/*TODO-REACT: Will change to core-style's FormField comp instead of Formik's Form & Field comp*/}
+          {/*TODO_REACT: Will change to core-wrapper's FieldWrapperFormik instead. https://tacc-main.atlassian.net/browse/WG-246 */}
           {({ errors, touched, values, handleChange }) => (
             <Form>
               <FormGroup>
@@ -148,7 +149,7 @@ const CreateMapModal = ({ isOpen, toggle }: CreateMapModalProps) => {
                   </div>
                 )}
               </FormGroup>
-              {/* TODO-REACT: This part will change once the FileBrowser component is added*/}
+              {/* TODO_REACT: This part will change once the FileBrowser component is added. https://tacc-main.atlassian.net/browse/WG-208*/}
               <FormGroup className="row align-items-center">
                 <Label className="col-sm-4">Save Location:</Label>
                 <div className="col-sm-8 text-primary">

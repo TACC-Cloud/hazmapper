@@ -18,10 +18,3 @@
 .form-check-label {
   font-style: italic;
 }
-
-.btn-close-custom {
-  background: transparent;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
