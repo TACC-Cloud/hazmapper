@@ -48,13 +48,14 @@ const CreateMapModal = ({ isOpen, toggle }: CreateMapModalProps) => {
       },
       onError: (err) => {
         // Handle error messages while creating new project
-        setErrorMessage('An error occurred while creating the project.');
         if (err?.response?.status === 409) {
           setErrorMessage(
             'That folder is already syncing with a different map.'
           );
-        } else if (err?.response?.status === 500) {
-          setErrorMessage('Internal server error. Please contact support.');
+        } else {
+          setErrorMessage(
+            'An error occurred while creating the project. Please contact support.'
+          );
         }
       },
     });
