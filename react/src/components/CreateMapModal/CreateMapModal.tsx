@@ -41,7 +41,7 @@ const CreateMapModal = ({ isOpen, toggle }: CreateMapModalProps) => {
     useCreateProject();
   const navigate = useNavigate();
 
-  const handleCreateProject = (projectData: ProjectRequest, actions) => {
+  const handleCreateProject = (projectData: ProjectRequest) => {
     createProject(projectData, {
       onSuccess: (newProject) => {
         navigate(`/project/${newProject.uuid}`);
@@ -56,15 +56,13 @@ const CreateMapModal = ({ isOpen, toggle }: CreateMapModalProps) => {
         } else if (err?.response?.status === 500) {
           setErrorMessage('Internal server error. Please contact support.');
         }
-        actions.setSubmitting(false);
       },
     });
   };
 
-  const handleSubmit = (values, actions) => {
+  const handleSubmit = (values) => {
     if (!userData) {
       setErrorMessage('User information is not available');
-      actions.setSubmitting(false);
       return;
     }
     const projectData = {
@@ -78,7 +76,7 @@ const CreateMapModal = ({ isOpen, toggle }: CreateMapModalProps) => {
         system_path: `/${userData.username}`,
       },
     };
-    handleCreateProject(projectData, actions);
+    handleCreateProject(projectData);
   };
   return (
     <Modal isOpen={isOpen} toggle={toggle}>
