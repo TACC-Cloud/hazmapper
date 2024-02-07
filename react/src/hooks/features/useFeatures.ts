@@ -1,0 +1,44 @@
+import { UseQueryResult } from 'react-query';
+import { FeatureCollection } from '../../types';
+import { useGet } from '../../requests';
+
+interface UseFeaturesParams {
+  projectId?: number;
+  isPublic: boolean;
+  options: object;
+}
+
+const useFeatures = ({
+  projectId,
+  isPublic,
+  options,
+}: UseFeaturesParams): UseQueryResult<FeatureCollection> => {
+  const featuresRoute = isPublic ? 'public-projects' : 'projects';
+  const endpoint = `/${featuresRoute}/${projectId}/features/`;
+
+  // TODO_REACT  add assets filter in https://tacc-main.atlassian.net/browse/WG-242. Filter route looks like something like this in v2:
+  // projects/1027/features/?assetType=image%2Cvideo%2Cpoint_cloud%2Cstreetview%2Cquestionnaire%2Cno_asset_vector&&updates=null&cloneFrom=null&encoder=%5Bobject%20Object%5D&map=%5Bobject%20Map%5D&application=hazmapper
+
+  // TODO_REACT  add guest uuid and app info and related ticket to come back to this in v3 WG-XXX https://github.com/TACC-Cloud/hazmapper/blob/master/angular/src/app/app.interceptors.ts#L44-L69):
+  /* TODO_V3 Send analytics-related params to projects endpoint only (until we use headers again in https://tacc-main.atlassian.net/browse/WG-192) */
+
+  const query = useGet<FeatureCollection>({
+    endpoint,
+    key: ['features', { projectId, isPublic }],
+    options,
+  });
+
+  if (!projectId) {
+    return {
+      ...query,
+      status: 'error',
+      error: new Error('Unknown project'),
+      data: undefined,
+      isFetching: false,
+    } as UseQueryResult<FeatureCollection>;
+  }
+
+  return query;
+};
+
+export default useFeatures;

@@ -1,8 +1,9 @@
 import React from 'react';
 import Map from '../../components/Map';
 import { tileServerLayers } from '../../__fixtures__/tileServerLayerFixture';
-import { featureCollection } from '../../__fixtures__/featuresFixture';
+import { useFeatures, useProject } from '../../hooks';
 import { useParams } from 'react-router-dom';
+import { LoadingSpinner } from '../../core-components';
 
 interface Props {
   /**
@@ -16,17 +17,50 @@ interface Props {
  * A component that displays a map project (a map and related data)
  */
 const MapProject: React.FC<Props> = ({ isPublic = false }) => {
-  const { projectUUID } = useParams<{ projectUUID: string }>();
+  const { projectUUID } = useParams();
 
-  console.log(projectUUID);
-  console.log(isPublic);
+  const {
+    data: activeProject,
+    isLoading: isActiveProjectLoading,
+    error: activeProjectError,
+  } = useProject({
+    projectUUID,
+    isPublic,
+    options: { enabled: !!projectUUID },
+  });
+
+  const {
+    data: featureCollection,
+    isLoading: isFeaturesLoading,
+    error: featuresError,
+  } = useFeatures({
+    projectId: activeProject?.id,
+    isPublic,
+    options: {
+      enabled:
+        !isActiveProjectLoading && !activeProjectError && !!activeProject,
+    },
+  });
+
+  if (isActiveProjectLoading || isFeaturesLoading) {
+    return <LoadingSpinner />;
+  }
+  if (activeProjectError || featuresError) {
+    return null; /* TODO_REACT show error*/
+  }
 
   return (
     <div style={{ width: '100vw', height: '100vh' }}>
-      {/* TODO for above and project, should we use style-components and/or CSS modules? */}
       <Map
         baseLayers={tileServerLayers}
-        featureCollection={featureCollection}
+        featureCollection={
+          featureCollection
+            ? featureCollection
+            : {
+                type: 'FeatureCollection',
+                features: [],
+              }
+        }
       />
     </div>
   );
