@@ -98,7 +98,9 @@ describe('CreateMapModal', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('Internal server error. Please contact support.')
+        screen.getByText(
+          'An error occurred while creating the project. Please contact support.'
+        )
       ).toBeTruthy();
     });
   });
