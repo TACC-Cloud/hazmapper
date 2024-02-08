@@ -7,7 +7,7 @@
   transition: color var(--transition-duration),
     background-color var(--transition-duration);
 
-  composes: c-button--secondary from '@tacc/core-styles/src/lib/_imports/components/c-button.css';
+  composes: c-button--secondary from '@tacc/core-styles/dist/components/c-button.css';
 }
 
 .copy-button.is-copied,
