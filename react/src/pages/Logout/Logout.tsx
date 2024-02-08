@@ -12,7 +12,7 @@ function Logout() {
   };
 
   useEffect(() => {
-    dispatch(logout);
+    dispatch(logout());
   }, [dispatch]);
 
   return (

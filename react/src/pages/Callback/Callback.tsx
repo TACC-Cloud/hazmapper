@@ -33,7 +33,7 @@ export default function CallbackPage() {
       dispatch(loginSuccess({ token, expires }));
       navigate(redirectTo);
     }
-  }, []);
+  }, [dispatch]);
 
   return <div>Logging in...</div>;
 }
