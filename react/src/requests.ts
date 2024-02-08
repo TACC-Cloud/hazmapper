@@ -78,7 +78,7 @@ export function useGet<ResponseType>({
   or /public-projects/<project_id>/features)
    only (until we use headers again in https://tacc-main.atlassian.net/browse/WG-192). We are using
    query params instead of custom headers due to https://tacc-main.atlassian.net/browse/WG-191 */
-   if (/\/(projects|public-projects)\/\d+\/features/.test(endpoint)) {
+  if (/\/(projects|public-projects)\/\d+\/features/.test(endpoint)) {
     let analytics_params = {};
 
     analytics_params = { ...analytics_params, application: 'hazmapper' };
