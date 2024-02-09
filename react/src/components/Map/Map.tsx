@@ -97,14 +97,18 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
           ClusterMarkerIcon(cluster.getChildCount())
         }
       >
-        {pointGeometryFeatures.map((f) => (
-          <Marker
-            key={f.id}
-            position={[f.geometry.coordinates[1], f.geometry.coordinates[0]]}
-          >
-            <Popup>{f.id}</Popup>
-          </Marker>
-        ))}
+        {pointGeometryFeatures.map((f) => {
+          const geometry = f.geometry as GeoJSON.Point;
+
+          return (
+            <Marker
+              key={f.id}
+              position={[geometry.coordinates[1], geometry.coordinates[0]]}
+            >
+              <Popup>{f.id}</Popup>
+            </Marker>
+          );
+        })}
       </MarkerClusterGroup>
       <FitBoundsOnInitialLoad featureCollection={featureCollection} />
     </MapContainer>
