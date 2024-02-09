@@ -3,6 +3,7 @@ import {
   LoadingSpinner,
   InlineMessage,
   SectionHeader,
+  Icon,
 } from '../../core-components';
 import { useProjects } from '../../hooks';
 import useAuthenticatedUser from '../../hooks/user/useAuthenticatedUser';
@@ -32,12 +33,20 @@ function MainMenu() {
     <>
       <SectionHeader isNestedHeader>Main Menu</SectionHeader>
       <InlineMessage type="success">
-        Welcome, {userData?.username || 'User'}
+        Welcome, {userData?.username || 'User'} <Icon name="user"></Icon>
       </InlineMessage>
 
       <table>
-        <thead>Projects</thead>
-        <tbody>You have {data?.length} projects.</tbody>
+        <thead>
+          <tr>
+            <th>Projects</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>You have {data?.length} projects.</td>
+          </tr>
+        </tbody>
       </table>
     </>
   );
