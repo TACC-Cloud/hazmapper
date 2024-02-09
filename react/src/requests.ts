@@ -91,7 +91,7 @@ export function useGet<ResponseType>({
 
       if (!guestUuid) {
         guestUuid = uuidv4();
-        localStorage.setItem('guestUuid', guestUuid);
+        localStorage.setItem('guestUuid', guestUuid as string);
       }
 
       analytics_params = { ...analytics_params, guest_uuid: guestUuid };
