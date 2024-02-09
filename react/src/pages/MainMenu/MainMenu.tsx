@@ -15,7 +15,6 @@ function MainMenu() {
     isLoading: isUserLoading,
     error: userError,
   } = useAuthenticatedUser();
-
   if (isLoading || isUserLoading) {
     return (
       <>
