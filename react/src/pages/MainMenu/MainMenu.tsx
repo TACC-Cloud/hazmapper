@@ -3,6 +3,7 @@ import {
   LoadingSpinner,
   InlineMessage,
   SectionHeader,
+  Icon,
   Button,
 } from '../../core-components';
 import { useProjects } from '../../hooks';
@@ -45,12 +46,20 @@ function MainMenu() {
         </Button>
       </div>
       <InlineMessage type="info">
-        Welcome, {userData?.username || 'User'}
+        Welcome, {userData?.username || 'User'} <Icon name="user"></Icon>
       </InlineMessage>
       <CreateMapModal isOpen={isModalOpen} toggle={toggleModal} />
       <table>
-        <thead>Projects</thead>
-        <tbody>You have {data?.length} projects.</tbody>
+        <thead>
+          <tr>
+            <th>Projects</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>You have {data?.length} projects.</td>
+          </tr>
+        </tbody>
       </table>
     </>
   );
