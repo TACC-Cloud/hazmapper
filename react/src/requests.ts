@@ -33,7 +33,6 @@ export function getHeaders(
   configuration: AppConfiguration,
   auth: AuthState
 ) {
-
   // TODO_REACT add mapillary support
   if (auth.token?.token && apiService !== ApiService.Mapillary) {
     //Add auth information in header for DesignSafe, Tapis, Geoapi for logged in users
