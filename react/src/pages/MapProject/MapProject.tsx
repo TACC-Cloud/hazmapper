@@ -46,7 +46,7 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
     return <LoadingSpinner />;
   }
   if (activeProjectError || featuresError) {
-    return null; /* TODO_REACT show error*/
+    return null; /* TODO_REACT show error and improve spinner https://tacc-main.atlassian.net/browse/WG-260*/
   }
 
   return (
