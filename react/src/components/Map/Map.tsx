@@ -1,5 +1,12 @@
 import React from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  WMSTileLayer,
+} from 'react-leaflet';
+import { TiledMapLayer } from 'react-esri-leaflet';
 import MarkerClusterGroup from '@changey/react-leaflet-markercluster';
 import { TileServerLayer, FeatureCollection } from '../../types';
 import * as L from 'leaflet';
@@ -56,15 +63,29 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
       zoom={13}
       style={{ width: '100%', height: '100%' }}
     >
-      {activeBaseLayers.map((layer) => (
-        <TileLayer
-          key={layer.id}
-          url={layer.url}
-          attribution={layer.attribution}
-          zIndex={layer.uiOptions.zIndex}
-          opacity={layer.uiOptions.opacity}
-        />
-      ))}
+      {activeBaseLayers.map((layer) =>
+        layer.type === 'wms' ? (
+          <WMSTileLayer
+            key={layer.id}
+            url={layer.url}
+            attribution={layer.attribution}
+            zIndex={layer.uiOptions.zIndex}
+            opacity={layer.uiOptions.opacity}
+            {...layer.tileOptions}
+          />
+        ) : layer.type === 'arcgis' ? (
+          <TiledMapLayer key={layer.id} url={layer.url} maxZoom={24} />
+        ) : (
+          <TileLayer
+            key={layer.id}
+            url={layer.url}
+            attribution={layer.attribution}
+            zIndex={layer.uiOptions.zIndex}
+            opacity={layer.uiOptions.opacity}
+            {...layer.tileOptions}
+          />
+        )
+      )}
       <MarkerClusterGroup
         iconCreateFunction={(cluster: MarkerCluster) =>
           ClusterMarkerIcon(cluster.getChildCount())
