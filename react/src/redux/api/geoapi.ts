@@ -12,10 +12,10 @@ export const geoapi = createApi({
     baseUrl: BASE_URL,
     prepareHeaders: (headers, api) => {
       // TODO check if logged in as we don't want to add if public
-      const token = (api.getState() as RootState).auth.token;
+      const authToken = (api.getState() as RootState).auth.authToken;
 
-      if (token) {
-        headers.set('Authorization', `Bearer ${token.token}`);
+      if (authToken) {
+        headers.set('Authorization', `Bearer ${authToken.token}`);
       }
 
       headers.set('Content-Type', 'application/json;charset=UTF-8');

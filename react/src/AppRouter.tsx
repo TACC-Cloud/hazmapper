@@ -39,7 +39,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
 function AppRouter() {
   const isAuthenticated = useSelector((state: RootState) =>
-    isTokenValid(state.auth.token)
+    isTokenValid(state.auth.authToken)
   );
 
   const basePath = useBasePath();

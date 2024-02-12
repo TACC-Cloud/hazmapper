@@ -9,7 +9,7 @@ function Login() {
   const location = useLocation();
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state: RootState) =>
-    isTokenValid(state.auth.token)
+    isTokenValid(state.auth.authToken)
   );
   const configuration = useAppConfiguration();
 

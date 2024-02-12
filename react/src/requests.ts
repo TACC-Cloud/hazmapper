@@ -34,7 +34,7 @@ export function getHeaders(
   auth: AuthState
 ) {
   // TODO_REACT add mapillary support
-  if (auth.token?.token && apiService !== ApiService.Mapillary) {
+  if (auth.authToken?.token && apiService !== ApiService.Mapillary) {
     //Add auth information in header for DesignSafe, Tapis, Geoapi for logged in users
     if (
       apiService === ApiService.Geoapi &&
@@ -43,7 +43,7 @@ export function getHeaders(
       // Use JWT in request header because local geoapi API is not behind ws02
       return { 'X-JWT-Assertion-designsafe': configuration.jwt };
     }
-    return { Authorization: `Bearer ${auth.token.token}` };
+    return { Authorization: `Bearer ${auth.authToken?.token}` };
   }
   return {};
 }
@@ -83,9 +83,10 @@ export function useGet<ResponseType>({
     let analytics_params = {};
 
     analytics_params = { ...analytics_params, application: 'hazmapper' };
-
+    console.log('Token value:', state.auth.authToken);
+    console.log('!Token value:', !state.auth.authToken);
     // for guest users, add a unique id
-    if (!state.auth.token) {
+    if (!state.auth.authToken?.token) {
       // Get (or create if needed) the guestUserID in local storage
 
       let guestUuid = localStorage.getItem('guestUuid');

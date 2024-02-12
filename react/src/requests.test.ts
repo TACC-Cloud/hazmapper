@@ -32,7 +32,7 @@ describe('getHeaders', () => {
       authenticatedUser
     );
     expect(headers).toEqual({
-      Authorization: `Bearer ${authenticatedUser.token?.token}`,
+      Authorization: `Bearer ${authenticatedUser.authToken?.token}`,
     });
   });
 
