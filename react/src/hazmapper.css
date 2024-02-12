@@ -1,0 +1,10 @@
+@import url('@tacc/core-styles/dist/core-styles.base.css');
+@import url('@tacc/core-styles/dist/core-styles.portal.css');
+
+/* for hazmapper specific overwrites of base and portal styles" like,
+
+:root {
+  --global-color-accent--xx-light: blue;
+}
+
+*/
