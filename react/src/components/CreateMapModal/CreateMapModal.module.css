@@ -11,10 +11,41 @@
 
 .custom-error-message {
   margin-top: 0.25rem;
-  font-size: 0.8em;
+  font-size: 1.2em;
   color: #dc3545;
 }
 
 .form-check-label {
   font-style: italic;
+}
+
+.input-height {
+  height: 3em;
+}
+
+.input-custom-size {
+  height: 3em;
+  width: 41rem;
+}
+
+.flexContainer {
+  display: flex;
+  vertical-align: top;
+  gap: 8px;
+  margin-bottom: 1.5em;
+}
+
+.check-wrapper {
+  display: flex;
+  margin-left: 1rem;
+  margin-top:-1.3rem;
+}
+
+.hazmapper-custom {
+  margin-top: 2.5rem;
+}
+
+.custom-sync-description {
+  font-style: italic;
+  margin-top: -1.25rem;
 }
