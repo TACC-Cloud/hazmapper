@@ -1,24 +1,15 @@
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Map from '../../components/Map';
 import AssetsPanel from '../../components/AssetsPanel';
+import ManageMapProjectModal from '../../components/ManageMapProjectModal';
+import { queryPanelKey, Panel } from '../../utils/panels';
 
-import { Button } from '../../core-components';
 import { tileServerLayers } from '../../__fixtures__/tileServerLayerFixture';
 import { featureCollection } from '../../__fixtures__/featuresFixture';
 import { useParams } from 'react-router-dom';
+import { QueryNavItem } from '../../core-wrappers';
 import styles from './MapProject.module.css';
-
-const queryPanelKey = 'panel';
-
-enum ActivePanel {
-  Assets = 'Assets',
-  PointClouds = 'PointClouds',
-  Layers = 'Layers',
-  Filters = 'Filters',
-  Streetview = 'Streetview',
-  Manage = 'Manage',
-}
 
 interface Props {
   /**
@@ -35,19 +26,9 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
   const { projectUUID } = useParams<{ projectUUID: string }>();
 
   const location = useLocation();
-  const navigate = useNavigate();
 
   const queryParams = new URLSearchParams(location.search);
   const activePanel = queryParams.get(queryPanelKey);
-
-  const togglePanel = (panel: ActivePanel) => {
-    if (queryParams.get(queryPanelKey) == panel) {
-      queryParams.delete(queryPanelKey);
-    } else {
-      queryParams.set(queryPanelKey, panel);
-    }
-    navigate({ search: queryParams.toString() });
-  };
 
   console.log(projectUUID);
   console.log(isPublic);
@@ -58,31 +39,79 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
       <div className={styles.mapControlBar}>MapTopControlBar</div>
       <div className={styles.container}>
         <div className={styles.panelNavigation}>
-          <Button onClick={() => togglePanel(ActivePanel.Assets)}>
+          <QueryNavItem
+            icon="applications" /* TODO_REACT*/
+            to={
+              activePanel == Panel.Assets
+                ? ''
+                : `?${queryPanelKey}=${Panel.Assets}`
+            }
+            active={activePanel == Panel.Assets}
+          >
             Assets
-          </Button>
-          <Button onClick={() => togglePanel(ActivePanel.PointClouds)}>
+          </QueryNavItem>
+          <QueryNavItem
+            icon="upload" /* TODO_REACT*/
+            to={
+              activePanel == Panel.PointClouds
+                ? ''
+                : `?${queryPanelKey}=${Panel.PointClouds}`
+            }
+            active={activePanel == Panel.PointClouds}
+          >
             Point Clouds
-          </Button>
-          <Button onClick={() => togglePanel(ActivePanel.Layers)}>
+          </QueryNavItem>
+          <QueryNavItem
+            icon="burger" /* TODO_REACT*/
+            to={
+              activePanel == Panel.Layers
+                ? ''
+                : `?${queryPanelKey}=${Panel.Layers}`
+            }
+            active={activePanel == Panel.Layers}
+          >
             Layers
-          </Button>
-          <Button onClick={() => togglePanel(ActivePanel.Filters)}>
+          </QueryNavItem>
+          <QueryNavItem
+            icon="search" /* TODO_REACT*/
+            to={
+              activePanel == Panel.Filters
+                ? ''
+                : `?${queryPanelKey}=${Panel.Filters}`
+            }
+            active={activePanel == Panel.Filters}
+          >
             Filters
-          </Button>
-          <Button onClick={() => togglePanel(ActivePanel.Streetview)}>
+          </QueryNavItem>
+          <QueryNavItem
+            icon="reverse-order" /* TODO_REACT*/
+            to={
+              activePanel == Panel.Streetview
+                ? ''
+                : `?${queryPanelKey}=${Panel.Streetview}`
+            }
+            active={activePanel == Panel.Streetview}
+          >
             Streetview
-          </Button>
-          <Button onClick={() => togglePanel(ActivePanel.Manage)}>
+          </QueryNavItem>
+          <QueryNavItem
+            icon="project" /* TODO_REACT*/
+            to={
+              activePanel == Panel.Manage
+                ? ''
+                : `?${queryPanelKey}=${Panel.Manage}`
+            }
+            active={activePanel == Panel.Manage}
+          >
             Manage
-          </Button>
+          </QueryNavItem>
         </div>
-        {activePanel && (
+        {activePanel && activePanel !== Panel.Manage && (
           <div className={styles.panelContainer}>
-            {activePanel === ActivePanel.Assets && <AssetsPanel />}
+            {activePanel === Panel.Assets && <AssetsPanel />}
           </div>
         )}
-
+        {activePanel === Panel.Manage && <ManageMapProjectModal />}
         <div className={styles.map}>
           <Map
             baseLayers={tileServerLayers}
