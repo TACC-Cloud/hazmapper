@@ -129,7 +129,7 @@ const CreateMapModal = ({
                     .hazmapper
                   </span>
                 </div>
-                <div className={`${styles['flexContainer']}`}>
+                <div className={`${styles['flexContainer-alt']}`}>
                   <label htmlFor="save-location-label">Save Location:</label>
                   <span className="text-primary">/{userData?.username}</span>
                 </div>
