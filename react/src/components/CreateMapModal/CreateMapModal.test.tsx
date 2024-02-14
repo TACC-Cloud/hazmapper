@@ -23,7 +23,7 @@ jest.mock('../../hooks/projects/useCreateProject', () => ({
   __esModule: true,
   default: () => ({
     mutate: jest.fn((data, { onSuccess, onError }) => {
-      if (data.project.name === 'Error Map') {
+      if (data.name === 'Error Map') {
         // Simulate a submission error with a 500 status code
         onError({ response: { status: 500 } });
       } else {
