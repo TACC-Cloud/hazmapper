@@ -29,15 +29,6 @@
   flex: 1;
 }
 
-.panelNavigation {
-  width: 100px;
-  background-color: #f0f0f09d;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 10px;
-}
-
 .panelContainer {
   /* todo place into a PanelContainer and then the PanelNavigation where the buttons live either horizonal or vertical    */
   width: 200px;
