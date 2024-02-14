@@ -3,9 +3,17 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import styles from './ManageMapProjectModal.module.css';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 
-const ManageMapProjectModal: React.FC = () => {
+interface ManageMapProjectModalProps {
+  isPublic?: boolean;
+}
+
+const ManageMapProjectModal: React.FC<ManageMapProjectModalProps> = ({
+  isPublic = false,
+}) => {
   const navigate = useNavigate();
   const location = useLocation();
+
+  console.log(isPublic);
 
   const closeModal = () => {
     const params = new URLSearchParams(location.search);

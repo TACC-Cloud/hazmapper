@@ -4,9 +4,8 @@ import styles from './AssetsPanel.module.css';
 interface Props {
   /**
    * Whether or not the map project is public.
-   * @default false
    */
-  isPublic?: boolean;
+  isPublic: boolean;
 }
 
 /**

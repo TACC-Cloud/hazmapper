@@ -41,10 +41,14 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
         <MapProjectNavBar />
         {activePanel && activePanel !== Panel.Manage && (
           <div className={styles.panelContainer}>
-            {activePanel === Panel.Assets && <AssetsPanel />}
+            {activePanel === Panel.Assets && (
+              <AssetsPanel isPublic={isPublic} />
+            )}
           </div>
         )}
-        {activePanel === Panel.Manage && <ManageMapProjectModal />}
+        {activePanel === Panel.Manage && (
+          <ManageMapProjectModal isPublic={isPublic} />
+        )}
         <div className={styles.map}>
           <Map
             baseLayers={tileServerLayers}
