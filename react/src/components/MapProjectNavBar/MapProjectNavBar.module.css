@@ -1,5 +1,4 @@
-
-.root{
+.root {
   height: 100%;
   min-width: 150px;
   padding-top: var(--global-space--section-top);
@@ -7,4 +6,8 @@
 
 .root > a > div {
   padding-left: var(--global-space--section-left);
+}
+
+.image {
+  margin-right: 1rem;
 }
