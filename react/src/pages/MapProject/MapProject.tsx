@@ -35,7 +35,7 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
 
   return (
     <div className={styles.root}>
-      <div className={styles.navbar}>MapTopNavBar</div>
+      <div className={styles.topNavbar}>MapTopNavBar</div>
       <div className={styles.mapControlBar}>MapTopControlBar</div>
       <div className={styles.container}>
         <MapProjectNavBar />
