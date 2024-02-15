@@ -1,4 +1,10 @@
-import React, { useState, useContext, useCallback, useEffect } from 'react';
+import React, {
+  useState,
+  useContext,
+  useCallback,
+  useEffect,
+  createContext,
+} from 'react';
 import StepWizard, { StepWizardChildProps } from 'react-step-wizard';
 import { Button } from '../../core-components';
 import { WizardStep } from '.';
@@ -8,7 +14,7 @@ import styles from './Wizard.module.css';
 export type WizardContextType = Partial<StepWizardChildProps>;
 
 const WizardContext: React.Context<WizardContextType> =
-  React.createContext<WizardContextType>({});
+  createContext<WizardContextType>({});
 
 export const useWizard = () => {
   const props = useContext(WizardContext);
