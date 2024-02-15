@@ -5,7 +5,6 @@ import {
   removeTokenFromLocalStorage,
 } from '../utils/authUtils';
 import { AuthState, AuthenticatedUser } from '../types';
-import { geoapi } from './api/geoapi';
 
 // TODO consider moving to ../types/
 // check local storage for our initial state
@@ -40,18 +39,6 @@ const authSlice = createSlice({
     setUser(state, action: PayloadAction<{ user: AuthenticatedUser }>) {
       state.user = action.payload.user;
     },
-  },
-  extraReducers: (builder) => {
-    builder.addMatcher(
-      geoapi.endpoints.getGeoapiUserInfo.matchFulfilled,
-      (state, action: PayloadAction<any>) => {
-        const u: any = {
-          name: action.payload.name,
-          email: action.payload.email,
-        };
-        state.user = u;
-      }
-    );
   },
 });
 

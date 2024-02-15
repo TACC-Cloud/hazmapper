@@ -1,7 +1,13 @@
 import axios from 'axios';
 import store from './redux/store';
 import { AxiosError } from 'axios';
-import { useQuery, UseQueryOptions, QueryKey } from 'react-query';
+import {
+  useQuery,
+  useMutation,
+  UseQueryOptions,
+  UseMutationOptions,
+  QueryKey,
+} from 'react-query';
 import { useAppConfiguration } from './hooks';
 import {
   ApiService,
@@ -54,6 +60,13 @@ type UseGetParams<ResponseType> = {
     UseQueryOptions<ResponseType, AxiosError>,
     'queryKey' | 'queryFn'
   >;
+  transform?: (data: any) => ResponseType;
+  apiService?: ApiService;
+};
+
+type UsePostParams<RequestType, ResponseType> = {
+  endpoint: string;
+  options?: UseMutationOptions<ResponseType, AxiosError, RequestType>;
   apiService?: ApiService;
 };
 
@@ -62,7 +75,30 @@ export function useGet<ResponseType>({
   key,
   options = {},
   apiService = ApiService.Geoapi,
+  transform,
 }: UseGetParams<ResponseType>) {
+  const client = axios;
+  const state = store.getState();
+  const configuration = useAppConfiguration();
+  const baseUrl = getBaseApiUrl(apiService, configuration);
+  const headers = getHeaders(apiService, configuration, state.auth);
+
+  /* TODO_REACT Send analytics-related params to projects endpoint only (until we use headers
+    again in https://tacc-main.atlassian.net/browse/WG-192) */
+
+  const getUtil = async () => {
+    const request = await client.get(`${baseUrl}${endpoint}`, { headers });
+    return transform ? transform(request.data) : request.data;
+  };
+
+  return useQuery<ResponseType, AxiosError>(key, getUtil, options);
+}
+
+export function usePost<RequestType, ResponseType>({
+  endpoint,
+  options = {},
+  apiService = ApiService.Geoapi,
+}: UsePostParams<RequestType, ResponseType>) {
   const client = axios;
   const state = store.getState();
   const configuration = useAppConfiguration();
@@ -70,18 +106,16 @@ export function useGet<ResponseType>({
   const baseUrl = getBaseApiUrl(apiService, configuration);
   const headers = getHeaders(apiService, configuration, state.auth);
 
-  /* TODO_REACT Send analytics-related params to projects endpoint only (until we use headers
-     again in https://tacc-main.atlassian.net/browse/WG-192) */
-
-  const getUtil = async () => {
-    const request = await client.get<ResponseType>(
+  const postUtil = async (requestData: RequestType) => {
+    const response = await client.post<ResponseType>(
       `${baseUrl}${endpoint}`,
-
+      requestData,
       {
         headers: headers,
       }
     );
-    return request.data;
+    return response.data;
   };
-  return useQuery<ResponseType, AxiosError>(key, () => getUtil(), options);
+
+  return useMutation<ResponseType, AxiosError, RequestType>(postUtil, options);
 }
