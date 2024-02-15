@@ -58,13 +58,15 @@ export class AuthService {
     }
   }
 
+
   public redirectToAuthenticator() {
     const client_id = this.envService.clientId;
     const callback = location.origin + this.envService.baseHref + 'callback';
     const state = Math.random().toString(36);
     // tslint:disable-next-line:max-line-length
-    const AUTH_URL = `https://agave.designsafe-ci.org/authorize?scope=openid&client_id=${client_id}&response_type=token&redirect_uri=${callback}&state=${state}`;
-    window.location.href = AUTH_URL;
+    const AUTH_URL_V3 = `https://designsafe.develop.tapis.io/v3/oauth2/authorize?client_id=${client_id}&response_type=token&redirect_uri=${callback}`
+
+    window.location.href = AUTH_URL_V3;
   }
 
   /**

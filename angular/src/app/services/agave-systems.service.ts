@@ -58,6 +58,7 @@ export class AgaveSystemsService {
     this._loadingProjects.next(true);
     this._loadingProjectsFailedMessage.next(null);
 
+    // TODO_TAPIS_V3 mock a response from projects endpoint and use designsafe directly i.e. /api/projects
     this.http.get<DesignSafeProjectCollection>(this.envService.designSafeUrl + `/projects/v2/`).subscribe(
       (resp) => {
         const projectSystems = resp.projects.map((project) => {
