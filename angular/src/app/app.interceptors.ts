@@ -17,23 +17,13 @@ export class JwtInterceptor implements HttpInterceptor {
   ) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (request.url.indexOf('https://agave.designsafe-ci.org') > -1) {
-      if (this.authSvc.isLoggedIn()) {
-        request = request.clone({
-          setHeaders: {
-            Authorization: 'Bearer ' + this.authSvc.userToken.token,
-          },
-        });
-      }
-    }
-
-    // we put the JWT on the request to our geoapi API because it is not behind ws02 if in local dev
-    // and if user is logged in
-    if (this.envService.jwt && request.url.indexOf(this.envService.apiUrl) > -1 && this.authSvc.isLoggedIn()) {
-      // add header
+    // TODO_TAPISV3 put the tapis url in envService
+    const isTargetUrl = request.url.includes('https://designsafe.develop.tapis.io') || request.url.includes(this.envService.apiUrl);
+    if (isTargetUrl && this.authSvc.isLoggedIn()) {
+      // add tapis token to Geoapi or Tapis requests
       request = request.clone({
         setHeaders: {
-          'X-JWT-Assertion-designsafe': this.envService.jwt,
+          'X-Tapis-Token': this.authSvc.userToken.token,
         },
       });
     }
