@@ -11,7 +11,7 @@ interface Props {
 /**
  * A component that displays a map project (a map and related data)
  */
-const AssetsPanel: React.FC<Props> = ({ isPublic = false }) => {
+const AssetsPanel: React.FC<Props> = ({ isPublic }) => {
   console.log(isPublic);
   return <div className={styles.root}>Assets Panel TODO</div>;
 };

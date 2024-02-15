@@ -4,11 +4,11 @@ import styles from './ManageMapProjectModal.module.css';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 
 interface ManageMapProjectModalProps {
-  isPublic?: boolean;
+  isPublic: boolean;
 }
 
 const ManageMapProjectModal: React.FC<ManageMapProjectModalProps> = ({
-  isPublic = false,
+  isPublic,
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
