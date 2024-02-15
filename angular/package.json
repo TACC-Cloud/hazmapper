@@ -42,6 +42,7 @@
     "foundation-sites": "^6.5.3",
     "hammerjs": "^2.0.8",
     "jquery": "^3.6.3",
+    "jwt-decode": "^4.0.0",
     "leaflet": "^1.4.0",
     "leaflet.markercluster": "^1.4.1",
     "mapillary-js": "^4.1.0",
