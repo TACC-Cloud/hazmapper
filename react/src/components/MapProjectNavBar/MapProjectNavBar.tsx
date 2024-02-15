@@ -70,26 +70,36 @@ const MapProjectNavBar: React.FC<NavBarPanelProps> = ({ isPublic = false }) => {
     <div className={styles.root}>
       {navItems
         .filter((item) => (isPublic ? item.showWhenPublic : true))
-        .map((item) => (
-          <QueryNavItem
-            key={item.panel}
-            to={
-              activePanel === item.panel
-                ? ''
-                : `?${queryPanelKey}=${item.panel}`
-            }
-            active={activePanel === item.panel}
-          >
-            <img
-              src={item.imagePath}
-              alt={item.label}
-              className={styles.image}
-              width="32px"
-            />
-            {/*TODO_REACT do we want to bold the text if active like in CEP-portals?*/}
-            {item.label}
-          </QueryNavItem>
-        ))}
+        .map((item) => {
+          const updatedQueryParams = new URLSearchParams(location.search);
+
+          if (activePanel === item.panel) {
+            // If already active, we want to remove queryPanel key if user clicks again
+            updatedQueryParams.delete(queryPanelKey);
+          } else {
+            // Set the queryPanelKey to the current item's panel
+            updatedQueryParams.set(queryPanelKey, item.panel);
+          }
+
+          // Construct the `to` prop with updated query params
+          const to = `${location.pathname}?${updatedQueryParams.toString()}`;
+
+          return (
+            <QueryNavItem
+              key={item.panel}
+              to={to}
+              active={activePanel === item.panel}
+            >
+              <img
+                src={item.imagePath}
+                alt={item.label}
+                className={styles.image}
+                width="32px"
+              />
+              {item.label}
+            </QueryNavItem>
+          );
+        })}
     </div>
   );
 };
