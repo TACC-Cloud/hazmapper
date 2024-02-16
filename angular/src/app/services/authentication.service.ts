@@ -4,7 +4,7 @@ import { AuthToken } from '../models/models';
 import { EnvService } from '../services/env.service';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Router } from '@angular/router';
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from 'jwt-decode';
 
 export class AuthenticatedUser {
   public readonly username: string;
@@ -48,13 +48,12 @@ export class AuthService {
     }
   }
 
-
   public redirectToAuthenticator() {
     const client_id = this.envService.clientId;
     const callback = location.origin + this.envService.baseHref + 'callback';
     const state = Math.random().toString(36);
     // tslint:disable-next-line:max-line-length
-    const AUTH_URL_V3 = `https://designsafe.develop.tapis.io/v3/oauth2/authorize?client_id=${client_id}&response_type=token&redirect_uri=${callback}`
+    const AUTH_URL_V3 = `https://designsafe.develop.tapis.io/v3/oauth2/authorize?client_id=${client_id}&response_type=token&redirect_uri=${callback}`;
 
     window.location.href = AUTH_URL_V3;
   }
@@ -91,8 +90,8 @@ export class AuthService {
   public getUserInfoFromToken() {
     // tapis/username
     const decodedJwt = jwtDecode(this.userToken.token);
-    const u = new AuthenticatedUser(decodedJwt["tapis/username"]);
-    this._currentUser.next(u)
+    const u = new AuthenticatedUser(decodedJwt['tapis/username']);
+    this._currentUser.next(u);
   }
 
   checkLoggedIn(): void {
