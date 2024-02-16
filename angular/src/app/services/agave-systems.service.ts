@@ -58,7 +58,11 @@ export class AgaveSystemsService {
     this._loadingProjects.next(true);
     this._loadingProjectsFailedMessage.next(null);
 
-    // TODO_TAPIS_V3 mock a response from projects endpoint and use designsafe directly i.e. /api/projects
+    // TODO_TAPISV3 mock a response from projects endpoint and use designsafe directly i.e. /api/projects
+    // See https://tacc-main.atlassian.net/browse/WG-261
+    this._projects.next([]);
+    this._loadingProjects.next(false);
+    /*
     this.http.get<DesignSafeProjectCollection>(this.envService.designSafeUrl + `/projects/v2/`).subscribe(
       (resp) => {
         const projectSystems = resp.projects.map((project) => {
@@ -77,6 +81,7 @@ export class AgaveSystemsService {
         this._loadingProjects.next(false);
       }
     );
+    */
   }
 
   getProjectMetadata(projects: Project[], dsProjects: SystemSummary[]): Project[] {
