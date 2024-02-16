@@ -18,7 +18,7 @@ export class JwtInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // TODO_TAPISV3 put the tapis url in envService
-    const isTargetUrl = request.url.includes('https://designsafe.develop.tapis.io') || request.url.includes(this.envService.apiUrl);
+    const isTargetUrl = request.url.includes('https://designsafe.tapis.io') || request.url.includes(this.envService.apiUrl);
     if (isTargetUrl && this.authSvc.isLoggedIn()) {
       // add tapis token to Geoapi or Tapis requests
       request = request.clone({
