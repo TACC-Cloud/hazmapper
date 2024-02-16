@@ -112,9 +112,9 @@ export class AuthInterceptor implements HttpInterceptor {
         if (err.status === 401) {
           // auto logout if 401 response returned from api
           // https://jira.tacc.utexas.edu/browse/DES-1999
-          //TODO_TAPIV3 renable these
-          //this.authService.logout();
-          //location.reload();
+          // TODO_TAPISV3 renable these
+          // this.authService.logout();
+          // location.reload();
         }
         throw err;
       })
