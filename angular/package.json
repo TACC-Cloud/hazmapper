@@ -13,7 +13,8 @@
     "prettier:fix": "prettier --single-quote --write src",
     "lint:js": "ng lint",
     "lint:js:fix": "ng lint --fix",
-    "lint:css": "stylelint '**/*.{styl,stylus,css}' --fix",
+    "lint:css": "stylelint '**/*.{styl,stylus,css}'",
+    "lint:css:fix": "stylelint '**/*.{styl,stylus,css}' --fix",
     "e2e": "ng e2e"
   },
   "private": true,
