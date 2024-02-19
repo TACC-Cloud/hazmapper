@@ -43,7 +43,7 @@ Run `npm run test`
 
 Run `npm run lint` to run linter
 
-Run `npm run lint:fix` to fix any linting/pretty errors
+Run `npm run lint:fix` to fix any linting/prettier errors
 
 ## Local Angular Development
 
