@@ -2,7 +2,8 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
-export default defineConfig(({ command, mode }) => { // eslint-disable-line
+// eslint-disable-next-line
+export default defineConfig(({ command, mode }) => {
   return {
     plugins: [react()],
     server: {
