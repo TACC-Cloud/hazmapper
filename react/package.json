@@ -49,8 +49,6 @@
         "eslint-plugin-react-hooks": "^4.6.0",
         "formik": "^2.4.5",
         "leaflet": "^1.9.3",
-        "postcss-preset-env": "^9.4.0",
-        "postcss-replace": "^2.0.1",
         "prettier": "^2.7.1",
         "prop-types": "^15.8.1",
         "react": "^18.2.0",
