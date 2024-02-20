@@ -1,7 +1,13 @@
 import axios from 'axios';
 import store from './redux/store';
 import { AxiosError } from 'axios';
-import { useQuery, UseQueryOptions, QueryKey } from 'react-query';
+import {
+  useQuery,
+  useMutation,
+  UseQueryOptions,
+  UseMutationOptions,
+  QueryKey,
+} from 'react-query';
 import { useAppConfiguration } from './hooks';
 import {
   ApiService,
@@ -59,6 +65,12 @@ type UseGetParams<ResponseType> = {
   apiService?: ApiService;
 };
 
+type UsePostParams<RequestType, ResponseType> = {
+  endpoint: string;
+  options?: UseMutationOptions<ResponseType, AxiosError, RequestType>;
+  apiService?: ApiService;
+};
+
 export function useGet<ResponseType>({
   endpoint,
   key,
@@ -109,4 +121,30 @@ export function useGet<ResponseType>({
   };
 
   return useQuery<ResponseType, AxiosError>(key, getUtil, options);
+}
+
+export function usePost<RequestType, ResponseType>({
+  endpoint,
+  options = {},
+  apiService = ApiService.Geoapi,
+}: UsePostParams<RequestType, ResponseType>) {
+  const client = axios;
+  const state = store.getState();
+  const configuration = useAppConfiguration();
+
+  const baseUrl = getBaseApiUrl(apiService, configuration);
+  const headers = getHeaders(apiService, configuration, state.auth);
+
+  const postUtil = async (requestData: RequestType) => {
+    const response = await client.post<ResponseType>(
+      `${baseUrl}${endpoint}`,
+      requestData,
+      {
+        headers: headers,
+      }
+    );
+    return response.data;
+  };
+
+  return useMutation<ResponseType, AxiosError, RequestType>(postUtil, options);
 }
