@@ -48,7 +48,7 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
         !isActiveProjectLoading && !activeProjectError && !!activeProject,
     },
   });
-  
+
   const location = useLocation();
 
   const queryParams = new URLSearchParams(location.search);
@@ -80,14 +80,14 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
         <div className={styles.map}>
           <Map
             baseLayers={tileServerLayers}
-        featureCollection={
-          featureCollection
-            ? featureCollection
-            : {
-                type: 'FeatureCollection',
-                features: [],
-              }
-        }
+            featureCollection={
+              featureCollection
+                ? featureCollection
+                : {
+                    type: 'FeatureCollection',
+                    features: [],
+                  }
+            }
           />
         </div>
       </div>

@@ -13,8 +13,6 @@ const ManageMapProjectModal: React.FC<ManageMapProjectModalProps> = ({
   const navigate = useNavigate();
   const location = useLocation();
 
-  console.log(isPublic);
-
   const closeModal = () => {
     const params = new URLSearchParams(location.search);
     params.delete('panel'); // Remove the panel query parameter
@@ -25,7 +23,9 @@ const ManageMapProjectModal: React.FC<ManageMapProjectModalProps> = ({
     <Modal isOpen toggle={closeModal}>
       <ModalHeader toggle={closeModal}>TODO</ModalHeader>
       <ModalBody>
-        <div className={styles.root}>Manage Map Project TODO</div>
+        <div className={styles.root}>
+          Manage Map Project TODO, isPublic: {isPublic}
+        </div>
       </ModalBody>
     </Modal>
   );
