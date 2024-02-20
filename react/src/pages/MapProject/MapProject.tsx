@@ -6,9 +6,10 @@ import ManageMapProjectModal from '../../components/ManageMapProjectModal';
 import { queryPanelKey, Panel } from '../../utils/panels';
 
 import { tileServerLayers } from '../../__fixtures__/tileServerLayerFixture';
-import { featureCollection } from '../../__fixtures__/featuresFixture';
+import { useFeatures, useProject } from '../../hooks';
 import { useParams } from 'react-router-dom';
 import styles from './MapProject.module.css';
+import { LoadingSpinner } from '../../core-components';
 import MapProjectNavBar from '../../components/MapProjectNavBar';
 
 interface Props {
@@ -23,15 +24,42 @@ interface Props {
  * A component that displays a map project (a map and related data)
  */
 const MapProject: React.FC<Props> = ({ isPublic = false }) => {
-  const { projectUUID } = useParams<{ projectUUID: string }>();
+  const { projectUUID } = useParams();
 
+  const {
+    data: activeProject,
+    isLoading: isActiveProjectLoading,
+    error: activeProjectError,
+  } = useProject({
+    projectUUID,
+    isPublic,
+    options: { enabled: !!projectUUID },
+  });
+
+  const {
+    data: featureCollection,
+    isLoading: isFeaturesLoading,
+    error: featuresError,
+  } = useFeatures({
+    projectId: activeProject?.id,
+    isPublic,
+    options: {
+      enabled:
+        !isActiveProjectLoading && !activeProjectError && !!activeProject,
+    },
+  });
+  
   const location = useLocation();
 
   const queryParams = new URLSearchParams(location.search);
   const activePanel = queryParams.get(queryPanelKey);
 
-  console.log(projectUUID);
-  console.log(isPublic);
+  if (isActiveProjectLoading || isFeaturesLoading) {
+    return <LoadingSpinner />;
+  }
+  if (activeProjectError || featuresError) {
+    return null; /* TODO_REACT show error and improve spinner https://tacc-main.atlassian.net/browse/WG-260*/
+  }
 
   return (
     <div className={styles.root}>
@@ -52,7 +80,14 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
         <div className={styles.map}>
           <Map
             baseLayers={tileServerLayers}
-            featureCollection={featureCollection}
+        featureCollection={
+          featureCollection
+            ? featureCollection
+            : {
+                type: 'FeatureCollection',
+                features: [],
+              }
+        }
           />
         </div>
       </div>

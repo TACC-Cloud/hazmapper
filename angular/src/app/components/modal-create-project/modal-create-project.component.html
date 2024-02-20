@@ -66,6 +66,8 @@
 
     <div class="button-group small">
         <button class="button small warning" type="button" (click)="close()">Close</button>
-        <button class="button small align-right" type="submit" [disabled]="!projCreateForm.valid || submitting">Submit</button>
+        <button class="button small align-right" type="submit" [disabled]="!projCreateForm.valid || submitting">
+            Submit <i *ngIf="submitting" class="fas fa-spinner fa-spin"></i>
+        </button>
     </div>
 </form>

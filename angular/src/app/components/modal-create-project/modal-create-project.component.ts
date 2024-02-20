@@ -67,27 +67,21 @@ export class ModalCreateProjectComponent implements OnInit, AfterContentChecked 
 
   submit() {
     this.submitting = true;
-    const p = new Project();
     const pr = new ProjectRequest();
 
-    p.description = this.projCreateForm.get('description').value;
-    p.name = this.projCreateForm.get('name').value;
-    p.system_path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path || '/' : this.currentPath || '/';
+    pr.description = this.projCreateForm.get('description').value;
+    pr.name = this.projCreateForm.get('name').value;
+    pr.system_path = this.selectedFiles.length > 0 ? this.selectedFiles[0].path || '/' : this.currentPath || '/';
 
-    p.system_id = this.selectedSystem.id;
-    p.system_file = this.projCreateForm.get('fileName').value ? this.projCreateForm.get('fileName').value : p.name;
+    pr.system_id = this.selectedSystem.id;
+    pr.system_file = this.projCreateForm.get('fileName').value ? this.projCreateForm.get('fileName').value : pr.name;
 
     if (this.selectedSystem.id.includes('project')) {
-      pr.observable = true;
-      pr.watch_content = this.projCreateForm.get('watchContent').value;
-    } else {
-      pr.observable = this.projCreateForm.get('watchContent').value;
-      pr.watch_content = pr.observable;
+      pr.watch_users = true;
     }
+    pr.watch_content = this.projCreateForm.get('watchContent').value;
 
     this.errorMessage = '';
-
-    pr.project = p;
 
     this.projectsService.create(pr).subscribe(
       (project) => {

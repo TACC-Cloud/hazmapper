@@ -5,7 +5,7 @@ export const authenticatedUser: AuthState = {
     username: 'user',
     email: 'user@user.com',
   },
-  token: {
+  authToken: {
     token: 'auth-token',
     expires: 3153600000000, // 2070
   },
@@ -13,5 +13,5 @@ export const authenticatedUser: AuthState = {
 
 export const unauthenticatedUser: AuthState = {
   user: null,
-  token: null,
+  authToken: null,
 };
