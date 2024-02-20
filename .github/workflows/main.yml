@@ -130,9 +130,7 @@ jobs:
       run: |
         cd react
         cp src/secret_local.example.ts src/secret_local.ts
-        ls
-        ls node_modules/
-        ls node_modules/@tacc/
         ls node_modules/@tacc/core-styles/
+        echo "listing node_modules/@tacc/core-styles/dist/"
         ls node_modules/@tacc/core-styles/dist/
         npm run build
