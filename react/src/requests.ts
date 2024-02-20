@@ -95,8 +95,7 @@ export function useGet<ResponseType>({
     let analytics_params = {};
 
     analytics_params = { ...analytics_params, application: 'hazmapper' };
-    console.log('Token value:', state.auth.authToken);
-    console.log('!Token value:', !state.auth.authToken);
+
     // for guest users, add a unique id
     if (!state.auth.authToken?.token) {
       // Get (or create if needed) the guestUserID in local storage
