@@ -1,3 +1,5 @@
+import { Point } from 'geojson';
+
 export const featureCollection = {
   type: 'FeatureCollection',
   features: [
@@ -8,7 +10,7 @@ export const featureCollection = {
       geometry: {
         type: 'Point',
         coordinates: [-80.780375, 32.6185055555556],
-      },
+      } as Point,
       properties: {},
       styles: {},
       assets: [
@@ -30,7 +32,7 @@ export const featureCollection = {
       geometry: {
         type: 'Point',
         coordinates: [-80.780375, 32.6185055555556],
-      },
+      } as Point,
       properties: {},
       styles: {},
       assets: [

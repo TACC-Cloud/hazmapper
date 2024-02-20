@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../redux/authSlice';
+import { queryClient } from '../../queryClient';
 
 function Logout() {
   const dispatch = useDispatch();
@@ -12,7 +13,11 @@ function Logout() {
   };
 
   useEffect(() => {
-    dispatch(logout);
+    // clear react-query cache
+    queryClient.clear();
+
+    // logout of auth (handled by rtk/redux)
+    dispatch(logout());
   }, [dispatch]);
 
   return (
