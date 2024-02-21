@@ -59,7 +59,6 @@ import { StreetviewAssetsComponent } from './components/streetview-assets/street
 import { PublicMapInfoPanelComponent } from './components/public-map-info-panel/public-map-info-panel.component';
 import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
-import { ModalLinkProjectComponent } from './components/modal-link-project/modal-link-project.component';
 import { ModalStreetviewPublishComponent } from './components/modal-streetview-publish/modal-streetview-publish.component';
 import { ModalStreetviewLogComponent } from './components/modal-streetview-log/modal-streetview-log.component';
 import { ModalStreetviewLinkComponent } from './components/modal-streetview-link/modal-streetview-link.component';
@@ -114,7 +113,6 @@ import { QuestionnaireDetailComponent } from './components/questionnaire-detail/
     PublicMapInfoPanelComponent,
     LoginComponent,
     LogoutComponent,
-    ModalLinkProjectComponent,
     ModalStreetviewPublishComponent,
     ModalStreetviewLogComponent,
     ModalStreetviewLinkComponent,
@@ -199,7 +197,6 @@ import { QuestionnaireDetailComponent } from './components/questionnaire-detail/
     ModalStreetviewUsernameComponent,
     ModalStreetviewOrganizationComponent,
     ModalPointCloudInfoComponent,
-    ModalLinkProjectComponent,
     ModalQuestionnaireViewerComponent,
   ],
 })

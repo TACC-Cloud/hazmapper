@@ -39,7 +39,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
 function AppRouter() {
   const isAuthenticated = useSelector((state: RootState) =>
-    isTokenValid(state.auth.token)
+    isTokenValid(state.auth.authToken)
   );
 
   const basePath = useBasePath();
@@ -65,7 +65,7 @@ function AppRouter() {
             </ProtectedRoute>
           }
         />
-        <Route path="project" element={<MapProject isPublic />} />
+        <Route path={ROUTES.PUBLIC_PROJECT} element={<MapProject isPublic />} />
         <Route path={ROUTES.CALLBACK} element={<Callback />} />
         <Route
           path={ROUTES.STREETVIEW_CALLBACK}

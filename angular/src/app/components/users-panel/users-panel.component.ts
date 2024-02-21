@@ -4,9 +4,8 @@ import { NotificationsService } from '../../services/notifications.service';
 import { ModalService } from '../../services/modal.service';
 import { TabsetComponent, BsModalService } from 'ngx-foundation';
 import { IProjectUser } from '../../models/project-user';
-import { Project, ProjectRequest } from '../../models/models';
+import { Project, ProjectUpdateRequest } from '../../models/models';
 import { EnvService } from '../../services/env.service';
-import { ModalLinkProjectComponent } from '../modal-link-project/modal-link-project.component';
 import { AgaveSystemsService } from 'src/app/services/agave-systems.service';
 import { combineLatest } from 'rxjs';
 import { copyToClipboard } from '../../utils/copyText';
@@ -71,10 +70,6 @@ export class UsersPanelComponent implements OnInit {
     return publicUrl;
   }
 
-  openExportProjectModal() {
-    this.bsModalService.show(ModalLinkProjectComponent);
-  }
-
   copyLinkToClipboard(link: string) {
     copyToClipboard(link);
     this.notificationsService.showSuccessToast(`Copied ${link} to the clipboard!`);
@@ -131,10 +126,10 @@ export class UsersPanelComponent implements OnInit {
       this.nameInputError = false;
       this.activeProject.name = name;
 
-      const pr = new ProjectRequest();
-      pr.project = this.activeProject;
+      const pr = new ProjectUpdateRequest();
+      pr.name = this.activeProject.name;
 
-      this.projectsService.updateProject(pr);
+      this.projectsService.updateProject(this.activeProject, pr);
     } else {
       this.nameInputError = true;
     }
@@ -145,10 +140,10 @@ export class UsersPanelComponent implements OnInit {
       this.descriptionInputError = false;
       this.activeProject.description = description;
 
-      const pr = new ProjectRequest();
-      pr.project = this.activeProject;
+      const pr = new ProjectUpdateRequest();
+      pr.description = this.activeProject.description;
 
-      this.projectsService.updateProject(pr);
+      this.projectsService.updateProject(this.activeProject, pr);
     } else {
       this.descriptionInputError = true;
     }
