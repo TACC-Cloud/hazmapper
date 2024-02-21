@@ -21,14 +21,14 @@
     },
     "browserslist": {
         "production": [
-          ">0.2%",
-          "not dead",
-          "not op_mini all"
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
         ],
         "development": [
-          "last 1 chrome version",
-          "last 1 firefox version",
-          "last 1 safari version"
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
         ]
     },
     "dependencies": {
@@ -37,7 +37,7 @@
         "@babel/preset-typescript": "^7.21.0",
         "@changey/react-leaflet-markercluster": "^4.0.0-rc1",
         "@reduxjs/toolkit": "^1.8.4",
-        "@tacc/core-styles": "^2.22.3",
+        "@tacc/core-styles": "^2.24.1",
         "@testing-library/react": "^13.4.0",
         "@types/leaflet.markercluster": "^1.5.1",
         "axios": "^1.6.2",

@@ -150,16 +150,10 @@ const CreateMapModal = ({
                 </div>
               )}
               <ModalFooter className="justify-content-start">
-                <Button
-                  className="justify-content-center"
-                  size="short"
-                  type="secondary"
-                  onClick={handleToggle}
-                >
+                <Button size="short" type="secondary" onClick={handleToggle}>
                   Close
                 </Button>
                 <Button
-                  className="justify-content-center"
                   size="short"
                   type="primary"
                   attr="submit"
