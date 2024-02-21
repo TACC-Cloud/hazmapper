@@ -19,13 +19,8 @@
   font-style: italic;
 }
 
-.input-height {
-  height: 3em;
-}
-
 .input-custom-size {
-  height: 3em;
-  width: 38rem;
+  width: 35.75rem;
 }
 
 .flexContainer {
@@ -46,7 +41,7 @@
 .check-wrapper {
   display: flex;
   margin-left: 1rem;
-  margin-top: -1.3rem;
+  margin-top: -0.9rem;
 }
 
 .hazmapper-custom {
@@ -57,10 +52,10 @@
   background-color: #e9ecef;
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
-  margin-top: 1.85rem;
+  margin-top: 2.27rem;
   margin-left: -9px;
   min-width: 100px;
-  height: 3em;
+  height: 2.9em;
 }
 
 .custom-sync-description {

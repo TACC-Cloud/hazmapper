@@ -108,13 +108,11 @@ const CreateMapModal = ({
                   label="Name"
                   required
                   data-testid="name-input"
-                  className={`${styles['input-height']}`}
                 />
                 <FormikTextarea
                   name="description"
                   label="Description"
                   required
-                  className={`${styles['input-height']}`}
                 />
                 <div className={`${styles['flexContainer']}`}>
                   <span>
