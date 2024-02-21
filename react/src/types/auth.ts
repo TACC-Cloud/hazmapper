@@ -1,6 +1,6 @@
 export interface AuthenticatedUser {
-  username: string | null;
-  email: string | null;
+  username: string;
+  email: string;
 }
 
 export interface AuthToken {
@@ -10,5 +10,5 @@ export interface AuthToken {
 
 export interface AuthState {
   user: AuthenticatedUser | null;
-  token: AuthToken | null;
+  authToken: AuthToken | null;
 }

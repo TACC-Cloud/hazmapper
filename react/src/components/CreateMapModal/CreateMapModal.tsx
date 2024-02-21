@@ -106,13 +106,11 @@ const CreateMapModal = ({
                   label="Name"
                   required
                   data-testid="name-input"
-                  className={`${styles['input-height']}`}
                 />
                 <FormikTextarea
                   name="description"
                   label="Description"
                   required
-                  className={`${styles['input-height']}`}
                 />
                 <div className={`${styles['flexContainer']}`}>
                   <span>
@@ -148,16 +146,10 @@ const CreateMapModal = ({
                 </div>
               )}
               <ModalFooter className="justify-content-start">
-                <Button
-                  className="justify-content-center"
-                  size="short"
-                  type="secondary"
-                  onClick={handleToggle}
-                >
+                <Button size="short" type="secondary" onClick={handleToggle}>
                   Close
                 </Button>
                 <Button
-                  className="justify-content-center"
                   size="short"
                   type="primary"
                   attr="submit"
