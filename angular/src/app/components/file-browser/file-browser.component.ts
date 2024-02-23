@@ -113,8 +113,11 @@ export class FileBrowserComponent implements OnInit {
       .listFiles(this.currentDirectory.system, this.currentDirectory.path, this.offset, FileBrowserComponent.limit)
       .subscribe(
         (response) => {
-          // TODO_TAPISV3 add 'system' to results to match v2
-          const files = response.result;
+          // Add 'system' to results to match v2
+          const files = response.result.map((f) => ({
+            ...f,
+            system: this.currentDirectory.system,
+          }));
 
           this.currentPath.next(this.currentDirectory.path);
 
