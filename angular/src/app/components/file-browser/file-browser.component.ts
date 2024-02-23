@@ -55,7 +55,7 @@ export class FileBrowserComponent implements OnInit {
     // wait on the currentUser, systems and projects to resolve
     combineLatest([this.authService.currentUser, this.agaveSystemsService.systems, this.agaveSystemsService.projects]).subscribe(
       ([user, systems, projects]) => {
-        this.myDataSystem = systems.find((sys) => sys.id === 'frontera'); // TODO_TAPISV3 use designsafe.
+        this.myDataSystem = systems.find((sys) => sys.id === 'frontera'); // TODO_TAPISV3 use designsafe.storage.default.
         this.communityDataSystem = systems.find((sys) => sys.id === 'designsafe.storage.community');
         this.publishedDataSystem = systems.find((sys) => sys.id === 'designsafe.storage.published');
         this.projects = projects;
@@ -66,7 +66,7 @@ export class FileBrowserComponent implements OnInit {
           system: this.myDataSystem.id,
           type: 'dir',
           // path: this.currentUser.username,      // TODO_TAPISV3
-          path: `/home1/05724/nathanf/`
+          path: `/home1/05724/nathanf/`,
         };
 
         // TODO_TAPISV3 is this being called 3 times??

@@ -27,8 +27,8 @@ export class EnvService {
     }
   }
 
-  get tapisUrl(): string{
-    return "https://portals.tapis.io/"; // TODO_TAPISV3 'https://designsafe.tapis.io/`
+  get tapisUrl(): string {
+    return 'https://portals.tapis.io/'; // TODO_TAPISV3 'https://designsafe.tapis.io/`
   }
 
   private getPortalUrl(backend: EnvironmentType): string {

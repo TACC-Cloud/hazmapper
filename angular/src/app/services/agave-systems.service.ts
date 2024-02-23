@@ -45,7 +45,7 @@ export class AgaveSystemsService {
   }
 
   list() {
-    this.http.get<any>(this.envService.tapisUrl + `v3/systems/?listType=ALL`,).subscribe(
+    this.http.get<any>(this.envService.tapisUrl + `v3/systems/?listType=ALL`).subscribe(
       (resp) => {
         this._systems.next(resp.result);
       },

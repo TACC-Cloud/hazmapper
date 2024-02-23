@@ -13,8 +13,7 @@ export class TapisFilesService {
   public readonly IMPORTABLE_OVERLAY_TYPES: Array<string> = ['jpg', 'jpeg'];
   public readonly IMPORTABLE_TILE_TYPES: Array<string> = ['ini'];
 
-  constructor(private tapis: ApiService, private envService: EnvService, private http: HttpClient
-    ) {}
+  constructor(private tapis: ApiService, private envService: EnvService, private http: HttpClient) {}
 
   public getFileExtension(file: RemoteFile): string {
     return file.name.split('.').pop().toLowerCase();
