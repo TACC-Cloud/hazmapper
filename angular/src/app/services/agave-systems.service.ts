@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable, ReplaySubject, combineLatest } from 'rxjs'
 import { map } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EnvService } from '../services/env.service';
-import { DesignSafeProjectCollection, Project, AgaveFileOperations } from '../models/models';
+import { Project, AgaveFileOperations } from '../models/models';
 
 export interface AgaveProjectsData {
   projects: SystemSummary[];
