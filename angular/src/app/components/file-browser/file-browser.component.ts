@@ -121,8 +121,16 @@ export class FileBrowserComponent implements OnInit {
 
           this.currentPath.next(this.currentDirectory.path);
 
-          // Add .. entry for users to up out of current path
-          const backPath = {name: '..', path: this.tapisFilesService.getParentPath(this.currentDirectory.path), system: this.currentDirectory.system};
+          // Add '..' entry for users to move to parent path
+          const backPath = {
+            name: '..',
+            format: 'folder',
+            type: 'dir',
+            mimeType: 'test/directory',
+            length: 8192,
+            path: this.tapisFilesService.getParentPath(this.currentDirectory.path),
+            system: this.currentDirectory.system,
+          };
           files.unshift(backPath);
 
           this.inProgress = false;
