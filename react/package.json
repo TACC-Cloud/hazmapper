@@ -21,14 +21,14 @@
     },
     "browserslist": {
         "production": [
-          ">0.2%",
-          "not dead",
-          "not op_mini all"
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
         ],
         "development": [
-          "last 1 chrome version",
-          "last 1 firefox version",
-          "last 1 safari version"
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
         ]
     },
     "dependencies": {
@@ -39,6 +39,8 @@
         "@reduxjs/toolkit": "^1.8.4",
         "@tacc/core-styles": "^2.22.3",
         "@testing-library/react": "^13.4.0",
+        "@turf/turf": "^6.5.0",
+        "@types/geojson": "^7946.0.14",
         "@types/leaflet.markercluster": "^1.5.1",
         "axios": "^1.6.2",
         "eslint-config-prettier": "^8.5.0",
@@ -52,6 +54,7 @@
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-dropzone": "^14.2.3",
+        "react-esri-leaflet": "^2.0.1",
         "react-leaflet": "^4.2.0",
         "react-query": "^3.39.3",
         "react-redux": "^8.0.2",

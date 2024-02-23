@@ -279,12 +279,6 @@ export class GeoDataService {
       .subscribe();
   }
 
-  addDefaultTileServers(projectId: number): void {
-    defaultTileServers.forEach((ts) => {
-      this.addTileServer(projectId, ts, true);
-    });
-  }
-
   importFeatureAsset(projectId: number, featureId: number, payload: IFileImportRequest): void {
     this.http.post<Feature>(this.envService.apiUrl + `/projects/${projectId}/features/${featureId}/assets/`, payload).subscribe(
       (feature) => {

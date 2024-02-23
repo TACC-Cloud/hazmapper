@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { System, SystemSummary } from 'ng-tapis';
+import { SystemSummary } from 'ng-tapis';
 import { ApiService } from 'ng-tapis';
 import { NotificationsService } from './notifications.service';
 import { BehaviorSubject, Observable, ReplaySubject, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { EnvService } from '../services/env.service';
-import { Project, AgaveFileOperations } from '../models/models';
+import { Project } from '../models/models';
 
 export interface AgaveProjectsData {
   projects: SystemSummary[];
@@ -94,93 +94,5 @@ export class AgaveSystemsService {
       });
     }
     return projects;
-  }
-
-  updateProjectMetadata(proj: Project, operation: AgaveFileOperations) {
-    const DSuuid = proj.system_id.replace('project-', '');
-    const uuid = proj.uuid;
-    const path = proj.system_path;
-    const name = proj.name;
-
-    this.http.get<any>(this.envService.tapisUrl + `projects/v2/${DSuuid}/`).subscribe((dsProject) => {
-      const previousMaps = dsProject.value.hazmapperMaps ? dsProject.value.hazmapperMaps.filter((e) => e.uuid !== uuid) : [];
-
-      const payloadProject =
-        operation === AgaveFileOperations.Update
-          ? [
-              {
-                name,
-                uuid,
-                path,
-                deployment: this.envService.env,
-              },
-            ]
-          : [];
-
-      const payload = {
-        DSuuid,
-        hazmapperMaps: [...previousMaps, ...payloadProject],
-      };
-
-      const headers = new HttpHeaders().set('X-Requested-With', 'XMLHttpRequest');
-
-      this.http.post<any>(this.envService.tapisUrl + `projects/v2/${DSuuid}/`, payload, { headers }).subscribe(
-        (resp) => {
-          console.log(resp);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    });
-  }
-
-  public saveFile(proj: Project) {
-    const data = JSON.stringify({
-      uuid: proj.uuid,
-      deployment: this.envService.env,
-    });
-
-    this.tapisV2
-      .filesImport({
-        systemId: proj.system_id,
-        filePath: proj.system_path,
-        body: {
-          fileType: 'plain/text',
-          callbackURL: '',
-          fileName: `${proj.system_file}.hazmapper`,
-          urlToIngest: '',
-          fileToUpload: data,
-        },
-      })
-      .subscribe(
-        (resp) => {
-          this.notificationsService.showSuccessToast(`Successfully saved file to ${proj.system_id}${proj.system_path}.`);
-        },
-        (error) => {
-          this.notificationsService.showErrorToast(`Failed to save file to ${proj.system_id}${proj.system_path}.`);
-        }
-      );
-  }
-
-  public deleteFile(proj: Project) {
-    this.tapisV2
-      .filesDelete({
-        systemId: proj.system_id,
-        filePath: `${proj.system_path}/${proj.system_file}.hazmapper`,
-      })
-      .subscribe(
-        (resp) => {
-          this.notificationsService.showSuccessToast(
-            `Successfully deleted file ${proj.system_id}${proj.system_path}/${proj.system_file}.hazmapper.`
-          );
-        },
-        (error) => {
-          // TODO: Handle this
-          // 404 happens when redundant delete
-          // 502/500 I'm not sure why...
-          console.log(error);
-        }
-      );
   }
 }
