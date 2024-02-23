@@ -30,7 +30,7 @@ export class AgaveSystemsService {
   public readonly projectsData: Observable<AgaveProjectsData>;
 
   constructor(
-    private tapis: ApiService,
+    private tapisV2: ApiService,
     private notificationsService: NotificationsService,
     private envService: EnvService,
     private http: HttpClient
@@ -45,7 +45,7 @@ export class AgaveSystemsService {
   }
 
   list() {
-    this.tapis.systemsList({ type: 'STORAGE' }).subscribe(
+    this.http.get<any>(this.envService.tapisUrl + `v3/systems/?listType=ALL`,).subscribe(
       (resp) => {
         this._systems.next(resp.result);
       },
@@ -102,7 +102,7 @@ export class AgaveSystemsService {
     const path = proj.system_path;
     const name = proj.name;
 
-    this.http.get<any>(this.envService.designSafeUrl + `projects/v2/${DSuuid}/`).subscribe((dsProject) => {
+    this.http.get<any>(this.envService.tapisUrl + `projects/v2/${DSuuid}/`).subscribe((dsProject) => {
       const previousMaps = dsProject.value.hazmapperMaps ? dsProject.value.hazmapperMaps.filter((e) => e.uuid !== uuid) : [];
 
       const payloadProject =
@@ -124,7 +124,7 @@ export class AgaveSystemsService {
 
       const headers = new HttpHeaders().set('X-Requested-With', 'XMLHttpRequest');
 
-      this.http.post<any>(this.envService.designSafeUrl + `projects/v2/${DSuuid}/`, payload, { headers }).subscribe(
+      this.http.post<any>(this.envService.tapisUrl + `projects/v2/${DSuuid}/`, payload, { headers }).subscribe(
         (resp) => {
           console.log(resp);
         },
@@ -141,7 +141,7 @@ export class AgaveSystemsService {
       deployment: this.envService.env,
     });
 
-    this.tapis
+    this.tapisV2
       .filesImport({
         systemId: proj.system_id,
         filePath: proj.system_path,
@@ -164,7 +164,7 @@ export class AgaveSystemsService {
   }
 
   public deleteFile(proj: Project) {
-    this.tapis
+    this.tapisV2
       .filesDelete({
         systemId: proj.system_id,
         filePath: `${proj.system_path}/${proj.system_file}.hazmapper`,

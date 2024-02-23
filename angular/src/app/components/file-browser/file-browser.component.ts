@@ -6,7 +6,6 @@ import { SystemSummary } from 'ng-tapis';
 import { TapisFilesService } from '../../services/tapis-files.service';
 import { BsModalRef } from 'ngx-foundation/modal/bs-modal-ref.service';
 import { AgaveSystemsService } from '../../services/agave-systems.service';
-import { max, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-file-browser',
@@ -53,13 +52,10 @@ export class FileBrowserComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.agaveSystemsService.list();
-
-    // TODO: change those hard coded systemIds to environment vars or some sort of config
     // wait on the currentUser, systems and projects to resolve
     combineLatest([this.authService.currentUser, this.agaveSystemsService.systems, this.agaveSystemsService.projects]).subscribe(
       ([user, systems, projects]) => {
-        this.myDataSystem = systems.find((sys) => sys.id === 'designsafe.storage.default');
+        this.myDataSystem = systems.find((sys) => sys.id === 'frontera'); // TODO_TAPISV3 use designsafe.
         this.communityDataSystem = systems.find((sys) => sys.id === 'designsafe.storage.community');
         this.publishedDataSystem = systems.find((sys) => sys.id === 'designsafe.storage.published');
         this.projects = projects;
@@ -69,8 +65,11 @@ export class FileBrowserComponent implements OnInit {
         const init = <RemoteFile>{
           system: this.myDataSystem.id,
           type: 'dir',
-          path: this.currentUser.username,
+          // path: this.currentUser.username,      // TODO_TAPISV3
+          path: `/home1/05724/nathanf/`
         };
+
+        // TODO_TAPISV3 is this being called 3 times??
         this.browse(init);
       }
     );
@@ -114,17 +113,14 @@ export class FileBrowserComponent implements OnInit {
       .listFiles(this.currentDirectory.system, this.currentDirectory.path, this.offset, FileBrowserComponent.limit)
       .subscribe(
         (response) => {
+          // TODO_TAPISV3 add 'system' to results to match v2
           const files = response.result;
 
-          if (files.length && files[0].name === '.') {
-            // This removes the first item in the listing, which in Agave
-            // is always a reference to self '.' and replaces with '..'
-            const current = files.shift();
-            this.currentPath.next(current.path);
-            current.path = this.tapisFilesService.getParentPath(current.path);
-            current.name = '..';
-            files.unshift(current);
-          }
+          this.currentPath.next(this.currentDirectory.path);
+
+          // Add .. entry for users to up out of current path
+          const backPath = {name: '..', path: this.tapisFilesService.getParentPath(this.currentDirectory.path), system: this.currentDirectory.system};
+          files.unshift(backPath);
 
           this.inProgress = false;
           this.filesList = this.filesList.concat(files);

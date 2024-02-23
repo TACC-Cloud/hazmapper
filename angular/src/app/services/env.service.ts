@@ -27,6 +27,10 @@ export class EnvService {
     }
   }
 
+  get tapisUrl(): string{
+    return "https://portals.tapis.io/"; // TODO_TAPISV3 'https://designsafe.tapis.io/`
+  }
+
   private getPortalUrl(backend: EnvironmentType): string {
     if (backend === EnvironmentType.Production) {
       return 'https://www.designsafe-ci.org/';
@@ -64,7 +68,7 @@ export class EnvService {
   }
 
   get designSafeUrl(): string {
-    // TODO_TAPISV3  just used for projects endpoint so shoud this be deisngsafe portal and not tapis tenant.
+    // TODO_TAPISV3  just used for projects endpoint so shoud this be designsafe portal and not tapis tenant.
     return 'https://designsafe.tapis.io/';
   }
 
@@ -134,7 +138,8 @@ export class EnvService {
       // local devevelopers can use localhost or hazmapper.local but
       // hazmapper.local is preferred as TAPIS supports it as a frame ancestor
       // (i.e. it allows for point cloud iframe preview)
-      this._clientId = /^localhost/.test(hostname) ? 'hazmapper.localhost2' : 'TODO_FOR_hazmapper.local';
+      // TODO_TAPISV3: use hazmapper.localhost2 on designsafe tenant
+      this._clientId = /^localhost/.test(hostname) ? 'hazmapper.localhost' : 'TODO_FOR_hazmapper.local';
     } else if (/^hazmapper.tacc.utexas.edu/.test(hostname) && pathname.startsWith('/staging')) {
       this._env = EnvironmentType.Staging;
       this._apiUrl = this.getApiUrl(this.env);

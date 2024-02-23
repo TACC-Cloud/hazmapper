@@ -53,7 +53,7 @@ export class AuthService {
     const callback = location.origin + this.envService.baseHref + 'callback';
     const state = Math.random().toString(36);
     // tslint:disable-next-line:max-line-length
-    const AUTH_URL_V3 = `https://designsafe.tapis.io/v3/oauth2/authorize?client_id=${client_id}&response_type=token&redirect_uri=${callback}`;
+    const AUTH_URL_V3 = `${this.envService.tapisUrl}/v3/oauth2/authorize?client_id=${client_id}&response_type=token&redirect_uri=${callback}`;
 
     window.location.href = AUTH_URL_V3;
   }
