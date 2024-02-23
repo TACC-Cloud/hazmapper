@@ -41,7 +41,7 @@ const CreateMapModal = ({
   const { mutate: createProject, isLoading: isCreatingProject } =
     useCreateProject();
   const navigate = useNavigate();
-  const handleToggle = () => {
+  const handleClose = () => {
     setErrorMessage(''); // Clear the error message
     parentToggle(); // Call the original toggle function passed as a prop
   };
@@ -85,8 +85,8 @@ const CreateMapModal = ({
     handleCreateProject(projectData);
   };
   return (
-    <Modal isOpen={isOpen} toggle={handleToggle}>
-      <ModalHeader toggle={handleToggle}>Create a New Map</ModalHeader>
+    <Modal isOpen={isOpen} toggle={handleClose}>
+      <ModalHeader toggle={handleClose}>Create a New Map</ModalHeader>
       <ModalBody>
         <Formik
           initialValues={{
@@ -101,7 +101,7 @@ const CreateMapModal = ({
           onSubmit={handleSubmit}
         >
           {() => (
-            <Form>
+            <Form className="c-form">
               <FieldWrapperFormik name="map-form-info" label="">
                 <FormikInput
                   name="name"
@@ -114,7 +114,7 @@ const CreateMapModal = ({
                   label="Description"
                   required
                 />
-                <div className={`${styles['flexContainer']}`}>
+                <div className={`${styles['field-wrapper']}`}>
                   <span>
                     <FormikInput
                       name="system_file"
@@ -127,11 +127,11 @@ const CreateMapModal = ({
                     .hazmapper
                   </span>
                 </div>
-                <div className={`${styles['flexContainer-alt']}`}>
+                <div className={`${styles['field-wrapper-alt']}`}>
                   <label htmlFor="save-location-label">Save Location:</label>
                   <span className="text-primary">/{userData?.username}</span>
                 </div>
-                <div className={`${styles['flexContainer']}`}>
+                <div className={`${styles['field-wrapper']}`}>
                   <label htmlFor="sync-folder-label">Sync Folder:</label>
                   <span className={`${styles['check-wrapper']}`}>
                     <FormikCheck name="syncFolder" label="" description="" />
@@ -143,12 +143,10 @@ const CreateMapModal = ({
                 </div>
               </FieldWrapperFormik>
               {errorMessage && (
-                <div className={`${styles['custom-error-message']}`}>
-                  {errorMessage}
-                </div>
+                <div className="c-form__errors">{errorMessage}</div>
               )}
               <ModalFooter className="justify-content-start">
-                <Button size="short" type="secondary" onClick={handleToggle}>
+                <Button size="short" type="secondary" onClick={handleClose}>
                   Close
                 </Button>
                 <Button

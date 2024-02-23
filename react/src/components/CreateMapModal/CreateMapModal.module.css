@@ -15,22 +15,18 @@
   color: #dc3545;
 }
 
-.form-check-label {
-  font-style: italic;
-}
-
 .input-custom-size {
   width: 35.75rem;
 }
 
-.flexContainer {
+.field-wrapper {
   display: flex;
   vertical-align: top;
   gap: 8px;
   margin-bottom: 1.5em;
 }
 
-.flexContainer-alt {
+.field-wrapper-alt {
   display: flex;
   vertical-align: top;
   gap: 8px;
