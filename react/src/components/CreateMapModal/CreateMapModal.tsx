@@ -136,16 +136,12 @@ const CreateMapModal = ({
                     disabled
                   />
                 </div>
-                <div className={`${styles['field-wrapper']}`}>
-                  <label htmlFor="sync-folder-label">Sync Folder:</label>
-                  <span className={`${styles['check-wrapper']}`}>
-                    <FormikCheck name="syncFolder" label="" description="" />
-                  </span>
-                </div>
-                <div className={`${styles['custom-sync-description']}`}>
-                  When enabled, files in this folder are automatically synced
-                  into the map periodically.
-                </div>
+                <FormikCheck
+                  name="syncFolder"
+                  label="Sync Folder"
+                  description="When enabled, files in this folder are automatically synced
+                  into the map periodically."
+                />
               </FieldWrapperFormik>
               {errorMessage && (
                 <div className="c-form__errors">{errorMessage}</div>
