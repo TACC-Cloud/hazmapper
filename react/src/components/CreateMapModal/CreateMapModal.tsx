@@ -128,8 +128,13 @@ const CreateMapModal = ({
                   </span>
                 </div>
                 <div className={`${styles['field-wrapper-alt']}`}>
-                  <label htmlFor="save-location-label">Save Location:</label>
-                  <span className="text-primary">/{userData?.username}</span>
+                  <FormikInput
+                    name="save-location-label"
+                    label="Save Location"
+                    value={`/${userData?.username}`}
+                    readOnly
+                    disabled
+                  />
                 </div>
                 <div className={`${styles['field-wrapper']}`}>
                   <label htmlFor="sync-folder-label">Sync Folder:</label>

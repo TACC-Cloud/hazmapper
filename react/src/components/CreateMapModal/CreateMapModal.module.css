@@ -26,12 +26,18 @@
   margin-bottom: 1.5em;
 }
 
-.field-wrapper-alt {
+/* .field-wrapper-alt {
   display: flex;
   vertical-align: top;
   gap: 8px;
   margin-bottom: 1.5em;
   margin-top: -1.5rem;
+} */
+
+.field-wrapper-alt {
+  margin-top: -2.15rem;
+  margin-bottom: -0.1rem;
+  max-width: 40em;
 }
 
 .check-wrapper {
