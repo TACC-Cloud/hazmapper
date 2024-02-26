@@ -9,12 +9,6 @@
   content: '\00D7'; /* Unicode character for 'X' */
 }
 
-.custom-error-message {
-  margin-top: 0.25rem;
-  font-size: 1.2em;
-  color: #dc3545;
-}
-
 .input-custom-size {
   width: 35.75rem;
 }
@@ -26,30 +20,16 @@
   margin-bottom: 1.5em;
 }
 
-/* .field-wrapper-alt {
-  display: flex;
-  vertical-align: top;
-  gap: 8px;
-  margin-bottom: 1.5em;
-  margin-top: -1.5rem;
-} */
-
 .field-wrapper-alt {
   margin-top: -2.15rem;
   margin-bottom: -0.1rem;
   max-width: 40em;
 }
 
-.check-wrapper {
-  display: flex;
-  margin-left: 1rem;
-  margin-top: -0.9rem;
-}
-
 .hazmapper-custom {
   display: inline-flex;
   align-items: center;
-  padding: 0 0.75rem;
+  padding: 0 1.75rem;
   font-size: 1rem;
   background-color: #e9ecef;
   border: 1px solid #ced4da;
@@ -58,9 +38,4 @@
   margin-left: -9px;
   min-width: 100px;
   height: 2.9em;
-}
-
-.custom-sync-description {
-  font-style: italic;
-  margin-top: -1.25rem;
 }
