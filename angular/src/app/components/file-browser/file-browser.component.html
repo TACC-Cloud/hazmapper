@@ -36,7 +36,7 @@
             <span> {{ file.name }} </span>
         </div>
         <div class="cell medium-3">
-            {{ file.length | filesize }}
+            {{ file.size | filesize }}
         </div>
     </div>
     <div class="grid-x" *ngIf="inProgress">

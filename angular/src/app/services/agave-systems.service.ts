@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable, ReplaySubject, combineLatest } from 'rxjs'
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { EnvService } from '../services/env.service';
-import { DesignSafeProjectCollection, Project } from '../models/models';
+import { Project } from '../models/models';
 
 export interface AgaveProjectsData {
   projects: SystemSummary[];
@@ -30,7 +30,7 @@ export class AgaveSystemsService {
   public readonly projectsData: Observable<AgaveProjectsData>;
 
   constructor(
-    private tapis: ApiService,
+    private tapisV2: ApiService,
     private notificationsService: NotificationsService,
     private envService: EnvService,
     private http: HttpClient
@@ -45,7 +45,7 @@ export class AgaveSystemsService {
   }
 
   list() {
-    this.tapis.systemsList({ type: 'STORAGE' }).subscribe(
+    this.http.get<any>(this.envService.tapisUrl + `v3/systems/?listType=ALL`).subscribe(
       (resp) => {
         this._systems.next(resp.result);
       },
