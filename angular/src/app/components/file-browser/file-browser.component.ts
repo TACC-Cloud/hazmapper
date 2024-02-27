@@ -127,7 +127,7 @@ export class FileBrowserComponent implements OnInit {
             format: 'folder',
             type: 'dir',
             mimeType: 'test/directory',
-            length: 8192,
+            size: 8192,
             path: this.tapisFilesService.getParentPath(this.currentDirectory.path),
             system: this.currentDirectory.system,
           };
