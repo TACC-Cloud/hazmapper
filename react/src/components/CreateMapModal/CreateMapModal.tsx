@@ -115,15 +115,13 @@ const CreateMapModal = ({
                   required
                 />
                 <div className={`${styles['field-wrapper']}`}>
-                  <span>
-                    <FormikInput
-                      name="system_file"
-                      label="Custom File Name"
-                      required
-                      className={`${styles['input-custom-size']}`}
-                    />
-                  </span>
-                  <span className={`${styles['hazmapper-custom']}`}>
+                  <FormikInput
+                    name="system_file"
+                    label="Custom File Name"
+                    required
+                    className={`${styles['input-custom-size']}`}
+                  />
+                  <span className={`${styles['hazmapper-suffix']}`}>
                     .hazmapper
                   </span>
                 </div>

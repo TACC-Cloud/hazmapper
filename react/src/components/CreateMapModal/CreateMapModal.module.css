@@ -9,33 +9,38 @@
   content: '\00D7'; /* Unicode character for 'X' */
 }
 
-.input-custom-size {
-  width: 35.75rem;
-}
-
-.field-wrapper {
-  display: flex;
-  vertical-align: top;
-  gap: 8px;
-  margin-bottom: 1.5em;
-}
-
 .field-wrapper-alt {
-  margin-top: -2.15rem;
+  margin-top: -0.5rem;
   margin-bottom: -0.1rem;
   max-width: 40em;
 }
 
-.hazmapper-custom {
-  display: inline-flex;
+.field-wrapper {
+  position: relative;
+  display: flex;
   align-items: center;
-  padding: 0 1.75rem;
-  font-size: 1rem;
-  background-color: #e9ecef;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  margin-top: 2.27rem;
-  margin-left: -9px;
-  min-width: 100px;
-  height: 2.9em;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.input-custom-size {
+  flex-grow: 1;
+  width: 37.55rem;
+  padding-right: 90px;
+}
+
+.hazmapper-suffix {
+  position: absolute;
+  right: 0;
+  padding-right: 10px;
+  top: 46%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+}
+
+/* Adding media queries for mobile devices */
+@media (max-width: 440px) {
+  .input-custom-size {
+    width: 115%;
+  }
 }
