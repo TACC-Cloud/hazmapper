@@ -41,7 +41,7 @@ const CreateMapModal = ({
   const { mutate: createProject, isLoading: isCreatingProject } =
     useCreateProject();
   const navigate = useNavigate();
-  const handleToggle = () => {
+  const handleClose = () => {
     setErrorMessage(''); // Clear the error message
     parentToggle(); // Call the original toggle function passed as a prop
   };
@@ -83,8 +83,8 @@ const CreateMapModal = ({
     handleCreateProject(projectData);
   };
   return (
-    <Modal isOpen={isOpen} toggle={handleToggle}>
-      <ModalHeader toggle={handleToggle}>Create a New Map</ModalHeader>
+    <Modal isOpen={isOpen} toggle={handleClose}>
+      <ModalHeader toggle={handleClose}>Create a New Map</ModalHeader>
       <ModalBody>
         <Formik
           initialValues={{
@@ -99,7 +99,7 @@ const CreateMapModal = ({
           onSubmit={handleSubmit}
         >
           {() => (
-            <Form>
+            <Form className="c-form">
               <FieldWrapperFormik name="map-form-info" label="">
                 <FormikInput
                   name="name"
@@ -112,41 +112,38 @@ const CreateMapModal = ({
                   label="Description"
                   required
                 />
-                <div className={`${styles['flexContainer']}`}>
-                  <span>
-                    <FormikInput
-                      name="system_file"
-                      label="Custom File Name"
-                      required
-                      className={`${styles['input-custom-size']}`}
-                    />
-                  </span>
-                  <span className={`${styles['hazmapper-custom']}`}>
+                <div className={`${styles['field-wrapper']}`}>
+                  <FormikInput
+                    name="system_file"
+                    label="Custom File Name"
+                    required
+                    className={`${styles['input-custom-size']}`}
+                  />
+                  <span className={`${styles['hazmapper-suffix']}`}>
                     .hazmapper
                   </span>
                 </div>
-                <div className={`${styles['flexContainer-alt']}`}>
-                  <label htmlFor="save-location-label">Save Location:</label>
-                  <span className="text-primary">/{userData?.username}</span>
+                <div className={`${styles['field-wrapper-alt']}`}>
+                  <FormikInput
+                    name="save-location-label"
+                    label="Save Location"
+                    value={`/${userData?.username}`}
+                    readOnly
+                    disabled
+                  />
                 </div>
-                <div className={`${styles['flexContainer']}`}>
-                  <label htmlFor="sync-folder-label">Sync Folder:</label>
-                  <span className={`${styles['check-wrapper']}`}>
-                    <FormikCheck name="syncFolder" label="" description="" />
-                  </span>
-                </div>
-                <div className={`${styles['custom-sync-description']}`}>
-                  When enabled, files in this folder are automatically synced
-                  into the map periodically.
-                </div>
+                <FormikCheck
+                  name="syncFolder"
+                  label="Sync Folder"
+                  description="When enabled, files in this folder are automatically synced
+                  into the map periodically."
+                />
               </FieldWrapperFormik>
               {errorMessage && (
-                <div className={`${styles['custom-error-message']}`}>
-                  {errorMessage}
-                </div>
+                <div className="c-form__errors">{errorMessage}</div>
               )}
               <ModalFooter className="justify-content-start">
-                <Button size="short" type="secondary" onClick={handleToggle}>
+                <Button size="short" type="secondary" onClick={handleClose}>
                   Close
                 </Button>
                 <Button

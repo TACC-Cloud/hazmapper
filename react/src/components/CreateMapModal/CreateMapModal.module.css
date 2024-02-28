@@ -9,56 +9,38 @@
   content: '\00D7'; /* Unicode character for 'X' */
 }
 
-.custom-error-message {
-  margin-top: 0.25rem;
-  font-size: 1.2em;
-  color: #dc3545;
+.field-wrapper-alt {
+  margin-top: -0.5rem;
+  margin-bottom: -0.1rem;
+  max-width: 40em;
 }
 
-.form-check-label {
-  font-style: italic;
+.field-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .input-custom-size {
-  width: 35.75rem;
+  flex-grow: 1;
+  width: 37.55rem;
+  padding-right: 90px;
 }
 
-.flexContainer {
-  display: flex;
-  vertical-align: top;
-  gap: 8px;
-  margin-bottom: 1.5em;
+.hazmapper-suffix {
+  position: absolute;
+  right: 0;
+  padding-right: 10px;
+  top: 46%;
+  transform: translateY(-50%);
+  white-space: nowrap;
 }
 
-.flexContainer-alt {
-  display: flex;
-  vertical-align: top;
-  gap: 8px;
-  margin-bottom: 1.5em;
-  margin-top: -1.5rem;
-}
-
-.check-wrapper {
-  display: flex;
-  margin-left: 1rem;
-  margin-top: -0.9rem;
-}
-
-.hazmapper-custom {
-  display: inline-flex;
-  align-items: center;
-  padding: 0 0.75rem;
-  font-size: 1rem;
-  background-color: #e9ecef;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  margin-top: 2.27rem;
-  margin-left: -9px;
-  min-width: 100px;
-  height: 2.9em;
-}
-
-.custom-sync-description {
-  font-style: italic;
-  margin-top: -1.25rem;
+/* Adding media queries for mobile devices */
+@media (max-width: 440px) {
+  .input-custom-size {
+    width: 115%;
+  }
 }
