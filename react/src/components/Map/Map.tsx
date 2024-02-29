@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import {
   MapContainer,
-  TileLayer,
+  ZoomControl,
   Marker,
   Popup,
+  TileLayer,
   WMSTileLayer,
   useMap,
 } from 'react-leaflet';
@@ -88,6 +89,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
       center={startingCenterPosition}
       zoom={3}
       style={{ width: '100%', height: '100%' }}
+      zoomControl={false}
       minZoom={2} // 2 typically prevents zooming out to far to see multiple earths
       maxBounds={maxBounds}
     >
@@ -133,6 +135,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
         })}
       </MarkerClusterGroup>
       <FitBoundsOnInitialLoad featureCollection={featureCollection} />
+      <ZoomControl position="bottomright" />
     </MapContainer>
   );
 };

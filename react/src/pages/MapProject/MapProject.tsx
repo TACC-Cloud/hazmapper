@@ -1,9 +1,16 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import Map from '../../components/Map';
+import AssetsPanel from '../../components/AssetsPanel';
+import ManageMapProjectModal from '../../components/ManageMapProjectModal';
+import { queryPanelKey, Panel } from '../../utils/panels';
+
 import { tileServerLayers } from '../../__fixtures__/tileServerLayerFixture';
 import { useFeatures, useProject } from '../../hooks';
 import { useParams } from 'react-router-dom';
+import styles from './MapProject.module.css';
 import { LoadingSpinner } from '../../core-components';
+import MapProjectNavBar from '../../components/MapProjectNavBar';
 
 interface Props {
   /**
@@ -42,6 +49,11 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
     },
   });
 
+  const location = useLocation();
+
+  const queryParams = new URLSearchParams(location.search);
+  const activePanel = queryParams.get(queryPanelKey);
+
   if (isActiveProjectLoading || isFeaturesLoading) {
     return <LoadingSpinner />;
   }
@@ -50,18 +62,35 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
   }
 
   return (
-    <div style={{ width: '100vw', height: '100vh' }}>
-      <Map
-        baseLayers={tileServerLayers}
-        featureCollection={
-          featureCollection
-            ? featureCollection
-            : {
-                type: 'FeatureCollection',
-                features: [],
-              }
-        }
-      />
+    <div className={styles.root}>
+      <div className={styles.topNavbar}>MapTopNavBar</div>
+      <div className={styles.mapControlBar}>MapTopControlBar</div>
+      <div className={styles.container}>
+        <MapProjectNavBar />
+        {activePanel && activePanel !== Panel.Manage && (
+          <div className={styles.panelContainer}>
+            {activePanel === Panel.Assets && (
+              <AssetsPanel isPublic={isPublic} />
+            )}
+          </div>
+        )}
+        {activePanel === Panel.Manage && (
+          <ManageMapProjectModal isPublic={isPublic} />
+        )}
+        <div className={styles.map}>
+          <Map
+            baseLayers={tileServerLayers}
+            featureCollection={
+              featureCollection
+                ? featureCollection
+                : {
+                    type: 'FeatureCollection',
+                    features: [],
+                  }
+            }
+          />
+        </div>
+      </div>
     </div>
   );
 };

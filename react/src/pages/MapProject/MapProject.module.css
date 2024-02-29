@@ -1,0 +1,44 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+}
+
+.topNavbar {
+  background-color: black;
+  color: white;
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.mapControlBar {
+  background-color: white;
+  height: 27px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.container {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex: 1;
+}
+
+.panelContainer {
+  /* todo place into a PanelContainer and then the PanelNavigation where the buttons live either horizonal or vertical    */
+  width: 200px;
+  height: 95%;
+  background-color: var(--global-color-primary--xx-light);
+  position: absolute;
+  left: 150px;
+  z-index: 5000;
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+}
