@@ -33,7 +33,7 @@ interface LeafletMapProps {
   /**
    * Tile servers used as base layers of map
    */
-  baseLayers: TileServerLayer[];
+  baseLayers?: TileServerLayer[];
 
   /**
    * Features of map
@@ -76,7 +76,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
   baseLayers,
   featureCollection,
 }) => {
-  const activeBaseLayers = baseLayers.filter(
+  const activeBaseLayers = baseLayers?.filter(
     (layer) => layer.uiOptions.isActive
   );
 
@@ -93,7 +93,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
       minZoom={2} // 2 typically prevents zooming out to far to see multiple earths
       maxBounds={maxBounds}
     >
-      {activeBaseLayers.map((layer) =>
+      {activeBaseLayers?.map((layer) =>
         layer.type === 'wms' ? (
           <WMSTileLayer
             key={layer.id}
