@@ -1,5 +1,5 @@
 import React from 'react';
-import { FieldInputProps, Field } from 'formik';
+import { Field, FieldInputProps } from 'formik';
 import { FormikInputProps } from '.';
 import { Input, FormText, FormGroup, Label } from 'reactstrap';
 import styles from './FormikCheck.module.css';
@@ -12,26 +12,36 @@ const FormikCheck: React.FC<FormikInputProps> = ({
   ...props
 }: FormikInputProps) => {
   return (
-    <FormGroup check>
-      <Label check className={`form-field__label ${styles.nospace}`} size="sm">
+    <>
+      <Label
+        htmlFor={name}
+        className={`form-field__label ${styles.nospace}`}
+        size="md"
+      >
+        {label}
+      </Label>
+      <FormGroup check className={`${styles.checkWrapper}`}>
         <Field
           name={name}
           as={(formikProps: FieldInputProps<any>) => (
             <Input
-              bsSize="sm"
               {...props}
               {...formikProps}
+              id={name}
               type="checkbox"
               checked={formikProps.value}
+              bsSize="sm"
             />
           )}
         />
-        {label}
-      </Label>
-      <FormText className={`form-field__help ${styles.nospace}`} color="muted">
-        {description}
-      </FormText>
-    </FormGroup>
+        <FormText
+          className={`form-field__help ${styles.nospace} ${styles.customDescription}`}
+          color="muted"
+        >
+          {description}
+        </FormText>
+      </FormGroup>
+    </>
   );
 };
 
