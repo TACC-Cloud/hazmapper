@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable, ReplaySubject, combineLatest } from 'rxjs'
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { EnvService } from '../services/env.service';
-import { DesignSafeProjectCollection, Project } from '../models/models';
+import { Project } from '../models/models';
 import { projectFixturev3 } from '../fixtures/projectv3.fixture';
 
 export interface AgaveProjectsData {
@@ -63,6 +63,26 @@ export class AgaveSystemsService {
     // See https://tacc-main.atlassian.net/browse/WG-261
     this._projects.next([]);
     this._loadingProjects.next(false);
+    /*
+    this.http.get<DesignSafeProjectCollection>(this.envService.designSafeUrl + `/projects/v2/`).subscribe(
+      (resp) => {
+        const projectSystems = resp.projects.map((project) => {
+          return {
+            id: 'project-' + project.uuid,
+            name: project.value.projectId,
+            description: project.value.title,
+          };
+        });
+        this._projects.next(projectSystems);
+        this._loadingProjects.next(false);
+      },
+      (error) => {
+        this._projects.next(null);
+        this._loadingProjectsFailedMessage.next(error.message || 'An error occured.');
+        this._loadingProjects.next(false);
+      }
+    );
+    */
     const useMockSuccess = true; // Change this to false to simulate an error
     if (useMockSuccess) {
       const mockResponse = projectFixturev3;
@@ -82,26 +102,6 @@ export class AgaveSystemsService {
       this._loadingProjects.next(false);
     }
   }
-
-  //   this.http.get<DesignSafeProjectCollection>(this.envService.designSafeUrl + `/projects/v2/`).subscribe(
-  //     (resp) => {
-  //       const projectSystems = resp.projects.map((project) => {
-  //         return {
-  //           id: 'project-' + project.uuid,
-  //           name: project.value.projectId,
-  //           description: project.value.title,
-  //         };
-  //       });
-  //       this._projects.next(projectSystems);
-  //       this._loadingProjects.next(false);
-  //     },
-  //     (error) => {
-  //       this._projects.next(null);
-  //       this._loadingProjectsFailedMessage.next(error.message || 'An error occured.');
-  //       this._loadingProjects.next(false);
-  //     }
-  //   );
-  // }
 
   getProjectMetadata(projects: Project[], dsProjects: SystemSummary[]): Project[] {
     if (dsProjects && dsProjects.length > 0) {
