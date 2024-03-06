@@ -85,15 +85,4 @@ Run `ng generate component components/component-name` to generate a new componen
 
 # Deployment
 
-## Images building + Jenkins
-
-The deployment of images and updating of the services and applications is performed by a Jenkins
-workflow found [here](https://jenkins01.tacc.utexas.edu/view/Hazmapper+Geoapi/.)
-
-The images used in deployment are built automatically for the master branch using TravisCI and 
-pushed to Docker Hub (see https://hub.docker.com/r/taccaci/hazmapper).
-
-
-## Additional Information/Tips
-
-For additional information like access and troubleshooting see [geoapi's devops directory TODO: create devops/README.md](https://github.com/TACC-Cloud/geoapi/tree/master/devops).
+For deployment information, see https://github.com/TACC-Cloud/geoapi/blob/master/devops/README.md
