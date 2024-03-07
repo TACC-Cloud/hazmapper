@@ -34,6 +34,9 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
     options: { enabled: !!projectUUID },
   });
 
+  const canFetchProjectFeaturesOrLayers =
+    !isActiveProjectLoading && !activeProjectError && !!activeProject;
+
   const {
     data: featureCollection,
     isLoading: isFeaturesLoading,
@@ -42,8 +45,7 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
     projectId: activeProject?.id,
     isPublic,
     options: {
-      enabled:
-        !isActiveProjectLoading && !activeProjectError && !!activeProject,
+      enabled: canFetchProjectFeaturesOrLayers,
     },
   });
 
@@ -55,8 +57,7 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
     projectId: activeProject?.id,
     isPublic,
     options: {
-      enabled:
-        !isActiveProjectLoading && !activeProjectError && !!activeProject,
+      enabled: canFetchProjectFeaturesOrLayers,
     },
   });
 
