@@ -1,22 +1,25 @@
 export interface Project {
-  description: string;
   id?: number;
-  name: string;
-  title?: string;
   uuid?: string;
+  name: string;
+  description: string;
   public?: boolean;
   system_file?: string;
   system_id?: string;
   system_path?: string;
   deletable?: boolean;
-  streetview_instances?: any;
 }
 export class Project implements Project {}
 
 export interface ProjectRequest {
-  project: Project;
-  observable: boolean;
-  watch_content: boolean;
+  name: string;
+  description: string;
+  public?: boolean;
+  system_file?: string;
+  system_id?: string;
+  system_path?: string;
+  watch_content?: boolean;
+  watch_users?: boolean;
 }
 
 export class ProjectRequest implements ProjectRequest {}
