@@ -71,7 +71,7 @@ const CreateMapModal = ({
       setErrorMessage('User information is not available');
       return;
     }
-    const projectData = {
+    const projectData: ProjectRequest = {
       name: values.name,
       description: values.description,
       system_file: values.system_file,
