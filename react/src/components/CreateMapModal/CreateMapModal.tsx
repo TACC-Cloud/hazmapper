@@ -101,12 +101,15 @@ const CreateMapModal = ({
         >
           {({ values, setFieldValue }) => {
             useEffect(() => {
+              // Replace spaces with underscores for system_file mirroring
+              const systemFileName = values.name.replace(/\s+/g, '_');
+
               // Update system_file only if it matches the previous name or if name/system_file are empty
               if (
-                values.system_file === previousName ||
+                values.system_file === previousName.replace(/\s+/g, '_') ||
                 (values.system_file === '' && values.name === '')
               ) {
-                setFieldValue('system_file', values.name);
+                setFieldValue('system_file', systemFileName);
                 setPreviousName(values.name);
               }
             }, [values.name, values.system_file, setFieldValue, previousName]);
