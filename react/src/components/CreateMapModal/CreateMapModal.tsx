@@ -72,16 +72,14 @@ const CreateMapModal = ({
       setErrorMessage('User information is not available');
       return;
     }
-    const projectData = {
-      observable: values.syncFolder,
+    const projectData: ProjectRequest = {
+      name: values.name,
+      description: values.description,
+      system_file: values.system_file,
+      system_id: values.system_id,
+      system_path: `/${userData.username}`,
       watch_content: values.syncFolder,
-      project: {
-        name: values.name,
-        description: values.description,
-        system_file: values.system_file,
-        system_id: values.system_id,
-        system_path: `/${userData.username}`,
-      },
+      watch_users: values.syncFolder,
     };
     handleCreateProject(projectData);
   };

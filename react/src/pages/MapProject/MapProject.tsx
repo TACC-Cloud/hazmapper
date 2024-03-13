@@ -4,9 +4,7 @@ import Map from '../../components/Map';
 import AssetsPanel from '../../components/AssetsPanel';
 import ManageMapProjectModal from '../../components/ManageMapProjectModal';
 import { queryPanelKey, Panel } from '../../utils/panels';
-
-import { tileServerLayers } from '../../__fixtures__/tileServerLayerFixture';
-import { useFeatures, useProject } from '../../hooks';
+import { useFeatures, useProject, useTileServers } from '../../hooks';
 import { useParams } from 'react-router-dom';
 import styles from './MapProject.module.css';
 import { LoadingSpinner } from '../../core-components';
@@ -49,15 +47,32 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
     },
   });
 
+  const {
+    data: tileServerLayers,
+    isLoading: isTileServerLayersLoading,
+    error: tileServerLayersError,
+  } = useTileServers({
+    projectId: activeProject?.id,
+    isPublic,
+    options: {
+      enabled:
+        !isActiveProjectLoading && !activeProjectError && !!activeProject,
+    },
+  });
+
   const location = useLocation();
 
   const queryParams = new URLSearchParams(location.search);
   const activePanel = queryParams.get(queryPanelKey);
 
-  if (isActiveProjectLoading || isFeaturesLoading) {
+  if (
+    isActiveProjectLoading ||
+    isFeaturesLoading ||
+    isTileServerLayersLoading
+  ) {
     return <LoadingSpinner />;
   }
-  if (activeProjectError || featuresError) {
+  if (activeProjectError || featuresError || tileServerLayersError) {
     return null; /* TODO_REACT show error and improve spinner https://tacc-main.atlassian.net/browse/WG-260*/
   }
 
