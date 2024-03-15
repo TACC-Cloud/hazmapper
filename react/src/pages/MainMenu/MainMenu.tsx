@@ -24,7 +24,6 @@ function MainMenu() {
     setIsModalOpen(!isModalOpen);
   };
 
-
   const [selectedSystem, setSelectedSystem] = useState('');
 
   if (isLoading || isUserLoading) {
