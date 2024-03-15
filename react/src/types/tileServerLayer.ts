@@ -1,3 +1,5 @@
+import { WMSParams } from 'leaflet';
+
 /**
  * Represents a tile server layer, with its metadata and options.
  */
@@ -15,11 +17,17 @@ export interface TileServerLayer {
   /** The tile options of the layer. */
   tileOptions: {
     /** The maximum zoom level of the layer. */
-    maxZoom: number;
+    maxZoom?: number;
     /** The minimum zoom level of the layer. */
-    minZoom: number;
+    minZoom?: number;
     /** The maximum native zoom level of the layer. */
-    maxNativeZoom: number;
+    maxNativeZoom?: number;
+    /** The format of the layer. */
+    format?: string;
+    /** Comma-separated list of layers. */
+    layers?: string;
+    /** The params for the layer. */
+    params?: WMSParams;
   };
   /** The user interface (UI) options of the layer. */
   uiOptions: {
@@ -30,8 +38,8 @@ export interface TileServerLayer {
     /** Whether the layer is active or not. */
     isActive: boolean;
     /** Whether to show an input for the layer or not. */
-    showInput: boolean;
+    showInput?: boolean;
     /** Whether to show the description of the layer or not. Note: handles if opacity ui is shown */
-    showDescription: boolean;
+    showDescription?: boolean;
   };
 }

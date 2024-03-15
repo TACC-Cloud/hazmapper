@@ -1,3 +1,5 @@
+import { GeoJsonProperties, Geometry } from 'geojson';
+
 /**
  * Asset of a feature
  */
@@ -33,14 +35,11 @@ export interface Feature {
   /**
    * The geometry of the feature, represented as a GeoJSON Point object with coordinates in longitude and latitude.
    */
-  geometry: {
-    type: string;
-    coordinates: number[];
-  };
+  geometry: Geometry;
   /**
    * Additional properties associated with the feature, represented as a generic object.
    */
-  properties: any;
+  properties: GeoJsonProperties;
   /**
    * Additional styles associated with the feature, represented as a generic object.
    */
@@ -56,10 +55,7 @@ export class FeatureClass implements Feature {
     public id: number,
     public project_id: number,
     public type: string,
-    public geometry: {
-      type: string;
-      coordinates: number[];
-    },
+    public geometry: Geometry,
     public properties: any,
     public styles: any,
     public assets: Asset[]

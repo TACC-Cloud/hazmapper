@@ -2,14 +2,14 @@ import { AuthToken } from '../types';
 
 export const AUTH_KEY = 'auth';
 
-export function isTokenValid(token: AuthToken | null): boolean {
-  if (token) {
-    if (!token.expires) {
+export function isTokenValid(authToken: AuthToken | null): boolean {
+  if (authToken) {
+    if (!authToken.expires) {
       return false;
     }
 
     const now = Date.now();
-    return now < token.expires;
+    return now < authToken.expires;
   } else {
     return false;
   }
@@ -28,8 +28,8 @@ export function getTokenFromLocalStorage(): AuthToken {
   return { token: null, expires: null };
 }
 
-export function setTokenToLocalStorage(token: AuthToken) {
-  localStorage.setItem(AUTH_KEY, JSON.stringify(token));
+export function setTokenToLocalStorage(authToken: AuthToken) {
+  localStorage.setItem(AUTH_KEY, JSON.stringify(authToken));
 }
 
 export function removeTokenFromLocalStorage() {

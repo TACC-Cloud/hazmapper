@@ -3,10 +3,13 @@ import {
   LoadingSpinner,
   InlineMessage,
   SectionHeader,
+  Icon,
+  Button,
 } from '../../core-components';
 import { useProjects } from '../../hooks';
 import useAuthenticatedUser from '../../hooks/user/useAuthenticatedUser';
 import { SystemSelect } from '../../components/Systems';
+import CreateMapModal from '../../components/CreateMapModal/CreateMapModal';
 
 function MainMenu() {
   const { data, isLoading, error } = useProjects();
@@ -15,6 +18,12 @@ function MainMenu() {
     isLoading: isUserLoading,
     error: userError,
   } = useAuthenticatedUser();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
 
   const [selectedSystem, setSelectedSystem] = useState('');
 
@@ -40,13 +49,26 @@ function MainMenu() {
   return (
     <>
       <SectionHeader isNestedHeader>Main Menu</SectionHeader>
-      <InlineMessage type="success">
-        Welcome, {userData?.username || 'User'}
+      <div>
+        <Button type="primary" size="small" onClick={toggleModal}>
+          Create Map
+        </Button>
+      </div>
+      <InlineMessage type="info">
+        Welcome, {userData?.username || 'User'} <Icon name="user"></Icon>
       </InlineMessage>
-
+      <CreateMapModal isOpen={isModalOpen} toggle={toggleModal} />
       <table>
-        <thead>Projects</thead>
-        <tbody>You have {data?.length} projects.</tbody>
+        <thead>
+          <tr>
+            <th>Projects</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>You have {data?.length} projects.</td>
+          </tr>
+        </tbody>
       </table>
 
       {selectedSystem && <div>Current system selected: {selectedSystem}</div>}
