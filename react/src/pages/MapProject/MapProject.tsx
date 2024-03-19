@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom';
 import styles from './MapProject.module.css';
 import { LoadingSpinner } from '../../core-components';
 import MapProjectNavBar from '../../components/MapProjectNavBar';
+import Filters from '../../components/FiltersPanel/Filter';
 
 interface Props {
   /**
@@ -87,6 +88,7 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
             {activePanel === Panel.Assets && (
               <AssetsPanel isPublic={isPublic} />
             )}
+            {activePanel === Panel.Filters && <Filters />}
           </div>
         )}
         {activePanel === Panel.Manage && (

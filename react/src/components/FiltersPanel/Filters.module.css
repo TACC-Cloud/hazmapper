@@ -1,0 +1,17 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding-left: 20px;
+}
+
+.filterOption {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.filterOption input[type='checkbox'] {
+  margin-right: 10px;
+}
