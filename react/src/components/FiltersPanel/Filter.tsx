@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Filters.module.css';
 
 interface FilterOptions {
-  Images: boolean;
-  Videos: boolean;
-  PointClouds: boolean;
+  Image: boolean;
+  Video: boolean;
+  PointCloud: boolean;
   Streetview: boolean;
   Questionnaire: boolean;
   NoAssetVector: boolean;
 }
 
 const FilterOptions: FilterOptions = {
-  Images: false,
-  Videos: false,
-  PointClouds: false,
-  Streetview: false,
-  Questionnaire: false,
-  NoAssetVector: false,
+  Image: true,
+  Video: true,
+  PointCloud: true,
+  Streetview: true,
+  Questionnaire: true,
+  NoAssetVector: true,
 };
 
 const FilterOption: React.FC<{
@@ -30,8 +30,33 @@ const FilterOption: React.FC<{
   </label>
 );
 
-const Filters: React.FC = () => {
-  const [selectedFilters, setSelectedFilters] = useState(FilterOptions);
+interface FiltersProps {
+  projectId?: number;
+  isPublic: boolean;
+  onFiltersChange: (selectedAssetTypes: string[]) => void;
+}
+
+const Filters: React.FC<FiltersProps> = ({ onFiltersChange }) => {
+  const [isTodayChecked, setIsTodayChecked] = useState(false);
+  const [selectedFilters, setSelectedFilters] =
+    useState<FilterOptions>(FilterOptions);
+  useEffect(() => {
+    const formatAssetTypeName = (name: string) => {
+      switch (name) {
+        case 'PointCloud':
+          return 'point_cloud';
+        case 'NoAssetVector':
+          return 'no_asset_vector';
+        default:
+          return name.toLowerCase();
+      }
+    };
+    const selectedAssetTypes = Object.entries(selectedFilters)
+      .filter(([, isSelected]) => isSelected)
+      .map(([key]) => formatAssetTypeName(key));
+
+    onFiltersChange(selectedAssetTypes);
+  }, [selectedFilters, onFiltersChange]);
 
   const handleFilterChange = (filterName: keyof FilterOptions) => {
     setSelectedFilters((prevFilters) => ({
@@ -40,8 +65,25 @@ const Filters: React.FC = () => {
     }));
   };
 
+  const handleTodayChange = () => {
+    setIsTodayChecked(!isTodayChecked);
+  };
+
   return (
     <div className={styles.root}>
+      <h3>Filters</h3>
+      <h2>Date Range</h2>
+      <div className={styles.filterOption}>
+        <input
+          type="checkbox"
+          id="date-range-today"
+          checked={isTodayChecked}
+          onChange={handleTodayChange}
+        />
+        <label htmlFor="date-range-today" className={styles.filterLabel}>
+          Today
+        </label>
+      </div>
       <h2>Asset Types</h2>
       {Object.entries(selectedFilters).map(([filterName, isChecked]) => (
         <FilterOption

@@ -12,9 +12,15 @@ const useFeatures = ({
   projectId,
   isPublic,
   options,
-}: UseFeaturesParams): UseQueryResult<FeatureCollection> => {
+  assetTypes,
+}: UseFeaturesParams & {
+  assetTypes?: string[];
+}): UseQueryResult<FeatureCollection> => {
   const featuresRoute = isPublic ? 'public-projects' : 'projects';
-  const endpoint = `/${featuresRoute}/${projectId}/features/`;
+  const assetTypesQueryParam = assetTypes?.length
+    ? `assetType=${assetTypes.join(',')}`
+    : '';
+  const endpoint = `/${featuresRoute}/${projectId}/features/?${assetTypesQueryParam}`;
 
   /* TODO_REACT add assets filter in https://tacc-main.atlassian.net/browse/WG-242.
   Filter route looks like something like this in v2:

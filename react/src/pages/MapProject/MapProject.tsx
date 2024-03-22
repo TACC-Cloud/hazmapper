@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Map from '../../components/Map';
 import AssetsPanel from '../../components/AssetsPanel';
@@ -25,6 +26,8 @@ interface Props {
 const MapProject: React.FC<Props> = ({ isPublic = false }) => {
   const { projectUUID } = useParams();
 
+  const [selectedAssetTypes, setSelectedAssetTypes] = useState<string[]>([]);
+
   const {
     data: activeProject,
     isLoading: isActiveProjectLoading,
@@ -46,6 +49,7 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
       enabled:
         !isActiveProjectLoading && !activeProjectError && !!activeProject,
     },
+    assetTypes: selectedAssetTypes,
   });
 
   const {
@@ -88,7 +92,13 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
             {activePanel === Panel.Assets && (
               <AssetsPanel isPublic={isPublic} />
             )}
-            {activePanel === Panel.Filters && <Filters />}
+            {activePanel === Panel.Filters && (
+              <Filters
+                projectId={activeProject?.id}
+                isPublic={isPublic}
+                onFiltersChange={setSelectedAssetTypes}
+              />
+            )}
           </div>
         )}
         {activePanel === Panel.Manage && (

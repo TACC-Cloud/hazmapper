@@ -111,7 +111,16 @@ export function useGet<ResponseType>({
     }
 
     const queryParams = new URLSearchParams(analytics_params).toString();
-    url += `?${queryParams}`;
+    if (url.endsWith('?')) {
+      // If the URL already ends with a '?', append parameters directly
+      url += queryParams;
+    } else if (url.includes('?')) {
+      // If the URL contains other parameters, prepend with '&'
+      url += `&${queryParams}`;
+    } else {
+      // If the URL contains no parameters, start with '?'
+      url += `?${queryParams}`;
+    }
   }
 
   const getUtil = async () => {
