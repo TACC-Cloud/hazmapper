@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { EnvService } from '../services/env.service';
 import { Project } from '../models/models';
+import { projectFixturev3 } from '../fixtures/projectv3.fixture';
 
 export interface AgaveProjectsData {
   projects: SystemSummary[];
@@ -82,6 +83,24 @@ export class AgaveSystemsService {
       }
     );
     */
+    const useMockSuccess = true; // Change this to false to simulate an error
+    if (useMockSuccess) {
+      const mockResponse = projectFixturev3;
+      const projectSystems = mockResponse.result.map((project) => {
+        return {
+          id: 'project-' + project.uuid,
+          name: project.value.projectId,
+          description: project.value.title,
+        };
+      });
+      this._projects.next(projectSystems);
+      this._loadingProjects.next(false);
+    } else {
+      const errorMessage = 'An error occurred. Contact support';
+      this._projects.next(null);
+      this._loadingProjectsFailedMessage.next(errorMessage);
+      this._loadingProjects.next(false);
+    }
   }
 
   getProjectMetadata(projects: Project[], dsProjects: SystemSummary[]): Project[] {
