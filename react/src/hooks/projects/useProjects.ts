@@ -25,7 +25,7 @@ export const useProject = ({
   const endpoint = `/${projectRoute}/?uuid=${projectUUID}`;
   const query = useGet<Project>({
     endpoint,
-    key: ['projects'],
+    key: ['project'],
     options,
     transform: (data) => data[0], // result is a list with a single Project
   });
