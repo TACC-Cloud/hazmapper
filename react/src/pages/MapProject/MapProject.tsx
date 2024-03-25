@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Map from '../../components/Map';
 import AssetsPanel from '../../components/AssetsPanel';
@@ -25,8 +25,37 @@ interface Props {
  */
 const MapProject: React.FC<Props> = ({ isPublic = false }) => {
   const { projectUUID } = useParams();
-
+  const [initialLoad, setInitialLoad] = useState(true);
   const [selectedAssetTypes, setSelectedAssetTypes] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (initialLoad) {
+      setSelectedAssetTypes([
+        'Image',
+        'Video',
+        'PointCloud',
+        'Streetview',
+        'Questionnaire',
+        'NoAssetVector',
+      ]);
+      setInitialLoad(false);
+    }
+  }, [initialLoad]);
+
+  const formatAssetTypeName = (name: string) => {
+    switch (name) {
+      case 'PointCloud':
+        return 'point_cloud';
+      case 'NoAssetVector':
+        return 'no_asset_vector';
+      default:
+        return name.toLowerCase();
+    }
+  };
+
+  const formattedAssetTypes = selectedAssetTypes.map((type) =>
+    formatAssetTypeName(type)
+  );
 
   const {
     data: activeProject,
@@ -49,7 +78,7 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
       enabled:
         !isActiveProjectLoading && !activeProjectError && !!activeProject,
     },
-    assetTypes: selectedAssetTypes,
+    assetTypes: formattedAssetTypes,
   });
 
   const {
@@ -94,8 +123,7 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
             )}
             {activePanel === Panel.Filters && (
               <Filters
-                projectId={activeProject?.id}
-                isPublic={isPublic}
+                selectedAssetTypes={selectedAssetTypes}
                 onFiltersChange={setSelectedAssetTypes}
               />
             )}
