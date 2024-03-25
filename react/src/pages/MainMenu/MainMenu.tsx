@@ -8,6 +8,7 @@ import {
 } from '../../core-components';
 import { useProjects } from '../../hooks';
 import useAuthenticatedUser from '../../hooks/user/useAuthenticatedUser';
+import { SystemSelect } from '../../components/Systems';
 import CreateMapModal from '../../components/CreateMapModal/CreateMapModal';
 
 function MainMenu() {
@@ -23,6 +24,8 @@ function MainMenu() {
     setIsModalOpen(!isModalOpen);
   };
 
+  const [selectedSystem, setSelectedSystem] = useState('');
+
   if (isLoading || isUserLoading) {
     return (
       <>
@@ -37,6 +40,11 @@ function MainMenu() {
       <InlineMessage type="error">Unable to retrieve projects.</InlineMessage>
     </>;
   }
+
+  const handleSelectChange = (system: string) => {
+    setSelectedSystem(system);
+  };
+
   return (
     <>
       <SectionHeader isNestedHeader>Main Menu</SectionHeader>
@@ -61,6 +69,9 @@ function MainMenu() {
           </tr>
         </tbody>
       </table>
+
+      {selectedSystem && <div>Current system selected: {selectedSystem}</div>}
+      <SystemSelect onSystemSelect={handleSelectChange}></SystemSelect>
     </>
   );
 }
