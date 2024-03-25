@@ -15,7 +15,7 @@ export class MainComponent implements AfterContentInit {
 
   ngAfterContentInit() {
     if (this.authService.isLoggedIn()) {
-      this.authService.getUserInfo();
+      this.authService.getUserInfoFromToken();
     }
     this.authService.currentUser.subscribe((next) => {
       // to avoid ExpressionChangedAfterItHasBeenCheckedError during /logout
