@@ -25,10 +25,7 @@ const useFeatures = ({
   const query = useGet<FeatureCollection>({
     endpoint,
     key: ['features', { projectId, isPublic, assetTypesQueryParam }],
-    options: {
-      ...options,
-      staleTime: 1000 * 30, // 30 seconds to avoid multiple network requests, but still keep data fresh
-    },
+    options,
   });
 
   if (!projectId) {
