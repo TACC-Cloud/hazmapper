@@ -6,6 +6,25 @@
   padding-left: 20px;
 }
 
+.customInputContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.customInput {
+  padding-right: 20px;
+  width: 73%;
+}
+
+.tooltip {
+  font-weight: bold;
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
 .filterOption {
   display: flex;
   align-items: center;

@@ -12,6 +12,11 @@ interface FiltersProps {
   setEndDate: (date: Date) => void;
 }
 
+interface CustomInputProps {
+  value?: string;
+  onClick?: () => void;
+}
+
 const assetTypeOptions = {
   Image: 'Image',
   Video: 'Video',
@@ -37,6 +42,29 @@ const Filters: React.FC<FiltersProps> = ({
     }
   };
 
+  const CustomInputWithTooltip = React.forwardRef<
+    HTMLInputElement,
+    CustomInputProps
+  >(({ value, onClick }, ref) => (
+    <div className={styles.customInputContainer}>
+      <input
+        className={styles.customInput}
+        value={value}
+        onClick={onClick}
+        ref={ref}
+        readOnly
+      />
+      <span
+        className={styles.tooltip}
+        title="Choose the date(s) corresponding to when the data collection occurred in the field, not when the data was uploaded to the map project."
+      >
+        ?
+      </span>
+    </div>
+  ));
+
+  CustomInputWithTooltip.displayName = 'CustomInputWithTooltip';
+
   return (
     <div className={styles.root}>
       <h3>Filters</h3>
@@ -49,6 +77,7 @@ const Filters: React.FC<FiltersProps> = ({
           selectsStart
           startDate={startDate}
           endDate={endDate}
+          customInput={<CustomInputWithTooltip />}
         />
         <h5>End Date</h5>
         <DatePicker
@@ -58,6 +87,7 @@ const Filters: React.FC<FiltersProps> = ({
           startDate={startDate}
           endDate={endDate}
           minDate={startDate}
+          customInput={<CustomInputWithTooltip />}
         />
       </>
       <h2>Asset Types</h2>
