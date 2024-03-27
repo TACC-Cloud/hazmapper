@@ -27,6 +27,10 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
   const { projectUUID } = useParams();
   const [initialLoad, setInitialLoad] = useState(true);
   const [selectedAssetTypes, setSelectedAssetTypes] = useState<string[]>([]);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(
+    new Date(Date.now() + 24 * 60 * 60 * 1000)
+  );
 
   useEffect(() => {
     if (initialLoad) {
@@ -125,6 +129,10 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
               <Filters
                 selectedAssetTypes={selectedAssetTypes}
                 onFiltersChange={setSelectedAssetTypes}
+                startDate={startDate}
+                setStartDate={setStartDate}
+                endDate={endDate}
+                setEndDate={setEndDate}
               />
             )}
           </div>
