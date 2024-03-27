@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Map from '../../components/Map';
 import AssetsPanel from '../../components/AssetsPanel';
@@ -9,6 +10,7 @@ import { useParams } from 'react-router-dom';
 import styles from './MapProject.module.css';
 import { LoadingSpinner } from '../../core-components';
 import MapProjectNavBar from '../../components/MapProjectNavBar';
+import Filters from '../../components/FiltersPanel/Filter';
 
 interface Props {
   /**
@@ -23,6 +25,41 @@ interface Props {
  */
 const MapProject: React.FC<Props> = ({ isPublic = false }) => {
   const { projectUUID } = useParams();
+  const [initialLoad, setInitialLoad] = useState(true);
+  const [selectedAssetTypes, setSelectedAssetTypes] = useState<string[]>([]);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(
+    new Date(Date.now() + 24 * 60 * 60 * 1000)
+  );
+
+  useEffect(() => {
+    if (initialLoad) {
+      setSelectedAssetTypes([
+        'Image',
+        'Video',
+        'PointCloud',
+        'Streetview',
+        'Questionnaire',
+        'NoAssetVector',
+      ]);
+      setInitialLoad(false);
+    }
+  }, [initialLoad]);
+
+  const formatAssetTypeName = (name: string) => {
+    switch (name) {
+      case 'PointCloud':
+        return 'point_cloud';
+      case 'NoAssetVector':
+        return 'no_asset_vector';
+      default:
+        return name.toLowerCase();
+    }
+  };
+
+  const formattedAssetTypes = selectedAssetTypes.map((type) =>
+    formatAssetTypeName(type)
+  );
 
   const {
     data: activeProject,
@@ -45,6 +82,7 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
       enabled:
         !isActiveProjectLoading && !activeProjectError && !!activeProject,
     },
+    assetTypes: formattedAssetTypes,
   });
 
   const {
@@ -86,6 +124,16 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
           <div className={styles.panelContainer}>
             {activePanel === Panel.Assets && (
               <AssetsPanel isPublic={isPublic} />
+            )}
+            {activePanel === Panel.Filters && (
+              <Filters
+                selectedAssetTypes={selectedAssetTypes}
+                onFiltersChange={setSelectedAssetTypes}
+                startDate={startDate}
+                setStartDate={setStartDate}
+                endDate={endDate}
+                setEndDate={setEndDate}
+              />
             )}
           </div>
         )}
