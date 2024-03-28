@@ -30,12 +30,11 @@
 }
 
 .hazmapper-suffix {
+  font-weight: bold;
   position: absolute;
-  right: 0;
-  padding-right: 10px;
-  top: 46%;
+  right: 8px;
   transform: translateY(-50%);
-  white-space: nowrap;
+  padding-left: 8px;
 }
 
 /* Adding media queries for mobile devices */

@@ -100,7 +100,7 @@ const CreateMapModal = ({
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {() => (
+          {({ errors, touched }) => (
             <Form className="c-form">
               <FieldWrapperFormik name="map-form-info" label="">
                 <FormikInput
@@ -121,7 +121,15 @@ const CreateMapModal = ({
                     required
                     className={`${styles['input-custom-size']}`}
                   />
-                  <span className={`${styles['hazmapper-suffix']}`}>
+                  <span
+                    className={`${styles['hazmapper-suffix']}`}
+                    style={{
+                      top:
+                        errors.system_file && touched.system_file
+                          ? 'auto'
+                          : '50%',
+                    }}
+                  >
                     .hazmapper
                   </span>
                 </div>
