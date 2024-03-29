@@ -120,13 +120,11 @@ const CreateMapModal = ({
                     className={`${styles['input-custom-size']}`}
                   />
                   <span
-                    className={`${styles['hazmapper-suffix']}`}
-                    style={{
-                      top:
-                        errors.system_file && touched.system_file
-                          ? 'auto'
-                          : '50%',
-                    }}
+                    className={`${styles['hazmapper-suffix']} ${
+                      errors.system_file && touched.system_file
+                        ? styles['hazmapper-suffix--error']
+                        : styles['hazmapper-suffix--normal']
+                    }`}
                   >
                     .hazmapper
                   </span>

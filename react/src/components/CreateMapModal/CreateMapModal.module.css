@@ -37,6 +37,14 @@
   padding-left: 8px;
 }
 
+.hazmapper-suffix--error {
+  top: auto;
+}
+
+.hazmapper-suffix--normal {
+  top: 50%;
+}
+
 /* Adding media queries for mobile devices */
 @media (max-width: 440px) {
   .input-custom-size {
