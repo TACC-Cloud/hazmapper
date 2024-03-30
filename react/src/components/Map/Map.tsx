@@ -18,10 +18,6 @@ import 'leaflet.markercluster';
 
 import 'leaflet/dist/leaflet.css';
 
-/* TODO: review if best approach is to style map with .leaflet-container */
-/* TODO: consider createTileLayerComponent
-/* TODO: support layers with type 'arcgis' and 'wms' (WMSTileLayer) https://jira.tacc.utexas.edu/browse/WG-6 */
-
 const startingCenterPosition: LatLngTuple = [40, -80];
 const maxFitToBoundsZoom = 18;
 const maxBounds: L.LatLngBoundsExpression = [
