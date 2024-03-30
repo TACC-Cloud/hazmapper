@@ -7,7 +7,6 @@ import { queryPanelKey, Panel } from '../../utils/panels';
 import { useFeatures, useProject, useTileServers } from '../../hooks';
 import { useParams } from 'react-router-dom';
 import styles from './MapProject.module.css';
-import { LoadingSpinner } from '../../core-components';
 import MapProjectNavBar from '../../components/MapProjectNavBar';
 
 interface Props {
@@ -66,21 +65,19 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
   const queryParams = new URLSearchParams(location.search);
   const activePanel = queryParams.get(queryPanelKey);
 
-  if (
-    isActiveProjectLoading ||
-    isFeaturesLoading ||
-    isTileServerLayersLoading
-  ) {
-    return <LoadingSpinner />;
-  }
-  if (activeProjectError || featuresError || tileServerLayersError) {
-    return null; /* TODO_REACT show error and improve spinner https://tacc-main.atlassian.net/browse/WG-260*/
-  }
+  /* TODO_REACT show error and improve spinner https://tacc-main.atlassian.net/browse/WG-260*/
+  const error = activeProjectError || featuresError || tileServerLayersError;
+  console.error(error);
+  const loading =
+    isActiveProjectLoading || isFeaturesLoading || isTileServerLayersLoading;
 
   return (
     <div className={styles.root}>
       <div className={styles.topNavbar}>MapTopNavBar</div>
-      <div className={styles.mapControlBar}>MapTopControlBar</div>
+      <div className={styles.mapControlBar}>
+        MapTopControlBar
+        {loading && <div> loading</div>}
+      </div>
       <div className={styles.container}>
         <MapProjectNavBar />
         {activePanel && activePanel !== Panel.Manage && (
