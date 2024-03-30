@@ -91,6 +91,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
       style={{ width: '100%', height: '100%' }}
       zoomControl={false}
       minZoom={2} // 2 typically prevents zooming out to far to see multiple earths
+      maxZoom={24}
       maxBounds={maxBounds}
     >
       {activeBaseLayers?.map((layer) =>
