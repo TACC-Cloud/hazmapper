@@ -18,10 +18,6 @@ import 'leaflet.markercluster';
 
 import 'leaflet/dist/leaflet.css';
 
-/* TODO: review if best approach is to style map with .leaflet-container */
-/* TODO: consider createTileLayerComponent
-/* TODO: support layers with type 'arcgis' and 'wms' (WMSTileLayer) https://jira.tacc.utexas.edu/browse/WG-6 */
-
 const startingCenterPosition: LatLngTuple = [40, -80];
 const maxFitToBoundsZoom = 18;
 const maxBounds: L.LatLngBoundsExpression = [
@@ -90,7 +86,8 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
       zoom={3}
       style={{ width: '100%', height: '100%' }}
       zoomControl={false}
-      minZoom={2} // 2 typically prevents zooming out to far to see multiple earths
+      minZoom={2} // 2 typically prevents zooming out too far to see multiple earths
+      maxZoom={24}
       maxBounds={maxBounds}
     >
       {activeBaseLayers?.map((layer) =>
