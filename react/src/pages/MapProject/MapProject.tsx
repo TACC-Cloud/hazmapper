@@ -67,7 +67,11 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
 
   /* TODO_REACT show error and improve spinner https://tacc-main.atlassian.net/browse/WG-260*/
   const error = activeProjectError || featuresError || tileServerLayersError;
-  console.error(error);
+
+  if (error) {
+    console.error(error);
+  }
+
   const loading =
     isActiveProjectLoading || isFeaturesLoading || isTileServerLayersLoading;
 
