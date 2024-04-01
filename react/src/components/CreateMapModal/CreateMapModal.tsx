@@ -135,23 +135,24 @@ const CreateMapModal = ({
                       required
                       className={`${styles['input-custom-size']}`}
                     />
-                  <span
-                    className={`${styles['hazmapper-suffix']} ${
-                      errors.system_file && touched.system_file
-                        ? styles['hazmapper-suffix--error']
-                        : styles['hazmapper-suffix--normal']
-                    }`}
-                  >
-                    .hazmapper
-                  </span>
-                </div>
-                <div className={`${styles['field-wrapper-alt']}`}>
-                  <FormikInput
-                    name="save-location"
-                    label="Save Location"
-                    value={`/${userData?.username}`}
-                    readOnly
-                    disabled
+                    <span
+                      className={`${styles['hazmapper-suffix']} ${
+                        errors.system_file && touched.system_file
+                          ? styles['hazmapper-suffix--error']
+                          : styles['hazmapper-suffix--normal']
+                      }`}
+                    >
+                      .hazmapper
+                    </span>
+                  </div>
+                  <div className={`${styles['field-wrapper-alt']}`}>
+                    <FormikInput
+                      name="save-location"
+                      label="Save Location"
+                      value={`/${userData?.username}`}
+                      readOnly
+                      disabled
+                    />
                   </div>
                   <FormikCheck
                     name="syncFolder"
