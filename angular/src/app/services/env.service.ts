@@ -119,6 +119,7 @@ export class EnvService {
       // TODO: Currently taggit is hosted on same port 4200
       // Have to change port on taggit or hazmapper (requires adding callbackUrl to that port)
       this._taggitUrl = 'http://localhost:4200/taggit';
+      // TODO_TAPISV3 Remove jwt from environment service and files a no longer has to be added
       // when we are using the local backend, a jwt is required
       if (environment.backend === EnvironmentType.Local) {
         this._jwt = environment.jwt;
