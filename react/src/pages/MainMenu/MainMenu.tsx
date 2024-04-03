@@ -6,12 +6,12 @@ import {
   Icon,
   Button,
 } from '../../core-components';
-import { useProjects } from '../../hooks';
 import useAuthenticatedUser from '../../hooks/user/useAuthenticatedUser';
+import { SystemSelect } from '../../components/Systems';
 import CreateMapModal from '../../components/CreateMapModal/CreateMapModal';
+import { ProjectListing } from '../../components/Projects/ProjectListing';
 
 function MainMenu() {
-  const { data, isLoading, error } = useProjects();
   const {
     data: userData,
     isLoading: isUserLoading,
@@ -23,7 +23,9 @@ function MainMenu() {
     setIsModalOpen(!isModalOpen);
   };
 
-  if (isLoading || isUserLoading) {
+  const [selectedSystem, setSelectedSystem] = useState('');
+
+  if (isUserLoading) {
     return (
       <>
         <SectionHeader isNestedHeader>Main Menu</SectionHeader>
@@ -31,12 +33,17 @@ function MainMenu() {
       </>
     );
   }
-  if (error || userError) {
+  if (userError) {
     <>
       <SectionHeader isNestedHeader>Main Menu</SectionHeader>
       <InlineMessage type="error">Unable to retrieve projects.</InlineMessage>
     </>;
   }
+
+  const handleSelectChange = (system: string) => {
+    setSelectedSystem(system);
+  };
+
   return (
     <>
       <SectionHeader isNestedHeader>Main Menu</SectionHeader>
@@ -49,18 +56,9 @@ function MainMenu() {
         Welcome, {userData?.username || 'User'} <Icon name="user"></Icon>
       </InlineMessage>
       <CreateMapModal isOpen={isModalOpen} toggle={toggleModal} />
-      <table>
-        <thead>
-          <tr>
-            <th>Projects</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>You have {data?.length} projects.</td>
-          </tr>
-        </tbody>
-      </table>
+      <ProjectListing />
+      {selectedSystem && <div>Current system selected: {selectedSystem}</div>}
+      <SystemSelect onSystemSelect={handleSelectChange}></SystemSelect>
     </>
   );
 }

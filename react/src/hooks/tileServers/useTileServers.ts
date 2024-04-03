@@ -22,15 +22,5 @@ export const useTileServers = ({
     options,
   });
 
-  if (!projectId) {
-    return {
-      ...query,
-      status: 'error',
-      error: new Error('Unknown project'),
-      data: undefined,
-      isLoading: false,
-    } as UseQueryResult<TileServerLayer[]>;
-  }
-
   return query;
 };
