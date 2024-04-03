@@ -27,17 +27,6 @@ const useFeatures = ({
     key: ['features', { projectId, isPublic, assetTypesQueryParam }],
     options,
   });
-
-  if (!projectId) {
-    return {
-      ...query,
-      status: 'error',
-      error: new Error('Unknown project'),
-      data: undefined,
-      isFetching: false,
-    } as UseQueryResult<FeatureCollection>;
-  }
-
   return query;
 };
 
