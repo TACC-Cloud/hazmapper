@@ -33,16 +33,8 @@
   font-weight: bold;
   position: absolute;
   right: 8px;
-  transform: translateY(-50%);
+  top: 30px;
   padding-left: 8px;
-}
-
-.hazmapper-suffix--error {
-  top: auto;
-}
-
-.hazmapper-suffix--normal {
-  top: 50%;
 }
 
 /* Adding media queries for mobile devices */

@@ -99,7 +99,7 @@ const CreateMapModal = ({
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ errors, touched, values, setFieldValue }) => {
+          {({ values, setFieldValue }) => {
             useEffect(() => {
               // Replace spaces with underscores for system_file mirroring
               const systemFileName = values.name.replace(/\s+/g, '_');
@@ -135,13 +135,7 @@ const CreateMapModal = ({
                       required
                       className={`${styles['input-custom-size']}`}
                     />
-                    <span
-                      className={`${styles['hazmapper-suffix']} ${
-                        errors.system_file && touched.system_file
-                          ? styles['hazmapper-suffix--error']
-                          : styles['hazmapper-suffix--normal']
-                      }`}
-                    >
+                    <span className={`${styles['hazmapper-suffix']}`}>
                       .hazmapper
                     </span>
                   </div>
