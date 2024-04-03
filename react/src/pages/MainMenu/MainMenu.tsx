@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   LoadingSpinner,
   InlineMessage,
@@ -10,6 +10,9 @@ import { useProjects } from '../../hooks';
 import useAuthenticatedUser from '../../hooks/user/useAuthenticatedUser';
 import { SystemSelect } from '../../components/Systems';
 import CreateMapModal from '../../components/CreateMapModal/CreateMapModal';
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:8000');
 
 function MainMenu() {
   const { data, isLoading, error } = useProjects();
@@ -19,12 +22,34 @@ function MainMenu() {
     error: userError,
   } = useAuthenticatedUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState('Disconnected');
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
 
   const [selectedSystem, setSelectedSystem] = useState('');
+
+  useEffect(() => {
+    // Listen for the 'connect' and 'disconnect' events to update the connection status
+    socket.on('connect', () => {
+      setConnectionStatus('Connected');
+    });
+
+    socket.on('disconnect', () => {
+      setConnectionStatus('Disconnected');
+    });
+
+    socket.on('connect_error', (error) => {
+      console.error('Connection Error:', error);
+    });
+
+    // Clean up the event listeners when the component unmounts
+    return () => {
+      socket.off('connect');
+      socket.off('disconnect');
+    };
+  }, []);
 
   if (isLoading || isUserLoading) {
     return (
@@ -48,6 +73,9 @@ function MainMenu() {
   return (
     <>
       <SectionHeader isNestedHeader>Main Menu</SectionHeader>
+      <InlineMessage type="info">
+        WebSocket Status: {connectionStatus}
+      </InlineMessage>
       <div>
         <Button type="primary" size="small" onClick={toggleModal}>
           Create Map
