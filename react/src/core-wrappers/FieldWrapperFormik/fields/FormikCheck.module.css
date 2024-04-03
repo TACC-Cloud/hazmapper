@@ -1,0 +1,19 @@
+.nospace {
+  padding-top: 0;
+  padding-bottom: 0;
+  font-weight: 500;
+  margin-top: -0.7rem;
+}
+
+.customDescription {
+  font-style: italic;
+  padding-left: 10px;
+  padding-top: 7px;
+}
+
+.checkWrapper {
+  display: flex;
+  margin-left: 1rem;
+  margin-top: -0.9rem;
+  margin-bottom: 1.5rem;
+}

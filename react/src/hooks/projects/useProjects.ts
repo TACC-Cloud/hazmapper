@@ -3,6 +3,7 @@ import {
   Project,
   DesignSafeProject,
   DesignSafeProjectCollection,
+  ApiService,
 } from '../../types';
 import { useGet } from '../../requests';
 
@@ -10,17 +11,37 @@ export const useProjects = (): UseQueryResult<Project[]> => {
   const query = useGet<Project[]>({
     endpoint: '/projects/',
     key: ['projects'],
-    baseUrl: 'https://agave.designsafe-ci.org/geo/v2',
   });
   return query;
 };
 
+interface UseProjectParams {
+  projectUUID?: string;
+  isPublic: boolean;
+  options: object;
+}
+
+export const useProject = ({
+  projectUUID,
+  isPublic,
+  options,
+}: UseProjectParams): UseQueryResult<Project> => {
+  const projectRoute = isPublic ? 'public-projects' : 'projects';
+  const endpoint = `/${projectRoute}/?uuid=${projectUUID}`;
+  const query = useGet<Project>({
+    endpoint,
+    key: ['project'],
+    options,
+    transform: (data) => data[0], // result is a list with a single Project
+  });
+  return query;
+};
 export const useDsProjects =
   (): UseQueryResult<DesignSafeProjectCollection> => {
     const query = useGet<DesignSafeProjectCollection>({
       endpoint: `projects/v2/`,
       key: ['projectsv2'],
-      baseUrl: 'https://agave.designsafe-ci.org//',
+      apiService: ApiService.DesignSafe,
     });
     return query;
   };

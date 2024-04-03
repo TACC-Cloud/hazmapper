@@ -3,13 +3,15 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { isTokenValid } from '../../utils/authUtils';
+import { useAppConfiguration } from '../../hooks';
 
 function Login() {
   const location = useLocation();
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state: RootState) =>
-    isTokenValid(state.auth.token)
+    isTokenValid(state.auth.authToken)
   );
+  const configuration = useAppConfiguration();
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -23,14 +25,13 @@ function Login() {
       localStorage.setItem('authState', state);
       localStorage.setItem('toParam', toParam);
 
-      // TODO check for staging/prod
-      const callbackUrl = `${window.location.origin}/callback`;
-
-      // TODO make auth/server configurable
-      const client_id = 'RMCJHgW9CwJ6mKjhLTDnUYBo9Hka';
-
+      const callbackUrl = (
+        window.location.origin +
+        configuration.basePath +
+        '/callback'
+      ).replace(/([^:])(\/{2,})/g, '$1/');
       // Construct the authentication URL with the client_id, redirect_uri, scope, response_type, and state parameters
-      const authUrl = `https://agave.designsafe-ci.org/authorize?client_id=${client_id}&redirect_uri=${callbackUrl}&scope=openid&response_type=token&state=${state}`;
+      const authUrl = `https://agave.designsafe-ci.org/authorize?client_id=${configuration.clientId}&redirect_uri=${callbackUrl}&scope=openid&response_type=token&state=${state}`;
 
       window.location.replace(authUrl);
     }

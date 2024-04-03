@@ -1,9 +1,8 @@
 export interface Project {
-  description: string;
   id?: number;
-  name: string;
-  title?: string;
   uuid?: string;
+  name: string;
+  description: string;
   public?: boolean;
   system_file?: string;
   system_id?: string;
@@ -25,4 +24,17 @@ export interface DesignSafeProjectCollection {
 }
 
 export class Project implements Project {}
+
+export interface ProjectRequest {
+  name: string;
+  description: string;
+  public?: boolean;
+  system_file?: string;
+  system_id?: string;
+  system_path?: string;
+  watch_content?: boolean;
+  watch_users?: boolean;
+}
+
+export class ProjectRequest implements ProjectRequest {}
 export class DesignSafeProject implements DesignSafeProject {}
