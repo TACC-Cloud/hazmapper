@@ -6,17 +6,12 @@ import {
   Icon,
   Button,
 } from '../../core-components';
-import { useProjects } from '../../hooks';
 import useAuthenticatedUser from '../../hooks/user/useAuthenticatedUser';
 import { SystemSelect } from '../../components/Systems';
 import CreateMapModal from '../../components/CreateMapModal/CreateMapModal';
-
-import React from 'react';
 import { ProjectListing } from '../../components/Projects/ProjectListing';
 
-
 function MainMenu() {
-  const { data, isLoading, error } = useProjects();
   const {
     data: userData,
     isLoading: isUserLoading,
@@ -30,7 +25,7 @@ function MainMenu() {
 
   const [selectedSystem, setSelectedSystem] = useState('');
 
-  if (isLoading || isUserLoading) {
+  if (isUserLoading) {
     return (
       <>
         <SectionHeader isNestedHeader>Main Menu</SectionHeader>
@@ -38,7 +33,7 @@ function MainMenu() {
       </>
     );
   }
-  if (error || userError) {
+  if (userError) {
     <>
       <SectionHeader isNestedHeader>Main Menu</SectionHeader>
       <InlineMessage type="error">Unable to retrieve projects.</InlineMessage>

@@ -38,4 +38,3 @@ export interface ProjectRequest {
 
 export class ProjectRequest implements ProjectRequest {}
 export class DesignSafeProject implements DesignSafeProject {}
-
