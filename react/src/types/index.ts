@@ -10,6 +10,7 @@ export type {
   DesignSafeProjectCollection,
   DesignSafeProject,
 } from './projects';
+export type { Project, ProjectRequest } from './projects';
 export type { AuthState, AuthenticatedUser, AuthToken } from './auth';
 export type { System } from './systems';
 export * from './environment';

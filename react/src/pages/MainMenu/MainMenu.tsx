@@ -10,8 +10,10 @@ import { useProjects } from '../../hooks';
 import useAuthenticatedUser from '../../hooks/user/useAuthenticatedUser';
 import { SystemSelect } from '../../components/Systems';
 import CreateMapModal from '../../components/CreateMapModal/CreateMapModal';
+
 import React from 'react';
 import { ProjectListing } from '../../components/Projects/ProjectListing';
+
 
 function MainMenu() {
   const { data, isLoading, error } = useProjects();
@@ -60,7 +62,6 @@ function MainMenu() {
       </InlineMessage>
       <CreateMapModal isOpen={isModalOpen} toggle={toggleModal} />
       <ProjectListing />
-
       {selectedSystem && <div>Current system selected: {selectedSystem}</div>}
       <SystemSelect onSystemSelect={handleSelectChange}></SystemSelect>
     </>
