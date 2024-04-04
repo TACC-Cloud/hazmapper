@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { Button } from '../../core-components';
+import { Button, Section, SectionTableWrapper } from '../../core-components';
 import styles from './CreateMapModal.module.css';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -14,6 +14,7 @@ import {
   FormikTextarea,
   FormikCheck,
 } from '../../core-wrappers';
+import { FileListing } from '../Files';
 
 type CreateMapModalProps = {
   isOpen: boolean;
@@ -44,6 +45,19 @@ const CreateMapModal = ({
   const handleClose = () => {
     setErrorMessage(''); // Clear the error message
     parentToggle(); // Call the original toggle function passed as a prop
+  };
+
+  const [selectedDirectory, setSelectedDirectory] = useState('');
+  const [selectedFiles, setSelectedFiles] = useState([] as any[]);
+
+  const handleDirectoryChange = (directory: string) => {
+    console.log('selected directory', directory);
+    setSelectedDirectory(directory);
+  };
+
+  const handleSelectedFiles = (files: any[]) => {
+    console.log('selected files', files);
+    setSelectedFiles(files);
   };
 
   const handleCreateProject = (projectData: ProjectRequest) => {
@@ -82,82 +96,119 @@ const CreateMapModal = ({
     };
     handleCreateProject(projectData);
   };
+
   return (
-    <Modal isOpen={isOpen} toggle={handleClose}>
+    <Modal isOpen={isOpen} toggle={handleClose} size="xl">
       <ModalHeader toggle={handleClose}>Create a New Map</ModalHeader>
-      <ModalBody>
-        <Formik
-          initialValues={{
-            name: '',
-            description: '',
-            system_file: '',
-            system_id: 'designsafe.storage.default',
-            system_path: '',
-            syncFolder: false,
-          }}
-          validationSchema={validationSchema}
-          onSubmit={handleSubmit}
-        >
-          {() => (
-            <Form className="c-form">
-              <FieldWrapperFormik name="map-form-info" label="">
-                <FormikInput
-                  name="name"
-                  label="Name"
-                  required
-                  data-testid="name-input"
-                />
-                <FormikTextarea
-                  name="description"
-                  label="Description"
-                  required
-                />
-                <div className={`${styles['field-wrapper']}`}>
-                  <FormikInput
-                    name="system_file"
-                    label="Custom File Name"
-                    required
-                    className={`${styles['input-custom-size']}`}
-                  />
-                  <span className={`${styles['hazmapper-suffix']}`}>
-                    .hazmapper
-                  </span>
-                </div>
-                <div className={`${styles['field-wrapper-alt']}`}>
-                  <FormikInput
-                    name="save-location-label"
-                    label="Save Location"
-                    value={`/${userData?.username}`}
-                    readOnly
-                    disabled
-                  />
-                </div>
-                <FormikCheck
-                  name="syncFolder"
-                  label="Sync Folder"
-                  description="When enabled, files in this folder are automatically synced
-                  into the map periodically."
-                />
-              </FieldWrapperFormik>
-              {errorMessage && (
-                <div className="c-form__errors">{errorMessage}</div>
-              )}
-              <ModalFooter className="justify-content-start">
-                <Button size="short" type="secondary" onClick={handleClose}>
-                  Close
-                </Button>
-                <Button
-                  size="short"
-                  type="primary"
-                  attr="submit"
-                  isLoading={isCreatingProject}
+      <ModalBody className={`${'modal-body'}`}>
+        <Section
+          bodyClassName="has-loaded-dashboard"
+          contentLayoutName={'twoColumn'}
+          // contentShouldScroll
+          className={`${styles['section']}`}
+          content={
+            <>
+              <SectionTableWrapper>
+                <Formik
+                  initialValues={{
+                    name: '',
+                    description: '',
+                    system_file: '',
+                    system_id: 'designsafe.storage.default',
+                    system_path: '',
+                    syncFolder: false,
+                  }}
+                  validationSchema={validationSchema}
+                  onSubmit={handleSubmit}
                 >
-                  Create
-                </Button>
-              </ModalFooter>
-            </Form>
-          )}
-        </Formik>
+                  {() => (
+                    <Form className="c-form">
+                      <FieldWrapperFormik name="map-form-info" label="">
+                        <FormikInput
+                          name="name"
+                          label="Name"
+                          required
+                          data-testid="name-input"
+                        />
+                        <FormikTextarea
+                          name="description"
+                          label="Description"
+                          required
+                        />
+                        <div className={`${styles['field-wrapper']}`}>
+                          <FormikInput
+                            name="system_file"
+                            label="Custom File Name"
+                            required
+                            className={`${styles['input-custom-size']}`}
+                          />
+                          <span className={`${styles['hazmapper-suffix']}`}>
+                            .hazmapper
+                          </span>
+                        </div>
+                        <div className={`${styles['field-wrapper-alt']}`}>
+                          <FormikInput
+                            name="save-location-label"
+                            label="Save Location"
+                            value={`/${userData?.username}`}
+                            readOnly
+                            disabled
+                          />
+                        </div>
+                        <FormikCheck
+                          name="syncFolder"
+                          label="Sync Folder"
+                          description="When enabled, files in this folder are automatically synced
+                  into the map periodically."
+                        />
+                      </FieldWrapperFormik>
+                      {errorMessage && (
+                        <div className="c-form__errors">{errorMessage}</div>
+                      )}
+                      <ModalFooter className="justify-content-start">
+                        <Button
+                          size="short"
+                          type="secondary"
+                          onClick={handleClose}
+                        >
+                          Close
+                        </Button>
+                        <Button
+                          size="short"
+                          type="primary"
+                          attr="submit"
+                          isLoading={isCreatingProject}
+                        >
+                          Create
+                        </Button>
+                      </ModalFooter>
+                    </Form>
+                  )}
+                </Formik>
+              </SectionTableWrapper>
+              <SectionTableWrapper
+                manualHeader={
+                  <>
+                    <h2 className={`${styles['link-heading']}`}>
+                      Select Link Save Location
+                    </h2>
+                    <h4 className={`${styles['link-subheading']}`}>
+                      If no folder is selected, the link file will be saved to
+                      the root of the selected system.If you select a project,
+                      you can link the current map to the project.
+                    </h4>
+                  </>
+                }
+              >
+                <FileListing
+                  disableSelection={false}
+                  onDirectoryChange={handleDirectoryChange}
+                  onFileSelect={handleSelectedFiles}
+                />
+              </SectionTableWrapper>
+            </>
+          }
+        ></Section>
       </ModalBody>
     </Modal>
   );
