@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
   LoadingSpinner,
   InlineMessage,
@@ -12,7 +14,7 @@ import CreateMapModal from '../../components/CreateMapModal/CreateMapModal';
 import { ProjectListing } from '../../components/Projects/ProjectListing';
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:8000');
+const socket = io('http://localhost:8888');
 
 function MainMenu() {
   const {
@@ -43,14 +45,20 @@ function MainMenu() {
       console.error('Connection Error:', error);
     });
 
+    socket.on('notifications', (data) => {
+      toast.info(data.message);
+    });
+
     // Clean up the event listeners when the component unmounts
     return () => {
       socket.off('connect');
       socket.off('disconnect');
+      socket.off('connect_error');
+      socket.off('notifications');
     };
   }, []);
 
-  if (isLoading || isUserLoading) {
+  if (isUserLoading) {
     return (
       <>
         <SectionHeader isNestedHeader>Main Menu</SectionHeader>
@@ -85,6 +93,7 @@ function MainMenu() {
       </InlineMessage>
       <CreateMapModal isOpen={isModalOpen} toggle={toggleModal} />
       <ProjectListing />
+      <ToastContainer />
       {selectedSystem && <div>Current system selected: {selectedSystem}</div>}
       <SystemSelect onSystemSelect={handleSelectChange}></SystemSelect>
     </>
