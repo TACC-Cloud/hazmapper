@@ -7,6 +7,25 @@ import { Provider } from 'react-redux';
 import store from '../../redux/store';
 import { BrowserRouter as Router } from 'react-router-dom';
 
+jest.mock('socket.io-client', () => {
+  return {
+    __esModule: true,
+    default: () => {
+      return {
+        on: jest.fn(),
+        emit: jest.fn(),
+        off: jest.fn(),
+      };
+    },
+  };
+});
+
+jest.mock('react-toastify', () => ({
+  toast: {
+    info: jest.fn(),
+  },
+}));
+
 test('renders menu', () => {
   const { getByText } = render(
     <Provider store={store}>
