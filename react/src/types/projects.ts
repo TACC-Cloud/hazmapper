@@ -8,7 +8,21 @@ export interface Project {
   system_id?: string;
   system_path?: string;
   deletable?: boolean;
+  streetview_instances?: any;
+  ds_project?: DesignSafeProject;
+  ds_project_id?: any;
+  ds_project_title?: any;
 }
+export interface DesignSafeProject {
+  uuid: string;
+  projectId: any;
+  title: any;
+  value: any;
+}
+export interface DesignSafeProjectCollection {
+  projects?: DesignSafeProject[];
+}
+
 export class Project implements Project {}
 
 export interface ProjectRequest {
@@ -23,3 +37,4 @@ export interface ProjectRequest {
 }
 
 export class ProjectRequest implements ProjectRequest {}
+export class DesignSafeProject implements DesignSafeProject {}
