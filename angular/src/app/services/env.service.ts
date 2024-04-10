@@ -17,13 +17,13 @@ export class EnvService {
     if (backend === EnvironmentType.Local) {
       return 'http://localhost:8888';
     } else if (backend === EnvironmentType.Staging) {
-      return 'https://staging.geoapi-services.tacc.utexas.edu:8000';
+      return 'http://staging.geoapi-services.tacc.utexas.edu:8888';
     } else if (backend === EnvironmentType.Production) {
-      return 'https://prod.geoapi-services.tacc.utexas.edu:8000';
+      return 'http://prod.geoapi-services.tacc.utexas.edu:8888';
     } else if (backend === EnvironmentType.Dev) {
-      return 'https://dev.geoapi-services.tacc.utexas.edu:8000';
+      return 'http://dev.geoapi-services.tacc.utexas.edu:8888';
     } else if (backend === EnvironmentType.Experimental) {
-      return 'https://experimental.geoapi-services.tacc.utexas.edu:8000';
+      return 'http://experimental.geoapi-services.tacc.utexas.edu:8888';  /*TODO_TapisV3 use https */
     } else {
       throw new Error('Unsupported Type');
     }
