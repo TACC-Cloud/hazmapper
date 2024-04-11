@@ -23,7 +23,7 @@ export class EnvService {
     } else if (backend === EnvironmentType.Dev) {
       return 'http://dev.geoapi-services.tacc.utexas.edu:8888';
     } else if (backend === EnvironmentType.Experimental) {
-      return 'http://experimental.geoapi-services.tacc.utexas.edu:8888';  /*TODO_TapisV3 use https */
+      return 'http://experimental.geoapi-services.tacc.utexas.edu:8888'; /*TODO_TapisV3 use https */
     } else {
       throw new Error('Unsupported Type');
     }
