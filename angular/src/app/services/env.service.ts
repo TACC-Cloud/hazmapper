@@ -17,11 +17,13 @@ export class EnvService {
     if (backend === EnvironmentType.Local) {
       return 'http://localhost:8888';
     } else if (backend === EnvironmentType.Staging) {
-      return 'https://agave.designsafe-ci.org/geo-staging/v2';
+      return 'https://staging.geoapi-services.tacc.utexas.edu';
     } else if (backend === EnvironmentType.Production) {
-      return 'https://agave.designsafe-ci.org/geo/v2';
+      return 'https://prod.geoapi-services.tacc.utexas.edu';
     } else if (backend === EnvironmentType.Dev) {
-      return 'https://agave.designsafe-ci.org/geo-dev/v2';
+      return 'https://dev.geoapi-services.tacc.utexas.edu';
+    } else if (backend === EnvironmentType.Experimental) {
+      return 'https://experimental.geoapi-services.tacc.utexas.edu';
     } else {
       throw new Error('Unsupported Type');
     }
@@ -34,6 +36,8 @@ export class EnvService {
   private getPortalUrl(backend: EnvironmentType): string {
     if (backend === EnvironmentType.Production) {
       return 'https://www.designsafe-ci.org/';
+    } else if (backend === EnvironmentType.Experimental) {
+      return 'https://designsafeci-next.tacc.utexas.edu/';
     } else {
       return 'https://designsafeci-dev.tacc.utexas.edu/';
     }
@@ -119,6 +123,7 @@ export class EnvService {
       // TODO: Currently taggit is hosted on same port 4200
       // Have to change port on taggit or hazmapper (requires adding callbackUrl to that port)
       this._taggitUrl = 'http://localhost:4200/taggit';
+      // TODO_TAPISV3 Remove jwt from environment service and files a no longer has to be added
       // when we are using the local backend, a jwt is required
       if (environment.backend === EnvironmentType.Local) {
         this._jwt = environment.jwt;
@@ -145,7 +150,7 @@ export class EnvService {
       this._apiUrl = this.getApiUrl(this.env);
       this._taggitUrl = origin + '/taggit-staging';
       this._portalUrl = this.getPortalUrl(this.env);
-      this._clientId = 'foitdqFcimPzKZuMhbQ1oyh3Anka';
+      this._clientId = 'hazmapper.staging';
       this._baseHref = '/staging/';
       this._streetviewEnv.secrets = {
         google: {
@@ -163,8 +168,26 @@ export class EnvService {
       this._apiUrl = this.getApiUrl(this.env);
       this._taggitUrl = origin + '/taggit-dev';
       this._portalUrl = this.getPortalUrl(this.env);
-      this._clientId = 'oEuGsl7xi015wnrEpxIeUmvzc6Qa';
+      this._clientId = 'hazmapper.dev';
       this._baseHref = '/dev/';
+      this._streetviewEnv.secrets = {
+        google: {
+          clientSecret: '',
+          clientId: '573001329633-1p0k8rko13s6n2p2cugp3timji3ip9f0.apps.googleusercontent.com',
+        },
+        mapillary: {
+          clientSecret: 'MLY|4936281379826603|cafd014ccd8cfc983e47c69c16082c7b',
+          clientId: '4936281379826603',
+          clientToken: 'MLY|4936281379826603|f8c4732d3c9d96582b86158feb1c1a7a',
+        },
+      };
+    } else if (/^hazmapper.tacc.utexas.edu/.test(hostname) && pathname.startsWith('/exp')) {
+      this._env = EnvironmentType.Experimental;
+      this._apiUrl = this.getApiUrl(this.env);
+      this._taggitUrl = origin + '/taggit-exp';
+      this._portalUrl = this.getPortalUrl(this.env);
+      this._clientId = 'hazmapper.experimental';
+      this._baseHref = '/exp/';
       this._streetviewEnv.secrets = {
         google: {
           clientSecret: '',
@@ -181,7 +204,7 @@ export class EnvService {
       this._apiUrl = this.getApiUrl(this.env);
       this._portalUrl = this.getPortalUrl(this.env);
       this._taggitUrl = origin + '/taggit';
-      this._clientId = 'tMvAiRdcsZ52S_89lCkO4x3d6VMa';
+      this._clientId = 'hazmapper.prod';
       this._baseHref = '/hazmapper/';
       this._streetviewEnv.secrets = {
         google: {
