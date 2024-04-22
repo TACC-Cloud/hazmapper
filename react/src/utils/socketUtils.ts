@@ -1,7 +1,14 @@
 import io from 'socket.io-client';
 import { toast } from 'react-toastify';
+import { getTokenFromLocalStorage } from './authUtils';
 
-export const socket = io('http://localhost:8888');
+const { token } = getTokenFromLocalStorage();
+
+export const socket = io('http://localhost:8888', {
+  auth: {
+    token,
+  },
+});
 
 export const setupSocketListeners = (updateConnectionStatus) => {
   socket.on('connect', () => {
@@ -23,6 +30,11 @@ export const setupSocketListeners = (updateConnectionStatus) => {
     toast.info(data.message);
   });
 
+  socket.on('new_notification', (data) => {
+    console.log('New Notification received:', data.message);
+    toast.info(data.message);
+  });
+
   socket.on('asset_success', (data) => {
     console.log('Notification received:', data.message);
     toast.success(data.message);
@@ -40,6 +52,7 @@ export const removeSocketListeners = () => {
   socket.off('disconnect');
   socket.off('connect_error');
   socket.off('notification');
+  socket.off('new_notification');
   socket.off('asset_success');
   socket.off('asset_failure');
 };
