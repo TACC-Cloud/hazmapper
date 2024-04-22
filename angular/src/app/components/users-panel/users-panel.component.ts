@@ -41,19 +41,22 @@ export class UsersPanelComponent implements OnInit {
 
   ngOnInit() {
     this.agaveSystemsService.list();
-
+    // Update this to point to v3 Data Depot URLs on DesignSafe Next. This is in the Manage Panel under Save tab. 
     combineLatest([this.projectsService.activeProject, this.agaveSystemsService.projects]).subscribe(([activeProject, dsProjects]) => {
       if (activeProject) {
+        console.log(activeProject)
         const portalUrl = this.envService.portalUrl + 'data/browser/';
         this.activeProject = this.agaveSystemsService.getProjectMetadata([activeProject], dsProjects)[0];
         if (activeProject.system_id) {
+          console.log(activeProject.system_id)
           if (activeProject.system_id.startsWith('project')) {
             this.dsHref = portalUrl + 'projects/' + activeProject.system_id.substr(8) + '/' + activeProject.system_path + '/';
             if (activeProject.ds_id) {
               this.projectHref = portalUrl + 'projects/' + activeProject.system_id.substr(8) + '/';
             }
           } else {
-            this.myDataHref = portalUrl + 'agave/' + activeProject.system_id;
+            // Change agave to tapis
+            this.myDataHref = portalUrl + 'tapis/' + activeProject.system_id;
             this.dsHref = this.myDataHref + activeProject.system_path + '/';
           }
         }

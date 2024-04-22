@@ -72,8 +72,7 @@ export class EnvService {
   }
 
   get designSafeUrl(): string {
-    // TODO_TAPISV3  just used for projects endpoint so shoud this be designsafe portal and not tapis tenant.
-    return 'https://designsafe.tapis.io/';
+    return 'https://designsafeci-next.tacc.utexas.edu';
   }
 
   get portalUrl(): string {
