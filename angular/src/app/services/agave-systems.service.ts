@@ -64,7 +64,7 @@ export class AgaveSystemsService {
 
     this.http.get<DesignSafeProjectCollection>(this.envService.designSafeUrl + `/api/projects/v2/`).subscribe(
       (resp) => {
-        const projectSystems = resp.projects.map((project) => {
+        const projectSystems = resp.result.map((project) => {
           return {
             id: 'project-' + project.uuid,
             name: project.value.projectId,
