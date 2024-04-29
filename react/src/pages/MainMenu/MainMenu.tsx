@@ -4,11 +4,9 @@ import {
   InlineMessage,
   SectionHeader,
   Icon,
-  Button,
 } from '../../core-components';
 import useAuthenticatedUser from '../../hooks/user/useAuthenticatedUser';
 import { SystemSelect } from '../../components/Systems';
-import CreateMapModal from '../../components/CreateMapModal/CreateMapModal';
 import { ProjectListing } from '../../components/Projects/ProjectListing';
 
 function MainMenu() {
@@ -17,11 +15,6 @@ function MainMenu() {
     isLoading: isUserLoading,
     error: userError,
   } = useAuthenticatedUser();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
 
   const [selectedSystem, setSelectedSystem] = useState('');
 
@@ -48,14 +41,10 @@ function MainMenu() {
     <>
       <SectionHeader isNestedHeader>Main Menu</SectionHeader>
       <div>
-        <Button type="primary" size="small" onClick={toggleModal}>
-          Create Map
-        </Button>
+        <InlineMessage type="info">
+          Welcome, {userData?.username || 'User'} <Icon name="user"></Icon>
+        </InlineMessage>
       </div>
-      <InlineMessage type="info">
-        Welcome, {userData?.username || 'User'} <Icon name="user"></Icon>
-      </InlineMessage>
-      <CreateMapModal isOpen={isModalOpen} toggle={toggleModal} />
       <ProjectListing />
       {selectedSystem && <div>Current system selected: {selectedSystem}</div>}
       <SystemSelect onSystemSelect={handleSelectChange}></SystemSelect>

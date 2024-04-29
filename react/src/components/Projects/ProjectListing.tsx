@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Project, DesignSafeProject } from '../../types';
 import {
   useDsProjects,
   useProjects,
   mergeDesignSafeProject,
 } from '../../hooks';
-import { LoadingSpinner } from '../../core-components';
+import { Button, LoadingSpinner } from '../../core-components';
+import CreateMapModal from '../CreateMapModal/CreateMapModal';
 
 export const ProjectListing: React.FC = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
   const { data, isLoading, isError } = useProjects();
   let projectsData: Array<Project> = [];
   let dsData: Array<DesignSafeProject> = [];
@@ -33,7 +40,10 @@ export const ProjectListing: React.FC = () => {
           <th>Map</th>
           <th>Project</th>
           <th>
-            <button>Create a New Map</button>
+            <CreateMapModal isOpen={isModalOpen} toggle={toggleModal} />
+            <Button onClick={toggleModal} size="small">
+              Create a New Map
+            </Button>
           </th>
         </tr>
       </thead>
