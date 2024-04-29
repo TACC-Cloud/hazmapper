@@ -43,6 +43,7 @@
     "@types/geojson": "^7946.0.14",
     "@types/leaflet.markercluster": "^1.5.1",
     "axios": "^1.6.2",
+    "chonky": "^2.3.2",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-jsx-a11y": "^6.6.1",
     "eslint-plugin-prettier": "^4.2.1",
