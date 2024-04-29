@@ -17,14 +17,14 @@ const useFeatures = ({
   assetTypes?: string[];
 }): UseQueryResult<FeatureCollection> => {
   const featuresRoute = isPublic ? 'public-projects' : 'projects';
-  const assetTypesQueryParam = assetTypes?.length
-    ? `assetType=${assetTypes.join(',')}`
-    : '';
-  const endpoint = `/${featuresRoute}/${projectId}/features/?${assetTypesQueryParam}`;
+  let endpoint = `/${featuresRoute}/${projectId}/features/`;
+  if (assetTypes?.length) {
+    endpoint += `?assetType=${assetTypes.join(',')}`;
+  }
 
   const query = useGet<FeatureCollection>({
     endpoint,
-    key: ['features', { projectId, isPublic, assetTypesQueryParam }],
+    key: ['features', { projectId, isPublic, assetTypes }],
     options,
   });
   return query;

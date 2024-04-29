@@ -111,10 +111,7 @@ export function useGet<ResponseType>({
     }
 
     const queryParams = new URLSearchParams(analytics_params).toString();
-    if (url.endsWith('?')) {
-      // If the URL already ends with a '?', append parameters directly
-      url += queryParams;
-    } else if (url.includes('?')) {
+    if (url.includes('?')) {
       // If the URL contains other parameters, prepend with '&'
       url += `&${queryParams}`;
     } else {

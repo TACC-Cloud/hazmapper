@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Map from '../../components/Map';
 import AssetsPanel from '../../components/AssetsPanel';
@@ -10,6 +10,7 @@ import { useParams } from 'react-router-dom';
 import styles from './MapProject.module.css';
 import MapProjectNavBar from '../../components/MapProjectNavBar';
 import Filters from '../../components/FiltersPanel/Filter';
+import { assetTypeOptions } from '../../components/FiltersPanel/Filter';
 
 interface Props {
   /**
@@ -24,26 +25,13 @@ interface Props {
  */
 const MapProject: React.FC<Props> = ({ isPublic = false }) => {
   const { projectUUID } = useParams();
-  const [initialLoad, setInitialLoad] = useState(true);
-  const [selectedAssetTypes, setSelectedAssetTypes] = useState<string[]>([]);
+  const [selectedAssetTypes, setSelectedAssetTypes] = useState<string[]>(
+    Object.keys(assetTypeOptions)
+  );
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(
     new Date(Date.now() + 24 * 60 * 60 * 1000)
   );
-
-  useEffect(() => {
-    if (initialLoad) {
-      setSelectedAssetTypes([
-        'Image',
-        'Video',
-        'PointCloud',
-        'Streetview',
-        'Questionnaire',
-        'NoAssetVector',
-      ]);
-      setInitialLoad(false);
-    }
-  }, [initialLoad]);
 
   const formatAssetTypeName = (name: string) => {
     switch (name) {

@@ -17,7 +17,7 @@ interface CustomInputProps {
   onClick?: () => void;
 }
 
-const assetTypeOptions = {
+export const assetTypeOptions = {
   Image: 'Image',
   Video: 'Video',
   PointCloud: 'Point Cloud',
@@ -69,27 +69,25 @@ const Filters: React.FC<FiltersProps> = ({
     <div className={styles.root}>
       <h3>Filters</h3>
       <h2>Date Range</h2>
-      <>
-        <h5>Start Date</h5>
-        <DatePicker
-          selected={startDate}
-          onChange={(date: Date) => setStartDate(date)}
-          selectsStart
-          startDate={startDate}
-          endDate={endDate}
-          customInput={<CustomInputWithTooltip />}
-        />
-        <h5>End Date</h5>
-        <DatePicker
-          selected={endDate}
-          onChange={(date: Date) => setEndDate(date)}
-          selectsEnd
-          startDate={startDate}
-          endDate={endDate}
-          minDate={startDate}
-          customInput={<CustomInputWithTooltip />}
-        />
-      </>
+      <h5>Start Date</h5>
+      <DatePicker
+        selected={startDate}
+        onChange={(date: Date) => setStartDate(date)}
+        selectsStart
+        startDate={startDate}
+        endDate={endDate}
+        customInput={<CustomInputWithTooltip />}
+      />
+      <h5>End Date</h5>
+      <DatePicker
+        selected={endDate}
+        onChange={(date: Date) => setEndDate(date)}
+        selectsEnd
+        startDate={startDate}
+        endDate={endDate}
+        minDate={startDate}
+        customInput={<CustomInputWithTooltip />}
+      />
       <h2>Asset Types</h2>
       {Object.entries(assetTypeOptions).map(([key, value]) => (
         <div key={key}>
