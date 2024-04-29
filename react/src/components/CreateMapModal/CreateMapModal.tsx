@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Button, Section, SectionTableWrapper } from '../../core-components';
 import styles from './CreateMapModal.module.css';
@@ -38,6 +38,7 @@ const CreateMapModal = ({
   toggle: parentToggle,
 }: CreateMapModalProps) => {
   const [errorMessage, setErrorMessage] = useState('');
+  const [previousName, setPreviousName] = useState('');
   const { data: userData } = useAuthenticatedUser();
   const { mutate: createProject, isLoading: isCreatingProject } =
     useCreateProject();
@@ -121,69 +122,90 @@ const CreateMapModal = ({
                   validationSchema={validationSchema}
                   onSubmit={handleSubmit}
                 >
-                  {() => (
-                    <Form className="c-form">
-                      <FieldWrapperFormik name="map-form-info" label="">
-                        <FormikInput
-                          name="name"
-                          label="Name"
-                          required
-                          data-testid="name-input"
-                        />
-                        <FormikTextarea
-                          name="description"
-                          label="Description"
-                          required
-                        />
-                        <div className={`${styles['field-wrapper']}`}>
+                  {({ values, setFieldValue }) => {
+                    useEffect(() => {
+                      // Replace spaces with underscores for system_file mirroring
+                      const systemFileName = values.name.replace(/\s+/g, '_');
+
+                      // Update system_file only if it matches the previous name or if name/system_file are empty
+                      if (
+                        values.system_file ===
+                          previousName.replace(/\s+/g, '_') ||
+                        (values.system_file === '' && values.name === '')
+                      ) {
+                        setFieldValue('system_file', systemFileName);
+                        setPreviousName(values.name);
+                      }
+                    }, [
+                      values.name,
+                      values.system_file,
+                      setFieldValue,
+                      previousName,
+                    ]);
+                    return (
+                      <Form className="c-form">
+                        <FieldWrapperFormik name="map-form-info" label="">
                           <FormikInput
-                            name="system_file"
-                            label="Custom File Name"
+                            name="name"
+                            label="Name"
                             required
-                            className={`${styles['input-custom-size']}`}
+                            data-testid="name-input"
                           />
-                          <span className={`${styles['hazmapper-suffix']}`}>
-                            .hazmapper
-                          </span>
-                        </div>
-                        <div className={`${styles['field-wrapper-alt']}`}>
-                          <FormikInput
-                            name="save-location-label"
-                            label="Save Location"
-                            value={`/${userData?.username}`}
-                            readOnly
-                            disabled
+                          <FormikTextarea
+                            name="description"
+                            label="Description"
+                            required
                           />
-                        </div>
-                        <FormikCheck
-                          name="syncFolder"
-                          label="Sync Folder"
-                          description="When enabled, files in this folder are automatically synced
+                          <div className={`${styles['field-wrapper']}`}>
+                            <FormikInput
+                              name="system_file"
+                              label="Custom File Name"
+                              required
+                              className={`${styles['input-custom-size']}`}
+                            />
+                            <span className={`${styles['hazmapper-suffix']}`}>
+                              .hazmapper
+                            </span>
+                          </div>
+                          <div className={`${styles['field-wrapper-alt']}`}>
+                            <FormikInput
+                              name="save-location-label"
+                              label="Save Location"
+                              value={`/${userData?.username}`}
+                              readOnly
+                              disabled
+                            />
+                          </div>
+                          <FormikCheck
+                            name="syncFolder"
+                            label="Sync Folder"
+                            description="When enabled, files in this folder are automatically synced
                   into the map periodically."
-                        />
-                      </FieldWrapperFormik>
-                      {errorMessage && (
-                        <div className="c-form__errors">{errorMessage}</div>
-                      )}
-                      <ModalFooter className="justify-content-start">
-                        <Button
-                          size="short"
-                          type="secondary"
-                          onClick={handleClose}
-                        >
-                          Close
-                        </Button>
-                        <Button
-                          size="short"
-                          type="primary"
-                          attr="submit"
-                          isLoading={isCreatingProject}
-                        >
-                          Create
-                        </Button>
-                      </ModalFooter>
-                    </Form>
-                  )}
+                          />
+                        </FieldWrapperFormik>
+                        {errorMessage && (
+                          <div className="c-form__errors">{errorMessage}</div>
+                        )}
+                        <ModalFooter className="justify-content-start">
+                          <Button
+                            size="short"
+                            type="secondary"
+                            onClick={handleClose}
+                          >
+                            Close
+                          </Button>
+                          <Button
+                            size="short"
+                            type="primary"
+                            attr="submit"
+                            isLoading={isCreatingProject}
+                          >
+                            Create
+                          </Button>
+                        </ModalFooter>
+                      </Form>
+                    );
+                  }}
                 </Formik>
               </SectionTableWrapper>
               <SectionTableWrapper
