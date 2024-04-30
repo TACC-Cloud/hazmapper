@@ -4,6 +4,7 @@ import { getTokenFromLocalStorage } from './authUtils';
 
 const { token } = getTokenFromLocalStorage();
 
+// TODO: REACT Point to active backend (where nginx is running) use wss:// for secure connection
 export const socket = io('http://localhost:8888', {
   auth: {
     token,
