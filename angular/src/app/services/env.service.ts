@@ -72,8 +72,7 @@ export class EnvService {
   }
 
   get designSafeUrl(): string {
-    // TODO_TAPISV3  just used for projects endpoint so shoud this be designsafe portal and not tapis tenant.
-    return 'https://designsafe.tapis.io/';
+    return 'https://designsafeci-next.tacc.utexas.edu';
   }
 
   get portalUrl(): string {
@@ -119,7 +118,7 @@ export class EnvService {
     if (/^localhost/.test(hostname) || /^hazmapper.local/.test(hostname)) {
       this._env = EnvironmentType.Local;
       this._apiUrl = this.getApiUrl(environment.backend);
-      this._portalUrl = this.getPortalUrl(environment.backend);
+      this._portalUrl = this.getPortalUrl(EnvironmentType.Experimental);
       // TODO: Currently taggit is hosted on same port 4200
       // Have to change port on taggit or hazmapper (requires adding callbackUrl to that port)
       this._taggitUrl = 'http://localhost:4200/taggit';
