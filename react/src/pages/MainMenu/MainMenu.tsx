@@ -4,7 +4,7 @@ import {
   InlineMessage,
   SectionHeader,
   Icon,
-} from '../../core-components';
+} from '@tacc/core-components';
 import useAuthenticatedUser from '../../hooks/user/useAuthenticatedUser';
 import { SystemSelect } from '../../components/Systems';
 import { ProjectListing } from '../../components/Projects/ProjectListing';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import styles from './MapProjectNavBar.module.css';
-import { QueryNavItem } from '../../core-wrappers';
+import { QueryNavItem } from '@tacc/core-components';
 import { queryPanelKey, Panel } from '../../utils/panels';
 
 import assetsImage from '../../assets/assets.png';

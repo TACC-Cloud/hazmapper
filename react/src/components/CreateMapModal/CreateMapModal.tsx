@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { Button } from '../../core-components';
+import { Button } from '@tacc/core-components';
 import styles from './CreateMapModal.module.css';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -13,7 +13,7 @@ import {
   FormikInput,
   FormikTextarea,
   FormikCheck,
-} from '../../core-wrappers';
+} from '@tacc/core-components';
 
 type CreateMapModalProps = {
   isOpen: boolean;
