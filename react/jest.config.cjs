@@ -80,6 +80,7 @@ module.exports = {
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   moduleNameMapper: {
+    '\\.(jpg|jpeg|png|gif|webp|svg)$': 'jest-transform-stub',
     '.*\\.(css|scss|sass)$': 'identity-obj-proxy',
     '^utils(.*)$': '<rootDir>/src/utils$1',
     '^hooks(.*)$': '<rootDir>/src/hooks$1',

@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import {
   MapContainer,
-  TileLayer,
+  ZoomControl,
   Marker,
   Popup,
+  TileLayer,
   WMSTileLayer,
   useMap,
 } from 'react-leaflet';
@@ -17,10 +18,6 @@ import 'leaflet.markercluster';
 
 import 'leaflet/dist/leaflet.css';
 
-/* TODO: review if best approach is to style map with .leaflet-container */
-/* TODO: consider createTileLayerComponent
-/* TODO: support layers with type 'arcgis' and 'wms' (WMSTileLayer) https://jira.tacc.utexas.edu/browse/WG-6 */
-
 const startingCenterPosition: LatLngTuple = [40, -80];
 const maxFitToBoundsZoom = 18;
 const maxBounds: L.LatLngBoundsExpression = [
@@ -32,7 +29,7 @@ interface LeafletMapProps {
   /**
    * Tile servers used as base layers of map
    */
-  baseLayers: TileServerLayer[];
+  baseLayers?: TileServerLayer[];
 
   /**
    * Features of map
@@ -75,7 +72,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
   baseLayers,
   featureCollection,
 }) => {
-  const activeBaseLayers = baseLayers.filter(
+  const activeBaseLayers = baseLayers?.filter(
     (layer) => layer.uiOptions.isActive
   );
 
@@ -88,10 +85,12 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
       center={startingCenterPosition}
       zoom={3}
       style={{ width: '100%', height: '100%' }}
-      minZoom={2} // 2 typically prevents zooming out to far to see multiple earths
+      zoomControl={false}
+      minZoom={2} // 2 typically prevents zooming out too far to see multiple earths
+      maxZoom={24}
       maxBounds={maxBounds}
     >
-      {activeBaseLayers.map((layer) =>
+      {activeBaseLayers?.map((layer) =>
         layer.type === 'wms' ? (
           <WMSTileLayer
             key={layer.id}
@@ -133,6 +132,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
         })}
       </MarkerClusterGroup>
       <FitBoundsOnInitialLoad featureCollection={featureCollection} />
+      <ZoomControl position="bottomright" />
     </MapContainer>
   );
 };

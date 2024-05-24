@@ -76,3 +76,7 @@ Run `npm run lint:css -- --fix` to fix css files.
 ### Code scaffolding
 
 Run `ng generate component components/component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+
+# Deployment
+
+For deployment information, see https://github.com/TACC-Cloud/geoapi/blob/master/devops/README.md

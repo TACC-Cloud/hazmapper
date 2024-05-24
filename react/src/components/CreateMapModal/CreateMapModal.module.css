@@ -9,12 +9,37 @@
   content: '\00D7'; /* Unicode character for 'X' */
 }
 
-.custom-error-message {
-  margin-top: 0.25rem;
-  font-size: 0.8em;
-  color: #dc3545;
+.field-wrapper-alt {
+  margin-top: -0.5rem;
+  margin-bottom: -0.1rem;
+  max-width: 40em;
 }
 
-.form-check-label {
-  font-style: italic;
+.field-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.input-custom-size {
+  flex-grow: 1;
+  width: 37.55rem;
+  padding-right: 90px;
+}
+
+.hazmapper-suffix {
+  font-weight: bold;
+  position: absolute;
+  right: 8px;
+  top: 30px;
+  padding-left: 8px;
+}
+
+/* Adding media queries for mobile devices */
+@media (max-width: 440px) {
+  .input-custom-size {
+    width: 115%;
+  }
 }

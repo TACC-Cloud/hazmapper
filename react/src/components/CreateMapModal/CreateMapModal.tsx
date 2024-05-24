@@ -1,21 +1,19 @@
-import React, { useState } from 'react';
-import {
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  FormGroup,
-  Label,
-  Input,
-} from 'reactstrap';
+import React, { useState, useEffect } from 'react';
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Button } from '../../core-components';
 import styles from './CreateMapModal.module.css';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import useCreateProject from '../../hooks/projects/useCreateProject';
 import useAuthenticatedUser from '../../hooks/user/useAuthenticatedUser';
 import { useNavigate } from 'react-router-dom';
 import { ProjectRequest } from '../../types';
+import {
+  FieldWrapperFormik,
+  FormikInput,
+  FormikTextarea,
+  FormikCheck,
+} from '../../core-wrappers';
 
 type CreateMapModalProps = {
   isOpen: boolean;
@@ -31,15 +29,23 @@ const validationSchema = Yup.object({
       /^[A-Za-z0-9-_]+$/,
       'Only letters, numbers, hyphens, and underscores are allowed'
     )
-    .required(' file name is required'),
+    .required(' File name is required'),
 });
 
-const CreateMapModal = ({ isOpen, toggle }: CreateMapModalProps) => {
+const CreateMapModal = ({
+  isOpen,
+  toggle: parentToggle,
+}: CreateMapModalProps) => {
   const [errorMessage, setErrorMessage] = useState('');
+  const [previousName, setPreviousName] = useState('');
   const { data: userData } = useAuthenticatedUser();
   const { mutate: createProject, isLoading: isCreatingProject } =
     useCreateProject();
   const navigate = useNavigate();
+  const handleClose = () => {
+    setErrorMessage(''); // Clear the error message
+    parentToggle(); // Call the original toggle function passed as a prop
+  };
 
   const handleCreateProject = (projectData: ProjectRequest) => {
     createProject(projectData, {
@@ -66,22 +72,20 @@ const CreateMapModal = ({ isOpen, toggle }: CreateMapModalProps) => {
       setErrorMessage('User information is not available');
       return;
     }
-    const projectData = {
-      observable: values.syncFolder,
+    const projectData: ProjectRequest = {
+      name: values.name,
+      description: values.description,
+      system_file: values.system_file,
+      system_id: values.system_id,
+      system_path: `/${userData.username}`,
       watch_content: values.syncFolder,
-      project: {
-        name: values.name,
-        description: values.description,
-        system_file: values.system_file,
-        system_id: values.system_id,
-        system_path: `/${userData.username}`,
-      },
+      watch_users: values.syncFolder,
     };
     handleCreateProject(projectData);
   };
   return (
-    <Modal isOpen={isOpen} toggle={toggle}>
-      <ModalHeader toggle={toggle}>Create a New Map</ModalHeader>
+    <Modal isOpen={isOpen} toggle={handleClose}>
+      <ModalHeader toggle={handleClose}>Create a New Map</ModalHeader>
       <ModalBody>
         <Formik
           initialValues={{
@@ -95,112 +99,80 @@ const CreateMapModal = ({ isOpen, toggle }: CreateMapModalProps) => {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {/*TODO_REACT: Will change to core-wrapper's FieldWrapperFormik instead. https://tacc-main.atlassian.net/browse/WG-246 */}
-          {({ errors, touched, values, handleChange }) => (
-            <Form>
-              <FormGroup>
-                <Label for="name">Name</Label>
-                <Field
-                  name="name"
-                  id="name"
-                  className="col-sm-11"
-                  data-testid="name-input"
-                  as={Input}
-                  invalid={touched.name && !!errors.name}
-                />
-                <ErrorMessage
-                  name="name"
-                  component="div"
-                  className="invalid-feedback"
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label for="description">Description</Label>
-                <Field
-                  name="description"
-                  id="description"
-                  className="col-sm-11"
-                  as={Input}
-                  invalid={touched.description && !!errors.description}
-                />
-                <ErrorMessage
-                  name="description"
-                  component="div"
-                  className="invalid-feedback"
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label for="system_file">Custom File Name</Label>
-                <div className="input-group">
-                  <Field
-                    name="system_file"
-                    id="system_file"
-                    as={Input}
-                    className="col-sm-8"
-                    invalid={touched.system_file && !!errors.system_file}
+          {({ values, setFieldValue }) => {
+            useEffect(() => {
+              // Replace spaces with underscores for system_file mirroring
+              const systemFileName = values.name.replace(/\s+/g, '_');
+
+              // Update system_file only if it matches the previous name or if name/system_file are empty
+              if (
+                values.system_file === previousName.replace(/\s+/g, '_') ||
+                (values.system_file === '' && values.name === '')
+              ) {
+                setFieldValue('system_file', systemFileName);
+                setPreviousName(values.name);
+              }
+            }, [values.name, values.system_file, setFieldValue, previousName]);
+
+            return (
+              <Form className="c-form">
+                <FieldWrapperFormik name="map-form-info" label="">
+                  <FormikInput
+                    name="name"
+                    label="Name"
+                    required
+                    data-testid="name-input"
                   />
-                  <span className="input-group-text col-sm-3">.hazmapper</span>
-                </div>
-                {/* Alt solution to render error message bc input group was causing text to not display properly */}
-                {touched.system_file && errors.system_file && (
-                  <div className={`${styles['custom-error-message']}`}>
-                    {errors.system_file}
+                  <FormikTextarea
+                    name="description"
+                    label="Description"
+                    required
+                  />
+                  <div className={`${styles['field-wrapper']}`}>
+                    <FormikInput
+                      name="system_file"
+                      label="Custom File Name"
+                      required
+                      className={`${styles['input-custom-size']}`}
+                    />
+                    <span className={`${styles['hazmapper-suffix']}`}>
+                      .hazmapper
+                    </span>
                   </div>
-                )}
-              </FormGroup>
-              {/* TODO_REACT: This part will change once the FileBrowser component is added. https://tacc-main.atlassian.net/browse/WG-208*/}
-              <FormGroup className="row align-items-center">
-                <Label className="col-sm-4">Save Location:</Label>
-                <div className="col-sm-8 text-primary">
-                  {userData ? `/${userData.username}` : 'Loading...'}
-                </div>
-              </FormGroup>
-              <FormGroup className="row mb-2">
-                <Label className="col-sm-4 col-form-label pt-0">
-                  Sync Folder:
-                </Label>
-                <div className="col-sm-8">
-                  <div className="form-check">
-                    <Field
-                      type="checkbox"
-                      name="syncFolder"
-                      id="syncFolder"
-                      className="form-check-input"
-                      checked={values.syncFolder}
-                      onChange={handleChange}
+                  <div className={`${styles['field-wrapper-alt']}`}>
+                    <FormikInput
+                      name="save-location"
+                      label="Save Location"
+                      value={`/${userData?.username}`}
+                      readOnly
+                      disabled
                     />
                   </div>
-                  <br />
-                  <br />
-                  <Label
-                    className={`${styles['form-check-label']}`}
-                    for="syncFolder"
+                  <FormikCheck
+                    name="syncFolder"
+                    label="Sync Folder"
+                    description="When enabled, files in this folder are automatically synced into the map periodically."
+                  />
+                </FieldWrapperFormik>
+                {errorMessage && (
+                  <div className="c-form__errors">{errorMessage}</div>
+                )}
+                <ModalFooter className="justify-content-start">
+                  <Button size="short" type="secondary" onClick={handleClose}>
+                    Close
+                  </Button>
+                  <Button
+                    size="short"
+                    type="primary"
+                    attr="submit"
+                    isLoading={isCreatingProject}
                   >
-                    When enabled, files in this folder are automatically synced
-                    into the map periodically.
-                  </Label>
-                </div>
-              </FormGroup>
-              {errorMessage && (
-                <div className={`${styles['custom-error-message']}`}>
-                  {errorMessage}
-                </div>
-              )}
-              <ModalFooter className="justify-content-start">
-                <Button size="short" type="secondary" onClick={toggle}>
-                  Close
-                </Button>
-                <Button
-                  size="short"
-                  type="primary"
-                  attr="submit"
-                  isLoading={isCreatingProject}
-                >
-                  Create
-                </Button>
-              </ModalFooter>
-            </Form>
-          )}
+                    Create
+                  </Button>
+                </ModalFooter>
+              </Form>
+            );
+          }}
         </Formik>
       </ModalBody>
     </Modal>
