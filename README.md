@@ -6,7 +6,6 @@ See https://github.com/TACC-Cloud/geoapi which is an associated restful API.
 
 ## Local React Development (work-in-progress)
 
-
 `react/` has the React client
 
 To get started, create a local secret file for local development:
