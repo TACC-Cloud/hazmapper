@@ -31,7 +31,7 @@ export class AuthService {
   }
 
   public login(requestedUrl: string) {
-    this.logout()
+    this.logout();
     localStorage.setItem(this.getRedirectKeyword(), requestedUrl);
     this.redirectToAuthenticator(requestedUrl);
   }
@@ -54,18 +54,18 @@ export class AuthService {
     return false;
   }
 
-    /**
+  /**
    * Checks to see if there is a logged in user but token is expired;
    */
-    public isLoggedInButTokenExpired(): boolean {
-      const tokenStr = localStorage.getItem(this.getTokenKeyword());
-      if (tokenStr) {
-        const token = JSON.parse(tokenStr);
-        this.userToken = new AuthToken(token.token, new Date(token.expires));
-        return this.userToken && this.userToken.isExpired();
-      }
-      return false;
+  public isLoggedInButTokenExpired(): boolean {
+    const tokenStr = localStorage.getItem(this.getTokenKeyword());
+    if (tokenStr) {
+      const token = JSON.parse(tokenStr);
+      this.userToken = new AuthToken(token.token, new Date(token.expires));
+      return this.userToken && this.userToken.isExpired();
     }
+    return false;
+  }
 
   public logout(): void {
     this.userToken = null;

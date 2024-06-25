@@ -23,12 +23,12 @@ export class JwtInterceptor implements HttpInterceptor {
       request.url.includes(this.envService.apiUrl) ||
       request.url.includes(this.envService.designSafeUrl);
     if (isTargetUrl) {
-      if(this.authSvc.isLoggedInButTokenExpired()){
+      if (this.authSvc.isLoggedInButTokenExpired()) {
         // check for an expired user token and get user to relogin if expired
         this.router.navigateByUrl(LOGIN + '?to=' + encodeURIComponent(this.router.url));
       }
 
-      if(this.authSvc.isLoggedIn()) {
+      if (this.authSvc.isLoggedIn()) {
         // add tapis token to Geoapi or Tapis requests
         request = request.clone({
           setHeaders: {
