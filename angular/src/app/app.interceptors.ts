@@ -1,34 +1,41 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from './services/authentication.service';
 import { EnvService } from './services/env.service';
-import { catchError } from 'rxjs/operators';
 import { StreetviewAuthenticationService } from './services/streetview-authentication.service';
-import { NotificationsService } from './services/notifications.service';
 import { v4 as uuidv4 } from 'uuid';
+import { LOGIN } from './constants/routes';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
   constructor(
+    private router: Router,
     private authSvc: AuthService,
     private envService: EnvService,
     private streetviewAuthService: StreetviewAuthenticationService
   ) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // TODO_TAPISV3 put the tapis url in envService
     const isTargetUrl =
       request.url.includes(this.envService.tapisUrl) ||
       request.url.includes(this.envService.apiUrl) ||
       request.url.includes(this.envService.designSafeUrl);
-    if (isTargetUrl && this.authSvc.isLoggedIn()) {
-      // add tapis token to Geoapi or Tapis requests
-      request = request.clone({
-        setHeaders: {
-          'X-Tapis-Token': this.authSvc.userToken.token,
-        },
-      });
+    if (isTargetUrl) {
+      if(this.authSvc.isLoggedInButTokenExpired()){
+        // check for an expired user token and get user to relogin if expired
+        this.router.navigateByUrl(LOGIN + '?to=' + encodeURIComponent(this.router.url));
+      }
+
+      if(this.authSvc.isLoggedIn()) {
+        // add tapis token to Geoapi or Tapis requests
+        request = request.clone({
+          setHeaders: {
+            'X-Tapis-Token': this.authSvc.userToken.token,
+          },
+        });
+      }
     }
 
     if (request.url.indexOf(this.envService.apiUrl) > -1) {
@@ -97,30 +104,5 @@ export class JwtInterceptor implements HttpInterceptor {
     // Regular expression to match /projects/{projectId}/features or /public-projects/{projectId}/features
     const urlPattern = /\/(projects|public-projects)\/\d+\/features\/?(?:\?.*)?/;
     return request.method === 'GET' && urlPattern.test(request.url);
-  }
-}
-
-@Injectable()
-export class AuthInterceptor implements HttpInterceptor {
-  constructor(
-    private authService: AuthService,
-    private envService: EnvService,
-    private streetviewAuthService: StreetviewAuthenticationService,
-    private notificationService: NotificationsService
-  ) {}
-
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(request).pipe(
-      catchError((err) => {
-        if (err.status === 401) {
-          // auto logout if 401 response returned from api
-          // https://jira.tacc.utexas.edu/browse/DES-1999
-          // TODO_TAPISV3 renable these
-          // this.authService.logout();
-          // location.reload();
-        }
-        throw err;
-      })
-    );
   }
 }

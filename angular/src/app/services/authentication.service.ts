@@ -31,31 +31,14 @@ export class AuthService {
   }
 
   public login(requestedUrl: string) {
+    this.logout()
     localStorage.setItem(this.getRedirectKeyword(), requestedUrl);
-
-    // First, check if the user has a token in localStorage
-    const tokenStr = localStorage.getItem(this.getTokenKeyword());
-    if (!tokenStr) {
-      this.redirectToAuthenticator();
-    } else {
-      const token = JSON.parse(tokenStr);
-      this.userToken = new AuthToken(token.token, new Date(token.expires));
-      if (!this.userToken || this.userToken.isExpired()) {
-        this.logout();
-        this.redirectToAuthenticator();
-      }
-      this.getUserInfoFromToken();
-    }
+    this.redirectToAuthenticator(requestedUrl);
   }
 
-  public redirectToAuthenticator() {
-    const client_id = this.envService.clientId;
-    const callback = location.origin + this.envService.baseHref + 'callback';
-    const state = Math.random().toString(36);
-    // tslint:disable-next-line:max-line-length
-    const AUTH_URL_V3 = `${this.envService.tapisUrl}/v3/oauth2/authorize?client_id=${client_id}&response_type=token&redirect_uri=${callback}`;
-
-    window.location.href = AUTH_URL_V3;
+  public redirectToAuthenticator(requestedUrl: string) {
+    const GEOAPI_AUTH_URL = `${this.envService.apiUrl}/auth/login?to=${requestedUrl}`;
+    window.location.href = GEOAPI_AUTH_URL;
   }
 
   /**
@@ -70,6 +53,19 @@ export class AuthService {
     }
     return false;
   }
+
+    /**
+   * Checks to see if there is a logged in user but token is expired;
+   */
+    public isLoggedInButTokenExpired(): boolean {
+      const tokenStr = localStorage.getItem(this.getTokenKeyword());
+      if (tokenStr) {
+        const token = JSON.parse(tokenStr);
+        this.userToken = new AuthToken(token.token, new Date(token.expires));
+        return this.userToken && this.userToken.isExpired();
+      }
+      return false;
+    }
 
   public logout(): void {
     this.userToken = null;
@@ -92,12 +88,5 @@ export class AuthService {
     const decodedJwt = jwtDecode(this.userToken.token);
     const u = new AuthenticatedUser(decodedJwt['tapis/username']);
     this._currentUser.next(u);
-  }
-
-  checkLoggedIn(): void {
-    if (!this.isLoggedIn()) {
-      this.logout();
-      this.redirectToAuthenticator();
-    }
   }
 }
