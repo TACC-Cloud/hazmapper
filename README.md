@@ -4,13 +4,6 @@ Hazmapper is an application for creating, visualizing, and analyzing geospatial 
 
 See https://github.com/TACC-Cloud/geoapi which is an associated restful API.
 
-### Getting started
-- Get a JWT from someone on WMA-Geospatial subgroup
-- GOTO jwt.io and edit that JWT to have your username/details
-- Create a file in angular/src/environments called jwt.ts that has this in it:
-
-    export const jwt = "YOUR JWT FROM ABOVE"
-
 ## Local React Development (work-in-progress)
 
 `react/` has the React client
@@ -20,7 +13,7 @@ To get started, create a local secret file for local development:
 cp react/src/secret_local.example.ts react/src/secret_local.ts
 ```
 
-Add the jwt retrieved from [Getting started](###getting-started) to `react/src/secret_local.ts`.  
+Get a JWT from someone on WMA-Geospatial subgroup and add the jwt to `react/src/secret_local.ts`.
 
 The `geoapiBackend` in ( see [react/src/secret_local.example.ts](react/src/secret_local.example.ts) ) can be used to select which backend `geoapi` is used by Hazmapper during local development (e.g. `EnvironmentType.Production`, `EnvironmentType.Staging`, `EnvironmentType.Dev`, * `EnvironmentType.Local`
 

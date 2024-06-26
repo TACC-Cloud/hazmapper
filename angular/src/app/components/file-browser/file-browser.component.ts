@@ -6,7 +6,6 @@ import { SystemSummary } from 'ng-tapis';
 import { TapisFilesService } from '../../services/tapis-files.service';
 import { BsModalRef } from 'ngx-foundation/modal/bs-modal-ref.service';
 import { AgaveSystemsService } from '../../services/agave-systems.service';
-import { max, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-file-browser',
@@ -53,9 +52,6 @@ export class FileBrowserComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.agaveSystemsService.list();
-
-    // TODO: change those hard coded systemIds to environment vars or some sort of config
     // wait on the currentUser, systems and projects to resolve
     combineLatest([this.authService.currentUser, this.agaveSystemsService.systems, this.agaveSystemsService.projects]).subscribe(
       ([user, systems, projects]) => {
@@ -71,6 +67,8 @@ export class FileBrowserComponent implements OnInit {
           type: 'dir',
           path: this.currentUser.username,
         };
+
+        // TODO_TAPISV3 is this being called 3 times??
         this.browse(init);
       }
     );
@@ -114,16 +112,26 @@ export class FileBrowserComponent implements OnInit {
       .listFiles(this.currentDirectory.system, this.currentDirectory.path, this.offset, FileBrowserComponent.limit)
       .subscribe(
         (response) => {
-          const files = response.result;
+          // Add 'system' to results to match v2
+          const files = response.result.map((f) => ({
+            ...f,
+            system: this.currentDirectory.system,
+          }));
 
-          if (files.length && files[0].name === '.') {
-            // This removes the first item in the listing, which in Agave
-            // is always a reference to self '.' and replaces with '..'
-            const current = files.shift();
-            this.currentPath.next(current.path);
-            current.path = this.tapisFilesService.getParentPath(current.path);
-            current.name = '..';
-            files.unshift(current);
+          this.currentPath.next(this.currentDirectory.path);
+
+          // If this is the first load, add the '..' entry for users to move to parent path
+          if (this.offset === 0) {
+            const backPath = {
+              name: '..',
+              format: 'folder',
+              type: 'dir',
+              mimeType: 'test/directory',
+              size: 8192,
+              path: this.tapisFilesService.getParentPath(this.currentDirectory.path),
+              system: this.currentDirectory.system,
+            };
+            this.filesList.unshift(backPath);
           }
 
           this.inProgress = false;
