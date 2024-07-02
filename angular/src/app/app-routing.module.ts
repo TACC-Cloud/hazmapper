@@ -46,7 +46,7 @@ const routes: Routes = [
       },
     ],
   },
-  { path: 'callback', component: CallbackComponent },
+  { path: 'handle-login', component: CallbackComponent },
   { path: 'streetview/callback', component: StreetviewCallbackComponent },
   { path: '404', component: NotFoundComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' },

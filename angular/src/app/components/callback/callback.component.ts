@@ -11,8 +11,6 @@ export class CallbackComponent implements OnInit {
   constructor(private route: ActivatedRoute, private auth: AuthService) {}
 
   ngOnInit() {
-    const frag = this.route.snapshot.fragment;
-    const params = new URLSearchParams(frag);
     const token = this.route.snapshot.queryParams.access_token;
     const expires_in = this.route.snapshot.queryParams.expires_in;
     this.auth.setToken(token, expires_in);

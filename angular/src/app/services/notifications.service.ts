@@ -29,7 +29,6 @@ export class NotificationsService {
   }
 
   getRecent(): void {
-    this.authService.checkLoggedIn();
     const baseUrl = this.envService.apiUrl + '/notifications/';
     const now = new Date();
     const then = new Date(now.getTime() - this.TIMEOUT);
@@ -75,7 +74,6 @@ export class NotificationsService {
   }
 
   getRecentProgress(): void {
-    this.authService.checkLoggedIn();
     const baseUrl = this.envService.apiUrl + '/notifications/progress';
     this.http.get<Array<IProgressNotification>>(baseUrl).subscribe((notes) => {
       this._progressNotifications.next(notes);

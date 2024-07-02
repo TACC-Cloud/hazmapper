@@ -29,7 +29,7 @@ import { AuthService } from './services/authentication.service';
 import { ModalService } from './services/modal.service';
 import { EnvService } from './services/env.service';
 import { CallbackComponent } from './components/callback/callback.component';
-import { AuthInterceptor, JwtInterceptor } from './app.interceptors';
+import { JwtInterceptor } from './app.interceptors';
 import { ModalCreateProjectComponent } from './components/modal-create-project/modal-create-project.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ModalFileBrowserComponent } from './components/modal-file-browser/modal-file-browser.component';
@@ -153,11 +153,6 @@ import { QuestionnaireDetailComponent } from './components/questionnaire-detail/
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
       multi: true,
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      multi: true,
-      useClass: AuthInterceptor,
     },
     {
       provide: CDK_DRAG_CONFIG,
