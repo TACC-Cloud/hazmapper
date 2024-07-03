@@ -23,7 +23,7 @@ export class AuthService {
   constructor(private http: HttpClient, private envService: EnvService, private router: Router) {}
 
   public getTokenKeyword() {
-    return `${this.envService.env}HazmapperToken`;
+    return `${this.envService.env}HazmapperV3Token`;
   }
 
   public getRedirectKeyword() {
