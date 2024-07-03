@@ -101,8 +101,8 @@ export class AuthToken {
 
   /**
    * Checks if the token is expired or not.
-   * A 5 minutebuffer is used to consider a token as expired slightly before its actual expiration time.
-   * @returns {boolean} True if the token is expired, false otherwise.
+   * A 5 minute buffer is used to consider a token as expired slightly before its actual expiration time.
+   * @returns True if the token is expired, false otherwise.
    */
   public isExpired(): boolean {
     const buffer = 300000; // 5 minutes in milliseconds
