@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { EnvironmentType } from '../../environments/environmentType';
+import { EnvironmentType, DesignSafeEnvironmentType } from '../../environments/environmentType';
 
 @Injectable({ providedIn: 'root' })
 export class EnvService {
   private _env: EnvironmentType;
   private _apiUrl: string;
-  private _portalUrl: string;
+  private _designSafePortalUrl: string;
   private _taggitUrl: string;
   private _jwt?: string;
   private _clientId: string;
@@ -30,16 +30,18 @@ export class EnvService {
   }
 
   get tapisUrl(): string {
-    return 'https://designsafe.tapis.io/';
+    return 'https://designsafe.tapis.io';
   }
 
-  private getPortalUrl(backend: EnvironmentType): string {
-    if (backend === EnvironmentType.Production) {
-      return 'https://www.designsafe-ci.org/';
-    } else if (backend === EnvironmentType.Experimental) {
-      return 'https://designsafeci-next.tacc.utexas.edu/';
+  private getDesignSafePortalUrl(backend: DesignSafeEnvironmentType): string {
+    if (backend === DesignSafeEnvironmentType.Production) {
+      return 'https://www.designsafe-ci.org';
+    } else if (backend === DesignSafeEnvironmentType.Next) {
+      return 'https://designsafeci-next.tacc.utexas.edu';
+    } else if (backend == DesignSafeEnvironmentType.Dev) {
+      return 'https://designsafeci-dev.tacc.utexas.edu';
     } else {
-      return 'https://designsafeci-dev.tacc.utexas.edu/';
+      throw new Error("Unsupported DS environment");
     }
   }
 
@@ -71,12 +73,8 @@ export class EnvService {
     return this._baseHref;
   }
 
-  get designSafeUrl(): string {
-    return 'https://designsafeci-next.tacc.utexas.edu';
-  }
-
-  get portalUrl(): string {
-    return this._portalUrl;
+  get designSafePortalUrl(): string {
+    return this._designSafePortalUrl;
   }
 
   get taggitUrl(): string {
@@ -118,7 +116,7 @@ export class EnvService {
     if (/^localhost/.test(hostname) || /^hazmapper.local/.test(hostname)) {
       this._env = EnvironmentType.Local;
       this._apiUrl = this.getApiUrl(environment.backend);
-      this._portalUrl = this.getPortalUrl(EnvironmentType.Experimental);
+      this._designSafePortalUrl =  this.getDesignSafePortalUrl(environment.designSafePortal);
       // TODO: Currently taggit is hosted on same port 4200
       // Have to change port on taggit or hazmapper (requires adding callbackUrl to that port)
       this._taggitUrl = 'http://localhost:4200/taggit';
@@ -148,7 +146,7 @@ export class EnvService {
       this._env = EnvironmentType.Staging;
       this._apiUrl = this.getApiUrl(this.env);
       this._taggitUrl = origin + '/taggit-staging';
-      this._portalUrl = this.getPortalUrl(this.env);
+      this._designSafePortalUrl = this.getDesignSafePortalUrl(DesignSafeEnvironmentType.Dev);
       this._clientId = 'hazmapper.staging';
       this._baseHref = '/staging/';
       this._streetviewEnv.secrets = {
@@ -166,7 +164,7 @@ export class EnvService {
       this._env = EnvironmentType.Dev;
       this._apiUrl = this.getApiUrl(this.env);
       this._taggitUrl = origin + '/taggit-dev';
-      this._portalUrl = this.getPortalUrl(this.env);
+      this._designSafePortalUrl = this.getDesignSafePortalUrl(DesignSafeEnvironmentType.Dev);
       this._clientId = 'hazmapper.dev';
       this._baseHref = '/dev/';
       this._streetviewEnv.secrets = {
@@ -184,7 +182,7 @@ export class EnvService {
       this._env = EnvironmentType.Experimental;
       this._apiUrl = this.getApiUrl(this.env);
       this._taggitUrl = origin + '/taggit-exp';
-      this._portalUrl = this.getPortalUrl(this.env);
+      this._designSafePortalUrl = this.getDesignSafePortalUrl(DesignSafeEnvironmentType.Next);
       this._clientId = 'hazmapper.experimental';
       this._baseHref = '/exp/';
       this._streetviewEnv.secrets = {
@@ -201,7 +199,7 @@ export class EnvService {
     } else if (/^hazmapper.tacc.utexas.edu/.test(hostname)) {
       this._env = EnvironmentType.Production;
       this._apiUrl = this.getApiUrl(this.env);
-      this._portalUrl = this.getPortalUrl(this.env);
+      this._designSafePortalUrl = this.getDesignSafePortalUrl(DesignSafeEnvironmentType.Production);
       this._taggitUrl = origin + '/taggit';
       this._clientId = 'hazmapper.prod';
       this._baseHref = '/hazmapper/';
