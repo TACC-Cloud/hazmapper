@@ -7,8 +7,8 @@ export enum EnvironmentType {
 }
 
 export enum DesignSafeEnvironmentType {
-  Production = 'production', /* https://www.designsafe-ci.org/ */
-  Dev = 'dev' /* https://designsafeci-dev.tacc.utexas.edu/ */ ,
+  Production = 'production' /* https://www.designsafe-ci.org/ */,
+  Dev = 'dev' /* https://designsafeci-dev.tacc.utexas.edu/ */,
   Next = 'experimental' /* https://designsafeci-next.tacc.utexas.edu/ */,
-  Local = 'local', /* not supported but would be designsafe.dev */
+  Local = 'local' /* not supported but would be designsafe.dev */,
 }

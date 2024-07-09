@@ -38,10 +38,10 @@ export class EnvService {
       return 'https://www.designsafe-ci.org';
     } else if (backend === DesignSafeEnvironmentType.Next) {
       return 'https://designsafeci-next.tacc.utexas.edu';
-    } else if (backend == DesignSafeEnvironmentType.Dev) {
+    } else if (backend === DesignSafeEnvironmentType.Dev) {
       return 'https://designsafeci-dev.tacc.utexas.edu';
     } else {
-      throw new Error("Unsupported DS environment");
+      throw new Error('Unsupported DS environment');
     }
   }
 
@@ -116,7 +116,7 @@ export class EnvService {
     if (/^localhost/.test(hostname) || /^hazmapper.local/.test(hostname)) {
       this._env = EnvironmentType.Local;
       this._apiUrl = this.getApiUrl(environment.backend);
-      this._designSafePortalUrl =  this.getDesignSafePortalUrl(environment.designSafePortal);
+      this._designSafePortalUrl = this.getDesignSafePortalUrl(environment.designSafePortal);
       // TODO: Currently taggit is hosted on same port 4200
       // Have to change port on taggit or hazmapper (requires adding callbackUrl to that port)
       this._taggitUrl = 'http://localhost:4200/taggit';
