@@ -52,7 +52,7 @@ export class UsersPanelComponent implements OnInit {
               this.projectHref = portalUrl + 'projects/' + activeProject.ds_id + '/';
             }
           } else {
-            this.myDataHref = portalUrl + 'tapis/' + activeProject.system_id;
+            this.myDataHref = portalUrl + 'tapis/' + activeProject.system_id + "/";
             this.dsHref = this.myDataHref + activeProject.system_path + '/';
           }
         }
