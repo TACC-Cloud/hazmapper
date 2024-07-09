@@ -93,19 +93,25 @@ export class AuthToken {
     this.expires = new Date(expires);
   }
 
+  /** Creates an AuthToken instance from a token and an expiration time in seconds. */
   static fromExpiresIn(token: string, expires_in: number) {
     const expires = new Date(new Date().getTime() + expires_in * 1000);
     return new AuthToken(token, expires);
   }
 
   /**
-   * Checks if the token is expired or not
+   * Checks if the token is expired or not.
+   * A 5 minute buffer is used to consider a token as expired slightly before its actual expiration time.
+   * @returns True if the token is expired, false otherwise.
    */
   public isExpired(): boolean {
+    const buffer = 300000; // 5 minutes in milliseconds
     if (this.expires) {
-      return new Date().getTime() > this.expires.getTime();
+      // Subtract buffer from the expiration time and compare with the current time
+      return new Date().getTime() > this.expires.getTime() - buffer;
     } else {
-      return false;
+      // If expires is not set, consider the token as not expired
+      return false; // TODO_V3 this affects the streetview token; should be confirmed or refactored.
     }
   }
 }
