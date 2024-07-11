@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 import { jwt as devJWT } from './jwt';
+import { dev_env as devEnv } from './jwt';
 import { EnvironmentType } from '../environments/environmentType';
+console.log(devEnv);
 
 export interface AppEnvironment {
   jwt?: string;
@@ -12,7 +14,7 @@ export interface AppEnvironment {
 }
 
 export const environment: AppEnvironment = {
-  backend: EnvironmentType.Local,
+  backend: devEnv,
   jwt: devJWT,
   production: false,
 };
