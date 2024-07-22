@@ -20,7 +20,7 @@ export class TapisFilesService {
   }
 
   listFiles(system: string, path: string, offset: number, limit: number) {
-    return this.http.get<any>(this.envService.tapisUrl + `v3/files/ops/${system}/${path}?offset=${offset}&limit=${limit}`);
+    return this.http.get<any>(this.envService.tapisUrl + `/v3/files/ops/${system}/${path}?offset=${offset}&limit=${limit}`);
   }
 
   public getParentPath(path: string): string {

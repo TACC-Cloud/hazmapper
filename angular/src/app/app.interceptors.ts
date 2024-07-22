@@ -21,7 +21,7 @@ export class JwtInterceptor implements HttpInterceptor {
     const isTargetUrl =
       request.url.includes(this.envService.tapisUrl) ||
       request.url.includes(this.envService.apiUrl) ||
-      request.url.includes(this.envService.designSafeUrl);
+      request.url.includes(this.envService.designSafePortalUrl);
     if (isTargetUrl) {
       if (this.authSvc.isLoggedInButTokenExpired()) {
         // check for an expired user token and get user to relogin if expired

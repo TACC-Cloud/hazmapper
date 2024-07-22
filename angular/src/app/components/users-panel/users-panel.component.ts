@@ -43,7 +43,7 @@ export class UsersPanelComponent implements OnInit {
     this.agaveSystemsService.list();
     combineLatest([this.projectsService.activeProject, this.agaveSystemsService.projects]).subscribe(([activeProject, dsProjects]) => {
       if (activeProject) {
-        const portalUrl = this.envService.portalUrl + 'data/browser/';
+        const portalUrl = this.envService.designSafePortalUrl + '/data/browser/';
         this.activeProject = this.agaveSystemsService.getProjectMetadata([activeProject], dsProjects)[0];
         if (activeProject.system_id) {
           if (activeProject.system_id.startsWith('project')) {
@@ -52,7 +52,7 @@ export class UsersPanelComponent implements OnInit {
               this.projectHref = portalUrl + 'projects/' + activeProject.ds_id + '/';
             }
           } else {
-            this.myDataHref = portalUrl + 'tapis/' + activeProject.system_id;
+            this.myDataHref = portalUrl + 'tapis/' + activeProject.system_id + '/';
             this.dsHref = this.myDataHref + activeProject.system_path + '/';
           }
         }

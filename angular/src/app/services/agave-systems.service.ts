@@ -46,7 +46,7 @@ export class AgaveSystemsService {
   }
 
   list() {
-    this.http.get<any>(this.envService.tapisUrl + `v3/systems/?listType=ALL`).subscribe(
+    this.http.get<any>(this.envService.tapisUrl + `/v3/systems/?listType=ALL`).subscribe(
       (resp) => {
         this._systems.next(resp.result);
       },
@@ -62,7 +62,7 @@ export class AgaveSystemsService {
     this._projects.next([]);
     this._loadingProjects.next(false);
 
-    this.http.get<DesignSafeProjectCollection>(this.envService.designSafeUrl + `/api/projects/v2/`).subscribe(
+    this.http.get<DesignSafeProjectCollection>(this.envService.designSafePortalUrl + `/api/projects/v2/`).subscribe(
       (resp) => {
         const projectSystems = resp.result.map((project) => {
           return {
