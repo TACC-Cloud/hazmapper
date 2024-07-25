@@ -11,5 +11,5 @@ export const environment: AppEnvironment = {
   production: true,
   // only used during testing
   backend: EnvironmentType.Production,
-  designSafePortal: DesignSafeEnvironmentType.Production
+  designSafePortal: DesignSafeEnvironmentType.Production,
 };
