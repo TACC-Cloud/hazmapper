@@ -11,9 +11,7 @@
     <option *ngIf="showPublicSystems" [ngValue]="communityDataSystem">Community Data</option>
     <option *ngIf="showPublicSystems" [ngValue]="publishedDataSystem">Published Data</option>
     <optgroup label="My Projects">
-        <option *ngFor="let project of projects" [ngValue]="project">
-            {{ project.description }}
-        </option>
+        <option *ngFor="let project of projects" [ngValue]="project">{{ project.name }} | {{ project.description }}</option>
     </optgroup>
 </select>
 <div
@@ -36,7 +34,7 @@
             <span> {{ file.name }} </span>
         </div>
         <div class="cell medium-3">
-            {{ file.length | filesize }}
+            {{ file.size | filesize }}
         </div>
     </div>
     <div class="grid-x" *ngIf="inProgress">
