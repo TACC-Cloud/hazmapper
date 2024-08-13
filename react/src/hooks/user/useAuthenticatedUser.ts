@@ -11,7 +11,6 @@ type SuccessResult<T> = {
 // TODO remove this placeholder hook
 const useAuthenticatedUser = (): SuccessResult<AuthenticatedUser> => {
   let username = useSelector((state: RootState) => state.auth.user?.username);
-  debugger;
 
   if (!username) {
     username = '';

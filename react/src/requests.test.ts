@@ -7,32 +7,17 @@ import {
 import { localDevConfiguration } from './__fixtures__/appConfigurationFixture';
 
 describe('getHeaders', () => {
-  it('returns JWT header when using local Geoapi', () => {
+  it('returns Authorization header for Geoapi', () => {
     const headers = getHeaders(
       ApiService.Geoapi,
       {
         ...localDevConfiguration,
-        geoapiBackend: GeoapiBackendEnvironment.Local,
-      },
-      authenticatedUser
-    );
-
-    expect(headers).toEqual({
-      'X-JWT-Assertion-designsafe': localDevConfiguration.jwt,
-    });
-  });
-
-  it('returns Authorization header for non-local Geoapi', () => {
-    const headers = getHeaders(
-      ApiService.Geoapi,
-      {
-        ...localDevConfiguration,
-        geoapiBackend: GeoapiBackendEnvironment.Production, // Or any other non-local environment
+        geoapiBackend: GeoapiBackendEnvironment.Production, // Or any other environment
       },
       authenticatedUser
     );
     expect(headers).toEqual({
-      Authorization: `Bearer ${authenticatedUser.authToken?.token}`,
+      Authorization: `${authenticatedUser.authToken?.token}`,
     });
   });
 

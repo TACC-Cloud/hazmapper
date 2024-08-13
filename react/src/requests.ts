@@ -25,10 +25,9 @@ function getBaseApiUrl(
     case ApiService.Geoapi:
       return configuration.geoapiUrl;
     case ApiService.DesignSafe:
-      return configuration.designSafeUrl;
+      return configuration.designsafePortalUrl;
     case ApiService.Tapis:
-      // Tapis and DesignSafe are currently the same
-      return configuration.designSafeUrl;
+      return 'https://designsafe.tapis.io/';
     default:
       throw new Error('Unsupported api service Type.');
   }
@@ -39,18 +38,20 @@ export function getHeaders(
   configuration: AppConfiguration,
   auth: AuthState
 ) {
-  // TODO_REACT add mapillary support
-  if (auth.authToken?.token && apiService !== ApiService.Mapillary) {
-    //Add auth information in header for DesignSafe, Tapis, Geoapi for logged in users
-    if (
-      apiService === ApiService.Geoapi &&
-      configuration.geoapiBackend === GeoapiBackendEnvironment.Local
-    ) {
-      // Use JWT in request header because local geoapi API is not behind ws02
-      return { 'X-JWT-Assertion-designsafe': configuration.jwt };
-    }
-    return { Authorization: `Bearer ${auth.authToken?.token}` };
+  const usesTapisToken = [
+    ApiService.Geoapi,
+    ApiService.Tapis,
+    ApiService.DesignSafe,
+  ].includes(apiService);
+
+  const hasAuthToken = !!auth.authToken?.token;
+
+  if (hasAuthToken && usesTapisToken) {
+    return { 'X-Tapis-Token': auth.authToken?.token };
   }
+
+  // TODO_REACT add mapillary support
+
   return {};
 }
 

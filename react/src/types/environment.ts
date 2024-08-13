@@ -43,9 +43,6 @@ export enum ApiService {
  *
  */
 export interface LocalAppConfiguration {
-  /* Developer's JWT token used for authentication during local development. */
-  jwt: string;
-
   /* The type of backend environment (production, staging, development, or local) */
   geoapiBackend: GeoapiBackendEnvironment;
 }
@@ -78,10 +75,7 @@ export interface AppConfiguration {
   /** URL for the GeoAPI service. */
   geoapiUrl: string;
 
-  /** URL for the DesignSafe/tapis API. */
-  designSafeUrl: string;
-
-  /** URL for the DesignSafe portal. */
+  /** URL for the DesignSafe portal and API. */
   designsafePortalUrl: string;
 
   /** Mapillary related configuration */
@@ -89,7 +83,4 @@ export interface AppConfiguration {
 
   /** URL for taggit */
   taggitUrl: string;
-
-  /** Optional JWT token used for development with local geoapi service. */
-  jwt?: string;
 }

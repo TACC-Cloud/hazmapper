@@ -39,7 +39,7 @@ export const useProject = ({
 export const useDsProjects =
   (): UseQueryResult<DesignSafeProjectCollection> => {
     const query = useGet<DesignSafeProjectCollection>({
-      endpoint: `projects/v2/`,
+      endpoint: `/api/projects/v2/`,
       key: ['projectsv2'],
       apiService: ApiService.DesignSafe,
     });

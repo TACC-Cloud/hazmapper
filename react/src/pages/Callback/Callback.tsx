@@ -18,7 +18,6 @@ export default function CallbackPage() {
     const expiresAt = params.get('expires_at');
 
     if (token && expiresAt) {
-      debugger;
       const username = jwtDecode(token)['tapis/username'];
 
       const authToken: AuthToken = { token, expiresAt };

@@ -68,32 +68,15 @@ export const useAppConfiguration = (): AppConfiguration => {
     };
 
     if (/^localhost/.test(hostname) || /^hazmapper.local/.test(hostname)) {
-      // Check if jwt has been set properly if we are using local geoapi
-      if (
-        localDevelopmentConfiguration.geoapiBackend ===
-        GeoapiBackendEnvironment.Local
-      ) {
-        if (
-          localDevelopmentConfiguration.jwt.startsWith('INSERT YOUR JWT HERE')
-        ) {
-          console.error(
-            'JWT has not been added to secret_local.ts; see README'
-          );
-          throw new Error('JWT has not been added to secret_local.ts');
-        }
-      }
-
       const appConfig: AppConfiguration = {
         basePath: basePath,
         geoapiBackend: localDevelopmentConfiguration.geoapiBackend,
         geoapiUrl: getGeoapiUrl(localDevelopmentConfiguration.geoapiBackend),
-        designSafeUrl: 'https://agave.designsafe-ci.org/',
         designsafePortalUrl: getDesignsafePortalUrl(
           DesignSafePortalEnvironment.Dev
         ),
         mapillary: mapillaryConfig,
         taggitUrl: origin + '/taggit-staging',
-        jwt: localDevelopmentConfiguration.jwt,
       };
       appConfig.mapillary.clientId = '5156692464392931';
       appConfig.mapillary.clientSecret =
@@ -109,7 +92,6 @@ export const useAppConfiguration = (): AppConfiguration => {
         basePath: basePath,
         geoapiBackend: GeoapiBackendEnvironment.Staging,
         geoapiUrl: getGeoapiUrl(GeoapiBackendEnvironment.Staging),
-        designSafeUrl: 'https://agave.designsafe-ci.org/',
         designsafePortalUrl: getDesignsafePortalUrl(
           DesignSafePortalEnvironment.Dev
         ),
@@ -131,7 +113,6 @@ export const useAppConfiguration = (): AppConfiguration => {
         basePath: basePath,
         geoapiBackend: GeoapiBackendEnvironment.Dev,
         geoapiUrl: getGeoapiUrl(GeoapiBackendEnvironment.Dev),
-        designSafeUrl: 'https://agave.designsafe-ci.org/',
         designsafePortalUrl: getDesignsafePortalUrl(
           DesignSafePortalEnvironment.Dev
         ),
@@ -151,7 +132,6 @@ export const useAppConfiguration = (): AppConfiguration => {
         basePath: basePath,
         geoapiBackend: GeoapiBackendEnvironment.Production,
         geoapiUrl: getGeoapiUrl(GeoapiBackendEnvironment.Production),
-        designSafeUrl: 'https://agave.designsafe-ci.org/',
         designsafePortalUrl: getDesignsafePortalUrl(
           DesignSafePortalEnvironment.Production
         ),

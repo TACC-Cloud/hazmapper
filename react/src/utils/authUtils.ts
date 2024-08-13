@@ -3,8 +3,6 @@ import { AuthToken, AuthState } from '../types';
 export const AUTH_KEY = 'authV3';
 
 export function isTokenValid(authToken: AuthToken | null): boolean {
-  debugger;
-
   if (authToken) {
     if (!authToken.expiresAt) {
       return false;
@@ -41,6 +39,5 @@ export function setAuthenticatedUserFromLocalStorage(authToken: AuthState) {
 }
 
 export function removeAuthenticatedUserFromLocalStorage() {
-  debugger;
   localStorage.removeItem(AUTH_KEY);
 }
