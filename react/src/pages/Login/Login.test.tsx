@@ -7,6 +7,23 @@ import { QueryClientProvider } from 'react-query';
 import { testQueryClient } from '../../testUtil';
 import { MemoryRouter } from 'react-router';
 
+beforeAll(() => {
+  const mockLocation = {
+    href: 'http://localhost:4200/login',
+    hostname: 'localhost',
+    pathname: '/login',
+    assign: jest.fn(),
+    replace: jest.fn(),
+    // You can add other properties if needed
+  };
+
+  jest.spyOn(window, 'location', 'get').mockReturnValue(mockLocation as any);
+});
+
+afterAll(() => {
+  jest.restoreAllMocks(); // Restore the original window.location after tests
+});
+
 test('renders login', async () => {
   const { getByText } = render(
     <Provider store={store}>
@@ -18,7 +35,11 @@ test('renders login', async () => {
     </Provider>
   );
   expect(getByText(/Logging in/)).toBeDefined();
+
   await waitFor(() => {
-    expect(localStorage.getItem('authState')).not.toBeNull();
+    // Check that localStorage was set with the correct "toParam"
+    expect(localStorage.getItem('toParam')).toBe('/');
+    // Check that the mocked location was set correctly
+    expect(window.location.href).toContain('geoapi');
   });
 });

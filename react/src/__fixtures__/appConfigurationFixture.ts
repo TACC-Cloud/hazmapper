@@ -4,7 +4,6 @@ import {
   MapillaryConfiguration,
 } from '../types';
 
-const clientId = 'abc_123_JWT';
 const jwtId = 'abc_123_client_id';
 
 export const mapillaryConfig: MapillaryConfiguration = {
@@ -21,7 +20,6 @@ export const mapillaryConfig: MapillaryConfiguration = {
 
 export const localDevConfiguration: AppConfiguration = {
   basePath: '/',
-  clientId: clientId,
   geoapiBackend: GeoapiBackendEnvironment.Local,
   geoapiUrl: 'http://localhost:8888',
   designSafeUrl: 'https://agave.designsafe-ci.org/',

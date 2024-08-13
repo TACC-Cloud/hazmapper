@@ -18,12 +18,14 @@ function getGeoapiUrl(backend: GeoapiBackendEnvironment): string {
   switch (backend) {
     case GeoapiBackendEnvironment.Local:
       return 'http://localhost:8888';
+    case GeoapiBackendEnvironment.Experimental:
+      return 'https://hazmapper.tacc.utexas.edu/geoapi-experimental';
     case GeoapiBackendEnvironment.Dev:
-      return 'https://agave.designsafe-ci.org/geo-dev/v2';
+      return 'https://hazmapper.tacc.utexas.edu/geoapi-dev';
     case GeoapiBackendEnvironment.Staging:
-      return 'https://agave.designsafe-ci.org/geo-staging/v2';
+      return 'https://hazmapper.tacc.utexas.edu/geoapi-staging';
     case GeoapiBackendEnvironment.Production:
-      return 'https://agave.designsafe-ci.org/geo/v2';
+      return 'https://hazmapper.tacc.utexas.edu/geoapi';
     default:
       throw new Error(
         'Unsupported TARGET/GEOAPI_BACKEND Type. Please check the .env file.'
@@ -36,9 +38,13 @@ function getGeoapiUrl(backend: GeoapiBackendEnvironment): string {
  */
 function getDesignsafePortalUrl(backend: DesignSafePortalEnvironment): string {
   if (backend === DesignSafePortalEnvironment.Production) {
-    return 'https://www.designsafe-ci.org/';
+    return 'https://www.designsafe-ci.org';
+  } else if (backend === DesignSafePortalEnvironment.Next) {
+    return 'https://designsafeci-next.tacc.utexas.edu';
+  } else if (backend === DesignSafePortalEnvironment.Dev) {
+    return 'https://designsafeci-dev.tacc.utexas.edu';
   } else {
-    return 'https://designsafeci-dev.tacc.utexas.edu/';
+    throw new Error('Unsupported DS environment');
   }
 }
 
@@ -77,16 +83,8 @@ export const useAppConfiguration = (): AppConfiguration => {
         }
       }
 
-      // local devevelopers can use localhost or hazmapper.local but
-      // hazmapper.local has been preferred in the past as TAPIS only supported it as a frame ancestor
-      // then (i.e. it allows for point cloud iframe preview)
-      const clientId = /^localhost/.test(hostname)
-        ? 'XgCBlhfAaqfv7jTu3NRc4IJDGdwa'
-        : 'Eb9NCCtWkZ83c01UbIAITFvhD9ka';
-
       const appConfig: AppConfiguration = {
         basePath: basePath,
-        clientId: clientId,
         geoapiBackend: localDevelopmentConfiguration.geoapiBackend,
         geoapiUrl: getGeoapiUrl(localDevelopmentConfiguration.geoapiBackend),
         designSafeUrl: 'https://agave.designsafe-ci.org/',
@@ -107,12 +105,8 @@ export const useAppConfiguration = (): AppConfiguration => {
       /^hazmapper.tacc.utexas.edu/.test(hostname) &&
       pathname.startsWith('/staging')
     ) {
-      const clientId = basePath.includes('react')
-        ? 'AhV_h3Ilvrfs1S2Cj10yj82G0Uoa' // "staging-react" client
-        : 'foitdqFcimPzKZuMhbQ1oyh3Anka'; // "staging client" client
       const appConfig: AppConfiguration = {
         basePath: basePath,
-        clientId: clientId,
         geoapiBackend: GeoapiBackendEnvironment.Staging,
         geoapiUrl: getGeoapiUrl(GeoapiBackendEnvironment.Staging),
         designSafeUrl: 'https://agave.designsafe-ci.org/',
@@ -133,12 +127,8 @@ export const useAppConfiguration = (): AppConfiguration => {
       /^hazmapper.tacc.utexas.edu/.test(hostname) &&
       pathname.startsWith('/dev')
     ) {
-      const clientId = basePath.includes('react')
-        ? '9rWjQLiJb0XPXHicmUh1RUq6rOEa' // "react-dev" client
-        : 'oEuGsl7xi015wnrEpxIeUmvzc6Qa'; // "dev" client
       const appConfig: AppConfiguration = {
         basePath: basePath,
-        clientId: clientId,
         geoapiBackend: GeoapiBackendEnvironment.Dev,
         geoapiUrl: getGeoapiUrl(GeoapiBackendEnvironment.Dev),
         designSafeUrl: 'https://agave.designsafe-ci.org/',
@@ -157,12 +147,8 @@ export const useAppConfiguration = (): AppConfiguration => {
         'MLY|4936281379826603|f8c4732d3c9d96582b86158feb1c1a7a';
       return appConfig;
     } else if (/^hazmapper.tacc.utexas.edu/.test(hostname)) {
-      const clientId = basePath.includes('react')
-        ? 'XEMnINR8b8hA6kFxE69HVTyoNCga' // "hazmapper-react" client
-        : 'tMvAiRdcsZ52S_89lCkO4x3d6VMa'; // "hazmapper" client
       const appConfig: AppConfiguration = {
         basePath: basePath,
-        clientId: clientId,
         geoapiBackend: GeoapiBackendEnvironment.Production,
         geoapiUrl: getGeoapiUrl(GeoapiBackendEnvironment.Production),
         designSafeUrl: 'https://agave.designsafe-ci.org/',
