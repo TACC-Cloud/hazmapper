@@ -9,12 +9,7 @@ import {
   QueryKey,
 } from 'react-query';
 import { useAppConfiguration } from './hooks';
-import {
-  ApiService,
-  AppConfiguration,
-  AuthState,
-  GeoapiBackendEnvironment,
-} from './types';
+import { ApiService, AppConfiguration, AuthState } from './types';
 import { v4 as uuidv4 } from 'uuid';
 
 function getBaseApiUrl(
@@ -27,7 +22,7 @@ function getBaseApiUrl(
     case ApiService.DesignSafe:
       return configuration.designsafePortalUrl;
     case ApiService.Tapis:
-      return 'https://designsafe.tapis.io/';
+      return 'https://designsafe.tapis.io';
     default:
       throw new Error('Unsupported api service Type.');
   }
