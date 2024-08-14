@@ -17,7 +17,7 @@ describe('getHeaders', () => {
       authenticatedUser
     );
     expect(headers).toEqual({
-      Authorization: `${authenticatedUser.authToken?.token}`,
+      'X-Tapis-Token': `${authenticatedUser.authToken?.token}`,
     });
   });
 
