@@ -8,11 +8,12 @@ import {
   UseMutationOptions,
   QueryKey,
 } from 'react-query';
-import { useLocation, useNavigate, NavigateFunction } from 'react-router-dom';
-import { useAppConfiguration } from './hooks';
+import {
+  useAppConfiguration,
+  useEnsureAuthenticatedUserHasValidTapisToken,
+} from './hooks';
 import { ApiService, AppConfiguration, AuthState } from './types';
 import { v4 as uuidv4 } from 'uuid';
-import { isTokenValid } from './utils/authUtils';
 
 function getBaseApiUrl(
   apiService: ApiService,
@@ -27,16 +28,6 @@ function getBaseApiUrl(
       return 'https://designsafe.tapis.io';
     default:
       throw new Error('Unsupported api service Type.');
-  }
-}
-
-export function checkTapisAuthToken(
-  auth: AuthState,
-  navigate: NavigateFunction,
-  currentPath: string
-) {
-  if (!isTokenValid(auth.authToken)) {
-    navigate(`/login?to=${encodeURIComponent(currentPath)}`);
   }
 }
 
@@ -88,14 +79,10 @@ export function useGet<ResponseType>({
   const client = axios;
   const state = store.getState();
   const configuration = useAppConfiguration();
-  const navigate = useNavigate();
-  const location = useLocation();
+
+  useEnsureAuthenticatedUserHasValidTapisToken();
 
   const baseUrl = getBaseApiUrl(apiService, configuration);
-  if (usesTapisToken(apiService)) {
-    // check if token is still valid and redirect to login if not
-    checkTapisAuthToken(state.auth, navigate, location.pathname);
-  }
   const headers = getHeaders(apiService, state.auth);
 
   let url = `${baseUrl}${endpoint}`;
@@ -150,15 +137,10 @@ export function usePost<RequestType, ResponseType>({
   const client = axios;
   const state = store.getState();
   const configuration = useAppConfiguration();
-  const navigate = useNavigate();
-  const location = useLocation();
+
+  useEnsureAuthenticatedUserHasValidTapisToken();
 
   const baseUrl = getBaseApiUrl(apiService, configuration);
-
-  if (usesTapisToken(apiService)) {
-    // check if token is still valid and redirect to login if not
-    checkTapisAuthToken(state.auth, navigate, location.pathname);
-  }
 
   const headers = getHeaders(apiService, state.auth);
 

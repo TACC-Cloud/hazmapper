@@ -9,7 +9,7 @@ export function isTokenValid(authToken: AuthToken | null): boolean {
     }
 
     const now = new Date();
-    const expiresAtDate = new Date(authToken.expiresAt);
+    const expiresAtDate: Date = new Date(authToken.expiresAt);
     return now < expiresAtDate;
   } else {
     return false;
