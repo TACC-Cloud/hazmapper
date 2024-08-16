@@ -8,9 +8,11 @@ import {
   UseMutationOptions,
   QueryKey,
 } from 'react-query';
+import { useLocation, useNavigate, NavigateFunction } from 'react-router-dom';
 import { useAppConfiguration } from './hooks';
 import { ApiService, AppConfiguration, AuthState } from './types';
 import { v4 as uuidv4 } from 'uuid';
+import { isTokenValid } from './utils/authUtils';
 
 function getBaseApiUrl(
   apiService: ApiService,
@@ -28,20 +30,29 @@ function getBaseApiUrl(
   }
 }
 
-export function getHeaders(
-  apiService: ApiService,
-  configuration: AppConfiguration,
-  auth: AuthState
+export function checkTapisAuthToken(
+  auth: AuthState,
+  navigate: NavigateFunction,
+  currentPath: string
 ) {
-  const usesTapisToken = [
+  if (!isTokenValid(auth.authToken)) {
+    navigate(`/login?to=${encodeURIComponent(currentPath)}`);
+  }
+}
+
+function usesTapisToken(apiService: ApiService) {
+  const servicesUsingTapisToken = [
     ApiService.Geoapi,
     ApiService.Tapis,
     ApiService.DesignSafe,
-  ].includes(apiService);
+  ];
+  return servicesUsingTapisToken.includes(apiService);
+}
 
-  const hasAuthToken = !!auth.authToken?.token;
+export function getHeaders(apiService: ApiService, auth: AuthState) {
+  const hasTapisAuthToken = !!auth.authToken?.token;
 
-  if (hasAuthToken && usesTapisToken) {
+  if (hasTapisAuthToken && usesTapisToken(apiService)) {
     return { 'X-Tapis-Token': auth.authToken?.token };
   }
 
@@ -77,8 +88,15 @@ export function useGet<ResponseType>({
   const client = axios;
   const state = store.getState();
   const configuration = useAppConfiguration();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const baseUrl = getBaseApiUrl(apiService, configuration);
-  const headers = getHeaders(apiService, configuration, state.auth);
+  if (usesTapisToken(apiService)) {
+    // check if token is still valid and redirect to login if not
+    checkTapisAuthToken(state.auth, navigate, location.pathname);
+  }
+  const headers = getHeaders(apiService, state.auth);
 
   let url = `${baseUrl}${endpoint}`;
 
@@ -132,9 +150,17 @@ export function usePost<RequestType, ResponseType>({
   const client = axios;
   const state = store.getState();
   const configuration = useAppConfiguration();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const baseUrl = getBaseApiUrl(apiService, configuration);
-  const headers = getHeaders(apiService, configuration, state.auth);
+
+  if (usesTapisToken(apiService)) {
+    // check if token is still valid and redirect to login if not
+    checkTapisAuthToken(state.auth, navigate, location.pathname);
+  }
+
+  const headers = getHeaders(apiService, state.auth);
 
   const postUtil = async (requestData: RequestType) => {
     const response = await client.post<ResponseType>(
