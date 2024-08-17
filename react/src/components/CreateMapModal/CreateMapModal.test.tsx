@@ -6,14 +6,16 @@ import {
   screen,
   waitFor,
 } from '@testing-library/react';
+
 import CreateMapModal from './CreateMapModal';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { act } from 'react-dom/test-utils';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 jest.mock('../../hooks/user/useAuthenticatedUser', () => ({
   __esModule: true,
   default: () => ({
-    data: { username: 'mockUser', email: 'mockUser@example.com' },
+    data: { username: 'mockUser' },
     isLoading: false,
     error: null,
   }),
@@ -45,14 +47,16 @@ jest.mock('react-router-dom', () => ({
 const toggleMock = jest.fn();
 const queryClient = new QueryClient();
 
-const renderComponent = (isOpen = true) => {
-  render(
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <CreateMapModal isOpen={isOpen} toggle={toggleMock} />
-      </Router>
-    </QueryClientProvider>
-  );
+const renderComponent = async (isOpen = true) => {
+  await act(async () => {
+    render(
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <CreateMapModal isOpen={isOpen} toggle={toggleMock} />
+        </Router>
+      </QueryClientProvider>
+    );
+  });
 };
 
 describe('CreateMapModal', () => {
@@ -60,23 +64,27 @@ describe('CreateMapModal', () => {
     cleanup();
   });
 
-  test('renders the modal when open', () => {
-    renderComponent();
-    expect(screen.getByText(/Create a New Map/)).toBeTruthy();
+  test('renders the modal when open', async () => {
+    await renderComponent();
+    await waitFor(() => {
+      expect(screen.getByText(/Create a New Map/)).toBeTruthy();
+    });
   });
 
   test('submits form data successfully', async () => {
-    renderComponent();
-    fireEvent.change(screen.getByTestId('name-input'), {
-      target: { value: 'Success Map' },
+    await renderComponent();
+    await act(async () => {
+      fireEvent.change(screen.getByTestId('name-input'), {
+        target: { value: 'Success Map' },
+      });
+      fireEvent.change(screen.getByLabelText(/Description/), {
+        target: { value: 'A successful map' },
+      });
+      fireEvent.change(screen.getByLabelText(/Custom File Name/), {
+        target: { value: 'success-file' },
+      });
+      fireEvent.click(screen.getByRole('button', { name: /Create/ }));
     });
-    fireEvent.change(screen.getByLabelText(/Description/), {
-      target: { value: 'A successful map' },
-    });
-    fireEvent.change(screen.getByLabelText(/Custom File Name/), {
-      target: { value: 'success-file' },
-    });
-    fireEvent.click(screen.getByRole('button', { name: /Create/ }));
 
     await waitFor(() => {
       expect(mockNavigate).toHaveBeenCalledWith('/project/123');
@@ -84,17 +92,19 @@ describe('CreateMapModal', () => {
   });
 
   test('displays error message on submission error', async () => {
-    renderComponent();
-    fireEvent.change(screen.getByTestId('name-input'), {
-      target: { value: 'Error Map' },
+    await renderComponent();
+    await act(async () => {
+      fireEvent.change(screen.getByTestId('name-input'), {
+        target: { value: 'Error Map' },
+      });
+      fireEvent.change(screen.getByLabelText(/Description/), {
+        target: { value: 'A map with an error' },
+      });
+      fireEvent.change(screen.getByLabelText(/Custom File Name/), {
+        target: { value: 'error-file' },
+      });
+      fireEvent.click(screen.getByRole('button', { name: /Create/ }));
     });
-    fireEvent.change(screen.getByLabelText(/Description/), {
-      target: { value: 'A map with an error' },
-    });
-    fireEvent.change(screen.getByLabelText(/Custom File Name/), {
-      target: { value: 'error-file' },
-    });
-    fireEvent.click(screen.getByRole('button', { name: /Create/ }));
 
     await waitFor(() => {
       expect(
