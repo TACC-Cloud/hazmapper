@@ -72,7 +72,7 @@ const Filters: React.FC<FiltersProps> = ({
       <h5>Start Date</h5>
       <DatePicker
         selected={startDate}
-        onChange={(date: Date) => setStartDate(date)}
+        onChange={(date: Date | null) => setStartDate(date as Date)}
         selectsStart
         startDate={startDate}
         endDate={endDate}
@@ -81,7 +81,7 @@ const Filters: React.FC<FiltersProps> = ({
       <h5>End Date</h5>
       <DatePicker
         selected={endDate}
-        onChange={(date: Date) => setEndDate(date)}
+        onChange={(date: Date | null) => setEndDate(date as Date)}
         selectsEnd
         startDate={startDate}
         endDate={endDate}
