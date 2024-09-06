@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, ReplaySubject, combineLatest } from 'rxjs';
 import { Project, ProjectRequest, ProjectUpdateRequest } from '../models/models';
 import { IpanelsDisplay, defaultPanelsDisplay } from '../models/ui';
