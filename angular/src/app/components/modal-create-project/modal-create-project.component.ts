@@ -1,4 +1,5 @@
 import { Component, OnInit, AfterContentChecked } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { BsModalRef } from 'ngx-foundation';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ProjectsService } from '../../services/projects.service';
@@ -87,7 +88,7 @@ export class ModalCreateProjectComponent implements OnInit, AfterContentChecked 
       (project) => {
         this.close(project);
       },
-      (err) => {
+      (err: HttpErrorResponse) => {
         if (err.status === 409) {
           this.errorMessage = 'That folder is already syncing with a different map!';
         } else {
