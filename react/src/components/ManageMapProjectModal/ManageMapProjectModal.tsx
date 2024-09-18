@@ -20,47 +20,47 @@ const ManageMapProjectModal: React.FC<ManageMapProjectModalProps> = ({
   };
 
   return (
-    <Modal classNme="modal-dialog-centered" size="lg" isOpen toggle={closeModal}>
-      <ModalHeader toggle={closeModal}>Manage Map</ModalHeader>
+    <Modal className="modal-dialog-centered" size="lg" isOpen toggle={closeModal}>
+      <ModalHeader toggle={closeModal}><b>Manage Map Project</b></ModalHeader>
       <ModalBody>
-        {/* <div className={styles.root}></div> */}
         <Container>
           <Row>
-            <Col lg="8">
-            <div>
-              <h3 style={{ marginBottom: '10px' }}>Map Details</h3>
-              <h4 style={{ marginBottom: '10px' }}>Map Name: TBD</h4>
-              <h4 style={{ marginBottom: '10px' }}>Map Description: TBD</h4>
-              <h4 style={{ marginBottom: '10px' }}>Map Saved Location: TBD</h4>
-              <h4 style={{ marginBottom: '10px' }}>Map Is-Public: {isPublic}</h4>
+            <Col lg="6">
+              <div className={styles.root}>
+                <h3 style={{ marginBottom: '10px' }}>Map Project Information</h3>
+                <div style={{ marginBottom: '10px' }}>Name: TBD</div>
+                <div style={{ marginBottom: '10px' }}>Description: TBD</div>
+                <div style={{ marginBottom: '10px' }}>Saved Location: TBD</div>
+                <div style={{ marginBottom: '10px' }}>Is-Public: {isPublic}</div>
+              </div>
+            </Col>
+            <Col lg="6">
+              <div className={styles.root}>
+                <h3 style={{ marginBottom: '10px' }}>Map Project Members</h3>
+                <ul>
+                  <li>TBD</li>
+                </ul>
+              </div>
+            </Col>
+          </Row>
+          <Row>
+            <Col lg="6">
               <Button
-                style={{ marginBottom: '10px' }}
-                // className={}
-                type="secondary"
-                // iconNameBefore="trash"
-                // attr="submit"
-                // isLoading={isFetching}
+                style={{ width: '12rem', marginBottom: '10px' }}
+                color="success"
+                size="md"
               >
                 Make Map Public
               </Button>
-              <br/>
+            </Col>
+            <Col lg="6">
               <Button
-              style={{ marginTop: '10px' }}
-                // className={}
-                type="secondary"
-                // iconNameBefore="trash"
-                // attr="submit"
-                // isLoading={isFetching}
+                style={{ width: '12rem', marginBottom: '10px' }}
+                color="danger"
+                size="md"
               >
                 Delete Map
               </Button>
-            </div>
-            </Col>
-            <Col lg="4">
-            <div>
-              <h3 style={{ marginBottom: '10px' }}>Map Users</h3>
-              <h4 style={{ marginBottom: '10px' }}>Current Members: TBD</h4>  
-            </div>
             </Col>
           </Row>
         </Container>

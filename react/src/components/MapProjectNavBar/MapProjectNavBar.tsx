@@ -9,6 +9,7 @@ import pointCloudImage from '../../assets/point-clouds.png';
 import layersImage from '../../assets/layers.png';
 import filtersImage from '../../assets/filters.png';
 import streetviewImage from '../../assets/streetview.png';
+import taggitImage from '../../assets/taggit.png';
 import manageImage from '../../assets/users-solid.png';
 
 interface NavItem {
@@ -47,6 +48,12 @@ const navItems: NavItem[] = [
     label: 'Streetview',
     imagePath: streetviewImage,
     panel: Panel.Streetview,
+    showWhenPublic: true,
+  },
+  {
+    label: 'Taggit',
+    imagePath: taggitImage,
+    panel: Panel.Taggit,
     showWhenPublic: true,
   },
   {
