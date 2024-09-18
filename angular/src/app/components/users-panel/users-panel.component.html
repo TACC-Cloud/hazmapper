@@ -95,14 +95,14 @@
 
                     <div *ngIf="activeProject.system_path" style="margin-bottom: 10px">
                         <span>Path: </span>
-                        <a [href]="dsHref"
-                            ><span>{{ activeProject.system_path }}</span></a
-                        >
+                        <a [href]="dsHref" target="_blank">
+                            <span>{{ activeProject.system_path }}</span>
+                        </a>
                     </div>
 
                     <div *ngIf="activeProject.system_id.startsWith('project'); else myData" style="margin-bottom: 20px">
                         <span>Project: </span>
-                        <a [href]="projectHref">
+                        <a [href]="projectHref" target="_blank">
                             <span>
                                 {{ activeProject.ds_id }} |
                                 {{ activeProject.title }}
@@ -113,7 +113,7 @@
                     <ng-template #myData>
                         <div style="margin-bottom: 20px">
                             <span>System: </span>
-                            <a [href]="myDataHref">
+                            <a [href]="myDataHref" target="_blank">
                                 <span>My Data</span>
                             </a>
                         </div>

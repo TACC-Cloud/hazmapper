@@ -8,13 +8,11 @@ import {
   UseMutationOptions,
   QueryKey,
 } from 'react-query';
-import { useAppConfiguration } from './hooks';
 import {
-  ApiService,
-  AppConfiguration,
-  AuthState,
-  GeoapiBackendEnvironment,
-} from './types';
+  useAppConfiguration,
+  useEnsureAuthenticatedUserHasValidTapisToken,
+} from './hooks';
+import { ApiService, AppConfiguration, AuthState } from './types';
 import { v4 as uuidv4 } from 'uuid';
 
 function getBaseApiUrl(
@@ -25,32 +23,32 @@ function getBaseApiUrl(
     case ApiService.Geoapi:
       return configuration.geoapiUrl;
     case ApiService.DesignSafe:
-      return configuration.designSafeUrl;
+      return configuration.designsafePortalUrl;
     case ApiService.Tapis:
-      // Tapis and DesignSafe are currently the same
-      return configuration.designSafeUrl;
+      return 'https://designsafe.tapis.io';
     default:
       throw new Error('Unsupported api service Type.');
   }
 }
 
-export function getHeaders(
-  apiService: ApiService,
-  configuration: AppConfiguration,
-  auth: AuthState
-) {
-  // TODO_REACT add mapillary support
-  if (auth.authToken?.token && apiService !== ApiService.Mapillary) {
-    //Add auth information in header for DesignSafe, Tapis, Geoapi for logged in users
-    if (
-      apiService === ApiService.Geoapi &&
-      configuration.geoapiBackend === GeoapiBackendEnvironment.Local
-    ) {
-      // Use JWT in request header because local geoapi API is not behind ws02
-      return { 'X-JWT-Assertion-designsafe': configuration.jwt };
-    }
-    return { Authorization: `Bearer ${auth.authToken?.token}` };
+function usesTapisToken(apiService: ApiService) {
+  const servicesUsingTapisToken = [
+    ApiService.Geoapi,
+    ApiService.Tapis,
+    ApiService.DesignSafe,
+  ];
+  return servicesUsingTapisToken.includes(apiService);
+}
+
+export function getHeaders(apiService: ApiService, auth: AuthState) {
+  const hasTapisAuthToken = !!auth.authToken?.token;
+
+  if (hasTapisAuthToken && usesTapisToken(apiService)) {
+    return { 'X-Tapis-Token': auth.authToken?.token };
   }
+
+  // TODO_REACT add mapillary support
+
   return {};
 }
 
@@ -81,8 +79,11 @@ export function useGet<ResponseType>({
   const client = axios;
   const state = store.getState();
   const configuration = useAppConfiguration();
+
+  useEnsureAuthenticatedUserHasValidTapisToken();
+
   const baseUrl = getBaseApiUrl(apiService, configuration);
-  const headers = getHeaders(apiService, configuration, state.auth);
+  const headers = getHeaders(apiService, state.auth);
 
   let url = `${baseUrl}${endpoint}`;
 
@@ -111,7 +112,13 @@ export function useGet<ResponseType>({
     }
 
     const queryParams = new URLSearchParams(analytics_params).toString();
-    url += `?${queryParams}`;
+    if (url.includes('?')) {
+      // If the URL contains other parameters, prepend with '&'
+      url += `&${queryParams}`;
+    } else {
+      // If the URL contains no parameters, start with '?'
+      url += `?${queryParams}`;
+    }
   }
 
   const getUtil = async () => {
@@ -131,8 +138,11 @@ export function usePost<RequestType, ResponseType>({
   const state = store.getState();
   const configuration = useAppConfiguration();
 
+  useEnsureAuthenticatedUserHasValidTapisToken();
+
   const baseUrl = getBaseApiUrl(apiService, configuration);
-  const headers = getHeaders(apiService, configuration, state.auth);
+
+  const headers = getHeaders(apiService, state.auth);
 
   const postUtil = async (requestData: RequestType) => {
     const response = await client.post<ResponseType>(
