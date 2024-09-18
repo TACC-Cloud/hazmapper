@@ -21,10 +21,16 @@ const ManageMapProjectModal: React.FC<ManageMapProjectModalProps> = ({
 
   return (
     <Modal isOpen toggle={closeModal}>
-      <ModalHeader toggle={closeModal}>TODO</ModalHeader>
+      <ModalHeader toggle={closeModal}>Manage Map</ModalHeader>
       <ModalBody>
         <div className={styles.root}>
-          Manage Map Project TODO, isPublic: {isPublic}
+          <h3 style={{ marginBottom: '10px' }}>Map Details</h3>
+          <h4 style={{ marginBottom: '10px' }}>Map Name: TBD</h4>
+          <h4 style={{ marginBottom: '10px' }}>Map Description: TBD</h4>
+          <h4 style={{ marginBottom: '10px' }}>Map Saved Location: TBD</h4>
+          <h4 style={{ marginBottom: '10px' }}>Map Is-Public: {isPublic}</h4>
+          <h3 style={{ marginBottom: '10px' }}>Map Users</h3>
+          <h4 style={{ marginBottom: '10px' }}>Current Members: TBD</h4>
         </div>
       </ModalBody>
     </Modal>
