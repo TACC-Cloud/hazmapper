@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './AssetsPanel.module.css';
+import FeatureFileTree from './FeatureFileTree';
 
 interface Props {
   /**
@@ -9,11 +10,19 @@ interface Props {
 }
 
 /**
- * A component that displays a map project (a map and related data)
+ * A panel component that displays info on feature assets
  */
 const AssetsPanel: React.FC<Props> = ({ isPublic }) => {
   return (
-    <div className={styles.root}>Assets Panel TODO, isPublic: {isPublic}</div>
+    <div className={styles.root}>
+      <div className={styles.topSection}>
+        Add Feature TODO, isPublic: {isPublic}
+      </div>
+      <div className={styles.middleSection}>
+        <FeatureFileTree/>
+      </div>
+      <div className={styles.bottomSection}>Export json TODO</div>
+    </div>
   );
 };
 
