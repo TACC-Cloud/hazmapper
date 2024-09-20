@@ -82,7 +82,7 @@ function featureCollectionToFileNodeArray(
         );
       }
 
-      // Add to parent node (if not already there)
+      // Popuplate the parent's subRows (and if not already there)
       const parentPath = currentPath.split('/').slice(0, -1).join('/');
       if (parentPath) {
         const parentNode = nodeMap[parentPath];
