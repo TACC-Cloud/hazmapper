@@ -10,9 +10,11 @@
  */
 
 import React, { useMemo, useEffect } from 'react';
-import { useTable, useExpanded, Column, HeaderGroup, Row } from 'react-table';
+import { useTable, useExpanded, Column, Row } from 'react-table';
 
-import { FeatureCollection } from '../../types';
+import Icon from '../../core-components/Icon';
+
+import { FeatureCollection, Feature } from '../../types';
 import styles from './FeatureFileTree.module.css';
 
 interface FeatureFileNode {
@@ -20,6 +22,82 @@ interface FeatureFileNode {
   name: string;
   isDirectory: boolean;
   subRows?: FeatureFileNode[];
+}
+
+function createFeatureFileNode(
+  id: string,
+  name: string,
+  isDirectory: boolean,
+  subRows?: FeatureFileNode[]
+): FeatureFileNode {
+  return { id, name, isDirectory, ...(subRows && { subRows }) };
+}
+
+function getFullPathFromFeature(feature: Feature): string {
+  const firstAsset = feature.assets[0];
+
+  if (firstAsset?.display_path) {
+    return firstAsset.display_path;
+  }
+
+  if (firstAsset) {
+    return firstAsset.id.toString();
+  }
+
+  return feature.id.toString();
+}
+
+/**
+ * Convert a feature collection to a tree of file nodes.
+ *
+ * This returns an array of only top-level nodes (which contain
+ * a node for all the features + their parent directories)
+ */
+function featureCollectionToFileNodeArray(
+  featureCollection: FeatureCollection
+): FeatureFileNode[] {
+  const nodeMap: { [key: string]: FeatureFileNode } = {};
+
+  featureCollection.features.forEach((feature) => {
+    const nodePath = getFullPathFromFeature(feature);
+    const parts = nodePath.split('/');
+
+    let currentPath = '';
+    parts.forEach((part, index) => {
+      currentPath += (currentPath ? '/' : '') + part;
+      const isLast = index === parts.length - 1;
+
+      if (!nodeMap[currentPath]) {
+        nodeMap[currentPath] = createFeatureFileNode(
+          isLast ? feature.id.toString() : currentPath,
+          part,
+          !isLast,
+          !isLast ? [] : undefined
+        );
+      }
+
+      // Add to parent node (if not already there)
+      const parentPath = currentPath.split('/').slice(0, -1).join('/');
+      if (parentPath) {
+        const parentNode = nodeMap[parentPath];
+        if (parentNode && parentNode.subRows) {
+          if (
+            !parentNode.subRows.some(
+              (node) => node.id === nodeMap[currentPath].id
+            )
+          ) {
+            parentNode.subRows.push(nodeMap[currentPath]);
+          }
+        }
+      }
+    });
+  });
+
+  // Return only top-level nodes (nodes without a parent)
+  return Object.values(nodeMap).filter((node) => {
+    const parentPath = node.id.split('/').slice(0, -1).join('/');
+    return !nodeMap[parentPath];
+  });
 }
 
 interface FeatureFileTreeProps {
@@ -34,41 +112,6 @@ interface FeatureFileTreeProps {
   isPublic: boolean;
 }
 
-const processData = (
-  featureCollection: FeatureCollection
-): FeatureFileNode[] => {
-  // TODO convert featureCollection to format for react-table
-  console.log(featureCollection);
-  const test_data = [
-    {
-      id: '1',
-      name: 'Root',
-      isDirectory: true,
-      subRows: [
-        {
-          id: '2',
-          name: 'Feature 1',
-          isDirectory: true,
-          subRows: [
-            { id: '3', name: 'Feature_1.geojson', isDirectory: false },
-            { id: '4', name: 'Feature_1_metadata.json', isDirectory: false },
-          ],
-        },
-        {
-          id: '5',
-          name: 'Feature 2',
-          isDirectory: true,
-          subRows: [
-            { id: '6', name: 'Feature_2.geojson', isDirectory: false },
-            { id: '7', name: 'Feature_2_metadata.json', isDirectory: false },
-          ],
-        },
-      ],
-    },
-  ];
-  return test_data;
-};
-
 /**
  * A tree of feature files that correspond to the map's features
  */
@@ -78,7 +121,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
 }) => {
   // Memoize the data processing
   const memoizedData = useMemo(
-    () => processData(featureCollection),
+    () => featureCollectionToFileNodeArray(featureCollection),
     [featureCollection]
   );
 
@@ -87,17 +130,24 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
   const columns = useMemo<Column<FeatureFileNode>[]>(
     () => [
       {
-        Header: 'Feature File Structure',
         accessor: 'name',
         Cell: ({ row }: any) => (
           <span
             {...row.getToggleRowExpandedProps({
               style: {
-                paddingLeft: `${row.depth * 2}rem`,
+                paddingLeft: `${row.depth * 1}rem`,
               },
             })}
           >
-            {row.isExpanded ? '📂' : row.original.isDirectory ? '📁' : '📄'}{' '}
+            {row.original.isDirectory ? (
+              row.isExpanded ? (
+                <Icon name="folder-open" size="small" />
+              ) : (
+                <Icon name="folder" size="small" />
+              )
+            ) : (
+              <Icon name="file" size="small" />
+            )}
             {row.values.name}
             {isPublic /* TODO add delete button if not public*/}
           </span>
@@ -110,7 +160,6 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
   const {
     getTableProps,
     getTableBodyProps,
-    headerGroups,
     rows,
     prepareRow,
     toggleAllRowsExpanded,
@@ -130,25 +179,6 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
 
   return (
     <table className={styles.featureFileTree} {...getTableProps()}>
-      <thead>
-        {headerGroups.map(
-          (headerGroup: HeaderGroup<FeatureFileNode>, groupIndex: number) => (
-            <tr
-              {...headerGroup.getHeaderGroupProps()}
-              key={`header-group-${groupIndex}`}
-            >
-              {headerGroup.headers.map((column, columnIndex) => (
-                <th
-                  {...column.getHeaderProps()}
-                  key={`header-${groupIndex}-${columnIndex}`}
-                >
-                  {column.render('Header')}
-                </th>
-              ))}
-            </tr>
-          )
-        )}
-      </thead>
       <tbody {...getTableBodyProps()}>
         {rows.map((row: Row<FeatureFileNode>, i) => {
           prepareRow(row);

@@ -118,7 +118,10 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
         {activePanel && activePanel !== Panel.Manage && (
           <div className={styles.panelContainer}>
             {activePanel === Panel.Assets && (
-              <AssetsPanel isPublic={isPublic} />
+              <AssetsPanel
+                isPublic={isPublic}
+                featureCollection={featureCollection}
+              />
             )}
             {activePanel === Panel.Filters && (
               <Filters
