@@ -5,7 +5,14 @@
 /*
  TODO
  - style
- -  user fa-folder-open and fa-folder or whatever icon we have
+ -  user fa-folder-open and fa-folder or whatever icon we have or chevron
+ - add icon for font awesome icon to handle asset icons
+ - add hover highlight
+ - add select highlight and update query param
+ - make sure all expaneded
+ - right now its 200px wide but previously 250
+ - add test for featureCollectionToFileNodeArray and refactor into util?
+
 
  */
 
