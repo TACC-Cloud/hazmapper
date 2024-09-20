@@ -9,8 +9,8 @@
 
  */
 
-import React, { useMemo, useEffect } from 'react';
-import { useTable, useExpanded, Column, Row } from 'react-table';
+import React, { useMemo } from 'react';
+import { useTable, useExpanded, Column } from 'react-table';
 
 import Icon from '../../core-components/Icon';
 
@@ -21,29 +21,26 @@ interface FeatureFileNode {
   id: string;
   name: string;
   isDirectory: boolean;
-  subRows?: FeatureFileNode[];
+  children?: FeatureFileNode[];
 }
 
 function createFeatureFileNode(
   id: string,
   name: string,
   isDirectory: boolean,
-  subRows?: FeatureFileNode[]
+  children?: FeatureFileNode[]
 ): FeatureFileNode {
-  return { id, name, isDirectory, ...(subRows && { subRows }) };
+  return { id, name, isDirectory, ...(children && { children }) };
 }
 
 function getFullPathFromFeature(feature: Feature): string {
   const firstAsset = feature.assets[0];
-
   if (firstAsset?.display_path) {
     return firstAsset.display_path;
   }
-
   if (firstAsset) {
     return firstAsset.id.toString();
   }
-
   return feature.id.toString();
 }
 
@@ -56,54 +53,46 @@ function getFullPathFromFeature(feature: Feature): string {
 function featureCollectionToFileNodeArray(
   featureCollection: FeatureCollection
 ): FeatureFileNode[] {
+  const rootNodes: FeatureFileNode[] = [];
   const nodeMap: { [key: string]: FeatureFileNode } = {};
 
-  const sortedFeatures = featureCollection.features.sort((a, b) => {
-    const pathA = getFullPathFromFeature(a);
-    const pathB = getFullPathFromFeature(b);
-    return pathA.localeCompare(pathB);
-  });
+  // Sort features to ensure consistent order
+  const sortedFeatures = featureCollection.features.sort((a, b) =>
+    getFullPathFromFeature(a).localeCompare(getFullPathFromFeature(b))
+  );
 
   sortedFeatures.forEach((feature) => {
     const nodePath = getFullPathFromFeature(feature);
     const parts = nodePath.split('/');
 
     let currentPath = '';
+    let currentNode: FeatureFileNode | null = null;
+
     parts.forEach((part, index) => {
       currentPath += (currentPath ? '/' : '') + part;
       const isLast = index === parts.length - 1;
 
       if (!nodeMap[currentPath]) {
-        nodeMap[currentPath] = createFeatureFileNode(
+        const newNode = createFeatureFileNode(
           isLast ? feature.id.toString() : currentPath,
           part,
-          !isLast,
-          !isLast ? [] : undefined
+          !isLast
         );
-      }
+        nodeMap[currentPath] = newNode;
 
-      // Popuplate the parent's subRows (and if not already there)
-      const parentPath = currentPath.split('/').slice(0, -1).join('/');
-      if (parentPath) {
-        const parentNode = nodeMap[parentPath];
-        if (parentNode && parentNode.subRows) {
-          if (
-            !parentNode.subRows.some(
-              (node) => node.id === nodeMap[currentPath].id
-            )
-          ) {
-            parentNode.subRows.push(nodeMap[currentPath]);
-          }
+        if (currentNode) {
+          if (!currentNode.children) currentNode.children = [];
+          currentNode.children.push(newNode);
+        } else {
+          rootNodes.push(newNode);
         }
       }
+
+      currentNode = nodeMap[currentPath];
     });
   });
 
-  // Return only top-level nodes (nodes without a parent)
-  return Object.values(nodeMap).filter((node) => {
-    const parentPath = node.id.split('/').slice(0, -1).join('/');
-    return !nodeMap[parentPath];
-  });
+  return rootNodes;
 }
 
 interface FeatureFileTreeProps {
@@ -131,19 +120,18 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
     [featureCollection]
   );
 
-  console.log(isPublic);
-
   const columns = useMemo<Column<FeatureFileNode>[]>(
     () => [
       {
         accessor: 'name',
         Cell: ({ row }: any) => (
           <span
-            {...row.getToggleRowExpandedProps({
-              style: {
-                paddingLeft: `${row.depth * 1}rem`,
-              },
-            })}
+            {...row.getToggleRowExpandedProps()}
+            className={styles.treeNode}
+            style={{
+              /* Create indentation based on the row's depth in the tree.*/
+              paddingLeft: `${row.depth * 1}rem`,
+            }}
           >
             {row.original.isDirectory ? (
               row.isExpanded ? (
@@ -155,7 +143,11 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
               <Icon name="file" size="small" />
             )}
             {row.values.name}
-            {isPublic /* TODO add delete button if not public*/}
+            {
+              !isPublic && !row.original.isDirectory && (
+                <span>todo delete</span>
+              ) /* Add delete button or other controls here */
+            }
           </span>
         ),
       },
@@ -163,43 +155,37 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
     [isPublic]
   );
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    rows,
-    prepareRow,
-    toggleAllRowsExpanded,
-  } = useTable<FeatureFileNode>(
-    {
-      columns,
-      data: memoizedData,
-      autoResetExpanded: false,
-    },
-    useExpanded
-  );
-
-  // Set all rows to be initially expanded
-  useEffect(() => {
-    toggleAllRowsExpanded(true);
-  }, [toggleAllRowsExpanded]);
+  const { getTableProps, getTableBodyProps, rows, prepareRow } =
+    useTable<FeatureFileNode>(
+      {
+        columns,
+        data: memoizedData,
+        getSubRows: (row: FeatureFileNode) => row.children,
+        initialState: {
+          expanded: true, // This will expand all rows by default
+        },
+        autoResetExpanded: false,
+      },
+      useExpanded
+    );
 
   return (
-    <table className={styles.featureFileTree} {...getTableProps()}>
-      <tbody {...getTableBodyProps()}>
-        {rows.map((row: Row<FeatureFileNode>, i) => {
+    <div className={styles.featureFileTree} {...getTableProps()}>
+      <div {...getTableBodyProps()}>
+        {rows.map((row, i) => {
           prepareRow(row);
           return (
-            <tr {...row.getRowProps()} key={i}>
+            <div {...row.getRowProps()} key={i}>
               {row.cells.map((cell, j) => (
-                <td {...cell.getCellProps()} key={`${i}-${j}`}>
-                  {cell.render('Cell')}
-                </td>
+                <div {...cell.getCellProps()} key={`${i}-${j}`}>
+                  {cell.render('Cell')}{' '}
+                </div>
               ))}
-            </tr>
+            </div>
           );
         })}
-      </tbody>
-    </table>
+      </div>
+    </div>
   );
 };
 
