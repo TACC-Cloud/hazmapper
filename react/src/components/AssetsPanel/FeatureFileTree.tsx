@@ -58,7 +58,13 @@ function featureCollectionToFileNodeArray(
 ): FeatureFileNode[] {
   const nodeMap: { [key: string]: FeatureFileNode } = {};
 
-  featureCollection.features.forEach((feature) => {
+  const sortedFeatures = featureCollection.features.sort((a, b) => {
+    const pathA = getFullPathFromFeature(a);
+    const pathB = getFullPathFromFeature(b);
+    return pathA.localeCompare(pathB);
+  });
+
+  sortedFeatures.forEach((feature) => {
     const nodePath = getFullPathFromFeature(feature);
     const parts = nodePath.split('/');
 
