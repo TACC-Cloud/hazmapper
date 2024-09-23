@@ -88,19 +88,25 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
     [isPublic]
   );
 
-  const { getTableProps, getTableBodyProps, rows, prepareRow } =
-    useTable<FeatureFileNode>(
-      {
-        columns,
-        data: memoizedData,
-        getSubRows: (row: FeatureFileNode) => row.children,
-        initialState: {
-          expanded: true, // This will expand all rows by default
-        },
-        autoResetExpanded: false,
-      },
-      useExpanded
-    );
+  const {
+    getTableProps,
+    getTableBodyProps,
+    rows,
+    prepareRow,
+    toggleAllRowsExpanded,
+  } = useTable<FeatureFileNode>(
+    {
+      columns,
+      data: memoizedData,
+      getSubRows: (row: FeatureFileNode) => row.children,
+    },
+    useExpanded
+  );
+
+  // Use effect to expand all rows on initial render
+  useEffect(() => {
+    toggleAllRowsExpanded(true);
+  }, [toggleAllRowsExpanded, memoizedData]);
 
   return (
     <div className={styles.featureFileTree} {...getTableProps()}>
