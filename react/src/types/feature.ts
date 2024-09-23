@@ -94,3 +94,13 @@ export interface FeatureCollection {
    */
   features: Feature[];
 }
+
+/**
+ *  Features/file abstraction for feature file tree represenation
+ */
+export interface FeatureFileNode {
+  id: string;
+  name: string;
+  isDirectory: boolean;
+  children?: FeatureFileNode[];
+}

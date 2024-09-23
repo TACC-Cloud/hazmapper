@@ -23,7 +23,7 @@ import Icon from '../../core-components/Icon';
 
 import { featureCollectionToFileNodeArray } from '../../utils/featureTreeUtils';
 
-import { FeatureCollection } from '../../types';
+import { FeatureCollection, FeatureFileNode } from '../../types';
 import styles from './FeatureFileTree.module.css';
 
 interface FeatureFileTreeProps {

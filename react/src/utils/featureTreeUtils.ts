@@ -1,11 +1,4 @@
-import { FeatureCollection, Feature } from '../types';
-
-interface FeatureFileNode {
-  id: string;
-  name: string;
-  isDirectory: boolean;
-  children?: FeatureFileNode[];
-}
+import { FeatureCollection, Feature, FeatureFileNode } from '../types';
 
 function createFeatureFileNode(
   id: string,
