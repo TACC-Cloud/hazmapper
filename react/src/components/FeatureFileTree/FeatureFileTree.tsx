@@ -25,6 +25,9 @@ import { featureCollectionToFileNodeArray } from '../../utils/featureTreeUtils';
 
 import { FeatureCollection, FeatureFileNode } from '../../types';
 import styles from './FeatureFileTree.module.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFolderClosed, faFolderOpen } from '@fortawesome/free-solid-svg-icons'
+
 
 interface FeatureFileTreeProps {
   /**
@@ -65,13 +68,12 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
             }}
           >
             {row.original.isDirectory ? (
-              row.isExpanded ? (
-                <Icon name="folder-open" size="small" />
-              ) : (
-                <Icon name="folder" size="small" />
-              )
+              <FontAwesomeIcon
+                icon={row.isExpanded ? faFolderOpen : faFolderClosed}
+                size="sm"
+              />
             ) : (
-              <Icon name="file" size="small" />
+              <Icon name="file" size="sm" />
             )}
             {row.values.name}
             {
