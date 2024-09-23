@@ -16,18 +16,18 @@
 
  */
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { useTable, useExpanded, Column } from 'react-table';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faFolderClosed,
+  faFolderOpen,
+} from '@fortawesome/free-solid-svg-icons';
 
 import Icon from '../../core-components/Icon';
-
 import { featureCollectionToFileNodeArray } from '../../utils/featureTreeUtils';
-
 import { FeatureCollection, FeatureFileNode } from '../../types';
 import styles from './FeatureFileTree.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolderClosed, faFolderOpen } from '@fortawesome/free-solid-svg-icons'
-
 
 interface FeatureFileTreeProps {
   /**
@@ -48,7 +48,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
   featureCollection,
   isPublic,
 }) => {
-  // Memoize the data processing
+  // Memoize the processing to get the structure of our feature file tree
   const memoizedData = useMemo(
     () => featureCollectionToFileNodeArray(featureCollection),
     [featureCollection]
