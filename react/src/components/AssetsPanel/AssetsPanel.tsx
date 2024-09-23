@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './AssetsPanel.module.css';
-import FeatureFileTree from './FeatureFileTree';
+import FeatureFileTree from '../FeatureFileTree/FeatureFileTree';
 import { FeatureCollection } from '../../types';
 
 interface Props {
