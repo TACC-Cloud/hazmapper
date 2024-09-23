@@ -2,20 +2,6 @@
  * A tree of feature files that correspond to the map's features
  */
 
-/*
- TODO
- - style
- -  user fa-folder-open and fa-folder or whatever icon we have or chevron
- - add icon for font awesome icon to handle asset icons
- - add hover highlight
- - add select highlight and update query param
- - make sure all expaneded
- - right now its 200px wide but previously 250
- - consider separte task for getting sytem (and systme display name) added to feature-asset
-
-
- */
-
 import React, { useMemo, useEffect } from 'react';
 import { useTable, useExpanded, Column } from 'react-table';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
