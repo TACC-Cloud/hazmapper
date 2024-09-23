@@ -96,7 +96,7 @@ export interface FeatureCollection {
 }
 
 /**
- *  Features/file abstraction for feature file tree represenation
+ *  Features/file abstraction for feature file tree representation
  */
 export interface FeatureFileNode {
   id: string;
