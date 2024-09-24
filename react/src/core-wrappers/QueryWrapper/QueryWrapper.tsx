@@ -1,5 +1,5 @@
 import React from 'react';
-import { LoadingSpinner, Message } from '@core-components';
+import { LoadingSpinner, Message } from '../../core-components';
 
 type QueryWrapperProps = React.PropsWithChildren<{
   isLoading: boolean;

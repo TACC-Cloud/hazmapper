@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Icon } from '@core-components';
+import { Icon } from '../../core-components';
 import styles from './Navbar.module.css';
 
 export const NavItem: React.FC<
