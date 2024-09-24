@@ -4,10 +4,10 @@ import {
   InlineMessage,
   SectionHeader,
   Icon,
-} from '../../core-components';
-import useAuthenticatedUser from '../../hooks/user/useAuthenticatedUser';
-import { SystemSelect } from '../../components/Systems';
-import { ProjectListing } from '../../components/Projects/ProjectListing';
+} from '@core-components';
+import useAuthenticatedUser from '@hazmapper/hooks/user/useAuthenticatedUser';
+import { SystemSelect } from '@hazmapper/components/Systems';
+import { ProjectListing } from '@hazmapper/components/Projects/ProjectListing';
 
 function MainMenu() {
   const {

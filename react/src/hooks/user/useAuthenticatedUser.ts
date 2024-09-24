@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
-import { AuthenticatedUser } from '../../types';
+import { AuthenticatedUser } from '@hazmapper/types';
 
 type SuccessResult<T> = {
   data: T;

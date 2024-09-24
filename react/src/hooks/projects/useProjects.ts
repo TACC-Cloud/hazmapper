@@ -4,7 +4,7 @@ import {
   DesignSafeProject,
   DesignSafeProjectCollection,
   ApiService,
-} from '../../types';
+} from '@hazmapper/types';
 import { useGet } from '../../requests';
 
 export const useProjects = (): UseQueryResult<Project[]> => {

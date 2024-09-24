@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Project, DesignSafeProject } from '../../types';
+import { Project, DesignSafeProject } from '@hazmapper/types';
 import {
   useDsProjects,
   useProjects,
   mergeDesignSafeProject,
-} from '../../hooks';
-import { Button, LoadingSpinner } from '../../core-components';
+} from '@hazmapper/hooks';
+import { Button, LoadingSpinner } from '@core-components';
 import CreateMapModal from '../CreateMapModal/CreateMapModal';
 import { useNavigate } from 'react-router-dom';
 
