@@ -19,8 +19,8 @@
     "baseUrl": ".",
     "paths": {
       "@hazmapper/*": ["src/*"],
-      "@core-components/*": ["src/core-components/*"]
-    }
+      "@core-components": ["src/core-components"],
+      "@core-components/*": ["src/core-components/*"]    }
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
