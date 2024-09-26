@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { Button } from '../../core-components';
+import { Button } from '@core-components';
 import styles from './CreateMapModal.module.css';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import useCreateProject from '../../hooks/projects/useCreateProject';
-import useAuthenticatedUser from '../../hooks/user/useAuthenticatedUser';
+import useCreateProject from '@hazmapper/hooks/projects/useCreateProject';
+import useAuthenticatedUser from '@hazmapper/hooks/user/useAuthenticatedUser';
 import { useNavigate } from 'react-router-dom';
-import { ProjectRequest } from '../../types';
+import { ProjectRequest } from '@hazmapper/types';
 import {
   FieldWrapperFormik,
   FormikInput,
