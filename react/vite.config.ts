@@ -23,7 +23,6 @@ export default defineConfig(({ command, mode }) => {
     resolve: {
       alias: {
         '@hazmapper': path.resolve(__dirname, './src'),
-        '@core-components': path.resolve(__dirname, './src/core-components'),
       },
     },
     build: {

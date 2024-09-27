@@ -5,7 +5,7 @@ import {
   useProjects,
   mergeDesignSafeProject,
 } from '@hazmapper/hooks';
-import { Button, LoadingSpinner } from '@core-components';
+import { Button, LoadingSpinner } from '@tacc/core-components';
 import CreateMapModal from '../CreateMapModal/CreateMapModal';
 import { useNavigate } from 'react-router-dom';
 
