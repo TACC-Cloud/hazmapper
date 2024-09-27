@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
+import { EnvService } from '../services/env.service';
 import { ApiService, RemoteFile } from 'ng-tapis';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -11,19 +13,14 @@ export class TapisFilesService {
   public readonly IMPORTABLE_OVERLAY_TYPES: Array<string> = ['jpg', 'jpeg'];
   public readonly IMPORTABLE_TILE_TYPES: Array<string> = ['ini'];
 
-  constructor(private tapis: ApiService) {}
+  constructor(private tapis: ApiService, private envService: EnvService, private http: HttpClient) {}
 
   public getFileExtension(file: RemoteFile): string {
     return file.name.split('.').pop().toLowerCase();
   }
 
   listFiles(system: string, path: string, offset: number, limit: number) {
-    return this.tapis.filesList({
-      systemId: system,
-      filePath: path,
-      offset,
-      limit,
-    });
+    return this.http.get<any>(this.envService.tapisUrl + `/v3/files/ops/${system}/${path}?offset=${offset}&limit=${limit}`);
   }
 
   public getParentPath(path: string): string {

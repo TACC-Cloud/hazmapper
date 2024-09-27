@@ -1,11 +1,10 @@
 export interface AuthenticatedUser {
   username: string;
-  email: string;
 }
 
 export interface AuthToken {
-  token: string | null;
-  expires: number | null;
+  token: string;
+  expiresAt: string;
 }
 
 export interface AuthState {

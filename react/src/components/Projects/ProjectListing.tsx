@@ -7,9 +7,15 @@ import {
 } from '../../hooks';
 import { Button, LoadingSpinner } from '@tacc/core-components';
 import CreateMapModal from '../CreateMapModal/CreateMapModal';
+import { useNavigate } from 'react-router-dom';
 
 export const ProjectListing: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const navigateToProject = (projectId) => {
+    navigate(`/project/${projectId}`);
+  };
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -49,7 +55,7 @@ export const ProjectListing: React.FC = () => {
       </thead>
       <tbody>
         {projectsData?.map((proj) => (
-          <tr key={proj.id}>
+          <tr key={proj.id} onClick={() => navigateToProject(proj.uuid)}>
             <td>{proj.name}</td>
             <td>
               {proj.ds_project_id} {proj.ds_project_title}
