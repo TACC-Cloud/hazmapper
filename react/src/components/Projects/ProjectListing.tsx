@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import { Project, DesignSafeProject } from '../../types';
-import {
-  useDsProjects,
-  useProjects,
-  mergeDesignSafeProject,
-} from '../../hooks';
-import { Button, LoadingSpinner } from '../../core-components';
+import { useDsProjects, mergeDesignSafeProject } from '../../hooks';
+import { Button, LoadingSpinner, Icon } from '../../core-components';
 import CreateMapModal from '../CreateMapModal/CreateMapModal';
 import { useNavigate } from 'react-router-dom';
 
@@ -21,15 +17,8 @@ export const ProjectListing: React.FC = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  const { data, isLoading, isError } = useProjects();
-  let projectsData: Array<Project> = [];
-  let dsData: Array<DesignSafeProject> = [];
-  const resp = useDsProjects();
-  dsData = resp?.data?.projects ?? [];
-  projectsData = data ?? [];
-
-  const combinedProj = mergeDesignSafeProject(projectsData, dsData);
-  projectsData = combinedProj;
+  const projects = useDsProjects();
+  const { data, isLoading, isError } = mergeDesignSafeProject(projects);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -40,30 +29,43 @@ export const ProjectListing: React.FC = () => {
   }
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Map</th>
-          <th>Project</th>
-          <th>
-            <CreateMapModal isOpen={isModalOpen} toggle={toggleModal} />
-            <Button onClick={toggleModal} size="small">
-              Create a New Map
-            </Button>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {projectsData?.map((proj) => (
-          <tr key={proj.id} onClick={() => navigateToProject(proj.uuid)}>
-            <td>{proj.name}</td>
-            <td>
-              {proj.ds_project_id} {proj.ds_project_title}
-            </td>
-            <td></td>
+    <>
+      <table>
+        <thead>
+          <tr>
+            <th>Map</th>
+            <th>Project</th>
+            <th>
+              <CreateMapModal isOpen={isModalOpen} toggle={toggleModal} />
+              <Button
+                onClick={toggleModal}
+                size="small"
+              >
+                Create a New Map
+              </Button>
+            </th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {data?.map((proj) => (
+            <tr key={proj.id} onClick={() => navigateToProject(proj.uuid)}>
+              <td>{proj.name}</td>
+              <td>
+                {proj.ds_project?.value.projectId}{' '}
+                {proj.ds_project?.value.title}
+              </td>
+              <td>
+                <Button>
+                  <Icon name="edit-document"></Icon>
+                </Button>
+                <Button>
+                  <Icon name="trash"></Icon>
+                </Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
   );
 };

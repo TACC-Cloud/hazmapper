@@ -1,4 +1,4 @@
-import { UseQueryResult } from 'react-query';
+import { UseQueryResult, useQuery } from 'react-query';
 import {
   Project,
   DesignSafeProject,
@@ -36,30 +36,40 @@ export const useProject = ({
   });
   return query;
 };
-export const useDsProjects =
-  (): UseQueryResult<DesignSafeProjectCollection> => {
-    const query = useGet<DesignSafeProjectCollection>({
-      endpoint: `/api/projects/v2/`,
-      key: ['projectsv2'],
-      apiService: ApiService.DesignSafe,
-    });
-    return query;
-  };
+export const useDsProjects = (): UseQueryResult<
+  DesignSafeProjectCollection | undefined
+> => {
+  const query = useGet<DesignSafeProjectCollection | undefined>({
+    endpoint: `/api/projects/v2/`,
+    key: ['projectsv2'],
+    apiService: ApiService.DesignSafe,
+  });
+  return query;
+};
 
 export const mergeDesignSafeProject = (
-  projects: Project[],
-  dsProjects: DesignSafeProject[]
-): Project[] => {
-  if (dsProjects && dsProjects.length > 0) {
-    return projects.map((proj) => {
-      const dsProject: DesignSafeProject | undefined = dsProjects.find(
-        (dsproj?) => dsproj?.uuid == proj.system_id?.replace('project-', '')
-      );
-      proj.ds_project = dsProject;
-      proj.ds_project_id = dsProject?.value.projectId;
-      proj.ds_project_title = dsProject?.value.title;
-      return proj;
-    });
-  }
-  return projects;
+  ds_project: UseQueryResult<DesignSafeProjectCollection | undefined>
+): UseQueryResult<Project[] | undefined> => {
+  const projectQuery = useProjects();
+
+  const query = useQuery<Project[] | undefined>({
+    queryFn: () => {
+      if (!ds_project.data || !projectQuery.data) return undefined;
+      const mergedProjects = projectQuery.data.map((proj) => {
+        const dsProj = ds_project.data?.result?.find(
+          (ds_proj) => proj?.system_id?.replace('project-', '') === ds_proj.uuid
+        );
+        if (dsProj) {
+          return {
+            ...proj,
+            ds_project: dsProj,
+          };
+        }
+        return proj;
+      });
+      return mergedProjects;
+    },
+    enabled: !!projectQuery.data && !!ds_project.data,
+  });
+  return query;
 };
