@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Project, DesignSafeProject } from '../../types';
 import { useDsProjects, mergeDesignSafeProject } from '../../hooks';
 import { Button, LoadingSpinner, Icon } from '../../core-components';
 import CreateMapModal from '../CreateMapModal/CreateMapModal';
@@ -37,10 +36,7 @@ export const ProjectListing: React.FC = () => {
             <th>Project</th>
             <th>
               <CreateMapModal isOpen={isModalOpen} toggle={toggleModal} />
-              <Button
-                onClick={toggleModal}
-                size="small"
-              >
+              <Button onClick={toggleModal} size="small">
                 Create a New Map
               </Button>
             </th>

@@ -1,10 +1,5 @@
 import { UseQueryResult, useQuery } from 'react-query';
-import {
-  Project,
-  DesignSafeProject,
-  DesignSafeProjectCollection,
-  ApiService,
-} from '../../types';
+import { Project, DesignSafeProjectCollection, ApiService } from '../../types';
 import { useGet } from '../../requests';
 
 export const useProjects = (): UseQueryResult<Project[]> => {
