@@ -1,6 +1,6 @@
 import { UseQueryResult } from 'react-query';
 import { useGet } from '../../requests';
-import { TileServerLayer } from '../../types';
+import { TileServerLayer } from '@hazmapper/types';
 
 interface UseTileServerParams {
   projectId?: number;

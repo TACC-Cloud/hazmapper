@@ -1,5 +1,5 @@
 import { UseQueryResult } from 'react-query';
-import { FeatureCollection } from '../../types';
+import { FeatureCollection } from '@hazmapper/types';
 import { useGet } from '../../requests';
 
 interface UseFeaturesParams {

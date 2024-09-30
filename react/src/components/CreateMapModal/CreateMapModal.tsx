@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { Button } from '../../core-components';
+import { Button } from '@tacc/core-components';
 import styles from './CreateMapModal.module.css';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import useCreateProject from '../../hooks/projects/useCreateProject';
-import useAuthenticatedUser from '../../hooks/user/useAuthenticatedUser';
+import useCreateProject from '@hazmapper/hooks/projects/useCreateProject';
+import useAuthenticatedUser from '@hazmapper/hooks/user/useAuthenticatedUser';
 import { useNavigate } from 'react-router-dom';
-import { ProjectRequest } from '../../types';
+import { ProjectRequest } from '@hazmapper/types';
 import {
-  FieldWrapperFormik,
+  FormikFieldWrapper,
   FormikInput,
   FormikTextarea,
   FormikCheck,
-} from '../../core-wrappers';
+} from '@tacc/core-components';
 
 type CreateMapModalProps = {
   isOpen: boolean;
@@ -116,7 +116,7 @@ const CreateMapModal = ({
 
             return (
               <Form className="c-form">
-                <FieldWrapperFormik name="map-form-info" label="">
+                <FormikFieldWrapper name="map-form-info" label="">
                   <FormikInput
                     name="name"
                     label="Name"
@@ -153,7 +153,7 @@ const CreateMapModal = ({
                     label="Sync Folder"
                     description="When enabled, files in this folder are automatically synced into the map periodically."
                   />
-                </FieldWrapperFormik>
+                </FormikFieldWrapper>
                 {errorMessage && (
                   <div className="c-form__errors">{errorMessage}</div>
                 )}

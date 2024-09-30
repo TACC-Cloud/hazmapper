@@ -37,6 +37,7 @@
     "@babel/preset-typescript": "^7.21.0",
     "@changey/react-leaflet-markercluster": "^4.0.0-rc1",
     "@reduxjs/toolkit": "^1.8.4",
+    "@tacc/core-components": "^0.0.2",
     "@tacc/core-styles": "^2.24.1",
     "@testing-library/react": "^13.4.0",
     "@turf/turf": "^6.5.0",

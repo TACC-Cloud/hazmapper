@@ -1,5 +1,5 @@
 import { usePost } from '../../requests';
-import { ApiService, Project, ProjectRequest } from '../../types';
+import { ApiService, Project, ProjectRequest } from '@hazmapper/types';
 
 const useCreateProject = () => {
   const endpoint = '/projects/';
