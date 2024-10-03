@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useProjectsWithDesignSafeInformation } from '../../hooks';
 import { Button, LoadingSpinner, Icon } from '../../core-components';
 import styles from './ProjectListing.module.css';
+import { EmptyTablePlaceholder} from '../utils';
 import CreateMapModal from '../CreateMapModal/CreateMapModal';
 import { useNavigate } from 'react-router-dom';
 
@@ -21,10 +22,6 @@ const ProjectListing: React.FC = () => {
 
   if (isLoading) {
     return <LoadingSpinner />;
-  }
-
-  if (isError) {
-    return <h4>Unable to retrieve projects</h4>;
   }
 
   return (
@@ -49,28 +46,61 @@ const ProjectListing: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {data?.map((proj) => (
-              <tr key={proj.id} onClick={() => navigateToProject(proj.uuid)}>
-                <td className={styles.projectName}>{proj.name}</td>
-                <td>
-                  {proj.ds_project?.value.projectId}
-                  {' - '}
-                  {proj.ds_project?.value.title}
-                </td>
-                <td>
-                  <Button type="link" className={styles.projectListItemButton}>
-                    <Icon name="edit-document"></Icon>
-                  </Button>
-                  <Button type="link" className={styles.projectListItemButton}>
-                    <Icon name="trash"></Icon>
-                  </Button>
+            {isError && (
+                      <tr>
+                      <td colSpan={3}>
+                        <EmptyTablePlaceholder type='error'>
+                          There was an error gathering your maps and projects. {''}
+                            <a
+                              href="https://www.designsafe-ci.org/help/new-ticket/"
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              Click here to submit a ticket on DesignSafe.
+                            </a>
+                        </EmptyTablePlaceholder>
+                      </td>
+                    </tr>)}
+            {data && data.length > 0 ? (
+              data?.map((proj) => (
+                <tr key={proj.id} onClick={() => navigateToProject(proj.uuid)}>
+                  <td className={styles.projectName}>{proj.name}</td>
+                  <td>
+                    {proj.ds_project?.value.projectId}
+                    {' - '}
+                    {proj.ds_project?.value.title}
+                  </td>
+                  <td>
+                    <Button
+                      type="link"
+                      className={styles.projectListItemButton}
+                    >
+                      <Icon name="edit-document" />
+                    </Button>
+                    <Button
+                      type="link"
+                      className={styles.projectListItemButton}
+                    >
+                      <Icon name="trash" />
+                    </Button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+              <td colSpan={3}>
+                <EmptyTablePlaceholder type='info'>
+                    No projects or maps found.
+                    <br/>Click Create New Map above to get started.
+                    </EmptyTablePlaceholder>
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
     </div>
   );
 };
+
 export default ProjectListing;
