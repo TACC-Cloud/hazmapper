@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useProjectsWithDesignSafeInformation } from '../../hooks';
 import { Button, LoadingSpinner, Icon } from '../../core-components';
+import styles from './ProjectListing.module.css';
 import CreateMapModal from '../CreateMapModal/CreateMapModal';
 import { useNavigate } from 'react-router-dom';
 
-export const ProjectListing: React.FC = () => {
+const ProjectListing: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -20,47 +21,54 @@ export const ProjectListing: React.FC = () => {
 
   if (isLoading) {
     return <LoadingSpinner />;
-  }
+  };
 
   if (isError) {
     return <h4>Unable to retrieve projects</h4>;
-  }
+  };
 
   return (
-    <>
-      <table>
-        <thead>
-          <tr>
-            <th>Map</th>
-            <th>Project</th>
-            <th>
-              <CreateMapModal isOpen={isModalOpen} toggle={toggleModal} />
-              <Button onClick={toggleModal} size="small">
-                Create a New Map
-              </Button>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {data?.map((proj) => (
-            <tr key={proj.id} onClick={() => navigateToProject(proj.uuid)}>
-              <td>{proj.name}</td>
-              <td>
-                {proj.ds_project?.value.projectId}{' '}
-                {proj.ds_project?.value.title}
-              </td>
-              <td>
-                <Button>
-                  <Icon name="edit-document"></Icon>
+    <div className={styles.root}>
+      <div className={styles.projectList}>
+        <table>
+          <thead className={styles.projectHeader}>
+            <tr>
+              <th className={styles.mapColumn}>Map</th>
+              <th className={styles.projectColumn}>Project</th>
+              <th className={styles.buttonColumn}>
+                <CreateMapModal isOpen={isModalOpen} toggle={toggleModal} />
+                <Button
+                  onClick={toggleModal}
+                  type="link"
+                  className={styles.projectListItemButton}
+                >
+                  <Icon name="add"/>Create a New Map
                 </Button>
-                <Button>
-                  <Icon name="trash"></Icon>
-                </Button>
-              </td>
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </>
+          </thead>
+          <tbody>
+            {data?.map((proj) => (
+              <tr  key={proj.id} onClick={() => navigateToProject(proj.uuid)}>
+                <td className={styles.projectName}>{proj.name}</td>
+                <td>
+                  {proj.ds_project?.value.projectId}{' - '}
+                  {proj.ds_project?.value.title}
+                </td>
+                <td >
+                  <Button type="link" className={styles.projectListItemButton}>
+                    <Icon name="edit-document"></Icon>
+                  </Button>
+                  <Button type="link" className={styles.projectListItemButton}>
+                    <Icon name="trash"></Icon>
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 };
+export default ProjectListing;

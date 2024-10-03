@@ -1,5 +1,7 @@
-@import url('@tacc/core-styles/dist/core-styles.base.css');
-@import url('@tacc/core-styles/dist/core-styles.portal.css');
+@import "leaflet/dist/leaflet.css";
+@import "@fortawesome/fontawesome-free/css/all.css";
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+@import url('https://unpkg.com/mapillary-js@2.18.0/dist/mapillary.min.css');
 
 /* for hazmapper specific overwrites of base and portal styles" like,
 
@@ -8,3 +10,17 @@
 }
 
 */
+
+
+/* CSS module styles taken from Angular styles.styl */
+:root {
+  --global-font-family: 'Raleway', san-serif;
+}
+html,
+body {
+  height: 100%;
+  font-family: var(--global-font-family);
+}
+table, form, button {
+  font-family: inherit;
+}
