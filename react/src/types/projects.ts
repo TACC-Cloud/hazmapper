@@ -20,7 +20,7 @@ export interface DesignSafeProject {
   value: any;
 }
 export interface DesignSafeProjectCollection {
-  projects?: DesignSafeProject[];
+  result?: DesignSafeProject[];
 }
 
 export class Project implements Project {}
