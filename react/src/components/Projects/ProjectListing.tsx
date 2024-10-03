@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDsProjects, mergeDesignSafeProject } from '../../hooks';
+import { useProjectsWithDesignSafeInformation } from '../../hooks';
 import { Button, LoadingSpinner, Icon } from '../../core-components';
 import CreateMapModal from '../CreateMapModal/CreateMapModal';
 import { useNavigate } from 'react-router-dom';
@@ -16,8 +16,7 @@ export const ProjectListing: React.FC = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  const projects = useDsProjects();
-  const { data, isLoading, isError } = mergeDesignSafeProject(projects);
+  const { data, isLoading, isError } = useProjectsWithDesignSafeInformation();
 
   if (isLoading) {
     return <LoadingSpinner />;

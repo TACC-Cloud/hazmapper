@@ -1,4 +1,5 @@
-import { UseQueryResult, useQuery } from 'react-query';
+import { UseQueryResult } from 'react-query';
+import { useMemo } from 'react';
 import { Project, DesignSafeProjectCollection, ApiService } from '../../types';
 import { useGet } from '../../requests';
 
@@ -42,16 +43,16 @@ export const useDsProjects = (): UseQueryResult<
   return query;
 };
 
-export const mergeDesignSafeProject = (
-  ds_project: UseQueryResult<DesignSafeProjectCollection | undefined>
-): UseQueryResult<Project[] | undefined> => {
+export function useProjectsWithDesignSafeInformation(): UseQueryResult<
+  Project[]
+> {
+  const dsProjectQuery = useDsProjects();
   const projectQuery = useProjects();
 
-  const query = useQuery<Project[] | undefined>({
-    queryFn: () => {
-      if (!ds_project.data || !projectQuery.data) return undefined;
-      const mergedProjects = projectQuery.data.map((proj) => {
-        const dsProj = ds_project.data?.result?.find(
+  const alteredProjectData = useMemo(() => {
+    if (projectQuery.isSuccess && dsProjectQuery.isSuccess) {
+      return projectQuery.data.map((proj) => {
+        const dsProj = dsProjectQuery.data?.result?.find(
           (ds_proj) => proj?.system_id?.replace('project-', '') === ds_proj.uuid
         );
         if (dsProj) {
@@ -62,9 +63,15 @@ export const mergeDesignSafeProject = (
         }
         return proj;
       });
-      return mergedProjects;
-    },
-    enabled: !!projectQuery.data && !!ds_project.data,
-  });
-  return query;
-};
+    }
+    return projectQuery.data;
+  }, [dsProjectQuery.data, projectQuery.data]);
+
+  return {
+    data: alteredProjectData,
+    isLoading: dsProjectQuery.isLoading || projectQuery.isLoading,
+    isError: dsProjectQuery.error || projectQuery.error,
+    isSuccess: dsProjectQuery.isSuccess && projectQuery.isSuccess,
+    error: dsProjectQuery.error || projectQuery.error,
+  } as UseQueryResult<Project[]>;
+}
