@@ -1,0 +1,19 @@
+.featureFileTree {
+  width: 100%;
+}
+
+.featureFileTree tr {
+  height: 2.5em;
+}
+
+.treeNode {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 0.25em 0; /* Vertical padding based on font size */
+}
+
+.treeNode > *:first-child {
+  margin-right: 0.5em;
+}

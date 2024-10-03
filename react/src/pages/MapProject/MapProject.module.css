@@ -30,7 +30,7 @@
 
 .panelContainer {
   /* todo place into a PanelContainer and then the PanelNavigation where the buttons live either horizonal or vertical    */
-  width: 200px;
+  width: 230px;
   height: 95%;
   background-color: var(--global-color-primary--xx-light);
   position: absolute;

@@ -62,7 +62,7 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
     !isActiveProjectLoading && !activeProjectError && !!activeProject;
 
   const {
-    data: featureCollection,
+    data: rawFeatureCollection,
     isLoading: isFeaturesLoading,
     error: featuresError,
   } = useFeatures({
@@ -101,6 +101,11 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
   const loading =
     isActiveProjectLoading || isFeaturesLoading || isTileServerLayersLoading;
 
+  const featureCollection = rawFeatureCollection ?? {
+    type: 'FeatureCollection',
+    features: [],
+  };
+
   return (
     <div className={styles.root}>
       <div className={styles.topNavbar}>MapTopNavBar</div>
@@ -113,7 +118,10 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
         {activePanel && activePanel !== Panel.Manage && (
           <div className={styles.panelContainer}>
             {activePanel === Panel.Assets && (
-              <AssetsPanel isPublic={isPublic} />
+              <AssetsPanel
+                isPublic={isPublic}
+                featureCollection={featureCollection}
+              />
             )}
             {activePanel === Panel.Filters && (
               <Filters
@@ -133,14 +141,7 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
         <div className={styles.map}>
           <Map
             baseLayers={tileServerLayers}
-            featureCollection={
-              featureCollection
-                ? featureCollection
-                : {
-                    type: 'FeatureCollection',
-                    features: [],
-                  }
-            }
+            featureCollection={featureCollection}
           />
         </div>
       </div>
