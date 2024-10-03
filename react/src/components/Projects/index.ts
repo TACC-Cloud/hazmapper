@@ -1,1 +1,1 @@
-export { ProjectListing } from './ProjectListing';
+export { default } from './ProjectListing';
