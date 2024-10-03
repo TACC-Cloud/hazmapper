@@ -1,4 +1,4 @@
-.root{
+.root {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -11,28 +11,29 @@
   margin-top: 40px;
   margin-bottom: 40px;
 }
-.projectHeader, .projectHeader th {
+.projectHeader,
+.projectHeader th {
   background: #d0d0d0;
-  position: sticky; 
+  position: sticky;
   top: 0;
   z-index: 1;
 }
 
-.projectListItemButton{
+.projectListItemButton {
   cursor: pointer;
   color: initial;
   margin-right: 10px;
 }
 
-.projectListItemButton:hover{
+.projectListItemButton:hover {
   color: #666;
 }
 
 .mapColumn {
-width: 30%;
+  width: 30%;
 }
 .projectColumn {
-width: 60%;
+  width: 60%;
 }
 .buttonColumn {
   white-space: nowrap;

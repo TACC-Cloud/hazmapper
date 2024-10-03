@@ -21,11 +21,11 @@ const ProjectListing: React.FC = () => {
 
   if (isLoading) {
     return <LoadingSpinner />;
-  };
+  }
 
   if (isError) {
     return <h4>Unable to retrieve projects</h4>;
-  };
+  }
 
   return (
     <div className={styles.root}>
@@ -42,20 +42,22 @@ const ProjectListing: React.FC = () => {
                   type="link"
                   className={styles.projectListItemButton}
                 >
-                  <Icon name="add"/>Create a New Map
+                  <Icon name="add" />
+                  Create a New Map
                 </Button>
               </th>
             </tr>
           </thead>
           <tbody>
             {data?.map((proj) => (
-              <tr  key={proj.id} onClick={() => navigateToProject(proj.uuid)}>
+              <tr key={proj.id} onClick={() => navigateToProject(proj.uuid)}>
                 <td className={styles.projectName}>{proj.name}</td>
                 <td>
-                  {proj.ds_project?.value.projectId}{' - '}
+                  {proj.ds_project?.value.projectId}
+                  {' - '}
                   {proj.ds_project?.value.title}
                 </td>
-                <td >
+                <td>
                   <Button type="link" className={styles.projectListItemButton}>
                     <Icon name="edit-document"></Icon>
                   </Button>
