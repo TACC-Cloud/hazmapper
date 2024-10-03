@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useProjectsWithDesignSafeInformation } from '../../hooks';
 import { Button, LoadingSpinner, Icon } from '../../core-components';
 import styles from './ProjectListing.module.css';
-import { EmptyTablePlaceholder} from '../utils';
+import { EmptyTablePlaceholder } from '../utils';
 import CreateMapModal from '../CreateMapModal/CreateMapModal';
 import { useNavigate } from 'react-router-dom';
 
@@ -47,20 +47,21 @@ const ProjectListing: React.FC = () => {
           </thead>
           <tbody>
             {isError && (
-                      <tr>
-                      <td colSpan={3}>
-                        <EmptyTablePlaceholder type='error'>
-                          There was an error gathering your maps and projects. {''}
-                            <a
-                              href="https://www.designsafe-ci.org/help/new-ticket/"
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              Click here to submit a ticket on DesignSafe.
-                            </a>
-                        </EmptyTablePlaceholder>
-                      </td>
-                    </tr>)}
+              <tr>
+                <td colSpan={3}>
+                  <EmptyTablePlaceholder type="error">
+                    There was an error gathering your maps and projects. {''}
+                    <a
+                      href="https://www.designsafe-ci.org/help/new-ticket/"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Click here to submit a ticket on DesignSafe.
+                    </a>
+                  </EmptyTablePlaceholder>
+                </td>
+              </tr>
+            )}
             {data && data.length > 0 ? (
               data?.map((proj) => (
                 <tr key={proj.id} onClick={() => navigateToProject(proj.uuid)}>
@@ -88,11 +89,12 @@ const ProjectListing: React.FC = () => {
               ))
             ) : (
               <tr>
-              <td colSpan={3}>
-                <EmptyTablePlaceholder type='info'>
+                <td colSpan={3}>
+                  <EmptyTablePlaceholder type="info">
                     No projects or maps found.
-                    <br/>Click Create New Map above to get started.
-                    </EmptyTablePlaceholder>
+                    <br />
+                    Click Create New Map above to get started.
+                  </EmptyTablePlaceholder>
                 </td>
               </tr>
             )}
