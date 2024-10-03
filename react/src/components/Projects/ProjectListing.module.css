@@ -1,0 +1,46 @@
+.root{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.projectList {
+  height: 270px;
+  border-collapse: collapse;
+  align-self: center;
+  overflow-y: scroll;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+.projectHeader, .projectHeader th {
+  background: #d0d0d0;
+  position: sticky; 
+  top: 0;
+  z-index: 1;
+}
+
+.projectListItemButton{
+  cursor: pointer;
+  color: initial;
+  margin-right: 10px;
+}
+
+.projectListItemButton:hover{
+  color: #666;
+}
+
+.mapColumn {
+width: 30%;
+}
+.projectColumn {
+width: 60%;
+}
+.buttonColumn {
+  white-space: nowrap;
+}
+
+.projectName {
+  max-width: fit-content;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}

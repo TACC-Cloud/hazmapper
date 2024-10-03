@@ -7,8 +7,7 @@ import {
 } from '../../core-components';
 import useAuthenticatedUser from '../../hooks/user/useAuthenticatedUser';
 import { SystemSelect } from '../../components/Systems';
-import { ProjectListing } from '../../components/Projects/ProjectListing';
-
+import ProjectListing from '../../components/Projects';
 function MainMenu() {
   const {
     data: userData,
