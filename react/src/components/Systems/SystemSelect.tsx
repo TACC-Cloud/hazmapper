@@ -3,10 +3,12 @@ import { useSystems } from '../../hooks';
 import { System } from '../../types';
 
 interface SystemSelectProps {
+  className: string;
   onSystemSelect: (selectedSystem: string) => void;
 }
 
 export const SystemSelect: React.FC<SystemSelectProps> = ({
+  className,
   onSystemSelect,
 }) => {
   const { data: systems } = useSystems();
@@ -30,7 +32,10 @@ export const SystemSelect: React.FC<SystemSelectProps> = ({
 
   return (
     <>
-      <select onChange={(e) => onSystemSelect(e.target.value)}>
+      <select
+        className={className}
+        onChange={(e) => onSystemSelect(e.target.value)}
+      >
         {myDataSystem && <option value={myDataSystem.id}>My Data</option>}
         {communityDataSystem && (
           <option value={communityDataSystem.id}>Community Data</option>
