@@ -86,7 +86,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
         initialState: {
           expanded: expandedState,
         },
-        autoResetExpanded: false,
+        autoResetExpanded: true,
       },
       useExpanded
     );
