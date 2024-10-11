@@ -1,8 +1,4 @@
-/*
- * A tree of feature files that correspond to the map's features
- */
-
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTable, useExpanded, Column } from 'react-table';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -16,25 +12,25 @@ import { FeatureCollection, FeatureFileNode } from '../../types';
 import styles from './FeatureFileTree.module.css';
 
 interface FeatureFileTreeProps {
-  /**
-   * Features of map
-   */
   featureCollection: FeatureCollection;
-
-  /**
-   * Whether or not the map project is public.
-   */
   isPublic: boolean;
 }
 
-/**
+/*
  * A tree of feature files that correspond to the map's features
  */
 const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
+  /**
+   * Features of map
+   */
   featureCollection,
+  /**
+   * Whether or not the map project is public.
+   */
   isPublic,
 }) => {
-  // Memoize the processing to get the structure of our feature file tree
+  const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
+
   const memoizedData = useMemo(
     () => featureCollectionToFileNodeArray(featureCollection),
     [featureCollection]
@@ -62,11 +58,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
               <Icon name="file" size="sm" />
             )}
             {row.values.name}
-            {
-              !isPublic && !row.original.isDirectory && (
-                <span>todo delete</span>
-              ) /* Add delete button or other controls here */
-            }
+            {!isPublic && !row.original.isDirectory && <span>todo delete</span>}
           </span>
         ),
       },
@@ -77,7 +69,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
   const expandedState = useMemo(() => {
     const expanded: { [key: string]: boolean } = {};
     const expandRow = (row: FeatureFileNode) => {
-      expanded[row.id] = true;
+      expanded[row.nodeId] = true;
       row.children?.forEach(expandRow);
     };
     memoizedData.forEach(expandRow);
@@ -90,7 +82,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
         columns,
         data: memoizedData,
         getSubRows: (row: FeatureFileNode) => row.children,
-        getRowId: (row: FeatureFileNode) => row.id,
+        getRowId: (row: FeatureFileNode) => row.nodeId,
         initialState: {
           expanded: expandedState,
         },
@@ -99,22 +91,44 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
       useExpanded
     );
 
+  const handleRowClick = (rowId: string) => {
+    setSelectedRowId((prevSelectedRowId) =>
+      prevSelectedRowId === rowId ? null : rowId
+    );
+  };
+
   return (
-    <div className={styles.featureFileTree} {...getTableProps()}>
-      <div {...getTableBodyProps()}>
-        {rows.map((row, i) => {
-          prepareRow(row);
-          return (
-            <div {...row.getRowProps()} key={i}>
-              {row.cells.map((cell, j) => (
-                <div {...cell.getCellProps()} key={`${i}-${j}`}>
-                  {cell.render('Cell')}{' '}
-                </div>
-              ))}
-            </div>
-          );
-        })}
-      </div>
+    <div className={styles.tableContainer}>
+      <table {...getTableProps()} className={styles.featureFileTree}>
+        <tbody {...getTableBodyProps()}>
+          {rows.map((row) => {
+            prepareRow(row);
+            const isSelected = row.original.isDirectory
+              ? false
+              : selectedRowId === row.id;
+            return (
+              <tr
+                {...row.getRowProps()}
+                key={row.id}
+                onClick={() => handleRowClick(row.id)}
+                tabIndex={0}
+              >
+                {row.cells.map((cell) => (
+                  <td
+                    {...cell.getCellProps()}
+                    className={`${styles.hoverable} ${
+                      isSelected ? styles.selected : ''
+                    } `}
+                    key={cell.column.id}
+                  >
+                    {cell.render('Cell')}
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 };

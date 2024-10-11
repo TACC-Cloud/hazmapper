@@ -14,15 +14,13 @@
 
 .middleSection {
   flex: 1 1 auto;
-  overflow: auto;
+  overflow: hidden;
   min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .middleSection > div {
-  height: 100%;
-}
-
-.middleSection table {
-  width: 100%;
-  height: 100%;
+  flex: 1;
+  overflow: auto;
 }

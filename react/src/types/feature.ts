@@ -99,7 +99,7 @@ export interface FeatureCollection {
  *  Features/file abstraction for feature file tree representation
  */
 export interface FeatureFileNode {
-  id: string;
+  nodeId: string /* feature id if feature; path if directory node */;
   name: string;
   isDirectory: boolean;
   children?: FeatureFileNode[];

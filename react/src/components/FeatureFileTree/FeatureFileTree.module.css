@@ -1,9 +1,12 @@
-.featureFileTree {
+.tableContainer {
   width: 100%;
+  height: 100%;
+  overflow: auto;
 }
 
-.featureFileTree tr {
-  height: 2.5em;
+.featureFileTree {
+  width: 100%;
+  table-layout: fixed;
 }
 
 .treeNode {
@@ -11,9 +14,21 @@
   align-items: center;
   height: 100%;
   box-sizing: border-box;
-  padding: 0.25em 0; /* Vertical padding based on font size */
+  padding: 0.25em 0;
 }
 
 .treeNode > *:first-child {
   margin-right: 0.5em;
+}
+
+.featureFileTreeRow {
+  height: 2.5em;
+}
+
+.selected {
+  background: var(--global-color-accent--weak) !important;
+}
+
+.hoverable:hover {
+  background: var(--global-color-accent--weak);
 }
