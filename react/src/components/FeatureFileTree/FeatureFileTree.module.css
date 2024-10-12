@@ -12,17 +12,19 @@
 .treeNode {
   display: flex;
   align-items: center;
-  height: 100%;
-  box-sizing: border-box;
-  padding: 0.25em 0;
+  height: 2.25em;
 }
 
-.treeNode > *:first-child {
-  margin-right: 0.5em;
+.fileName {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-left: 0.5em;
 }
 
-.featureFileTreeRow {
-  height: 2.5em;
+.deleteButton {
+  margin-left: auto;
 }
 
 .selected {

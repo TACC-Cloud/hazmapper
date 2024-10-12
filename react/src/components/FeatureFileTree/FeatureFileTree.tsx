@@ -1,12 +1,13 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useTable, useExpanded, Column } from 'react-table';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faFolderClosed,
   faFolderOpen,
 } from '@fortawesome/free-solid-svg-icons';
 
-import Icon from '../../core-components/Icon';
+import { Icon, Button } from '../../core-components';
 import { featureCollectionToFileNodeArray } from '../../utils/featureTreeUtils';
 import { FeatureCollection, FeatureFileNode } from '../../types';
 import styles from './FeatureFileTree.module.css';
@@ -28,8 +29,14 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
    * Whether or not the map project is public.
    */
   isPublic,
+
+  /** */
 }) => {
-  const [selectedRowId, setSelectedRowId] = useState<string | null>(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const searchParams = new URLSearchParams(location.search);
+  const selectedFeature = searchParams.get('selectedFeature');
 
   const memoizedData = useMemo(
     () => featureCollectionToFileNodeArray(featureCollection),
@@ -41,7 +48,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
       {
         accessor: 'name',
         Cell: ({ row }: any) => (
-          <span
+          <div
             {...row.getToggleRowExpandedProps()}
             className={styles.treeNode}
             style={{
@@ -57,13 +64,23 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
             ) : (
               <Icon name="file" size="sm" />
             )}
-            {row.values.name}
-            {!isPublic && !row.original.isDirectory && <span>todo delete</span>}
-          </span>
+            <span className={styles.fileName}>{row.values.name}</span>
+            {!isPublic && row.id === selectedFeature && (
+              <Button
+                size="small"
+                type="primary"
+                iconNameBefore="trash"
+                className={styles.deleteButton}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  // TODO: Implement delete request/update
+                }}              />
+            )}
+          </div>
         ),
       },
     ],
-    [isPublic]
+    [isPublic, selectedFeature]
   );
 
   const expandedState = useMemo(() => {
@@ -92,9 +109,13 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
     );
 
   const handleRowClick = (rowId: string) => {
-    setSelectedRowId((prevSelectedRowId) =>
-      prevSelectedRowId === rowId ? null : rowId
-    );
+    const newSearchParams = new URLSearchParams(searchParams);
+    if (selectedFeature === rowId || rowId.startsWith('DIR_')) {
+      newSearchParams.delete('selectedFeature');
+    } else {
+      newSearchParams.set('selectedFeature', rowId);
+    }
+    navigate({ search: newSearchParams.toString() }, { replace: true });
   };
 
   return (
@@ -105,7 +126,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
             prepareRow(row);
             const isSelected = row.original.isDirectory
               ? false
-              : selectedRowId === row.id;
+              : selectedFeature === row.id;
             return (
               <tr
                 {...row.getRowProps()}
