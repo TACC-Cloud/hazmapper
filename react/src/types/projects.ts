@@ -10,8 +10,6 @@ export interface Project {
   deletable?: boolean;
   streetview_instances?: any;
   ds_project?: DesignSafeProject;
-  ds_project_id?: any;
-  ds_project_title?: any;
 }
 export interface DesignSafeProject {
   uuid: string;

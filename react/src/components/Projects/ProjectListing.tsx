@@ -2,10 +2,14 @@ import React, { useState } from 'react';
 import { useProjectsWithDesignSafeInformation } from '../../hooks';
 import { Button, LoadingSpinner, Icon } from '../../core-components';
 import CreateMapModal from '../CreateMapModal/CreateMapModal';
+import DeleteMapModal from '../DeleteMapModal/DeleteMapModal';
+import { Project } from '../../types';
 import { useNavigate } from 'react-router-dom';
 
 export const ProjectListing: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProjectForDeletion, setSelectedProjectForDeletion] =
+    useState<Project | null>(null);
   const navigate = useNavigate();
 
   const navigateToProject = (projectId) => {
@@ -14,6 +18,10 @@ export const ProjectListing: React.FC = () => {
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
+  };
+
+  const toggleDeleteModal = (project: Project | null) => {
+    setSelectedProjectForDeletion(project);
   };
 
   const { data, isLoading, isError } = useProjectsWithDesignSafeInformation();
@@ -43,9 +51,9 @@ export const ProjectListing: React.FC = () => {
         </thead>
         <tbody>
           {data?.map((proj) => (
-            <tr key={proj.id} onClick={() => navigateToProject(proj.uuid)}>
-              <td>{proj.name}</td>
-              <td>
+            <tr key={proj.id}>
+              <td onClick={() => navigateToProject(proj.uuid)}>{proj.name}</td>
+              <td onClick={() => navigateToProject(proj.uuid)}>
                 {proj.ds_project?.value.projectId}{' '}
                 {proj.ds_project?.value.title}
               </td>
@@ -53,7 +61,7 @@ export const ProjectListing: React.FC = () => {
                 <Button>
                   <Icon name="edit-document"></Icon>
                 </Button>
-                <Button>
+                <Button onClick={() => toggleDeleteModal(proj)}>
                   <Icon name="trash"></Icon>
                 </Button>
               </td>
@@ -61,6 +69,15 @@ export const ProjectListing: React.FC = () => {
           ))}
         </tbody>
       </table>
+
+      {selectedProjectForDeletion && (
+        <DeleteMapModal
+          isOpen={!!selectedProjectForDeletion}
+          toggle={() => toggleDeleteModal(null)}
+          projectId={selectedProjectForDeletion.id}
+          project={selectedProjectForDeletion}
+        />
+      )}
     </>
   );
 };

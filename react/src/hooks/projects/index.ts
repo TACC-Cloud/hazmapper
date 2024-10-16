@@ -1,4 +1,5 @@
 export {
+  useDeleteProject,
   useProjectsWithDesignSafeInformation,
   useProjects,
   useDsProjects,
