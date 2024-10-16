@@ -36,10 +36,7 @@ jest.mock('react-router-dom', () => ({
 const toggleMock = jest.fn();
 const queryClient = new QueryClient();
 
-const renderComponent = async (
-  projectId = 123,
-  projectName = 'Sample Project'
-) => {
+const renderComponent = async () => {
   await act(async () => {
     render(
       <Provider store={store}>

@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Button, SectionMessage } from '../../core-components';
 import styles from './DeleteMapModal.module.css';
-import useAuthenticatedUser from '../../hooks/user/useAuthenticatedUser';
 import { Project } from '../../types';
 import { useDeleteProject } from '../../hooks/projects/';
 
@@ -21,11 +19,8 @@ const DeleteMapModal = ({
   project,
 }: DeleteMapModalProps) => {
   const [errorMessage, setErrorMessage] = useState('');
-  const {
-    mutate: deleteProject,
-    isLoading: isDeletingProject,
-    isError: isErrorDeleting,
-  } = useDeleteProject(projectId);
+  const { mutate: deleteProject, isLoading: isDeletingProject } =
+    useDeleteProject(projectId);
   const handleClose = () => {
     setErrorMessage(''); // Clear the error message
     parentToggle(); // Call the original toggle function passed as a prop
@@ -43,7 +38,7 @@ const DeleteMapModal = ({
   };
 
   return (
-    <Modal isOpen={isOpen} toggle={handleClose}>
+    <Modal isOpen={isOpen} toggle={handleClose} className={styles.root}>
       <ModalHeader toggle={handleClose}>
         Delete Map: {project?.name}{' '}
       </ModalHeader>
