@@ -2,7 +2,7 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import styles from './MapProjectNavBar.module.css';
 import { QueryNavItem } from '../../core-wrappers';
-import { queryPanelKey, Panel } from '../../utils/panels';
+import { queryPanelKey, Panel } from '@hazmapper/utils/panels';
 
 import assetsImage from '../../assets/assets.png';
 import pointCloudImage from '../../assets/point-clouds.png';

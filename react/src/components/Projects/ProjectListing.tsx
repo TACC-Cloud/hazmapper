@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useProjectsWithDesignSafeInformation } from '../../hooks';
-import { Button, LoadingSpinner, Icon } from '../../core-components';
+import { useProjectsWithDesignSafeInformation } from '@hazmapper/hooks';
+import { Button, LoadingSpinner, Icon } from '@core-components';
 import CreateMapModal from '../CreateMapModal/CreateMapModal';
 import { useNavigate } from 'react-router-dom';
 
