@@ -2,9 +2,9 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import styles from './MapProjectNavBar.module.css';
 import { QueryNavItem } from '@tacc/core-components';
+import { queryPanelKey, Panel } from '@hazmapper/utils/panels';
 // TODO:not needed but can help illustate the `error useLocation() in the context of a <Router>` and how its in the tacc/core-components lib
 //import { QueryNavItem } from './QueryNavItem';
-import { queryPanelKey, Panel } from '../../utils/panels';
 
 import assetsImage from '../../assets/assets.png';
 import pointCloudImage from '../../assets/point-clouds.png';
