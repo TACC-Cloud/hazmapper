@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Project, DesignSafeProject } from '@hazmapper/types';
 import { useProjectsWithDesignSafeInformation } from '@hazmapper/hooks';
 import { Button, LoadingSpinner, Icon } from '@core-components';
 import CreateMapModal from '../CreateMapModal/CreateMapModal';
