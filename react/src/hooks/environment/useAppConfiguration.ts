@@ -8,7 +8,7 @@ import {
   MapillaryConfiguration,
   GeoapiBackendEnvironment,
   DesignSafePortalEnvironment,
-} from '../../types';
+} from '@hazmapper/types';
 import useBasePath from './useBasePath';
 
 /**
