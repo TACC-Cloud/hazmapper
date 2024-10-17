@@ -1,10 +1,6 @@
 import { UseQueryResult } from 'react-query';
-import {
-  Project,
-  DesignSafeProject,
-  DesignSafeProjectCollection,
-  ApiService,
-} from '@hazmapper/types';
+import { useMemo } from 'react';
+import { Project, DesignSafeProjectCollection, ApiService } from '@hazmapper/types';
 import { useGet } from '../../requests';
 
 export const useProjects = (): UseQueryResult<Project[]> => {
@@ -36,30 +32,46 @@ export const useProject = ({
   });
   return query;
 };
-export const useDsProjects =
-  (): UseQueryResult<DesignSafeProjectCollection> => {
-    const query = useGet<DesignSafeProjectCollection>({
-      endpoint: `/api/projects/v2/`,
-      key: ['projectsv2'],
-      apiService: ApiService.DesignSafe,
-    });
-    return query;
-  };
-
-export const mergeDesignSafeProject = (
-  projects: Project[],
-  dsProjects: DesignSafeProject[]
-): Project[] => {
-  if (dsProjects && dsProjects.length > 0) {
-    return projects.map((proj) => {
-      const dsProject: DesignSafeProject | undefined = dsProjects.find(
-        (dsproj?) => dsproj?.uuid == proj.system_id?.replace('project-', '')
-      );
-      proj.ds_project = dsProject;
-      proj.ds_project_id = dsProject?.value.projectId;
-      proj.ds_project_title = dsProject?.value.title;
-      return proj;
-    });
-  }
-  return projects;
+export const useDsProjects = (): UseQueryResult<
+  DesignSafeProjectCollection | undefined
+> => {
+  const query = useGet<DesignSafeProjectCollection | undefined>({
+    endpoint: `/api/projects/v2/`,
+    key: ['projectsv2'],
+    apiService: ApiService.DesignSafe,
+  });
+  return query;
 };
+
+export function useProjectsWithDesignSafeInformation(): UseQueryResult<
+  Project[]
+> {
+  const dsProjectQuery = useDsProjects();
+  const projectQuery = useProjects();
+
+  const alteredProjectData = useMemo(() => {
+    if (projectQuery.isSuccess && dsProjectQuery.isSuccess) {
+      return projectQuery.data.map((proj) => {
+        const dsProj = dsProjectQuery.data?.result?.find(
+          (ds_proj) => proj?.system_id?.replace('project-', '') === ds_proj.uuid
+        );
+        if (dsProj) {
+          return {
+            ...proj,
+            ds_project: dsProj,
+          };
+        }
+        return proj;
+      });
+    }
+    return projectQuery.data;
+  }, [dsProjectQuery.data, projectQuery.data]);
+
+  return {
+    data: alteredProjectData,
+    isLoading: dsProjectQuery.isLoading || projectQuery.isLoading,
+    isError: dsProjectQuery.error || projectQuery.error,
+    isSuccess: dsProjectQuery.isSuccess && projectQuery.isSuccess,
+    error: dsProjectQuery.error || projectQuery.error,
+  } as UseQueryResult<Project[]>;
+}
