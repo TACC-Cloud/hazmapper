@@ -1,0 +1,36 @@
+.tableContainer {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+.featureFileTree {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.treeNode {
+  display: flex;
+  align-items: center;
+  height: 2.25em;
+}
+
+.fileName {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-left: 0.5em;
+}
+
+.deleteButton {
+  margin-left: auto;
+}
+
+.selected {
+  background: var(--global-color-accent--weak) !important;
+}
+
+.hoverable:hover {
+  background: var(--global-color-accent--weak);
+}

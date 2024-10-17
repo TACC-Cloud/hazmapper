@@ -1,10 +1,5 @@
 export type { TileServerLayer } from './tileServerLayer';
-export type {
-  Asset,
-  Feature,
-  FeatureClass,
-  FeatureCollection,
-} from './feature';
+export * from './feature';
 export type {
   Project,
   DesignSafeProjectCollection,
