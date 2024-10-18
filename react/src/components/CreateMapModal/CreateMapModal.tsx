@@ -4,20 +4,15 @@ import { Button } from '@tacc/core-components';
 import styles from './CreateMapModal.module.css';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import useCreateProject from '../../hooks/projects/useCreateProject';
-import useAuthenticatedUser from '../../hooks/user/useAuthenticatedUser';
+import useCreateProject from '@hazmapper/hooks/projects/useCreateProject';
+import useAuthenticatedUser from '@hazmapper/hooks/user/useAuthenticatedUser';
 import { useNavigate } from 'react-router-dom';
-import { ProjectRequest } from '../../types';
+import { ProjectRequest } from '@hazmapper/types';
 import {
   FormikInput,
   FormikTextarea,
   FormikCheck,
 } from '@tacc/core-components';
-// import {
-//   FormikInput,
-//   FormikTextarea,
-//   FormikCheck,
-// } from '../../core-wrappers';
 
 type CreateMapModalProps = {
   isOpen: boolean;

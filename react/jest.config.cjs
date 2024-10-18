@@ -3,8 +3,11 @@
  * https://jestjs.io/docs/configuration
  */
 
-// https://stackoverflow.com/questions/73504569/syntaxerror-unexpected-token-export-from-react-leaflet-while-using-jest
-const esModules = ['@react-leaflet', 'react-leaflet'].join('|');
+const esModules = [
+  '@react-leaflet',
+  'react-leaflet',
+  '@tacc/core-components',
+].join('|');
 
 module.exports = {
   // All imported modules in your tests should be mocked automatically
@@ -85,6 +88,7 @@ module.exports = {
     '^utils(.*)$': '<rootDir>/src/utils$1',
     '^hooks(.*)$': '<rootDir>/src/hooks$1',
     '^react-leaflet$': require.resolve('react-leaflet'),
+    '^@hazmapper/(.*)$': '<rootDir>/src/$1',
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
@@ -178,10 +182,10 @@ module.exports = {
   // timers: "real",
 
   // A map from regular expressions to paths to transformers
-  transform: { '^.+\\.(js|jsx)?$': 'babel-jest' },
+  transform: { '^.+\\.(js|jsx|mjs)?$': 'babel-jest' },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
-  transformIgnorePatterns: [`/node_modules/(?!${esModules})`],
+  transformIgnorePatterns: [`/node_modules/(?!(${esModules}))`],
 
   // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
   // unmockedModulePathPatterns: undefined,

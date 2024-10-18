@@ -1,5 +1,5 @@
 import { UseQueryResult } from 'react-query';
-import { ApiService, System } from '../../types';
+import { ApiService, System } from '@hazmapper/types';
 import { useGet } from '../../requests';
 
 const useSystems = (): UseQueryResult<System[]> => {
