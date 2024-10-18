@@ -24,7 +24,7 @@ npm ci
 npm run dev
 ```
 
-Navigate to `http://localhost:4200/` or `http://hazmapper.local:4200/`.  (Note that `hazmapper.local` needs to be added to your `/etc/hosts`)
+Navigate to `http://localhost:4200/`.
 
 #### Running unit tests
 
