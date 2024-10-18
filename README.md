@@ -4,9 +4,9 @@ Hazmapper is an application for creating, visualizing, and analyzing geospatial 
 
 See https://github.com/TACC-Cloud/geoapi which is an associated restful API.
 
-## Local React Development (work-in-progress)
+## Local React Development
 
-`react/` has the React client
+`react/` directory contains the React client
 
 To get started, create a local secret file for local development:
 ```
