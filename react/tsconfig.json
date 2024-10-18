@@ -18,9 +18,7 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@hazmapper/*": ["src/*"],
-      "@core-components": ["src/core-components"],
-      "@core-components/*": ["src/core-components/*"]
+      "@hazmapper/*": ["src/*"]
     }
   },
   "include": ["src"],
