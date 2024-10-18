@@ -89,6 +89,8 @@ module.exports = {
     '^hooks(.*)$': '<rootDir>/src/hooks$1',
     '^react-leaflet$': require.resolve('react-leaflet'),
     '^@hazmapper/(.*)$': '<rootDir>/src/$1',
+    '^@core-components$': '<rootDir>/src/core-components/index.ts',
+    '^@core-components/(.*)$': '<rootDir>/src/core-components/$1',
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
