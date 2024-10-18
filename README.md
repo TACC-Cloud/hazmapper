@@ -13,8 +13,6 @@ To get started, create a local secret file for local development:
 cp react/src/secret_local.example.ts react/src/secret_local.ts
 ```
 
-Get a JWT from someone on WMA-Geospatial subgroup and add the jwt to `react/src/secret_local.ts`.
-
 The `geoapiBackend` in ( see [react/src/secret_local.example.ts](react/src/secret_local.example.ts) ) can be used to select which backend `geoapi` is used by Hazmapper during local development (e.g. `EnvironmentType.Production`, `EnvironmentType.Staging`, `EnvironmentType.Dev`, * `EnvironmentType.Local`
 
 See https://github.com/TACC-Cloud/geoapi for more details on running geoapi locally.
