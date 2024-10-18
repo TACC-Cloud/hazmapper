@@ -13,9 +13,14 @@ To get started, create a local secret file for local development:
 cp react/src/secret_local.example.ts react/src/secret_local.ts
 ```
 
-The `geoapiBackend` in ( see [react/src/secret_local.example.ts](react/src/secret_local.example.ts) ) can be used to select which backend `geoapi` is used by Hazmapper during local development (e.g. `EnvironmentType.Production`, `EnvironmentType.Staging`, `EnvironmentType.Dev`, * `EnvironmentType.Local`
+The `geoapiBackend` setting in `react/src/secret_local.ts` ( see the example [react/src/secret_local.example.ts](react/src/secret_local.example.ts) ) controls which backend `GeoAPI` is used by Hazmapper during local development. You can choose from the following:
 
-See https://github.com/TACC-Cloud/geoapi for more details on running geoapi locally.
+* `EnvironmentType.Production`
+* `EnvironmentType.Staging`
+* `EnvironmentType.Dev`
+* `EnvironmentType.Local`
+
+To run Hazmapper with the GeoAPI backend locally, configure `geoapiBackend` to use `GeoapiBackendEnvironment.Local` and see the [GeoAPI repository](https://github.com/TACC-Cloud/geoapi) for more detailed instructions.
 
 #### Run
 
