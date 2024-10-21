@@ -10,7 +10,7 @@ import {
 } from 'react-leaflet';
 import { TiledMapLayer } from 'react-esri-leaflet';
 import MarkerClusterGroup from '@changey/react-leaflet-markercluster';
-import { TileServerLayer, FeatureCollection } from '../../types';
+import { TileServerLayer, FeatureCollection } from '@hazmapper/types';
 import * as L from 'leaflet';
 import * as turf from '@turf/turf';
 import { LatLngTuple, MarkerCluster } from 'leaflet';
