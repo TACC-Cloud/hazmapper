@@ -26,8 +26,14 @@ export default defineConfig(({ command, mode }) => {
         '@core-components': path.resolve(__dirname, './src/core-components'),
       },
     },
+    resolve: {
+      alias: {
+        '@hazmapper': path.resolve(__dirname, './src'),
+      },
+    },
     build: {
       rollupOptions: {
+        external: ['react', 'react-dom', 'react-router-dom'], // Ensure these are treated as external
         output: {
           manualChunks(id) {
             if (id.includes('node_modules/react-datepicker')) {

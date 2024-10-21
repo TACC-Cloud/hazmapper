@@ -4,7 +4,7 @@ import {
   InlineMessage,
   SectionHeader,
   Icon,
-} from '@core-components';
+} from '@tacc/core-components';
 import useAuthenticatedUser from '@hazmapper/hooks/user/useAuthenticatedUser';
 import { SystemSelect } from '@hazmapper/components/Systems';
 import { ProjectListing } from '@hazmapper/components/Projects/ProjectListing';
