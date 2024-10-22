@@ -158,17 +158,20 @@ export function usePost<RequestType, ResponseType>({
   return useMutation<ResponseType, AxiosError, RequestType>(postUtil, options);
 }
 
-type UseDeleteParams<ResponseType> = {
-  endpoint: string;
-  options?: UseMutationOptions<ResponseType, AxiosError>;
+type UseDeleteParams<ResponseType, Variables> = {
+  endpoint: string | ((variables: Variables) => string);
+  options?: Omit<
+    UseMutationOptions<ResponseType, AxiosError, Variables>,
+    'mutationFn'
+  >;
   apiService?: ApiService;
 };
 
-export function useDelete<ResponseType>({
+export function useDelete<ResponseType, Variables>({
   endpoint,
   options = {},
   apiService = ApiService.Geoapi,
-}: UseDeleteParams<ResponseType>) {
+}: UseDeleteParams<ResponseType, Variables>) {
   const client = axios;
   const state = store.getState();
   const configuration = useAppConfiguration();
@@ -178,15 +181,16 @@ export function useDelete<ResponseType>({
   const baseUrl = getBaseApiUrl(apiService, configuration);
   const headers = getHeaders(apiService, state.auth);
 
-  const deleteUtil = async () => {
+  const deleteUtil = async (variables: Variables) => {
+    const finalEndpoint =
+      typeof endpoint === 'function' ? endpoint(variables) : endpoint;
+
     const response = await client.delete<ResponseType>(
-      `${baseUrl}${endpoint}`,
-      {
-        headers: headers,
-      }
+      `${baseUrl}${finalEndpoint}`,
+      { headers }
     );
     return response.data;
   };
 
-  return useMutation<ResponseType, AxiosError>(deleteUtil, options);
+  return useMutation<ResponseType, AxiosError, Variables>(deleteUtil, options);
 }

@@ -1,4 +1,3 @@
-
 .root {
   display: flex;
   flex-direction: column;
@@ -7,7 +6,8 @@
   overflow: hidden;
 }
 
-.topSection, .bottomSection {
+.topSection,
+.bottomSection {
   flex: 0 0 auto;
   padding: 10px;
 }

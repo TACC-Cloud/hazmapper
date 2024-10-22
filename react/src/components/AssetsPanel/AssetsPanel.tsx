@@ -13,12 +13,21 @@ interface Props {
    * Whether or not the map project is public.
    */
   isPublic: boolean;
+
+  /**
+   * active project id
+   */
+  projectId: number;
 }
 
 /**
  * A panel component that displays info on feature assets
  */
-const AssetsPanel: React.FC<Props> = ({ isPublic, featureCollection }) => {
+const AssetsPanel: React.FC<Props> = ({
+  isPublic,
+  featureCollection,
+  projectId,
+}) => {
   return (
     <div className={styles.root}>
       <div className={styles.topSection}>
@@ -26,6 +35,7 @@ const AssetsPanel: React.FC<Props> = ({ isPublic, featureCollection }) => {
       </div>
       <div className={styles.middleSection}>
         <FeatureFileTree
+          projectId={projectId}
           isPublic={isPublic}
           featureCollection={featureCollection}
         />

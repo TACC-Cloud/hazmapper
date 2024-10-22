@@ -106,6 +106,7 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
     features: [],
   };
 
+  const activeProjectId = activeProject?.id ?? -1;
   return (
     <div className={styles.root}>
       <div className={styles.topNavbar}>MapTopNavBar</div>
@@ -119,6 +120,7 @@ const MapProject: React.FC<Props> = ({ isPublic = false }) => {
           <div className={styles.panelContainer}>
             {activePanel === Panel.Assets && (
               <AssetsPanel
+                projectId={activeProjectId}
                 isPublic={isPublic}
                 featureCollection={featureCollection}
               />

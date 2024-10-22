@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
-import { useTable, useExpanded, Column } from 'react-table';
+import React, { useMemo, useCallback } from 'react';
+import { useTable, useExpanded, Column, CellProps } from 'react-table';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -7,31 +7,38 @@ import {
   faFolderOpen,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { Icon, Button } from '../../core-components';
-import { featureCollectionToFileNodeArray } from '../../utils/featureTreeUtils';
-import { FeatureCollection, FeatureFileNode } from '../../types';
+import { Icon, Button } from '@tacc/core-components';
+import { featureCollectionToFileNodeArray } from '@hazmapper/utils/featureTreeUtils';
+import { FeatureCollection, FeatureFileNode } from '@hazmapper/types';
+import { useDeleteFeature } from '@hazmapper/hooks';
 import styles from './FeatureFileTree.module.css';
 
 interface FeatureFileTreeProps {
+  /**
+   * Features of map
+   */
   featureCollection: FeatureCollection;
+
+  /**
+   * Whether or not the map project is public.
+   */
   isPublic: boolean;
+
+  /**
+   * active project id
+   */
+  projectId: number;
 }
 
 /*
  * A tree of feature files that correspond to the map's features
  */
 const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
-  /**
-   * Features of map
-   */
   featureCollection,
-  /**
-   * Whether or not the map project is public.
-   */
   isPublic,
-
-  /** */
+  projectId,
 }) => {
+  const { mutate: deleteFeature, isLoading } = useDeleteFeature();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -47,7 +54,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
     () => [
       {
         accessor: 'name',
-        Cell: ({ row }: any) => (
+        Cell: ({ row }: CellProps<FeatureFileNode>) => (
           <div
             {...row.getToggleRowExpandedProps()}
             className={styles.treeNode}
@@ -64,17 +71,15 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
             ) : (
               <Icon name="file" size="sm" />
             )}
-            <span className={styles.fileName}>{row.values.name}</span>
+            <span className={styles.fileName}>{row.original.name}</span>
             {!isPublic && row.id === selectedFeature && (
               <Button
                 size="small"
                 type="primary"
                 iconNameBefore="trash"
                 className={styles.deleteButton}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  // TODO: Implement delete request/update
-                }}              />
+                onClick={handleDelete(row.original.nodeId)}
+              />
             )}
           </div>
         ),
@@ -107,6 +112,27 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
       },
       useExpanded
     );
+
+  const handleDelete = useCallback(
+    (nodeId: string) => (e: React.MouseEvent) => {
+      e.stopPropagation();
+      const featureId = parseInt(nodeId, 10);
+
+      if (isNaN(featureId)) {
+        console.error('Invalid feature ID:', nodeId);
+        return;
+      }
+
+      // Only proceed with deletion if projectId is valid
+      if (projectId > 0) {
+        deleteFeature({
+          projectId,
+          featureId,
+        });
+      }
+    },
+    [projectId, deleteFeature]
+  );
 
   const handleRowClick = (rowId: string) => {
     const newSearchParams = new URLSearchParams(searchParams);

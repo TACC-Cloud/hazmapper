@@ -1,6 +1,6 @@
 import { UseQueryResult } from 'react-query';
 import { FeatureCollection } from '@hazmapper/types';
-import { useGet } from '../../requests';
+import { useGet } from '@hazmapper/requests';
 
 interface UseFeaturesParams {
   projectId?: number;
@@ -8,7 +8,7 @@ interface UseFeaturesParams {
   options: object;
 }
 
-const useFeatures = ({
+export const useFeatures = ({
   projectId,
   isPublic,
   options,
@@ -24,10 +24,8 @@ const useFeatures = ({
 
   const query = useGet<FeatureCollection>({
     endpoint,
-    key: ['features', { projectId, isPublic, assetTypes }],
+    key: ['activeProjectFeatures', { projectId, isPublic, assetTypes }],
     options,
   });
   return query;
 };
-
-export default useFeatures;
