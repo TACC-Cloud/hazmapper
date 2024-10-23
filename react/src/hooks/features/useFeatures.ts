@@ -3,19 +3,18 @@ import { FeatureCollection } from '@hazmapper/types';
 import { useGet } from '@hazmapper/requests';
 
 interface UseFeaturesParams {
-  projectId?: number;
+  projectId: number;
   isPublic: boolean;
-  options: object;
+  assetTypes: string[];
+  options?: object;
 }
 
 export const useFeatures = ({
   projectId,
   isPublic,
-  options,
   assetTypes,
-}: UseFeaturesParams & {
-  assetTypes?: string[];
-}): UseQueryResult<FeatureCollection> => {
+  options = {},
+}: UseFeaturesParams): UseQueryResult<FeatureCollection> => {
   const featuresRoute = isPublic ? 'public-projects' : 'projects';
   let endpoint = `/${featuresRoute}/${projectId}/features/`;
   if (assetTypes?.length) {
