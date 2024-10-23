@@ -39,11 +39,6 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
   projectId,
 }) => {
   const { mutate: deleteFeature, isLoading } = useDeleteFeature();
-  /* TODO
-   * use isLoading and isError or add ticket
-   * add todos for other todos here
-   * refactor so we can't have a -1 project id?  or what would that look like?
-   */
   const location = useLocation();
   const navigate = useNavigate();
 

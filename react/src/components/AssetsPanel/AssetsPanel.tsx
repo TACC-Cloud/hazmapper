@@ -31,7 +31,7 @@ const AssetsPanel: React.FC<Props> = ({
   return (
     <div className={styles.root}>
       <div className={styles.topSection}>
-        Add Feature TODO, isPublic: {isPublic}
+        Add Feature TODO: WG-387, isPublic: {isPublic}
       </div>
       <div className={styles.middleSection}>
         <FeatureFileTree
