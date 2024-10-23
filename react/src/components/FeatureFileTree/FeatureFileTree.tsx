@@ -77,6 +77,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
                 size="small"
                 type="primary"
                 iconNameBefore="trash"
+                isLoading={isLoading}
                 className={styles.deleteButton}
                 onClick={handleDelete(row.original.nodeId)}
               />
