@@ -32,64 +32,50 @@ export interface Asset {
 /**
  * Geoapi feature which is a GeoJSON Feature object with additional `id`, `project_id`, `properties`, `styles`, and `assets` properties.
  */
-export abstract class Feature {
+export interface Feature {
   /**
    * The unique identifier of the feature.
    */
-  abstract id: number;
+  id: number;
   /**
    * The identifier of the project that the feature belongs to.
    */
-  abstract project_id: number;
+  project_id: number;
   /**
    * The type of the GeoJSON object, which should always be `"Feature"`.
    */
-  abstract type: string;
+  type: string;
   /**
    * The geometry of the feature, represented as a GeoJSON Point object with coordinates in longitude and latitude.
    */
-  abstract geometry: Geometry;
+  geometry: Geometry;
   /**
    * Additional properties associated with the feature, represented as a generic object.
    */
-  abstract properties: GeoJsonProperties;
+  properties: GeoJsonProperties;
   /**
    * Additional styles associated with the feature, represented as a generic object.
    */
-  abstract styles: any;
+  styles: any;
   /**
    * An array of assets associated with the feature, represented as an array of objects with `id`, `path`, `uuid`, `asset_type`, `original_path`, `original_name`, and `display_path` properties.
    */
-  abstract assets: Asset[];
-
-  /**
-   * Returns the type of the feature based on its assets and geometry.
-   */
-  featureType(): FeatureType {
-    if (this.assets.length === 1) {
-      /* If there is only one asset, returns the type of that asset (i.e. "image", "video", "point_cloud", or "streetview".)*/
-      return this.assets[0].asset_type;
-    } else if (this.assets.length > 1) {
-      /* multiple assets */
-      return 'collection';
-    } else {
-      /* else we rely on geojson geometry type */
-      return this.geometry.type;
-    }
-  }
+  assets: Asset[];
 }
 
-export class FeatureClass extends Feature {
-  constructor(
-    public id: number,
-    public project_id: number,
-    public type: string,
-    public geometry: Geometry,
-    public properties: any,
-    public styles: any,
-    public assets: Asset[]
-  ) {
-    super();
+/**
+ * Returns the type of the feature based on its assets and geometry.
+ */
+export function getFeatureType(feature: Feature): FeatureType {
+  if (feature.assets.length === 1) {
+    /* If there is only one asset, returns the type of that asset (i.e. "image", "video", "point_cloud", or "streetview".)*/
+    return feature.assets[0].asset_type;
+  } else if (feature.assets.length > 1) {
+    /* multiple assets */
+    return 'collection';
+  } else {
+    /* else we rely on geojson geometry type */
+    return feature.geometry.type;
   }
 }
 

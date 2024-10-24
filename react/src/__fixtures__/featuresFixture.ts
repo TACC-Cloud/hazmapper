@@ -1,7 +1,7 @@
 import { Point } from 'geojson';
-import { FeatureCollection, FeatureClass, AssetType } from '@hazmapper/types';
+import { FeatureCollection, AssetType } from '@hazmapper/types';
 
-const rawFeatureCollection = {
+export const featureCollection: FeatureCollection = {
   type: 'FeatureCollection',
   features: [
     {
@@ -51,23 +51,7 @@ const rawFeatureCollection = {
   ],
 };
 
-export const featureCollection: FeatureCollection = {
-  type: rawFeatureCollection.type,
-  features: rawFeatureCollection.features.map(
-    (f) =>
-      new FeatureClass(
-        f.id,
-        f.project_id,
-        f.type,
-        f.geometry,
-        f.properties,
-        f.styles,
-        f.assets
-      )
-  ),
-};
-
-export const rawFeatureCollectionWithNestedPaths = {
+export const featureCollectionWithNestedPaths: FeatureCollection = {
   type: 'FeatureCollection',
   features: [
     {
@@ -109,20 +93,4 @@ export const rawFeatureCollectionWithNestedPaths = {
       ],
     },
   ],
-};
-
-export const featureCollectionWithNestedPaths: FeatureCollection = {
-  type: rawFeatureCollectionWithNestedPaths.type,
-  features: rawFeatureCollectionWithNestedPaths.features.map(
-    (f) =>
-      new FeatureClass(
-        f.id,
-        f.project_id,
-        f.type,
-        f.geometry,
-        f.properties,
-        f.styles,
-        f.assets
-      )
-  ),
 };

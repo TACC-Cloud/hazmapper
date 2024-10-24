@@ -3,6 +3,7 @@ import {
   Feature,
   FeatureType,
   FeatureFileNode,
+  getFeatureType,
 } from '../types';
 
 function createFeatureFileNode(
@@ -65,7 +66,9 @@ export function featureCollectionToFileNodeArray(
           isLast ? feature.id.toString() : `DIR_${currentPath}` /* nodeId */,
           part /* name */,
           !isLast /* isDirectory */,
-          feature.featureType() /* featureType */
+          isLast
+            ? getFeatureType(feature) /*featureType*/
+            : undefined /* or if dir, then undefined */
         );
         nodeMap[currentPath] = newNode;
 
