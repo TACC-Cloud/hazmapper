@@ -36,10 +36,11 @@ export const useProject = ({
   });
   return query;
 };
+
 export const useDsProjects = (): UseQueryResult<
   DesignSafeProjectCollection | undefined
 > => {
-  const query = useGet<DesignSafeProjectCollection | undefined>({
+  const query = useGet<DesignSafeProjectCollection>({
     endpoint: `/api/projects/v2/`,
     key: ['projectsv2'],
     apiService: ApiService.DesignSafe,

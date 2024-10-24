@@ -157,3 +157,40 @@ export function usePost<RequestType, ResponseType>({
 
   return useMutation<ResponseType, AxiosError, RequestType>(postUtil, options);
 }
+
+type UseDeleteParams<ResponseType, Variables> = {
+  endpoint: string | ((variables: Variables) => string);
+  options?: Omit<
+    UseMutationOptions<ResponseType, AxiosError, Variables>,
+    'mutationFn'
+  >;
+  apiService?: ApiService;
+};
+
+export function useDelete<ResponseType, Variables>({
+  endpoint,
+  options = {},
+  apiService = ApiService.Geoapi,
+}: UseDeleteParams<ResponseType, Variables>) {
+  const client = axios;
+  const state = store.getState();
+  const configuration = useAppConfiguration();
+
+  useEnsureAuthenticatedUserHasValidTapisToken();
+
+  const baseUrl = getBaseApiUrl(apiService, configuration);
+  const headers = getHeaders(apiService, state.auth);
+
+  const deleteUtil = async (variables: Variables) => {
+    const finalEndpoint =
+      typeof endpoint === 'function' ? endpoint(variables) : endpoint;
+
+    const response = await client.delete<ResponseType>(
+      `${baseUrl}${finalEndpoint}`,
+      { headers }
+    );
+    return response.data;
+  };
+
+  return useMutation<ResponseType, AxiosError, Variables>(deleteUtil, options);
+}
