@@ -7,10 +7,11 @@ import {
   faFolderOpen,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { Icon, Button } from '@tacc/core-components';
+import { Button } from '@tacc/core-components';
 import { featureCollectionToFileNodeArray } from '@hazmapper/utils/featureTreeUtils';
 import { FeatureCollection, FeatureFileNode } from '@hazmapper/types';
 import { useDeleteFeature } from '@hazmapper/hooks';
+import { FeatureIcon } from '@hazmapper/components/FeatureIcon';
 import styles from './FeatureFileTree.module.css';
 
 interface FeatureFileTreeProps {
@@ -69,7 +70,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
                 size="sm"
               />
             ) : (
-              <Icon name="file" size="sm" />
+              <FeatureIcon featureType={row.original.featureType} />
             )}
             <span className={styles.fileName}>{row.original.name}</span>
             {!isPublic && row.id === selectedFeature && (

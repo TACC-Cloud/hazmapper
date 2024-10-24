@@ -1,12 +1,24 @@
-import { FeatureCollection, Feature, FeatureFileNode } from '../types';
+import {
+  FeatureCollection,
+  Feature,
+  FeatureType,
+  FeatureFileNode,
+} from '../types';
 
 function createFeatureFileNode(
   nodeId: string,
   name: string,
   isDirectory: boolean,
+  featureType: FeatureType | undefined,
   children?: FeatureFileNode[]
 ): FeatureFileNode {
-  return { nodeId, name, isDirectory, ...(children && { children }) };
+  return {
+    nodeId,
+    name,
+    isDirectory,
+    featureType,
+    ...(children && { children }),
+  };
 }
 
 function getFullPathFromFeature(feature: Feature): string {
@@ -52,7 +64,8 @@ export function featureCollectionToFileNodeArray(
         const newNode = createFeatureFileNode(
           isLast ? feature.id.toString() : `DIR_${currentPath}` /* nodeId */,
           part /* name */,
-          !isLast /* isDirectory */
+          !isLast /* isDirectory */,
+          feature.featureType() /* featureType */
         );
         nodeMap[currentPath] = newNode;
 
