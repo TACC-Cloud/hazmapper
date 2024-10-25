@@ -40,8 +40,9 @@ module.exports = {
     // Exclude build/dist directories
     '!dist/**/*',
     '!build/**/*',
+    '!src/vite-env*',
     // Exclude node_modules
-    '!**/node_modules/**'
+    '!**/node_modules/**',
   ],
   // The directory where Jest should output its coverage files
   coverageDirectory: 'coverage',
