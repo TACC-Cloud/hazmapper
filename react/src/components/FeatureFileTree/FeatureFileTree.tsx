@@ -93,8 +93,10 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
   const expandedState = useMemo(() => {
     const expanded: { [key: string]: boolean } = {};
     const expandRow = (row: FeatureFileNode) => {
+      /* eslint-disable react/prop-types */
       expanded[row.nodeId] = true;
       row.children?.forEach(expandRow);
+      /* eslint-enable react/prop-types */
     };
     memoizedData.forEach(expandRow);
     return expanded;
@@ -105,8 +107,10 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
       {
         columns,
         data: memoizedData,
+        /* eslint-disable react/prop-types */
         getSubRows: (row: FeatureFileNode) => row.children,
         getRowId: (row: FeatureFileNode) => row.nodeId,
+        /* eslint-enable react/prop-types */
         initialState: {
           expanded: expandedState,
         },
@@ -152,6 +156,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
         <tbody {...getTableBodyProps()}>
           {rows.map((row) => {
             prepareRow(row);
+            /* eslint-disable react/prop-types */
             const isSelected = row.original.isDirectory
               ? false
               : selectedFeature === row.id;
@@ -175,6 +180,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
                 ))}
               </tr>
             );
+            /* eslint-enable react/prop-types */
           })}
         </tbody>
       </table>
