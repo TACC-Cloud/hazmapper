@@ -5,7 +5,7 @@ export const featureCollection: FeatureCollection = {
   type: 'FeatureCollection',
   features: [
     {
-      id: 2053334,
+      id: 1,
       project_id: 80,
       type: 'Feature',
       geometry: {
@@ -20,14 +20,14 @@ export const featureCollection: FeatureCollection = {
           path: '80/f7c2afa2-f184-40a7-80be-0874a7db755e.jpeg',
           uuid: 'f7c2afa2-f184-40a7-80be-0874a7db755e',
           asset_type: 'image' as AssetType,
-          original_path: '/nathanf/image1.JPG',
+          original_path: '/foo/image1.JPG',
           original_name: null,
-          display_path: '/nathanf/image1.JPG',
+          display_path: '/foo/image1.JPG',
         },
       ],
     },
     {
-      id: 2053335,
+      id: 2,
       project_id: 80,
       type: 'Feature',
       geometry: {
@@ -42,9 +42,9 @@ export const featureCollection: FeatureCollection = {
           path: '80/5a3e7513-2740-4c0f-944d-7b497ceff2ea.jpeg',
           uuid: '5a3e7513-2740-4c0f-944d-7b497ceff2ea',
           asset_type: 'image' as AssetType,
-          original_path: '/nathanf/image1.JPG',
+          original_path: '/foo/image2.JPG',
           original_name: null,
-          display_path: '/nathanf/image1.JPG',
+          display_path: '/foo/image2.JPG',
         },
       ],
     },

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import AssetsPanel from './AssetsPanel';
-import { featureCollection } from '../../__fixtures__/featuresFixture';
+import { featureCollection } from '@hazmapper/__fixtures__/featuresFixture';
 import { useFeatures } from '@hazmapper/hooks';
 
 jest.mock('@hazmapper/hooks', () => ({
