@@ -10,7 +10,7 @@ jest.mock('@hazmapper/hooks', () => ({
 
 // Mock FeatureFileTree component since it's a complex component and tested elswhere
 jest.mock('@hazmapper/components/FeatureFileTree', () => {
-  return function MockFeatureFileTree(props) {
+  return function MockFeatureFileTree() {
     return <div data-testid="feature-file-tree">FeatureFileTree Component</div>;
   };
 });
