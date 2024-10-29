@@ -8,14 +8,12 @@ import { useDeleteProject } from '../../hooks/projects/';
 type DeleteMapModalProps = {
   isOpen: boolean;
   close: () => void;
-  projectId: number;
-  project?: Project;
+  project: Project;
 };
 
 const DeleteMapModal = ({
   isOpen,
   close: parentToggle,
-  projectId,
   project,
 }: DeleteMapModalProps) => {
   const {
@@ -23,7 +21,7 @@ const DeleteMapModal = ({
     isLoading: isDeletingProject,
     isError,
     isSuccess,
-  } = useDeleteProject(projectId);
+  } = useDeleteProject(project.id);
   const handleClose = () => {
     parentToggle();
   };

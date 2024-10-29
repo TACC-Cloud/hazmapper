@@ -68,8 +68,7 @@ export const ProjectListing: React.FC = () => {
       {selectedProjectForDeletion && (
         <DeleteMapModal
           isOpen={!!selectedProjectForDeletion}
-          toggle={() => setSelectedProjectForDeletion(null)}
-          projectId={selectedProjectForDeletion.id}
+          close={() => setSelectedProjectForDeletion(null)}
           project={selectedProjectForDeletion}
         />
       )}
