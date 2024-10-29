@@ -1,7 +1,6 @@
 import React from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Button, SectionMessage } from '@tacc/core-components';
-import styles from './DeleteMapModal.module.css';
 import { Project } from '../../types';
 import { useDeleteProject } from '../../hooks/projects/';
 
