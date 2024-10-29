@@ -67,7 +67,7 @@ describe('DeleteMapModal', () => {
   });
 
   test('successfully deletes a project', async () => {
-    await renderComponent(123, 'Sample Project');
+    await renderComponent();
 
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /Delete/ }));
