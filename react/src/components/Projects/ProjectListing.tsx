@@ -48,10 +48,26 @@ export const ProjectListing: React.FC = () => {
         <tbody>
           {data?.map((proj) => (
             <tr key={proj.id}>
-              <td key={proj.id} onClick={() => navigateToProject(proj.uuid)}>{proj.name}</td>
-              <td key={proj.id} onClick={() => navigateToProject(proj.uuid)}>
-                {proj.ds_project?.value.projectId}{' '}
-                {proj.ds_project?.value.title}
+              <td key={proj.id}>
+                {' '}
+                <Button
+                  type="link"
+                  onClick={() => navigateToProject(proj.uuid)}
+                >
+                  {proj.name}
+                </Button>
+              </td>
+              <td key={proj.id}>
+                {' '}
+                <Button
+                  type="link"
+                  onClick={() => navigateToProject(proj.uuid)}
+                >
+                  {proj.ds_project
+                    ? `${proj.ds_project?.value.projectId} |
+                ${proj.ds_project?.value.title}`
+                    : '---------'}
+                </Button>
               </td>
               <td>
                 <Button iconNameBefore="edit-document"></Button>
