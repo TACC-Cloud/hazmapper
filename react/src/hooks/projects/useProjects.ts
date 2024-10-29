@@ -76,7 +76,7 @@ export function useProjectsWithDesignSafeInformation(): UseQueryResult<
   } as UseQueryResult<Project[]>;
 }
 
-export const useDeleteProject = (projectId: number | undefined) => {
+export const useDeleteProject = (projectId: number) => {
   const queryClient = useQueryClient();
   const endpoint = `/projects/${projectId}/`;
   return useDelete<void>({

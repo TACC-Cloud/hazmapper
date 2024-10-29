@@ -3,11 +3,11 @@ export interface Project {
   uuid?: string;
   name: string;
   description: string;
-  public?: boolean;
-  system_file?: string;
-  system_id?: string;
-  system_path?: string;
-  deletable?: boolean;
+  public: boolean;
+  system_file: string;
+  system_id: string;
+  system_path: string;
+  deletable: boolean;
   streetview_instances?: any;
   ds_project?: DesignSafeProject;
 }

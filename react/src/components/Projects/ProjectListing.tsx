@@ -20,10 +20,6 @@ export const ProjectListing: React.FC = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  const toggleDeleteModal = (project: Project | null) => {
-    setSelectedProjectForDeletion(project);
-  };
-
   const { data, isLoading, isError } = useProjectsWithDesignSafeInformation();
 
   if (isLoading) {
@@ -58,12 +54,11 @@ export const ProjectListing: React.FC = () => {
                 {proj.ds_project?.value.title}
               </td>
               <td>
-                <Button>
-                  <Icon name="edit-document"></Icon>
-                </Button>
-                <Button onClick={() => toggleDeleteModal(proj)}>
-                  <Icon name="trash"></Icon>
-                </Button>
+                <Button iconNameBefore="edit-document"></Button>
+                <Button
+                  iconNameBefore="trash"
+                  onClick={() => setSelectedProjectForDeletion(proj)}
+                ></Button>
               </td>
             </tr>
           ))}
@@ -73,7 +68,7 @@ export const ProjectListing: React.FC = () => {
       {selectedProjectForDeletion && (
         <DeleteMapModal
           isOpen={!!selectedProjectForDeletion}
-          toggle={() => toggleDeleteModal(null)}
+          toggle={() => setSelectedProjectForDeletion(null)}
           projectId={selectedProjectForDeletion.id}
           project={selectedProjectForDeletion}
         />
