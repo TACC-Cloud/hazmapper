@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { visualizer } from 'rollup-plugin-visualizer';
+import path from 'path';
 
 // https://vitejs.dev/config/
 // eslint-disable-next-line
@@ -19,8 +20,20 @@ export default defineConfig(({ command, mode }) => {
       port: 4200,
       host: 'localhost',
     },
+    resolve: {
+      alias: {
+        '@hazmapper': path.resolve(__dirname, './src'),
+        '@core-components': path.resolve(__dirname, './src/core-components'),
+      },
+    },
+    resolve: {
+      alias: {
+        '@hazmapper': path.resolve(__dirname, './src'),
+      },
+    },
     build: {
       rollupOptions: {
+        external: ['react', 'react-dom', 'react-router-dom'], // Ensure these are treated as external
         output: {
           manualChunks(id) {
             if (id.includes('node_modules/react-datepicker')) {

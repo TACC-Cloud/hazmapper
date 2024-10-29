@@ -12,7 +12,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { act } from 'react-dom/test-utils';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
-jest.mock('../../hooks/user/useAuthenticatedUser', () => ({
+jest.mock('@hazmapper/hooks/user/useAuthenticatedUser', () => ({
   __esModule: true,
   default: () => ({
     data: { username: 'mockUser' },
@@ -21,7 +21,7 @@ jest.mock('../../hooks/user/useAuthenticatedUser', () => ({
   }),
 }));
 
-jest.mock('../../hooks/projects/useCreateProject', () => ({
+jest.mock('@hazmapper/hooks/projects/useCreateProject', () => ({
   __esModule: true,
   default: () => ({
     mutate: jest.fn((data, { onSuccess, onError }) => {
