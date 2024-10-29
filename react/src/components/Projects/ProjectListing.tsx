@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useProjectsWithDesignSafeInformation } from '@hazmapper/hooks';
-import { Button, LoadingSpinner, Icon } from '@tacc/core-components';
+import { Button, LoadingSpinner } from '@tacc/core-components';
 import CreateMapModal from '../CreateMapModal/CreateMapModal';
 import DeleteMapModal from '../DeleteMapModal/DeleteMapModal';
 import { Project } from '../../types';
