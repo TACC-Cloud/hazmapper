@@ -46,29 +46,23 @@ const DeleteMapModal = ({
             </b>
           </>
         ) : (
-          "This map cannot be deleted because you don't have correct permission credentials."
+          'You don’t have permission to delete this map.'
         )}
       </ModalBody>
       <ModalFooter className="justify-content-start">
         <Button size="short" type="secondary" onClick={handleClose}>
           {isSuccess ? 'Close' : 'Cancel'}
         </Button>
-        {project?.deletable ? (
-          <Button
-            size="short"
-            type="primary"
-            attr="submit"
-            isLoading={isDeletingProject}
-            onClick={handleDeleteProject}
-            disabled={isSuccess}
-          >
-            Delete
-          </Button>
-        ) : (
-          <Button size="short" type="primary" attr="submit" disabled>
-            Delete
-          </Button>
-        )}
+        <Button
+          size="short"
+          type="primary"
+          attr="submit"
+          isLoading={isDeletingProject}
+          onClick={handleDeleteProject}
+          disabled={isSuccess || !project?.deletable}
+        >
+          Delete
+        </Button>
         {isSuccess && (
           <SectionMessage type="success">
             {'Succesfully deleted the map.'}

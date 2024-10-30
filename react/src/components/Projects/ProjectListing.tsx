@@ -48,7 +48,7 @@ export const ProjectListing: React.FC = () => {
         <tbody>
           {data?.map((proj) => (
             <tr key={proj.id}>
-              <td key={proj.id}>
+              <td>
                 {' '}
                 <Button
                   type="link"
@@ -57,7 +57,7 @@ export const ProjectListing: React.FC = () => {
                   {proj.name}
                 </Button>
               </td>
-              <td key={proj.id}>
+              <td>
                 {' '}
                 <Button
                   type="link"
