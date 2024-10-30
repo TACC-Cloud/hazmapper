@@ -6,5 +6,6 @@ export enum Panel {
   Layers = 'Layers',
   Filters = 'Filters',
   Streetview = 'Streetview',
+  Taggit = 'Taggit',
   Manage = 'Manage',
 }

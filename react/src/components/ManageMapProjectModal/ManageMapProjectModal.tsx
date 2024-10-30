@@ -8,7 +8,7 @@ interface ManageMapProjectModalProps {
 }
 
 const ManageMapProjectModal: React.FC<ManageMapProjectModalProps> = ({
-  isPublic,
+  // isPublic,
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
