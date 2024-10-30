@@ -75,13 +75,14 @@ const ProjectListing: React.FC = () => {
                   {proj.ds_project?.value.title}
                 </td>
                 <td className={styles.buttonColumn}>
-                <Button iconNameBefore="edit-document"></Button>
-                <Button
-                  iconNameBefore="trash"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    setSelectedProjectForDeletion(proj)}}
-                ></Button>
+                  <Button iconNameBefore="edit-document"></Button>
+                  <Button
+                    iconNameBefore="trash"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedProjectForDeletion(proj);
+                    }}
+                  ></Button>
                 </td>
               </tr>
             ))
