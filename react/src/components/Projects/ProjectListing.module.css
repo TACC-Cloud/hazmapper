@@ -23,7 +23,7 @@ td {
 
 .projectList tr:hover td {
   color: white;
-  background-color: ;
+  background-color: rgb(60, 111, 219);
 }
 
 .buttonColumn {
