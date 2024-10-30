@@ -1,11 +1,14 @@
 .root {
   display: flex;
-  justify-content: center;
   width: 100%;
 }
 .projectList {
   width: 100%;
   overflow-y: scroll;
+  padding: 10px;
+}
+.errorMessage {
+  width: 100%;
   padding: 10px;
 }
 .projectList th {

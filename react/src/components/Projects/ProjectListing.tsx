@@ -28,6 +28,7 @@ const ProjectListing: React.FC = () => {
   if (isError) {
     return (
       <div className={styles.root}>
+        <div className={styles.errorMessage}>
         <SectionMessage type="error">
           There was an error gathering your maps.{' '}
           {/*@ts-ignore: Suppress error typing issues*/}
@@ -41,6 +42,7 @@ const ProjectListing: React.FC = () => {
             Click here to submit a ticket to DesignSafe.
           </a>
         </SectionMessage>
+        </div>
       </div>
     );
   }
