@@ -1,6 +1,10 @@
 import { UseQueryResult } from 'react-query';
 import { useMemo } from 'react';
-import { Project, DesignSafeProjectCollection, ApiService } from '../../types';
+import {
+  Project,
+  DesignSafeProjectCollection,
+  ApiService,
+} from '@hazmapper/types';
 import { useGet } from '../../requests';
 
 export const useProjects = (): UseQueryResult<Project[]> => {
