@@ -9,7 +9,7 @@ import useAuthenticatedUser from '@hazmapper/hooks/user/useAuthenticatedUser';
 import { SystemSelect } from '@hazmapper/components/Systems';
 import { ProjectListing } from '@hazmapper/components/Projects/ProjectListing';
 
-function MainMenu() {
+const MainMenu = () => {
   const {
     data: userData,
     isLoading: isUserLoading,
@@ -50,6 +50,6 @@ function MainMenu() {
       <SystemSelect onSystemSelect={handleSelectChange}></SystemSelect>
     </>
   );
-}
+};
 
 export default MainMenu;
