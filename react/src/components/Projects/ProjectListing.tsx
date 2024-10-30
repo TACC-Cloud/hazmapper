@@ -41,7 +41,7 @@ const ProjectListing: React.FC = () => {
             Click here to submit a ticket to DesignSafe.
           </a>
         </SectionMessage>
-        </div>
+      </div>
     );
   }
 
@@ -63,7 +63,7 @@ const ProjectListing: React.FC = () => {
         <tbody>
           {data && data?.length > 0 ? (
             data.map((proj) => (
-              <tr key={proj.id} onClick={() => navigateToProject(proj.uuid)} >
+              <tr key={proj.id} onClick={() => navigateToProject(proj.uuid)}>
                 <td>{proj.name}</td>
                 <td>
                   {proj.ds_project?.value.projectId}
@@ -79,12 +79,15 @@ const ProjectListing: React.FC = () => {
           ) : (
             <tr>
               <td colSpan={3}>
-            <EmptyTablePlaceholder type="info">
-              No maps found.
-              <br />
-              <Button type='link' onClick={toggleModal}>Create New Map</Button> to get started.
-            </EmptyTablePlaceholder>
-            </td>
+                <EmptyTablePlaceholder type="info">
+                  No maps found.
+                  <br />
+                  <Button type="link" onClick={toggleModal}>
+                    Create New Map
+                  </Button>{' '}
+                  to get started.
+                </EmptyTablePlaceholder>
+              </td>
             </tr>
           )}
         </tbody>
