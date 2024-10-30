@@ -25,8 +25,25 @@ module.exports = {
   collectCoverage: true,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
-  // collectCoverageFrom: undefined,
-
+  collectCoverageFrom: [
+    'src/**/*.{js,jsx,ts,tsx}',
+    // Exclude test files
+    '!src/**/*.test.{js,jsx,ts,tsx}',
+    '!src/**/*.spec.{js,jsx,ts,tsx}',
+    // Exclude test utilities
+    '!src/test/**/*',
+    '!src/testUtil.ts',
+    '!src/__fixtures__/**/*',
+    // Exclude secrets and other files
+    '!src/secret_local*ts',
+    '!src/types/react*.ts',
+    // Exclude build/dist directories
+    '!dist/**/*',
+    '!build/**/*',
+    '!src/vite-env*',
+    // Exclude node_modules
+    '!**/node_modules/**',
+  ],
   // The directory where Jest should output its coverage files
   coverageDirectory: 'coverage',
 
