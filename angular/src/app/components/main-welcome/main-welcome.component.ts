@@ -20,7 +20,7 @@ import { EnvService } from 'src/app/services/env.service';
 })
 export class MainWelcomeComponent implements OnInit {
   release_url = 'https://github.com/TACC-cloud/hazmapper';
-  guide_url = 'https://www.designsafe-ci.org/rw/user-guides/tools-applications/visualization/hazmapper/';
+  guide_url = 'https://www.designsafe-ci.org/user-guide/tools/visualization/#hazmapper-user-guide';
 
   private projectsData: ProjectsData;
   private dsProjectsData: AgaveProjectsData;
