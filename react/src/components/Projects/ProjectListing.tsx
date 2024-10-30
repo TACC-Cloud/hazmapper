@@ -29,19 +29,19 @@ const ProjectListing: React.FC = () => {
     return (
       <div className={styles.root}>
         <div className={styles.errorMessage}>
-        <SectionMessage type="error">
-          There was an error gathering your maps.{' '}
-          {/*@ts-ignore: Suppress error typing issues*/}
-          {error?.message ? error?.message : 'An unknown error occurred.'}
-          <br />
-          <a
-            href="https://www.designsafe-ci.org/help/new-ticket/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Click here to submit a ticket to DesignSafe.
-          </a>
-        </SectionMessage>
+          <SectionMessage type="error">
+            There was an error gathering your maps.{' '}
+            {/*@ts-ignore: Suppress error typing issues*/}
+            {error?.message ? error?.message : 'An unknown error occurred.'}
+            <br />
+            <a
+              href="https://www.designsafe-ci.org/help/new-ticket/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Click here to submit a ticket to DesignSafe.
+            </a>
+          </SectionMessage>
         </div>
       </div>
     );
@@ -68,7 +68,7 @@ const ProjectListing: React.FC = () => {
               <tr key={proj.id} onClick={() => navigateToProject(proj.uuid)}>
                 <td>{proj.name}</td>
                 <td>
-                {proj.ds_project
+                  {proj.ds_project
                     ? `${proj.ds_project?.value.projectId} |
                 ${proj.ds_project?.value.title}`
                     : '---------'}
