@@ -20,7 +20,6 @@ td {
   overflow: hidden;
   white-space: nowrap;
 }
-
 .projectList tr:hover td {
   color: white;
   background-color: rgb(60, 111, 219);
