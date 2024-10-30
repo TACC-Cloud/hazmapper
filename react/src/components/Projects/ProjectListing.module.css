@@ -1,5 +1,6 @@
 .root {
   display: flex;
+  justify-content: center;
   width: 100%;
 }
 .projectList {
@@ -12,7 +13,8 @@
   max-width: fit-content;
   text-overflow: ellipsis;
 }
-.projectList tr, td {
+.projectList tr,
+td {
   max-width: fit-content;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -21,6 +23,6 @@
 
 .buttonColumn {
   white-space: nowrap;
-  overflow:hidden;
-  text-align:end;
+  overflow: hidden;
+  text-align: end;
 }

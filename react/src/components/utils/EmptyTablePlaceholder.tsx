@@ -1,4 +1,4 @@
-import { SectionMessage } from '../../core-components';
+import { SectionMessage } from '@tacc/core-components';
 import styles from './EmptyTablePlaceholder.module.css';
 import React from 'react';
 
