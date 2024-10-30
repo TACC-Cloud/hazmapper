@@ -21,6 +21,11 @@ td {
   white-space: nowrap;
 }
 
+.projectList tr:hover td {
+  color: white;
+  background-color: ;
+}
+
 .buttonColumn {
   white-space: nowrap;
   overflow: hidden;

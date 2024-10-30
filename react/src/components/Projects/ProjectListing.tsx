@@ -30,7 +30,7 @@ const ProjectListing: React.FC = () => {
       <div className={styles.root}>
         <SectionMessage type="error">
           There was an error gathering your maps.{' '}
-          {/* @ts-ignore: Suppress error typing issues */}
+          {/*@ts-ignore: Suppress error typing issues*/}
           {error?.message ? error?.message : 'An unknown error occurred.'}
           <br />
           <a
