@@ -66,9 +66,10 @@ const ProjectListing: React.FC = () => {
               <tr key={proj.id} onClick={() => navigateToProject(proj.uuid)}>
                 <td>{proj.name}</td>
                 <td>
-                  {proj.ds_project?.value.projectId}
-                  {' - '}
-                  {proj.ds_project?.value.title}
+                {proj.ds_project
+                    ? `${proj.ds_project?.value.projectId} |
+                ${proj.ds_project?.value.title}`
+                    : '---------'}
                 </td>
                 <td className={styles.buttonColumn}>
                   <Button type="link" iconNameBefore="edit-document"></Button>
