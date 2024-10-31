@@ -1,12 +1,13 @@
-import React, { useMemo, useCallback } from 'react';
-import { useTable, useExpanded, Column, CellProps } from 'react-table';
+import React, { useMemo, useCallback, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Tree } from 'antd';
+import type { DataNode } from 'antd/es/tree';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faFolderClosed,
   faFolderOpen,
 } from '@fortawesome/free-solid-svg-icons';
-
+import { useResizeDetector } from 'react-resize-detector';
 import { Button } from '@tacc/core-components';
 import { featureCollectionToFileNodeArray } from '@hazmapper/utils/featureTreeUtils';
 import { FeatureCollection, FeatureFileNode } from '@hazmapper/types';
@@ -14,6 +15,13 @@ import { useDeleteFeature } from '@hazmapper/hooks';
 import { FeatureIcon } from '@hazmapper/components/FeatureIcon';
 import styles from './FeatureFileTree.module.css';
 
+/* interface for combining antd tree node and our tree data */
+interface TreeDataNode extends DataNode {
+  title?: string;
+  key: string;
+  children?: TreeDataNode[];
+  featureNode: FeatureFileNode;
+}
 interface FeatureFileTreeProps {
   /**
    * Features of map
@@ -43,81 +51,48 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
   const location = useLocation();
   const navigate = useNavigate();
 
+  const { height, ref } = useResizeDetector();
+
+  const [expanded, setExpanded] = useState<string[]>([]);
+
   const searchParams = new URLSearchParams(location.search);
   const selectedFeature = searchParams.get('selectedFeature');
 
-  const memoizedData = useMemo(
-    () => featureCollectionToFileNodeArray(featureCollection),
-    [featureCollection]
-  );
+  const treeData = useMemo(() => {
+    const fileNodeArray = featureCollectionToFileNodeArray(featureCollection);
 
-  const columns = useMemo<Column<FeatureFileNode>[]>(
-    () => [
-      {
-        accessor: 'name',
-        Cell: ({ row }: CellProps<FeatureFileNode>) => (
-          <div
-            {...row.getToggleRowExpandedProps()}
-            className={styles.treeNode}
-            style={{
-              /* Create indentation based on the row's depth in the tree.*/
-              paddingLeft: `${row.depth * 1}rem`,
-            }}
-          >
-            {row.original.isDirectory ? (
-              <FontAwesomeIcon
-                icon={row.isExpanded ? faFolderOpen : faFolderClosed}
-                size="sm"
-              />
-            ) : (
-              <FeatureIcon featureType={row.original.featureType} />
-            )}
-            <span className={styles.fileName}>{row.original.name}</span>
-            {!isPublic && row.id === selectedFeature && (
-              <Button
-                size="small"
-                type="primary"
-                iconNameBefore="trash"
-                isLoading={isLoading}
-                className={styles.deleteButton}
-                onClick={handleDelete(row.original.nodeId)}
-              />
-            )}
-          </div>
-        ),
-      },
-    ],
-    [isPublic, selectedFeature]
-  );
+    const getDirectoryNodeIds = (nodes: FeatureFileNode[]): string[] => {
+      const directoryIds: string[] = [];
+      const stack = [...nodes];
 
-  const expandedState = useMemo(() => {
-    const expanded: { [key: string]: boolean } = {};
-    const expandRow = (row: FeatureFileNode) => {
-      /* eslint-disable react/prop-types */
-      expanded[row.nodeId] = true;
-      row.children?.forEach(expandRow);
-      /* eslint-enable react/prop-types */
+      while (stack.length > 0) {
+        const node = stack.pop();
+        if (node && node.isDirectory) {
+          directoryIds.push(node.nodeId);
+          if (node.children) {
+            stack.push(...node.children);
+          }
+        }
+      }
+
+      return directoryIds;
     };
-    memoizedData.forEach(expandRow);
-    return expanded;
-  }, [memoizedData]);
 
-  const { getTableProps, getTableBodyProps, rows, prepareRow } =
-    useTable<FeatureFileNode>(
-      {
-        columns,
-        data: memoizedData,
-        /* eslint-disable react/prop-types */
-        getSubRows: (row: FeatureFileNode) => row.children,
-        getRowId: (row: FeatureFileNode) => row.nodeId,
-        /* eslint-enable react/prop-types */
-        initialState: {
-          expanded: expandedState,
-        },
-        autoResetExpanded: true,
-      },
-      useExpanded
-    );
+    const expandedDirectories = getDirectoryNodeIds(fileNodeArray);
+    // Have all direcotories be in 'expanded' (i.e. everything is expanded)
+    setExpanded(expandedDirectories);
+
+    const convertToTreeNode = (node: FeatureFileNode) => ({
+      title: node.name,
+      key: node.nodeId,
+      isLeaf: !node.isDirectory,
+      children: node.children?.map(convertToTreeNode),
+      featureNode: node,
+    });
+
+    // Convert features into Antd's DataNode (i.e. TreeDataNode) and our internal class FeatureFileNode
+    return fileNodeArray.map(convertToTreeNode);
+  }, [featureCollection]);
 
   const handleDelete = useCallback(
     (nodeId: string) => (e: React.MouseEvent) => {
@@ -140,50 +115,74 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
     [projectId, deleteFeature]
   );
 
-  const handleRowClick = (rowId: string) => {
-    const newSearchParams = new URLSearchParams(searchParams);
-    if (selectedFeature === rowId || rowId.startsWith('DIR_')) {
-      newSearchParams.delete('selectedFeature');
-    } else {
-      newSearchParams.set('selectedFeature', rowId);
-    }
-    navigate({ search: newSearchParams.toString() }, { replace: true });
-  };
+  const titleRender = useCallback(
+    (node: TreeDataNode) => {
+      const featureNode = node.featureNode as FeatureFileNode;
+      const isSelected =
+        selectedFeature === node.key && !featureNode.isDirectory;
+      const isExpanded = expanded.includes(node.key);
+
+      // Add click handler for directory nodes
+      const handleClick = (e: React.MouseEvent) => {
+        if (featureNode.isDirectory) {
+          e.stopPropagation(); // Prevent default Tree selection
+          // Toggle expanded state
+          const newExpanded = expanded.includes(node.key)
+            ? expanded.filter((k) => k !== node.key)
+            : [...expanded, node.key];
+          setExpanded(newExpanded);
+        } else {
+          const newSearchParams = new URLSearchParams(searchParams);
+          if (selectedFeature === node.key || node.key.startsWith('DIR_')) {
+            newSearchParams.delete('selectedFeature');
+          } else {
+            newSearchParams.set('selectedFeature', node.key);
+          }
+          navigate({ search: newSearchParams.toString() }, { replace: true });
+        }
+      };
+
+      return (
+        <div className={styles.treeNode} onClick={handleClick}>
+          {featureNode.isDirectory ? (
+            <FontAwesomeIcon
+              icon={isExpanded ? faFolderOpen : faFolderClosed}
+              size="sm"
+            />
+          ) : (
+            <FeatureIcon featureType={featureNode.featureType} />
+          )}
+          <span className={styles.fileName}>{featureNode.name}</span>
+          {!isPublic && isSelected && (
+            <Button
+              size="small"
+              type="primary"
+              iconNameBefore="trash"
+              isLoading={isLoading}
+              className={styles.deleteButton}
+              onClick={(e) => handleDelete(featureNode.nodeId)(e)}
+            />
+          )}
+        </div>
+      );
+    },
+    [expanded, setExpanded, selectedFeature, isPublic, isLoading, handleDelete]
+  );
 
   return (
-    <div className={styles.tableContainer}>
-      <table {...getTableProps()} className={styles.featureFileTree}>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row) => {
-            prepareRow(row);
-            /* eslint-disable react/prop-types */
-            const isSelected = row.original.isDirectory
-              ? false
-              : selectedFeature === row.id;
-            return (
-              <tr
-                {...row.getRowProps()}
-                key={row.id}
-                onClick={() => handleRowClick(row.id)}
-                tabIndex={0}
-              >
-                {row.cells.map((cell) => (
-                  <td
-                    {...cell.getCellProps()}
-                    className={`${styles.hoverable} ${
-                      isSelected ? styles.selected : ''
-                    } `}
-                    key={cell.column.id}
-                  >
-                    {cell.render('Cell')}
-                  </td>
-                ))}
-              </tr>
-            );
-            /* eslint-enable react/prop-types */
-          })}
-        </tbody>
-      </table>
+    <div ref={ref} className={styles.root}>
+      <Tree
+        className={styles.featureFileTree}
+        treeData={treeData}
+        expandedKeys={expanded}
+        selectedKeys={selectedFeature ? [selectedFeature] : []}
+        height={height}
+        titleRender={titleRender}
+        showIcon={false}
+        switcherIcon={null}
+        virtual
+        blockNode /* make whole row clickable */
+      />
     </div>
   );
 };

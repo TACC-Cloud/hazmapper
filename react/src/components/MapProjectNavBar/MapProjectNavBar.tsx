@@ -27,7 +27,8 @@ const navItems: NavItem[] = [
   },
   {
     label: 'Point Clouds',
-    imagePath: pointCloudImage,
+    imagePath:
+      pointCloudImage /* https://tacc-main.atlassian.net/browse/WG-391 */,
     panel: Panel.PointClouds,
     showWhenPublic: false,
   },

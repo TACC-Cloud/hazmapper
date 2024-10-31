@@ -1,36 +1,65 @@
-.tableContainer {
+.root {
   width: 100%;
   height: 100%;
   overflow: auto;
 }
 
 .featureFileTree {
-  width: 100%;
-  table-layout: fixed;
+  /* Remove switcher space */
+  :global(.ant-tree-switcher) {
+    display: none;
+  }
+
+  :global(.ant-tree-node-content-wrapper) {
+    padding-left: 0;
+    /*https://tacc-main.atlassian.net/browse/WG-390*/
+    font-size: var(--global-font-family--small);
+    font-family: var(--global-font-family--sans);
+    max-width: 200px; /* fixed width */
+  }
+
+  :global(.ant-tree-node-content-wrapper .ant-tree-title) {
+    display: flex !important;
+    flex: 1;
+    justify-content: flex-start !important;
+    text-align: left !important;
+    min-width: 0;
+    max-width: none;
+  }
+
+  /* Adjust indent size */
+  :global(.ant-tree-indent-unit) {
+    width: 6px;
+  }
+
+  /* Hovering over non-selected items */
+  :global(.ant-tree-node-content-wrapper:hover:not(.ant-tree-node-selected)) {
+    background-color: var(--global-color-accent--weak) !important;
+  }
+
+  /* Selected items (both normal and hover state) */
+  :global(.ant-tree-node-content-wrapper.ant-tree-node-selected) {
+    background-color: var(--global-color-accent--weak) !important;
+  }
 }
 
 .treeNode {
   display: flex;
   align-items: center;
-  height: 2.25em;
+  justify-content: space-between;
+  height: 1.5em;
+  width: 100%;
 }
 
 .fileName {
   flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin-left: 0.5em;
+  margin-left: 0.25em;
 }
 
 .deleteButton {
   margin-left: auto;
-}
-
-.selected {
-  background: var(--global-color-accent--weak) !important;
-}
-
-.hoverable:hover {
-  background: var(--global-color-accent--weak);
 }

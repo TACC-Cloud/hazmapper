@@ -7,21 +7,22 @@ import {
   faClipboardList,
   faMapMarkerAlt,
   faDrawPolygon,
-  faBezierCurve,
   faCloud,
+  faBezierCurve,
   faRoad,
   faLayerGroup,
   faQuestionCircle,
 } from '@fortawesome/free-solid-svg-icons';
 
 import { FeatureType, FeatureTypeNullable } from '@hazmapper/types';
+import styles from './FeatureIcon.module.css';
 
 const featureTypeToIcon: Record<FeatureType, IconDefinition> = {
   // Asset types
   image: faCameraRetro,
   video: faVideo,
   questionnaire: faClipboardList,
-  point_cloud: faCloud,
+  point_cloud: faCloud /* https://tacc-main.atlassian.net/browse/WG-391 */,
   streetview: faRoad,
 
   // Geometry types
@@ -44,5 +45,5 @@ interface Props {
 export const FeatureIcon: React.FC<Props> = ({ featureType }) => {
   const icon = featureType ? featureTypeToIcon[featureType] : faQuestionCircle;
 
-  return <FontAwesomeIcon icon={icon} size="sm" />;
+  return <FontAwesomeIcon className={styles.icon} icon={icon} size="sm" />;
 };
