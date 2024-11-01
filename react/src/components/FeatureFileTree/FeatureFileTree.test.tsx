@@ -10,6 +10,13 @@ jest.mock('@hazmapper/hooks', () => ({
   useDeleteFeature: jest.fn(),
 }));
 
+jest.mock('react-resize-detector', () => ({
+  useResizeDetector: () => ({
+    height: 500,
+    ref: jest.fn(),
+  }),
+}));
+
 const renderWithRouter = (ui: React.ReactElement, { route = '/' } = {}) => {
   return {
     ...render(<MemoryRouter initialEntries={[route]}>{ui}</MemoryRouter>),
@@ -49,13 +56,13 @@ describe('FeatureFileTree', () => {
       isLoading: false,
     }));
 
-    const { getByRole } = renderWithRouter(
+    const { getByTestId } = renderWithRouter(
       <FeatureFileTree {...defaultProps} />,
       { route: '/?selectedFeature=1' }
     );
 
     // Find and click delete button (as featured is selected)
-    const deleteButton = getByRole('button');
+    const deleteButton = getByTestId('delete-feature-button');
     fireEvent.click(deleteButton);
 
     expect(deleteFeatureMock).toHaveBeenCalledWith({
@@ -65,23 +72,23 @@ describe('FeatureFileTree', () => {
   });
 
   it('does not show delete button for public projects', () => {
-    const { queryByRole } = renderWithRouter(
+    const { queryByTestId } = renderWithRouter(
       <FeatureFileTree {...defaultProps} isPublic={true} />,
       { route: '/?selectedFeature=1' }
     );
 
     // Verify delete button is not present
-    const deleteButton = queryByRole('button');
+    const deleteButton = queryByTestId('delete-feature-button');
     expect(deleteButton).toBeNull();
   });
 
   it('does not show delete button when no feature is selected', () => {
-    const { queryByRole } = renderWithRouter(
+    const { queryByTestId } = renderWithRouter(
       <FeatureFileTree {...defaultProps} isPublic={true} />
     );
 
     // Verify delete button is not present
-    const deleteButton = queryByRole('button');
+    const deleteButton = queryByTestId('delete-feature-button');
     expect(deleteButton).toBeNull();
   });
 });

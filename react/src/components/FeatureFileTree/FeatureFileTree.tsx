@@ -122,10 +122,8 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
         selectedFeature === node.key && !featureNode.isDirectory;
       const isExpanded = expanded.includes(node.key);
 
-      // Add click handler for directory nodes
-      const handleClick = (e: React.MouseEvent) => {
+      const toggleNode = () => {
         if (featureNode.isDirectory) {
-          e.stopPropagation(); // Prevent default Tree selection
           // Toggle expanded state
           const newExpanded = expanded.includes(node.key)
             ? expanded.filter((k) => k !== node.key)
@@ -142,8 +140,28 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
         }
       };
 
+      // Add click handler for directory nodes
+      const handleClick = (e: React.MouseEvent) => {
+        toggleNode();
+        e.preventDefault();
+      };
+
+      const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          toggleNode();
+          e.preventDefault();
+        }
+      };
+
       return (
-        <div className={styles.treeNode} onClick={handleClick}>
+        <div
+          className={styles.treeNode}
+          onClick={handleClick}
+          onKeyDown={handleKeyDown}
+          role="button"
+          tabIndex={0}
+          data-testid={`tree-node-${featureNode.nodeId}`}
+        >
           {featureNode.isDirectory ? (
             <FontAwesomeIcon
               icon={isExpanded ? faFolderOpen : faFolderClosed}
@@ -161,6 +179,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
               isLoading={isLoading}
               className={styles.deleteButton}
               onClick={(e) => handleDelete(featureNode.nodeId)(e)}
+              dataTestid="delete-feature-button"
             />
           )}
         </div>
