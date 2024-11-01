@@ -46,10 +46,10 @@
 .panelContainer {
   /* todo place into a PanelContainer and then the PanelNavigation where the buttons live either horizonal or vertical    */
   width: 230px;
-  height: calc(100vh - var(--navbar-height) - var(--control-bar-height));
+  height: calc(100vh - var(--navbar-height) - var(--control-bar-height)); /* todo should consider if scrolled below those */
   background-color: var(--global-color-primary--xx-light);
   position: absolute;
-  left: 150px;
+  left: var(--hazmapper-navbar-width);
   z-index: 5000;
 }
 

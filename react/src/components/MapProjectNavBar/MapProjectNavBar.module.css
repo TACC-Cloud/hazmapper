@@ -1,13 +1,24 @@
 .root {
   height: 100%;
-  min-width: 150px;
+  min-width: 75px;
+
   padding-top: var(--global-space--section-top);
 }
 
-.root > a > div {
-  padding-left: var(--global-space--section-left);
+.root :global([class*='nav-content']) {
+  height: 70px;
+  min-height: 70px;
+}
+
+.navItem {
+  height: 70px;
+  width: 75px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .image {
-  margin-right: 1rem;
+  width: 32px;
 }
