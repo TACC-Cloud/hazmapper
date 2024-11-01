@@ -1,3 +1,8 @@
+:root {
+  --navbar-height: 40px;
+  --control-bar-height: 27px;
+}
+
 .errorContainer {
   display: flex;
   align-items: center;
@@ -16,21 +21,23 @@
 .topNavbar {
   background-color: black;
   color: white;
-  height: 40px;
+  height: var(--navbar-height);
+  min-height: var(--navbar-height);
   display: flex;
   align-items: center;
 }
 
 .mapControlBar {
   background-color: white;
-  height: 27px;
+  height: var(--control-bar-height);
+  min-height: var(--control-bar-height);
   display: flex;
   align-items: center;
   padding: 0 10px;
 }
 
 .container {
-  height: 100vh;
+  height: 100%;
   width: 100%;
   display: flex;
   flex: 1;
@@ -39,7 +46,7 @@
 .panelContainer {
   /* todo place into a PanelContainer and then the PanelNavigation where the buttons live either horizonal or vertical    */
   width: 230px;
-  height: 95%;
+  height: calc(100vh - var(--navbar-height) - var(--control-bar-height));
   background-color: var(--global-color-primary--xx-light);
   position: absolute;
   left: 150px;
