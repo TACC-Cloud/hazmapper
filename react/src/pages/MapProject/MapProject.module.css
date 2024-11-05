@@ -48,7 +48,7 @@
   width: 230px;
   height: calc(
     100vh - var(--navbar-height) - var(--control-bar-height)
-  ); /* TODO should consider if scrolled below those; like if we scrolled below and aren't showign navbar/controlbar */
+  );
   background-color: var(--global-color-primary--xx-light);
   position: absolute;
   left: var(--hazmapper-navbar-width);
