@@ -1,6 +1,7 @@
-import React, { useMemo, useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Tree } from 'antd';
+import { ConfigProvider } from 'antd';
 import type { DataNode } from 'antd/es/tree';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -54,11 +55,12 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
   const { height, ref } = useResizeDetector();
 
   const [expanded, setExpanded] = useState<string[]>([]);
+  const [treeData, setTreeData] = useState<TreeDataNode[]>([]);
 
   const searchParams = new URLSearchParams(location.search);
   const selectedFeature = searchParams.get('selectedFeature');
 
-  const treeData = useMemo(() => {
+  useEffect(() => {
     const fileNodeArray = featureCollectionToFileNodeArray(featureCollection);
 
     const getDirectoryNodeIds = (nodes: FeatureFileNode[]): string[] => {
@@ -78,9 +80,8 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
       return directoryIds;
     };
 
-    const expandedDirectories = getDirectoryNodeIds(fileNodeArray);
     // Have all direcotories be in 'expanded' (i.e. everything is expanded)
-    setExpanded(expandedDirectories);
+    const expandedDirectories = getDirectoryNodeIds(fileNodeArray);
 
     const convertToTreeNode = (node: FeatureFileNode) => ({
       title: node.name,
@@ -91,8 +92,13 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
     });
 
     // Convert features into Antd's DataNode (i.e. TreeDataNode) and our internal class FeatureFileNode
-    return fileNodeArray.map(convertToTreeNode);
+    setTreeData(fileNodeArray.map(convertToTreeNode));
+    setExpanded(expandedDirectories);
   }, [featureCollection]);
+
+  const handleExpand = (newExpandedKeys) => {
+    setExpanded(newExpandedKeys);
+  };
 
   const handleDelete = useCallback(
     (nodeId: string) => (e: React.MouseEvent) => {
@@ -105,103 +111,111 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
       }
 
       // Only proceed with deletion if projectId is valid
-      if (projectId > 0) {
-        deleteFeature({
-          projectId,
-          featureId,
-        });
-      }
+      deleteFeature({
+        projectId,
+        featureId,
+      });
     },
     [projectId, deleteFeature]
   );
 
-  const titleRender = useCallback(
-    (node: TreeDataNode) => {
-      const featureNode = node.featureNode as FeatureFileNode;
-      const isSelected =
-        selectedFeature === node.key && !featureNode.isDirectory;
-      const isExpanded = expanded.includes(node.key);
+  const titleRender = (node: TreeDataNode) => {
+    const featureNode = node.featureNode as FeatureFileNode;
+    const isSelected = selectedFeature === node.key && !featureNode.isDirectory;
+    const isExpanded = expanded.includes(node.key);
 
-      const toggleNode = () => {
-        if (featureNode.isDirectory) {
-          // Toggle expanded state
-          const newExpanded = expanded.includes(node.key)
-            ? expanded.filter((k) => k !== node.key)
-            : [...expanded, node.key];
-          setExpanded(newExpanded);
+    const toggleNode = (e: React.MouseEvent | React.KeyboardEvent) => {
+      if (featureNode.isDirectory) {
+        e.stopPropagation();
+
+        // Toggle expanded state
+        const newExpanded = expanded.includes(node.key)
+          ? expanded.filter((k) => k !== node.key)
+          : [...expanded, node.key];
+        setExpanded(newExpanded);
+      } else {
+        e.stopPropagation();
+
+        const newSearchParams = new URLSearchParams(searchParams);
+        if (selectedFeature === node.key) {
+          newSearchParams.delete('selectedFeature');
         } else {
-          const newSearchParams = new URLSearchParams(searchParams);
-          if (selectedFeature === node.key || node.key.startsWith('DIR_')) {
-            newSearchParams.delete('selectedFeature');
-          } else {
-            newSearchParams.set('selectedFeature', node.key);
-          }
-          navigate({ search: newSearchParams.toString() }, { replace: true });
+          newSearchParams.set('selectedFeature', node.key);
         }
-      };
+        navigate({ search: newSearchParams.toString() }, { replace: true });
+      }
+    };
 
-      // Add click handler for directory nodes
-      const handleClick = (e: React.MouseEvent) => {
-        toggleNode();
-        e.preventDefault();
-      };
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        toggleNode(e);
+      }
+    };
 
-      const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          toggleNode();
-          e.preventDefault();
-        }
-      };
+    return (
+      <div
+        className={styles.treeNode}
+        onClick={toggleNode}
+        onKeyDown={handleKeyDown}
+        role="button"
+        tabIndex={0}
+        data-testid={`tree-node-${featureNode.nodeId}`}
+      >
+        {featureNode.isDirectory ? (
+          <FontAwesomeIcon
+            icon={isExpanded ? faFolderOpen : faFolderClosed}
+            size="sm"
+          />
+        ) : (
+          <FeatureIcon featureType={featureNode.featureType} />
+        )}
+        <span className={styles.fileName}>{featureNode.name}</span>
+        {!isPublic && isSelected && (
+          <Button
+            size="small"
+            type="primary"
+            iconNameBefore="trash"
+            isLoading={isLoading}
+            onClick={(e) => handleDelete(featureNode.nodeId)(e)}
+            dataTestid="delete-feature-button"
+          />
+        )}
+      </div>
+    );
+  };
 
-      return (
-        <div
-          className={styles.treeNode}
-          onClick={handleClick}
-          onKeyDown={handleKeyDown}
-          role="button"
-          tabIndex={0}
-          data-testid={`tree-node-${featureNode.nodeId}`}
-        >
-          {featureNode.isDirectory ? (
-            <FontAwesomeIcon
-              icon={isExpanded ? faFolderOpen : faFolderClosed}
-              size="sm"
-            />
-          ) : (
-            <FeatureIcon featureType={featureNode.featureType} />
-          )}
-          <span className={styles.fileName}>{featureNode.name}</span>
-          {!isPublic && isSelected && (
-            <Button
-              size="small"
-              type="primary"
-              iconNameBefore="trash"
-              isLoading={isLoading}
-              onClick={(e) => handleDelete(featureNode.nodeId)(e)}
-              dataTestid="delete-feature-button"
-            />
-          )}
-        </div>
-      );
-    },
-    [expanded, setExpanded, selectedFeature, isPublic, isLoading, handleDelete]
-  );
+  if (!treeData.length) return null;
 
   return (
-    <div ref={ref} className={styles.root}>
-      <Tree
-        className={styles.featureFileTree}
-        treeData={treeData}
-        expandedKeys={expanded}
-        selectedKeys={selectedFeature ? [selectedFeature] : []}
-        height={height}
-        titleRender={titleRender}
-        showIcon={false}
-        switcherIcon={null}
-        virtual
-        blockNode /* make whole row clickable */
-      />
-    </div>
+    <ConfigProvider
+      theme={{
+        hashed:
+          false /* removed ccs-dev-only style which adds margin-bottom which is problematic when calculating virtual rendering*/,
+        components: {
+          Tree: {
+            marginXXS: 0,
+            marginXS: 0,
+            titleHeight: 32, // Set to your desired height
+          },
+        },
+      }}
+    >
+      <div className={styles.root} ref={ref}>
+        <Tree
+          className={styles.featureFileTree}
+          treeData={treeData}
+          expandedKeys={expanded}
+          selectable={false}
+          height={height}
+          titleRender={titleRender}
+          showIcon={false}
+          switcherIcon={null}
+          onExpand={handleExpand}
+          blockNode /* make whole row clickable */
+          virtual
+        />
+      </div>
+    </ConfigProvider>
   );
 };
 

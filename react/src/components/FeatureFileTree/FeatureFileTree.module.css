@@ -1,14 +1,31 @@
 .root {
   width: 100%;
   height: 100%;
-  overflow: auto;
+  overflow: 'visible';
+
+  :global(.ant-tree .ant-tree-treenode) {
+    height: 28px; /* Original 24px + 4px spacing */
+    margin-bottom: 0px !important; /*needed to ensure calculation of row hight is right */
+  }
+
+  :global(
+      .ant-tree-list
+        .ant-tree-list-holder
+        .ant-tree-list-holder-inner
+        .ant-tree
+        .ant-tree-treenode
+    ) {
+    margin-bottom: 0px !important; /*needed to ensure calculation of row hight is right */
+  }
+
+    /* Remove switcher space */
+    :global(.ant-tree-switcher) {
+      display: none;
+    }
 }
 
 .featureFileTree {
-  /* Remove switcher space */
-  :global(.ant-tree-switcher) {
-    display: none;
-  }
+  height: 100%;
 
   :global(.ant-tree-node-content-wrapper) {
     padding-left: 0;
@@ -27,12 +44,29 @@
     display: flex !important;
     flex: 1;
     justify-content: flex-start !important;
+    padding: 0 !important; /* Removes the default padding */
+    margin: 0 !important; /* Removes any margin */
     text-align: left !important;
   }
 
   /* Adjust indent size */
   :global(.ant-tree-indent-unit) {
-    width: 5px;
+    width: 6px;
+  }
+
+  :global(.ant-tree-treenode:before) {
+    height: 0 !important;
+    display: none !important;
+  }
+
+  :global(
+      .ant-tree-list
+        .ant-tree-list-holder
+        .ant-tree-list-holder-inner
+        .ant-tree
+        .ant-tree-treenode
+    ) {
+    margin-bottom: 0px !important; /*needed to ensure calculation of row hight is right */
   }
 
   /* Hovering over non-selected items */
@@ -51,6 +85,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  margin-bottom: 0 !important; /* needed to ensure calcuation of row height is correct*/
 }
 
 .fileName {
@@ -59,4 +94,5 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   margin-left: 0.25em;
+  margin-bottom: 0 !important; /* needed to ensure calcuation of row height is correct*/
 }
