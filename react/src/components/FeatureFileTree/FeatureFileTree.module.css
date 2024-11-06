@@ -29,7 +29,7 @@
     /*https://tacc-main.atlassian.net/browse/WG-390*/
     font-size: var(--global-font-family--small);
     font-family: var(--global-font-family--sans);
-    max-width: 230px; /* fixed width of panel*/
+    max-width: var(--hazmapper-panel-width); /* fixed width of panel*/
     padding-left: 5px;
     padding-right: 5px;
     overflow: hidden;

@@ -1,6 +1,7 @@
 .root {
   height: 100%;
-  min-width: 75px;
+  width: var(--hazmapper-panel-navbar-width);
+  min-width: var(--hazmapper-panel-navbar-width);
   overflow-y: auto; /* Allows scrolling */
   padding-top: var(--global-space--section-top);
 }
