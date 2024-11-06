@@ -1,7 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Tree } from 'antd';
-import { ConfigProvider } from 'antd';
 import type { DataNode } from 'antd/es/tree';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -187,35 +186,21 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
   if (!treeData.length) return null;
 
   return (
-    <ConfigProvider
-      theme={{
-        hashed:
-          false /* removed ccs-dev-only style which adds margin-bottom which is problematic when calculating virtual rendering*/,
-        components: {
-          Tree: {
-            marginXXS: 0,
-            marginXS: 0,
-            titleHeight: 32, // Set to your desired height
-          },
-        },
-      }}
-    >
-      <div className={styles.root} ref={ref}>
-        <Tree
-          className={styles.featureFileTree}
-          treeData={treeData}
-          expandedKeys={expanded}
-          selectable={false}
-          height={height}
-          titleRender={titleRender}
-          showIcon={false}
-          switcherIcon={null}
-          onExpand={handleExpand}
-          blockNode /* make whole row clickable */
-          virtual
-        />
-      </div>
-    </ConfigProvider>
+    <div className={styles.root} ref={ref}>
+      <Tree
+        className={styles.featureFileTree}
+        treeData={treeData}
+        expandedKeys={expanded}
+        selectable={false}
+        height={height}
+        titleRender={titleRender}
+        showIcon={false}
+        switcherIcon={null}
+        onExpand={handleExpand}
+        blockNode /* make whole row clickable */
+        virtual
+      />
+    </div>
   );
 };
 
