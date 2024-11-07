@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { act } from 'react';
 import {
   render,
   cleanup,
@@ -9,7 +9,6 @@ import {
 
 import CreateMapModal from './CreateMapModal';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { act } from 'react-dom/test-utils';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 jest.mock('@hazmapper/hooks/user/useAuthenticatedUser', () => ({
