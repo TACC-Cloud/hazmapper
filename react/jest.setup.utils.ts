@@ -7,3 +7,11 @@ const ignoredWarnings = ['React Router Future Flag Warning'];
 export function shouldIgnoreWarning(message: string): boolean {
   return ignoredWarnings.some((warning) => message.includes(warning));
 }
+
+export const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS, PATCH',
+  'Access-Control-Allow-Headers':
+    'Content-Type, Authorization, X-Requested-With',
+  'Access-Control-Allow-Credentials': 'true',
+};

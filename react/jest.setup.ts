@@ -1,9 +1,9 @@
 import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
 import nock from 'nock';
 import { QueryClient } from 'react-query';
-import { shouldIgnoreWarning } from './jest.setup.utils';
+import { shouldIgnoreWarning, CORS_HEADERS } from './jest.setup.utils';
 
-/***** A) Mock the configuration used for unit testing *****/
+/***** A) Setup the configuration used for unit testing *****/
 jest.mock('@hazmapper/hooks/environment/getLocalAppConfiguration', () => ({
   getLocalAppConfiguration: jest.fn(() => testDevConfiguration),
 }));
@@ -18,11 +18,8 @@ console.warn = (...args) => {
   originalWarn.apply(console, args);
 };
 
-/***** C) Ensure that we are mocking things in tests *****/
-
-// Configure nock for all requests
+/***** C) Setup nock and also ensure that we are mocking things in tests *****/
 nock.disableNetConnect();
-nock.enableNetConnect('127.0.0.1'); // Allow localhost if needed
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -42,6 +39,18 @@ let unmockedRequest = false;
 beforeEach(() => {
   queryClient.clear();
   nock.cleanAll();
+
+  // Setup persistent CORS handling
+  nock(testDevConfiguration.geoapiUrl)
+    .options(/.*/)
+    .reply(200, '', CORS_HEADERS)
+    .persist();
+  nock(testDevConfiguration.designsafePortalUrl)
+    .options(/.*/)
+    .reply(200, '', CORS_HEADERS)
+    .persist();
+
+  // Keep track of unmocked requests
   unmockedRequest = false;
 
   nock.emitter.on('no match', (req) => {
@@ -59,7 +68,7 @@ beforeEach(() => {
       `No mock found for request: ${method} ${proto}://${hostname}${path}\n` +
         'Please add a mock to your test:\n\n' +
         'beforeEach(() => {\n' +
-        `  nock('${proto}://${hostname}')\n` +
+        `  nock('YOUR_HOST') \\\\ testDevConfiguration.geoapiUrl or testDevConfiguration.designsafePortalUrl\n` +
         `    .${method.toLowerCase()}('${path}')\n` +
         '    .reply(200, YOUR_MOCK_DATA);\n' +
         '});'
@@ -73,15 +82,9 @@ afterEach(() => {
       'Test contained unmocked requests - see console for details'
     );
   }
-
-  if (!nock.isDone()) {
-    const pendingMocks = nock.pendingMocks();
-    console.log('Pending mocks:', pendingMocks);
-    throw new Error(
-      `Not all nock interceptors were used!\n${pendingMocks.join('\n')}`
-    );
-  }
   nock.emitter.removeAllListeners('no match');
+
+  nock.cleanAll();
 });
 
 afterAll(() => {
