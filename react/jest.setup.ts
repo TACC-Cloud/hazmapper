@@ -8,7 +8,6 @@ jest.mock('@hazmapper/hooks/environment/getLocalAppConfiguration', () => ({
   getLocalAppConfiguration: jest.fn(() => testDevConfiguration),
 }));
 
-
 /***** B) Ignore some known warnings/errors *****/
 const originalWarn = console.warn;
 
@@ -51,26 +50,28 @@ beforeEach(() => {
       method,
       hostname,
       path,
-      fullUrl: `${proto}://${hostname}${path}`
+      fullUrl: `${proto}://${hostname}${path}`,
     });
 
     unmockedRequest = true;
     // Throw error that will be caught by React Query
     throw new Error(
       `No mock found for request: ${method} ${proto}://${hostname}${path}\n` +
-      'Please add a mock to your test:\n\n' +
-      'beforeEach(() => {\n' +
-      `  nock('${proto}://${hostname}')\n` +
-      `    .${method.toLowerCase()}('${path}')\n` +
-      '    .reply(200, YOUR_MOCK_DATA);\n' +
-      '});'
+        'Please add a mock to your test:\n\n' +
+        'beforeEach(() => {\n' +
+        `  nock('${proto}://${hostname}')\n` +
+        `    .${method.toLowerCase()}('${path}')\n` +
+        '    .reply(200, YOUR_MOCK_DATA);\n' +
+        '});'
     );
   });
 });
 
 afterEach(() => {
   if (unmockedRequest) {
-    throw new Error('Test contained unmocked requests - see console for details');
+    throw new Error(
+      'Test contained unmocked requests - see console for details'
+    );
   }
 
   if (!nock.isDone()) {
