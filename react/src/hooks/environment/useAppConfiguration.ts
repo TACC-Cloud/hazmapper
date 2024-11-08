@@ -50,6 +50,7 @@ export const useAppConfiguration = (): AppConfiguration => {
         designsafePortalUrl: getDesignsafePortalUrl(
           DesignSafePortalEnvironment.Dev
         ),
+        tapisUrl: 'https://designsafe.tapis.io',
         mapillary: mapillaryConfig,
         taggitUrl: origin + '/taggit-staging',
       };
@@ -70,6 +71,7 @@ export const useAppConfiguration = (): AppConfiguration => {
         designsafePortalUrl: getDesignsafePortalUrl(
           DesignSafePortalEnvironment.Dev
         ),
+        tapisUrl: 'https://designsafe.tapis.io',
         mapillary: mapillaryConfig,
         taggitUrl: origin + '/taggit-dev',
       };
@@ -88,6 +90,7 @@ export const useAppConfiguration = (): AppConfiguration => {
         designsafePortalUrl: getDesignsafePortalUrl(
           DesignSafePortalEnvironment.Production
         ),
+        tapisUrl: 'https://designsafe.tapis.io',
         mapillary: mapillaryConfig,
         taggitUrl: origin + '/taggit',
       };

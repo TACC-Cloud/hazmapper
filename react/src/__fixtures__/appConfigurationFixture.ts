@@ -14,8 +14,9 @@ export const mapillaryConfig: MapillaryConfiguration = {
 
 export const testDevConfiguration: AppConfiguration = {
   basePath: '/test',
-  geoapiUrl: 'http://geoapi.unittest',
+  geoapiUrl: 'https://geoapi.unittest',
   designsafePortalUrl: 'https://designsafeci.unittest',
+  tapisUrl: 'https://tapis.io.unittest',
   mapillary: mapillaryConfig,
-  taggitUrl: 'http://taggit.unittest',
+  taggitUrl: 'https://taggit.unittest',
 };

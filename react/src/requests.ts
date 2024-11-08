@@ -24,7 +24,7 @@ function getBaseApiUrl(
     case ApiService.DesignSafe:
       return configuration.designsafePortalUrl;
     case ApiService.Tapis:
-      return 'https://designsafe.tapis.io';
+      return configuration.tapisUrl;
     default:
       throw new Error('Unsupported api service Type.');
   }

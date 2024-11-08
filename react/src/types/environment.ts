@@ -75,6 +75,9 @@ export interface AppConfiguration {
   /** URL for the DesignSafe portal and API. */
   designsafePortalUrl: string;
 
+  /** URL for Tapis  */
+  tapisUrl: string;
+
   /** Mapillary related configuration */
   mapillary: MapillaryConfiguration;
 

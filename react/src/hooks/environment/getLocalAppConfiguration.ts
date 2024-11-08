@@ -22,6 +22,7 @@ export const getLocalAppConfiguration = (
     designsafePortalUrl: getDesignsafePortalUrl(
       DesignSafePortalEnvironment.Dev
     ),
+    tapisUrl: 'https://designsafe.tapis.io',
     mapillary: mapillaryConfig,
     taggitUrl: origin + '/taggit-staging',
   };
