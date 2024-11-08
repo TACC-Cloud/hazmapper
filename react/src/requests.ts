@@ -8,11 +8,10 @@ import {
   UseMutationOptions,
   QueryKey,
 } from 'react-query';
-import {
-  useAppConfiguration,
-  useEnsureAuthenticatedUserHasValidTapisToken,
-} from './hooks';
-import { ApiService, AppConfiguration, AuthState } from './types';
+import { useAppConfiguration } from '@hazmapper/hooks';
+
+import { useEnsureAuthenticatedUserHasValidTapisToken } from '@hazmapper/hooks';
+import { ApiService, AppConfiguration, AuthState } from '@hazmapper/types';
 import { v4 as uuidv4 } from 'uuid';
 
 function getBaseApiUrl(

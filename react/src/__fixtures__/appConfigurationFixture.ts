@@ -1,8 +1,4 @@
-import {
-  GeoapiBackendEnvironment,
-  AppConfiguration,
-  MapillaryConfiguration,
-} from '../types';
+import { AppConfiguration, MapillaryConfiguration } from '@hazmapper/types';
 
 export const mapillaryConfig: MapillaryConfiguration = {
   authUrl: 'https://www.mapillary.com/connect',
