@@ -1,7 +1,8 @@
 import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
 import nock from 'nock';
-import { QueryClient } from 'react-query';
-import { shouldIgnoreWarning, CORS_HEADERS } from './jest.setup.utils';
+import { shouldIgnoreWarning, setupCorsMocks } from './jest.setup.utils';
+import { testQueryClient } from '@hazmapper/testUtil';
+import axios from 'axios';
 
 /***** A) Setup the configuration used for unit testing *****/
 jest.mock('@hazmapper/hooks/environment/getLocalAppConfiguration', () => ({
@@ -19,43 +20,22 @@ console.warn = (...args) => {
 };
 
 /***** C) Setup nock and also ensure that we are mocking things in tests *****/
-nock.disableNetConnect();
-
-export const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: false,
-      cacheTime: 0,
-      staleTime: 0,
-      // Make React Query throw errors
-      useErrorBoundary: true,
-    },
-  },
-});
 
 // Track if we've seen an unmocked request
 let unmockedRequest = false;
 
 beforeEach(() => {
-  queryClient.clear();
+  testQueryClient.clear();
   nock.cleanAll();
-
-  // Setup persistent CORS handling
-  nock(testDevConfiguration.geoapiUrl)
-    .options(/.*/)
-    .reply(200, '', CORS_HEADERS)
-    .persist();
-  nock(testDevConfiguration.designsafePortalUrl)
-    .options(/.*/)
-    .reply(200, '', CORS_HEADERS)
-    .persist();
+  nock.disableNetConnect();
+  setupCorsMocks(testDevConfiguration);
 
   // Keep track of unmocked requests
   unmockedRequest = false;
 
   nock.emitter.on('no match', (req) => {
     const { method, path, hostname, proto } = req;
-    console.log(`Intercepted unmocked ${proto} request:`, {
+    console.error(`Intercepted unmocked ${proto} request:`, {
       method,
       hostname,
       path,
@@ -83,7 +63,6 @@ afterEach(() => {
     );
   }
   nock.emitter.removeAllListeners('no match');
-
   nock.cleanAll();
 });
 

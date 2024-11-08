@@ -6,10 +6,15 @@ import {
   screen,
   waitFor,
 } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import store from '../../redux/store';
+import nock from 'nock';
 
 import CreateMapModal from './CreateMapModal';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from 'react-query';
+import { testQueryClient } from '@hazmapper/testUtil';
+import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
 
 jest.mock('@hazmapper/hooks/user/useAuthenticatedUser', () => ({
   __esModule: true,
@@ -17,22 +22,6 @@ jest.mock('@hazmapper/hooks/user/useAuthenticatedUser', () => ({
     data: { username: 'mockUser' },
     isLoading: false,
     error: null,
-  }),
-}));
-
-jest.mock('@hazmapper/hooks/projects/useCreateProject', () => ({
-  __esModule: true,
-  default: () => ({
-    mutate: jest.fn((data, { onSuccess, onError }) => {
-      if (data.name === 'Error Map') {
-        // Simulate a submission error with a 500 status code
-        onError({ response: { status: 500 } });
-      } else {
-        // Simulate successful project creation
-        onSuccess({ uuid: '123' });
-      }
-    }),
-    isLoading: false,
   }),
 }));
 
@@ -44,25 +33,22 @@ jest.mock('react-router-dom', () => ({
 }));
 
 const toggleMock = jest.fn();
-const queryClient = new QueryClient();
 
 const renderComponent = async (isOpen = true) => {
   await act(async () => {
     render(
-      <QueryClientProvider client={queryClient}>
-        <Router>
-          <CreateMapModal isOpen={isOpen} toggle={toggleMock} />
-        </Router>
-      </QueryClientProvider>
+      <Provider store={store}>
+        <QueryClientProvider client={testQueryClient}>
+          <Router>
+            <CreateMapModal isOpen={isOpen} toggle={toggleMock} />
+          </Router>
+        </QueryClientProvider>
+      </Provider>
     );
   });
 };
 
 describe('CreateMapModal', () => {
-  afterEach(() => {
-    cleanup();
-  });
-
   test('renders the modal when open', async () => {
     await renderComponent();
     await waitFor(() => {
@@ -71,6 +57,11 @@ describe('CreateMapModal', () => {
   });
 
   test('submits form data successfully', async () => {
+    nock(testDevConfiguration.geoapiUrl)
+      .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
+      .post('/projects/')
+      .reply(200, { uuid: 123 }); // Fixture being added in https://github.com/TACC-Cloud/hazmapper/pull/273
+
     await renderComponent();
     await act(async () => {
       fireEvent.change(screen.getByTestId('name-input'), {
@@ -91,6 +82,8 @@ describe('CreateMapModal', () => {
   });
 
   test('displays error message on submission error', async () => {
+    nock(testDevConfiguration.geoapiUrl).post('/projects/').reply(500);
+
     await renderComponent();
     await act(async () => {
       fireEvent.change(screen.getByTestId('name-input'), {
