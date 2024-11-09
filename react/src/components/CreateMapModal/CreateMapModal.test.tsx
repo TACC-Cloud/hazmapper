@@ -1,19 +1,13 @@
 import React, { act } from 'react';
-import {
-  render,
-  cleanup,
-  fireEvent,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import store from '../../redux/store';
-import nock from 'nock';
+import { http, HttpResponse } from 'msw';
 
 import CreateMapModal from './CreateMapModal';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { QueryClientProvider } from 'react-query';
-import { testQueryClient } from '@hazmapper/testUtil';
+import { testQueryClient, server } from '@hazmapper/testUtil';
 import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
 
 jest.mock('@hazmapper/hooks/user/useAuthenticatedUser', () => ({
@@ -57,10 +51,11 @@ describe('CreateMapModal', () => {
   });
 
   test('submits form data successfully', async () => {
-    nock(testDevConfiguration.geoapiUrl)
-      .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
-      .post('/projects/')
-      .reply(200, { uuid: 123 }); // Fixture being added in https://github.com/TACC-Cloud/hazmapper/pull/273
+    server.use(
+      http.post(`${testDevConfiguration.geoapiUrl}/projects/`, () => {
+        return HttpResponse.json({ uuid: 123 }, { status: 200 });
+      })
+    ); // Fixture being added in https://github.com/TACC-Cloud/hazmapper/pull/273
 
     await renderComponent();
     await act(async () => {
@@ -82,7 +77,13 @@ describe('CreateMapModal', () => {
   });
 
   test('displays error message on submission error', async () => {
-    nock(testDevConfiguration.geoapiUrl).post('/projects/').reply(500);
+    server.use(
+      http.post(`${testDevConfiguration.geoapiUrl}/projects/`, async () => {
+        return new HttpResponse(null, {
+          status: 500,
+        });
+      })
+    );
 
     await renderComponent();
     await act(async () => {

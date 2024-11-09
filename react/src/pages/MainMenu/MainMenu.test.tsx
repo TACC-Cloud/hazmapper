@@ -1,15 +1,14 @@
 import React, { act } from 'react';
 import { render, waitFor } from '@testing-library/react';
+import { http, HttpResponse } from 'msw';
 import MainMenu from './MainMenu';
 import { QueryClientProvider } from 'react-query';
-import { testQueryClient } from '@hazmapper/testUtil';
+import { testQueryClient, server } from '@hazmapper/testUtil';
 import { Provider } from 'react-redux';
 import store from '../../redux/store';
 import { MemoryRouter } from 'react-router-dom';
 import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
 import { systems } from '@hazmapper/__fixtures__/systemsFixture';
-
-import nock from 'nock';
 
 jest.mock('@hazmapper/hooks/user/useAuthenticatedUser', () => ({
   __esModule: true,
@@ -21,13 +20,24 @@ jest.mock('@hazmapper/hooks/user/useAuthenticatedUser', () => ({
 }));
 
 test('renders menu', async () => {
-  nock(testDevConfiguration.tapisUrl)
-    .get('/v3/systems/?listType=ALL')
-    .reply(200, systems);
-  nock(testDevConfiguration.geoapiUrl).get('/projects/').reply(200, {}); // Fixture being added in https://github.com/TACC-Cloud/hazmapper/pull/273
-  nock(testDevConfiguration.designsafePortalUrl)
-    .get('/api/projects/v2/')
-    .reply(200, { results: [] }); // Fixture being added in https://github.com/TACC-Cloud/hazmapper/pull/273
+  server.use(
+    // TODO: Use proper systems fixture once available
+    http.get(`${testDevConfiguration.tapisUrl}/v3/systems/`, () =>
+      HttpResponse.json(systems, { status: 200 })
+    ),
+
+    // TODO: Replace empty response with proper fixture from https://github.com/TACC-Cloud/hazmapper/pull/273
+    http.get(`${testDevConfiguration.geoapiUrl}/projects/`, () =>
+      HttpResponse.json({}, { status: 200 })
+    ),
+
+    // TODO: Replace empty response with proper fixture from https://github.com/TACC-Cloud/hazmapper/pull/273
+    http.get(
+      `${testDevConfiguration.designsafePortalUrl}/api/projects/v2/`,
+      () => HttpResponse.json({ results: [] }, { status: 200 })
+    )
+  );
+
   const { getByText } = render(
     <Provider store={store}>
       <MemoryRouter>

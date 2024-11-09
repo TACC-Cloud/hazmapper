@@ -7,6 +7,7 @@ const esModules = [
   '@react-leaflet',
   'react-leaflet',
   '@tacc/core-components',
+  'uuid',
 ].join('|');
 
 module.exports = {
@@ -165,11 +166,14 @@ module.exports = {
   // snapshotSerializers: [],
 
   // The test environment that will be used for testing
-  testEnvironment: 'jsdom',
+  // https://mswjs.io/docs/migrations/1.x-to-2.x#requestresponsetextencoder-is-not-defined-jest; consider moving to vitest
+  testEnvironment: 'jest-fixed-jsdom',
 
   // Options that will be passed to the testEnvironment
-  // testEnvironmentOptions: {},
-
+  // Force JSDOM to import msw/node (see https://stackoverflow.com/questions/77399773/cannot-find-module-msw-node-from)
+  testEnvironmentOptions: {
+    customExportConditions: [''],
+  },
   // Adds a location field to test results
   // testLocationInResults: false,
 

@@ -1,8 +1,5 @@
 import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
-import nock from 'nock';
-import { shouldIgnoreWarning, setupCorsMocks } from './jest.setup.utils';
-import { testQueryClient } from '@hazmapper/testUtil';
-import axios from 'axios';
+import { server } from '@hazmapper/testUtil';
 
 /***** A) Setup the configuration used for unit testing *****/
 jest.mock('@hazmapper/hooks/environment/getLocalAppConfiguration', () => ({
@@ -12,6 +9,14 @@ jest.mock('@hazmapper/hooks/environment/getLocalAppConfiguration', () => ({
 /***** B) Ignore some known warnings/errors *****/
 const originalWarn = console.warn;
 
+// List of `console.warn` messages that can be ignored
+const ignoredWarnings = ['React Router Future Flag Warning'];
+
+// Helper function to determine if a `console.warn` message should be ignored
+export function shouldIgnoreWarning(message: string): boolean {
+  return ignoredWarnings.some((warning) => message.includes(warning));
+}
+
 console.warn = (...args) => {
   if (typeof args[0] === 'string' && shouldIgnoreWarning(args[0])) {
     return;
@@ -19,54 +24,29 @@ console.warn = (...args) => {
   originalWarn.apply(console, args);
 };
 
-/***** C) Setup nock and also ensure that we are mocking things in tests *****/
+/***** C) Setup testing and also ensure that we are mocking things in tests *****/
 
-// Track if we've seen an unmocked request
-let unmockedRequest = false;
+beforeAll(() => {
+  // Establish mocking of APIs before all tests
+  server.listen({ onUnhandledRequest: 'error' });
 
-beforeEach(() => {
-  testQueryClient.clear();
-  nock.cleanAll();
-  nock.disableNetConnect();
-  setupCorsMocks(testDevConfiguration);
+  const originalError = console.error;
 
-  // Keep track of unmocked requests
-  unmockedRequest = false;
-
-  nock.emitter.on('no match', (req) => {
-    const { method, path, hostname, proto } = req;
-    console.error(`Intercepted unmocked ${proto} request:`, {
-      method,
-      hostname,
-      path,
-      fullUrl: `${proto}://${hostname}${path}`,
-    });
-
-    unmockedRequest = true;
-    // Throw error that will be caught by React Query
-    throw new Error(
-      `No mock found for request: ${method} ${proto}://${hostname}${path}\n` +
-        'Please add a mock to your test:\n\n' +
-        'beforeEach(() => {\n' +
-        `  nock('YOUR_HOST') \\\\ testDevConfiguration.geoapiUrl or testDevConfiguration.designsafePortalUrl\n` +
-        `    .${method.toLowerCase()}('${path}')\n` +
-        '    .reply(200, YOUR_MOCK_DATA);\n' +
-        '});'
-    );
+  jest.spyOn(console, 'error').mockImplementation((...args: any[]) => {
+    // Check if contains the 500 status message as common for our testing purposes
+    // so not needed to be logged;
+    if (args[0]?.message?.includes('Request failed with status code 500'))
+      return;
+    // Use the original console.error for other cases
+    originalError.apply(console, args);
   });
 });
 
-afterEach(() => {
-  if (unmockedRequest) {
-    throw new Error(
-      'Test contained unmocked requests - see console for details'
-    );
-  }
-  nock.emitter.removeAllListeners('no match');
-  nock.cleanAll();
-});
+// Reset any runtime request handlers we may add during the tests
+afterEach(() => server.resetHandlers());
 
+// Clean up after the tests are finished
 afterAll(() => {
-  nock.restore();
-  nock.enableNetConnect();
+  server.close();
+  jest.restoreAllMocks();
 });
