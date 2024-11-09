@@ -35,7 +35,6 @@ const ProjectListing: React.FC = () => {
         <div className={styles.errorMessage}>
           <SectionMessage type="error">
             There was an error gathering your maps.{' '}
-            {/*@ts-ignore: Suppress error typing issues*/}
             {error?.message ? error?.message : 'An unknown error occurred.'}
             <br />
             <a
@@ -79,34 +78,28 @@ const ProjectListing: React.FC = () => {
                 </td>
                 <td className={styles.buttonColumn}>
                   <Button type="link" iconNameBefore="edit-document"></Button>
-                  <Button type="link" iconNameBefore="trash"></Button>
+                  <Button
+                    type="link"
+                    iconNameBefore="trash"
+                    onClick={() => setSelectedProjectForDeletion(proj)}
+                  ></Button>
                 </td>
               </tr>
             ))
           ) : (
-            <tr>
-              <td colSpan={3}>
-                <EmptyTablePlaceholder type="info">
-                  No maps found.
-                  <br />
-                  <Button type="link" onClick={toggleModal}>
-                    Create New Map
-                  </Button>{' '}
-                  to get started.
-                </EmptyTablePlaceholder>
-              </td>
-              <td>
-                <Button iconNameBefore="edit-document"></Button>
-                <Button
-                  iconNameBefore="trash"
-                  onClick={() => setSelectedProjectForDeletion(proj)}
-                ></Button>
-              </td>
-            </tr>
+            <td colSpan={3}>
+              <EmptyTablePlaceholder type="info">
+                No maps found.
+                <br />
+                <Button type="link" onClick={toggleModal}>
+                  Create New Map
+                </Button>{' '}
+                to get started.
+              </EmptyTablePlaceholder>
+            </td>
           )}
         </tbody>
       </table>
-
       {selectedProjectForDeletion && (
         <DeleteMapModal
           isOpen={!!selectedProjectForDeletion}
