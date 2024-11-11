@@ -14,7 +14,7 @@ import { getLocalAppConfiguration } from './getLocalAppConfiguration';
  * A hook that provides environment-specific application configuration based on the current hostname and path.
  *
  * This hook determines the appropriate configuration for various environments:
- * - Local development (localhost or hazmapper.local) or unit testing
+ * - Local development (localhost or hazmapper.local)
  * - Staging (/staging path on hazmapper.tacc.utexas.edu)
  * - Development (/dev path on hazmapper.tacc.utexas.edu)
  * - Production (hazmapper.tacc.utexas.edu without path prefix)
