@@ -1,33 +1,39 @@
 import { UseQueryResult } from 'react-query';
 import { FeatureCollection } from '@hazmapper/types';
-import { useGet } from '../../requests';
+import { useGet } from '@hazmapper/requests';
 
 interface UseFeaturesParams {
-  projectId?: number;
+  projectId: number;
   isPublic: boolean;
-  options: object;
+  assetTypes: string[];
+  options?: object;
 }
 
-const useFeatures = ({
+export const useFeatures = ({
   projectId,
   isPublic,
-  options,
   assetTypes,
-}: UseFeaturesParams & {
-  assetTypes?: string[];
-}): UseQueryResult<FeatureCollection> => {
+  options = {},
+}: UseFeaturesParams): UseQueryResult<FeatureCollection> => {
   const featuresRoute = isPublic ? 'public-projects' : 'projects';
   let endpoint = `/${featuresRoute}/${projectId}/features/`;
   if (assetTypes?.length) {
     endpoint += `?assetType=${assetTypes.join(',')}`;
   }
 
+  /* Expensive to fetch and process so we only fetch when updated */
+  const defaultQueryOptions = {
+    staleTime: Infinity,
+    cacheTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  };
+
   const query = useGet<FeatureCollection>({
     endpoint,
-    key: ['features', { projectId, isPublic, assetTypes }],
-    options,
+    key: ['activeProjectFeatures', { projectId, isPublic, assetTypes }],
+    options: { ...defaultQueryOptions, ...options },
   });
   return query;
 };
-
-export default useFeatures;

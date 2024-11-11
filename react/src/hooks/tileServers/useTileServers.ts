@@ -5,13 +5,13 @@ import { TileServerLayer } from '@hazmapper/types';
 interface UseTileServerParams {
   projectId?: number;
   isPublic: boolean;
-  options: object;
+  options?: object;
 }
 
 export const useTileServers = ({
   projectId,
   isPublic,
-  options,
+  options = {},
 }: UseTileServerParams): UseQueryResult<TileServerLayer[]> => {
   const tileServersRoute = isPublic ? 'public-projects' : 'projects';
   const endpoint = `/${tileServersRoute}/${projectId}/tile-servers/`;
