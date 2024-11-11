@@ -190,7 +190,7 @@ export function useDelete<ResponseType>({
   return useMutation<ResponseType, AxiosError>(deleteUtil, options);
 }
 
-type UseDeleteParams<ResponseType, Variables> = {
+type UseDeleteWithParams<ResponseType, Variables> = {
   endpoint: string | ((variables: Variables) => string);
   options?: Omit<
     UseMutationOptions<ResponseType, AxiosError, Variables>,
@@ -199,11 +199,11 @@ type UseDeleteParams<ResponseType, Variables> = {
   apiService?: ApiService;
 };
 
-export function useDelete<ResponseType, Variables>({
+export function useDeleteWithParams<ResponseType, Variables>({
   endpoint,
   options = {},
   apiService = ApiService.Geoapi,
-}: UseDeleteParams<ResponseType, Variables>) {
+}: UseDeleteWithParams<ResponseType, Variables>) {
   const client = axios;
   const state = store.getState();
   const configuration = useAppConfiguration();
