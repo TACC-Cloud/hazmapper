@@ -1,15 +1,15 @@
 import React, { act } from 'react';
-import {
-  render,
-  cleanup,
-  fireEvent,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { render, fireEvent, screen, waitFor } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import store from '../../redux/store';
+import { http, HttpResponse } from 'msw';
 
 import CreateMapModal from './CreateMapModal';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from 'react-query';
+import { testQueryClient, server } from '@hazmapper/test/testUtil';
+import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
+import { projectMock } from '@hazmapper/__fixtures__/projectFixtures';
 
 jest.mock('@hazmapper/hooks/user/useAuthenticatedUser', () => ({
   __esModule: true,
@@ -17,22 +17,6 @@ jest.mock('@hazmapper/hooks/user/useAuthenticatedUser', () => ({
     data: { username: 'mockUser' },
     isLoading: false,
     error: null,
-  }),
-}));
-
-jest.mock('@hazmapper/hooks/projects/useCreateProject', () => ({
-  __esModule: true,
-  default: () => ({
-    mutate: jest.fn((data, { onSuccess, onError }) => {
-      if (data.name === 'Error Map') {
-        // Simulate a submission error with a 500 status code
-        onError({ response: { status: 500 } });
-      } else {
-        // Simulate successful project creation
-        onSuccess({ uuid: '123' });
-      }
-    }),
-    isLoading: false,
   }),
 }));
 
@@ -44,25 +28,22 @@ jest.mock('react-router-dom', () => ({
 }));
 
 const toggleMock = jest.fn();
-const queryClient = new QueryClient();
 
 const renderComponent = async (isOpen = true) => {
   await act(async () => {
     render(
-      <QueryClientProvider client={queryClient}>
-        <Router>
-          <CreateMapModal isOpen={isOpen} toggle={toggleMock} />
-        </Router>
-      </QueryClientProvider>
+      <Provider store={store}>
+        <QueryClientProvider client={testQueryClient}>
+          <Router>
+            <CreateMapModal isOpen={isOpen} toggle={toggleMock} />
+          </Router>
+        </QueryClientProvider>
+      </Provider>
     );
   });
 };
 
 describe('CreateMapModal', () => {
-  afterEach(() => {
-    cleanup();
-  });
-
   test('renders the modal when open', async () => {
     await renderComponent();
     await waitFor(() => {
@@ -71,6 +52,12 @@ describe('CreateMapModal', () => {
   });
 
   test('submits form data successfully', async () => {
+    server.use(
+      http.post(`${testDevConfiguration.geoapiUrl}/projects/`, () => {
+        return HttpResponse.json(projectMock, { status: 200 });
+      })
+    );
+
     await renderComponent();
     await act(async () => {
       fireEvent.change(screen.getByTestId('name-input'), {
@@ -86,11 +73,19 @@ describe('CreateMapModal', () => {
     });
 
     await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith('/project/123');
+      expect(mockNavigate).toHaveBeenCalledWith(`/project/${projectMock.uuid}`);
     });
   });
 
   test('displays error message on submission error', async () => {
+    server.use(
+      http.post(`${testDevConfiguration.geoapiUrl}/projects/`, async () => {
+        return new HttpResponse(null, {
+          status: 500,
+        });
+      })
+    );
+
     await renderComponent();
     await act(async () => {
       fireEvent.change(screen.getByTestId('name-input'), {

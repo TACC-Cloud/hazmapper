@@ -15,8 +15,8 @@ import Login from './pages/Login/Login';
 import Callback from './pages/Callback/Callback';
 import StreetviewCallback from './pages/StreetviewCallback/StreetviewCallback';
 import { RootState } from './redux/store';
-import { isTokenValid } from './utils/authUtils';
-import { useBasePath } from './hooks/environment';
+import { isTokenValid } from '@hazmapper/utils/authUtils';
+import { useBasePath } from '@hazmapper/hooks/environment';
 
 interface ProtectedRouteProps {
   isAuthenticated: boolean;

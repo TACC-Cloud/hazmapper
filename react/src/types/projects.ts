@@ -1,6 +1,6 @@
 export interface Project {
   id: number;
-  uuid?: string;
+  uuid: string;
   name: string;
   description: string;
   public: boolean;
