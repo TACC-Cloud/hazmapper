@@ -4,7 +4,7 @@ import Login from './Login';
 import { Provider } from 'react-redux';
 import store from '../../redux/store';
 import { QueryClientProvider } from 'react-query';
-import { testQueryClient } from '../../testUtil';
+import { testQueryClient } from '../../test/testUtil';
 import { MemoryRouter } from 'react-router';
 
 beforeAll(() => {

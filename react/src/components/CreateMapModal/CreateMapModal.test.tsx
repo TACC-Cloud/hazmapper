@@ -7,8 +7,9 @@ import { http, HttpResponse } from 'msw';
 import CreateMapModal from './CreateMapModal';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { QueryClientProvider } from 'react-query';
-import { testQueryClient, server } from '@hazmapper/testUtil';
+import { testQueryClient, server } from '@hazmapper/test/testUtil';
 import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
+import { projectMock } from '@hazmapper/__fixtures__/projectFixtures';
 
 jest.mock('@hazmapper/hooks/user/useAuthenticatedUser', () => ({
   __esModule: true,
@@ -53,9 +54,9 @@ describe('CreateMapModal', () => {
   test('submits form data successfully', async () => {
     server.use(
       http.post(`${testDevConfiguration.geoapiUrl}/projects/`, () => {
-        return HttpResponse.json({ uuid: 123 }, { status: 200 });
+        return HttpResponse.json(projectMock, { status: 200 });
       })
-    ); // Fixture being added in https://github.com/TACC-Cloud/hazmapper/pull/273
+    );
 
     await renderComponent();
     await act(async () => {
@@ -72,7 +73,7 @@ describe('CreateMapModal', () => {
     });
 
     await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith('/project/123');
+      expect(mockNavigate).toHaveBeenCalledWith(`/project/${projectMock.uuid}`);
     });
   });
 

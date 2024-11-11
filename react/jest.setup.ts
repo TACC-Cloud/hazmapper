@@ -1,5 +1,5 @@
 import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
-import { server } from '@hazmapper/testUtil';
+import { server } from '@hazmapper/test/testUtil';
 
 /***** A) Setup the configuration used for unit testing *****/
 jest.mock('@hazmapper/hooks/environment/getLocalAppConfiguration', () => ({
