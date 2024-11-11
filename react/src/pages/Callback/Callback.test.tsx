@@ -1,17 +1,9 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-import { MemoryRouter } from 'react-router-dom';
-import { render } from '@testing-library/react';
-import store from '../../redux/store';
+import { renderInTest } from '@hazmapper/test/testUtil';
 import Callback from './Callback';
 
 test('renders callback', async () => {
-  const { getByText } = render(
-    <Provider store={store}>
-      <MemoryRouter initialEntries={['/callback']}>
-        <Callback />
-      </MemoryRouter>
-    </Provider>
-  );
+  const { getByText } = renderInTest(<Callback />, '/callback');
+
   expect(getByText(/Logging in/)).toBeDefined();
 });

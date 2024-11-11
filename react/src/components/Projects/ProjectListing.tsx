@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { useProjectsWithDesignSafeInformation } from '@hazmapper/hooks';
-import { Button, LoadingSpinner, Icon } from '@tacc/core-components';
+import { Button, LoadingSpinner } from '@tacc/core-components';
 import CreateMapModal from '../CreateMapModal/CreateMapModal';
+import DeleteMapModal from '../DeleteMapModal/DeleteMapModal';
+import { Project } from '../../types';
 import { useNavigate } from 'react-router-dom';
 
 export const ProjectListing: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProjectForDeletion, setSelectedProjectForDeletion] =
+    useState<Project | null>(null);
   const navigate = useNavigate();
 
   const navigateToProject = (projectId) => {
@@ -43,24 +47,47 @@ export const ProjectListing: React.FC = () => {
         </thead>
         <tbody>
           {data?.map((proj) => (
-            <tr key={proj.id} onClick={() => navigateToProject(proj.uuid)}>
-              <td>{proj.name}</td>
+            <tr key={proj.id}>
               <td>
-                {proj.ds_project?.value.projectId}{' '}
-                {proj.ds_project?.value.title}
+                {' '}
+                <Button
+                  type="link"
+                  onClick={() => navigateToProject(proj.uuid)}
+                >
+                  {proj.name}
+                </Button>
               </td>
               <td>
-                <Button>
-                  <Icon name="edit-document"></Icon>
+                {' '}
+                <Button
+                  type="link"
+                  onClick={() => navigateToProject(proj.uuid)}
+                >
+                  {proj.ds_project
+                    ? `${proj.ds_project?.value.projectId} |
+                ${proj.ds_project?.value.title}`
+                    : '---------'}
                 </Button>
-                <Button>
-                  <Icon name="trash"></Icon>
-                </Button>
+              </td>
+              <td>
+                <Button iconNameBefore="edit-document"></Button>
+                <Button
+                  iconNameBefore="trash"
+                  onClick={() => setSelectedProjectForDeletion(proj)}
+                ></Button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {selectedProjectForDeletion && (
+        <DeleteMapModal
+          isOpen={!!selectedProjectForDeletion}
+          close={() => setSelectedProjectForDeletion(null)}
+          project={selectedProjectForDeletion}
+        />
+      )}
     </>
   );
 };

@@ -1,5 +1,5 @@
 import { useQueryClient } from 'react-query';
-import { useDelete } from '@hazmapper/requests';
+import { useDeleteWithParams } from '@hazmapper/requests';
 
 type DeleteFeatureParams = {
   projectId: number;
@@ -9,7 +9,7 @@ type DeleteFeatureParams = {
 export function useDeleteFeature() {
   const queryClient = useQueryClient();
 
-  return useDelete<void, DeleteFeatureParams>({
+  return useDeleteWithParams<void, DeleteFeatureParams>({
     endpoint: ({ projectId, featureId }) =>
       `/projects/${projectId}/features/${featureId}/`,
     options: {

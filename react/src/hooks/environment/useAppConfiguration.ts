@@ -1,53 +1,24 @@
 import { useMemo } from 'react';
 
-// TODO_REACT consider dynamically importing local configuration but then we would need to refactor things as initial configuration is async (context?)
-import { localDevelopmentConfiguration } from '../../secret_local';
-
 import {
   AppConfiguration,
   MapillaryConfiguration,
   GeoapiBackendEnvironment,
   DesignSafePortalEnvironment,
 } from '@hazmapper/types';
+import { getGeoapiUrl, getDesignsafePortalUrl } from './utils';
 import useBasePath from './useBasePath';
+import { getLocalAppConfiguration } from './getLocalAppConfiguration';
 
 /**
- * Retrieves the GeoAPI URL based on the provided backend environment.
+ * A hook that provides environment-specific application configuration based on the current hostname and path.
+ *
+ * This hook determines the appropriate configuration for various environments:
+ * - Local development (localhost or hazmapper.local)
+ * - Staging (/staging path on hazmapper.tacc.utexas.edu)
+ * - Development (/dev path on hazmapper.tacc.utexas.edu)
+ * - Production (hazmapper.tacc.utexas.edu without path prefix)
  */
-function getGeoapiUrl(backend: GeoapiBackendEnvironment): string {
-  switch (backend) {
-    case GeoapiBackendEnvironment.Local:
-      return 'http://localhost:8888';
-    case GeoapiBackendEnvironment.Experimental:
-      return 'https://hazmapper.tacc.utexas.edu/geoapi-experimental';
-    case GeoapiBackendEnvironment.Dev:
-      return 'https://hazmapper.tacc.utexas.edu/geoapi-dev';
-    case GeoapiBackendEnvironment.Staging:
-      return 'https://hazmapper.tacc.utexas.edu/geoapi-staging';
-    case GeoapiBackendEnvironment.Production:
-      return 'https://hazmapper.tacc.utexas.edu/geoapi';
-    default:
-      throw new Error(
-        'Unsupported TARGET/GEOAPI_BACKEND Type. Please check the .env file.'
-      );
-  }
-}
-
-/**
- * Retrieves the DesignSafe portal URL based on the provided backend environment.
- */
-function getDesignsafePortalUrl(backend: DesignSafePortalEnvironment): string {
-  if (backend === DesignSafePortalEnvironment.Production) {
-    return 'https://www.designsafe-ci.org';
-  } else if (backend === DesignSafePortalEnvironment.Next) {
-    return 'https://designsafeci-next.tacc.utexas.edu';
-  } else if (backend === DesignSafePortalEnvironment.Dev) {
-    return 'https://designsafeci-dev.tacc.utexas.edu';
-  } else {
-    throw new Error('Unsupported DS environment');
-  }
-}
-
 export const useAppConfiguration = (): AppConfiguration => {
   const basePath = useBasePath();
 
@@ -68,33 +39,18 @@ export const useAppConfiguration = (): AppConfiguration => {
     };
 
     if (/^localhost/.test(hostname) || /^hazmapper.local/.test(hostname)) {
-      const appConfig: AppConfiguration = {
-        basePath: basePath,
-        geoapiBackend: localDevelopmentConfiguration.geoapiBackend,
-        geoapiUrl: getGeoapiUrl(localDevelopmentConfiguration.geoapiBackend),
-        designsafePortalUrl: getDesignsafePortalUrl(
-          DesignSafePortalEnvironment.Dev
-        ),
-        mapillary: mapillaryConfig,
-        taggitUrl: origin + '/taggit-staging',
-      };
-      appConfig.mapillary.clientId = '5156692464392931';
-      appConfig.mapillary.clientSecret =
-        'MLY|5156692464392931|6be48c9f4074f4d486e0c42a012b349f';
-      appConfig.mapillary.clientToken =
-        'MLY|5156692464392931|4f1118aa1b06f051a44217cb56bedf79';
-      return appConfig;
+      return getLocalAppConfiguration(basePath, mapillaryConfig);
     } else if (
       /^hazmapper.tacc.utexas.edu/.test(hostname) &&
       pathname.startsWith('/staging')
     ) {
       const appConfig: AppConfiguration = {
         basePath: basePath,
-        geoapiBackend: GeoapiBackendEnvironment.Staging,
         geoapiUrl: getGeoapiUrl(GeoapiBackendEnvironment.Staging),
         designsafePortalUrl: getDesignsafePortalUrl(
           DesignSafePortalEnvironment.Dev
         ),
+        tapisUrl: 'https://designsafe.tapis.io',
         mapillary: mapillaryConfig,
         taggitUrl: origin + '/taggit-staging',
       };
@@ -111,11 +67,11 @@ export const useAppConfiguration = (): AppConfiguration => {
     ) {
       const appConfig: AppConfiguration = {
         basePath: basePath,
-        geoapiBackend: GeoapiBackendEnvironment.Dev,
         geoapiUrl: getGeoapiUrl(GeoapiBackendEnvironment.Dev),
         designsafePortalUrl: getDesignsafePortalUrl(
           DesignSafePortalEnvironment.Dev
         ),
+        tapisUrl: 'https://designsafe.tapis.io',
         mapillary: mapillaryConfig,
         taggitUrl: origin + '/taggit-dev',
       };
@@ -130,11 +86,11 @@ export const useAppConfiguration = (): AppConfiguration => {
     } else if (/^hazmapper.tacc.utexas.edu/.test(hostname)) {
       const appConfig: AppConfiguration = {
         basePath: basePath,
-        geoapiBackend: GeoapiBackendEnvironment.Production,
         geoapiUrl: getGeoapiUrl(GeoapiBackendEnvironment.Production),
         designsafePortalUrl: getDesignsafePortalUrl(
           DesignSafePortalEnvironment.Production
         ),
+        tapisUrl: 'https://designsafe.tapis.io',
         mapillary: mapillaryConfig,
         taggitUrl: origin + '/taggit',
       };

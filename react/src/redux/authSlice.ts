@@ -4,7 +4,7 @@ import {
   setAuthenticatedUserFromLocalStorage,
   removeAuthenticatedUserFromLocalStorage,
 } from '../utils/authUtils';
-import { AuthenticatedUser, AuthToken } from '../types';
+import { AuthenticatedUser, AuthToken } from '@hazmapper/types';
 
 // check local storage for our initial state
 const initialState = getAuthenticatedUserFromLocalStorage();

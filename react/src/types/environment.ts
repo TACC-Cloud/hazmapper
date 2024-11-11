@@ -69,14 +69,14 @@ export interface AppConfiguration {
   /** Base URL path for the application. */
   basePath: string;
 
-  /* The type of backend environment */
-  geoapiBackend: GeoapiBackendEnvironment;
-
   /** URL for the GeoAPI service. */
   geoapiUrl: string;
 
   /** URL for the DesignSafe portal and API. */
   designsafePortalUrl: string;
+
+  /** URL for Tapis  */
+  tapisUrl: string;
 
   /** Mapillary related configuration */
   mapillary: MapillaryConfiguration;

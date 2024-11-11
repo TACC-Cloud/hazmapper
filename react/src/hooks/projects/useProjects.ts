@@ -1,11 +1,11 @@
-import { UseQueryResult } from 'react-query';
+import { UseQueryResult, useQueryClient } from 'react-query';
 import { useMemo } from 'react';
 import {
   Project,
   DesignSafeProjectCollection,
   ApiService,
 } from '@hazmapper/types';
-import { useGet } from '../../requests';
+import { useGet, useDelete } from '@hazmapper/requests';
 
 export const useProjects = (): UseQueryResult<Project[]> => {
   const query = useGet<Project[]>({
@@ -80,3 +80,17 @@ export function useProjectsWithDesignSafeInformation(): UseQueryResult<
     error: dsProjectQuery.error || projectQuery.error,
   } as UseQueryResult<Project[]>;
 }
+
+export const useDeleteProject = (projectId: number) => {
+  const queryClient = useQueryClient();
+  const endpoint = `/projects/${projectId}/`;
+  return useDelete<void>({
+    endpoint,
+    apiService: ApiService.Geoapi,
+    options: {
+      onSuccess: () => {
+        queryClient.invalidateQueries('projects');
+      },
+    },
+  });
+};

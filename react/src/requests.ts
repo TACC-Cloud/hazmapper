@@ -8,11 +8,10 @@ import {
   UseMutationOptions,
   QueryKey,
 } from 'react-query';
-import {
-  useAppConfiguration,
-  useEnsureAuthenticatedUserHasValidTapisToken,
-} from './hooks';
-import { ApiService, AppConfiguration, AuthState } from './types';
+import { useAppConfiguration } from '@hazmapper/hooks';
+
+import { useEnsureAuthenticatedUserHasValidTapisToken } from '@hazmapper/hooks';
+import { ApiService, AppConfiguration, AuthState } from '@hazmapper/types';
 import { v4 as uuidv4 } from 'uuid';
 
 function getBaseApiUrl(
@@ -25,7 +24,7 @@ function getBaseApiUrl(
     case ApiService.DesignSafe:
       return configuration.designsafePortalUrl;
     case ApiService.Tapis:
-      return 'https://designsafe.tapis.io';
+      return configuration.tapisUrl;
     default:
       throw new Error('Unsupported api service Type.');
   }
@@ -158,7 +157,40 @@ export function usePost<RequestType, ResponseType>({
   return useMutation<ResponseType, AxiosError, RequestType>(postUtil, options);
 }
 
-type UseDeleteParams<ResponseType, Variables> = {
+type UseDeleteParams<ResponseType> = {
+  endpoint: string;
+  options?: UseMutationOptions<ResponseType, AxiosError>;
+  apiService?: ApiService;
+};
+
+export function useDelete<ResponseType>({
+  endpoint,
+  options = {},
+  apiService = ApiService.Geoapi,
+}: UseDeleteParams<ResponseType>) {
+  const client = axios;
+  const state = store.getState();
+  const configuration = useAppConfiguration();
+
+  useEnsureAuthenticatedUserHasValidTapisToken();
+
+  const baseUrl = getBaseApiUrl(apiService, configuration);
+  const headers = getHeaders(apiService, state.auth);
+
+  const deleteUtil = async () => {
+    const response = await client.delete<ResponseType>(
+      `${baseUrl}${endpoint}`,
+      {
+        headers: headers,
+      }
+    );
+    return response.data;
+  };
+
+  return useMutation<ResponseType, AxiosError>(deleteUtil, options);
+}
+
+type UseDeleteWithParams<ResponseType, Variables> = {
   endpoint: string | ((variables: Variables) => string);
   options?: Omit<
     UseMutationOptions<ResponseType, AxiosError, Variables>,
@@ -167,11 +199,11 @@ type UseDeleteParams<ResponseType, Variables> = {
   apiService?: ApiService;
 };
 
-export function useDelete<ResponseType, Variables>({
+export function useDeleteWithParams<ResponseType, Variables>({
   endpoint,
   options = {},
   apiService = ApiService.Geoapi,
-}: UseDeleteParams<ResponseType, Variables>) {
+}: UseDeleteWithParams<ResponseType, Variables>) {
   const client = axios;
   const state = store.getState();
   const configuration = useAppConfiguration();
