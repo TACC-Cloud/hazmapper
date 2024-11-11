@@ -33,7 +33,6 @@ module.exports = {
     '!src/**/*.spec.{js,jsx,ts,tsx}',
     // Exclude test utilities
     '!src/test/**/*',
-    '!src/testUtil.ts',
     '!src/__fixtures__/**/*',
     // Exclude secrets and other files
     '!src/secret_local*ts',
