@@ -1,5 +1,5 @@
-import React from 'react';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import React, { act } from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import AssetsPanel from './AssetsPanel';
 import { featureCollection } from '@hazmapper/__fixtures__/featuresFixture';
 import { useFeatures } from '@hazmapper/hooks';

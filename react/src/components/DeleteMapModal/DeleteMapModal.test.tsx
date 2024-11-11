@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { act } from 'react';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { act } from 'react-dom/test-utils';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import DeleteMapModal from './DeleteMapModal';
 import { Provider } from 'react-redux';
