@@ -1,5 +1,5 @@
 import { getHeaders } from './requests';
-import { ApiService } from './types';
+import { ApiService } from '@hazmapper/types';
 import {
   authenticatedUser,
   unauthenticatedUser,
