@@ -1,4 +1,4 @@
-import React, { act } from 'react';
+import React from 'react';
 import { render, waitFor } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import MainMenu from './MainMenu';
