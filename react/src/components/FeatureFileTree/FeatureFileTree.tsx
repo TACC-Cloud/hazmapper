@@ -31,7 +31,7 @@ interface FeatureFileTreeProps {
   /**
    * Whether or not the map project is public.
    */
-  isPublic: boolean;
+  isPublicView: boolean;
 
   /**
    * active project id
@@ -44,7 +44,7 @@ interface FeatureFileTreeProps {
  */
 const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
   featureCollection,
-  isPublic,
+  isPublicView,
   projectId,
 }) => {
   const { mutate: deleteFeature, isLoading } = useDeleteFeature();
@@ -169,7 +169,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
           <FeatureIcon featureType={featureNode.featureType} />
         )}
         <span className={styles.fileName}>{featureNode.name}</span>
-        {!isPublic && isSelected && (
+        {!isPublicView && isSelected && (
           <Button
             size="small"
             type="primary"

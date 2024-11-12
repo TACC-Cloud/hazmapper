@@ -56,9 +56,9 @@ interface Props {
   featureCollection: FeatureCollection;
 
   /**
-   * Whether or not the map project is public.
+   * Whether or not the map project is a public view.
    */
-  isPublic: boolean;
+  isPublicView: boolean;
 
   /**
    * active project id
@@ -70,7 +70,7 @@ interface Props {
  * A panel component that displays info on feature assets
  */
 const AssetsPanel: React.FC<Props> = ({
-  isPublic,
+  isPublicView,
   featureCollection,
   projectId,
 }) => {
@@ -81,8 +81,8 @@ const AssetsPanel: React.FC<Props> = ({
       </div>
       <div className={styles.middleSection}>
         <FeatureFileTree
-          projectId={projectId}
-          isPublic={isPublic}
+          projectId={project.id}
+          isPublicView={isPublicView}
           featureCollection={featureCollection}
         />
       </div>

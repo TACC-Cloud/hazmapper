@@ -19,13 +19,13 @@ interface MapProjectProps {
    * Whether or not the map project is public.
    * @default false
    */
-  isPublic?: boolean;
+  isPublicView?: boolean;
 }
 
 /**
  * A component that displays a map project including initial loading/error components
  */
-const MapProject: React.FC<MapProjectProps> = ({ isPublic = false }) => {
+const MapProject: React.FC<MapProjectProps> = ({ isPublicView = false }) => {
   const { projectUUID } = useParams();
 
   const {
@@ -34,7 +34,7 @@ const MapProject: React.FC<MapProjectProps> = ({ isPublic = false }) => {
     error,
   } = useProject({
     projectUUID,
-    isPublic,
+    isPublicView,
     options: { enabled: !!projectUUID },
   });
 
@@ -61,7 +61,7 @@ const MapProject: React.FC<MapProjectProps> = ({ isPublic = false }) => {
     );
   }
 
-  return <LoadedMapProject isPublic={isPublic} activeProject={activeProject} />;
+  return <LoadedMapProject isPublicView={isPublicView} activeProject={activeProject} />;
 };
 
 interface LoadedMapProject {
@@ -73,7 +73,7 @@ interface LoadedMapProject {
   /**
    * Whether or not the map project is public.
    */
-  isPublic;
+  isPublicView;
 }
 
 /**
@@ -81,7 +81,7 @@ interface LoadedMapProject {
  */
 const LoadedMapProject: React.FC<LoadedMapProject> = ({
   activeProject,
-  isPublic,
+  isPublicView,
 }) => {
   const [selectedAssetTypes, setSelectedAssetTypes] = useState<string[]>(
     Object.keys(assetTypeOptions)
@@ -112,7 +112,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     error: featuresError,
   } = useFeatures({
     projectId: activeProject.id,
-    isPublic,
+    isPublicView,
     assetTypes: formattedAssetTypes,
   });
 
@@ -122,7 +122,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     error: tileServerLayersError,
   } = useTileServers({
     projectId: activeProject.id,
-    isPublic,
+    isPublicView,
   });
 
   const location = useLocation();
@@ -157,8 +157,8 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
           <div className={styles.panelContainer}>
             {activePanel === Panel.Assets && (
               <AssetsPanel
-                projectId={activeProject.id}
-                isPublic={isPublic}
+                project={activeProject}
+                isPublicView={isPublicView}
                 featureCollection={featureCollection}
               />
             )}
@@ -175,7 +175,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
           </div>
         )}
         {activePanel === Panel.Manage && (
-          <ManageMapProjectModal isPublic={isPublic} />
+          <ManageMapProjectModal isPublicView={isPublicView} />
         )}
         <div className={styles.map}>
           <Map

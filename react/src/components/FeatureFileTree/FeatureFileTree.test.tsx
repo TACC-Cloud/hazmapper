@@ -26,7 +26,7 @@ const renderWithRouter = (ui: React.ReactElement, { route = '/' } = {}) => {
 describe('FeatureFileTree', () => {
   const defaultProps = {
     featureCollection: featureCollection,
-    isPublic: false,
+    isPublicView: false,
     projectId: 1,
   };
 
@@ -73,7 +73,7 @@ describe('FeatureFileTree', () => {
 
   it('does not show delete button for public projects', () => {
     const { queryByTestId } = renderWithRouter(
-      <FeatureFileTree {...defaultProps} isPublic={true} />,
+      <FeatureFileTree {...defaultProps} isPublicView={true} />,
       { route: '/?selectedFeature=1' }
     );
 
@@ -84,7 +84,7 @@ describe('FeatureFileTree', () => {
 
   it('does not show delete button when no feature is selected', () => {
     const { queryByTestId } = renderWithRouter(
-      <FeatureFileTree {...defaultProps} isPublic={true} />
+      <FeatureFileTree {...defaultProps} isPublicView={false} />
     );
 
     // Verify delete button is not present

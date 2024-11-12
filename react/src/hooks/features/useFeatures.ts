@@ -4,18 +4,19 @@ import { useGet } from '@hazmapper/requests';
 
 interface UseFeaturesParams {
   projectId: number;
-  isPublic: boolean;
+  isPublicView: boolean;
   assetTypes: string[];
   options?: object;
 }
 
 export const useFeatures = ({
   projectId,
-  isPublic,
+  isPublicView,
   assetTypes,
   options = {},
 }: UseFeaturesParams): UseQueryResult<FeatureCollection> => {
-  const featuresRoute = isPublic ? 'public-projects' : 'projects';
+  // TODO can be reworked as /projects can be used and /public-projects can be removed since we are no longer a WSO2 API
+  const featuresRoute = isPublicView ? 'public-projects' : 'projects';
   let endpoint = `/${featuresRoute}/${projectId}/features/`;
   if (assetTypes?.length) {
     endpoint += `?assetType=${assetTypes.join(',')}`;
@@ -32,7 +33,7 @@ export const useFeatures = ({
 
   const query = useGet<FeatureCollection>({
     endpoint,
-    key: ['activeProjectFeatures', { projectId, isPublic, assetTypes }],
+    key: ['activeProjectFeatures', { projectId, isPublicView, assetTypes }],
     options: { ...defaultQueryOptions, ...options },
   });
   return query;
