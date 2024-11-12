@@ -62,7 +62,9 @@ interface NavBarPanelProps {
   isPublicView?: boolean;
 }
 
-const MapProjectNavBar: React.FC<NavBarPanelProps> = ({ isPublicView = false }) => {
+const MapProjectNavBar: React.FC<NavBarPanelProps> = ({
+  isPublicView = false,
+}) => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const activePanel = queryParams.get(queryPanelKey);

@@ -61,7 +61,12 @@ const MapProject: React.FC<MapProjectProps> = ({ isPublicView = false }) => {
     );
   }
 
-  return <LoadedMapProject isPublicView={isPublicView} activeProject={activeProject} />;
+  return (
+    <LoadedMapProject
+      isPublicView={isPublicView}
+      activeProject={activeProject}
+    />
+  );
 };
 
 interface LoadedMapProject {

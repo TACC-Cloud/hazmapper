@@ -17,6 +17,9 @@ export const testQueryClient = new QueryClient({
       staleTime: 0,
       useErrorBoundary: true,
     },
+    mutations: {
+      retry: false,
+    },
   },
 });
 
