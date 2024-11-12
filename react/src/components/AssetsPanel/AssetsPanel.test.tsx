@@ -2,6 +2,7 @@ import React, { act } from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import AssetsPanel from './AssetsPanel';
 import { featureCollection } from '@hazmapper/__fixtures__/featuresFixture';
+import { projectMock } from '@hazmapper/__fixtures__/projectFixtures';
 import { useFeatures } from '@hazmapper/hooks';
 
 jest.mock('@hazmapper/hooks', () => ({
@@ -18,8 +19,8 @@ jest.mock('@hazmapper/components/FeatureFileTree', () => {
 describe('AssetsPanel', () => {
   const defaultProps = {
     featureCollection,
-    projectId: 1,
-    isPublic: false,
+    project: projectMock,
+    isPublicView: false,
   };
 
   beforeEach(() => {
