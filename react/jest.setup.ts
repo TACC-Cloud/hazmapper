@@ -53,8 +53,9 @@ export function shouldIgnoreError(args: any[]): boolean {
 
 beforeAll(() => {
   // Establish mocking of APIs before all tests
-  server.listen({ onUnhandledRequest: 'error' });
-
+  server.listen({
+    onUnhandledRequest: 'error',
+  });
   const originalError = console.error;
 
   jest.spyOn(console, 'error').mockImplementation((...args: any[]) => {
