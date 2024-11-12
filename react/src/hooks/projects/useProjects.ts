@@ -81,11 +81,15 @@ export function useProjectsWithDesignSafeInformation(): UseQueryResult<
   } as UseQueryResult<Project[]>;
 }
 
-export const useDeleteProject = (projectId: number) => {
+type DeleteProjectParams = {
+  projectId: number;
+};
+
+export const useDeleteProject = () => {
   const queryClient = useQueryClient();
-  const endpoint = `/projects/${projectId}/`;
-  return useDelete<void>({
-    endpoint,
+
+  return useDelete<void, DeleteProjectParams>({
+    endpoint: ({ projectId }) => `/projects/${projectId}/`,
     apiService: ApiService.Geoapi,
     options: {
       onSuccess: () => {
