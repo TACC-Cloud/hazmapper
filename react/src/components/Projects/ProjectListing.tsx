@@ -55,11 +55,11 @@ const ProjectListing: React.FC = () => {
       <table className={styles.projectList}>
         <thead>
           <tr>
-            <th>Map</th>
-            <th>Project</th>
+            <th className={styles.mapColumn}>Map</th>
+            <th className={styles.projectColumn}>Project</th>
             <th className={styles.buttonColumn}>
               <CreateMapModal isOpen={isModalOpen} toggle={toggleModal} />
-              <Button onClick={toggleModal} type="link" iconNameBefore="add">
+              <Button onClick={toggleModal} type="link" iconNameBefore="add" >
                 Create a New Map
               </Button>
             </th>
@@ -69,8 +69,8 @@ const ProjectListing: React.FC = () => {
           {data && data?.length > 0 ? (
             data.map((proj) => (
               <tr key={proj.id} onClick={() => navigateToProject(proj.uuid)}>
-                <td>{proj.name}</td>
-                <td>
+                <td className={styles.mapColumn}>{proj.name}</td>
+                <td className={styles.projectColumn}>
                   {proj.ds_project
                     ? `${proj.ds_project?.value.projectId} |
                 ${proj.ds_project?.value.title}`

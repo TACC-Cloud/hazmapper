@@ -4,7 +4,7 @@
 }
 .projectList {
   width: 100%;
-  overflow-y: scroll;
+  table-layout: fixed;
   padding: 10px;
 }
 .errorMessage {
@@ -13,12 +13,13 @@
 }
 .projectList th {
   background: #d0d0d0;
-  max-width: fit-content;
   text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 .projectList tr,
 td {
-  max-width: fit-content;
+  width: 100%;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -30,8 +31,20 @@ td {
 .projectList tr:hover td button {
   color: white;
 }
+.mapColumn {
+  width: 42%
+}
+.projectColumn {
+  width: 42%
+}
 .buttonColumn {
-  white-space: nowrap;
-  overflow: hidden;
+  width: 16%;
   text-align: end;
+}
+.buttonColumn button {
+  max-width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  justify-content: flex-start;
 }
