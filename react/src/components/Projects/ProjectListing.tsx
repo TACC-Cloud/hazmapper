@@ -59,7 +59,7 @@ const ProjectListing: React.FC = () => {
             <th className={styles.projectColumn}>Project</th>
             <th className={styles.buttonColumn}>
               <CreateMapModal isOpen={isModalOpen} toggle={toggleModal} />
-              <Button onClick={toggleModal} type="link" iconNameBefore="add" >
+              <Button onClick={toggleModal} type="link" iconNameBefore="add">
                 Create a New Map
               </Button>
             </th>
