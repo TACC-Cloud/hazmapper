@@ -8,11 +8,10 @@ import {
   UseMutationOptions,
   QueryKey,
 } from 'react-query';
-import {
-  useAppConfiguration,
-  useEnsureAuthenticatedUserHasValidTapisToken,
-} from './hooks';
-import { ApiService, AppConfiguration, AuthState } from './types';
+import { useAppConfiguration } from '@hazmapper/hooks';
+
+import { useEnsureAuthenticatedUserHasValidTapisToken } from '@hazmapper/hooks';
+import { ApiService, AppConfiguration, AuthState } from '@hazmapper/types';
 import { v4 as uuidv4 } from 'uuid';
 
 function getBaseApiUrl(
@@ -25,7 +24,7 @@ function getBaseApiUrl(
     case ApiService.DesignSafe:
       return configuration.designsafePortalUrl;
     case ApiService.Tapis:
-      return 'https://designsafe.tapis.io';
+      return configuration.tapisUrl;
     default:
       throw new Error('Unsupported api service Type.');
   }
@@ -189,4 +188,41 @@ export function useDelete<ResponseType>({
   };
 
   return useMutation<ResponseType, AxiosError>(deleteUtil, options);
+}
+
+type UseDeleteWithParams<ResponseType, Variables> = {
+  endpoint: string | ((variables: Variables) => string);
+  options?: Omit<
+    UseMutationOptions<ResponseType, AxiosError, Variables>,
+    'mutationFn'
+  >;
+  apiService?: ApiService;
+};
+
+export function useDeleteWithParams<ResponseType, Variables>({
+  endpoint,
+  options = {},
+  apiService = ApiService.Geoapi,
+}: UseDeleteWithParams<ResponseType, Variables>) {
+  const client = axios;
+  const state = store.getState();
+  const configuration = useAppConfiguration();
+
+  useEnsureAuthenticatedUserHasValidTapisToken();
+
+  const baseUrl = getBaseApiUrl(apiService, configuration);
+  const headers = getHeaders(apiService, state.auth);
+
+  const deleteUtil = async (variables: Variables) => {
+    const finalEndpoint =
+      typeof endpoint === 'function' ? endpoint(variables) : endpoint;
+
+    const response = await client.delete<ResponseType>(
+      `${baseUrl}${finalEndpoint}`,
+      { headers }
+    );
+    return response.data;
+  };
+
+  return useMutation<ResponseType, AxiosError, Variables>(deleteUtil, options);
 }

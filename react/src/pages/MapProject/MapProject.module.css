@@ -1,3 +1,11 @@
+.errorContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+}
+
 .root {
   display: flex;
   flex-direction: column;
@@ -8,33 +16,40 @@
 .topNavbar {
   background-color: black;
   color: white;
-  height: 40px;
+  height: var(--hazmapper-top-navbar-height);
+  min-height: var(--hazmapper-top-navbar-height);
   display: flex;
   align-items: center;
 }
 
 .mapControlBar {
   background-color: white;
-  height: 27px;
+  height: var(--hazmapper-control-bar-height);
+  min-height: var(--hazmapper-control-bar-height);
   display: flex;
   align-items: center;
   padding: 0 10px;
 }
 
 .container {
-  height: 100vh;
+  height: calc(
+    100vh - var(--hazmapper-top-navbar-height) -
+      var(--hazmapper-control-bar-height)
+  );
   width: 100%;
   display: flex;
   flex: 1;
 }
 
 .panelContainer {
-  /* todo place into a PanelContainer and then the PanelNavigation where the buttons live either horizonal or vertical    */
-  width: 200px;
-  height: 95%;
+  width: var(--hazmapper-panel-width);
+  height: calc(
+    100vh - var(--hazmapper-top-navbar-height) -
+      var(--hazmapper-control-bar-height)
+  );
   background-color: var(--global-color-primary--xx-light);
   position: absolute;
-  left: 150px;
+  left: var(--hazmapper-panel-navbar-width);
   z-index: 5000;
 }
 

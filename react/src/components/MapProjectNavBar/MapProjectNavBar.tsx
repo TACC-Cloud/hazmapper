@@ -27,7 +27,8 @@ const navItems: NavItem[] = [
   },
   {
     label: 'Point Clouds',
-    imagePath: pointCloudImage,
+    imagePath:
+      pointCloudImage /* https://tacc-main.atlassian.net/browse/WG-391 */,
     panel: Panel.PointClouds,
     showWhenPublic: false,
   },
@@ -89,14 +90,15 @@ const MapProjectNavBar: React.FC<NavBarPanelProps> = ({ isPublic = false }) => {
               key={item.panel}
               to={to}
               active={activePanel === item.panel}
+              className={styles.navItem}
             >
               <img
                 src={item.imagePath}
-                alt={item.label}
+                alt=""
                 className={styles.image}
-                width="32px"
+                aria-hidden="true"
               />
-              {item.label}
+              <span className={styles.label}>{item.label}</span>
             </QueryNavItem>
           );
         })}

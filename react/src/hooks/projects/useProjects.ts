@@ -1,7 +1,11 @@
 import { UseQueryResult, useQueryClient } from 'react-query';
 import { useMemo } from 'react';
-import { Project, DesignSafeProjectCollection, ApiService } from '../../types';
-import { useGet, useDelete } from '../../requests';
+import {
+  Project,
+  DesignSafeProjectCollection,
+  ApiService,
+} from '@hazmapper/types';
+import { useGet, useDelete } from '@hazmapper/requests';
 
 type QueryError = {
   message?: string;
@@ -36,10 +40,11 @@ export const useProject = ({
   });
   return query;
 };
+
 export const useDsProjects = (): UseQueryResult<
   DesignSafeProjectCollection | undefined
 > => {
-  const query = useGet<DesignSafeProjectCollection | undefined>({
+  const query = useGet<DesignSafeProjectCollection>({
     endpoint: `/api/projects/v2/`,
     key: ['projectsv2'],
     apiService: ApiService.DesignSafe,
