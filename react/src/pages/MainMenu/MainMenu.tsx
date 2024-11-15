@@ -43,10 +43,10 @@ const MainMenu = () => {
     justifyContent: 'space-between',
     display: 'flex',
   };
-  
+
   const contentStyle = {
-    alignContent: 'center'
-  }
+    alignContent: 'center',
+  };
 
   return (
     <div className={styles.root}>
@@ -56,15 +56,20 @@ const MainMenu = () => {
       </Layout.Header>
       <Layout.Content>
         <div className={styles.versionContainer}>
-        <img src='./assets/Hazmapper-Stack@4x.png'></img>
-        <div className={styles.version}>{"Version 2.17"}</div>
+          <img src="./assets/Hazmapper-Stack@4x.png"></img>
+          <div className={styles.version}>{'Version 2.17'}</div>
         </div>
         <ProjectListing />
-        <Button 
-          iconNameBefore="exit" type="link" 
-          onClick = {() => (window.location.href='https://www.designsafe-ci.org/user-guide/tools/visualization/#hazmapper-user-guide')}>
+        <Button
+          iconNameBefore="exit"
+          type="link"
+          onClick={() =>
+            (window.location.href =
+              'https://www.designsafe-ci.org/user-guide/tools/visualization/#hazmapper-user-guide')
+          }
+        >
           User Guide
-          </Button>
+        </Button>
       </Layout.Content>
       <Layout.Footer>
         <div className={styles.logoContainer}>

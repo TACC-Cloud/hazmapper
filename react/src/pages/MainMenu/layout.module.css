@@ -5,14 +5,14 @@
   height: 100vh;
 }
 .versionContainer {
-    display: flex;
-    flex-direction: column;
-    padding-bottom: 50px;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 50px;
+  justify-content: center;
+  align-items: center;
 }
 .versionContainer img {
-    width: 250px;
+  width: 250px;
 }
 .userName {
   color: white;
