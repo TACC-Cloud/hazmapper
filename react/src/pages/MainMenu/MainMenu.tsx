@@ -3,10 +3,9 @@ import {
   LoadingSpinner,
   InlineMessage,
   SectionHeader,
-  Icon,
+  Button,
 } from '@tacc/core-components';
 import useAuthenticatedUser from '@hazmapper/hooks/user/useAuthenticatedUser';
-import { SystemSelect } from '@hazmapper/components/Systems';
 import { ProjectListing } from '@hazmapper/components/Projects/ProjectListing';
 import { Layout } from 'antd';
 import styles from './layout.module.css';
@@ -44,6 +43,10 @@ const MainMenu = () => {
     justifyContent: 'space-between',
     display: 'flex',
   };
+  
+  const contentStyle = {
+    alignContent: 'center'
+  }
 
   return (
     <div className={styles.root}>
@@ -52,9 +55,16 @@ const MainMenu = () => {
         <div className={styles.userName}>{userData.username}</div>
       </Layout.Header>
       <Layout.Content>
+        <div className={styles.versionContainer}>
+        <img src='./assets/Hazmapper-Stack@4x.png'></img>
+        <div className={styles.version}>{"Version 2.17"}</div>
+        </div>
         <ProjectListing />
-        {selectedSystem && <div>Current system selected: {selectedSystem}</div>}
-        <SystemSelect onSystemSelect={handleSelectChange}></SystemSelect>
+        <Button 
+          iconNameBefore="exit" type="link" 
+          onClick = {() => (window.location.href='https://www.designsafe-ci.org/user-guide/tools/visualization/#hazmapper-user-guide')}>
+          User Guide
+          </Button>
       </Layout.Content>
       <Layout.Footer>
         <div className={styles.logoContainer}>

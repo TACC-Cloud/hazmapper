@@ -4,10 +4,19 @@
   width: 100vw;
   height: 100vh;
 }
+.versionContainer {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 50px;
+    justify-content: center;
+    align-items: center;
+}
+.versionContainer img {
+    width: 250px;
+}
 .userName {
   color: white;
 }
-
 .logoContainer {
   display: flex;
   align-items: center;
@@ -15,5 +24,5 @@
   background-color: #f7f7f7;
 }
 .logoContainer img {
-  padding-left: 10px;
+  padding: 10px;
 }
