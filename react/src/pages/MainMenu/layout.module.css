@@ -1,7 +1,7 @@
 .root {
   display: flex;
   flex-direction: column;
-  height:100vh;
+  height: 100vh;
 }
 .mainMenuHeader {
   display: flex;
@@ -16,7 +16,7 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-};
+}
 .versionContainer {
   display: flex;
   flex-direction: column;
@@ -39,5 +39,4 @@
   padding: 10px;
 }
 .menuFooter {
-
 }

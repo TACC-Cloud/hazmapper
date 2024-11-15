@@ -45,10 +45,10 @@ const MainMenu = () => {
         <div className={styles.userName}>{userData.username}</div>
       </Header>
       <Content className={styles.listingContainer}>
-          <ProjectListing />
+        <ProjectListing />
       </Content>
       <Footer className={styles.menuFooter}>
-      <div className={styles.sponsorContainer}>
+        <div className={styles.sponsorContainer}>
           <a href="https://www.nsf.gov/">
             <img src="./src/assets/nsf.png" width="60px" />
           </a>

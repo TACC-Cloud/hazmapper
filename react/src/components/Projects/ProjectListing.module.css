@@ -10,7 +10,7 @@
   width: 100%;
   table-layout: fixed;
   padding: 10px;
-  overflow-y:scroll;
+  overflow-y: scroll;
   height: 60%;
 }
 .errorMessage {
@@ -23,7 +23,8 @@
   overflow: hidden;
   white-space: nowrap;
 }
-.projectList th, button {
+.projectList th,
+button {
   overflow: visible;
   overflow-wrap: normal;
 }
@@ -61,16 +62,15 @@ td {
   font-weight: bold;
   font-size: medium;
   justify-content: flex-end;
-  height:10%;
+  height: 10%;
 }
 .versionContainer {
   display: flex;
   flex-direction: column;
-  height:30%;
+  height: 30%;
   justify-content: center;
   align-items: center;
 }
 .versionContainer img {
-  height:80%;
-
+  height: 80%;
 }
