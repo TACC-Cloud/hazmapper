@@ -1,0 +1,50 @@
+.root {
+  display: flex;
+  width: 100%;
+}
+.projectList {
+  width: 100%;
+  table-layout: fixed;
+  padding: 10px;
+}
+.errorMessage {
+  width: 100%;
+  padding: 10px;
+}
+.projectList th {
+  background: #d0d0d0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.projectList tr,
+td {
+  width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.projectList tr:hover td {
+  color: white;
+  background-color: var(--global-color-accent--light);
+}
+.projectList tr:hover td button {
+  color: white;
+}
+.mapColumn {
+  width: 42%;
+}
+.projectColumn {
+  width: 42%;
+}
+.buttonColumn {
+  width: 16%;
+  text-align: end;
+}
+.buttonColumn button {
+  max-width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  justify-content: flex-start;
+}

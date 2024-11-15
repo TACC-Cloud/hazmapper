@@ -6,7 +6,7 @@ import {
   Button,
 } from '@tacc/core-components';
 import useAuthenticatedUser from '@hazmapper/hooks/user/useAuthenticatedUser';
-import { ProjectListing } from '@hazmapper/components/Projects/ProjectListing';
+import ProjectListing from '@hazmapper/components/Projects/ProjectListing';
 import { Layout } from 'antd';
 import styles from './layout.module.css';
 
