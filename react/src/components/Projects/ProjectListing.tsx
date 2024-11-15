@@ -100,6 +100,22 @@ const ProjectListing: React.FC = () => {
           )}
         </tbody>
       </table>
+      <Button
+        className={styles.userGuide}
+        iconNameBefore="exit"
+        type="link"
+        onClick={(e) => {
+          window.open(
+            'https://www.designsafe-ci.org/user-guide/tools/visualization/#hazmapper-user-guide',
+            '_blank',
+            'noopener,noreferrer'
+          );
+          // To prevent active box around link lingering after click
+          e.currentTarget.blur();
+        }}
+      >
+        User Guide
+      </Button>
       {selectedProjectForDeletion && (
         <DeleteMapModal
           isOpen={!!selectedProjectForDeletion}

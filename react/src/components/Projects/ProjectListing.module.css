@@ -1,5 +1,6 @@
 .root {
   display: flex;
+  flex-direction: column;
   width: 100%;
 }
 .projectList {
@@ -16,6 +17,10 @@
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+}
+.projectList th, button {
+  overflow: visible;
+  overflow-wrap: normal;
 }
 .projectList tr,
 td {
@@ -44,7 +49,12 @@ td {
 .buttonColumn button {
   max-width: 100%;
   text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
+  white-space: wrap;
   justify-content: flex-start;
+}
+.userGuide {
+  padding: 10px;
+  font-weight: bold;
+  font-size: medium;
+  justify-content: flex-end;
 }
