@@ -3,7 +3,6 @@ import {
   LoadingSpinner,
   InlineMessage,
   SectionHeader,
-  Button,
 } from '@tacc/core-components';
 import useAuthenticatedUser from '@hazmapper/hooks/user/useAuthenticatedUser';
 import ProjectListing from '@hazmapper/components/Projects/ProjectListing';
@@ -11,6 +10,7 @@ import { Layout } from 'antd';
 import styles from './layout.module.css';
 
 const MainMenu = () => {
+  const { Header, Content, Footer } = Layout;
   const {
     data: userData,
     isLoading: isUserLoading,
@@ -38,53 +38,29 @@ const MainMenu = () => {
     setSelectedSystem(system);
   };
 
-  const headerStyle = {
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    display: 'flex',
-  };
-
-  const contentStyle = {
-    alignContent: 'center',
-  };
-
   return (
-    <div className={styles.root}>
-      <Layout.Header style={headerStyle}>
-        <img width="150px" src="./assets/hazmapper-header-logo.png" />
+    <Layout className={styles.root}>
+      <Header className={styles.mainMenuHeader}>
+        <img width="150px" src="./src/assets/hazmapper-header-logo.png" />
         <div className={styles.userName}>{userData.username}</div>
-      </Layout.Header>
-      <Layout.Content>
-        <div className={styles.versionContainer}>
-          <img src="./assets/Hazmapper-Stack@4x.png"></img>
-          <div className={styles.version}>{'Version 2.17'}</div>
-        </div>
-        <ProjectListing />
-        <Button
-          iconNameBefore="exit"
-          type="link"
-          onClick={() =>
-            (window.location.href =
-              'https://www.designsafe-ci.org/user-guide/tools/visualization/#hazmapper-user-guide')
-          }
-        >
-          User Guide
-        </Button>
-      </Layout.Content>
-      <Layout.Footer>
-        <div className={styles.logoContainer}>
+      </Header>
+      <Content className={styles.listingContainer}>
+          <ProjectListing />
+      </Content>
+      <Footer className={styles.menuFooter}>
+      <div className={styles.sponsorContainer}>
           <a href="https://www.nsf.gov/">
-            <img src="./assets/nsf.png" width="60px" />
+            <img src="./src/assets/nsf.png" width="60px" />
           </a>
           <a href="https://www.designsafe-ci.org/">
-            <img src="./assets/designsafe.svg" width="200px" />
+            <img src="./src/assets/designsafe.svg" width="200px" />
           </a>
           <a href="https://www.designsafe-ci.org/about/">
-            <img src="./assets/nheri.png" width="150px" />
+            <img src="./src/assets/nheri.png" width="150px" />
           </a>
         </div>
-      </Layout.Footer>
-    </div>
+      </Footer>
+    </Layout>
   );
 };
 

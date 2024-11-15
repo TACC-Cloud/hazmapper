@@ -1,12 +1,26 @@
 .root {
   display: flex;
   flex-direction: column;
-  width: 100vw;
-  height: 100vh;
+  height:100vh;
 }
+.mainMenuHeader {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.userName {
+  color: white;
+}
+.listingContainer {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+};
 .versionContainer {
   display: flex;
   flex-direction: column;
+  width: 100%;
   padding-bottom: 50px;
   justify-content: center;
   align-items: center;
@@ -14,15 +28,16 @@
 .versionContainer img {
   width: 250px;
 }
-.userName {
-  color: white;
-}
-.logoContainer {
+.sponsorContainer {
   display: flex;
-  align-items: center;
+  flex-direction: row;
+  align-items: flex-end;
   justify-content: center;
   background-color: #f7f7f7;
 }
-.logoContainer img {
+.sponsorContainer img {
   padding: 10px;
+}
+.menuFooter {
+
 }

@@ -17,6 +17,6 @@ test('renders menu', async () => {
 
   // Wait for the "Main Menu" text to be rendered and then check it
   await waitFor(() => {
-    expect(getByText(/Main Menu/)).toBeDefined();
+    expect(getByText(/mockUser/)).toBeDefined();
   });
 });
