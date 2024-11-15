@@ -28,7 +28,8 @@
         document.getElementById('base').href = '/exp-react/';
       } else if (/^hazmapper.tacc.utexas.edu/.test(hostname)) {
         document.getElementById('base').href = '/hazmapper-react/';
-      } else if ( /* NOTE: non `-react` statements below are not being used */
+      } else if (
+        /* NOTE: non `-react` statements below are not being used */
         /^hazmapper.tacc.utexas.edu/.test(hostname) &&
         pathname.startsWith('/staging')
       ) {
