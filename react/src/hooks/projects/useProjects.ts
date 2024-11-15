@@ -21,16 +21,16 @@ export const useProjects = (): UseQueryResult<Project[]> => {
 
 interface UseProjectParams {
   projectUUID?: string;
-  isPublic: boolean;
+  isPublicView: boolean;
   options: object;
 }
 
 export const useProject = ({
   projectUUID,
-  isPublic,
+  isPublicView,
   options,
 }: UseProjectParams): UseQueryResult<Project> => {
-  const projectRoute = isPublic ? 'public-projects' : 'projects';
+  const projectRoute = isPublicView ? 'public-projects' : 'projects';
   const endpoint = `/${projectRoute}/?uuid=${projectUUID}`;
   const query = useGet<Project>({
     endpoint,
@@ -86,11 +86,15 @@ export function useProjectsWithDesignSafeInformation(): UseQueryResult<
   } as UseQueryResult<Project[], QueryError>;
 }
 
-export const useDeleteProject = (projectId: number) => {
+type DeleteProjectParams = {
+  projectId: number;
+};
+
+export const useDeleteProject = () => {
   const queryClient = useQueryClient();
-  const endpoint = `/projects/${projectId}/`;
-  return useDelete<void>({
-    endpoint,
+
+  return useDelete<void, DeleteProjectParams>({
+    endpoint: ({ projectId }) => `/projects/${projectId}/`,
     apiService: ApiService.Geoapi,
     options: {
       onSuccess: () => {

@@ -20,13 +20,13 @@ const DeleteMapModal = ({
     isLoading: isDeletingProject,
     isError,
     isSuccess,
-  } = useDeleteProject(project.id);
+  } = useDeleteProject();
   const handleClose = () => {
     parentToggle();
   };
 
   const handleDeleteProject = () => {
-    deleteProject(undefined, {});
+    deleteProject({ projectId: project.id });
   };
 
   return (
