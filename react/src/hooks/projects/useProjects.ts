@@ -7,6 +7,10 @@ import {
 } from '@hazmapper/types';
 import { useGet, useDelete } from '@hazmapper/requests';
 
+type QueryError = {
+  message?: string;
+};
+
 export const useProjects = (): UseQueryResult<Project[]> => {
   const query = useGet<Project[]>({
     endpoint: '/projects/',
@@ -49,7 +53,8 @@ export const useDsProjects = (): UseQueryResult<
 };
 
 export function useProjectsWithDesignSafeInformation(): UseQueryResult<
-  Project[]
+  Project[],
+  QueryError
 > {
   const dsProjectQuery = useDsProjects();
   const projectQuery = useProjects();
@@ -77,8 +82,8 @@ export function useProjectsWithDesignSafeInformation(): UseQueryResult<
     isLoading: dsProjectQuery.isLoading || projectQuery.isLoading,
     isError: dsProjectQuery.error || projectQuery.error,
     isSuccess: dsProjectQuery.isSuccess && projectQuery.isSuccess,
-    error: dsProjectQuery.error || projectQuery.error,
-  } as UseQueryResult<Project[]>;
+    error: (dsProjectQuery.error || projectQuery.error) as QueryError,
+  } as UseQueryResult<Project[], QueryError>;
 }
 
 type DeleteProjectParams = {
