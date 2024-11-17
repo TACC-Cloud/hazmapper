@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
   MapContainer,
   ZoomControl,
@@ -44,21 +45,51 @@ const ClusterMarkerIcon = (childCount: number) => {
   });
 };
 
-const FitBoundsOnInitialLoad = ({
+/**
+ * Handles map bounds adjustments based on features.
+ * On initial load: Fits bounds to show all features in collection
+ * When activeFeatureId changes: Zooms to that specific feature
+ * Uses turf.bbox() for bounding calculations with maxFitToBoundsZoom limit
+ */
+const FitBoundsHandler = ({
   featureCollection,
 }: {
   featureCollection: FeatureCollection;
 }) => {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const rawSelectedFeatureId = searchParams.get('selectedFeature');
+  const selectedFeatureId = rawSelectedFeatureId
+    ? Number(rawSelectedFeatureId)
+    : undefined;
+
   const map = useMap();
 
+  // Handle zooming in on initial page load load
   useEffect(() => {
-    if (featureCollection.features.length) {
+    if (featureCollection.features.length && !selectedFeatureId) {
       const bbox = turf.bbox(featureCollection);
       const southWest: [number, number] = [bbox[1], bbox[0]];
       const northEast: [number, number] = [bbox[3], bbox[2]];
       map.fitBounds([southWest, northEast], { maxZoom: maxFitToBoundsZoom });
     }
   }, [map, featureCollection]);
+
+  // Handle zooming to selected feature
+  useEffect(() => {
+    if (selectedFeatureId) {
+      const activeFeature = featureCollection.features.find(
+        (f) => f.id === selectedFeatureId
+      );
+
+      if (activeFeature) {
+        const bbox = turf.bbox(activeFeature);
+        const southWest: [number, number] = [bbox[1], bbox[0]];
+        const northEast: [number, number] = [bbox[3], bbox[2]];
+        map.fitBounds([southWest, northEast], { maxZoom: maxFitToBoundsZoom });
+      }
+    }
+  }, [map, selectedFeatureId, featureCollection]);
 
   return null;
 };
@@ -131,7 +162,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
           );
         })}
       </MarkerClusterGroup>
-      <FitBoundsOnInitialLoad featureCollection={featureCollection} />
+      <FitBoundsHandler featureCollection={featureCollection} />{' '}
       <ZoomControl position="bottomright" />
     </MapContainer>
   );
