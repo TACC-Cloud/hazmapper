@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import {
   MapContainer,
@@ -11,7 +11,7 @@ import {
 } from 'react-leaflet';
 import { TiledMapLayer } from 'react-esri-leaflet';
 import MarkerClusterGroup from '@changey/react-leaflet-markercluster';
-import { TileServerLayer, FeatureCollection } from '@hazmapper/types';
+import { TileServerLayer, FeatureCollection, Feature } from '@hazmapper/types';
 import * as L from 'leaflet';
 import * as turf from '@turf/turf';
 import { LatLngTuple, MarkerCluster } from 'leaflet';
@@ -19,18 +19,23 @@ import 'leaflet.markercluster';
 
 import 'leaflet/dist/leaflet.css';
 
-const startingCenterPosition: LatLngTuple = [40, -80];
-const maxFitToBoundsZoom = 18;
-const maxBounds: L.LatLngBoundsExpression = [
-  [-90, -180], // Southwest coordinates
-  [90, 180], // Northeast coordinates
-];
+const MAP_CONFIG = {
+  startingCenter: [40, -80] as LatLngTuple,
+  maxFitBoundsInitialZoom: 18,
+  maxFitBoundsSelectedFeatureZoom: 18,
+  maxBounds: [
+    [-90, -180], // Southwest coordinates
+    [90, 180], // Northeast coordinates
+  ] as L.LatLngBoundsExpression,
+  minZoom: 2, // 2 typically prevents zooming out too far to see multiple earths
+  maxZoom: 24,
+} as const;
 
 interface LeafletMapProps {
   /**
    * Tile servers used as base layers of map
    */
-  baseLayers?: TileServerLayer[];
+  baseLayers: TileServerLayer[];
 
   /**
    * Features of map
@@ -51,31 +56,40 @@ const ClusterMarkerIcon = (childCount: number) => {
  * When activeFeatureId changes: Zooms to that specific feature
  * Uses turf.bbox() for bounding calculations with maxFitToBoundsZoom limit
  */
-const FitBoundsHandler = ({
+const FitBoundsHandler: React.FC<{ featureCollection: FeatureCollection }> = ({
   featureCollection,
-}: {
-  featureCollection: FeatureCollection;
 }) => {
   const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const rawSelectedFeatureId = searchParams.get('selectedFeature');
-  const selectedFeatureId = rawSelectedFeatureId
-    ? Number(rawSelectedFeatureId)
-    : undefined;
-
   const map = useMap();
 
-  // Handle zooming in on initial page load load
+  const selectedFeatureId = useMemo(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const rawId = searchParams.get('selectedFeature');
+    return rawId ? Number(rawId) : undefined;
+  }, [location.search]);
+
+  const getBoundsFromFeature = useCallback(
+    (feature: FeatureCollection | Feature) => {
+      const bbox = turf.bbox(feature);
+      return [
+        [bbox[1], bbox[0]] as [number, number],
+        [bbox[3], bbox[2]] as [number, number],
+      ];
+    },
+    []
+  );
+
+  // Handle initial bounds
   useEffect(() => {
     if (featureCollection.features.length && !selectedFeatureId) {
-      const bbox = turf.bbox(featureCollection);
-      const southWest: [number, number] = [bbox[1], bbox[0]];
-      const northEast: [number, number] = [bbox[3], bbox[2]];
-      map.fitBounds([southWest, northEast], { maxZoom: maxFitToBoundsZoom });
+      const bounds = getBoundsFromFeature(featureCollection);
+      map.fitBounds(bounds, {
+        maxZoom: MAP_CONFIG.maxFitBoundsInitialZoom,
+      });
     }
-  }, [map, featureCollection]);
+  }, [map, featureCollection, selectedFeatureId]);
 
-  // Handle zooming to selected feature
+  // Handle selected feature bounds
   useEffect(() => {
     if (selectedFeatureId) {
       const activeFeature = featureCollection.features.find(
@@ -83,10 +97,10 @@ const FitBoundsHandler = ({
       );
 
       if (activeFeature) {
-        const bbox = turf.bbox(activeFeature);
-        const southWest: [number, number] = [bbox[1], bbox[0]];
-        const northEast: [number, number] = [bbox[3], bbox[2]];
-        map.fitBounds([southWest, northEast], { maxZoom: maxFitToBoundsZoom });
+        const bounds = getBoundsFromFeature(activeFeature);
+        map.fitBounds(bounds, {
+          maxZoom: MAP_CONFIG.maxFitBoundsSelectedFeatureZoom,
+        });
       }
     }
   }, [map, selectedFeatureId, featureCollection]);
@@ -100,26 +114,28 @@ const FitBoundsHandler = ({
  * Note this is not called Map as causes an issue with react-leaflet
  */
 const LeafletMap: React.FC<LeafletMapProps> = ({
-  baseLayers,
+  baseLayers = [],
   featureCollection,
 }) => {
-  const activeBaseLayers = baseLayers?.filter(
-    (layer) => layer.uiOptions.isActive
+  const activeBaseLayers = useMemo(
+    () => baseLayers.filter((layer) => layer.uiOptions.isActive),
+    [baseLayers]
   );
 
-  const pointGeometryFeatures = featureCollection.features.filter(
-    (f) => f.geometry.type === 'Point'
+  const pointFeatures = useMemo(
+    () => featureCollection.features.filter((f) => f.geometry.type === 'Point'),
+    [featureCollection.features]
   );
 
   return (
     <MapContainer
-      center={startingCenterPosition}
+      center={MAP_CONFIG.startingCenter}
       zoom={3}
       style={{ width: '100%', height: '100%' }}
       zoomControl={false}
-      minZoom={2} // 2 typically prevents zooming out too far to see multiple earths
-      maxZoom={24}
-      maxBounds={maxBounds}
+      minZoom={MAP_CONFIG.minZoom}
+      maxZoom={MAP_CONFIG.maxZoom}
+      maxBounds={MAP_CONFIG.maxBounds}
     >
       {activeBaseLayers?.map((layer) =>
         layer.type === 'wms' ? (
@@ -149,7 +165,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
           ClusterMarkerIcon(cluster.getChildCount())
         }
       >
-        {pointGeometryFeatures.map((f) => {
+        {pointFeatures.map((f) => {
           const geometry = f.geometry as GeoJSON.Point;
 
           return (
