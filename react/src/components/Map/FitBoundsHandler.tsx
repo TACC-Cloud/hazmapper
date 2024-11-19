@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useCallback } from 'react';
+import React, { useEffect, useMemo, useCallback, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import * as turf from '@turf/turf';
 import { useMap } from 'react-leaflet';
@@ -7,15 +7,17 @@ import { MAP_CONFIG } from './config';
 
 /**
  * Handles map bounds adjustments based on features.
- * On initial load: Fits bounds to show all features in collection
- * When activeFeatureId changes: Zooms to that specific feature
- * Uses turf.bbox() for bounding calculations with maxFitToBoundsZoom limit
+ * When features are first loaded: Fits bounds to show all features in collection
+ * When selectedFeature changes: Zooms to that  feature
  */
 const FitBoundsHandler: React.FC<{
   featureCollection: FeatureCollection;
 }> = ({ featureCollection }) => {
   const location = useLocation();
   const map = useMap();
+
+  // Track if we've seen features before
+  const hasFeatures = useRef(false);
 
   const selectedFeatureId = useMemo(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -34,15 +36,20 @@ const FitBoundsHandler: React.FC<{
     []
   );
 
-  // Handle initial bounds
+  // Handle initial bounds when features are loaded
   useEffect(() => {
-    if (featureCollection.features.length && !selectedFeatureId) {
+    if (
+      featureCollection.features.length &&
+      !selectedFeatureId &&
+      !hasFeatures.current
+    ) {
       const bounds = getBoundsFromFeature(featureCollection);
       map.fitBounds(bounds, {
         maxZoom: MAP_CONFIG.maxFitBoundsInitialZoom,
       });
+      hasFeatures.current = true;
     }
-  }, [map, featureCollection, selectedFeatureId]);
+  }, [map, featureCollection, selectedFeatureId, getBoundsFromFeature]);
 
   // Handle selected feature bounds
   useEffect(() => {
@@ -58,7 +65,7 @@ const FitBoundsHandler: React.FC<{
         });
       }
     }
-  }, [map, selectedFeatureId, featureCollection]);
+  }, [map, selectedFeatureId, featureCollection, getBoundsFromFeature]);
 
   return null;
 };
