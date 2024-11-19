@@ -1,5 +1,4 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { Tree } from 'antd';
 import type { DataNode } from 'antd/es/tree';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,7 +10,7 @@ import { useResizeDetector } from 'react-resize-detector';
 import { Button } from '@tacc/core-components';
 import { featureCollectionToFileNodeArray } from '@hazmapper/utils/featureTreeUtils';
 import { FeatureCollection, FeatureFileNode } from '@hazmapper/types';
-import { useDeleteFeature } from '@hazmapper/hooks';
+import { useDeleteFeature, useFeatureSelection } from '@hazmapper/hooks';
 import { FeatureIcon } from '@hazmapper/components/FeatureIcon';
 import styles from './FeatureFileTree.module.css';
 
@@ -48,16 +47,12 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
   projectId,
 }) => {
   const { mutate: deleteFeature, isLoading } = useDeleteFeature();
-  const location = useLocation();
-  const navigate = useNavigate();
+  const { selectedFeatureId, setSelectedFeature } = useFeatureSelection();
 
   const { height, ref } = useResizeDetector();
 
   const [expanded, setExpanded] = useState<string[]>([]);
   const [treeData, setTreeData] = useState<TreeDataNode[]>([]);
-
-  const searchParams = new URLSearchParams(location.search);
-  const selectedFeature = searchParams.get('selectedFeature');
 
   useEffect(() => {
     const fileNodeArray = featureCollectionToFileNodeArray(featureCollection);
@@ -120,7 +115,8 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
 
   const titleRender = (node: TreeDataNode) => {
     const featureNode = node.featureNode as FeatureFileNode;
-    const isSelected = selectedFeature === node.key && !featureNode.isDirectory;
+    const isSelected =
+      !featureNode.isDirectory && selectedFeatureId === Number(node.key);
     const isExpanded = expanded.includes(node.key);
 
     const toggleNode = (e: React.MouseEvent | React.KeyboardEvent) => {
@@ -135,13 +131,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
       } else {
         e.stopPropagation();
 
-        const newSearchParams = new URLSearchParams(searchParams);
-        if (selectedFeature === node.key) {
-          newSearchParams.delete('selectedFeature');
-        } else {
-          newSearchParams.set('selectedFeature', node.key);
-        }
-        navigate({ search: newSearchParams.toString() }, { replace: true });
+        setSelectedFeature(Number(node.key));
       }
     };
 

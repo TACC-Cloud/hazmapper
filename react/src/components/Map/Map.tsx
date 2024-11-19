@@ -1,5 +1,4 @@
 import React, { useMemo, useCallback } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
 import {
   MapContainer,
   ZoomControl,
@@ -22,6 +21,7 @@ import {
   Feature,
   getFeatureType,
 } from '@hazmapper/types';
+import { useFeatureSelection } from '@hazmapper/hooks';
 import { MAP_CONFIG } from './config';
 import FitBoundsHandler from './FitBoundsHandler';
 import { calculatePointCloudMarkerPosition } from './utils';
@@ -30,7 +30,7 @@ interface LeafletMapProps {
   /**
    * Tile servers used as base layers of map
    */
-  baseLayers: TileServerLayer[];
+  baseLayers?: TileServerLayer[];
 
   /**
    * Features of map
@@ -67,24 +67,15 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
   baseLayers = [],
   featureCollection,
 }) => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const selectedFeature = searchParams.get('selectedFeature');
+  const { selectedFeatureId, setSelectedFeature } = useFeatureSelection();
 
   const handleFeatureClick = useCallback(
     (feature: any) => {
-      const newSearchParams = new URLSearchParams(searchParams);
-      if (selectedFeature === feature.id) {
-        newSearchParams.delete('selectedFeature');
-      } else {
-        newSearchParams.set('selectedFeature', feature.id);
-      }
-      navigate({ search: newSearchParams.toString() }, { replace: true });
+      setSelectedFeature(feature.id);
 
       //TODO handle clicking on streetview https://tacc-main.atlassian.net/browse/WG-392
     },
-    [navigate]
+    [selectedFeatureId]
   );
 
   const activeBaseLayers = useMemo(
