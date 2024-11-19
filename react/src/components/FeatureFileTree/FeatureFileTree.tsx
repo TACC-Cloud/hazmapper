@@ -204,4 +204,4 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
   );
 };
 
-export default React.memo(FeatureFileTree);
+export default FeatureFileTree;
