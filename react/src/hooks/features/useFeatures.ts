@@ -9,6 +9,8 @@ interface UseFeaturesParams {
   options?: object;
 }
 
+export const KEY_USE_FEATURES = 'activeProjectFeatures';
+
 export const useFeatures = ({
   projectId,
   isPublicView,
@@ -22,18 +24,18 @@ export const useFeatures = ({
     endpoint += `?assetType=${assetTypes.join(',')}`;
   }
 
-  /* Expensive to fetch and process so we only fetch when updated */
   const defaultQueryOptions = {
-    staleTime: Infinity,
-    cacheTime: Infinity,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
+    /* Expensive to fetch and process so we only fetch when updated */
+    staleTime: Infinity /* "" */,
+    cacheTime: Infinity /* "" */,
+    refetchOnWindowFocus: false /* "" */,
+    refetchOnMount: false /* "" */,
+    refetchOnReconnect: false /* "" */,
   };
 
   const query = useGet<FeatureCollection>({
     endpoint,
-    key: ['activeProjectFeatures', { projectId, isPublicView, assetTypes }],
+    key: [KEY_USE_FEATURES, { projectId, isPublicView, assetTypes }],
     options: { ...defaultQueryOptions, ...options },
   });
   return query;

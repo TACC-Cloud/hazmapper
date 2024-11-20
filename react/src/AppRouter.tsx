@@ -7,14 +7,14 @@ import {
   Navigate,
   useLocation,
 } from 'react-router-dom';
-import * as ROUTES from './constants/routes';
-import MapProject from './pages/MapProject';
-import MainMenu from './pages/MainMenu';
-import Logout from './pages/Logout/Logout';
-import Login from './pages/Login/Login';
-import Callback from './pages/Callback/Callback';
-import StreetviewCallback from './pages/StreetviewCallback/StreetviewCallback';
-import { RootState } from './redux/store';
+import * as ROUTES from '@hazmapper/constants/routes';
+import MapProject from '@hazmapper/pages/MapProject';
+import MainMenu from '@hazmapper/pages/MainMenu';
+import Logout from '@hazmapper/pages/Logout/Logout';
+import Login from '@hazmapper/pages/Login/Login';
+import Callback from '@hazmapper/pages/Callback/Callback';
+import StreetviewCallback from '@hazmapper/pages/StreetviewCallback/StreetviewCallback';
+import { RootState } from '@hazmapper/redux/store';
 import { isTokenValid } from '@hazmapper/utils/authUtils';
 import { useBasePath } from '@hazmapper/hooks/environment';
 
