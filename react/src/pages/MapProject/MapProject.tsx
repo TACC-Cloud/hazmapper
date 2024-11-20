@@ -1,19 +1,26 @@
-import React from 'react';
-import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useQueryClient } from 'react-query';
+
+import { Message, LoadingSpinner } from '@tacc/core-components';
+
 import Map from '@hazmapper/components/Map';
 import AssetsPanel from '@hazmapper/components/AssetsPanel';
 import ManageMapProjectModal from '@hazmapper/components/ManageMapProjectModal';
 import { queryPanelKey, Panel } from '@hazmapper/utils/panels';
-import { useFeatures, useProject, useTileServers } from '@hazmapper/hooks';
-import { useParams } from 'react-router-dom';
-import styles from './MapProject.module.css';
+import {
+  useFeatures,
+  useProject,
+  useTileServers,
+  KEY_USE_FEATURES,
+} from '@hazmapper/hooks';
 import MapProjectNavBar from '@hazmapper/components/MapProjectNavBar';
 import Filters from '@hazmapper/components/FiltersPanel/Filter';
 import { assetTypeOptions } from '@hazmapper/components/FiltersPanel/Filter';
 import { Project } from '@hazmapper/types';
-import { Message, LoadingSpinner } from '@tacc/core-components';
 import * as ROUTES from '@hazmapper/constants/routes';
+
+import styles from './MapProject.module.css';
 
 interface MapProjectProps {
   /**
@@ -28,6 +35,7 @@ interface MapProjectProps {
  */
 const MapProject: React.FC<MapProjectProps> = ({ isPublicView = false }) => {
   const { projectUUID } = useParams();
+  const queryClient = useQueryClient();
 
   const {
     data: activeProject,
@@ -38,6 +46,14 @@ const MapProject: React.FC<MapProjectProps> = ({ isPublicView = false }) => {
     isPublicView,
     options: { enabled: !!projectUUID },
   });
+
+  // Clear feature queries when changing projects to prevent stale features from
+  // briefly appearing and causing incorrect map bounds/zoom during navigation
+  useEffect(() => {
+    return () => {
+      queryClient.removeQueries([KEY_USE_FEATURES]);
+    };
+  }, [projectUUID, queryClient]);
 
   if (isLoading) {
     /* TODO_REACT show error and improve spinner https://tacc-main.atlassian.net/browse/WG-260*/

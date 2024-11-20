@@ -8,7 +8,7 @@ import { MAP_CONFIG } from './config';
 /**
  * Handles map bounds adjustments based on features.
  * When features are first loaded: Fits bounds to show all features in collection
- * When selectedFeature changes: Zooms to that  feature
+ * When selectedFeature changes: Zooms to that feature
  */
 const FitBoundsHandler: React.FC<{
   featureCollection: FeatureCollection;
@@ -16,7 +16,7 @@ const FitBoundsHandler: React.FC<{
   const location = useLocation();
   const map = useMap();
 
-  // Track if we've seen features before
+  // Track if we've seen features
   const hasFeatures = useRef(false);
 
   const selectedFeatureId = useMemo(() => {
