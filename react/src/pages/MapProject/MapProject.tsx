@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Map from '@hazmapper/components/Map';
 import AssetsPanel from '@hazmapper/components/AssetsPanel';
 import ManageMapProjectModal from '@hazmapper/components/ManageMapProjectModal';
@@ -13,6 +13,7 @@ import Filters from '@hazmapper/components/FiltersPanel/Filter';
 import { assetTypeOptions } from '@hazmapper/components/FiltersPanel/Filter';
 import { Project } from '@hazmapper/types';
 import { Message, LoadingSpinner } from '@tacc/core-components';
+import * as ROUTES from '@hazmapper/constants/routes';
 
 interface MapProjectProps {
   /**
@@ -131,6 +132,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
   });
 
   const location = useLocation();
+  const navigate = useNavigate();
 
   const queryParams = new URLSearchParams(location.search);
   const activePanel = queryParams.get(queryPanelKey);
@@ -149,11 +151,28 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     features: [],
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    /* TODO https://tacc-main.atlassian.net/browse/WG-207 */
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      navigate(ROUTES.MAIN);
+    }
+  };
+
   return (
     <div className={styles.root}>
-      <div className={styles.topNavbar}>MapTopNavBar</div>
+      <div
+        className={styles.topNavbar}
+        onKeyDown={handleKeyDown}
+        onClick={() => navigate(ROUTES.MAIN)}
+        role="button"
+        tabIndex={0}
+        style={{ cursor: 'pointer' }}
+      >
+        MapTopNavBar TODO https://tacc-main.atlassian.net/browse/WG-207
+      </div>
       <div className={styles.mapControlBar}>
-        MapTopControlBar
+        MapTopControlBar TODO https://tacc-main.atlassian.net/browse/WG-260
         {loading && <div> loading</div>}
       </div>
       <div className={styles.container}>
