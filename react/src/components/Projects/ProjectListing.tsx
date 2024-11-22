@@ -89,7 +89,10 @@ const ProjectListing: React.FC = () => {
                     <Button
                       type="link"
                       iconNameBefore="trash"
-                      onClick={() => setSelectedProjectForDeletion(proj)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedProjectForDeletion(proj);
+                      }}
                     ></Button>
                   </td>
                 </tr>
