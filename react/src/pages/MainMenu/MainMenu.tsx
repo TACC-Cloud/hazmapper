@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { LoadingSpinner, InlineMessage } from '@tacc/core-components';
 import useAuthenticatedUser from '@hazmapper/hooks/user/useAuthenticatedUser';
 import ProjectListing from '@hazmapper/components/Projects/ProjectListing';
@@ -37,13 +37,21 @@ const MainMenu = () => {
       </div>
       <div className={styles.sponsorContainer}>
         <a href="https://www.nsf.gov/">
-          <img src="./src/assets/nsf.png" width="60px" />
+          <img
+            src="./src/assets/nsf.png"
+            alt="National Science Foundation webiste"
+            width="60px"
+          />
         </a>
         <a href="https://www.designsafe-ci.org/">
-          <img src="./src/assets/designsafe.svg" width="200px" />
+          <img
+            src="./src/assets/designsafe.svg"
+            alt="NHERI DesignSafe webiste"
+            width="200px"
+          />
         </a>
         <a href="https://www.designsafe-ci.org/about/">
-          <img src="./src/assets/nheri.png" width="150px" />
+          <img src="./src/assets/nheri.png" alt="NHERI webiste" width="150px" />
         </a>
       </div>
     </div>

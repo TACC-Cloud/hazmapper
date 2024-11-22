@@ -53,7 +53,10 @@ const ProjectListing: React.FC = () => {
   return (
     <div className={styles.root}>
       <div className={styles.versionContainer}>
-        <img src="./src/assets/Hazmapper-Stack@4x.png"></img>
+        <img
+          src="./src/assets/Hazmapper-Stack@4x.png"
+          alt="Hazmapper Logo Version 2.17"
+        ></img>
         <div className={styles.version}>{'Version 2.17'}</div>
       </div>
       <div className={styles.projectList}>
