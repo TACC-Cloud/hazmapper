@@ -39,19 +39,19 @@ const MainMenu = () => {
         <a href="https://www.nsf.gov/">
           <img
             src="./src/assets/nsf.png"
-            alt="National Science Foundation webiste"
+            alt="National Science Foundation website"
             width="60px"
           />
         </a>
         <a href="https://www.designsafe-ci.org/">
           <img
             src="./src/assets/designsafe.svg"
-            alt="NHERI DesignSafe webiste"
+            alt="NHERI DesignSafe website"
             width="200px"
           />
         </a>
         <a href="https://www.designsafe-ci.org/about/">
-          <img src="./src/assets/nheri.png" alt="NHERI webiste" width="150px" />
+          <img src="./src/assets/nheri.png" alt="NHERI website" width="150px" />
         </a>
       </div>
     </div>
