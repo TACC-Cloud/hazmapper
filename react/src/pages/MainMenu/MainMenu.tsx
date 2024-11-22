@@ -3,7 +3,7 @@ import { LoadingSpinner, InlineMessage } from '@tacc/core-components';
 import useAuthenticatedUser from '@hazmapper/hooks/user/useAuthenticatedUser';
 import ProjectListing from '@hazmapper/components/Projects/ProjectListing';
 import styles from './layout.module.css';
-import HazmapperHeader from '@hazmapper/components/HazmapperHeader';
+import HeaderNavBar from '@hazmapper/components/HeaderNavBar';
 
 const MainMenu = () => {
   const {
@@ -15,7 +15,7 @@ const MainMenu = () => {
   if (isUserLoading) {
     return (
       <>
-        <HazmapperHeader user={''} />
+        <HeaderNavBar user={''} />
         <LoadingSpinner />
       </>
     );
@@ -23,7 +23,7 @@ const MainMenu = () => {
   if (userError) {
     return (
       <>
-        <HazmapperHeader user={''} />
+        <HeaderNavBar user={''} />
         <InlineMessage type="error">Unable to retrieve projects.</InlineMessage>
       </>
     );
@@ -31,7 +31,7 @@ const MainMenu = () => {
 
   return (
     <div className={styles.root}>
-      <HazmapperHeader user={userData.username} />
+      <HeaderNavBar user={userData.username} />
       <div className={styles.listingContainer}>
         <ProjectListing />
       </div>
