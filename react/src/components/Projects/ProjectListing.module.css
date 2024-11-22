@@ -1,7 +1,7 @@
 .root {
   display: flex;
   flex-direction: column;
-  padding-left:50px;
+  padding-left: 50px;
   padding-right: 50px;
 }
 
@@ -9,14 +9,13 @@
   flex-grow: 1;
   overflow: hidden;
   justify-content: center;
-  padding:10px;
+  padding: 10px;
 }
 
 .projectList table {
   width: 100%;
   table-layout: fixed;
   border-collapse: collapse;
-
 }
 
 .projectList thead {
@@ -35,7 +34,7 @@
 
 .projectList tbody {
   display: block;
-  max-height: 300px; 
+  max-height: 300px;
   overflow-y: auto;
 }
 
@@ -97,5 +96,4 @@
 
 .versionContainer img {
   max-height: min-content;
-
 }
