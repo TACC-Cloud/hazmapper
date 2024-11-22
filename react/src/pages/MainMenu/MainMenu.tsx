@@ -51,7 +51,7 @@ const MainMenu = () => {
           />
         </a>
         <a href="https://www.designsafe-ci.org/about/">
-          <img src="./src/assets/nheri.png" alt="NHERI webiste" width="150px" />
+          <img src="./src/assets/nheri.png" alt="NHERI website" width="150px" />
         </a>
       </div>
     </div>
