@@ -39,7 +39,7 @@ const MainMenu = () => {
         <a href="https://www.nsf.gov/">
           <img
             src="./src/assets/nsf.png"
-            alt="National Science Foundation webiste"
+            alt="National Science Foundation website"
             width="60px"
           />
         </a>
