@@ -59,10 +59,12 @@ const navItems: NavItem[] = [
 ];
 
 interface NavBarPanelProps {
-  isPublic?: boolean;
+  isPublicView?: boolean;
 }
 
-const MapProjectNavBar: React.FC<NavBarPanelProps> = ({ isPublic = false }) => {
+const MapProjectNavBar: React.FC<NavBarPanelProps> = ({
+  isPublicView = false,
+}) => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const activePanel = queryParams.get(queryPanelKey);
@@ -70,7 +72,7 @@ const MapProjectNavBar: React.FC<NavBarPanelProps> = ({ isPublic = false }) => {
   return (
     <div className={styles.root}>
       {navItems
-        .filter((item) => (isPublic ? item.showWhenPublic : true))
+        .filter((item) => (isPublicView ? item.showWhenPublic : true))
         .map((item) => {
           const updatedQueryParams = new URLSearchParams(location.search);
 

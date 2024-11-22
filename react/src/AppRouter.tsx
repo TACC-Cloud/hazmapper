@@ -65,7 +65,10 @@ function AppRouter() {
             </ProtectedRoute>
           }
         />
-        <Route path={ROUTES.PUBLIC_PROJECT} element={<MapProject isPublic />} />
+        <Route
+          path={ROUTES.PUBLIC_PROJECT}
+          element={<MapProject isPublicView />}
+        />
         <Route path={ROUTES.CALLBACK} element={<Callback />} />
         <Route
           path={ROUTES.STREETVIEW_CALLBACK}

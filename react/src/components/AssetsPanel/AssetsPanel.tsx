@@ -1,22 +1,26 @@
 import React from 'react';
 import styles from './AssetsPanel.module.css';
 import FeatureFileTree from '@hazmapper/components/FeatureFileTree';
-import { FeatureCollection } from '@hazmapper/types';
+import { FeatureCollection, Project } from '@hazmapper/types';
 import { Button } from '@tacc/core-components';
 import { useFeatures } from '@hazmapper/hooks';
 
+const getFilename = (projectName: string) => {
+  // Convert to lowercase filename based on projectName
+  const sanitizedString = projectName.toLowerCase().replace(/[^a-z0-9]/g, '_');
+  return `${sanitizedString}.json`;
+};
+
 interface DownloadFeaturesButtonProps {
-  projectId: number;
-  isPublic: boolean;
+  project: Project;
 }
 
 const DownloadFeaturesButton: React.FC<DownloadFeaturesButtonProps> = ({
-  projectId,
-  isPublic,
+  project,
 }) => {
   const { isLoading: isDownloading, refetch: triggerDownload } = useFeatures({
-    projectId,
-    isPublic,
+    projectId: project.id,
+    isPublicView: project.public,
     assetTypes: [], // Empty array to get all features
     options: {
       enabled: false, // Only fetch when triggered by user clicking button
@@ -31,7 +35,7 @@ const DownloadFeaturesButton: React.FC<DownloadFeaturesButtonProps> = ({
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = `hazmapper.json`;
+        link.download = getFilename(project.name);
 
         document.body.appendChild(link);
         link.click();
@@ -56,23 +60,23 @@ interface Props {
   featureCollection: FeatureCollection;
 
   /**
-   * Whether or not the map project is public.
+   * Whether or not the map project is a public view.
    */
-  isPublic: boolean;
+  isPublicView: boolean;
 
   /**
-   * active project id
+   * active project
    */
-  projectId: number;
+  project: Project;
 }
 
 /**
  * A panel component that displays info on feature assets
  */
 const AssetsPanel: React.FC<Props> = ({
-  isPublic,
+  isPublicView,
   featureCollection,
-  projectId,
+  project,
 }) => {
   return (
     <div className={styles.root}>
@@ -81,13 +85,13 @@ const AssetsPanel: React.FC<Props> = ({
       </div>
       <div className={styles.middleSection}>
         <FeatureFileTree
-          projectId={projectId}
-          isPublic={isPublic}
+          projectId={project.id}
+          isPublicView={isPublicView}
           featureCollection={featureCollection}
         />
       </div>
       <div className={styles.bottomSection}>
-        <DownloadFeaturesButton projectId={projectId} isPublic={isPublic} />
+        <DownloadFeaturesButton project={project} />
       </div>
     </div>
   );
