@@ -1,14 +1,10 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { fireEvent, waitFor } from '@testing-library/react';
+import { http, HttpResponse } from 'msw';
 import FeatureFileTree from './FeatureFileTree';
+import { server, renderInTest } from '@hazmapper/test/testUtil';
 import { featureCollection } from '@hazmapper/__fixtures__/featuresFixture';
-import { useDeleteFeature } from '@hazmapper/hooks';
-
-// Mock the hooks
-jest.mock('@hazmapper/hooks', () => ({
-  useDeleteFeature: jest.fn(),
-}));
+import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
 
 jest.mock('react-resize-detector', () => ({
   useResizeDetector: () => ({
@@ -17,31 +13,20 @@ jest.mock('react-resize-detector', () => ({
   }),
 }));
 
-const renderWithRouter = (ui: React.ReactElement, { route = '/' } = {}) => {
-  return {
-    ...render(<MemoryRouter initialEntries={[route]}>{ui}</MemoryRouter>),
-  };
-};
-
 describe('FeatureFileTree', () => {
-  const defaultProps = {
+  const defaultTreeProps = {
     featureCollection: featureCollection,
-    isPublic: false,
+    isPublicView: false,
     projectId: 1,
   };
 
   beforeEach(() => {
     jest.clearAllMocks();
-
-    (useDeleteFeature as jest.Mock).mockImplementation(() => ({
-      mutate: jest.fn(),
-      isLoading: false,
-    }));
   });
 
   it('renders feature list correctly', () => {
-    const { getByText } = renderWithRouter(
-      <FeatureFileTree {...defaultProps} />
+    const { getByText } = renderInTest(
+      <FeatureFileTree {...defaultTreeProps} />
     );
 
     expect(getByText('foo')).toBeDefined();
@@ -49,32 +34,38 @@ describe('FeatureFileTree', () => {
     expect(getByText('image2.JPG')).toBeDefined();
   });
 
-  it('handles feature deletion for non-public projects', () => {
-    const deleteFeatureMock = jest.fn();
-    (useDeleteFeature as jest.Mock).mockImplementation(() => ({
-      mutate: deleteFeatureMock,
-      isLoading: false,
-    }));
+  it('handles feature deletion for non-public projects', async () => {
+    const featureId = 1;
+    let wasDeleted = false;
 
-    const { getByTestId } = renderWithRouter(
-      <FeatureFileTree {...defaultProps} />,
-      { route: '/?selectedFeature=1' }
+    server.use(
+      http.delete(
+        `${testDevConfiguration.geoapiUrl}/projects/${defaultTreeProps.projectId}/features/${featureId}/`,
+        () => {
+          wasDeleted = true;
+          return HttpResponse.json({}, { status: 200 });
+        }
+      )
+    );
+
+    const { getByTestId } = renderInTest(
+      <FeatureFileTree {...defaultTreeProps} />,
+      `/?selectedFeature=${featureId}`
     );
 
     // Find and click delete button (as featured is selected)
     const deleteButton = getByTestId('delete-feature-button');
     fireEvent.click(deleteButton);
 
-    expect(deleteFeatureMock).toHaveBeenCalledWith({
-      projectId: 1,
-      featureId: 1,
+    await waitFor(() => {
+      expect(wasDeleted).toBeTruthy();
     });
   });
 
   it('does not show delete button for public projects', () => {
-    const { queryByTestId } = renderWithRouter(
-      <FeatureFileTree {...defaultProps} isPublic={true} />,
-      { route: '/?selectedFeature=1' }
+    const { queryByTestId } = renderInTest(
+      <FeatureFileTree {...defaultTreeProps} isPublicView={true} />,
+      '/?selectedFeature=1'
     );
 
     // Verify delete button is not present
@@ -83,8 +74,8 @@ describe('FeatureFileTree', () => {
   });
 
   it('does not show delete button when no feature is selected', () => {
-    const { queryByTestId } = renderWithRouter(
-      <FeatureFileTree {...defaultProps} isPublic={true} />
+    const { queryByTestId } = renderInTest(
+      <FeatureFileTree {...defaultTreeProps} isPublicView={false} />
     );
 
     // Verify delete button is not present
