@@ -9,6 +9,7 @@ jest.mock('@hazmapper/hooks/user/useAuthenticatedUser', () => ({
     data: { username: 'mockUser' },
     isLoading: false,
     error: null,
+    refetch: jest.fn(),
   }),
 }));
 
