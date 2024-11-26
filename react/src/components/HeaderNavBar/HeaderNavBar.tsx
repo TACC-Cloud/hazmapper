@@ -29,7 +29,7 @@ export const HeaderNavBar: React.FC = () => {
     return <LoadingSpinner />;
   }
 
-  if (!isUserError) {
+  if (isUserError) {
     return (
       <InlineMessage type="error">
         {' '}
