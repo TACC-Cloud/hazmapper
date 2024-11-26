@@ -1,37 +1,12 @@
 import React from 'react';
-import { LoadingSpinner, InlineMessage } from '@tacc/core-components';
-import useAuthenticatedUser from '@hazmapper/hooks/user/useAuthenticatedUser';
 import ProjectListing from '@hazmapper/components/Projects/ProjectListing';
 import styles from './layout.module.css';
 import HeaderNavBar from '@hazmapper/components/HeaderNavBar';
 
 const MainMenu = () => {
-  const {
-    data: userData,
-    isLoading: isUserLoading,
-    error: userError,
-  } = useAuthenticatedUser();
-
-  if (isUserLoading) {
-    return (
-      <>
-        <HeaderNavBar user={''} />
-        <LoadingSpinner />
-      </>
-    );
-  }
-  if (userError) {
-    return (
-      <>
-        <HeaderNavBar user={''} />
-        <InlineMessage type="error">Unable to retrieve projects.</InlineMessage>
-      </>
-    );
-  }
-
   return (
     <div className={styles.root}>
-      <HeaderNavBar user={userData.username} />
+      <HeaderNavBar />
       <div className={styles.listingContainer}>
         <ProjectListing />
       </div>

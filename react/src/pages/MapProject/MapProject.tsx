@@ -5,12 +5,7 @@ import Map from '@hazmapper/components/Map';
 import AssetsPanel from '@hazmapper/components/AssetsPanel';
 import ManageMapProjectModal from '@hazmapper/components/ManageMapProjectModal';
 import { queryPanelKey, Panel } from '@hazmapper/utils/panels';
-import {
-  useAuthenticatedUser,
-  useFeatures,
-  useProject,
-  useTileServers,
-} from '@hazmapper/hooks';
+import { useFeatures, useProject, useTileServers } from '@hazmapper/hooks';
 import { useParams } from 'react-router-dom';
 import styles from './MapProject.module.css';
 import MapProjectNavBar from '@hazmapper/components/MapProjectNavBar';
@@ -94,7 +89,6 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
   activeProject,
   isPublicView,
 }) => {
-  const { data: userData } = useAuthenticatedUser();
   const [selectedAssetTypes, setSelectedAssetTypes] = useState<string[]>(
     Object.keys(assetTypeOptions)
   );
@@ -158,7 +152,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
 
   return (
     <div className={styles.root}>
-      <HeaderNavBar user={userData ? userData.username : ''} />
+      <HeaderNavBar />
       <div className={styles.mapControlBar}>
         MapTopControlBar
         {loading && <div> loading</div>}
