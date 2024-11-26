@@ -26,7 +26,11 @@ const ProjectListing: React.FC = () => {
     useProjectsWithDesignSafeInformation();
 
   if (isLoading) {
-    return <LoadingSpinner />;
+    return (
+      <div className={styles.root}>
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   if (isError) {
@@ -52,13 +56,6 @@ const ProjectListing: React.FC = () => {
 
   return (
     <div className={styles.root}>
-      <div className={styles.versionContainer}>
-        <img
-          src="./src/assets/Hazmapper-Stack@4x.png"
-          alt="Hazmapper Logo"
-        ></img>
-        <div className={styles.version}>{'Version 2.17'}</div>
-      </div>
       <div className={styles.projectList}>
         <table>
           <thead>
@@ -112,22 +109,6 @@ const ProjectListing: React.FC = () => {
           </tbody>
         </table>
       </div>
-      <Button
-        className={styles.userGuide}
-        iconNameBefore="exit"
-        type="link"
-        onClick={(e) => {
-          window.open(
-            'https://www.designsafe-ci.org/user-guide/tools/visualization/#hazmapper-user-guide',
-            '_blank',
-            'noopener,noreferrer'
-          );
-          // To prevent active box around link lingering after click
-          e.currentTarget.blur();
-        }}
-      >
-        User Guide
-      </Button>
       {selectedProjectForDeletion && (
         <DeleteMapModal
           isOpen={!!selectedProjectForDeletion}

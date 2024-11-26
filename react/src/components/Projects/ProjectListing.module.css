@@ -4,6 +4,13 @@
   padding-left: 50px;
   padding-right: 50px;
 }
+.errorMessage {
+  width: 100%;
+  padding: 10px;
+}
+.errorMessage p {
+  justify-content: center;
+}
 
 .projectList {
   flex-grow: 1;
@@ -42,6 +49,9 @@
   display: table;
   width: 100%;
   table-layout: fixed;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .projectList tr:hover td {
@@ -77,23 +87,4 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   justify-content: flex-start;
-}
-
-.userGuide {
-  font-weight: bold;
-  font-size: medium;
-  justify-content: flex-end;
-  padding-right: 10px;
-}
-
-.versionContainer {
-  display: flex;
-  flex-direction: column;
-
-  justify-content: center;
-  align-items: center;
-}
-
-.versionContainer img {
-  max-height: min-content;
 }

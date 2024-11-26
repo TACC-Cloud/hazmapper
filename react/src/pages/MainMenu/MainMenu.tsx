@@ -1,6 +1,7 @@
 import React from 'react';
 import ProjectListing from '@hazmapper/components/Projects/ProjectListing';
 import styles from './layout.module.css';
+import { Button } from '@tacc/core-components';
 import HeaderNavBar from '@hazmapper/components/HeaderNavBar';
 
 const MainMenu = () => {
@@ -8,7 +9,32 @@ const MainMenu = () => {
     <div className={styles.root}>
       <HeaderNavBar />
       <div className={styles.listingContainer}>
+        <div className={styles.versionContainer}>
+          <img
+            src="./src/assets/Hazmapper-Stack@4x.png"
+            alt="Hazmapper Logo"
+          ></img>
+          <div className={styles.version}>{'Version 2.17'}</div>
+        </div>
+
         <ProjectListing />
+
+        <Button
+          className={styles.userGuide}
+          iconNameBefore="exit"
+          type="link"
+          onClick={(e) => {
+            window.open(
+              'https://www.designsafe-ci.org/user-guide/tools/visualization/#hazmapper-user-guide',
+              '_blank',
+              'noopener,noreferrer'
+            );
+            // To prevent active box around link lingering after click
+            e.currentTarget.blur();
+          }}
+        >
+          User Guide
+        </Button>
       </div>
       <div className={styles.sponsorContainer}>
         <a href="https://www.nsf.gov/">
