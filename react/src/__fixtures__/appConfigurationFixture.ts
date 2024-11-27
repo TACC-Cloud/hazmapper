@@ -1,8 +1,4 @@
-import {
-  GeoapiBackendEnvironment,
-  AppConfiguration,
-  MapillaryConfiguration,
-} from '../types';
+import { AppConfiguration, MapillaryConfiguration } from '@hazmapper/types';
 
 export const mapillaryConfig: MapillaryConfiguration = {
   authUrl: 'https://www.mapillary.com/connect',
@@ -16,11 +12,11 @@ export const mapillaryConfig: MapillaryConfiguration = {
   clientToken: '',
 };
 
-export const localDevConfiguration: AppConfiguration = {
-  basePath: '/',
-  geoapiBackend: GeoapiBackendEnvironment.Local,
-  geoapiUrl: 'http://localhost:8888',
-  designsafePortalUrl: 'https://designsafeci-dev.tacc.utexas.edu',
+export const testDevConfiguration: AppConfiguration = {
+  basePath: '/test',
+  geoapiUrl: 'https://geoapi.unittest',
+  designsafePortalUrl: 'https://designsafeci.unittest',
+  tapisUrl: 'https://tapis.io.unittest',
   mapillary: mapillaryConfig,
-  taggitUrl: 'http://localhost:4200/taggit-staging',
+  taggitUrl: 'https://taggit.unittest',
 };

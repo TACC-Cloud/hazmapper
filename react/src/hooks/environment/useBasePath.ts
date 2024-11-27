@@ -11,9 +11,11 @@ const useBasePath = (): string => {
       '/hazmapper-react',
       '/staging-react',
       '/dev-react',
+      '/exp-react',
       '/hazmapper',
       '/staging',
       '/dev',
+      '/exp',
     ];
     const currentPath: string = window.location.pathname;
     const base: string | undefined = paths.find((path) =>

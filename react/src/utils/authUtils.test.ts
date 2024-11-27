@@ -5,7 +5,7 @@ import {
   removeAuthenticatedUserFromLocalStorage,
   AUTH_KEY,
 } from './authUtils';
-import { AuthState, AuthToken } from '../types';
+import { AuthState, AuthToken } from '@hazmapper/types';
 
 describe('Auth Utils', () => {
   describe('isTokenValid', () => {

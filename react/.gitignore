@@ -23,6 +23,10 @@ dist-ssr
 *.sln
 *.sw?
 
+# Building artifacts from core-components
+# (to be removed in https://tacc-main.atlassian.net/browse/WI-208)
+.nx
+
 # Environment
 .env
 secret_local.ts

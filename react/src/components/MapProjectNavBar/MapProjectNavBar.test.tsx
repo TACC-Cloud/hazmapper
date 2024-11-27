@@ -7,7 +7,7 @@ describe('MapProjectNavBar', () => {
   it('renders the public nav items for public maps', () => {
     const { getByText, queryByText } = render(
       <BrowserRouter>
-        <MapProjectNavBar isPublic={true} />
+        <MapProjectNavBar isPublicView={true} />
       </BrowserRouter>
     );
     expect(getByText('Assets')).toBeDefined();
@@ -22,7 +22,7 @@ describe('MapProjectNavBar', () => {
   it('renders all nav items for non-public maps', () => {
     const { getByText } = render(
       <BrowserRouter>
-        <MapProjectNavBar isPublic={false} />
+        <MapProjectNavBar isPublicView={false} />
       </BrowserRouter>
     );
 

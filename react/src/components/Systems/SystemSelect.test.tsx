@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { SystemSelect } from './SystemSelect';
 import systemsFixture from './Systems.fixture';
 
-jest.mock('../../hooks', () => {
+jest.mock('@hazmapper/hooks', () => {
   return {
     useSystems: () => {
       return {

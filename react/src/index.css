@@ -3,7 +3,7 @@
 /* prettier-ignore */
 @import url('https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css') layer(foundation);
 
-@import url('@tacc/core-styles/dist/core-styles.base.css'); /* layer(base);*/
-@import url('@tacc/core-styles/dist/core-styles.portal.css'); /* layer(base);*/
+@import url('@tacc/core-styles/dist/core-styles.base.css') layer(base);
+@import url('@tacc/core-styles/dist/core-styles.portal.css') layer(base);
 
 @import url('./hazmapper.css') layer(project);

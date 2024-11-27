@@ -1,33 +1,40 @@
 import { UseQueryResult } from 'react-query';
-import { FeatureCollection } from '../../types';
-import { useGet } from '../../requests';
+import { FeatureCollection } from '@hazmapper/types';
+import { useGet } from '@hazmapper/requests';
 
 interface UseFeaturesParams {
-  projectId?: number;
-  isPublic: boolean;
-  options: object;
+  projectId: number;
+  isPublicView: boolean;
+  assetTypes: string[];
+  options?: object;
 }
 
-const useFeatures = ({
+export const useFeatures = ({
   projectId,
-  isPublic,
-  options,
+  isPublicView,
   assetTypes,
-}: UseFeaturesParams & {
-  assetTypes?: string[];
-}): UseQueryResult<FeatureCollection> => {
-  const featuresRoute = isPublic ? 'public-projects' : 'projects';
+  options = {},
+}: UseFeaturesParams): UseQueryResult<FeatureCollection> => {
+  // TODO can be reworked as /projects can be used and /public-projects can be removed since we are no longer a WSO2 API
+  const featuresRoute = isPublicView ? 'public-projects' : 'projects';
   let endpoint = `/${featuresRoute}/${projectId}/features/`;
   if (assetTypes?.length) {
     endpoint += `?assetType=${assetTypes.join(',')}`;
   }
 
+  /* Expensive to fetch and process so we only fetch when updated */
+  const defaultQueryOptions = {
+    staleTime: Infinity,
+    cacheTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  };
+
   const query = useGet<FeatureCollection>({
     endpoint,
-    key: ['features', { projectId, isPublic, assetTypes }],
-    options,
+    key: ['activeProjectFeatures', { projectId, isPublicView, assetTypes }],
+    options: { ...defaultQueryOptions, ...options },
   });
   return query;
 };
-
-export default useFeatures;

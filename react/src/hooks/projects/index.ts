@@ -1,5 +1,6 @@
 export {
-  mergeDesignSafeProject,
+  useDeleteProject,
+  useProjectsWithDesignSafeInformation,
   useProjects,
   useDsProjects,
 } from './useProjects';

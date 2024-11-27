@@ -1,11 +1,7 @@
 import React from 'react';
-import { render, waitFor } from '@testing-library/react';
+import { waitFor } from '@testing-library/react';
 import Login from './Login';
-import { Provider } from 'react-redux';
-import store from '../../redux/store';
-import { QueryClientProvider } from 'react-query';
-import { testQueryClient } from '../../testUtil';
-import { MemoryRouter } from 'react-router';
+import { renderInTest } from '../../test/testUtil';
 
 beforeAll(() => {
   const mockLocation = {
@@ -25,15 +21,7 @@ afterAll(() => {
 });
 
 test('renders login', async () => {
-  const { getByText } = render(
-    <Provider store={store}>
-      <MemoryRouter>
-        <QueryClientProvider client={testQueryClient}>
-          <Login />
-        </QueryClientProvider>
-      </MemoryRouter>
-    </Provider>
-  );
+  const { getByText } = renderInTest(<Login />);
   expect(getByText(/Logging in/)).toBeDefined();
 
   await waitFor(() => {

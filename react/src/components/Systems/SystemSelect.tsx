@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { useSystems } from '../../hooks';
-import { System } from '../../types';
+import { useSystems } from '@hazmapper/hooks';
+import { System } from '@hazmapper/types';
 
 interface SystemSelectProps {
   className: string;

@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { Button, Section, SectionTableWrapper } from '../../core-components';
+import { Button } from '@tacc/core-components';
 import styles from './CreateMapModal.module.css';
-import { Formik, Form } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import useCreateProject from '../../hooks/projects/useCreateProject';
-import useAuthenticatedUser from '../../hooks/user/useAuthenticatedUser';
+import useCreateProject from '@hazmapper/hooks/projects/useCreateProject';
+import useAuthenticatedUser from '@hazmapper/hooks/user/useAuthenticatedUser';
 import { useNavigate } from 'react-router-dom';
-import { ProjectRequest } from '../../types';
+import { ProjectRequest } from '@hazmapper/types';
 import {
-  FieldWrapperFormik,
   FormikInput,
   FormikTextarea,
   FormikCheck,
-} from '../../core-wrappers';
-import { FileListing } from '../Files';
+} from '@tacc/core-components';
 
 type CreateMapModalProps = {
   isOpen: boolean;
@@ -127,110 +125,83 @@ const CreateMapModal = ({
                       // Replace spaces with underscores for system_file mirroring
                       const systemFileName = values.name.replace(/\s+/g, '_');
 
-                      // Update system_file only if it matches the previous name or if name/system_file are empty
-                      if (
-                        values.system_file ===
-                          previousName.replace(/\s+/g, '_') ||
-                        (values.system_file === '' && values.name === '')
-                      ) {
-                        setFieldValue('system_file', systemFileName);
-                        setPreviousName(values.name);
-                      }
-                    }, [
-                      values.name,
-                      values.system_file,
-                      setFieldValue,
-                      previousName,
-                    ]);
-                    return (
-                      <Form className="c-form">
-                        <FieldWrapperFormik name="map-form-info" label="">
-                          <FormikInput
-                            name="name"
-                            label="Name"
-                            required
-                            data-testid="name-input"
-                          />
-                          <FormikTextarea
-                            name="description"
-                            label="Description"
-                            required
-                          />
-                          <div className={`${styles['field-wrapper']}`}>
-                            <FormikInput
-                              name="system_file"
-                              label="Custom File Name"
-                              required
-                              className={`${styles['input-custom-size']}`}
-                            />
-                            <span className={`${styles['hazmapper-suffix']}`}>
-                              .hazmapper
-                            </span>
-                          </div>
-                          <div className={`${styles['field-wrapper-alt']}`}>
-                            <FormikInput
-                              name="save-location-label"
-                              label="Save Location"
-                              value={`/${userData?.username}`}
-                              readOnly
-                              disabled
-                            />
-                          </div>
-                          <FormikCheck
-                            name="syncFolder"
-                            label="Sync Folder"
-                            description="When enabled, files in this folder are automatically synced
-                  into the map periodically."
-                          />
-                        </FieldWrapperFormik>
-                        {errorMessage && (
-                          <div className="c-form__errors">{errorMessage}</div>
-                        )}
-                        <ModalFooter className="justify-content-start">
-                          <Button
-                            size="short"
-                            type="secondary"
-                            onClick={handleClose}
-                          >
-                            Close
-                          </Button>
-                          <Button
-                            size="short"
-                            type="primary"
-                            attr="submit"
-                            isLoading={isCreatingProject}
-                          >
-                            Create
-                          </Button>
-                        </ModalFooter>
-                      </Form>
-                    );
-                  }}
-                </Formik>
-              </SectionTableWrapper>
-              <SectionTableWrapper
-                manualHeader={
-                  <>
-                    <h2 className={`${styles['link-heading']}`}>
-                      Select Link Save Location
-                    </h2>
-                    <h4 className={`${styles['link-subheading']}`}>
-                      If no folder is selected, the link file will be saved to
-                      the root of the selected system.If you select a project,
-                      you can link the current map to the project.
-                    </h4>
-                  </>
-                }
-              >
-                <FileListing
-                  disableSelection={false}
-                  onDirectoryChange={handleDirectoryChange}
-                  onFileSelect={handleSelectedFiles}
-                />
-              </SectionTableWrapper>
-            </>
-          }
-        ></Section>
+              // Update system_file only if it matches the previous name or if name/system_file are empty
+              if (
+                values.system_file === previousName.replace(/\s+/g, '_') ||
+                (values.system_file === '' && values.name === '')
+              ) {
+                setFieldValue('system_file', systemFileName);
+                setPreviousName(values.name);
+              }
+            }, [values.name, values.system_file, setFieldValue, previousName]);
+
+            return (
+              <Form className="c-form" name="map-form-info">
+                {/* TODO: Remove superfluous empty tag, and re-nest markup */}
+                {/* NOTE: Added to simplify diff of PR #239 */}
+                <>
+                  <Field
+                    component={FormikInput}
+                    name="name"
+                    label="Name"
+                    required
+                    data-testid="name-input"
+                  />
+                  <Field
+                    component={FormikTextarea}
+                    name="description"
+                    label="Description"
+                    required
+                  />
+                  <div className={`${styles['field-wrapper']}`}>
+                    <Field
+                      component={FormikInput}
+                      name="system_file"
+                      label="Custom File Name"
+                      required
+                      className={`${styles['input-custom-size']}`}
+                    />
+                    <span className={`${styles['hazmapper-suffix']}`}>
+                      .hazmapper
+                    </span>
+                  </div>
+                  <div className={`${styles['field-wrapper-alt']}`}>
+                    <Field
+                      component={FormikInput}
+                      name="save-location"
+                      label="Save Location"
+                      value={`/${userData?.username}`}
+                      readOnly
+                      disabled
+                    />
+                  </div>
+                  <Field
+                    component={FormikCheck}
+                    name="syncFolder"
+                    label="Sync Folder"
+                    description="When enabled, files in this folder are automatically synced into the map periodically."
+                  />
+                </>
+                {errorMessage && (
+                  <div className="c-form__errors">{errorMessage}</div>
+                )}
+                <ModalFooter className="justify-content-start">
+                  <Button size="short" type="secondary" onClick={handleClose}>
+                    Close
+                  </Button>
+                  <Button
+                    size="short"
+                    type="primary"
+                    attr="submit"
+                    isLoading={isCreatingProject}
+                  >
+                    Create
+                  </Button>
+                </ModalFooter>
+              </Form>
+            );
+          }}
+        </Formik>
       </ModalBody>
     </Modal>
   );

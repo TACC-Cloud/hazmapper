@@ -1,4 +1,4 @@
-import { AuthState } from '../types';
+import { AuthState } from '@hazmapper/types';
 
 // Convert the timestamp to a Date object
 const expiresAtDate = new Date(3153600000000); //2070

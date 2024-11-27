@@ -1,5 +1,21 @@
 import { GeoJsonProperties, Geometry } from 'geojson';
 
+// Define asset types from GeoApi
+export type AssetType =
+  | 'image'
+  | 'video'
+  | 'questionnaire'
+  | 'point_cloud'
+  | 'streetview';
+
+// Define all possible geometry types from GeoJSON (e.g.  "Point", "MultiPoint", "Polygon" etc)
+export type GeoJSONGeometryType = Geometry['type'];
+
+// Combined feature type that includes all possibilities for a feature
+export type FeatureType = AssetType | GeoJSONGeometryType | 'collection';
+
+export type FeatureTypeNullable = FeatureType | undefined;
+
 /**
  * Asset of a feature
  */
@@ -7,10 +23,7 @@ export interface Asset {
   id: number;
   path: string;
   uuid: string;
-  /**
-   * The type of asset, such as "image", "video", "point_cloud", or "streetview".
-   */
-  asset_type: string;
+  asset_type: AssetType;
   original_path: string;
   original_name: string | null;
   display_path: string;
@@ -50,34 +63,19 @@ export interface Feature {
   assets: Asset[];
 }
 
-export class FeatureClass implements Feature {
-  constructor(
-    public id: number,
-    public project_id: number,
-    public type: string,
-    public geometry: Geometry,
-    public properties: any,
-    public styles: any,
-    public assets: Asset[]
-  ) {}
-
-  /**
-   * Returns the type of the feature based on its assets and geometry.
-   * If there are no assets, returns the type of the feature's geometry.
-   * If there is only one asset, returns the type of that asset (i.e. "image", "video", "point_cloud", or "streetview".)
-   * If there are multiple assets, returns "collection".
-   * If there are no assets or geometry, returns "unknown".
-   *
-   * @returns The type of the feature as a string.
-   */
-  featureType(): string {
-    if (this.assets.length === 1) {
-      return this.assets[0].asset_type;
-    } else if (this.assets.length > 1) {
-      return 'collection';
-    } else {
-      return this.geometry.type;
-    }
+/**
+ * Returns the type of the feature based on its assets and geometry.
+ */
+export function getFeatureType(feature: Feature): FeatureType {
+  if (feature.assets.length === 1) {
+    /* If there is only one asset, returns the type of that asset (i.e. "image", "video", "point_cloud", or "streetview".)*/
+    return feature.assets[0].asset_type;
+  } else if (feature.assets.length > 1) {
+    /* multiple assets */
+    return 'collection';
+  } else {
+    /* else we rely on geojson geometry type */
+    return feature.geometry.type;
   }
 }
 
@@ -93,4 +91,15 @@ export interface FeatureCollection {
    * An array of Feature objects.
    */
   features: Feature[];
+}
+
+/**
+ *  Features/file abstraction for feature file tree representation
+ */
+export interface FeatureFileNode {
+  nodeId: string /* feature id if feature; path if directory node */;
+  name: string;
+  isDirectory: boolean;
+  featureType: FeatureTypeNullable;
+  children?: FeatureFileNode[];
 }

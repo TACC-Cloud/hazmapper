@@ -1,4 +1,4 @@
-import { AuthToken, AuthState } from '../types';
+import { AuthToken, AuthState } from '@hazmapper/types';
 
 export const AUTH_KEY = 'authV3';
 
