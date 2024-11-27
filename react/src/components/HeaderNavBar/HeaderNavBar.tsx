@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Layout } from 'antd';
 import useAuthenticatedUser from '@hazmapper/hooks/user/useAuthenticatedUser';
 import { useNavigate } from 'react-router-dom';
@@ -13,17 +13,12 @@ export const HeaderNavBar: React.FC = () => {
     data: userData,
     isLoading: isUserLoading,
     error: isUserError,
-    refetch,
   } = useAuthenticatedUser();
 
   const handleLogin = () => {
     const url = `/login?to=${encodeURIComponent(location.pathname)}`;
     navigate(url);
   };
-
-  useEffect(() => {
-    if (userData) refetch();
-  }, [userData, refetch]);
 
   if (isUserLoading) {
     return <LoadingSpinner />;
