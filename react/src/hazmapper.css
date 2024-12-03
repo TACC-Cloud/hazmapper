@@ -13,7 +13,7 @@
   --hazmapper-control-bar-height: 27px;
 
   /* Height of the main navigation bar */
-  --hazmapper-top-navbar-height: 40px;
+  --hazmapper-header-navbar-height: 40px;
 
   /* Width of panel navbar (i.e. icon navigation panel) */
   --hazmapper-panel-navbar-width: 75px;

@@ -19,7 +19,7 @@ import Filters from '@hazmapper/components/FiltersPanel/Filter';
 import { assetTypeOptions } from '@hazmapper/components/FiltersPanel/Filter';
 import { Project } from '@hazmapper/types';
 import * as ROUTES from '@hazmapper/constants/routes';
-
+import HeaderNavBar from '@hazmapper/components/HeaderNavBar';
 import styles from './MapProject.module.css';
 
 interface MapProjectProps {
@@ -167,26 +167,9 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     features: [],
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent) => {
-    /* TODO https://tacc-main.atlassian.net/browse/WG-207 */
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      navigate(ROUTES.MAIN);
-    }
-  };
-
   return (
     <div className={styles.root}>
-      <div
-        className={styles.topNavbar}
-        onKeyDown={handleKeyDown}
-        onClick={() => navigate(ROUTES.MAIN)}
-        role="button"
-        tabIndex={0}
-        style={{ cursor: 'pointer' }}
-      >
-        MapTopNavBar TODO https://tacc-main.atlassian.net/browse/WG-207
-      </div>
+      <HeaderNavBar />
       <div className={styles.mapControlBar}>
         MapTopControlBar TODO https://tacc-main.atlassian.net/browse/WG-260
         {loading && <div> loading</div>}
