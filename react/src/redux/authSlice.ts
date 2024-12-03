@@ -17,10 +17,8 @@ const authSlice = createSlice({
       state,
       action: PayloadAction<{ user: AuthenticatedUser; authToken: AuthToken }>
     ) {
-      state = {
-        user: action.payload.user,
-        authToken: action.payload.authToken,
-      };
+      state.user = action.payload.user;
+      state.authToken = action.payload.authToken;
 
       // save to local storage
       setAuthenticatedUserFromLocalStorage(state);

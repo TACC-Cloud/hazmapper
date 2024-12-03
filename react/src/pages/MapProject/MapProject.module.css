@@ -16,8 +16,8 @@
 .topNavbar {
   background-color: black;
   color: white;
-  height: var(--hazmapper-top-navbar-height);
-  min-height: var(--hazmapper-top-navbar-height);
+  height: var(--hazmapper-header-navbar-height);
+  min-height: var(--hazmapper-header-navbar-height);
   display: flex;
   align-items: center;
 }
@@ -33,7 +33,7 @@
 
 .container {
   height: calc(
-    100vh - var(--hazmapper-top-navbar-height) -
+    100vh - var(--hazmapper-header-navbar-height) -
       var(--hazmapper-control-bar-height)
   );
   width: 100%;
@@ -44,7 +44,7 @@
 .panelContainer {
   width: var(--hazmapper-panel-width);
   height: calc(
-    100vh - var(--hazmapper-top-navbar-height) -
+    100vh - var(--hazmapper-header-navbar-height) -
       var(--hazmapper-control-bar-height)
   );
   background-color: var(--global-color-primary--xx-light);

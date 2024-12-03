@@ -26,7 +26,11 @@ const ProjectListing: React.FC = () => {
     useProjectsWithDesignSafeInformation();
 
   if (isLoading) {
-    return <LoadingSpinner />;
+    return (
+      <div className={styles.root}>
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   if (isError) {
@@ -52,54 +56,59 @@ const ProjectListing: React.FC = () => {
 
   return (
     <div className={styles.root}>
-      <table className={styles.projectList}>
-        <thead>
-          <tr>
-            <th className={styles.mapColumn}>Map</th>
-            <th className={styles.projectColumn}>Project</th>
-            <th className={styles.buttonColumn}>
-              <CreateMapModal isOpen={isModalOpen} toggle={toggleModal} />
-              <Button onClick={toggleModal} type="link" iconNameBefore="add">
-                Create a New Map
-              </Button>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {data && data?.length > 0 ? (
-            data.map((proj) => (
-              <tr key={proj.id} onClick={() => navigateToProject(proj.uuid)}>
-                <td className={styles.mapColumn}>{proj.name}</td>
-                <td className={styles.projectColumn}>
-                  {proj.ds_project
-                    ? `${proj.ds_project?.value.projectId} |
+      <div className={styles.projectList}>
+        <table>
+          <thead>
+            <tr>
+              <th className={styles.mapColumn}>Map</th>
+              <th className={styles.projectColumn}>Project</th>
+              <th className={styles.buttonColumn}>
+                <CreateMapModal isOpen={isModalOpen} toggle={toggleModal} />
+                <Button onClick={toggleModal} type="link" iconNameBefore="add">
+                  Create a New Map
+                </Button>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {data && data?.length > 0 ? (
+              data.map((proj) => (
+                <tr key={proj.id} onClick={() => navigateToProject(proj.uuid)}>
+                  <td className={styles.mapColumn}>{proj.name}</td>
+                  <td className={styles.projectColumn}>
+                    {proj.ds_project
+                      ? `${proj.ds_project?.value.projectId} |
                 ${proj.ds_project?.value.title}`
-                    : '---------'}
-                </td>
-                <td className={styles.buttonColumn}>
-                  <Button type="link" iconNameBefore="edit-document"></Button>
-                  <Button
-                    type="link"
-                    iconNameBefore="trash"
-                    onClick={() => setSelectedProjectForDeletion(proj)}
-                  ></Button>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <td colSpan={3}>
-              <EmptyTablePlaceholder type="info">
-                No maps found.
-                <br />
-                <Button type="link" onClick={toggleModal}>
-                  Create New Map
-                </Button>{' '}
-                to get started.
-              </EmptyTablePlaceholder>
-            </td>
-          )}
-        </tbody>
-      </table>
+                      : '---------'}
+                  </td>
+                  <td className={styles.buttonColumn}>
+                    <Button type="link" iconNameBefore="edit-document"></Button>
+                    <Button
+                      type="link"
+                      iconNameBefore="trash"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedProjectForDeletion(proj);
+                      }}
+                    ></Button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <td colSpan={3}>
+                <EmptyTablePlaceholder type="info">
+                  No maps found.
+                  <br />
+                  <Button type="link" onClick={toggleModal}>
+                    Create New Map
+                  </Button>{' '}
+                  to get started.
+                </EmptyTablePlaceholder>
+              </td>
+            )}
+          </tbody>
+        </table>
+      </div>
       {selectedProjectForDeletion && (
         <DeleteMapModal
           isOpen={!!selectedProjectForDeletion}

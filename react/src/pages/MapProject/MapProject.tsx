@@ -13,6 +13,7 @@ import Filters from '@hazmapper/components/FiltersPanel/Filter';
 import { assetTypeOptions } from '@hazmapper/components/FiltersPanel/Filter';
 import { Project } from '@hazmapper/types';
 import { Message, LoadingSpinner } from '@tacc/core-components';
+import HeaderNavBar from '@hazmapper/components/HeaderNavBar';
 
 interface MapProjectProps {
   /**
@@ -151,7 +152,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
 
   return (
     <div className={styles.root}>
-      <div className={styles.topNavbar}>MapTopNavBar</div>
+      <HeaderNavBar />
       <div className={styles.mapControlBar}>
         MapTopControlBar
         {loading && <div> loading</div>}
