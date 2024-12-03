@@ -16,9 +16,7 @@ const MainMenu = () => {
           ></img>
           <div className={styles.version}>{'Version 2.17'}</div>
         </div>
-
         <ProjectListing />
-
         <Button
           className={styles.userGuide}
           iconNameBefore="exit"
@@ -34,6 +32,22 @@ const MainMenu = () => {
           }}
         >
           User Guide
+        </Button>
+        <Button
+          className={styles.userGuide}
+          iconNameBefore="exit"
+          type="link"
+          onClick={(e) => {
+            window.open(
+              'https://www.designsafe-ci.org/user-guide/tools/visualization/#taggit-user-guide-basic-image-browsing-and-mapping',
+              '_blank',
+              'noopener,noreferrer'
+            );
+            // To prevent active box around link lingering after click
+            e.currentTarget.blur();
+          }}
+        >
+          Taggit User Guide
         </Button>
       </div>
       <div className={styles.sponsorContainer}>
