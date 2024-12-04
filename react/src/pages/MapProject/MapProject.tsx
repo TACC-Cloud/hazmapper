@@ -18,7 +18,6 @@ import MapProjectNavBar from '@hazmapper/components/MapProjectNavBar';
 import Filters from '@hazmapper/components/FiltersPanel/Filter';
 import { assetTypeOptions } from '@hazmapper/components/FiltersPanel/Filter';
 import { Project } from '@hazmapper/types';
-import * as ROUTES from '@hazmapper/constants/routes';
 import HeaderNavBar from '@hazmapper/components/HeaderNavBar';
 import styles from './MapProject.module.css';
 
