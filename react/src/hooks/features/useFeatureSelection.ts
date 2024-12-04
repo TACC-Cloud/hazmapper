@@ -5,7 +5,7 @@ const SELECTED_FEATURE_PARAM = 'selectedFeature';
 
 interface UseFeatureSelectionReturn {
   selectedFeatureId: number | null;
-  setSelectedFeature: (featureId: number) => void;
+  setSelectedFeatureId: (featureId: number) => void;
 }
 
 export function useFeatureSelection(): UseFeatureSelectionReturn {
@@ -17,7 +17,7 @@ export function useFeatureSelection(): UseFeatureSelectionReturn {
     ? Number(searchParams.get(SELECTED_FEATURE_PARAM))
     : null;
 
-  const setSelectedFeature = useCallback(
+  const setSelectedFeatureId = useCallback(
     (featureId: number) => {
       const newSearchParams = new URLSearchParams(searchParams);
 
@@ -40,6 +40,6 @@ export function useFeatureSelection(): UseFeatureSelectionReturn {
 
   return {
     selectedFeatureId,
-    setSelectedFeature,
+    setSelectedFeatureId,
   };
 }

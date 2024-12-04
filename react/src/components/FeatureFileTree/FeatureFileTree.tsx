@@ -47,7 +47,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
   projectId,
 }) => {
   const { mutate: deleteFeature, isLoading } = useDeleteFeature();
-  const { selectedFeatureId, setSelectedFeature } = useFeatureSelection();
+  const { selectedFeatureId, setSelectedFeatureId } = useFeatureSelection();
 
   const { height, ref } = useResizeDetector();
 
@@ -131,7 +131,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
       } else {
         e.stopPropagation();
 
-        setSelectedFeature(Number(node.key));
+        setSelectedFeatureId(Number(node.key));
       }
     };
 
