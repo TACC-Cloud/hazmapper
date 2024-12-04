@@ -1,4 +1,4 @@
-import { UseQueryResult } from 'react-query';
+import { useQueryClient, UseQueryResult } from 'react-query';
 import { FeatureCollection } from '@hazmapper/types';
 import { useGet } from '@hazmapper/requests';
 
@@ -37,4 +37,23 @@ export const useFeatures = ({
     options: { ...defaultQueryOptions, ...options },
   });
   return query;
+};
+
+export const useCurrentFeatures = (): UseQueryResult<FeatureCollection> => {
+  const queryClient = useQueryClient();
+  const queries = queryClient.getQueriesData(['activeProjectFeatures']);
+
+  // Get the most recent query data
+  const mostRecentQuery = queries[queries.length - 1];
+  const currentData = mostRecentQuery
+    ? (mostRecentQuery[1] as FeatureCollection)
+    : undefined;
+
+  return {
+    data: currentData,
+    isSuccess: !!currentData,
+    isLoading: false,
+    isError: false,
+    error: null,
+  } as UseQueryResult<FeatureCollection>;
 };
