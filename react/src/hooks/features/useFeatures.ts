@@ -9,6 +9,8 @@ interface UseFeaturesParams {
   options?: object;
 }
 
+export const KEY_USE_FEATURES = 'activeProjectFeatures';
+
 export const useFeatures = ({
   projectId,
   isPublicView,
@@ -33,7 +35,7 @@ export const useFeatures = ({
 
   const query = useGet<FeatureCollection>({
     endpoint,
-    key: ['activeProjectFeatures', { projectId, isPublicView, assetTypes }],
+    key: [KEY_USE_FEATURES, { projectId, isPublicView, assetTypes }],
     options: { ...defaultQueryOptions, ...options },
   });
   return query;
@@ -41,13 +43,15 @@ export const useFeatures = ({
 
 export const useCurrentFeatures = (): UseQueryResult<FeatureCollection> => {
   const queryClient = useQueryClient();
-  const queries = queryClient.getQueriesData(['activeProjectFeatures']);
 
-  // Get the most recent query data
-  const mostRecentQuery = queries[queries.length - 1];
-  const currentData = mostRecentQuery
-    ? (mostRecentQuery[1] as FeatureCollection)
-    : undefined;
+  // Get all existing queries that match the KEY_USE_FEATURES prefix
+  const queries = queryClient.getQueriesData<FeatureCollection>([
+    KEY_USE_FEATURES,
+  ]);
+
+  // Find first query with data - getQueriesData returns [queryKey, data] tuples
+  const activeQuery = queries.find(([, queryData]) => !!queryData);
+  const currentData = activeQuery ? activeQuery[1] : undefined;
 
   return {
     data: currentData,
