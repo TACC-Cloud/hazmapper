@@ -11,7 +11,6 @@ import { combineLatest } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { StreetviewAuthenticationService } from 'src/app/services/streetview-authentication.service';
 import { StreetviewService } from 'src/app/services/streetview.service';
-import { EnvService } from 'src/app/services/env.service';
 
 @Component({
   selector: 'app-main-welcome',
@@ -35,8 +34,7 @@ export class MainWelcomeComponent implements OnInit {
     private modalService: ModalService,
     private streetviewAuthenticationService: StreetviewAuthenticationService,
     private streetviewService: StreetviewService,
-    private agaveSystemsService: AgaveSystemsService,
-    private envService: EnvService
+    private agaveSystemsService: AgaveSystemsService
   ) {}
 
   ngOnInit() {
