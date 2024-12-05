@@ -3,7 +3,6 @@ import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFi
 import { systems } from '@hazmapper/__fixtures__/systemsFixture';
 import { featureCollection } from '@hazmapper/__fixtures__/featuresFixture';
 
-
 // ArcGIS tiles GET
 export const arcgis_tiles = http.get('https://tiles.arcgis.com/*', () => {
   return HttpResponse.text('dummy');
