@@ -195,7 +195,9 @@ _No release_
 
 ## [2.1] - 2020-10-05
 
-[unreleased]: https://github.com/TACC-Cloud/hazmapper/compare/v2.17...HEAD
+[unreleased]: https://github.com/TACC-Cloud/hazmapper/compare/v2.19...HEAD
+[2.19]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.19
+[2.18]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.18
 [2.17]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.17
 [2.16]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.16
 [2.15]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.15
