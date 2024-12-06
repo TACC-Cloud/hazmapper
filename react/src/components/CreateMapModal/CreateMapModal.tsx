@@ -46,6 +46,19 @@ const CreateMapModal = ({
     parentToggle(); // Call the original toggle function passed as a prop
   };
 
+  const [selectedDirectory, setSelectedDirectory] = useState('');
+  const [selectedFiles, setSelectedFiles] = useState([] as any[]);
+
+  const handleDirectoryChange = (directory: string) => {
+    console.log('selected directory', directory);
+    setSelectedDirectory(directory);
+  };
+
+  const handleSelectedFiles = (files: any[]) => {
+    console.log('selected files', files);
+    setSelectedFiles(files);
+  };
+
   const handleCreateProject = (projectData: ProjectRequest) => {
     createProject(projectData, {
       onSuccess: (newProject) => {
@@ -82,26 +95,35 @@ const CreateMapModal = ({
     };
     handleCreateProject(projectData);
   };
+
   return (
-    <Modal isOpen={isOpen} toggle={handleClose}>
+    <Modal isOpen={isOpen} toggle={handleClose} size="xl">
       <ModalHeader toggle={handleClose}>Create a New Map</ModalHeader>
-      <ModalBody>
-        <Formik
-          initialValues={{
-            name: '',
-            description: '',
-            system_file: '',
-            system_id: 'designsafe.storage.default',
-            system_path: '',
-            syncFolder: false,
-          }}
-          validationSchema={validationSchema}
-          onSubmit={handleSubmit}
-        >
-          {({ values, setFieldValue }) => {
-            useEffect(() => {
-              // Replace spaces with underscores for system_file mirroring
-              const systemFileName = values.name.replace(/\s+/g, '_');
+      <ModalBody className={`${'modal-body'}`}>
+        <Section
+          bodyClassName="has-loaded-dashboard"
+          contentLayoutName={'twoColumn'}
+          // contentShouldScroll
+          className={`${styles['section']}`}
+          content={
+            <>
+              <SectionTableWrapper>
+                <Formik
+                  initialValues={{
+                    name: '',
+                    description: '',
+                    system_file: '',
+                    system_id: 'designsafe.storage.default',
+                    system_path: '',
+                    syncFolder: false,
+                  }}
+                  validationSchema={validationSchema}
+                  onSubmit={handleSubmit}
+                >
+                  {({ values, setFieldValue }) => {
+                    useEffect(() => {
+                      // Replace spaces with underscores for system_file mirroring
+                      const systemFileName = values.name.replace(/\s+/g, '_');
 
               // Update system_file only if it matches the previous name or if name/system_file are empty
               if (
