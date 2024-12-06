@@ -1,7 +1,5 @@
 # Changelog
 
-## [Unreleased]
-
 ## [2.19] - 2024-12-05
 
 ### Changed
@@ -9,7 +7,7 @@
 - WG-295: Improve error message when duplicate syncing project (#255)
 - Remove temporary banner related to Tapis V3 migration (#287)
 
-## [2.18] - 2024-8-07
+## [2.18] - 2024-08-07
 
 ### Changed
 
@@ -23,7 +21,7 @@
 
 - WG-287: Fix infinite scroll when listing files and multiple '..' entries (#240)
 
-## [2.17] - 2024-4-29
+## [2.17] - 2024-04-29
 
 ### Changed
 
