@@ -1,9 +1,12 @@
 .root {
+  background-color: black;
+  color: white;
   display: flex;
   align-items: center;
   flex-direction: row;
   justify-content: space-between;
   height: var(--hazmapper-header-navbar-height);
+  padding: 5px;
 }
 .userName {
   color: white;
