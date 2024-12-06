@@ -2,11 +2,32 @@
 
 ## [Unreleased]
 
+## [2.19] - 2024-12-05
+
+### Changed
+
+- WG-295: Improve error message when duplicate syncing project (#255)
+- Remove temporary banner related to Tapis V3 migration (#287)
+
+## [2.18] - 2024-8-07
+
+### Changed
+
+- WG-366, WG-227: Add support for Tapis V3 (#238, #232, #231, #220, #214, #217, #213)
+- WG-268: Add authentification to backend (#244)
+- Add DesignSafe project id to project listing (#241)
+- WG-288: Improve configuration of DesignSafe url (#245)
+- Add temporary banner for Tapis V3 migration (#249)
+
+### Fixed
+
+- WG-287: Fix infinite scroll when listing files and multiple '..' entries (#240)
+
 ## [2.17] - 2024-4-29
 
 ### Changed
 
- - WG-212: use updated project create and project update routes (#199)
+ - WG-212: Use updated project create and project update routes (#199)
 
 ### Fixed
  - WG-161: Update devops documentation (#221)
@@ -174,7 +195,8 @@ _No release_
 
 ## [2.1] - 2020-10-05
 
-[unreleased]: https://github.com/TACC-Cloud/hazmapper/compare/v2.16...HEAD
+[unreleased]: https://github.com/TACC-Cloud/hazmapper/compare/v2.17...HEAD
+[2.17]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.17
 [2.16]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.16
 [2.15]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.15
 [2.14]: https://github.com/TACC-Cloud/hazmapper/releases/tag/v2.14
