@@ -1,17 +1,15 @@
 export interface Project {
-  id?: number;
-  uuid?: string;
+  id: number;
+  uuid: string;
   name: string;
   description: string;
-  public?: boolean;
-  system_file?: string;
-  system_id?: string;
-  system_path?: string;
-  deletable?: boolean;
+  public: boolean;
+  system_file: string;
+  system_id: string;
+  system_path: string;
+  deletable: boolean;
   streetview_instances?: any;
   ds_project?: DesignSafeProject;
-  ds_project_id?: any;
-  ds_project_title?: any;
 }
 export interface DesignSafeProject {
   uuid: string;
@@ -20,7 +18,7 @@ export interface DesignSafeProject {
   value: any;
 }
 export interface DesignSafeProjectCollection {
-  projects?: DesignSafeProject[];
+  result?: DesignSafeProject[];
 }
 
 export class Project implements Project {}

@@ -3,7 +3,7 @@ import { ChonkyFileActionData, FileData } from 'chonky';
 import { File } from '../../types/file';
 import { FileBrowser, FileNavbar, FileList, ChonkyActions } from 'chonky';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Icon } from '../../core-components';
+import { Icon } from '@tacc/core-components';
 import { SystemSelect } from '../Systems';
 import styles from './FileListing.module.css';
 

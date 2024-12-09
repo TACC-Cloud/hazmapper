@@ -4,7 +4,7 @@ import {
   setAuthenticatedUserFromLocalStorage,
   removeAuthenticatedUserFromLocalStorage,
 } from '../utils/authUtils';
-import { AuthenticatedUser, AuthToken } from '../types';
+import { AuthenticatedUser, AuthToken } from '@hazmapper/types';
 
 // check local storage for our initial state
 const initialState = getAuthenticatedUserFromLocalStorage();
@@ -17,10 +17,8 @@ const authSlice = createSlice({
       state,
       action: PayloadAction<{ user: AuthenticatedUser; authToken: AuthToken }>
     ) {
-      state = {
-        user: action.payload.user,
-        authToken: action.payload.authToken,
-      };
+      state.user = action.payload.user;
+      state.authToken = action.payload.authToken;
 
       // save to local storage
       setAuthenticatedUserFromLocalStorage(state);

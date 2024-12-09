@@ -15,8 +15,12 @@
     "isolatedModules": true,
     "noEmit": true,
     "noImplicitAny": false,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@hazmapper/*": ["src/*"]
+    }
   },
-  "include": ["src"],
+  "include": ["src", "jest.setup.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
