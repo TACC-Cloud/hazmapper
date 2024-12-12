@@ -35,8 +35,8 @@ export function getDesignsafePortalUrl(
     return 'https://www.designsafe-ci.org';
   } else if (backend === DesignSafePortalEnvironment.Next) {
     return 'https://designsafeci-next.tacc.utexas.edu';
-  } else if (backend === DesignSafePortalEnvironment.Dev) {
-    return 'https://designsafeci-dev.tacc.utexas.edu';
+  } else if (backend === DesignSafePortalEnvironment.PPRD) {
+    return 'https://pprd.designsafe-ci.org';
   } else {
     throw new Error('Unsupported DS environment');
   }

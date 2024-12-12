@@ -1,5 +1,6 @@
 import { useQueryClient } from 'react-query';
 import { useDelete } from '@hazmapper/requests';
+import { KEY_USE_FEATURES } from './useFeatures';
 
 type DeleteFeatureParams = {
   projectId: number;
@@ -15,7 +16,7 @@ export function useDeleteFeature() {
     options: {
       onSuccess: () => {
         // invalidate *any* feature listing query
-        queryClient.invalidateQueries(['activeProjectFeatures']);
+        queryClient.invalidateQueries([KEY_USE_FEATURES]);
       },
     },
   });

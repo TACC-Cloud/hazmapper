@@ -40,7 +40,7 @@ const MainMenu = () => {
             src="./src/assets/Hazmapper-Stack@4x.png"
             alt="Hazmapper Logo"
           ></img>
-          <div className={styles.version}>{'Version 2.17'}</div>
+          <div className={styles.version}>{'Version 2.19'}</div>
         </div>
         <ProjectListing />
         <Button
