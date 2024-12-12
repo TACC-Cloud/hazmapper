@@ -1,0 +1,57 @@
+.root {
+  width: 100%;
+  overflow: visible;
+
+  :global(.ant-tree .ant-tree-treenode) {
+    margin-bottom: 0px !important; /*needed to ensure calculation of row hight is right */
+  }
+
+  /* Remove switcher space */
+  :global(.ant-tree-switcher) {
+    display: none;
+  }
+
+  /* Hovering over non-selected items */
+  :global(.ant-tree-node-content-wrapper:hover:not(.ant-tree-node-selected)) {
+    background-color: var(--global-color-accent--weak) !important;
+  }
+
+  /* Selected items (both normal and hover state) */ /*TODO*/
+  :global(.ant-tree-node-content-wrapper.ant-tree-node-selected) {
+    background-color: var(--global-color-accent--weak) !important;
+  }
+}
+
+.featureFileTree {
+  height: 100%;
+
+  :global(.ant-tree-node-content-wrapper) {
+    /*https://tacc-main.atlassian.net/browse/WG-390*/
+    font-size: var(--global-font-family--small);
+    font-family: var(--global-font-family--sans);
+    max-width: var(--hazmapper-panel-width); /* fixed width of panel*/
+    padding-left: 5px;
+    padding-right: 5px;
+    overflow: hidden;
+  }
+
+  /* Adjust indent size */
+  :global(.ant-tree-indent-unit) {
+    width: 8px;
+  }
+}
+
+.treeNode {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.fileName {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-left: 0.25em;
+}

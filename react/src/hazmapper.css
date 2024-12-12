@@ -1,10 +1,23 @@
-@import url('@tacc/core-styles/dist/core-styles.base.css');
-@import url('@tacc/core-styles/dist/core-styles.portal.css');
-
 /* for hazmapper specific overwrites of base and portal styles" like,
 
 :root {
-  --global-color-accent--xx-light: blue;
+--global-color-accent--xx-light: blue;
 }
-
 */
+
+/* hazmapper globals */
+:root {
+  /* *** Map page variables *** */
+
+  /* Height of the map control toolbar */
+  --hazmapper-control-bar-height: 27px;
+
+  /* Height of the main navigation bar */
+  --hazmapper-header-navbar-height: 40px;
+
+  /* Width of panel navbar (i.e. icon navigation panel) */
+  --hazmapper-panel-navbar-width: 75px;
+
+  /* Width of expanded panels (assets, layers, filters etc) to the right of panel navbar */
+  --hazmapper-panel-width: 230px;
+}

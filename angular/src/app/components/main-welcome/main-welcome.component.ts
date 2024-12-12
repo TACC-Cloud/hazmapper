@@ -11,6 +11,7 @@ import { combineLatest } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { StreetviewAuthenticationService } from 'src/app/services/streetview-authentication.service';
 import { StreetviewService } from 'src/app/services/streetview.service';
+import { EnvService } from 'src/app/services/env.service';
 
 @Component({
   selector: 'app-main-welcome',
@@ -19,7 +20,8 @@ import { StreetviewService } from 'src/app/services/streetview.service';
 })
 export class MainWelcomeComponent implements OnInit {
   release_url = 'https://github.com/TACC-cloud/hazmapper';
-  guide_url = 'https://www.designsafe-ci.org/rw/user-guides/tools-applications/visualization/hazmapper/';
+  guide_url = 'https://www.designsafe-ci.org/user-guide/tools/visualization/#hazmapper-user-guide';
+  taggit_guide_url = 'https://www.designsafe-ci.org/user-guide/tools/visualization/#taggit-user-guide-basic-image-browsing-and-mapping';
 
   private projectsData: ProjectsData;
   private dsProjectsData: AgaveProjectsData;
@@ -33,7 +35,8 @@ export class MainWelcomeComponent implements OnInit {
     private modalService: ModalService,
     private streetviewAuthenticationService: StreetviewAuthenticationService,
     private streetviewService: StreetviewService,
-    private agaveSystemsService: AgaveSystemsService
+    private agaveSystemsService: AgaveSystemsService,
+    private envService: EnvService
   ) {}
 
   ngOnInit() {

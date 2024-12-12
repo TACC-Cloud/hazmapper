@@ -1,8 +1,8 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import styles from './MapProjectNavBar.module.css';
-import { QueryNavItem } from '../../core-wrappers';
-import { queryPanelKey, Panel } from '../../utils/panels';
+import { QueryNavItem } from '@tacc/core-components';
+import { queryPanelKey, Panel } from '@hazmapper/utils/panels';
 
 import assetsImage from '../../assets/assets.png';
 import pointCloudImage from '../../assets/point-clouds.png';
@@ -27,7 +27,8 @@ const navItems: NavItem[] = [
   },
   {
     label: 'Point Clouds',
-    imagePath: pointCloudImage,
+    imagePath:
+      pointCloudImage /* https://tacc-main.atlassian.net/browse/WG-391 */,
     panel: Panel.PointClouds,
     showWhenPublic: false,
   },
@@ -58,10 +59,12 @@ const navItems: NavItem[] = [
 ];
 
 interface NavBarPanelProps {
-  isPublic?: boolean;
+  isPublicView?: boolean;
 }
 
-const MapProjectNavBar: React.FC<NavBarPanelProps> = ({ isPublic = false }) => {
+const MapProjectNavBar: React.FC<NavBarPanelProps> = ({
+  isPublicView = false,
+}) => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const activePanel = queryParams.get(queryPanelKey);
@@ -69,7 +72,7 @@ const MapProjectNavBar: React.FC<NavBarPanelProps> = ({ isPublic = false }) => {
   return (
     <div className={styles.root}>
       {navItems
-        .filter((item) => (isPublic ? item.showWhenPublic : true))
+        .filter((item) => (isPublicView ? item.showWhenPublic : true))
         .map((item) => {
           const updatedQueryParams = new URLSearchParams(location.search);
 
@@ -89,14 +92,15 @@ const MapProjectNavBar: React.FC<NavBarPanelProps> = ({ isPublic = false }) => {
               key={item.panel}
               to={to}
               active={activePanel === item.panel}
+              className={styles.navItem}
             >
               <img
                 src={item.imagePath}
-                alt={item.label}
+                alt=""
                 className={styles.image}
-                width="32px"
+                aria-hidden="true"
               />
-              {item.label}
+              <span className={styles.label}>{item.label}</span>
             </QueryNavItem>
           );
         })}

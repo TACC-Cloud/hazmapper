@@ -4,27 +4,23 @@ Hazmapper is an application for creating, visualizing, and analyzing geospatial 
 
 See https://github.com/TACC-Cloud/geoapi which is an associated restful API.
 
-### Getting started
-- Get a JWT from someone on WMA-Geospatial subgroup
-- GOTO jwt.io and edit that JWT to have your username/details
-- Create a file in angular/src/environments called jwt.ts that has this in it:
+## Local React Development
 
-    export const jwt = "YOUR JWT FROM ABOVE"
-
-## Local React Development (work-in-progress)
-
-`react/` has the React client
+`react/` directory contains the React client
 
 To get started, create a local secret file for local development:
 ```
 cp react/src/secret_local.example.ts react/src/secret_local.ts
 ```
 
-Add the jwt retrieved from [Getting started](###getting-started) to `react/src/secret_local.ts`.  
+The `geoapiBackend` setting in `react/src/secret_local.ts` ( see the example [react/src/secret_local.example.ts](react/src/secret_local.example.ts) ) controls which backend `GeoAPI` is used by Hazmapper during local development. You can choose from the following:
 
-The `geoapiBackend` in ( see [react/src/secret_local.example.ts](react/src/secret_local.example.ts) ) can be used to select which backend `geoapi` is used by Hazmapper during local development (e.g. `EnvironmentType.Production`, `EnvironmentType.Staging`, `EnvironmentType.Dev`, * `EnvironmentType.Local`
+* `EnvironmentType.Production`
+* `EnvironmentType.Staging`
+* `EnvironmentType.Dev`
+* `EnvironmentType.Local`
 
-See https://github.com/TACC-Cloud/geoapi for more details on running geoapi locally.
+To run Hazmapper with the GeoAPI backend locally, configure `geoapiBackend` to use `GeoapiBackendEnvironment.Local` and see the [GeoAPI repository](https://github.com/TACC-Cloud/geoapi) for more detailed instructions.
 
 #### Run
 
@@ -33,7 +29,7 @@ npm ci
 npm run dev
 ```
 
-Navigate to `http://localhost:4200/` or `http://hazmapper.local:4200/`.  (Note that `hazmapper.local` needs to be added to your `/etc/hosts`)
+Navigate to `http://localhost:4200/`.
 
 #### Running unit tests
 

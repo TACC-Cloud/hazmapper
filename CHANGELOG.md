@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+## [2.17] - 2024-4-29
+
+### Changed
+
+ - WG-212: use updated project create and project update routes (#199)
+
+### Fixed
+ - WG-161: Update devops documentation (#221)
+
 ## [2.16] - 2023-12-19
 
 ### Added

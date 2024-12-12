@@ -1,13 +1,15 @@
-import { AuthState } from '../types';
+import { AuthState } from '@hazmapper/types';
+
+// Convert the timestamp to a Date object
+const expiresAtDate = new Date(3153600000000); //2070
 
 export const authenticatedUser: AuthState = {
   user: {
     username: 'user',
-    email: 'user@user.com',
   },
   authToken: {
     token: 'auth-token',
-    expires: 3153600000000, // 2070
+    expiresAt: expiresAtDate.toISOString(),
   },
 };
 

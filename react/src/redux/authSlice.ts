@@ -1,17 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
-  getTokenFromLocalStorage,
-  setTokenToLocalStorage,
-  removeTokenFromLocalStorage,
+  getAuthenticatedUserFromLocalStorage,
+  setAuthenticatedUserFromLocalStorage,
+  removeAuthenticatedUserFromLocalStorage,
 } from '../utils/authUtils';
-import { AuthState, AuthenticatedUser } from '../types';
+import { AuthenticatedUser, AuthToken } from '@hazmapper/types';
 
-// TODO consider moving to ../types/
 // check local storage for our initial state
-const initialState: AuthState = {
-  authToken: getTokenFromLocalStorage(),
-  user: null,
-};
+const initialState = getAuthenticatedUserFromLocalStorage();
 
 const authSlice = createSlice({
   name: 'auth',
@@ -19,25 +15,19 @@ const authSlice = createSlice({
   reducers: {
     loginSuccess(
       state,
-      action: PayloadAction<{ token: string; expires: number }>
+      action: PayloadAction<{ user: AuthenticatedUser; authToken: AuthToken }>
     ) {
-      state.authToken = {
-        token: action.payload.token,
-        expires: action.payload.expires,
-      };
+      state.user = action.payload.user;
+      state.authToken = action.payload.authToken;
 
       // save to local storage
-      setTokenToLocalStorage(state.authToken);
+      setAuthenticatedUserFromLocalStorage(state);
     },
     logout(state) {
       state.user = null;
       state.authToken = null;
       //remove from local storage
-      removeTokenFromLocalStorage();
-    },
-
-    setUser(state, action: PayloadAction<{ user: AuthenticatedUser }>) {
-      state.user = action.payload.user;
+      removeAuthenticatedUserFromLocalStorage();
     },
   },
 });

@@ -5,6 +5,7 @@ export enum GeoapiBackendEnvironment {
   Production = 'production',
   Staging = 'staging',
   Dev = 'dev',
+  Experimental = 'experimental',
   Local = 'local',
 }
 
@@ -12,8 +13,10 @@ export enum GeoapiBackendEnvironment {
  * Environment for Geoapi Backend
  */
 export enum DesignSafePortalEnvironment {
-  Production = 'production',
-  Dev = 'dev' /* DesignSafe has 2 deployed environments: prod and dev. This dev is comparable to Geoapi's staging */,
+  Production = 'production' /* https://www.designsafe-ci.org/ */,
+  Dev = 'dev' /* https://designsafeci-dev.tacc.utexas.edu/ This dev is comparable to Geoapi's staging */,
+  Next = 'experimental' /* https://designsafeci-next.tacc.utexas.edu/ */,
+  Local = 'local' /* not supported but would be designsafe.dev */,
 }
 
 /**
@@ -23,7 +26,7 @@ export enum ApiService {
   /* Geoapi api */
   Geoapi = 'geoapi',
 
-  /* DesignSafe api - for project listings */
+  /* DesignSafe api - for project listings + project metadata read/update */
   DesignSafe = 'designsafe',
 
   /* Tapis api - for system listings and file operations */
@@ -40,9 +43,6 @@ export enum ApiService {
  *
  */
 export interface LocalAppConfiguration {
-  /* Developer's JWT token used for authentication during local development. */
-  jwt: string;
-
   /* The type of backend environment (production, staging, development, or local) */
   geoapiBackend: GeoapiBackendEnvironment;
 }
@@ -69,27 +69,18 @@ export interface AppConfiguration {
   /** Base URL path for the application. */
   basePath: string;
 
-  /** Client ID used for Tapis authentication. */
-  clientId: string;
-
-  /* The type of backend environment */
-  geoapiBackend: GeoapiBackendEnvironment;
-
   /** URL for the GeoAPI service. */
   geoapiUrl: string;
 
-  /** URL for the DesignSafe/tapis API. */
-  designSafeUrl: string;
-
-  /** URL for the DesignSafe portal. */
+  /** URL for the DesignSafe portal and API. */
   designsafePortalUrl: string;
+
+  /** URL for Tapis  */
+  tapisUrl: string;
 
   /** Mapillary related configuration */
   mapillary: MapillaryConfiguration;
 
   /** URL for taggit */
   taggitUrl: string;
-
-  /** Optional JWT token used for development with local geoapi service. */
-  jwt?: string;
 }

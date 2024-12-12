@@ -3,8 +3,12 @@
  * https://jestjs.io/docs/configuration
  */
 
-// https://stackoverflow.com/questions/73504569/syntaxerror-unexpected-token-export-from-react-leaflet-while-using-jest
-const esModules = ['@react-leaflet', 'react-leaflet'].join('|');
+const esModules = [
+  '@react-leaflet',
+  'react-leaflet',
+  '@tacc/core-components',
+  'uuid',
+].join('|');
 
 module.exports = {
   // All imported modules in your tests should be mocked automatically
@@ -22,13 +26,29 @@ module.exports = {
   collectCoverage: true,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
-  // collectCoverageFrom: undefined,
-
+  collectCoverageFrom: [
+    'src/**/*.{js,jsx,ts,tsx}',
+    // Exclude test files
+    '!src/**/*.test.{js,jsx,ts,tsx}',
+    '!src/**/*.spec.{js,jsx,ts,tsx}',
+    // Exclude test utilities
+    '!src/test/**/*',
+    '!src/__fixtures__/**/*',
+    // Exclude secrets and other files
+    '!src/secret_local*ts',
+    '!src/types/react*.ts',
+    // Exclude build/dist directories
+    '!dist/**/*',
+    '!build/**/*',
+    '!src/vite-env*',
+    // Exclude node_modules
+    '!**/node_modules/**',
+  ],
   // The directory where Jest should output its coverage files
   coverageDirectory: 'coverage',
 
   // An array of regexp pattern strings used to skip coverage collection
-  coveragePathIgnorePatterns: ['src/core-components/', 'src/core-wrappers'],
+  // coveragePathIgnorePatterns: ['src/some-components/', 'src/some-wrappers'],
 
   // Indicates which provider should be used to instrument code for coverage
   // coverageProvider: "babel",
@@ -85,6 +105,9 @@ module.exports = {
     '^utils(.*)$': '<rootDir>/src/utils$1',
     '^hooks(.*)$': '<rootDir>/src/hooks$1',
     '^react-leaflet$': require.resolve('react-leaflet'),
+    '^@hazmapper/(.*)$': '<rootDir>/src/$1',
+    '^@core-components$': '<rootDir>/src/core-components/index.ts',
+    '^@core-components/(.*)$': '<rootDir>/src/core-components/$1',
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
@@ -133,7 +156,7 @@ module.exports = {
   // setupFiles: [],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
-  // setupFilesAfterEnv: [],
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 
   // The number of seconds after which a test is considered as slow and reported as such in the results.
   // slowTestThreshold: 5,
@@ -142,11 +165,14 @@ module.exports = {
   // snapshotSerializers: [],
 
   // The test environment that will be used for testing
-  testEnvironment: 'jsdom',
+  // https://mswjs.io/docs/migrations/1.x-to-2.x#requestresponsetextencoder-is-not-defined-jest; consider moving to vitest
+  testEnvironment: 'jest-fixed-jsdom',
 
   // Options that will be passed to the testEnvironment
-  // testEnvironmentOptions: {},
-
+  // Force JSDOM to import msw/node (see https://stackoverflow.com/questions/77399773/cannot-find-module-msw-node-from)
+  testEnvironmentOptions: {
+    customExportConditions: [''],
+  },
   // Adds a location field to test results
   // testLocationInResults: false,
 
@@ -157,10 +183,10 @@ module.exports = {
   // ],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
-  testPathIgnorePatterns: [
-    '<rootDir>/src/core-components/',
-    '<rootDir>/src/core-wrappers/',
-  ],
+  // testPathIgnorePatterns: [
+  //   '<rootDir>/src/some-components/',
+  //   '<rootDir>/src/some-wrappers/',
+  // ],
 
   // The regexp pattern or array of patterns that Jest uses to detect test files
   // testRegex: [],
@@ -178,10 +204,10 @@ module.exports = {
   // timers: "real",
 
   // A map from regular expressions to paths to transformers
-  transform: { '^.+\\.(js|jsx)?$': 'babel-jest' },
+  transform: { '^.+\\.(js|jsx|mjs)?$': 'babel-jest' },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
-  transformIgnorePatterns: [`/node_modules/(?!${esModules})`],
+  transformIgnorePatterns: [`/node_modules/(?!(${esModules}))`],
 
   // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
   // unmockedModulePathPatterns: undefined,

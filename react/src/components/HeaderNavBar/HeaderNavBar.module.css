@@ -1,0 +1,10 @@
+.root {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  height: var(--hazmapper-header-navbar-height);
+}
+.userName {
+  color: white;
+}

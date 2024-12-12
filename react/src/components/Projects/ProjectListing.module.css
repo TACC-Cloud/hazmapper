@@ -1,0 +1,90 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  padding-left: 50px;
+  padding-right: 50px;
+}
+.errorMessage {
+  width: 100%;
+  padding: 10px;
+}
+.errorMessage p {
+  justify-content: center;
+}
+
+.projectList {
+  flex-grow: 1;
+  overflow: hidden;
+  justify-content: center;
+  padding: 10px;
+}
+
+.projectList table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.projectList thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #d0d0d0;
+}
+
+.projectList thead th {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  background: #d0d0d0;
+}
+
+.projectList tbody {
+  display: block;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.projectList tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.projectList tr:hover td {
+  color: white;
+  background-color: var(--global-color-accent--light);
+}
+
+.projectList tr:hover td button {
+  color: white;
+}
+
+.mapColumn {
+  width: 42%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.projectColumn {
+  width: 42%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.buttonColumn {
+  width: 16%;
+  text-align: end;
+}
+
+.buttonColumn button {
+  max-width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  justify-content: flex-start;
+}

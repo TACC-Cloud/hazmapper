@@ -1,13 +1,13 @@
 import io from 'socket.io-client';
 import { toast } from 'react-toastify';
-import { getTokenFromLocalStorage } from './authUtils';
+import { getAuthenticatedUserFromLocalStorage } from './authUtils';
 
-const { token } = getTokenFromLocalStorage();
+const AuthState = getAuthenticatedUserFromLocalStorage();
 
 // TODO: REACT Point to active backend (where nginx is running) use wss:// for secure connection
 export const socket = io('http://localhost:8888', {
   auth: {
-    token,
+    token: AuthState.authToken,
   },
 });
 
