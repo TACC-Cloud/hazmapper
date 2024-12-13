@@ -1,4 +1,4 @@
-import { UseQueryResult } from 'react-query';
+import { useQueryClient, UseQueryResult } from 'react-query';
 import { FeatureCollection } from '@hazmapper/types';
 import { useGet } from '@hazmapper/requests';
 
@@ -39,4 +39,25 @@ export const useFeatures = ({
     options: { ...defaultQueryOptions, ...options },
   });
   return query;
+};
+
+export const useCurrentFeatures = (): UseQueryResult<FeatureCollection> => {
+  const queryClient = useQueryClient();
+
+  // Get all existing queries that match the KEY_USE_FEATURES prefix
+  const queries = queryClient.getQueriesData<FeatureCollection>([
+    KEY_USE_FEATURES,
+  ]);
+
+  // Find first query with data - getQueriesData returns [queryKey, data] tuples
+  const activeQuery = queries.find(([, queryData]) => !!queryData);
+  const currentData = activeQuery ? activeQuery[1] : undefined;
+
+  return {
+    data: currentData,
+    isSuccess: !!currentData,
+    isLoading: false,
+    isError: false,
+    error: null,
+  } as UseQueryResult<FeatureCollection>;
 };

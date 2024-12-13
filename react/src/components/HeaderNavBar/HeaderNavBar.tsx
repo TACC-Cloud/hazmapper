@@ -41,6 +41,7 @@ export const HeaderNavBar: React.FC = () => {
       onKeyDown={() => navigate(ROUTES.MAIN)}
       onClick={() => navigate(ROUTES.MAIN)}
       role="button"
+      aria-label="return to project listings"
       tabIndex={0}
     >
       <img

@@ -34,3 +34,13 @@ export function renderInTest(children: ReactElement, path = '/') {
     </Provider>
   );
 }
+
+export const TestWrapper = ({ children }: { children: React.ReactNode }) => (
+  <Provider store={store}>
+    <MemoryRouter>
+      <QueryClientProvider client={testQueryClient}>
+        {children}
+      </QueryClientProvider>
+    </MemoryRouter>
+  </Provider>
+);
