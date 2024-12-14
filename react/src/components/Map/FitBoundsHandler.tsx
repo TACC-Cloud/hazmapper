@@ -1,29 +1,17 @@
-import React, { useEffect, useMemo, useCallback, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useCallback, useRef } from 'react';
 import * as turf from '@turf/turf';
 import { useMap } from 'react-leaflet';
 import { FeatureCollection, Feature } from '@hazmapper/types';
+import { useFeatureSelection } from '@hazmapper/hooks';
 import { MAP_CONFIG } from './config';
+import L from 'leaflet';
 
-/**
- * Handles map bounds adjustments based on features.
- * When features are first loaded: Fits bounds to show all features in collection
- * When selectedFeature changes: Zooms to that feature
- */
 const FitBoundsHandler: React.FC<{
   featureCollection: FeatureCollection;
 }> = ({ featureCollection }) => {
-  const location = useLocation();
   const map = useMap();
-
-  // Track if we've seen features
   const hasFeatures = useRef(false);
-
-  const selectedFeatureId = useMemo(() => {
-    const searchParams = new URLSearchParams(location.search);
-    const rawId = searchParams.get('selectedFeature');
-    return rawId ? Number(rawId) : undefined;
-  }, [location.search]);
+  const { selectedFeatureId } = useFeatureSelection();
 
   const getBoundsFromFeature = useCallback(
     (feature: FeatureCollection | Feature) => {
@@ -36,6 +24,27 @@ const FitBoundsHandler: React.FC<{
     []
   );
 
+  const zoomToFeature = useCallback(
+    (feature: Feature) => {
+      if (feature.geometry.type === 'Point') {
+        const coordinates = feature.geometry.coordinates;
+        const point = L.latLng(coordinates[1], coordinates[0]);
+
+        map.setView(point, MAP_CONFIG.maxPointSelectedFeatureZoom, {
+          animate: false,
+        });
+      } else {
+        const bounds = getBoundsFromFeature(feature);
+        map.fitBounds(bounds, {
+          maxZoom: MAP_CONFIG.maxFitBoundsSelectedFeatureZoom,
+          padding: [50, 50],
+          animate: false,
+        });
+      }
+    },
+    [map, getBoundsFromFeature]
+  );
+
   // Handle initial bounds when features are loaded
   useEffect(() => {
     if (
@@ -46,6 +55,7 @@ const FitBoundsHandler: React.FC<{
       const bounds = getBoundsFromFeature(featureCollection);
       map.fitBounds(bounds, {
         maxZoom: MAP_CONFIG.maxFitBoundsInitialZoom,
+        padding: [50, 50],
       });
       hasFeatures.current = true;
     }
@@ -59,13 +69,10 @@ const FitBoundsHandler: React.FC<{
       );
 
       if (activeFeature) {
-        const bounds = getBoundsFromFeature(activeFeature);
-        map.fitBounds(bounds, {
-          maxZoom: MAP_CONFIG.maxFitBoundsSelectedFeatureZoom,
-        });
+        zoomToFeature(activeFeature);
       }
     }
-  }, [map, selectedFeatureId, featureCollection, getBoundsFromFeature]);
+  }, [map, selectedFeatureId, featureCollection, zoomToFeature]);
 
   return null;
 };

@@ -7,24 +7,28 @@ import {
   WMSTileLayer,
   GeoJSON,
 } from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-markercluster';
 import { TiledMapLayer } from 'react-esri-leaflet';
-import MarkerClusterGroup from '@changey/react-leaflet-markercluster';
-import * as L from 'leaflet';
-import { MarkerCluster } from 'leaflet';
-import 'leaflet.markercluster';
-
-import 'leaflet/dist/leaflet.css';
+import L, { MarkerCluster } from 'leaflet';
 
 import {
   TileServerLayer,
   FeatureCollection,
   Feature,
   getFeatureType,
+  FeatureType,
 } from '@hazmapper/types';
 import { useFeatureSelection } from '@hazmapper/hooks';
 import { MAP_CONFIG } from './config';
 import FitBoundsHandler from './FitBoundsHandler';
 import { calculatePointCloudMarkerPosition } from './utils';
+import styles from './Map.module.css';
+import './Map.css';
+
+import 'leaflet/dist/leaflet.css';
+import 'react-leaflet-markercluster/styles';
+
+import { featureTypeToIcon } from '@hazmapper/utils/featureIconUtil';
 
 interface LeafletMapProps {
   /**
@@ -51,10 +55,13 @@ const getFeatureStyle = (feature: any) => {
   return feature.properties?.style || defaultGeoJsonOptions.style;
 };
 
-const ClusterMarkerIcon = (childCount: number) => {
+// NOTE: iconCreateFunction being run by leaflet, which is not support ES6 arrow func syntax
+// eslint-disable-next-line
+const createClusterCustomIcon = function (cluster: MarkerCluster) {
   return L.divIcon({
-    html: `<div><b>${childCount}</b></div>`,
-    className: 'marker-cluster',
+    html: `<span>${cluster.getChildCount()}</span>`,
+    className: 'custom-marker-cluster',
+    iconSize: L.point(25, 25, true),
   });
 };
 
@@ -67,16 +74,49 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
   baseLayers = [],
   featureCollection,
 }) => {
-  const { selectedFeatureId, setSelectedFeature } = useFeatureSelection();
+  const { selectedFeatureId, setSelectedFeatureId } = useFeatureSelection();
 
   const handleFeatureClick = useCallback(
     (feature: any) => {
-      setSelectedFeature(feature.id);
+      debugger;
+      setSelectedFeatureId(feature.id);
 
       //TODO handle clicking on streetview https://tacc-main.atlassian.net/browse/WG-392
     },
     [selectedFeatureId]
   );
+
+  const createCustomIcon = useCallback((feature: Feature) => {
+    const featureFAIcon = featureTypeToIcon(getFeatureType(feature));
+    // Get SVG path directly from the icon object
+    const iconPath = featureFAIcon.icon[4];
+
+    return L.divIcon({
+      html: `
+          <div style="
+            background-color: #3498db;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+          ">
+            <svg
+              viewBox="0 0 ${featureFAIcon.icon[0]} ${featureFAIcon.icon[1]}"
+              style="width: 20px; height: 20px; fill: white;"
+            >
+              <path d="${iconPath}"></path>
+            </svg>
+          </div>
+        `,
+      className: 'custom-marker',
+      iconSize: L.point(40, 40),
+      iconAnchor: L.point(20, 20),
+    });
+  }, []);
 
   const activeBaseLayers = useMemo(
     () => baseLayers.filter((layer) => layer.uiOptions.isActive),
@@ -179,16 +219,21 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
       ))}
       {/* Marker Features with Clustering (also includes point cloud markers) */}
       <MarkerClusterGroup
-        iconCreateFunction={(cluster: MarkerCluster) =>
-          ClusterMarkerIcon(cluster.getChildCount())
+        iconCreateFunction={createClusterCustomIcon}
+        maxFitBoundsSelectedFeatureZoom={
+          MAP_CONFIG.maxFitBoundsSelectedFeatureZoom
         }
-        zIndexOffset={1}
+        spiderfyOnMaxZoom={true}
+        spiderfyOnZoom={MAP_CONFIG.maxPointSelectedFeatureZoom}
+        showCoverageOnHover={true}
+        zoomToBoundsOnClick={false}
       >
         {markerFeatures.map((feature) => {
           const geometry = feature.geometry as GeoJSON.Point;
           return (
             <Marker
               key={feature.id}
+              icon={createCustomIcon(feature)}
               position={[geometry.coordinates[1], geometry.coordinates[0]]}
               eventHandlers={{
                 click: () => handleFeatureClick(feature),
@@ -198,7 +243,8 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
           );
         })}
       </MarkerClusterGroup>
-      <FitBoundsHandler featureCollection={featureCollection} />{' '}
+      {/* Handles zooming to a specific feature or to all features */}
+      <FitBoundsHandler featureCollection={featureCollection} />
       <ZoomControl position="bottomright" />
     </MapContainer>
   );
