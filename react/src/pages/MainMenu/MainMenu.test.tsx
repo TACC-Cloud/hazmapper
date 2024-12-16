@@ -20,3 +20,22 @@ test('renders menu', async () => {
     expect(getByText(/mockUser/)).toBeDefined();
   });
 });
+
+jest.mock('socket.io-client', () => {
+  return {
+    __esModule: true,
+    default: () => {
+      return {
+        on: jest.fn(),
+        emit: jest.fn(),
+        off: jest.fn(),
+      };
+    },
+  };
+});
+
+jest.mock('react-toastify', () => ({
+  toast: {
+    info: jest.fn(),
+  },
+}));

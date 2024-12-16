@@ -1,14 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { ToastContainer } from 'react-toastify';
 import ProjectListing from '@hazmapper/components/Projects/ProjectListing';
 import styles from './layout.module.css';
-import { Button } from '@tacc/core-components';
+import { Button, InlineMessage } from '@tacc/core-components';
 import HeaderNavBar from '@hazmapper/components/HeaderNavBar';
+import 'react-toastify/dist/ReactToastify.css';
+import {
+  setupSocketListeners,
+  removeSocketListeners,
+  socket,
+} from '../../utils/socketUtils';
 
 const MainMenu = () => {
+  const [connectionStatus, setConnectionStatus] = useState('Disconnected');
+  const triggerNotification = () => {
+    socket.emit('trigger_notification', {
+      message: 'Hello from the client!',
+    });
+  };
+
+  useEffect(() => {
+    setupSocketListeners(setConnectionStatus);
+
+    // Clean up the event listeners when the component unmounts
+    return () => {
+      removeSocketListeners();
+    };
+  }, [setConnectionStatus]);
+
   return (
     <div className={styles.root}>
       <HeaderNavBar />
       <div className={styles.listingContainer}>
+        <InlineMessage type="info">
+          WebSocket Status: {connectionStatus}
+        </InlineMessage>
         <div className={styles.versionContainer}>
           <img
             src="./src/assets/Hazmapper-Stack@4x.png"
@@ -69,6 +95,12 @@ const MainMenu = () => {
           <img src="./src/assets/nheri.png" alt="NHERI website" width="150px" />
         </a>
       </div>
+      <div>
+        <Button type="primary" onClick={triggerNotification}>
+          Trigger Notification
+        </Button>
+      </div>
+      <ToastContainer />
     </div>
   );
 };

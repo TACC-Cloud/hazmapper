@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './AssetsPanel.module.css';
 import FeatureFileTree from '@hazmapper/components/FeatureFileTree';
 import { FeatureCollection, Project } from '@hazmapper/types';
 import { Button } from '@tacc/core-components';
 import { useFeatures } from '@hazmapper/hooks';
+import {
+  socket,
+  setupSocketListeners,
+  removeSocketListeners,
+} from '../../utils/socketUtils';
+import { ToastContainer } from 'react-toastify';
 
 const getFilename = (projectName: string) => {
   // Convert to lowercase filename based on projectName
@@ -78,10 +84,43 @@ const AssetsPanel: React.FC<Props> = ({
   featureCollection,
   project,
 }) => {
+  const [connectionStatus, setConnectionStatus] = useState('Disconnected');
+
+  const triggerSuccess = () => {
+    socket.emit('trigger_asset_success', {
+      message: 'Hello from the client!',
+    });
+  };
+
+  const triggerFailure = () => {
+    socket.emit('trigger_asset_failure', {
+      message: 'Hello from the client!',
+    });
+  };
+
+  useEffect(() => {
+    setupSocketListeners(setConnectionStatus);
+    return () => {
+      removeSocketListeners();
+    };
+  }, []);
   return (
     <div className={styles.root}>
       <div className={styles.topSection}>
-        <Button>Import from DesignSafe TODO/WG-387</Button>
+        <>
+          <Button size="small" onClick={triggerSuccess}>
+            Asset Success
+          </Button>
+          <Button size="small" onClick={triggerFailure}>
+            Asset Failure
+          </Button>
+          <ToastContainer />
+          <div className={styles.root}>
+            <Button>Import from DesignSafe TODO/WG-387</Button>
+            Assets Panel TODO, isPublicView: {isPublicView}
+          </div>
+          Connection Status: {connectionStatus}
+        </>
       </div>
       <div className={styles.middleSection}>
         <FeatureFileTree
