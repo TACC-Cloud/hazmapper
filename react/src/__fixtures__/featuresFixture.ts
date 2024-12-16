@@ -94,3 +94,97 @@ export const featureCollectionWithNestedPaths: FeatureCollection = {
     },
   ],
 };
+
+export const featureCollectionWithDuplicateImages: FeatureCollection = {
+  type: 'FeatureCollection',
+  features: [
+    {
+      id: 1,
+      project_id: 80,
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [-80.780375, 32.6185055555556],
+      } as Point,
+      properties: {},
+      styles: {},
+      assets: [
+        {
+          id: 2036562,
+          path: '80/f7c2afa2-f184-40a7-80be-0874a7db755e.jpeg',
+          uuid: 'f7c2afa2-f184-40a7-80be-0874a7db755e',
+          asset_type: 'image' as AssetType,
+          original_path: '/image1.JPG',
+          original_name: null,
+          display_path: '/image1.JPG',
+        },
+      ],
+    },
+    {
+      id: 2,
+      project_id: 80,
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [-80.780375, 32.6185055555556],
+      } as Point,
+      properties: {},
+      styles: {},
+      assets: [
+        {
+          id: 2036568,
+          path: '80/f7c2afa2-f184-40a7-80be-0874a7db755e.jpeg',
+          uuid: 'f7c2afa2-f184-40a7-80be-0874a7db755e',
+          asset_type: 'image' as AssetType,
+          original_path: '/image1.JPG',
+          original_name: null,
+          display_path: '/image1.JPG',
+        },
+      ],
+    },
+    {
+      id: 3,
+      project_id: 80,
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [-80.780375, 32.6185055555556],
+      } as Point,
+      properties: {},
+      styles: {},
+      assets: [
+        {
+          id: 2036568,
+          path: '80/f7c2afa2-f184-40a7-80be-0874a7db755e.jpeg',
+          uuid: 'f7c2afa2-f184-40a7-80be-0874a7db755e',
+          asset_type: 'image' as AssetType,
+          original_path: '/folder1/image1.JPG',
+          original_name: null,
+          display_path: '/folder1/image1.JPG',
+        },
+      ],
+    },
+    {
+      id: 4,
+      project_id: 80,
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [-80.780375, 32.6185055555556],
+      } as Point,
+      properties: {},
+      styles: {},
+      assets: [
+        {
+          id: 2036568,
+          path: '80/f7c2afa2-f184-40a7-80be-0874a7db755e.jpeg',
+          uuid: 'f7c2afa2-f184-40a7-80be-0874a7db755e',
+          asset_type: 'image' as AssetType,
+          original_path: '/folder1/image1.JPG',
+          original_name: null,
+          display_path: '/folder1/image1.JPG',
+        },
+      ],
+    },
+  ],
+};
