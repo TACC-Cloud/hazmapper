@@ -10,6 +10,7 @@
   flex: 0 0 auto;
   padding: 10px;
   display: flex;
+  text-align: center;
   justify-content: space-between;
   align-items: center;
   font-size: large;
@@ -20,13 +21,23 @@
   overflow: hidden;
   min-height: 0;
   display: flex;
+  text-align: center;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
+  gap: 10px;
 }
 .middleSection > div {
-  flex: 1;
+  flex: 0 1 auto;
   overflow: auto;
+}
+.assetContainer {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+.assetContainer > * {
+  max-width: 100%;
 }
 .bottomSection {
   display: block;

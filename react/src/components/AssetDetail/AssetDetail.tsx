@@ -1,37 +1,22 @@
 import React, { Suspense, useState, useEffect } from 'react';
 import _ from 'lodash';
-import { useAppConfiguration, useFeatureSelection } from '@hazmapper/hooks';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { Asset, FeatureTypeNullable } from '@hazmapper/types';
+import { useAppConfiguration } from '@hazmapper/hooks';
+import { Asset, FeatureTypeNullable, Feature } from '@hazmapper/types';
 import { FeatureIcon } from '@hazmapper/components/FeatureIcon';
 import { Button, LoadingSpinner, SectionMessage } from '@tacc/core-components';
 import styles from './AssetDetail.module.css';
-import { faCameraRetro, faPhotoFilm } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 type AssetModalProps = {
-  isOpen: boolean;
-  projectId: number;
+  onClose: () => void;
+  selectedFeature: Feature;
   isPublicView: boolean;
 };
 
 const AssetDetail: React.FC<AssetModalProps> = ({
-  isOpen,
-  projectId,
+  selectedFeature,
+  onClose,
   isPublicView,
 }) => {
-  const { selectedFeature, selectedFeatureId, setSelectedFeatureId } =
-    useFeatureSelection();
-
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const closePanel = () => {
-    const params = new URLSearchParams(location.search);
-    params.delete('selectedFeature');
-    navigate(`${location.pathname}?${params.toString()}`);
-  };
-
   const config = useAppConfiguration();
   const geoapiUrl = config.geoapiUrl;
 
@@ -59,10 +44,12 @@ const AssetDetail: React.FC<AssetModalProps> = ({
     }) => {
       switch (type) {
         case 'image':
-          return <img src={source} alt="Asset" loading="lazy" width="100%" />;
+          return <img src={source} alt="Asset" loading="lazy" />;
         case 'video':
           return (
-            <video src={source} controls preload="metadata" height="90%" />
+            <video src={source} controls preload="metadata">
+              <track kind="captions" />
+            </video>
           );
         case 'point_cloud':
           /*TODO Add pointcloud */
@@ -75,29 +62,37 @@ const AssetDetail: React.FC<AssetModalProps> = ({
       }
     }
   );
+  AssetRenderer.displayName = 'AssetRenderer';
 
   return (
     <div className={styles.root}>
       <div className={styles.topSection}>
         <FeatureIcon featureType={fileType as FeatureTypeNullable} />
-        {selectedFeature?.id}
-        <Button type="link" iconNameAfter="close" onClick={closePanel}></Button>
+        {selectedFeature && selectedFeature?.assets?.length > 0
+          ? selectedFeature?.assets.map((asset) =>
+              asset.display_path.split('/').pop()
+            )
+          : selectedFeature?.id}
+        <Button type="link" iconNameAfter="close" onClick={onClose}></Button>
       </div>
       <div className={styles.middleSection}>
         {fileType ? (
           <>
             <Suspense fallback={<LoadingSpinner />}>
-              <AssetRenderer type={fileType} source={featureSource} />
+              <div className={styles.assetContainer}>
+                <AssetRenderer type={fileType} source={featureSource} />
+              </div>
             </Suspense>
             <Button /*TODO Download Action */>Download</Button>
           </>
         ) : (
           <>
             <SectionMessage type="info">Feature has no asset.</SectionMessage>
-
-            <Button type="primary" /* TODO Add asset to a feature */>
-              Add asset from DesignSafe
-            </Button>
+            {!isPublicView && (
+              <Button type="primary" /* TODO Add asset to a feature */>
+                Add asset from DesignSafe
+              </Button>
+            )}
           </>
         )}
       </div>
@@ -129,9 +124,7 @@ const AssetDetail: React.FC<AssetModalProps> = ({
                   ))
               ) : (
                 <tr>
-                  <td colSpan={2}>
-                    There are no metadata properties for this feature.
-                  </td>
+                  <td colSpan={2}>There are no metadata properties.</td>
                 </tr>
               )}
             </tbody>
@@ -144,22 +137,23 @@ const AssetDetail: React.FC<AssetModalProps> = ({
             </thead>
             <tbody>
               {selectedFeature?.geometry &&
-                Object.entries(selectedFeature.geometry)
-                .map(
-                  ([propKey, propValue]) => (
-                    propValue && propValue !== undefined && propValue.toString().trim() !== '' && propValue.toString() !== 'null' && (
-                    <tr key={propKey}>
-                      <td>{_.trim(_.startCase(propKey.toString()), '"')}</td>
-                      <td>
-                        {' '}
-                        {Array.isArray(propValue) && propValue.length === 2
-                          ? `Latitude: ${propValue[0].toString()},
+                Object.entries(selectedFeature.geometry).map(
+                  ([propKey, propValue]) =>
+                    propValue &&
+                    propValue !== undefined &&
+                    propValue.toString().trim() !== '' &&
+                    propValue.toString() !== 'null' && (
+                      <tr key={propKey}>
+                        <td>{_.trim(_.startCase(propKey.toString()), '"')}</td>
+                        <td>
+                          {' '}
+                          {Array.isArray(propValue) && propValue.length === 2
+                            ? `Latitude: ${propValue[0].toString()},
                              Longitude: ${propValue[1].toString()}`
-                          : _.trim(JSON.stringify(propValue), '"')}
-                      </td>
-                    </tr>
+                            : _.trim(JSON.stringify(propValue), '"')}
+                        </td>
+                      </tr>
                     )
-                  )
                 )}
             </tbody>
           </table>

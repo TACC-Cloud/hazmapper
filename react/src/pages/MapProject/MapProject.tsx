@@ -102,7 +102,8 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
   const [endDate, setEndDate] = useState(
     new Date(Date.now() + 24 * 60 * 60 * 1000)
   );
-  const { selectedFeature } = useFeatureSelection();
+  const { selectedFeature, setSelectedFeatureId: toggleSelectedFeature } =
+    useFeatureSelection();
 
   const formatAssetTypeName = (name: string) => {
     switch (name) {
@@ -199,8 +200,8 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
         {selectedFeature && (
           <div className={styles.detailContainer}>
             <AssetDetail
-              isOpen={true}
-              projectId={activeProject.id}
+              selectedFeature={selectedFeature}
+              onClose={() => toggleSelectedFeature(selectedFeature.id)}
               isPublicView={activeProject.public}
             />
           </div>
