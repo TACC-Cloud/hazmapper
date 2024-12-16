@@ -43,15 +43,23 @@ export function featureCollectionToFileNodeArray(
   featureCollection: FeatureCollection
 ): FeatureFileNode[] {
   const rootNodes: FeatureFileNode[] = [];
-  const nodeMap: { [key: string]: FeatureFileNode } = {};
+  const nodeMap: { [key: string]: FeatureFileNode[] } = {};
 
-  // Sort features to ensure consistent order
-  const sortedFeatures = featureCollection.features.sort((a, b) =>
-    getFullPathFromFeature(a).localeCompare(getFullPathFromFeature(b))
-  );
+  function normalizePath(path: string): string {
+    return path.replace(/^\/+|\/+$/g, '');
+  }
+
+  // Sort features by normalized path
+  const sortedFeatures = featureCollection.features
+    .map((feature) => ({
+      feature,
+      normalizedPath: normalizePath(getFullPathFromFeature(feature)),
+    }))
+    .sort((a, b) => a.normalizedPath.localeCompare(b.normalizedPath))
+    .map(({ feature }) => feature);
 
   sortedFeatures.forEach((feature) => {
-    const nodePath = getFullPathFromFeature(feature);
+    const nodePath = normalizePath(getFullPathFromFeature(feature));
     const parts = nodePath.split('/');
 
     let currentPath = '';
@@ -61,26 +69,52 @@ export function featureCollectionToFileNodeArray(
       currentPath += (currentPath ? '/' : '') + part;
       const isLast = index === parts.length - 1;
 
-      if (!nodeMap[currentPath]) {
+      if (isLast) {
+        // For leaf nodes (actual features), always create a new node
         const newNode = createFeatureFileNode(
-          isLast ? feature.id.toString() : `DIR_${currentPath}` /* nodeId */,
-          part /* name */,
-          !isLast /* isDirectory */,
-          isLast
-            ? getFeatureType(feature) /*featureType*/
-            : undefined /* or if dir, then undefined */
+          feature.id.toString(),
+          part,
+          false,
+          getFeatureType(feature)
         );
-        nodeMap[currentPath] = newNode;
 
+        // Add to parent node if it exists
         if (currentNode) {
           if (!currentNode.children) currentNode.children = [];
+          // Important: Always add the new node to children array
           currentNode.children.push(newNode);
         } else {
           rootNodes.push(newNode);
         }
-      }
 
-      currentNode = nodeMap[currentPath];
+        // Store in nodeMap
+        if (!nodeMap[currentPath]) {
+          nodeMap[currentPath] = [];
+        }
+        nodeMap[currentPath].push(newNode);
+      } else {
+        // For directories, reuse existing node if it exists
+        if (!nodeMap[currentPath]) {
+          const newNode = createFeatureFileNode(
+            `DIR_${currentPath}`,
+            part,
+            true,
+            undefined
+          );
+
+          if (currentNode) {
+            if (!currentNode.children) currentNode.children = [];
+            currentNode.children.push(newNode);
+          } else {
+            rootNodes.push(newNode);
+          }
+
+          nodeMap[currentPath] = [newNode];
+        }
+
+        // Always use the first directory node
+        currentNode = nodeMap[currentPath][0];
+      }
     });
   });
 

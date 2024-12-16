@@ -1,5 +1,8 @@
 import { featureCollectionToFileNodeArray } from './featureTreeUtils';
-import { featureCollectionWithNestedPaths } from '@hazmapper/__fixtures__/featuresFixture';
+import {
+  featureCollectionWithNestedPaths,
+  featureCollectionWithDuplicateImages,
+} from '@hazmapper/__fixtures__/featuresFixture';
 
 describe('featureTreeUtils', () => {
   describe('featureCollectionToFileNodeArray', () => {
@@ -32,6 +35,29 @@ describe('featureTreeUtils', () => {
       expect(result[0].children?.[1].children?.[0].nodeId).toBe('2');
     });
 
-    // Add more test cases as needed
+    it('should convert handle duplicate paths in tree structure', () => {
+      const mockFeatureCollection = featureCollectionWithDuplicateImages;
+
+      const result = featureCollectionToFileNodeArray(mockFeatureCollection);
+
+      /*
+       * Directory layout:
+       * ├── folder1
+       * │   ├── image1.JPG
+       * │   └── image2.JPG
+       * ├── image1.JPG
+       * └── image2.JPG
+       * */
+
+      expect(result).toHaveLength(3);
+      expect(result[0].name).toBe('folder1');
+      expect(result[1].name).toBe('image1.JPG');
+      expect(result[2].name).toBe('image1.JPG');
+
+      // folder1 contents
+      expect(result[0].children).toHaveLength(2);
+      expect(result[0].children?.[0].name).toBe('image1.JPG');
+      expect(result[0].children?.[1].name).toBe('image1.JPG');
+    });
   });
 });
