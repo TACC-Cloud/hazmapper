@@ -219,14 +219,17 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
       ))}
       {/* Marker Features with Clustering (also includes point cloud markers) */}
       <MarkerClusterGroup
+        zIndexOffset={1}
         iconCreateFunction={createClusterCustomIcon}
+        chunkedLoading={true}
+        animate={true}
         maxFitBoundsSelectedFeatureZoom={
           MAP_CONFIG.maxFitBoundsSelectedFeatureZoom
         }
+        spiderifyOnHover={true}
         spiderfyOnMaxZoom={true}
         spiderfyOnZoom={MAP_CONFIG.maxPointSelectedFeatureZoom}
-        showCoverageOnHover={true}
-        zoomToBoundsOnClick={false}
+        zoomToBoundsOnClick={true}
       >
         {markerFeatures.map((feature) => {
           const geometry = feature.geometry as GeoJSON.Point;

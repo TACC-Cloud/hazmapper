@@ -74,7 +74,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
       return directoryIds;
     };
 
-    // Have all direcotories be in 'expanded' (i.e. everything is expanded)
+    // Have all directories be in 'expanded' (i.e. everything is expanded)
     const expandedDirectories = getDirectoryNodeIds(fileNodeArray);
 
     const convertToTreeNode = (node: FeatureFileNode) => ({
