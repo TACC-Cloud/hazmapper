@@ -61,7 +61,12 @@ const AssetDetail: React.FC<AssetModalProps> = ({
         <FeatureIcon featureType={fileType as FeatureTypeNullable} />
         {selectedFeature?.assets?.length > 0
           ? selectedFeature?.assets.map((asset) =>
-              asset.display_path.split('/').pop()
+              // To make sure fileTree name matches title and catches null
+              asset.display_path
+                ? asset.display_path.split('/').pop()
+                : asset.id
+                ? asset.id
+                : selectedFeature.id
             )
           : selectedFeature?.id}
         <Button type="link" iconNameAfter="close" onClick={onClose}></Button>
