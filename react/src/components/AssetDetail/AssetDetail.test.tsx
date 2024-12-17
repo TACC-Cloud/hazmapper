@@ -36,6 +36,6 @@ describe('AssetDetail', () => {
     expect(getByText('Photo 4.jpg')).toBeDefined();
     expect(getByText('Download')).toBeDefined();
     expect(getByText('Metadata')).toBeDefined();
-    expect(getByText('Geometry')).toBeUndefined();
+    expect(getByText('Geometry')).toBeDefined();
   });
 });
