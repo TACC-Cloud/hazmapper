@@ -1,7 +1,12 @@
 import React, { Suspense, useState, useEffect } from 'react';
 import _ from 'lodash';
 import { useAppConfiguration } from '@hazmapper/hooks';
-import { Asset, FeatureTypeNullable, Feature } from '@hazmapper/types';
+import {
+  Asset,
+  FeatureTypeNullable,
+  Feature,
+  getFeatureType,
+} from '@hazmapper/types';
 import { FeatureIcon } from '@hazmapper/components/FeatureIcon';
 import { Button, LoadingSpinner, SectionMessage } from '@tacc/core-components';
 import styles from './AssetDetail.module.css';
@@ -20,19 +25,10 @@ const AssetDetail: React.FC<AssetModalProps> = ({
   const config = useAppConfiguration();
   const geoapiUrl = config.geoapiUrl;
 
-  const [selectedFeatureAsset, setSelectedFeatureAsset] = useState<
-    Asset | undefined
-  >(selectedFeature?.assets[0]);
+  const featureSource: string =
+    geoapiUrl + '/assets/' + selectedFeature?.assets?.[0]?.path;
 
-  useEffect(() => {
-    const featureAsset = selectedFeature?.assets[0];
-    setSelectedFeatureAsset(featureAsset);
-  }, [selectedFeature]);
-
-  const featureSource: string | undefined =
-    geoapiUrl + '/assets/' + selectedFeatureAsset?.path;
-
-  const fileType: string | undefined = selectedFeatureAsset?.asset_type;
+  const fileType = getFeatureType(selectedFeature);
 
   const AssetRenderer = React.memo(
     ({
@@ -68,7 +64,7 @@ const AssetDetail: React.FC<AssetModalProps> = ({
     <div className={styles.root}>
       <div className={styles.topSection}>
         <FeatureIcon featureType={fileType as FeatureTypeNullable} />
-        {selectedFeature && selectedFeature?.assets?.length > 0
+        {selectedFeature?.assets?.length > 0
           ? selectedFeature?.assets.map((asset) =>
               asset.display_path.split('/').pop()
             )
