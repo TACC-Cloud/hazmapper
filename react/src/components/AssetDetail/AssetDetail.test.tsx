@@ -1,9 +1,7 @@
-import React, { act } from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import React from 'react';
+import { render } from '@testing-library/react';
 import AssetDetail from './AssetDetail';
-import { featureCollection } from '@hazmapper/__fixtures__/featuresFixture';
 import { mockImgFeature } from '@hazmapper/__fixtures__/featuresFixture';
-import { useAppConfiguration, useFeatureSelection } from '@hazmapper/hooks';
 
 jest.mock('@hazmapper/hooks', () => ({
   useFeatureSelection: jest.fn(),

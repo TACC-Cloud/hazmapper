@@ -1,12 +1,7 @@
-import React, { Suspense, useState, useEffect } from 'react';
+import React, { Suspense } from 'react';
 import _ from 'lodash';
 import { useAppConfiguration } from '@hazmapper/hooks';
-import {
-  Asset,
-  FeatureTypeNullable,
-  Feature,
-  getFeatureType,
-} from '@hazmapper/types';
+import { FeatureTypeNullable, Feature, getFeatureType } from '@hazmapper/types';
 import { FeatureIcon } from '@hazmapper/components/FeatureIcon';
 import { Button, LoadingSpinner, SectionMessage } from '@tacc/core-components';
 import styles from './AssetDetail.module.css';
