@@ -10,13 +10,6 @@ jest.mock('@hazmapper/hooks', () => ({
   }),
 }));
 
-// Mock AssetDetail component since it's a complex component and tested elswhere
-jest.mock('@hazmapper/components/AssetDetail', () => {
-  return function AssetDetail() {
-    return <div data-testid="asset-detail">Asset Detail Component</div>;
-  };
-});
-
 describe('AssetDetail', () => {
   const AssetModalProps = {
     onClose: jest.fn(),
