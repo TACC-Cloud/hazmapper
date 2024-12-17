@@ -52,6 +52,18 @@
   left: var(--hazmapper-panel-navbar-width);
   z-index: 5000;
 }
+.detailContainer {
+  min-width: 250px;
+  max-width: 400px;
+  height: auto;
+  background-color: var(--global-color-primary--xx-light);
+  position: fixed;
+  padding: 5px;
+  right: 10px;
+  top: 75px;
+  bottom: 20px;
+  z-index: 5000;
+}
 
 .map {
   width: 100%;

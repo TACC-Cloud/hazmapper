@@ -1,4 +1,4 @@
-import { useQueryClient, UseQueryResult } from 'react-query';
+import { useQueryClient, UseQueryResult, QueryKey } from 'react-query';
 import { FeatureCollection } from '@hazmapper/types';
 import { useGet } from '@hazmapper/requests';
 
@@ -40,22 +40,26 @@ export const useFeatures = ({
   });
   return query;
 };
-
 export const useCurrentFeatures = (): UseQueryResult<FeatureCollection> => {
   const queryClient = useQueryClient();
-
-  // Get all existing queries that match the KEY_USE_FEATURES prefix
-  const queries = queryClient.getQueriesData<FeatureCollection>([
-    KEY_USE_FEATURES,
-  ]);
-
-  // Find first query with data - getQueriesData returns [queryKey, data] tuples
-  const activeQuery = queries.find(([, queryData]) => !!queryData);
-  const currentData = activeQuery ? activeQuery[1] : undefined;
+  const latestQuery = queryClient
+    .getQueriesData<FeatureCollection>([KEY_USE_FEATURES])
+    .filter(([, value]) => Boolean(value))
+    .reduce<[QueryKey, FeatureCollection] | null>((latest, current) => {
+      const currentState = queryClient.getQueryState(current[0]);
+      const latestState = latest ? queryClient.getQueryState(latest[0]) : null;
+      if (
+        !latestState ||
+        (currentState && currentState.dataUpdatedAt > latestState.dataUpdatedAt)
+      ) {
+        return current;
+      }
+      return latest;
+    }, null);
 
   return {
-    data: currentData,
-    isSuccess: !!currentData,
+    data: latestQuery?.[1],
+    isSuccess: !!latestQuery?.[1],
     isLoading: false,
     isError: false,
     error: null,
