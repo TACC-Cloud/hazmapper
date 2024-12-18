@@ -83,3 +83,6 @@ th {
   white-space: normal;
   text-overflow: clip;
 }
+.pointCloud {
+  height: 25em;
+}
