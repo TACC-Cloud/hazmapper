@@ -52,6 +52,7 @@
   width: 100%;
   table-layout: fixed;
   border-collapse: collapse;
+  margin-top: 5px;
   margin-bottom: 5px;
   padding: 5px;
 }
