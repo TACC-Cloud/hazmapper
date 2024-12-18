@@ -98,13 +98,13 @@ const GeometryAsset: React.FC<GeometryAssetProps> = ({ selectedFeature }) => {
             </tr>
             <tr>
               <td>Minimum</td>
-              <td>{turf.bbox(selectedFeature.geometry)[0]}</td>
               <td>{turf.bbox(selectedFeature.geometry)[1]}</td>
+              <td>{turf.bbox(selectedFeature.geometry)[0]}</td>
             </tr>
             <tr>
               <td>Maximum</td>
-              <td>{turf.bbox(selectedFeature.geometry)[2]}</td>
               <td>{turf.bbox(selectedFeature.geometry)[3]}</td>
+              <td>{turf.bbox(selectedFeature.geometry)[2]}</td>
             </tr>
           </tbody>
         </table>
