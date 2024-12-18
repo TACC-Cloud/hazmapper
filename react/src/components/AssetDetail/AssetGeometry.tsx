@@ -29,11 +29,11 @@ const GeometryAsset: React.FC<GeometryAssetProps> = ({ selectedFeature }) => {
           <tbody>
             <tr>
               <td>Latitude</td>
-              <td>{selectedFeature.geometry.coordinates[1]}</td>
+              <td>{selectedFeature.geometry.coordinates[0]}</td>
             </tr>
             <tr>
               <td>Longitude</td>
-              <td>{selectedFeature.geometry.coordinates[0]}</td>
+              <td>{selectedFeature.geometry.coordinates[1]}</td>
             </tr>
           </tbody>
         </table>
@@ -98,13 +98,13 @@ const GeometryAsset: React.FC<GeometryAssetProps> = ({ selectedFeature }) => {
             </tr>
             <tr>
               <td>Minimum</td>
-              <td>{turf.bbox(selectedFeature.geometry)[1]}</td>
               <td>{turf.bbox(selectedFeature.geometry)[0]}</td>
+              <td>{turf.bbox(selectedFeature.geometry)[1]}</td>
             </tr>
             <tr>
               <td>Maximum</td>
-              <td>{turf.bbox(selectedFeature.geometry)[3]}</td>
               <td>{turf.bbox(selectedFeature.geometry)[2]}</td>
+              <td>{turf.bbox(selectedFeature.geometry)[3]}</td>
             </tr>
           </tbody>
         </table>
