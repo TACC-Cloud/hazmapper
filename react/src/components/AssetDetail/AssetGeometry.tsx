@@ -15,8 +15,6 @@ const GeometryAsset: React.FC<GeometryAssetProps> = ({ selectedFeature }) => {
       ? turf.bbox(selectedFeature)
       : null;
 
-  console.log(selectedFeature.geometry);
-
   return (
     <>
       {selectedFeature.geometry.type === 'Point' && (

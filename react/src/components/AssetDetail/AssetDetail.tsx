@@ -128,9 +128,7 @@ const AssetDetail: React.FC<AssetModalProps> = ({
               )}
             </tbody>
           </table>
-          <AssetGeometry
-            selectedFeature={selectedFeature}
-          />
+          <AssetGeometry selectedFeature={selectedFeature} />
         </div>
       </div>
     </div>

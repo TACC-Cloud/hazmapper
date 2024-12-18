@@ -16,7 +16,6 @@ jest.mock('./AssetGeometry', () => {
   };
 });
 
-
 describe('AssetDetail', () => {
   const AssetModalProps = {
     onClose: jest.fn(),
