@@ -1,54 +1,111 @@
-import { files as FilesList } from '../../__fixtures__/fileFixture';
-import { ChonkyFileActionData, FileData } from 'chonky';
-import { File } from '../../types/file';
-import { FileBrowser, FileNavbar, FileList, ChonkyActions } from 'chonky';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
+import {
+  ChonkyFileActionData,
+  FileBrowser,
+  FileData,
+  FileNavbar,
+  FileList,
+  ChonkyActions,
+} from 'chonky';
 import { Icon } from '@tacc/core-components';
 import { SystemSelect } from '../Systems';
 import styles from './FileListing.module.css';
+import { useFiles } from '../../hooks/files/useFiles';
+import {
+  useAuthenticatedUser,
+  useProjectsWithDesignSafeInformation,
+  useSystems,
+} from '../../hooks';
+import { File, System } from '../../types';
 
-const serializeToChonkyFile = (file: File): FileData => {
-  return {
-    id: file.path,
-    name: file.name,
-    size: file.length,
-    modDate: file.lastModified,
-    isDir: file.type === 'dir',
-    ext: file.type !== 'dir' ? file.name.split('.').pop() : undefined,
-    icon: file.type === 'dir' ? 'folder' : 'file',
-  };
-};
+// preventing typescript warnings
+const _FileBrowser = FileBrowser as any;
 
-export const FileListing: React.FC<{
+interface FileListingProps {
   disableSelection: boolean;
-  onDirectoryChange?: (directoy: string) => void;
+  showPublicSystems?: boolean;
   onFileSelect?: (files: File[]) => void;
-}> = ({ disableSelection, onDirectoryChange, onFileSelect }) => {
+  onFolderSelect?: (folder: string) => void;
+  allowedFileExtensions?: string[];
+}
+
+const serializeToChonkyFile = (
+  file: File,
+  allowedFileExtensions: string[]
+): FileData => ({
+  id: file.path,
+  name: file.name,
+  size: file.length,
+  modDate: file.lastModified,
+  isDir: file.type === 'dir',
+  ext: file.type !== 'dir' ? file.name.split('.').pop() : undefined,
+  icon: file.type === 'dir' ? 'folder' : 'file',
+  selectable:
+    file.type === 'dir' ||
+    allowedFileExtensions.includes(file.name.split('.').pop() || ''),
+});
+
+export const FileListing: React.FC<FileListingProps> = ({
+  disableSelection,
+  showPublicSystems = true,
+  onFileSelect,
+  onFolderSelect,
+  allowedFileExtensions = [],
+}) => {
+  const {
+    data: systems = [],
+    myDataSystem,
+    communityDataSystem,
+    publishedDataSystem,
+  } = useSystems();
+
+  const { data: projectSystems } = useProjectsWithDesignSafeInformation();
+  const { data: user } = useAuthenticatedUser();
+
   const [chonkyFiles, setChonkyFiles] = React.useState<any>([]);
   const [folderChain, setFolderChain] = React.useState<any>([]);
-  const [selectedSystem, setSelectedSystem] = useState(
-    'designsafe.storage.default'
+  const [path, setPath] = React.useState<string>('');
+  const [selectedSystem, setSelectedSystem] = React.useState<System | null>(
+    null
   );
-  const [tapisFiles, setTapisFiles] = React.useState<File[]>([]);
+  const [selectedFiles, setSelectedFiles] = React.useState<File[]>([]);
+  const [hasError, setHasError] = React.useState(false);
+
+  const { data: files, refetch } = useFiles({
+    system: selectedSystem?.id || '',
+    path:
+      path || (selectedSystem?.id === myDataSystem?.id ? user?.username : ''),
+    offset: '0',
+    limit: '100',
+    enabled: !!selectedSystem?.id,
+  });
+
+  // Automatically select the default system or the first available one
+  useEffect(() => {
+    if (!selectedSystem && myDataSystem) {
+      setSelectedSystem(myDataSystem || systems[0]);
+    }
+  }, [selectedSystem, systems, myDataSystem]);
 
   useEffect(() => {
-    const files = [...FilesList];
-    setTapisFiles(files);
-  }, [selectedSystem]);
+    if (selectedSystem?.id) {
+      refetch();
+    }
+  }, [selectedSystem, path, refetch]);
 
   useEffect(() => {
     setChonkyFiles(
-      tapisFiles.map((file) => {
-        return serializeToChonkyFile(file);
-      })
+      files?.map((file) =>
+        serializeToChonkyFile(file, allowedFileExtensions)
+      ) || []
     );
 
-    setFolderChain([{ id: 'user', name: 'User', isDir: true }]);
-  }, [tapisFiles]);
+    if (!folderChain.length && user?.username) {
+      setFolderChain([{ id: user.username, name: user.username, isDir: true }]);
+    }
+  }, [files, folderChain.length, user?.username]);
 
-  const FileListingIcon = (props: any) => {
-    return <Icon name={props.icon} />;
-  };
+  const FileListingIcon = (props: any) => <Icon name={props.icon} />;
 
   const useFileActionHandler = () => {
     return useCallback(
@@ -57,78 +114,104 @@ export const FileListing: React.FC<{
           const file: FileData = data.payload.targetFile as FileData;
 
           if (file.isDir) {
-            // Update the breadcrumbs
+            setPath(file.id);
             setFolderChain((prev) => {
               const index = prev.findIndex((folder) => folder.id === file.id);
-
-              if (index === -1) {
-                return [...prev, file];
-              } else {
-                return prev.slice(0, index + 1);
-              }
+              return index === -1 ? [...prev, file] : prev.slice(0, index + 1);
             });
 
-            // Update the file listing
-            setChonkyFiles(
-              tapisFiles
-                .filter((f) => f.path.startsWith(file.id + '/')) // will be removed when we have proper file listing
-                .map((file) => {
-                  return serializeToChonkyFile(file);
-                })
-            );
-
-            // Dispatch the directory change event
-            if (onDirectoryChange) {
-              onDirectoryChange(file.id);
+            onFolderSelect?.(file.id);
+          } else {
+            const selectedFile = files?.find((f) => f.path === file.id);
+            if (selectedFile) {
+              onFileSelect?.([selectedFile]);
             }
           }
-        } else if (data.id === ChonkyActions.ChangeSelection.id) {
-          if (onFileSelect) {
-            const selectedFiles = Array.from(data.payload.selection)
-              .map((selection) =>
-                tapisFiles.find((f: File) => f.path === selection)
-              )
-              .filter((f) => f !== undefined) as File[];
+        } else if (data.id === ChonkyActions.MouseClickFile.id) {
+          const file: FileData = data.payload.file as FileData;
 
-            onFileSelect(selectedFiles);
+          if (file.isDir) {
+            onFolderSelect?.(file.id);
           }
+        } else if (data.id === ChonkyActions.ChangeSelection.id) {
+          const filePaths = Array.from(data.payload.selection);
+
+          setSelectedFiles(
+            files?.filter(
+              (f) => filePaths.includes(f.path) && f.type !== 'dir'
+            ) || []
+          );
+          onFileSelect?.(selectedFiles || []);
         }
       },
-      [chonkyFiles, tapisFiles]
+      [chonkyFiles, files]
     );
   };
 
   const handleSelectChange = (system: string) => {
-    // Shows the loading skeleton and reset breadcrumbs
     setChonkyFiles(new Array(8).fill(null));
     setFolderChain([null]);
-    setSelectedSystem(system);
+
+    const sys = systems.find((sys) => sys.id === system);
+
+    if (!sys) {
+      setHasError(true);
+      return;
+    }
+
+    setSelectedSystem(sys);
+    const rootFolder = sys.id === myDataSystem?.id ? user?.username : '/';
+    setPath(rootFolder);
+    onFolderSelect?.(rootFolder);
+    let rootFolderName: string;
+
+    if (sys.id === myDataSystem?.id) {
+      rootFolderName = 'My Data';
+    } else if (sys.id === communityDataSystem?.id) {
+      rootFolderName = 'Community Data';
+    } else if (sys.id === publishedDataSystem?.id) {
+      rootFolderName = 'Published Data';
+    } else {
+      const project = projectSystems?.find((proj) => proj.system_id === sys.id);
+      rootFolderName = project?.name || sys.id;
+    }
+
+    setFolderChain([{ id: rootFolder, name: rootFolderName, isDir: true }]);
   };
 
   const handleFileAction = useFileActionHandler();
+
+  if (!systems.length) {
+    return <p>No systems available.</p>;
+  }
+
+  if (hasError) {
+    return <p>There was an error loading the system.</p>;
+  }
 
   return (
     <>
       <div className={`${styles['system-select-wrapper']}`}>
         <SystemSelect
           className={`${styles['system-select']}`}
+          showPublicSystems={showPublicSystems}
           onSystemSelect={handleSelectChange}
-        ></SystemSelect>
+        />
       </div>
       <div className={`${styles['file-browser']}`}>
-        <FileBrowser
+        <_FileBrowser
           files={chonkyFiles}
           folderChain={folderChain}
           defaultFileViewActionId={ChonkyActions.EnableListView.id}
           disableSelection={disableSelection}
-          disableDragAndDropProvider={true}
-          clearSelectionOnOutsideClick={true}
+          disableDragAndDropProvider
+          clearSelectionOnOutsideClick
           iconComponent={FileListingIcon}
           onFileAction={handleFileAction}
         >
           <FileNavbar />
           <FileList />
-        </FileBrowser>
+        </_FileBrowser>
       </div>
     </>
   );

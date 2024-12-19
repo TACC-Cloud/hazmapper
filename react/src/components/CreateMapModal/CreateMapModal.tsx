@@ -47,16 +47,14 @@ const CreateMapModal = ({
     parentToggle(); // Call the original toggle function passed as a prop
   };
 
-  const [selectedDirectory, setSelectedDirectory] = useState('');
   const [selectedFiles, setSelectedFiles] = useState([] as any[]);
+  const [saveLocation, setSaveLocation] = useState('');
 
   const handleDirectoryChange = (directory: string) => {
-    console.log('selected directory', directory);
-    setSelectedDirectory(directory);
+    setSaveLocation(directory);
   };
 
   const handleSelectedFiles = (files: any[]) => {
-    console.log('selected files', files);
     setSelectedFiles(files);
   };
 
@@ -97,7 +95,7 @@ const CreateMapModal = ({
     handleCreateProject(projectData);
   };
   return (
-    <Modal isOpen={isOpen} toggle={handleClose} size='xl'>
+    <Modal isOpen={isOpen} toggle={handleClose} size="xl">
       <ModalHeader toggle={handleClose}>Create a New Map</ModalHeader>
       <ModalBody>
         <Section
@@ -176,7 +174,7 @@ const CreateMapModal = ({
                               component={FormikInput}
                               name="save-location"
                               label="Save Location"
-                              value={`/${userData?.username}`}
+                              value={saveLocation}
                               readOnly
                               disabled
                             />
@@ -226,13 +224,15 @@ const CreateMapModal = ({
                     </h4>
                   </>
                 }
-              >
-                <FileListing
-                  disableSelection={false}
-                  onDirectoryChange={handleDirectoryChange}
-                  onFileSelect={handleSelectedFiles}
-                />
-              </SectionTableWrapper>
+                manualContent={
+                  <FileListing
+                    disableSelection={false}
+                    onFolderSelect={handleDirectoryChange}
+                    onFileSelect={handleSelectedFiles}
+                    showPublicSystems={false}
+                  />
+                }
+              />
             </>
           }
         />

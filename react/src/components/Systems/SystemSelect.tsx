@@ -1,28 +1,21 @@
 import React, { useEffect } from 'react';
-import { useSystems } from '@hazmapper/hooks';
-import { System } from '@hazmapper/types';
+import { useProjectsWithDesignSafeInformation, useSystems } from '../../hooks';
 
 interface SystemSelectProps {
   className: string;
+  showPublicSystems: boolean;
   onSystemSelect: (selectedSystem: string) => void;
 }
 
 export const SystemSelect: React.FC<SystemSelectProps> = ({
   className,
+  showPublicSystems,
   onSystemSelect,
 }) => {
-  const { data: systems } = useSystems();
+  const { myDataSystem, communityDataSystem, publishedDataSystem } =
+    useSystems();
 
-  // use dsProjects hook here
-  const dsProjects: any[] = [];
-
-  const findSystemById = (id: string): System | undefined => {
-    return systems?.find((system) => system.id === id);
-  };
-
-  const myDataSystem = findSystemById('designsafe.storage.default');
-  const communityDataSystem = findSystemById('designsafe.storage.community');
-  const publishDataSystem = findSystemById('designsafe.storage.published');
+  const { data: projects } = useProjectsWithDesignSafeInformation();
 
   useEffect(() => {
     if (myDataSystem) {
@@ -37,17 +30,17 @@ export const SystemSelect: React.FC<SystemSelectProps> = ({
         onChange={(e) => onSystemSelect(e.target.value)}
       >
         {myDataSystem && <option value={myDataSystem.id}>My Data</option>}
-        {communityDataSystem && (
+        {communityDataSystem && showPublicSystems && (
           <option value={communityDataSystem.id}>Community Data</option>
         )}
-        {publishDataSystem && (
-          <option value={publishDataSystem.id}>Published Data</option>
+        {publishedDataSystem && showPublicSystems && (
+          <option value={publishedDataSystem.id}>Published Data</option>
         )}
         <optgroup label="My Projects">
-          {dsProjects.map((proj) => {
+          {projects?.map((proj) => {
             return (
-              <option key={proj.id} value={proj.id}>
-                {proj.ds_project.title}
+              <option key={proj.id} value={proj.system_id}>
+                PRJ-{proj.id} | {proj.name}
               </option>
             );
           })}
