@@ -95,7 +95,7 @@ const _createIconMarker = (
   });
 };
 
-const _createFeatureTypeMarker = (featureType) => {
+const _createFeatureTypeMarker = (featureType: FeatureType) => {
   const icon = featureTypeToIcon(featureType);
   const iconPath = icon.icon[4];
   const viewBoxWidth = icon.icon[0];
