@@ -3,6 +3,10 @@
 /* prettier-ignore */
 @import url('https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css') layer(foundation);
 
+/* needed for custom icons on map (to support taggit) */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css')
+layer(foundation);
+
 @import url('@tacc/core-styles/dist/core-styles.base.css') layer(base);
 @import url('@tacc/core-styles/dist/core-styles.portal.css') layer(base);
 
