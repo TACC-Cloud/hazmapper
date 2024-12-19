@@ -35,17 +35,21 @@ const _createCircleMarker = (customStyle = {}) => {
 
   return L.divIcon({
     html: `
-        <svg height="${totalSize}" width="${totalSize}">
-          <circle 
-            cx="${center}"
-            cy="${center}"
-            r="${style.radius}"
-            fill="${style.fillColor}"
-            fill-opacity="${style.fillOpacity}"
-            stroke="${style.strokeColor}"
-            stroke-width="${style.strokeWidth}"
-            stroke-opacity="${style.opacity}"
-          />
+        <svg
+          height="${totalSize}"
+          width="${totalSize}"
+          aria-hidden="true"
+          role="presentation">
+            <circle
+                cx="${center}"
+                cy="${center}"
+                r="${style.radius}"
+                fill="${style.fillColor}"
+                fill-opacity="${style.fillOpacity}"
+                stroke="${style.strokeColor}"
+                stroke-width="${style.strokeWidth}"
+                stroke-opacity="${style.opacity}"
+            />
         </svg>
       `,
     className: styles.marker,
