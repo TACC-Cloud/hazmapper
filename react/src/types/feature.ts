@@ -1,18 +1,45 @@
 import { GeoJsonProperties, Geometry } from 'geojson';
 
-// Define asset types from GeoApi
-export type AssetType =
-  | 'image'
-  | 'video'
-  | 'questionnaire'
-  | 'point_cloud'
-  | 'streetview';
+// Create the constant object for AssetType
+export const AssetType = {
+  Image: 'image',
+  Video: 'video',
+  Questionnaire: 'questionnaire',
+  PointCloud: 'point_cloud',
+  Streetview: 'streetview',
+} as const;
 
-// Define all possible geometry types from GeoJSON (e.g.  "Point", "MultiPoint", "Polygon" etc)
+export type AssetType = (typeof AssetType)[keyof typeof AssetType];
+
 export type GeoJSONGeometryType = Geometry['type'];
 
-// Combined feature type that includes all possibilities for a feature
-export type FeatureType = AssetType | GeoJSONGeometryType | 'collection';
+// Define all possible geometry types from GeoJSON
+const createGeoJSONTypes = () => {
+  const types: Record<GeoJSONGeometryType, GeoJSONGeometryType> = {
+    Point: 'Point',
+    MultiPoint: 'MultiPoint',
+    LineString: 'LineString',
+    MultiLineString: 'MultiLineString',
+    Polygon: 'Polygon',
+    MultiPolygon: 'MultiPolygon',
+    GeometryCollection: 'GeometryCollection',
+  };
+  return types;
+};
+
+export const FeatureType = {
+  // GeoJSON types
+  ...createGeoJSONTypes(),
+
+  // Asset types
+  ...AssetType,
+
+  // Collection type (i.e., more than 1 asset;
+  // not used/created in frontend but possible to create using Geoapi)
+  Collection: 'collection',
+} as const;
+
+export type FeatureType = (typeof FeatureType)[keyof typeof FeatureType];
 
 export type FeatureTypeNullable = FeatureType | undefined;
 
@@ -30,7 +57,18 @@ export interface Asset {
 }
 
 /**
- * Geoapi feature which is a GeoJSON Feature object with additional `id`, `project_id`, `properties`, `styles`, and `assets` properties.
+ * A GeoAPI Feature extends a GeoJSON Feature with some additions.
+ *
+ * From GeoJSON standard (https://geojson.org/):
+ * • type
+ * • geometry
+ * * properties
+ *
+ * Additons for GeoAPI/hazmapper:
+ * • id
+ * • project_id
+ * • styles
+ * • assets
  */
 export interface Feature {
   /**
@@ -68,11 +106,11 @@ export interface Feature {
  */
 export function getFeatureType(feature: Feature): FeatureType {
   if (feature.assets.length === 1) {
-    /* If there is only one asset, returns the type of that asset (i.e. "image", "video", "point_cloud", or "streetview".)*/
+    /* If there is only one asset, returns the type of that asset (i.e. AssetType: "image", "video", "point_cloud", or "streetview".)*/
     return feature.assets[0].asset_type;
   } else if (feature.assets.length > 1) {
     /* multiple assets */
-    return 'collection';
+    return FeatureType.Collection;
   } else {
     /* else we rely on geojson geometry type */
     return feature.geometry.type;
