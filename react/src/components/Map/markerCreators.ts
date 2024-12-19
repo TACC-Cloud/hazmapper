@@ -18,7 +18,7 @@ const defaultConfig = {
   clusterFontSize: 14,
 };
 
-const createCircleMarker = (customStyle = {}) => {
+const _createCircleMarker = (customStyle = {}) => {
   const style = {
     radius: 8,
     fillColor: defaultConfig.fillColor,
@@ -54,7 +54,7 @@ const createCircleMarker = (customStyle = {}) => {
   });
 };
 
-const createIconMarker = (
+const _createIconMarker = (
   iconClass,
   customStyle: {
     color?: string;
@@ -91,7 +91,7 @@ const createIconMarker = (
   });
 };
 
-const createFeatureTypeMarker = (featureType) => {
+const _createFeatureTypeMarker = (featureType) => {
   const icon = featureTypeToIcon(featureType);
   const iconPath = icon.icon[4];
   const viewBoxWidth = icon.icon[0];
@@ -152,15 +152,15 @@ export const createMarkerIcon = (feature) => {
   const customStyle = feature.properties?.style;
   if (customStyle) {
     if (customStyle.faIcon) {
-      return createIconMarker(customStyle.faIcon, customStyle);
+      return _createIconMarker(customStyle.faIcon, customStyle);
     }
-    return createCircleMarker(customStyle);
+    return _createCircleMarker(customStyle);
   }
 
   const featureType = getFeatureType(feature);
   if (featureType === FeatureType.Point) {
-    return createCircleMarker();
+    return _createCircleMarker();
   }
 
-  return createFeatureTypeMarker(featureType);
+  return _createFeatureTypeMarker(featureType);
 };
