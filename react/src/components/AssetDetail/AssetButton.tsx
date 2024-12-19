@@ -9,6 +9,7 @@ type AssetButtonProps = {
   featureSource: string;
   isPublicView: boolean;
 };
+
 const AssetButton: React.FC<AssetButtonProps> = ({
   selectedFeature,
   featureSource,
@@ -21,27 +22,23 @@ const AssetButton: React.FC<AssetButtonProps> = ({
     return <Button /*TODO add Download*/ type="primary">Download</Button>;
   }
 
-  if (fileType === 'point_cloud') {
-    return (
-      <>
+  return (
+    <>
+      {fileType === 'point_cloud' && (
         <a href={pointCloudURL} target="_blank" rel="noreferrer">
           <Button type="primary">View</Button>
         </a>
-      </>
-    );
-  }
-  if (fileType === 'questionnaire') {
-    //TODO
-    return <Button type="primary">View</Button>;
-  }
-  if (fileType.includes(selectedFeature.geometry.type)) {
-    if (isPublicView) {
-      //TODO
-      return <Button type="primary">Add Asset from DesignSafe</Button>;
-    }
-  } else {
-    return null;
-  }
+      )}
+      {fileType === 'questionnaire' && (
+        //TODO
+        <Button type="primary">View</Button>
+      )}
+      {fileType.includes(selectedFeature.geometry.type) && isPublicView && (
+        //TODO
+        <Button type="primary">Add Asset from DesignSafe</Button>
+      )}
+    </>
+  );
 };
 
 export default AssetButton;
