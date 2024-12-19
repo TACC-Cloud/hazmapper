@@ -86,17 +86,112 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
     [selectedFeatureId]
   );
 
+  /*
+   * move to module.css
+   * circle marker for points
+   * create custom icon marker
+   * create circle icon marker with style
+   */
   const createCustomIcon = useCallback((feature: Feature) => {
-    const featureFAIcon = featureTypeToIcon(getFeatureType(feature));
+    const defaultFillColor = 'var(--global-color-accent--normal)';
+    const createCircleIcon = (customStyle = {}) => {
+      const defaultCustomStyle = {
+        radius: 8,
+        fillColor: defaultFillColor,
+        color: 'black',
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8,
+      };
+
+      const style = { ...defaultCustomStyle, ...customStyle };
+
+      // Add padding for the stroke
+      const padding = style.weight;
+      const totalSize = style.radius * 2 + padding * 2;
+      const center = totalSize / 2;
+
+      return L.divIcon({
+        html: `
+          <svg height="${totalSize}" width="${totalSize}">
+            <circle 
+              cx="${center}"
+              cy="${center}"
+              r="${style.radius}"
+              fill="${style.fillColor}"
+              fill-opacity="${style.fillOpacity}"
+              stroke="${style.color}"
+              stroke-width="${style.weight}"
+              stroke-opacity="${style.opacity}"
+            />
+          </svg>
+        `,
+        className: '',
+        iconSize: [totalSize, totalSize],
+        iconAnchor: [center, center],
+      });
+    };
+
+    const createFontAwesomeIcon = (
+      faIconString: string,
+      customStyle: { color?: string; backgroundColor?: string } = {}
+    ) => {
+      const color = customStyle?.color ?? defaultFillColor;
+      const backgroundColor = customStyle?.backgroundColor ?? '#ffffff';
+
+      const divHtml = `
+        <div style="
+          background-color: ${backgroundColor};
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+          border: 2px solid white;
+        ">
+          <i class="fas ${faIconString}" style="
+            color: ${color};
+            font-size: 20px;
+          "></i>
+        </div>
+      `;
+
+      return L.divIcon({
+        html: divHtml,
+        className: 'custom-marker',
+        iconSize: [40, 40],
+        iconAnchor: [20, 20],
+      });
+    };
+
+    const customStyle = feature.properties?.style;
+    if (customStyle) {
+      if (customStyle.faIcon) {
+        return createFontAwesomeIcon(customStyle.faIcon, customStyle);
+      } else {
+        return createCircleIcon(customStyle);
+      }
+    }
+
+    const featureType = getFeatureType(feature);
+
+    if (featureType === FeatureType.Point) {
+      return createCircleIcon();
+    }
+
+    const featureFAIcon = featureTypeToIcon(featureType);
+
     // Get SVG path directly from the icon object
     const iconPath = featureFAIcon.icon[4];
 
     return L.divIcon({
       html: `
           <div style="
-            background-color: #3498db;
-            width: 40px;
-            height: 40px;
+            background-color: #ffffff;
+            width: 32px;
+            height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -106,7 +201,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
           ">
             <svg
               viewBox="0 0 ${featureFAIcon.icon[0]} ${featureFAIcon.icon[1]}"
-              style="width: 20px; height: 20px; fill: white;"
+              style="width: 20px; height: 20px; fill: ${defaultFillColor};"
             >
               <path d="${iconPath}"></path>
             </svg>
@@ -143,10 +238,10 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
   } = useMemo(() => {
     return featureCollection.features.reduce<FeatureAccumulator>(
       (accumulator, feature: Feature) => {
-        if (feature.geometry.type === 'Point') {
+        if (feature.geometry.type === FeatureType.Point) {
           accumulator.markerFeatures.push(feature);
         } else {
-          if (getFeatureType(feature) === 'point_cloud') {
+          if (getFeatureType(feature) === FeatureType.PointCloud) {
             // Add a marker at the calculated position
             const markerPosition = calculatePointCloudMarkerPosition(
               feature.geometry
