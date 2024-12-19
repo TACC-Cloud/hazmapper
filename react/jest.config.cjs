@@ -8,6 +8,7 @@ const esModules = [
   'react-leaflet',
   '@tacc/core-components',
   'uuid',
+  'react-leaflet-markercluster',
 ].join('|');
 
 module.exports = {
@@ -204,7 +205,10 @@ module.exports = {
   // timers: "real",
 
   // A map from regular expressions to paths to transformers
-  transform: { '^.+\\.(js|jsx|mjs)?$': 'babel-jest' },
+  transform: {
+    '^.+\\.(js|jsx|mjs)?$': 'babel-jest',
+    '^.+\\.css$': 'jest-transform-stub',
+  },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   transformIgnorePatterns: [`/node_modules/(?!(${esModules}))`],

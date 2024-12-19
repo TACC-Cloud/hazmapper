@@ -13,15 +13,6 @@
   height: 100vh;
 }
 
-.topNavbar {
-  background-color: black;
-  color: white;
-  height: var(--hazmapper-header-navbar-height);
-  min-height: var(--hazmapper-header-navbar-height);
-  display: flex;
-  align-items: center;
-}
-
 .mapControlBar {
   background-color: white;
   height: var(--hazmapper-control-bar-height);

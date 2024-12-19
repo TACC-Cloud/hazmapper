@@ -1,6 +1,9 @@
-import React from 'react';
-import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
+import { useQueryClient } from 'react-query';
+
+import { Message, LoadingSpinner } from '@tacc/core-components';
+
 import Map from '@hazmapper/components/Map';
 import AssetsPanel from '@hazmapper/components/AssetsPanel';
 import AssetDetail from '@hazmapper/components/AssetDetail';
@@ -11,15 +14,14 @@ import {
   useProject,
   useTileServers,
   useFeatureSelection,
+  KEY_USE_FEATURES,
 } from '@hazmapper/hooks';
-import { useParams } from 'react-router-dom';
-import styles from './MapProject.module.css';
 import MapProjectNavBar from '@hazmapper/components/MapProjectNavBar';
 import Filters from '@hazmapper/components/FiltersPanel/Filter';
 import { assetTypeOptions } from '@hazmapper/components/FiltersPanel/Filter';
 import { Project } from '@hazmapper/types';
-import { Message, LoadingSpinner } from '@tacc/core-components';
 import HeaderNavBar from '@hazmapper/components/HeaderNavBar';
+import styles from './MapProject.module.css';
 
 interface MapProjectProps {
   /**
@@ -34,6 +36,7 @@ interface MapProjectProps {
  */
 const MapProject: React.FC<MapProjectProps> = ({ isPublicView = false }) => {
   const { projectUUID } = useParams();
+  const queryClient = useQueryClient();
 
   const {
     data: activeProject,
@@ -44,6 +47,14 @@ const MapProject: React.FC<MapProjectProps> = ({ isPublicView = false }) => {
     isPublicView,
     options: { enabled: !!projectUUID },
   });
+
+  // Clear feature queries when changing projects to prevent stale features from
+  // briefly appearing and causing incorrect map bounds/zoom during navigation
+  useEffect(() => {
+    return () => {
+      queryClient.removeQueries([KEY_USE_FEATURES]);
+    };
+  }, [projectUUID, queryClient]);
 
   if (isLoading) {
     /* TODO_REACT show error and improve spinner https://tacc-main.atlassian.net/browse/WG-260*/
@@ -162,7 +173,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     <div className={styles.root}>
       <HeaderNavBar />
       <div className={styles.mapControlBar}>
-        MapTopControlBar
+        MapTopControlBar TODO https://tacc-main.atlassian.net/browse/WG-260
         {loading && <div> loading</div>}
       </div>
       <div className={styles.container}>
