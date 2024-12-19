@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
 
 import { Message, LoadingSpinner } from '@tacc/core-components';

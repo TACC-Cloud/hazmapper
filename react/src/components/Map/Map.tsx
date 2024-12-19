@@ -23,7 +23,6 @@ import { MAP_CONFIG } from './config';
 import FitBoundsHandler from './FitBoundsHandler';
 import { calculatePointCloudMarkerPosition } from './utils';
 import styles from './Map.module.css';
-import './Map.css';
 
 import 'leaflet/dist/leaflet.css';
 import 'react-leaflet-markercluster/styles';
@@ -55,12 +54,10 @@ const getFeatureStyle = (feature: any) => {
   return feature.properties?.style || defaultGeoJsonOptions.style;
 };
 
-// NOTE: iconCreateFunction being run by leaflet, which is not support ES6 arrow func syntax
-// eslint-disable-next-line
-const createClusterCustomIcon = function (cluster: MarkerCluster) {
+const createClusterCustomIcon = (cluster: MarkerCluster) => {
   return L.divIcon({
     html: `<span>${cluster.getChildCount()}</span>`,
-    className: 'custom-marker-cluster',
+    className: styles.customMarkerCluster,
     iconSize: L.point(25, 25, true),
   });
 };
@@ -98,7 +95,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
       const defaultCustomStyle = {
         radius: 8,
         fillColor: defaultFillColor,
-        color: 'black',
+        color: 'white',
         weight: 1,
         opacity: 1,
         fillOpacity: 0.8,
@@ -160,7 +157,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
 
       return L.divIcon({
         html: divHtml,
-        className: 'custom-marker',
+        className: styles.customMarker,
         iconSize: [40, 40],
         iconAnchor: [20, 20],
       });
@@ -207,7 +204,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
             </svg>
           </div>
         `,
-      className: 'custom-marker',
+      className: styles.customMarker,
       iconSize: L.point(40, 40),
       iconAnchor: L.point(20, 20),
     });

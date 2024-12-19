@@ -1,0 +1,17 @@
+.customMarkerCluster {
+  color: #ffffff;
+  background: var(--global-color-accent--normal);
+
+  border: 3px solid #ffffff;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  border-radius: 50%;
+  line-height: 15px;
+
+  justify-content: center;
+  font: 14px var(--global-font-family--sans);
+}
+
+.customMarker {
+}
