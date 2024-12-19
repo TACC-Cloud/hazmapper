@@ -48,7 +48,7 @@ export const useAppConfiguration = (): AppConfiguration => {
         basePath: basePath,
         geoapiUrl: getGeoapiUrl(GeoapiBackendEnvironment.Staging),
         designsafePortalUrl: getDesignsafePortalUrl(
-          DesignSafePortalEnvironment.Dev
+          DesignSafePortalEnvironment.PPRD
         ),
         tapisUrl: 'https://designsafe.tapis.io',
         mapillary: mapillaryConfig,
@@ -69,7 +69,7 @@ export const useAppConfiguration = (): AppConfiguration => {
         basePath: basePath,
         geoapiUrl: getGeoapiUrl(GeoapiBackendEnvironment.Dev),
         designsafePortalUrl: getDesignsafePortalUrl(
-          DesignSafePortalEnvironment.Dev
+          DesignSafePortalEnvironment.PPRD
         ),
         tapisUrl: 'https://designsafe.tapis.io',
         mapillary: mapillaryConfig,

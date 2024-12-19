@@ -38,8 +38,8 @@ export class EnvService {
       return 'https://www.designsafe-ci.org';
     } else if (backend === DesignSafeEnvironmentType.Next) {
       return 'https://designsafeci-next.tacc.utexas.edu';
-    } else if (backend === DesignSafeEnvironmentType.Dev) {
-      return 'https://designsafeci-dev.tacc.utexas.edu';
+    } else if (backend === DesignSafeEnvironmentType.PPRD) {
+      return 'https://pprd.designsafe-ci.org';
     } else {
       throw new Error('Unsupported DS environment');
     }
@@ -146,7 +146,7 @@ export class EnvService {
       this._env = EnvironmentType.Staging;
       this._apiUrl = this.getApiUrl(this.env);
       this._taggitUrl = origin + '/taggit-staging';
-      this._designSafePortalUrl = this.getDesignSafePortalUrl(DesignSafeEnvironmentType.Dev);
+      this._designSafePortalUrl = this.getDesignSafePortalUrl(DesignSafeEnvironmentType.PPRD);
       this._clientId = 'hazmapper.staging';
       this._baseHref = '/staging/';
       this._streetviewEnv.secrets = {
@@ -164,7 +164,7 @@ export class EnvService {
       this._env = EnvironmentType.Dev;
       this._apiUrl = this.getApiUrl(this.env);
       this._taggitUrl = origin + '/taggit-dev';
-      this._designSafePortalUrl = this.getDesignSafePortalUrl(DesignSafeEnvironmentType.Dev);
+      this._designSafePortalUrl = this.getDesignSafePortalUrl(DesignSafeEnvironmentType.PPRD);
       this._clientId = 'hazmapper.dev';
       this._baseHref = '/dev/';
       this._streetviewEnv.secrets = {

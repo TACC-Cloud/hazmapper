@@ -20,7 +20,7 @@ export const getLocalAppConfiguration = (
     basePath: basePath,
     geoapiUrl: getGeoapiUrl(localDevelopmentConfiguration.geoapiBackend),
     designsafePortalUrl: getDesignsafePortalUrl(
-      DesignSafePortalEnvironment.Dev
+      DesignSafePortalEnvironment.PPRD
     ),
     tapisUrl: 'https://designsafe.tapis.io',
     mapillary: mapillaryConfig,

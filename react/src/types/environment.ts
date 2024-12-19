@@ -14,7 +14,7 @@ export enum GeoapiBackendEnvironment {
  */
 export enum DesignSafePortalEnvironment {
   Production = 'production' /* https://www.designsafe-ci.org/ */,
-  Dev = 'dev' /* https://designsafeci-dev.tacc.utexas.edu/ This dev is comparable to Geoapi's staging */,
+  PPRD = 'PPRD' /* https://pprd.designsafe-ci.org;  This is comparable to Geoapi's staging. */,
   Next = 'experimental' /* https://designsafeci-next.tacc.utexas.edu/ */,
   Local = 'local' /* not supported but would be designsafe.dev */,
 }
