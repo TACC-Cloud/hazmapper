@@ -9,7 +9,6 @@ import {
 } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import { TiledMapLayer } from 'react-esri-leaflet';
-import L, { MarkerCluster } from 'leaflet';
 
 import {
   TileServerLayer,
@@ -21,13 +20,11 @@ import {
 import { useFeatureSelection } from '@hazmapper/hooks';
 import { MAP_CONFIG } from './config';
 import FitBoundsHandler from './FitBoundsHandler';
+import { createMarkerIcon, createClusterIcon } from './markerCreators';
 import { calculatePointCloudMarkerPosition } from './utils';
-import styles from './Map.module.css';
 
 import 'leaflet/dist/leaflet.css';
 import 'react-leaflet-markercluster/styles';
-
-import { featureTypeToIcon } from '@hazmapper/utils/featureIconUtil';
 
 interface LeafletMapProps {
   /**
@@ -54,14 +51,6 @@ const getFeatureStyle = (feature: any) => {
   return feature.properties?.style || defaultGeoJsonOptions.style;
 };
 
-const createClusterCustomIcon = (cluster: MarkerCluster) => {
-  return L.divIcon({
-    html: `<span>${cluster.getChildCount()}</span>`,
-    className: styles.customMarkerCluster,
-    iconSize: L.point(25, 25, true),
-  });
-};
-
 /**
  * A component that displays a leaflet map of hazmapper data
  *
@@ -75,140 +64,12 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
 
   const handleFeatureClick = useCallback(
     (feature: any) => {
-      debugger;
       setSelectedFeatureId(feature.id);
 
       //TODO handle clicking on streetview https://tacc-main.atlassian.net/browse/WG-392
     },
     [selectedFeatureId]
   );
-
-  /*
-   * move to module.css
-   * circle marker for points
-   * create custom icon marker
-   * create circle icon marker with style
-   */
-  const createCustomIcon = useCallback((feature: Feature) => {
-    const defaultFillColor = 'var(--global-color-accent--normal)';
-    const createCircleIcon = (customStyle = {}) => {
-      const defaultCustomStyle = {
-        radius: 8,
-        fillColor: defaultFillColor,
-        color: 'white',
-        weight: 1,
-        opacity: 1,
-        fillOpacity: 0.8,
-      };
-
-      const style = { ...defaultCustomStyle, ...customStyle };
-
-      // Add padding for the stroke
-      const padding = style.weight;
-      const totalSize = style.radius * 2 + padding * 2;
-      const center = totalSize / 2;
-
-      return L.divIcon({
-        html: `
-          <svg height="${totalSize}" width="${totalSize}">
-            <circle 
-              cx="${center}"
-              cy="${center}"
-              r="${style.radius}"
-              fill="${style.fillColor}"
-              fill-opacity="${style.fillOpacity}"
-              stroke="${style.color}"
-              stroke-width="${style.weight}"
-              stroke-opacity="${style.opacity}"
-            />
-          </svg>
-        `,
-        className: '',
-        iconSize: [totalSize, totalSize],
-        iconAnchor: [center, center],
-      });
-    };
-
-    const createFontAwesomeIcon = (
-      faIconString: string,
-      customStyle: { color?: string; backgroundColor?: string } = {}
-    ) => {
-      const color = customStyle?.color ?? defaultFillColor;
-      const backgroundColor = customStyle?.backgroundColor ?? '#ffffff';
-
-      const divHtml = `
-        <div style="
-          background-color: ${backgroundColor};
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-          border: 2px solid white;
-        ">
-          <i class="fas ${faIconString}" style="
-            color: ${color};
-            font-size: 20px;
-          "></i>
-        </div>
-      `;
-
-      return L.divIcon({
-        html: divHtml,
-        className: styles.customMarker,
-        iconSize: [40, 40],
-        iconAnchor: [20, 20],
-      });
-    };
-
-    const customStyle = feature.properties?.style;
-    if (customStyle) {
-      if (customStyle.faIcon) {
-        return createFontAwesomeIcon(customStyle.faIcon, customStyle);
-      } else {
-        return createCircleIcon(customStyle);
-      }
-    }
-
-    const featureType = getFeatureType(feature);
-
-    if (featureType === FeatureType.Point) {
-      return createCircleIcon();
-    }
-
-    const featureFAIcon = featureTypeToIcon(featureType);
-
-    // Get SVG path directly from the icon object
-    const iconPath = featureFAIcon.icon[4];
-
-    return L.divIcon({
-      html: `
-          <div style="
-            background-color: #ffffff;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            border: 2px solid white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-          ">
-            <svg
-              viewBox="0 0 ${featureFAIcon.icon[0]} ${featureFAIcon.icon[1]}"
-              style="width: 20px; height: 20px; fill: ${defaultFillColor};"
-            >
-              <path d="${iconPath}"></path>
-            </svg>
-          </div>
-        `,
-      className: styles.customMarker,
-      iconSize: L.point(40, 40),
-      iconAnchor: L.point(20, 20),
-    });
-  }, []);
 
   const activeBaseLayers = useMemo(
     () => baseLayers.filter((layer) => layer.uiOptions.isActive),
@@ -312,7 +173,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
       {/* Marker Features with Clustering (also includes point cloud markers) */}
       <MarkerClusterGroup
         zIndexOffset={1}
-        iconCreateFunction={createClusterCustomIcon}
+        iconCreateFunction={createClusterIcon}
         chunkedLoading={true}
         animate={true}
         maxFitBoundsSelectedFeatureZoom={
@@ -328,7 +189,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
           return (
             <Marker
               key={feature.id}
-              icon={createCustomIcon(feature)}
+              icon={createMarkerIcon(feature)}
               position={[geometry.coordinates[1], geometry.coordinates[0]]}
               eventHandlers={{
                 click: () => handleFeatureClick(feature),

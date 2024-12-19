@@ -1,17 +1,26 @@
-.customMarkerCluster {
+.markerCluster {
   color: #ffffff;
   background: var(--global-color-accent--normal);
-
   border: 3px solid #ffffff;
   text-align: center;
   display: flex;
   align-items: center;
-  border-radius: 50%;
-  line-height: 15px;
-
   justify-content: center;
+  border-radius: 50%;
   font: 14px var(--global-font-family--sans);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  min-width: 25px;
+  min-height: 25px;
 }
 
-.customMarker {
+.marker {
+  border-radius: 50%;
+}
+
+.markerContainer {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
