@@ -1,7 +1,14 @@
 import React, { Suspense } from 'react';
 import _ from 'lodash';
 import { useAppConfiguration } from '@hazmapper/hooks';
-import { FeatureTypeNullable, Feature, getFeatureType } from '@hazmapper/types';
+import AssetPointCloud from './AssetPointCloud';
+import AssetButton from './AssetButton';
+import {
+  FeatureTypeNullable,
+  Feature,
+  getFeatureType,
+  FeatureType,
+} from '@hazmapper/types';
 import { FeatureIcon } from '@hazmapper/components/FeatureIcon';
 import { Button, LoadingSpinner, SectionMessage } from '@tacc/core-components';
 import styles from './AssetDetail.module.css';
@@ -23,37 +30,39 @@ const AssetDetail: React.FC<AssetModalProps> = ({
   const featureSource: string =
     geoapiUrl + '/assets/' + selectedFeature?.assets?.[0]?.path;
 
-  const fileType = getFeatureType(selectedFeature);
+  const fileType: FeatureType = getFeatureType(selectedFeature);
 
-  const AssetRenderer = React.memo(
-    ({
-      type,
-      source,
-    }: {
-      type: string | undefined;
-      source: string | undefined;
-    }) => {
-      switch (type) {
-        case 'image':
-          return <img src={source} alt="Asset" loading="lazy" />;
-        case 'video':
+  const isGeometry = (fileType: FeatureType): boolean => {
+    return fileType.includes(selectedFeature.geometry.type);
+  };
+
+  const AssetRenderer = () => {
+    switch (fileType) {
+      case FeatureType.Image:
+        return <img src={featureSource} alt="Asset" loading="lazy" />;
+      case FeatureType.Video:
+        return (
+          <video src={featureSource} controls preload="metadata">
+            <track kind="captions" />
+          </video>
+        );
+      case FeatureType.PointCloud:
+        return <AssetPointCloud featureSource={featureSource} />;
+      case FeatureType.Questionnaire:
+        /*TODO Add questionnaire */
+        return <div> source={featureSource}</div>;
+      case FeatureType.GeometryCollection:
+      default:
+        if (isGeometry(fileType)) {
           return (
-            <video src={source} controls preload="metadata">
-              <track kind="captions" />
-            </video>
+            <SectionMessage type="info">
+              This feature has no asset.
+            </SectionMessage>
           );
-        case 'point_cloud':
-          /*TODO Add pointcloud */
-          return <div> source={source}</div>;
-        case 'questionnaire':
-          /*TODO Add questionnaire */
-          return <div> source={source}</div>;
-        default:
-          return null;
-      }
+        }
+        return <SectionMessage type="warn">Unknown asset</SectionMessage>;
     }
-  );
-  AssetRenderer.displayName = 'AssetRenderer';
+  };
 
   return (
     <div className={styles.root}>
@@ -72,25 +81,16 @@ const AssetDetail: React.FC<AssetModalProps> = ({
         <Button type="link" iconNameAfter="close" onClick={onClose}></Button>
       </div>
       <div className={styles.middleSection}>
-        {fileType ? (
-          <>
-            <Suspense fallback={<LoadingSpinner />}>
-              <div className={styles.assetContainer}>
-                <AssetRenderer type={fileType} source={featureSource} />
-              </div>
-            </Suspense>
-            <Button /*TODO Download Action */>Download</Button>
-          </>
-        ) : (
-          <>
-            <SectionMessage type="info">Feature has no asset.</SectionMessage>
-            {!isPublicView && (
-              <Button type="primary" /* TODO Add asset to a feature */>
-                Add asset from DesignSafe
-              </Button>
-            )}
-          </>
-        )}
+        <Suspense fallback={<LoadingSpinner />}>
+          <div className={styles.assetContainer}>
+            <AssetRenderer />
+          </div>
+          <AssetButton
+            selectedFeature={selectedFeature}
+            featureSource={featureSource}
+            isPublicView={isPublicView}
+          />
+        </Suspense>
       </div>
       <div className={styles.bottomSection}>
         <div className={styles.metadataTable}>
