@@ -1,13 +1,13 @@
 import React from 'react';
 import _ from 'lodash';
 import * as turf from '@turf/turf';
-import { Feature } from '@hazmapper/types';
+import { Feature, FeatureType, getFeatureType } from '@hazmapper/types';
 
-interface GeometryAssetProps {
+interface AssetGeometryProps {
   selectedFeature: Feature;
 }
 
-const GeometryAsset: React.FC<GeometryAssetProps> = ({ selectedFeature }) => {
+const AssetGeometry: React.FC<AssetGeometryProps> = ({ selectedFeature }) => {
   if (!selectedFeature?.geometry) return null;
 
   const bbox =
@@ -15,9 +15,11 @@ const GeometryAsset: React.FC<GeometryAssetProps> = ({ selectedFeature }) => {
       ? turf.bbox(selectedFeature)
       : null;
 
+  const geometryType: FeatureType = getFeatureType(selectedFeature);
+
   return (
     <>
-      {selectedFeature.geometry.type === 'Point' && (
+      {geometryType === FeatureType.Point && (
         <table>
           <thead>
             <tr>
@@ -29,17 +31,17 @@ const GeometryAsset: React.FC<GeometryAssetProps> = ({ selectedFeature }) => {
           <tbody>
             <tr>
               <td>Latitude</td>
-              <td>{selectedFeature.geometry.coordinates[0]}</td>
+              <td>{turf.bbox(selectedFeature.geometry)[0]}</td>
             </tr>
             <tr>
               <td>Longitude</td>
-              <td>{selectedFeature.geometry.coordinates[1]}</td>
+              <td>{turf.bbox(selectedFeature.geometry)[1]}</td>
             </tr>
           </tbody>
         </table>
       )}
-      {(selectedFeature.geometry.type === 'Polygon' ||
-        selectedFeature.geometry.type === 'MultiPolygon') && (
+      {(geometryType === FeatureType.Polygon ||
+        geometryType === FeatureType.MultiPolygon) && (
         <table>
           <thead>
             <tr>
@@ -56,8 +58,8 @@ const GeometryAsset: React.FC<GeometryAssetProps> = ({ selectedFeature }) => {
           </tbody>
         </table>
       )}
-      {(selectedFeature.geometry.type === 'LineString' ||
-        selectedFeature.geometry.type === 'MultiLineString') && (
+      {(geometryType === FeatureType.LineString ||
+        geometryType === FeatureType.MultiLineString) && (
         <table>
           <thead>
             <tr>
@@ -74,7 +76,7 @@ const GeometryAsset: React.FC<GeometryAssetProps> = ({ selectedFeature }) => {
           </tbody>
         </table>
       )}
-      {selectedFeature.geometry.type !== 'Point' && bbox && (
+      {geometryType !== FeatureType.Point && bbox && (
         <table>
           <thead>
             {selectedFeature.geometry.type === 'GeometryCollection' && (
@@ -113,4 +115,4 @@ const GeometryAsset: React.FC<GeometryAssetProps> = ({ selectedFeature }) => {
   );
 };
 
-export default GeometryAsset;
+export default AssetGeometry;
