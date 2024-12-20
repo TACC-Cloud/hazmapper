@@ -24,13 +24,13 @@ export const useFeatures = ({
     endpoint += `?assetType=${assetTypes.join(',')}`;
   }
 
-  /* Expensive to fetch and process so we only fetch when updated */
   const defaultQueryOptions = {
-    staleTime: Infinity,
-    cacheTime: Infinity,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
+    /* Expensive to fetch and process so we only fetch when updated */
+    staleTime: Infinity /* "" */,
+    cacheTime: Infinity /* "" */,
+    refetchOnWindowFocus: false /* "" */,
+    refetchOnMount: false /* "" */,
+    refetchOnReconnect: false /* "" */,
   };
 
   const query = useGet<FeatureCollection>({

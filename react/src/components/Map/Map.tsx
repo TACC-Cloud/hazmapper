@@ -1,29 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import {
   MapContainer,
   ZoomControl,
   Marker,
-  Popup,
   TileLayer,
   WMSTileLayer,
-  useMap,
+  GeoJSON,
 } from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-markercluster';
 import { TiledMapLayer } from 'react-esri-leaflet';
-import MarkerClusterGroup from '@changey/react-leaflet-markercluster';
-import { TileServerLayer, FeatureCollection } from '@hazmapper/types';
-import * as L from 'leaflet';
-import * as turf from '@turf/turf';
-import { LatLngTuple, MarkerCluster } from 'leaflet';
-import 'leaflet.markercluster';
+
+import {
+  TileServerLayer,
+  FeatureCollection,
+  Feature,
+  getFeatureType,
+  FeatureType,
+} from '@hazmapper/types';
+import { useFeatureSelection } from '@hazmapper/hooks';
+import { MAP_CONFIG } from './config';
+import FitBoundsHandler from './FitBoundsHandler';
+import { createMarkerIcon, createClusterIcon } from './markerCreators';
+import { calculatePointCloudMarkerPosition } from './utils';
 
 import 'leaflet/dist/leaflet.css';
-
-const startingCenterPosition: LatLngTuple = [40, -80];
-const maxFitToBoundsZoom = 18;
-const maxBounds: L.LatLngBoundsExpression = [
-  [-90, -180], // Southwest coordinates
-  [90, 180], // Northeast coordinates
-];
+import 'react-leaflet-markercluster/styles';
 
 interface LeafletMapProps {
   /**
@@ -37,30 +38,17 @@ interface LeafletMapProps {
   featureCollection: FeatureCollection;
 }
 
-const ClusterMarkerIcon = (childCount: number) => {
-  return L.divIcon({
-    html: `<div><b>${childCount}</b></div>`,
-    className: 'marker-cluster',
-  });
+const defaultGeoJsonOptions = {
+  style: {
+    color: '#3388ff',
+    weight: 3,
+    opacity: 1,
+    fillOpacity: 0.2,
+  },
 };
 
-const FitBoundsOnInitialLoad = ({
-  featureCollection,
-}: {
-  featureCollection: FeatureCollection;
-}) => {
-  const map = useMap();
-
-  useEffect(() => {
-    if (featureCollection.features.length) {
-      const bbox = turf.bbox(featureCollection);
-      const southWest: [number, number] = [bbox[1], bbox[0]];
-      const northEast: [number, number] = [bbox[3], bbox[2]];
-      map.fitBounds([southWest, northEast], { maxZoom: maxFitToBoundsZoom });
-    }
-  }, [map, featureCollection]);
-
-  return null;
+const getFeatureStyle = (feature: any) => {
+  return feature.properties?.style || defaultGeoJsonOptions.style;
 };
 
 /**
@@ -69,26 +57,83 @@ const FitBoundsOnInitialLoad = ({
  * Note this is not called Map as causes an issue with react-leaflet
  */
 const LeafletMap: React.FC<LeafletMapProps> = ({
-  baseLayers,
+  baseLayers = [],
   featureCollection,
 }) => {
-  const activeBaseLayers = baseLayers?.filter(
-    (layer) => layer.uiOptions.isActive
+  const { selectedFeatureId, setSelectedFeatureId } = useFeatureSelection();
+
+  const handleFeatureClick = useCallback(
+    (feature: any) => {
+      setSelectedFeatureId(feature.id);
+
+      //TODO handle clicking on streetview https://tacc-main.atlassian.net/browse/WG-392
+    },
+    [selectedFeatureId]
   );
 
-  const pointGeometryFeatures = featureCollection.features.filter(
-    (f) => f.geometry.type === 'Point'
+  const activeBaseLayers = useMemo(
+    () => baseLayers.filter((layer) => layer.uiOptions.isActive),
+    [baseLayers]
   );
+  interface FeatureAccumulator {
+    generalGeoJsonFeatures: Feature[] /* non-point features, includes point cloud outlines */;
+    markerFeatures: Feature[];
+    streetviewFeatures: Feature[];
+  }
+
+  // Initial accumulator state
+  const initialAccumulator: FeatureAccumulator = {
+    generalGeoJsonFeatures: [],
+    markerFeatures: [],
+    streetviewFeatures: [],
+  };
+
+  const {
+    generalGeoJsonFeatures,
+    markerFeatures,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    streetviewFeatures /* Add streetview support https://tacc-main.atlassian.net/browse/WG-392 */,
+  } = useMemo(() => {
+    return featureCollection.features.reduce<FeatureAccumulator>(
+      (accumulator, feature: Feature) => {
+        if (feature.geometry.type === FeatureType.Point) {
+          accumulator.markerFeatures.push(feature);
+        } else {
+          if (getFeatureType(feature) === FeatureType.PointCloud) {
+            // Add a marker at the calculated position
+            const markerPosition = calculatePointCloudMarkerPosition(
+              feature.geometry
+            );
+            const pointCloudMarker: Feature = {
+              ...feature,
+              geometry: {
+                type: 'Point',
+                coordinates: [markerPosition.lng, markerPosition.lat],
+              },
+            };
+
+            accumulator.markerFeatures.push(pointCloudMarker);
+            // Also keep the original geometry for rendering
+            accumulator.generalGeoJsonFeatures.push(feature);
+          } else {
+            accumulator.generalGeoJsonFeatures.push(feature);
+          }
+        }
+        return accumulator;
+      },
+      initialAccumulator
+    );
+  }, [featureCollection.features]);
 
   return (
     <MapContainer
-      center={startingCenterPosition}
+      center={MAP_CONFIG.startingCenter}
       zoom={3}
       style={{ width: '100%', height: '100%' }}
       zoomControl={false}
-      minZoom={2} // 2 typically prevents zooming out too far to see multiple earths
-      maxZoom={24}
-      maxBounds={maxBounds}
+      minZoom={MAP_CONFIG.minZoom}
+      maxZoom={MAP_CONFIG.maxZoom}
+      maxBounds={MAP_CONFIG.maxBounds}
     >
       {activeBaseLayers?.map((layer) =>
         layer.type === 'wms' ? (
@@ -113,25 +158,49 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
           />
         )
       )}
+      {/* General GeoJSON Features (including point cloud geometries) */}
+      {generalGeoJsonFeatures.map((feature) => (
+        <GeoJSON
+          key={feature.id}
+          data={feature.geometry}
+          style={() => getFeatureStyle(feature)}
+          eventHandlers={{
+            click: () => handleFeatureClick(feature),
+            contextmenu: () => handleFeatureClick(feature),
+          }}
+        />
+      ))}
+      {/* Marker Features with Clustering (also includes point cloud markers) */}
       <MarkerClusterGroup
-        iconCreateFunction={(cluster: MarkerCluster) =>
-          ClusterMarkerIcon(cluster.getChildCount())
+        zIndexOffset={1}
+        iconCreateFunction={createClusterIcon}
+        chunkedLoading={true}
+        animate={true}
+        maxFitBoundsSelectedFeatureZoom={
+          MAP_CONFIG.maxFitBoundsSelectedFeatureZoom
         }
+        spiderifyOnHover={true}
+        spiderfyOnMaxZoom={true}
+        spiderfyOnZoom={MAP_CONFIG.maxPointSelectedFeatureZoom}
+        zoomToBoundsOnClick={true}
       >
-        {pointGeometryFeatures.map((f) => {
-          const geometry = f.geometry as GeoJSON.Point;
-
+        {markerFeatures.map((feature) => {
+          const geometry = feature.geometry as GeoJSON.Point;
           return (
             <Marker
-              key={f.id}
+              key={feature.id}
+              icon={createMarkerIcon(feature)}
               position={[geometry.coordinates[1], geometry.coordinates[0]]}
-            >
-              <Popup>{f.id}</Popup>
-            </Marker>
+              eventHandlers={{
+                click: () => handleFeatureClick(feature),
+                contextmenu: () => handleFeatureClick(feature),
+              }}
+            />
           );
         })}
       </MarkerClusterGroup>
-      <FitBoundsOnInitialLoad featureCollection={featureCollection} />
+      {/* Handles zooming to a specific feature or to all features */}
+      <FitBoundsHandler featureCollection={featureCollection} />
       <ZoomControl position="bottomright" />
     </MapContainer>
   );
