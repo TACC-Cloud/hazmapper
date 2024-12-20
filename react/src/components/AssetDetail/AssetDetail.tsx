@@ -3,7 +3,12 @@ import _ from 'lodash';
 import { useAppConfiguration } from '@hazmapper/hooks';
 import AssetPointCloud from './AssetPointCloud';
 import AssetButton from './AssetButton';
-import { FeatureTypeNullable, Feature, getFeatureType } from '@hazmapper/types';
+import {
+  FeatureTypeNullable,
+  Feature,
+  getFeatureType,
+  FeatureType,
+} from '@hazmapper/types';
 import { FeatureIcon } from '@hazmapper/components/FeatureIcon';
 import { Button, LoadingSpinner, SectionMessage } from '@tacc/core-components';
 import styles from './AssetDetail.module.css';
@@ -25,29 +30,37 @@ const AssetDetail: React.FC<AssetModalProps> = ({
   const featureSource: string =
     geoapiUrl + '/assets/' + selectedFeature?.assets?.[0]?.path;
 
-  const fileType = getFeatureType(selectedFeature);
+  const fileType: FeatureType = getFeatureType(selectedFeature);
+
+  const isGeometry = (fileType: FeatureType): boolean => {
+    return fileType.includes(selectedFeature.geometry.type);
+  };
 
   const AssetRenderer = () => {
     switch (fileType) {
-      case 'image':
+      case FeatureType.Image:
         return <img src={featureSource} alt="Asset" loading="lazy" />;
-      case 'video':
+      case FeatureType.Video:
         return (
           <video src={featureSource} controls preload="metadata">
             <track kind="captions" />
           </video>
         );
-      case 'point_cloud':
+      case FeatureType.PointCloud:
         return <AssetPointCloud featureSource={featureSource} />;
-      case 'questionnaire':
+      case FeatureType.Questionnaire:
         /*TODO Add questionnaire */
         return <div> source={featureSource}</div>;
+      case FeatureType.GeometryCollection:
       default:
-        return (
-          <SectionMessage type="info">
-            This feature has no asset.
-          </SectionMessage>
-        );
+        if (isGeometry(fileType)) {
+          return (
+            <SectionMessage type="info">
+              This feature has no asset.
+            </SectionMessage>
+          );
+        }
+        return <SectionMessage type="warn">Unknown asset</SectionMessage>;
     }
   };
 
