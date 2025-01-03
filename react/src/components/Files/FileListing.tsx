@@ -1,25 +1,33 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { ReactNode, useCallback, useEffect } from 'react';
 import {
   ChonkyFileActionData,
-  FileBrowser,
+  FileBrowser as F,
   FileData,
   FileNavbar,
   FileList,
   ChonkyActions,
+  FileBrowserProps,
+  FileBrowserHandle,
 } from 'chonky';
 import { Icon } from '@tacc/core-components';
 import { SystemSelect } from '../Systems';
 import styles from './FileListing.module.css';
-import { useFiles } from '../../hooks/files/useFiles';
 import {
   useAuthenticatedUser,
   useProjectsWithDesignSafeInformation,
   useSystems,
+  useFiles,
 } from '../../hooks';
 import { File, System } from '../../types';
+import { serializeToChonkyFile } from '../../utils/fileUtils';
 
-// preventing typescript warnings
-const _FileBrowser = FileBrowser as any;
+const FileBrowser = F as React.MemoExoticComponent<
+  React.ForwardRefExoticComponent<
+    FileBrowserProps & {
+      children?: ReactNode;
+    } & React.RefAttributes<FileBrowserHandle>
+  >
+>;
 
 interface FileListingProps {
   disableSelection: boolean;
@@ -28,22 +36,6 @@ interface FileListingProps {
   onFolderSelect?: (folder: string) => void;
   allowedFileExtensions?: string[];
 }
-
-const serializeToChonkyFile = (
-  file: File,
-  allowedFileExtensions: string[]
-): FileData => ({
-  id: file.path,
-  name: file.name,
-  size: file.length,
-  modDate: file.lastModified,
-  isDir: file.type === 'dir',
-  ext: file.type !== 'dir' ? file.name.split('.').pop() : undefined,
-  icon: file.type === 'dir' ? 'folder' : 'file',
-  selectable:
-    file.type === 'dir' ||
-    allowedFileExtensions.includes(file.name.split('.').pop() || ''),
-});
 
 export const FileListing: React.FC<FileListingProps> = ({
   disableSelection,
@@ -85,7 +77,7 @@ export const FileListing: React.FC<FileListingProps> = ({
     if (!selectedSystem && myDataSystem) {
       setSelectedSystem(myDataSystem || systems[0]);
     }
-  }, [selectedSystem, systems, myDataSystem]);
+  }, [systems, myDataSystem]);
 
   useEffect(() => {
     if (selectedSystem?.id) {
@@ -107,47 +99,6 @@ export const FileListing: React.FC<FileListingProps> = ({
 
   const FileListingIcon = (props: any) => <Icon name={props.icon} />;
 
-  const useFileActionHandler = () => {
-    return useCallback(
-      (data: ChonkyFileActionData) => {
-        if (data.id === ChonkyActions.OpenFiles.id) {
-          const file: FileData = data.payload.targetFile as FileData;
-
-          if (file.isDir) {
-            setPath(file.id);
-            setFolderChain((prev) => {
-              const index = prev.findIndex((folder) => folder.id === file.id);
-              return index === -1 ? [...prev, file] : prev.slice(0, index + 1);
-            });
-
-            onFolderSelect?.(file.id);
-          } else {
-            const selectedFile = files?.find((f) => f.path === file.id);
-            if (selectedFile) {
-              onFileSelect?.([selectedFile]);
-            }
-          }
-        } else if (data.id === ChonkyActions.MouseClickFile.id) {
-          const file: FileData = data.payload.file as FileData;
-
-          if (file.isDir) {
-            onFolderSelect?.(file.id);
-          }
-        } else if (data.id === ChonkyActions.ChangeSelection.id) {
-          const filePaths = Array.from(data.payload.selection);
-
-          setSelectedFiles(
-            files?.filter(
-              (f) => filePaths.includes(f.path) && f.type !== 'dir'
-            ) || []
-          );
-          onFileSelect?.(selectedFiles || []);
-        }
-      },
-      [chonkyFiles, files]
-    );
-  };
-
   const handleSelectChange = (system: string) => {
     setChonkyFiles(new Array(8).fill(null));
     setFolderChain([null]);
@@ -162,6 +113,7 @@ export const FileListing: React.FC<FileListingProps> = ({
     setSelectedSystem(sys);
     const rootFolder = sys.id === myDataSystem?.id ? user?.username : '/';
     setPath(rootFolder);
+
     onFolderSelect?.(rootFolder);
     let rootFolderName: string;
 
@@ -179,7 +131,44 @@ export const FileListing: React.FC<FileListingProps> = ({
     setFolderChain([{ id: rootFolder, name: rootFolderName, isDir: true }]);
   };
 
-  const handleFileAction = useFileActionHandler();
+  const handleFileAction = useCallback(
+    (data: ChonkyFileActionData) => {
+      if (data.id === ChonkyActions.OpenFiles.id) {
+        const file: FileData = data.payload.targetFile as FileData;
+
+        if (file.isDir) {
+          setPath(file.id);
+          setFolderChain((prev) => {
+            const index = prev.findIndex((folder) => folder.id === file.id);
+            return index === -1 ? [...prev, file] : prev.slice(0, index + 1);
+          });
+
+          onFolderSelect?.(file.id);
+        } else {
+          const selectedFile = files?.find((f) => f.path === file.id);
+          if (selectedFile) {
+            onFileSelect?.([selectedFile]);
+          }
+        }
+      } else if (data.id === ChonkyActions.MouseClickFile.id) {
+        const file: FileData = data.payload.file as FileData;
+
+        if (file.isDir) {
+          onFolderSelect?.(file.id);
+        }
+      } else if (data.id === ChonkyActions.ChangeSelection.id) {
+        const filePaths = Array.from(data.payload.selection);
+
+        setSelectedFiles(
+          files?.filter(
+            (f) => filePaths.includes(f.path) && f.type !== 'dir'
+          ) || []
+        );
+        onFileSelect?.(selectedFiles || []);
+      }
+    },
+    [chonkyFiles, files]
+  );
 
   if (!systems.length) {
     return <p>No systems available.</p>;
@@ -199,7 +188,7 @@ export const FileListing: React.FC<FileListingProps> = ({
         />
       </div>
       <div className={`${styles['file-browser']}`}>
-        <_FileBrowser
+        <FileBrowser
           files={chonkyFiles}
           folderChain={folderChain}
           defaultFileViewActionId={ChonkyActions.EnableListView.id}
@@ -211,7 +200,7 @@ export const FileListing: React.FC<FileListingProps> = ({
         >
           <FileNavbar />
           <FileList />
-        </_FileBrowser>
+        </FileBrowser>
       </div>
     </>
   );

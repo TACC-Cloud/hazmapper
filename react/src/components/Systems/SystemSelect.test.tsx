@@ -8,6 +8,14 @@ jest.mock('@hazmapper/hooks', () => {
     useSystems: () => {
       return {
         data: systemsFixture,
+        myDataSystem: { id: 'designsafe.storage.default' },
+        communityDataSystem: { id: 'designsafe.storage.community' },
+        publishedDataSystem: { id: 'designsafe.storage.published' },
+      };
+    },
+    useProjectsWithDesignSafeInformation: () => {
+      return {
+        data: [],
       };
     },
   };
@@ -16,9 +24,13 @@ jest.mock('@hazmapper/hooks', () => {
 describe('System Select', () => {
   const mockOnSystemSelect = jest.fn();
 
-  const renderComponent = () => {
+  const renderComponent = (showPublicSystems = true) => {
     return render(
-      <SystemSelect onSystemSelect={mockOnSystemSelect}></SystemSelect>
+      <SystemSelect
+        onSystemSelect={mockOnSystemSelect}
+        className="class-name"
+        showPublicSystems={showPublicSystems}
+      ></SystemSelect>
     );
   };
 
@@ -46,5 +58,12 @@ describe('System Select', () => {
     expect(mockOnSystemSelect).toHaveBeenCalledWith(
       'designsafe.storage.community'
     );
+  });
+
+  it('does not display public systems when showPublicSystems is false', () => {
+    renderComponent(false);
+    expect(screen.getByText('My Data')).toBeDefined();
+    expect(screen.queryByText('Community Data')).toBeNull();
+    expect(screen.queryByText('Published Data')).toBeNull();
   });
 });
