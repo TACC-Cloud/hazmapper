@@ -139,6 +139,8 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     projectId: activeProject.id,
     isPublicView,
     assetTypes: formattedAssetTypes,
+    startDate,
+    endDate,
   });
 
   const {

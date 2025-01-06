@@ -6,6 +6,8 @@ interface UseFeaturesParams {
   projectId: number;
   isPublicView: boolean;
   assetTypes: string[];
+  startDate: Date;
+  endDate: Date;
   options?: object;
 }
 
@@ -15,6 +17,8 @@ export const useFeatures = ({
   projectId,
   isPublicView,
   assetTypes,
+  startDate,
+  endDate,
   options = {},
 }: UseFeaturesParams): UseQueryResult<FeatureCollection> => {
   // TODO can be reworked as /projects can be used and /public-projects can be removed since we are no longer a WSO2 API
@@ -22,6 +26,9 @@ export const useFeatures = ({
   let endpoint = `/${featuresRoute}/${projectId}/features/`;
   if (assetTypes?.length) {
     endpoint += `?assetType=${assetTypes.join(',')}`;
+  }
+  if (startDate && endDate) {
+    endpoint += `&startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`;
   }
 
   const defaultQueryOptions = {
