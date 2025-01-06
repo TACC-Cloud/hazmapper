@@ -8,6 +8,7 @@ interface UseFeaturesParams {
   assetTypes: string[];
   startDate: Date;
   endDate: Date;
+  toggleDateFilter: boolean;
   options?: object;
 }
 
@@ -19,6 +20,7 @@ export const useFeatures = ({
   assetTypes,
   startDate,
   endDate,
+  toggleDateFilter,
   options = {},
 }: UseFeaturesParams): UseQueryResult<FeatureCollection> => {
   // TODO can be reworked as /projects can be used and /public-projects can be removed since we are no longer a WSO2 API
@@ -27,7 +29,7 @@ export const useFeatures = ({
   if (assetTypes?.length) {
     endpoint += `?assetType=${assetTypes.join(',')}`;
   }
-  if (startDate && endDate) {
+  if (startDate && endDate && toggleDateFilter) {
     endpoint += `&startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`;
   }
 
