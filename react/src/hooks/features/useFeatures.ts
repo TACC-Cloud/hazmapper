@@ -72,3 +72,34 @@ export const useCurrentFeatures = (): UseQueryResult<FeatureCollection> => {
     error: null,
   } as UseQueryResult<FeatureCollection>;
 };
+
+interface FeatureLoadingState {
+  isLoading: boolean;
+  isError: boolean;
+}
+
+/**
+ * A hook that provides the aggregated loading and error states of all active feature queries.
+ * This hook is useful for showing global loading or error states without needing to know
+ * the specific parameters of individual useFeatures calls.
+ */
+export const useFeatureLoadingState = (): FeatureLoadingState => {
+  const queryClient = useQueryClient();
+
+  // Get all active feature queries
+  const featureQueries = queryClient.getQueriesData<FeatureCollection>([
+    KEY_USE_FEATURES,
+  ]);
+
+  // Get the states for all active queries
+  const queryStates = featureQueries
+    .map(([queryKey]) => queryClient.getQueryState(queryKey))
+    .filter(Boolean);
+
+  return {
+    // If any query is loading, we're loading
+    isLoading: queryStates.some((state) => state?.status === 'loading'),
+    // If any query has an error, we have an error
+    isError: queryStates.some((state) => state?.status === 'error'),
+  };
+};
