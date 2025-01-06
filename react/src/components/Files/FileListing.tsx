@@ -1,7 +1,7 @@
 import React, { ReactNode, useCallback, useEffect } from 'react';
 import {
   ChonkyFileActionData,
-  FileBrowser as F,
+  FileBrowser,
   FileData,
   FileNavbar,
   FileList,
@@ -21,7 +21,7 @@ import {
 import { File, System } from '../../types';
 import { serializeToChonkyFile } from '../../utils/fileUtils';
 
-const FileBrowser = F as React.MemoExoticComponent<
+const _FileBrowser = FileBrowser as React.MemoExoticComponent<
   React.ForwardRefExoticComponent<
     FileBrowserProps & {
       children?: ReactNode;
@@ -188,7 +188,7 @@ export const FileListing: React.FC<FileListingProps> = ({
         />
       </div>
       <div className={`${styles['file-browser']}`}>
-        <FileBrowser
+        <_FileBrowser
           files={chonkyFiles}
           folderChain={folderChain}
           defaultFileViewActionId={ChonkyActions.EnableListView.id}
@@ -200,7 +200,7 @@ export const FileListing: React.FC<FileListingProps> = ({
         >
           <FileNavbar />
           <FileList />
-        </FileBrowser>
+        </_FileBrowser>
       </div>
     </>
   );
