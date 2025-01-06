@@ -20,6 +20,7 @@ import {
 import { useFeatureSelection } from '@hazmapper/hooks';
 import { MAP_CONFIG } from './config';
 import FitBoundsHandler from './FitBoundsHandler';
+import PositionTracker from './PositionTracker';
 import { createMarkerIcon, createClusterIcon } from './markerCreators';
 import { calculatePointCloudMarkerPosition } from './utils';
 
@@ -202,6 +203,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
       {/* Handles zooming to a specific feature or to all features */}
       <FitBoundsHandler featureCollection={featureCollection} />
       <ZoomControl position="bottomright" />
+      <PositionTracker />
     </MapContainer>
   );
 };
