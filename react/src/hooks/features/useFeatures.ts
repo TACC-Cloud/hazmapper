@@ -40,6 +40,13 @@ export const useFeatures = ({
   });
   return query;
 };
+
+/**
+ * A hook that retrieves the most recently updated feature collection from any active
+ * useFeatures queries. This hook is useful when you need access to feature data but
+ * don't know or don't want to specify the exact query parameters that were used to originally
+ * fetch it.
+ */
 export const useCurrentFeatures = (): UseQueryResult<FeatureCollection> => {
   const queryClient = useQueryClient();
   const latestQuery = queryClient
