@@ -2,6 +2,7 @@ export {
   useProjects,
   useProject,
   useProjectsWithDesignSafeInformation,
+  useDsProjects,
 } from './projects/useProjects';
 export * from './features/';
 export { useTileServers } from './tileServers/useTileServers';

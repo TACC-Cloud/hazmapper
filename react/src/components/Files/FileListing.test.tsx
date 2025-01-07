@@ -4,7 +4,7 @@ import { FileListing } from './FileListing';
 import {
   useFiles,
   useAuthenticatedUser,
-  useProjectsWithDesignSafeInformation,
+  useDsProjects,
   useSystems,
 } from '../../hooks';
 import { serializeToChonkyFile } from '../../utils/fileUtils';
@@ -16,7 +16,7 @@ jest.mock('../../hooks', () => ({
     data: [],
     refetch: jest.fn(),
   })),
-  useProjectsWithDesignSafeInformation: jest.fn(() => ({ data: [] })),
+  useDsProjects: jest.fn(() => ({ result: [] })),
   useAuthenticatedUser: jest.fn(() => ({ data: { username: 'test-user' } })),
   useSystems: jest.fn(() => ({ data: [] })),
 }));
@@ -47,8 +47,8 @@ describe('FileListing', () => {
 
   it('renders without crashing and displays "No systems available" if no systems are returned', () => {
     (useSystems as jest.Mock).mockReturnValue({ data: [], myDataSystem: null });
-    (useProjectsWithDesignSafeInformation as jest.Mock).mockReturnValue({
-      data: [{ id: 'project1', name: 'Project 1' }],
+    (useDsProjects as jest.Mock).mockReturnValue({
+      result: [],
     });
     (useAuthenticatedUser as jest.Mock).mockReturnValue({
       data: { username: 'test-user' },
@@ -70,7 +70,7 @@ describe('FileListing', () => {
       data: [],
       refetch: jest.fn(),
     });
-    (useProjectsWithDesignSafeInformation as jest.Mock).mockReturnValue({
+    (useDsProjects as jest.Mock).mockReturnValue({
       data: [],
     });
     (useAuthenticatedUser as jest.Mock).mockReturnValue({
@@ -94,7 +94,7 @@ describe('FileListing', () => {
       data: [],
       refetch: jest.fn(),
     });
-    (useProjectsWithDesignSafeInformation as jest.Mock).mockReturnValue({
+    (useDsProjects as jest.Mock).mockReturnValue({
       data: [],
     });
     (useAuthenticatedUser as jest.Mock).mockReturnValue({
@@ -135,7 +135,7 @@ describe('FileListing', () => {
       refetch: jest.fn(),
     });
 
-    (useProjectsWithDesignSafeInformation as jest.Mock).mockReturnValue({
+    (useDsProjects as jest.Mock).mockReturnValue({
       data: [],
     });
 
@@ -179,7 +179,7 @@ describe('FileListing', () => {
       refetch: jest.fn(),
     });
 
-    (useProjectsWithDesignSafeInformation as jest.Mock).mockReturnValue({
+    (useDsProjects as jest.Mock).mockReturnValue({
       data: [],
     });
 

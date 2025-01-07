@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
-import { useProjectsWithDesignSafeInformation, useSystems } from '../../hooks';
+import React, { useEffect, useState } from 'react';
+import { useDsProjects, useSystems } from '../../hooks';
+import { DesignSafeProject } from '@hazmapper/types';
 
 interface SystemSelectProps {
   className: string;
@@ -15,7 +16,15 @@ export const SystemSelect: React.FC<SystemSelectProps> = ({
   const { myDataSystem, communityDataSystem, publishedDataSystem } =
     useSystems();
 
-  const { data: projects } = useProjectsWithDesignSafeInformation();
+  const [dsProjects, setDsProjects] = useState<DesignSafeProject[]>([]);
+
+  const { data: dsProjectsResult } = useDsProjects();
+
+  useEffect(() => {
+    if (dsProjectsResult) {
+      setDsProjects(dsProjectsResult?.result || []);
+    }
+  }, [dsProjectsResult]);
 
   useEffect(() => {
     if (myDataSystem) {
@@ -37,10 +46,10 @@ export const SystemSelect: React.FC<SystemSelectProps> = ({
           <option value={publishedDataSystem.id}>Published Data</option>
         )}
         <optgroup label="My Projects">
-          {projects?.map((proj) => {
+          {dsProjects?.map((proj) => {
             return (
-              <option key={proj.id} value={proj.system_id}>
-                PRJ-{proj.id} | {proj.name}
+              <option key={proj.uuid} value={`project-${proj.uuid}`}>
+                {proj.value.projectId} | {proj.value.title}
               </option>
             );
           })}

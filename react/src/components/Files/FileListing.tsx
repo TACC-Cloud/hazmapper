@@ -12,12 +12,7 @@ import {
 import { Icon } from '@tacc/core-components';
 import { SystemSelect } from '../Systems';
 import styles from './FileListing.module.css';
-import {
-  useAuthenticatedUser,
-  useProjectsWithDesignSafeInformation,
-  useSystems,
-  useFiles,
-} from '../../hooks';
+import { useAuthenticatedUser, useSystems, useFiles } from '../../hooks';
 import { File, System } from '../../types';
 import { serializeToChonkyFile } from '../../utils/fileUtils';
 
@@ -51,7 +46,6 @@ export const FileListing: React.FC<FileListingProps> = ({
     publishedDataSystem,
   } = useSystems();
 
-  const { data: projectSystems } = useProjectsWithDesignSafeInformation();
   const { data: user } = useAuthenticatedUser();
 
   const [chonkyFiles, setChonkyFiles] = React.useState<any>([]);
@@ -124,8 +118,7 @@ export const FileListing: React.FC<FileListingProps> = ({
     } else if (sys.id === publishedDataSystem?.id) {
       rootFolderName = 'Published Data';
     } else {
-      const project = projectSystems?.find((proj) => proj.system_id === sys.id);
-      rootFolderName = project?.name || sys.id;
+      rootFolderName = 'Project';
     }
 
     setFolderChain([{ id: rootFolder, name: rootFolderName, isDir: true }]);
