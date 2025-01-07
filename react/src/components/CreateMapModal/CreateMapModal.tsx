@@ -47,15 +47,10 @@ const CreateMapModal = ({
     parentToggle(); // Call the original toggle function passed as a prop
   };
 
-  const [selectedFiles, setSelectedFiles] = useState([] as any[]);
   const [saveLocation, setSaveLocation] = useState('');
 
   const handleDirectoryChange = (directory: string) => {
     setSaveLocation(directory);
-  };
-
-  const handleSelectedFiles = (files: any[]) => {
-    setSelectedFiles(files);
   };
 
   const handleCreateProject = (projectData: ProjectRequest) => {
@@ -228,7 +223,6 @@ const CreateMapModal = ({
                   <FileListing
                     disableSelection={false}
                     onFolderSelect={handleDirectoryChange}
-                    onFileSelect={handleSelectedFiles}
                     showPublicSystems={false}
                   />
                 }
