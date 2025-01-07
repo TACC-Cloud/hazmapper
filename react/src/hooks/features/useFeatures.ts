@@ -6,9 +6,9 @@ interface UseFeaturesParams {
   projectId: number;
   isPublicView: boolean;
   assetTypes: string[];
-  startDate: Date;
-  endDate: Date;
-  toggleDateFilter: boolean;
+  startDate?: Date;
+  endDate?: Date;
+  toggleDateFilter?: boolean;
   options?: object;
 }
 
