@@ -1,26 +1,30 @@
-import React, { useEffect } from 'react';
-import { useSystems } from '@hazmapper/hooks';
-import { System } from '@hazmapper/types';
+import React, { useEffect, useState } from 'react';
+import { useDsProjects, useSystems } from '../../hooks';
+import { DesignSafeProject } from '@hazmapper/types';
 
 interface SystemSelectProps {
+  className: string;
+  showPublicSystems: boolean;
   onSystemSelect: (selectedSystem: string) => void;
 }
 
 export const SystemSelect: React.FC<SystemSelectProps> = ({
+  className,
+  showPublicSystems,
   onSystemSelect,
 }) => {
-  const { data: systems } = useSystems();
+  const { myDataSystem, communityDataSystem, publishedDataSystem } =
+    useSystems();
 
-  // use dsProjects hook here
-  const dsProjects: any[] = [];
+  const [dsProjects, setDsProjects] = useState<DesignSafeProject[]>([]);
 
-  const findSystemById = (id: string): System | undefined => {
-    return systems?.find((system) => system.id === id);
-  };
+  const { data: dsProjectsResult } = useDsProjects();
 
-  const myDataSystem = findSystemById('designsafe.storage.default');
-  const communityDataSystem = findSystemById('designsafe.storage.community');
-  const publishDataSystem = findSystemById('designsafe.storage.published');
+  useEffect(() => {
+    if (dsProjectsResult) {
+      setDsProjects(dsProjectsResult?.result || []);
+    }
+  }, [dsProjectsResult]);
 
   useEffect(() => {
     if (myDataSystem) {
@@ -30,19 +34,22 @@ export const SystemSelect: React.FC<SystemSelectProps> = ({
 
   return (
     <>
-      <select onChange={(e) => onSystemSelect(e.target.value)}>
+      <select
+        className={className}
+        onChange={(e) => onSystemSelect(e.target.value)}
+      >
         {myDataSystem && <option value={myDataSystem.id}>My Data</option>}
-        {communityDataSystem && (
+        {communityDataSystem && showPublicSystems && (
           <option value={communityDataSystem.id}>Community Data</option>
         )}
-        {publishDataSystem && (
-          <option value={publishDataSystem.id}>Published Data</option>
+        {publishedDataSystem && showPublicSystems && (
+          <option value={publishedDataSystem.id}>Published Data</option>
         )}
         <optgroup label="My Projects">
-          {dsProjects.map((proj) => {
+          {dsProjects?.map((proj) => {
             return (
-              <option key={proj.id} value={proj.id}>
-                {proj.ds_project.title}
+              <option key={proj.uuid} value={`project-${proj.uuid}`}>
+                {proj.value.projectId} | {proj.value.title}
               </option>
             );
           })}
