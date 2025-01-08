@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import _ from 'lodash';
+import AssetGeometry from './AssetGeometry';
 import { useAppConfiguration } from '@hazmapper/hooks';
 import AssetPointCloud from './AssetPointCloud';
 import AssetButton from './AssetButton';
@@ -97,7 +98,9 @@ const AssetDetail: React.FC<AssetModalProps> = ({
           <table>
             <thead>
               <tr>
-                <th colSpan={2}>Metadata</th>
+                <th colSpan={2} className="text-center">
+                  Metadata
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -125,34 +128,7 @@ const AssetDetail: React.FC<AssetModalProps> = ({
               )}
             </tbody>
           </table>
-          <table>
-            <thead>
-              <tr>
-                <th colSpan={2}>Geometry</th>
-              </tr>
-            </thead>
-            <tbody>
-              {selectedFeature?.geometry &&
-                Object.entries(selectedFeature.geometry).map(
-                  ([propKey, propValue]) =>
-                    propValue &&
-                    propValue !== undefined &&
-                    propValue.toString().trim() !== '' &&
-                    propValue.toString() !== 'null' && (
-                      <tr key={propKey}>
-                        <td>{_.trim(_.startCase(propKey.toString()), '"')}</td>
-                        <td>
-                          {' '}
-                          {Array.isArray(propValue) && propValue.length === 2
-                            ? `Latitude: ${propValue[0].toString()},
-                             Longitude: ${propValue[1].toString()}`
-                            : _.trim(JSON.stringify(propValue), '"')}
-                        </td>
-                      </tr>
-                    )
-                )}
-            </tbody>
-          </table>
+          <AssetGeometry selectedFeature={selectedFeature} />
         </div>
       </div>
     </div>

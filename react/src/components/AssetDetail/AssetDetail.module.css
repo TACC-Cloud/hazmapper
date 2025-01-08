@@ -19,7 +19,7 @@
 .middleSection {
   flex: 1 1 auto;
   overflow: hidden;
-  min-height: 0;
+  min-height: 20%;
   display: flex;
   text-align: center;
   flex-direction: column;
@@ -42,26 +42,25 @@
 }
 .bottomSection {
   display: block;
-  flex: 0 0 auto;
+  flex: 0 1 auto;
   overflow-x: hidden;
-  justify-items: flex-end;
-  align-items: flex-end;
   width: 100%;
 }
 .metadataTable {
-  flex-grow: 1;
   width: 100%;
 }
 .metadataTable table {
   width: 100%;
   table-layout: fixed;
   border-collapse: collapse;
-  margin: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   padding: 5px;
 }
 .metadataTable thead,
 th {
-  background: #d0d0d0;
+  background: var(--global-color-primary--light);
+  text-emphasis: var(--global-color-primary--dark);
 }
 .metadataTable tbody {
   display: block;
@@ -82,7 +81,6 @@ th {
   word-wrap: break-word;
   word-break: break-word;
   white-space: normal;
-  text-overflow: clip;
 }
 .pointCloud {
   height: 35em;
