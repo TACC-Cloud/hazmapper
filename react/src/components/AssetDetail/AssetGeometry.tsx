@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import * as turf from '@turf/turf';
-import { Feature, FeatureType, getFeatureType } from '@hazmapper/types';
+import { Feature, FeatureType } from '@hazmapper/types';
 
 interface AssetGeometryProps {
   selectedFeature: Feature;
@@ -15,7 +15,7 @@ const AssetGeometry: React.FC<AssetGeometryProps> = ({ selectedFeature }) => {
       ? turf.bbox(selectedFeature)
       : null;
 
-  const geometryType: FeatureType = getFeatureType(selectedFeature);
+  const geometryType = selectedFeature.geometry.type
 
   return (
     <>
