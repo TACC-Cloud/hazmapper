@@ -17,23 +17,23 @@ const AssetButton: React.FC<AssetButtonProps> = ({
 }) => {
   const pointCloudURL = DOMPurify.sanitize(featureSource + '/index.html');
 
-  const fileType = getFeatureType(selectedFeature);
+  const featureType = getFeatureType(selectedFeature);
 
   return (
     <>
-      {fileType === FeatureType.Image && (
+      {featureType === FeatureType.Image && (
         <Button /*TODO add Download*/ type="primary">Download</Button>
       )}
-      {fileType === FeatureType.PointCloud && (
+      {featureType === FeatureType.PointCloud && (
         <a href={pointCloudURL} target="_blank" rel="noreferrer">
           <Button type="primary">View</Button>
         </a>
       )}
-      {fileType === FeatureType.Questionnaire && (
+      {featureType === FeatureType.Questionnaire && (
         //TODO
         <Button type="primary">View</Button>
       )}
-      {fileType.includes(selectedFeature.geometry.type) && isPublicView && (
+      {featureType.includes(selectedFeature.geometry.type) && isPublicView && (
         //TODO
         <Button type="primary">Add Asset from DesignSafe</Button>
       )}

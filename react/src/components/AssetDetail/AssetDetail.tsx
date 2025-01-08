@@ -30,14 +30,14 @@ const AssetDetail: React.FC<AssetModalProps> = ({
   const featureSource: string =
     geoapiUrl + '/assets/' + selectedFeature?.assets?.[0]?.path;
 
-  const fileType: FeatureType = getFeatureType(selectedFeature);
+  const featureType: FeatureType = getFeatureType(selectedFeature);
 
-  const isGeometry = (fileType: FeatureType): boolean => {
-    return fileType.includes(selectedFeature.geometry.type);
+  const isGeometry = (featureType: FeatureType): boolean => {
+    return featureType.includes(selectedFeature.geometry.type);
   };
 
   const AssetRenderer = () => {
-    switch (fileType) {
+    switch (featureType) {
       case FeatureType.Image:
         return <img src={featureSource} alt="Asset" loading="lazy" />;
       case FeatureType.Video:
@@ -53,7 +53,7 @@ const AssetDetail: React.FC<AssetModalProps> = ({
         return <div> source={featureSource}</div>;
       case FeatureType.GeometryCollection:
       default:
-        if (isGeometry(fileType)) {
+        if (isGeometry(featureType)) {
           return (
             <SectionMessage type="info">
               This feature has no asset.
@@ -67,7 +67,7 @@ const AssetDetail: React.FC<AssetModalProps> = ({
   return (
     <div className={styles.root}>
       <div className={styles.topSection}>
-        <FeatureIcon featureType={fileType as FeatureTypeNullable} />
+        <FeatureIcon featureType={featureType as FeatureTypeNullable} />
         {selectedFeature?.assets?.length > 0
           ? selectedFeature?.assets.map((asset) =>
               // To make sure fileTree name matches title and catches null
