@@ -29,6 +29,7 @@
 }
 .middleSection > div {
   flex: 0 1 auto;
+  width: 100%;
   overflow: auto;
 }
 .assetContainer {
@@ -84,5 +85,6 @@ th {
   text-overflow: clip;
 }
 .pointCloud {
-  height: 25em;
+  height: 35em;
+  width: 100%;
 }
