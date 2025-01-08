@@ -134,6 +134,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
       minZoom={MAP_CONFIG.minZoom}
       maxZoom={MAP_CONFIG.maxZoom}
       maxBounds={MAP_CONFIG.maxBounds}
+      preferCanvas={true}
     >
       {activeBaseLayers?.map((layer) =>
         layer.type === 'wms' ? (
