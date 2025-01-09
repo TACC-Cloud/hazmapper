@@ -1,0 +1,25 @@
+.root {
+  background-color: white;
+  height: var(--hazmapper-control-bar-height);
+  min-height: var(--hazmapper-control-bar-height);
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.loadingData {
+  display: flex;
+  align-items: center;
+}
+
+.homeArrow {
+  color: white;
+  background-color: var(--global-color-accent--normal);
+  height: var(--hazmapper-control-bar-height);
+  width: var(--hazmapper-control-bar-height); /* Make it square */
+  padding: 0; /* Remove default button padding */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: -10px; /* Offset the parent's padding */
+}

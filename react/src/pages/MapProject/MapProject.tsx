@@ -17,11 +17,13 @@ import {
   KEY_USE_FEATURES,
 } from '@hazmapper/hooks';
 import MapProjectNavBar from '@hazmapper/components/MapProjectNavBar';
+import MapControlBar from '@hazmapper/components/MapControlBar';
 import Filters from '@hazmapper/components/FiltersPanel/Filter';
 import { assetTypeOptions } from '@hazmapper/components/FiltersPanel/Filter';
 import { Project } from '@hazmapper/types';
 import HeaderNavBar from '@hazmapper/components/HeaderNavBar';
 import styles from './MapProject.module.css';
+import { MapPositionProvider } from '@hazmapper/context/MapContext';
 
 interface MapProjectProps {
   /**
@@ -162,63 +164,60 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     console.error(error);
   }
 
-  const loading = isFeaturesLoading || isTileServerLayersLoading;
-
   const featureCollection = rawFeatureCollection ?? {
     type: 'FeatureCollection',
     features: [],
   };
 
   return (
-    <div className={styles.root}>
-      <HeaderNavBar />
-      <div className={styles.mapControlBar}>
-        MapTopControlBar TODO https://tacc-main.atlassian.net/browse/WG-260
-        {loading && <div> loading</div>}
-      </div>
-      <div className={styles.container}>
-        <MapProjectNavBar />
-        {activePanel && activePanel !== Panel.Manage && (
-          <div className={styles.panelContainer}>
-            {activePanel === Panel.Assets && (
-              <AssetsPanel
-                project={activeProject}
-                isPublicView={isPublicView}
-                featureCollection={featureCollection}
-              />
-            )}
-            {activePanel === Panel.Filters && (
-              <Filters
-                selectedAssetTypes={selectedAssetTypes}
-                onFiltersChange={setSelectedAssetTypes}
-                startDate={startDate}
-                setStartDate={setStartDate}
-                endDate={endDate}
-                setEndDate={setEndDate}
-              />
-            )}
-          </div>
-        )}
-        {activePanel === Panel.Manage && (
-          <ManageMapProjectModal isPublicView={isPublicView} />
-        )}
-        <div className={styles.map}>
-          <Map
-            baseLayers={tileServerLayers}
-            featureCollection={featureCollection}
-          />
-        </div>
-        {selectedFeature && (
-          <div className={styles.detailContainer}>
-            <AssetDetail
-              selectedFeature={selectedFeature}
-              onClose={() => toggleSelectedFeature(selectedFeature.id)}
-              isPublicView={activeProject.public}
+    <MapPositionProvider>
+      <div className={styles.root}>
+        <HeaderNavBar />
+        <MapControlBar isPublicView={isPublicView} />
+        <div className={styles.container}>
+          <MapProjectNavBar />
+          {activePanel && activePanel !== Panel.Manage && (
+            <div className={styles.panelContainer}>
+              {activePanel === Panel.Assets && (
+                <AssetsPanel
+                  project={activeProject}
+                  isPublicView={isPublicView}
+                  featureCollection={featureCollection}
+                />
+              )}
+              {activePanel === Panel.Filters && (
+                <Filters
+                  selectedAssetTypes={selectedAssetTypes}
+                  onFiltersChange={setSelectedAssetTypes}
+                  startDate={startDate}
+                  setStartDate={setStartDate}
+                  endDate={endDate}
+                  setEndDate={setEndDate}
+                />
+              )}
+            </div>
+          )}
+          {activePanel === Panel.Manage && (
+            <ManageMapProjectModal isPublicView={isPublicView} />
+          )}
+          <div className={styles.map}>
+            <Map
+              baseLayers={tileServerLayers}
+              featureCollection={featureCollection}
             />
           </div>
-        )}
+          {selectedFeature && (
+            <div className={styles.detailContainer}>
+              <AssetDetail
+                selectedFeature={selectedFeature}
+                onClose={() => toggleSelectedFeature(selectedFeature.id)}
+                isPublicView={activeProject.public}
+              />
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </MapPositionProvider>
   );
 };
 
