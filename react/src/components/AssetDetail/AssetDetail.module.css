@@ -86,3 +86,11 @@ th {
   height: 35em;
   width: 100%;
 }
+.caption {
+  color: #1f5c7a;
+  font-size: 0.8em;
+}
+.questionnaireImage {
+  width: 100%;
+  height: 30em;
+}
