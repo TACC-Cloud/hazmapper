@@ -44,7 +44,17 @@ export const useFeatures = ({
 
   const query = useGet<FeatureCollection>({
     endpoint,
-    key: [KEY_USE_FEATURES, { projectId, isPublicView, assetTypes }],
+    key: [
+      KEY_USE_FEATURES,
+      {
+        projectId,
+        isPublicView,
+        assetTypes,
+        startDate,
+        endDate,
+        toggleDateFilter,
+      },
+    ],
     options: { ...defaultQueryOptions, ...options },
   });
   return query;
