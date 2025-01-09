@@ -29,6 +29,7 @@
 }
 .middleSection > div {
   flex: 0 1 auto;
+  width: 100%;
   overflow: auto;
 }
 .assetContainer {
@@ -80,4 +81,8 @@ th {
   word-wrap: break-word;
   word-break: break-word;
   white-space: normal;
+}
+.pointCloud {
+  height: 35em;
+  width: 100%;
 }
