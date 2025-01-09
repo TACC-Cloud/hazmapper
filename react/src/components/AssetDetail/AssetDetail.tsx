@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import _ from 'lodash';
 import { useAppConfiguration } from '@hazmapper/hooks';
-import AssetPointCloud from './AssetPointCloud';
+import AssetRenderer from './AssetRenderer';
 import AssetButton from './AssetButton';
 import {
   FeatureTypeNullable,
@@ -10,7 +10,7 @@ import {
   FeatureType,
 } from '@hazmapper/types';
 import { FeatureIcon } from '@hazmapper/components/FeatureIcon';
-import { Button, LoadingSpinner, SectionMessage } from '@tacc/core-components';
+import { Button, LoadingSpinner } from '@tacc/core-components';
 import styles from './AssetDetail.module.css';
 
 type AssetModalProps = {
@@ -32,38 +32,6 @@ const AssetDetail: React.FC<AssetModalProps> = ({
 
   const featureType: FeatureType = getFeatureType(selectedFeature);
 
-  const isGeometry = (featureType: FeatureType): boolean => {
-    return featureType.includes(selectedFeature.geometry.type);
-  };
-
-  const AssetRenderer = () => {
-    switch (featureType) {
-      case FeatureType.Image:
-        return <img src={featureSource} alt="Asset" loading="lazy" />;
-      case FeatureType.Video:
-        return (
-          <video src={featureSource} controls preload="metadata">
-            <track kind="captions" />
-          </video>
-        );
-      case FeatureType.PointCloud:
-        return <AssetPointCloud featureSource={featureSource} />;
-      case FeatureType.Questionnaire:
-        /*TODO Add questionnaire */
-        return <div> source={featureSource}</div>;
-      case FeatureType.GeometryCollection:
-      default:
-        if (isGeometry(featureType)) {
-          return (
-            <SectionMessage type="info">
-              This feature has no asset.
-            </SectionMessage>
-          );
-        }
-        return <SectionMessage type="warn">Unknown asset</SectionMessage>;
-    }
-  };
-
   return (
     <div className={styles.root}>
       <div className={styles.topSection}>
@@ -83,7 +51,10 @@ const AssetDetail: React.FC<AssetModalProps> = ({
       <div className={styles.middleSection}>
         <Suspense fallback={<LoadingSpinner />}>
           <div className={styles.assetContainer}>
-            <AssetRenderer />
+            <AssetRenderer
+              selectedFeature={selectedFeature}
+              featureSource={featureSource}
+            />
           </div>
           <AssetButton
             selectedFeature={selectedFeature}
