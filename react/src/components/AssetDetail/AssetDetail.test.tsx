@@ -28,11 +28,7 @@ describe('AssetDetail', () => {
     const { getByText } = render(<AssetDetail {...AssetModalProps} />);
     const assetGeometry = screen.getByTestId('asset-geometry');
     await act(async () => {
-      render(
-        <AssetGeometry
-          selectedFeature={mockImgFeature}
-        />
-      );
+      render(<AssetGeometry selectedFeature={mockImgFeature} />);
     });
     // Check for title, button, and tables
     expect(getByText('Photo 4.jpg')).toBeDefined();

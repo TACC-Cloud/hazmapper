@@ -89,6 +89,7 @@ th {
 .caption {
   color: #1f5c7a;
   font-size: 0.8em;
+  padding-bottom: 0.8em;
 }
 .questionnaireImage {
   width: 100%;

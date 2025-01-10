@@ -14,11 +14,7 @@ jest.mock('antd', () => ({
   Carousel: forwardRef(({ children }: any, ref: any) => {
     // Assign the mock methods to the ref
     React.useImperativeHandle(ref, () => mockCarouselRef);
-    return (
-      <div data-testid="mock-carousel">
-        {children}
-      </div>
-    );
+    return <div data-testid="mock-carousel">{children}</div>;
   }),
   Space: ({ children }: any) => <div data-testid="mock-space">{children}</div>,
   Flex: ({ children }: any) => <div data-testid="mock-flex">{children}</div>,
@@ -26,10 +22,7 @@ jest.mock('antd', () => ({
 
 jest.mock('@tacc/core-components', () => ({
   Button: ({ children, onClick, iconNameBefore }: any) => (
-    <button 
-      onClick={onClick}
-      data-testid={`button-${iconNameBefore}`}
-    >
+    <button onClick={onClick} data-testid={`button-${iconNameBefore}`}>
       {iconNameBefore}
       {children}
     </button>
@@ -60,15 +53,24 @@ describe('AssetQuestionnaire', () => {
     });
 
     const images = screen.getAllByRole('img');
-    expect(images).toHaveLength(mockQuestionnaireFeature?.properties?._hazmapper.questionnaire.assets.length);
+    expect(images).toHaveLength(
+      mockQuestionnaireFeature?.properties?._hazmapper.questionnaire.assets
+        .length
+    );
 
-    mockQuestionnaireFeature?.properties?._hazmapper.questionnaire.assets.forEach((asset, index) => {
-      const image = images[index];
-      const expectedPreviewPath = `${mockFeatureSource}/${asset.filename}`.replace(/\.([^.]+)$/, '.preview.$1');
-      
-      expect(image.getAttribute('src')).toBe(expectedPreviewPath);
-      expect(image.getAttribute('alt')).toBe(asset.filename);
-    });
+    mockQuestionnaireFeature?.properties?._hazmapper.questionnaire.assets.forEach(
+      (asset, index) => {
+        const image = images[index];
+        const expectedPreviewPath =
+          `${mockFeatureSource}/${asset.filename}`.replace(
+            /\.([^.]+)$/,
+            '.preview.$1'
+          );
+
+        expect(image.getAttribute('src')).toBe(expectedPreviewPath);
+        expect(image.getAttribute('alt')).toBe(asset.filename);
+      }
+    );
   });
 
   it('renders navigation buttons', async () => {
@@ -78,7 +80,7 @@ describe('AssetQuestionnaire', () => {
 
     const prevButton = screen.getByTestId('button-push-left');
     const nextButton = screen.getByTestId('button-push-right');
-    
+
     expect(prevButton).toBeTruthy();
     expect(nextButton).toBeTruthy();
   });
@@ -88,10 +90,12 @@ describe('AssetQuestionnaire', () => {
       setup();
     });
 
-    mockQuestionnaireFeature?.properties?._hazmapper.questionnaire.assets.forEach((asset) => {
-      const caption = screen.getByText(asset.filename);
-      expect(caption).toBeTruthy();
-    });
+    mockQuestionnaireFeature?.properties?._hazmapper.questionnaire.assets.forEach(
+      (asset) => {
+        const caption = screen.getByText(asset.filename);
+        expect(caption).toBeTruthy();
+      }
+    );
   });
 
   it('handles carousel navigation', async () => {
