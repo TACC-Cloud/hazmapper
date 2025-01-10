@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import GeometryAsset from './AssetGeometry';
+import AssetGeometry from './AssetGeometry';
 import { mockImgFeature } from '@hazmapper/__fixtures__/featuresFixture';
 
 jest.mock('@turf/turf', () => ({
@@ -20,7 +20,7 @@ describe('AssetGeometry', () => {
   };
 
   it('renders geometry for point on an image', () => {
-    const { getByText } = render(<GeometryAsset {...GeometryAssetProps} />);
+    const { getByText } = render(<AssetGeometry {...GeometryAssetProps} />);
     expect(getByText('Geometry: Point')).toBeDefined();
     expect(getByText('Latitude')).toBeDefined();
     expect(getByText('Longitude')).toBeDefined();
