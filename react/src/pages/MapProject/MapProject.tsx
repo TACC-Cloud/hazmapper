@@ -109,6 +109,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
   const [selectedAssetTypes, setSelectedAssetTypes] = useState<string[]>(
     Object.keys(assetTypeOptions)
   );
+  const [toggleDateFilter, setToggleDateFilter] = React.useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(
     new Date(Date.now() + 24 * 60 * 60 * 1000)
@@ -139,6 +140,9 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     projectId: activeProject.id,
     isPublicView,
     assetTypes: formattedAssetTypes,
+    startDate,
+    endDate,
+    toggleDateFilter,
   });
 
   const {
@@ -195,6 +199,8 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
                 setStartDate={setStartDate}
                 endDate={endDate}
                 setEndDate={setEndDate}
+                toggleDateFilter={toggleDateFilter}
+                setToggleDateFilter={setToggleDateFilter}
               />
             )}
           </div>
