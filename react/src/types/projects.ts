@@ -36,3 +36,8 @@ export interface ProjectRequest {
 
 export class ProjectRequest implements ProjectRequest {}
 export class DesignSafeProject implements DesignSafeProject {}
+
+export interface ProjectUser {
+  id: number;
+  username: string;
+}

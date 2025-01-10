@@ -10,6 +10,7 @@ import { Button, LoadingSpinner } from '@tacc/core-components';
 import {
   useProject,
   useProjectsWithDesignSafeInformation,
+  useProjectUsers,
   useFeatureLoadingState,
   useMapMousePosition,
   useAuthenticatedUser,
@@ -43,7 +44,7 @@ const MapControlbar: React.FC<Props> = ({ isPublicView }) => {
   const navigate = useNavigate();
   const { projectUUID } = useParams();
 
-  const { data: userData } = useAuthenticatedUser();
+  const { data: authenticatedUser } = useAuthenticatedUser();
 
   const {
     data: activeProject,
@@ -54,14 +55,27 @@ const MapControlbar: React.FC<Props> = ({ isPublicView }) => {
     isPublicView,
     options: { enabled: !!projectUUID },
   });
+  const { data: activeProjectUsers } = activeProject?.id
+    ? useProjectUsers({
+        projectId: activeProject.id,
+        options: {
+          enabled: isPublicView && authenticatedUser && !!activeProject?.id,
+        },
+      })
+    : { data: null };
 
   const { isLoading: isFeaturesLoading, isError: isFeaturesError } =
     useFeatureLoadingState();
 
   const mapPrefix = isPublicView ? 'Public Map' : 'Map';
 
+  /* for public maps, check if user is logged in and in the activeProjectUsers list */
   const canSwitchToPrivateMap =
-    true; /*check if user is logged in and in the projectUsers list */
+    isPublicView &&
+    authenticatedUser &&
+    activeProjectUsers?.find((u) => u.username === authenticatedUser.username)
+      ? true
+      : false;
 
   if (isActiveProjectLoading) {
     return (
