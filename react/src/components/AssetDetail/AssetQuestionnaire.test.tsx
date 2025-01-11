@@ -11,8 +11,7 @@ const mockCarouselRef = {
 
 // Mock the antd components used in AssetQuestionnaire
 jest.mock('antd', () => ({
-  Carousel: forwardRef(({ children }: any, ref: any) => {
-    // Assign the mock methods to the ref
+  Carousel: forwardRef(function Carousel({ children }: any, ref: any) {
     React.useImperativeHandle(ref, () => mockCarouselRef);
     return <div data-testid="mock-carousel">{children}</div>;
   }),
