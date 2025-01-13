@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faLock } from '@fortawesome/free-solid-svg-icons';
@@ -8,13 +8,13 @@ import { faArrowLeft, faLock } from '@fortawesome/free-solid-svg-icons';
 import { Button, LoadingSpinner } from '@tacc/core-components';
 
 import {
-  useProject,
   useProjectsWithDesignSafeInformation,
   useProjectUsers,
   useFeatureLoadingState,
   useMapMousePosition,
   useAuthenticatedUser,
 } from '@hazmapper/hooks';
+import { Project } from '@hazmapper/types';
 import * as ROUTES from '@hazmapper/constants/routes';
 
 import styles from './MapControlbar.module.css';
@@ -32,6 +32,11 @@ const CoordinatesDisplay = () => {
 
 interface Props {
   /**
+   * Active project
+   */
+  activeProject: Project;
+
+  /**
    * Whether or not the map project is a public view.
    */
   isPublicView: boolean;
@@ -40,26 +45,20 @@ interface Props {
 /**
  * A horizontal control bar on top
  */
-const MapControlbar: React.FC<Props> = ({ isPublicView }) => {
+const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
   const navigate = useNavigate();
-  const { projectUUID } = useParams();
-
   const { data: authenticatedUser } = useAuthenticatedUser();
 
-  const {
-    data: activeProject,
-    isLoading: isActiveProjectLoading,
-    error: isLoadingActiveProjectError,
-  } = useProject({
-    projectUUID,
-    isPublicView,
-    options: { enabled: !!projectUUID },
-  });
   const { data: activeProjectUsers } = activeProject?.id
     ? useProjectUsers({
         projectId: activeProject.id,
         options: {
-          enabled: isPublicView && authenticatedUser && !!activeProject?.id,
+          // Only fetch users when viewing a public map, user is authenticated, and
+          // there is an active project - this determines if we need to check list of users
+          // to see if current user can switch to private view
+          enabled: Boolean(
+            isPublicView && authenticatedUser && activeProject?.id
+          ),
         },
       })
     : { data: null };
@@ -76,18 +75,6 @@ const MapControlbar: React.FC<Props> = ({ isPublicView }) => {
     activeProjectUsers?.find((u) => u.username === authenticatedUser.username)
       ? true
       : false;
-
-  if (isActiveProjectLoading) {
-    return (
-      <div className={styles.root}>
-        <LoadingSpinner placement="inline" />
-      </div>
-    );
-  }
-
-  if (isLoadingActiveProjectError) {
-    return <div className={styles.root}>Unable to access this map</div>;
-  }
 
   return (
     <div className={styles.root}>
