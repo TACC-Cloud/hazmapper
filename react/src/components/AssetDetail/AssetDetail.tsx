@@ -64,59 +64,61 @@ const AssetDetail: React.FC<AssetModalProps> = ({
           />
         </Suspense>
       </div>
-      <div className={styles.bottomSection}>
-        <div className={styles.metadataTable}>
-          <table>
-            <thead>
-              <tr>
-                <th colSpan={2} className="text-center">
-                  Metadata
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {selectedFeature?.properties &&
-              Object.keys(selectedFeature.properties).length > 0 ? (
-                (() => {
-                  /* Function check that shows the "There are no metadata properties" 
+      {featureType !== FeatureType.Questionnaire && (
+        <div className={styles.bottomSection}>
+          <div className={styles.metadataTable}>
+            <table>
+              <thead>
+                <tr>
+                  <th colSpan={2} className="text-center">
+                    Metadata
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {selectedFeature?.properties &&
+                Object.keys(selectedFeature.properties).length > 0 ? (
+                  (() => {
+                    /* Function check that shows the "There are no metadata properties" 
                   in any of these cases:
                   - The properties object is empty or null
                   - The properties object only contains keys that start with "_hazmapper"
                   - The properties object exists but has no properties*/
-                  const filteredProperties = Object.entries(
-                    selectedFeature.properties
-                  )
-                    .filter(([key]) => !key.startsWith('_hazmapper'))
-                    .sort(([keyA], [keyB]) => keyA.localeCompare(keyB));
-                  return filteredProperties.length > 0 ? (
-                    filteredProperties.map(([propKey, propValue]) => (
-                      <tr key={propKey}>
-                        <td>{_.startCase(propKey)}</td>
-                        <td>
-                          {propKey.startsWith('description') ? (
-                            <code>{propValue}</code>
-                          ) : (
-                            _.trim(JSON.stringify(propValue), '"')
-                          )}
-                        </td>
+                    const filteredProperties = Object.entries(
+                      selectedFeature.properties
+                    )
+                      .filter(([key]) => !key.startsWith('_hazmapper'))
+                      .sort(([keyA], [keyB]) => keyA.localeCompare(keyB));
+                    return filteredProperties.length > 0 ? (
+                      filteredProperties.map(([propKey, propValue]) => (
+                        <tr key={propKey}>
+                          <td>{_.startCase(propKey)}</td>
+                          <td>
+                            {propKey.startsWith('description') ? (
+                              <code>{propValue}</code>
+                            ) : (
+                              _.trim(JSON.stringify(propValue), '"')
+                            )}
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={2}>There are no metadata properties.</td>
                       </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan={2}>There are no metadata properties.</td>
-                    </tr>
-                  );
-                })()
-              ) : (
-                <tr>
-                  <td colSpan={2}>There are no metadata properties.</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-          <AssetGeometry selectedFeature={selectedFeature} />
+                    );
+                  })()
+                ) : (
+                  <tr>
+                    <td colSpan={2}>There are no metadata properties.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+            <AssetGeometry selectedFeature={selectedFeature} />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
