@@ -2,6 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import * as turf from '@turf/turf';
 import { Feature, FeatureType } from '@hazmapper/types';
+import styles from './AssetDetail.module.css';
 
 interface AssetGeometryProps {
   selectedFeature: Feature;
@@ -18,7 +19,7 @@ const AssetGeometry: React.FC<AssetGeometryProps> = ({ selectedFeature }) => {
   const geometryType = selectedFeature.geometry.type;
 
   return (
-    <>
+    <div className={styles.metadataTable}>
       {geometryType === FeatureType.Point && (
         <table>
           <thead>
@@ -111,7 +112,7 @@ const AssetGeometry: React.FC<AssetGeometryProps> = ({ selectedFeature }) => {
           </tbody>
         </table>
       )}
-    </>
+    </div>
   );
 };
 
