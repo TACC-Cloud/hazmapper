@@ -46,7 +46,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
   isPublicView,
   projectId,
 }) => {
-  const { mutate: deleteFeature, isLoading } = useDeleteFeature();
+  const { mutate: deleteFeature, isPending } = useDeleteFeature();
   const { selectedFeatureId, setSelectedFeatureId } = useFeatureSelection();
 
   const { height, ref } = useResizeDetector();
@@ -164,7 +164,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
             size="small"
             type="primary"
             iconNameBefore="trash"
-            isLoading={isLoading}
+            isLoading={isPending}
             onClick={(e) => handleDelete(featureNode.nodeId)(e)}
             dataTestid="delete-feature-button"
           />

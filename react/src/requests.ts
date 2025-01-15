@@ -7,7 +7,7 @@ import {
   UseQueryOptions,
   UseMutationOptions,
   QueryKey,
-} from 'react-query';
+} from '@tanstack/react-query';
 import { useAppConfiguration } from '@hazmapper/hooks';
 
 import { useEnsureAuthenticatedUserHasValidTapisToken } from '@hazmapper/hooks';
@@ -54,6 +54,7 @@ export function getHeaders(apiService: ApiService, auth: AuthState) {
 type UseGetParams<ResponseType> = {
   endpoint: string;
   key: QueryKey;
+  params?: { [key: string]: string };
   options?: Omit<
     UseQueryOptions<ResponseType, AxiosError>,
     'queryKey' | 'queryFn'
@@ -70,7 +71,8 @@ type UsePostParams<RequestType, ResponseType> = {
 
 export function useGet<ResponseType>({
   endpoint,
-  key,
+  key: queryKey,
+  params = {},
   options = {},
   apiService = ApiService.Geoapi,
   transform,
@@ -121,11 +123,15 @@ export function useGet<ResponseType>({
   }
 
   const getUtil = async () => {
-    const request = await client.get(url, { headers });
+    const request = await client.get(url, { headers, params });
     return transform ? transform(request.data) : request.data;
   };
 
-  return useQuery<ResponseType, AxiosError>(key, getUtil, options);
+  return useQuery<ResponseType, AxiosError>({
+    queryKey,
+    queryFn: getUtil,
+    ...options,
+  });
 }
 
 export function usePost<RequestType, ResponseType>({
@@ -154,7 +160,10 @@ export function usePost<RequestType, ResponseType>({
     return response.data;
   };
 
-  return useMutation<ResponseType, AxiosError, RequestType>(postUtil, options);
+  return useMutation<ResponseType, AxiosError, RequestType>({
+    mutationFn: postUtil,
+    ...options,
+  });
 }
 
 type UseDeleteParams<ResponseType, Variables> = {
@@ -191,5 +200,8 @@ export function useDelete<ResponseType, Variables>({
     return response.data;
   };
 
-  return useMutation<ResponseType, AxiosError, Variables>(deleteUtil, options);
+  return useMutation<ResponseType, AxiosError, Variables>({
+    mutationFn: deleteUtil,
+    ...options,
+  });
 }
