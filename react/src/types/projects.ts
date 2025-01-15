@@ -43,6 +43,12 @@ interface DesignSafeProjectValue {
   // Users and access
   users: any[];
 
+  // Users - Deprecated: no longer used in v2 DS
+  pi?: string;
+  coPis?: any[];
+  teamMembers?: string[];
+  guestMembers?: string[];
+
   // Location data
   nhLatitude: string;
   nhLongitude: string;
@@ -54,8 +60,24 @@ interface DesignSafeProjectValue {
   nhEvents: string[];
   dois: string[]; // Deprecated: appears to always empty array
 
+  // Natural Hazard specific
+  nhEvent: string;
+  nhTypes: string[];
+
   // Related features
   hazmapperMaps?: any[];
+  facilities: string[];
+  associatedProjects: string[];
+  referencedData: any[];
+
+  // Other
+  ef?: string;
+  authors?: any[];
+  frTypes?: any[];
+  fileObjs?: any[];
+  fileTags?: string[];
+  awardNumbers?: string[];
+  tombstone?: boolean;
 }
 
 export interface DesignSafeProject {
@@ -64,6 +86,7 @@ export interface DesignSafeProject {
   value: DesignSafeProjectValue;
   created: string;
   lastUpdated: string;
+  associationIds?: any[];
 }
 
 export interface DesignSafeProjectCollection {
