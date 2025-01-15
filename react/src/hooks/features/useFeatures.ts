@@ -1,9 +1,7 @@
-import { useCallback, useMemo } from 'react';
 import {
   useQueryClient,
   UseQueryResult,
   QueryKey,
-  useQuery,
 } from '@tanstack/react-query';
 import { FeatureCollection } from '@hazmapper/types';
 import { useGet } from '@hazmapper/requests';

@@ -7,10 +7,6 @@ import {
 } from '@hazmapper/types';
 import { useGet, useDelete } from '@hazmapper/requests';
 
-type QueryError = {
-  message?: string;
-};
-
 export const useProjects = (): UseQueryResult<Project[]> => {
   const query = useGet<Project[]>({
     endpoint: '/projects/',
