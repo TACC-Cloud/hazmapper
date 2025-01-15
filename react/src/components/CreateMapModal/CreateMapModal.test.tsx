@@ -6,7 +6,7 @@ import { http, HttpResponse } from 'msw';
 
 import CreateMapModal from './CreateMapModal';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { testQueryClient, server } from '@hazmapper/test/testUtil';
 import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
 import { projectMock } from '@hazmapper/__fixtures__/projectFixtures';

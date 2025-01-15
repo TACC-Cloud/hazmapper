@@ -1,6 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import * as turf from '@turf/turf';
+import { Feature as TFeature } from 'geojson';
 import { Feature, FeatureType } from '@hazmapper/types';
 import styles from './AssetDetail.module.css';
 
@@ -13,7 +14,7 @@ const AssetGeometry: React.FC<AssetGeometryProps> = ({ selectedFeature }) => {
 
   const bbox =
     selectedFeature.geometry.type !== 'Point'
-      ? turf.bbox(selectedFeature)
+      ? turf.bbox(selectedFeature as TFeature)
       : null;
 
   const geometryType = selectedFeature.geometry.type;
@@ -54,7 +55,7 @@ const AssetGeometry: React.FC<AssetGeometryProps> = ({ selectedFeature }) => {
           <tbody>
             <tr>
               <td>Area (m²)</td>
-              <td>{turf.area(selectedFeature as turf.Feature).toFixed(2)}</td>
+              <td>{turf.area(selectedFeature as TFeature).toFixed(2)}</td>
             </tr>
           </tbody>
         </table>
@@ -72,7 +73,7 @@ const AssetGeometry: React.FC<AssetGeometryProps> = ({ selectedFeature }) => {
           <tbody>
             <tr>
               <td>Length (m)</td>
-              <td>{turf.length(selectedFeature as turf.Feature).toFixed(2)}</td>
+              <td>{turf.length(selectedFeature as TFeature).toFixed(2)}</td>
             </tr>
           </tbody>
         </table>

@@ -1,4 +1,4 @@
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useDelete } from '@hazmapper/requests';
 import { KEY_USE_FEATURES } from './useFeatures';
 
@@ -16,7 +16,7 @@ export function useDeleteFeature() {
     options: {
       onSuccess: () => {
         // invalidate *any* feature listing query
-        queryClient.invalidateQueries([KEY_USE_FEATURES]);
+        queryClient.invalidateQueries({ queryKey: [KEY_USE_FEATURES] });
       },
     },
   });

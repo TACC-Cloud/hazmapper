@@ -43,8 +43,8 @@ const AssetDetail: React.FC<AssetModalProps> = ({
               asset.display_path
                 ? asset.display_path.split('/').pop()
                 : asset.id
-                ? asset.id
-                : selectedFeature.id
+                  ? asset.id
+                  : selectedFeature.id
             )
           : selectedFeature?.id}
         <Button type="link" iconNameAfter="close" onClick={onClose}></Button>

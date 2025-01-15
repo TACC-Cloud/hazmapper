@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { Message, LoadingSpinner } from '@tacc/core-components';
 
@@ -52,7 +52,7 @@ const MapProject: React.FC<MapProjectProps> = ({ isPublicView = false }) => {
   // briefly appearing and causing incorrect map bounds/zoom during navigation
   useEffect(() => {
     return () => {
-      queryClient.removeQueries([KEY_USE_FEATURES]);
+      queryClient.removeQueries({ queryKey: [KEY_USE_FEATURES] });
     };
   }, [projectUUID, queryClient]);
 
@@ -74,7 +74,9 @@ const MapProject: React.FC<MapProjectProps> = ({ isPublicView = false }) => {
 
     return (
       <div className={styles.errorContainer}>
-        <Message type="error">Error loading project</Message>
+        <Message tagName="span" type="error">
+          Error loading project
+        </Message>
       </div>
     );
   }
