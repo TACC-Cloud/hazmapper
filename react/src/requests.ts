@@ -86,7 +86,7 @@ export function useGet<ResponseType>({
   const baseUrl = getBaseApiUrl(apiService, configuration);
   const headers = getHeaders(apiService, state.auth);
 
-  let url = `${baseUrl}${endpoint}`;
+  const url = `${baseUrl}${endpoint}`;
 
   /* TODO_V3 Send analytics-related params to features endpoint (i.e.
     /projects/<project_id>/features or /public-projects/<project_id>/features)
