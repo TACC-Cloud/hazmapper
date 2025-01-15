@@ -105,7 +105,7 @@ const CreateMapModal = ({
             // Update system_file only if it matches the previous name and if name/system_file are different
             if (
               values.system_file === status.oldName &&
-              values.system_file !== values.name
+              values.system_file !== systemFileName
             ) {
               setFieldValue('system_file', systemFileName);
               setStatus({ oldName: systemFileName });
