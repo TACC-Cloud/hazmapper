@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Button } from '@tacc/core-components';
 import styles from './CreateMapModal.module.css';
@@ -36,9 +36,8 @@ const CreateMapModal = ({
   toggle: parentToggle,
 }: CreateMapModalProps) => {
   const [errorMessage, setErrorMessage] = useState('');
-  const [previousName, setPreviousName] = useState('');
   const { data: userData } = useAuthenticatedUser();
-  const { mutate: createProject, isLoading: isCreatingProject } =
+  const { mutate: createProject, isPending: isCreatingProject } =
     useCreateProject();
   const navigate = useNavigate();
   const handleClose = () => {
@@ -97,21 +96,20 @@ const CreateMapModal = ({
           }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
+          initialStatus={{ oldName: '' }}
         >
-          {({ values, setFieldValue }) => {
-            useEffect(() => {
-              // Replace spaces with underscores for system_file mirroring
-              const systemFileName = values.name.replace(/\s+/g, '_');
+          {({ values, setFieldValue, setStatus, status }) => {
+            // Replace spaces with underscores for system_file mirroring
+            const systemFileName = values.name.replace(/\s+/g, '_');
 
-              // Update system_file only if it matches the previous name or if name/system_file are empty
-              if (
-                values.system_file === previousName.replace(/\s+/g, '_') ||
-                (values.system_file === '' && values.name === '')
-              ) {
-                setFieldValue('system_file', systemFileName);
-                setPreviousName(values.name);
-              }
-            }, [values.name, values.system_file, setFieldValue, previousName]);
+            // Update system_file only if it matches the previous name and if name/system_file are different
+            if (
+              values.system_file === status.oldName &&
+              values.system_file !== systemFileName
+            ) {
+              setFieldValue('system_file', systemFileName);
+              setStatus({ oldName: systemFileName });
+            }
 
             return (
               <Form className="c-form" name="map-form-info">

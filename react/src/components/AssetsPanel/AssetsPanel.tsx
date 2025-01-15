@@ -24,7 +24,7 @@ const DownloadFeaturesButton: React.FC<DownloadFeaturesButtonProps> = ({
     assetTypes: [], // Empty array to get all features
     options: {
       enabled: false, // Only fetch when triggered by user clicking button
-      cacheTime: 0,
+      gcTime: 0,
       staleTime: 0,
       onSuccess: (data: FeatureCollection) => {
         // Create and trigger download

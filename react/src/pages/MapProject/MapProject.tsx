@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { Message, Button, LoadingSpinner } from '@tacc/core-components';
 
@@ -114,7 +114,7 @@ const MapProject: React.FC<MapProjectProps> = ({ isPublicView = false }) => {
   // briefly appearing and causing incorrect map bounds/zoom during navigation
   useEffect(() => {
     return () => {
-      queryClient.removeQueries([KEY_USE_FEATURES]);
+      queryClient.removeQueries({ queryKey: [KEY_USE_FEATURES] });
     };
   }, [projectUUID, queryClient]);
 
@@ -166,6 +166,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
   const [selectedAssetTypes, setSelectedAssetTypes] = useState<string[]>(
     Object.keys(assetTypeOptions)
   );
+  const [toggleDateFilter, setToggleDateFilter] = React.useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(
     new Date(Date.now() + 24 * 60 * 60 * 1000)
@@ -196,6 +197,9 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     projectId: activeProject.id,
     isPublicView,
     assetTypes: formattedAssetTypes,
+    startDate,
+    endDate,
+    toggleDateFilter,
   });
 
   const {
@@ -251,6 +255,8 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
                   setStartDate={setStartDate}
                   endDate={endDate}
                   setEndDate={setEndDate}
+                toggleDateFilter={toggleDateFilter}
+                setToggleDateFilter={setToggleDateFilter}
                 />
               )}
             </div>

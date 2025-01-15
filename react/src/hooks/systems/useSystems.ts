@@ -1,4 +1,4 @@
-import { UseQueryResult } from 'react-query';
+import { UseQueryResult } from '@tanstack/react-query';
 import { ApiService, System } from '@hazmapper/types';
 import { useGet } from '../../requests';
 

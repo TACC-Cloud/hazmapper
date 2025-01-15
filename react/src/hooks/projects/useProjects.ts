@@ -1,4 +1,4 @@
-import { UseQueryResult, useQueryClient } from 'react-query';
+import { UseQueryResult, useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import {
   Project,
@@ -7,10 +7,6 @@ import {
   ApiService,
 } from '@hazmapper/types';
 import { useGet, useDelete } from '@hazmapper/requests';
-
-type QueryError = {
-  message?: string;
-};
 
 export const useProjects = (): UseQueryResult<Project[]> => {
   const query = useGet<Project[]>({
@@ -75,10 +71,7 @@ export const useDesignSafeProjects = (): UseQueryResult<
   return query;
 };
 
-export function useProjectsWithDesignSafeInformation(): UseQueryResult<
-  Project[],
-  QueryError
-> {
+export function useProjectsWithDesignSafeInformation() {
   const dsProjectQuery = useDesignSafeProjects();
   const projectQuery = useProjects();
 
@@ -105,8 +98,8 @@ export function useProjectsWithDesignSafeInformation(): UseQueryResult<
     isLoading: dsProjectQuery.isLoading || projectQuery.isLoading,
     isError: dsProjectQuery.error || projectQuery.error,
     isSuccess: dsProjectQuery.isSuccess && projectQuery.isSuccess,
-    error: (dsProjectQuery.error || projectQuery.error) as QueryError,
-  } as UseQueryResult<Project[], QueryError>;
+    error: dsProjectQuery.error || projectQuery.error,
+  };
 }
 
 type DeleteProjectParams = {
@@ -121,7 +114,7 @@ export const useDeleteProject = () => {
     apiService: ApiService.Geoapi,
     options: {
       onSuccess: () => {
-        queryClient.invalidateQueries('projects');
+        queryClient.invalidateQueries({ queryKey: 'projects' });
       },
     },
   });

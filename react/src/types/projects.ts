@@ -93,8 +93,6 @@ export interface DesignSafeProjectCollection {
   result?: DesignSafeProject[];
 }
 
-export class Project implements Project {}
-
 export interface ProjectRequest {
   name: string;
   description: string;
@@ -105,9 +103,6 @@ export interface ProjectRequest {
   watch_content?: boolean;
   watch_users?: boolean;
 }
-
-export class ProjectRequest implements ProjectRequest {}
-export class DesignSafeProject implements DesignSafeProject {}
 
 export interface ProjectUser {
   id: number;

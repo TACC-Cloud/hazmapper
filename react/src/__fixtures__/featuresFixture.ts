@@ -287,3 +287,47 @@ export const mockVideoFeature: Feature = {
     },
   ],
 };
+
+export const mockQuestionnaireFeature: Feature = {
+  id: 2466139,
+  project_id: 94,
+  type: 'Feature',
+  geometry: {
+    type: 'Point',
+    coordinates: [-122.306436952, 47.653046488],
+  },
+  properties: {
+    _hazmapper: {
+      questionnaire: {
+        assets: [
+          {
+            filename: 'Q11-Photo-001.jpg',
+            coordinates: [-122.30645555555556, 47.65306388888889],
+          },
+          {
+            filename: 'Q12-Photo-001.jpg',
+            coordinates: [-122.30648611111111, 47.65299722222222],
+          },
+          {
+            filename: 'Q13-Photo-001.jpg',
+            coordinates: [-122.3064611111111, 47.652975],
+          },
+        ],
+      },
+    },
+  },
+  styles: {},
+  assets: [
+    {
+      id: 2037094,
+      path: '94/816c47f4-b34d-4a30-b0d8-e92b11ba100c',
+      uuid: '816c47f4-b34d-4a30-b0d8-e92b11ba100c',
+      asset_type: 'questionnaire',
+      original_path:
+        'project-3891343857756007955-242ac117-0001-012/RApp/asif27/Home/GNSS Base Station Setup (Copy 1) 1690582474191.rqa/GNSS Base Station Setup (Copy 1) 1690582474191.rq',
+      original_name: null,
+      display_path:
+        'project-3891343857756007955-242ac117-0001-012/RApp/asif27/Home/GNSS Base Station Setup (Copy 1) 1690582474191.rqa/GNSS Base Station Setup (Copy 1) 1690582474191.rq',
+    },
+  ],
+};

@@ -2,6 +2,7 @@ import React, { useEffect, useCallback, useRef } from 'react';
 import * as turf from '@turf/turf';
 import { useMap } from 'react-leaflet';
 import { FeatureCollection, Feature } from '@hazmapper/types';
+import { Feature as TFeature } from 'geojson';
 import { useFeatureSelection } from '@hazmapper/hooks';
 import { MAP_CONFIG } from './config';
 import L from 'leaflet';
@@ -15,7 +16,7 @@ const FitBoundsHandler: React.FC<{
 
   const getBoundsFromFeature = useCallback(
     (feature: FeatureCollection | Feature) => {
-      const bbox = turf.bbox(feature);
+      const bbox = turf.bbox(feature as TFeature);
       return [
         [bbox[1], bbox[0]] as [number, number],
         [bbox[3], bbox[2]] as [number, number],
