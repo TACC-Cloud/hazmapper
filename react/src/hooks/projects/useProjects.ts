@@ -2,6 +2,7 @@ import { UseQueryResult, useQueryClient } from 'react-query';
 import { useMemo } from 'react';
 import {
   Project,
+  DesignSafeProject,
   DesignSafeProjectCollection,
   ApiService,
 } from '@hazmapper/types';
@@ -41,12 +42,34 @@ export const useProject = ({
   return query;
 };
 
-export const useDsProjects = (): UseQueryResult<
+interface UseDesignSafeProjectParams {
+  designSafeProjectUUID: string;
+  options?: object;
+}
+
+export const useDesignSafeProject = ({
+  designSafeProjectUUID,
+  options = {},
+}: UseDesignSafeProjectParams): UseQueryResult<
+  DesignSafeProject | undefined
+> => {
+  const query = useGet<DesignSafeProject>({
+    endpoint: `/api/projects/v2/${designSafeProjectUUID}/`,
+    key: ['designsafe-single-projectv2'],
+    options,
+    apiService: ApiService.DesignSafe,
+    transform: (data) => data.baseProject,
+  });
+  return query;
+};
+
+export const useDesignSafeProjects = (): UseQueryResult<
   DesignSafeProjectCollection | undefined
 > => {
+  // TODO add offset and a high limit (as default is 100 for this endpoint)
   const query = useGet<DesignSafeProjectCollection>({
     endpoint: `/api/projects/v2/`,
-    key: ['projectsv2'],
+    key: ['designsafe-projectsv2'],
     apiService: ApiService.DesignSafe,
   });
   return query;
@@ -56,7 +79,7 @@ export function useProjectsWithDesignSafeInformation(): UseQueryResult<
   Project[],
   QueryError
 > {
-  const dsProjectQuery = useDsProjects();
+  const dsProjectQuery = useDesignSafeProjects();
   const projectQuery = useProjects();
 
   const alteredProjectData = useMemo(() => {

@@ -11,12 +11,61 @@ export interface Project {
   streetview_instances?: any;
   ds_project?: DesignSafeProject;
 }
+
+interface DesignSafeProjectValue {
+  dois: string[] /* always empty, deprecated? */;
+  title: string;
+  users: any[];
+  keywords: string[];
+  nhEvents: string[];
+  dataTypes: string[];
+  projectId: string;
+  nhLatitude: string;
+  nhLocation: string;
+  description: string;
+  nhLongitude: string;
+  projectType: string;
+  hazmapperMaps?: any[];
+}
+
+/**
+ * Partial interface for DesignSafe project value data.
+ * Note: This represents key fields only, not all available fields.
+ * Some fields (e.g. dois) may be deprecated.
+ */
+interface DesignSafeProjectValue {
+  // Core project identifiers
+  projectId: string;
+  title: string;
+  description: string;
+  projectType: string;
+
+  // Users and access
+  users: any[];
+
+  // Location data
+  nhLatitude: string;
+  nhLongitude: string;
+  nhLocation: string;
+
+  // Classifications and metadata
+  keywords: string[];
+  dataTypes: string[];
+  nhEvents: string[];
+  dois: string[]; // Deprecated: appears to always empty array
+
+  // Related features
+  hazmapperMaps?: any[];
+}
+
 export interface DesignSafeProject {
   uuid: string;
-  projectId: any;
-  title: any;
-  value: any;
+  name: string;
+  value: DesignSafeProjectValue;
+  created: string;
+  lastUpdated: string;
 }
+
 export interface DesignSafeProjectCollection {
   result?: DesignSafeProject[];
 }

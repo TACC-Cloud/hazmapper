@@ -3,7 +3,8 @@ export {
   useProjectsWithDesignSafeInformation,
   useProjects,
   useProject,
-  useDsProjects,
+  useDesignSafeProject,
+  useDesignSafeProjects,
 } from './useProjects';
 
 export { default as useCreateProject } from './useCreateProject';

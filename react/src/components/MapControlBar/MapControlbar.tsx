@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -8,7 +8,7 @@ import { faArrowLeft, faLock } from '@fortawesome/free-solid-svg-icons';
 import { Button, LoadingSpinner } from '@tacc/core-components';
 
 import {
-  useProjectsWithDesignSafeInformation,
+  useDesignSafeProject,
   useProjectUsers,
   useFeatureLoadingState,
   useMapMousePosition,
@@ -63,6 +63,20 @@ const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
       })
     : { data: null };
 
+  const designSafeProjectUUID = useMemo(() => {
+    return activeProject?.system_id?.startsWith('project-')
+      ? activeProject.system_id.split('project-')[1]
+      : '';
+  }, [activeProject?.system_id]);
+
+  const { data: designSafeProject } = useDesignSafeProject({
+    designSafeProjectUUID: designSafeProjectUUID,
+    options: {
+      // Only fetch users when user is authenticated
+      enabled: Boolean(authenticatedUser && designSafeProjectUUID),
+    },
+  });
+
   const { isLoading: isFeaturesLoading, isError: isFeaturesError } =
     useFeatureLoadingState();
 
@@ -90,7 +104,13 @@ const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
       <span>
         {mapPrefix}: {activeProject?.name}
       </span>
-      <span>Project: TODO</span>
+      {designSafeProject && (
+        <span>
+          Project: {designSafeProject.value.projectId} |{' '}
+          {designSafeProject.value.title}
+        </span>
+      )}
+
       {canSwitchToPrivateMap && (
         // TODO: Add tooltip "View private map" to this button
         <Button
