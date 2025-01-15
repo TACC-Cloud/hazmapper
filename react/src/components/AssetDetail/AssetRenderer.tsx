@@ -2,6 +2,7 @@ import React from 'react';
 import { Feature, FeatureType, getFeatureType } from '@hazmapper/types';
 import { SectionMessage } from '@tacc/core-components';
 import AssetPointCloud from './AssetPointCloud';
+import AssetQuestionnaire from './AssetQuestionnaire';
 
 interface AssetRendererProps {
   selectedFeature: Feature;
@@ -30,7 +31,12 @@ const AssetRenderer: React.FC<AssetRendererProps> = ({
     case FeatureType.PointCloud:
       return <AssetPointCloud featureSource={featureSource} />;
     case FeatureType.Questionnaire:
-      return <div>source={featureSource}</div>;
+      return (
+        <AssetQuestionnaire
+          feature={selectedFeature}
+          featureSource={featureSource}
+        />
+      );
     case FeatureType.GeometryCollection:
     default:
       if (isGeometry(featureType)) {
