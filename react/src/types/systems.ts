@@ -8,4 +8,3 @@ export interface System {
   status: string;
   type: string;
 }
-export class System implements System {}

@@ -11,8 +11,8 @@
     "test": "jest",
     "lint": "npm run lint:js && npm run prettier:check",
     "lint:fix": "npm run lint:js:fix && npm run prettier:fix",
-    "lint:js": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "lint:js:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "lint:js": "eslint .",
+    "lint:js:fix": "eslint . --fix",
     "lint:rules": "eslint --print-config src/index.tsx",
     "prettier:check": "prettier --single-quote --check .",
     "prettier:fix": "prettier --single-quote --write ."
