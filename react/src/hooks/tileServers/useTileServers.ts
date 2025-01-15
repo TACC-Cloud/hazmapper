@@ -1,26 +1,56 @@
 import { UseQueryResult } from '@tanstack/react-query';
-import { useGet } from '../../requests';
+import { useGet, useDelete, usePost, usePut } from '../../requests';
 import { TileServerLayer } from '@hazmapper/types';
 
-interface UseTileServerParams {
+interface UseGetTileServerParams {
   projectId?: number;
   isPublicView: boolean;
   options?: object;
 }
 
-export const useTileServers = ({
+interface UsePostTileServerParams {
+  projectId: number;
+}
+
+export interface UseDeleteTileServerParams {
+  projectId: number;
+  tileLayerId: number;
+}
+
+export const useGetTileServers = ({
   projectId,
   isPublicView,
   options = {},
-}: UseTileServerParams): UseQueryResult<TileServerLayer[]> => {
+}: UseGetTileServerParams): UseQueryResult<TileServerLayer[]> => {
   const tileServersRoute = isPublicView ? 'public-projects' : 'projects';
   const endpoint = `/${tileServersRoute}/${projectId}/tile-servers/`;
 
   const query = useGet<TileServerLayer[]>({
     endpoint,
-    key: ['tile-servers', { projectId, isPublicView }],
+    key: ['useGetTileServers', { projectId, isPublicView }],
     options,
   });
 
   return query;
+};
+
+export const usePutTileServer = ({ projectId }: UsePostTileServerParams) => {
+  return usePut<TileServerLayer[], TileServerLayer[]>({
+    endpoint: `/projects/${projectId}/tile-servers/`,
+  });
+};
+
+export const usePostTileServer = ({ projectId }: UsePostTileServerParams) => {
+  return usePost<TileServerLayer, TileServerLayer>({
+    endpoint: `/projects/${projectId}/tile-servers/`,
+  });
+};
+
+export const useDeleteTileServer = ({
+  projectId,
+  tileLayerId,
+}: UseDeleteTileServerParams) => {
+  return useDelete<void, void>({
+    endpoint: `/projects/${projectId}/tile-servers/${tileLayerId}/`,
+  });
 };

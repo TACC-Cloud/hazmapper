@@ -4,6 +4,7 @@
   min-width: var(--hazmapper-panel-navbar-width);
   overflow-y: auto; /* Allows scrolling */
   padding-top: var(--global-space--section-top);
+  border-right: 1px solid #707070;
 }
 
 .root :global([class*='nav-content']) {
