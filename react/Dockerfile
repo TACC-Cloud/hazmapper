@@ -1,4 +1,4 @@
-FROM node:22-alpine as node
+FROM node:22-alpine AS node
 
 RUN mkdir /www
 COPY react /www
