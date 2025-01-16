@@ -1,4 +1,4 @@
-import { UseQueryResult } from '@tanstack/react-query';
+import { UseQueryResult, useQueryClient } from '@tanstack/react-query';
 import { useGet, useDelete, usePost, usePut } from '../../requests';
 import { TileServerLayer } from '@hazmapper/types';
 
@@ -20,7 +20,10 @@ export interface UseDeleteTileServerParams {
 export const useGetTileServers = ({
   projectId,
   isPublicView,
-  options = {},
+  options = {
+    staleTime: 1000 * 60 * 5, // 5 minute stale time
+    refetchOnMount: false,
+  },
 }: UseGetTileServerParams): UseQueryResult<TileServerLayer[]> => {
   const tileServersRoute = isPublicView ? 'public-projects' : 'projects';
   const endpoint = `/${tileServersRoute}/${projectId}/tile-servers/`;
@@ -50,7 +53,14 @@ export const useDeleteTileServer = ({
   projectId,
   tileLayerId,
 }: UseDeleteTileServerParams) => {
+  const queryClient = useQueryClient();
   return useDelete<void, void>({
     endpoint: `/projects/${projectId}/tile-servers/${tileLayerId}/`,
+    options: {
+      onSuccess: () =>
+        queryClient.invalidateQueries({
+          queryKey: ['useGetTileServers'],
+        }),
+    },
   });
 };

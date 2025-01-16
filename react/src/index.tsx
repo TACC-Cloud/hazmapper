@@ -30,6 +30,8 @@ const themeConfig: ThemeConfig = {
       bodyBg: 'transparent',
       headerBg: 'transparent',
       headerPadding: '0 16px',
+      footerBg: 'transparent',
+      footerPadding: '0 16px',
     },
   },
 };
