@@ -51,15 +51,8 @@ export const usePutTileServer = ({ projectId }: UsePostTileServerParams) => {
 };
 
 export const usePostTileServer = ({ projectId }: UsePostTileServerParams) => {
-  const queryClient = useQueryClient();
-  return usePost<TileServerLayer, TileServerLayer>({
+  return usePost<Omit<TileServerLayer, 'id'>, TileServerLayer>({
     endpoint: `/projects/${projectId}/tile-servers/`,
-    options: {
-      onSuccess: () =>
-        queryClient.invalidateQueries({
-          queryKey: ['useGetTileServers'],
-        }),
-    },
   });
 };
 

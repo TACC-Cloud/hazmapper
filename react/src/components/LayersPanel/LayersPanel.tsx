@@ -44,6 +44,7 @@ import { SortableItem } from './SortableItem';
 import { useSelector } from 'react-redux';
 import { RootState } from '@hazmapper/redux/store';
 import { isTokenValid } from '@hazmapper/utils/authUtils';
+import CreateLayerModal from '../CreateLayerModal';
 
 const formLayerTheme: ThemeConfig = {
   components: {
@@ -53,44 +54,46 @@ const formLayerTheme: ThemeConfig = {
   },
 };
 
-const schema = z.object({
+export const tileLayerSchema = z.object({
+  id: z.number(),
+  name: z.string().min(1, 'Required'),
+  type: z.string(),
+  url: z.string().url().min(1, 'Required'),
+  attribution: z.string(),
+  tileOptions: z.object({
+    maxZoom: z.number().nullish(),
+    minZoom: z.number().nullish(),
+    maxNativeZoom: z.number().nullish(),
+    format: z.string().nullish(),
+    layers: z.string().nullish(),
+    params: z
+      .object({
+        format: z.string().optional(),
+        layers: z.string(),
+        request: z.string().optional(),
+        service: z.string().optional(),
+        styles: z.string().optional(),
+        version: z.string().optional(),
+        transpaernt: z.boolean().optional(),
+        width: z.number().optional(),
+        height: z.number().optional(),
+      })
+      .or(z.string())
+      .nullish(),
+  }),
+  uiOptions: z.object({
+    zIndex: z.number(),
+    opacity: z.number(),
+    isActive: z.boolean(),
+    showInput: z.boolean().nullish(),
+    showDescription: z.boolean().nullish(),
+  }),
+});
+
+const formSchema = z.object({
   tileLayers: z.array(
     z.object({
-      layer: z.object({
-        id: z.number(),
-        name: z.string().min(1, 'Required'),
-        type: z.string(),
-        url: z.string(),
-        attribution: z.string(),
-        tileOptions: z.object({
-          maxZoom: z.number().optional().nullish(),
-          minZoom: z.number().optional().nullish(),
-          maxNativeZoom: z.number().optional().nullish(),
-          format: z.string().optional().nullish(),
-          layers: z.string().optional().nullish(),
-          params: z
-            .object({
-              format: z.string().optional().nullish(),
-              layers: z.string(),
-              request: z.string().optional().nullish(),
-              service: z.string().optional().nullish(),
-              styles: z.string().optional().nullish(),
-              version: z.string().optional().nullish(),
-              transpaernt: z.boolean().optional().nullish(),
-              width: z.number().optional().nullish(),
-              height: z.number().optional().nullish(),
-            })
-            .optional()
-            .nullish(),
-        }),
-        uiOptions: z.object({
-          zIndex: z.number(),
-          opacity: z.number(),
-          isActive: z.boolean(),
-          showInput: z.boolean().optional().nullish(),
-          showDescription: z.boolean().optional().nullish(),
-        }),
-      }),
+      layer: tileLayerSchema, // Need to nest tile layer here since useFieldArray will add it's own `id` field, overwriting our own
     })
   ),
 });
@@ -124,6 +127,7 @@ const LayersPanel: React.FC<{
   const isAuthenticated = useSelector((state: RootState) =>
     isTokenValid(state.auth.authToken)
   );
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const { Header, Content } = Layout;
   const { mutate: updateTileLayers, isPending } = usePutTileServer({
@@ -142,7 +146,7 @@ const LayersPanel: React.FC<{
 
   const methods = useForm({
     defaultValues: initialValues,
-    resolver: zodResolver(schema),
+    resolver: zodResolver(formSchema),
     mode: 'onChange',
   });
 
@@ -175,10 +179,14 @@ const LayersPanel: React.FC<{
     updateTileLayers(reOrderedLayers);
   };
 
-  const { fields, move, update } = useFieldArray({
+  const { fields, move, update, insert } = useFieldArray({
     control,
     name: 'tileLayers',
   });
+
+  const addTileLayer = (layer: TileServerLayer) => {
+    insert(0, { layer });
+  };
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -209,6 +217,7 @@ const LayersPanel: React.FC<{
                   icon={<PlusOutlined />}
                   title="Add Layer"
                   size="middle"
+                  onClick={() => setIsModalOpen(true)}
                 />
               )}
             </Flex>
@@ -407,6 +416,12 @@ const LayersPanel: React.FC<{
           </Content>
         </Flex>
       </div>
+      <CreateLayerModal
+        isOpen={isModalOpen}
+        closeModal={() => setIsModalOpen(false)}
+        projectId={projectId}
+        addTileLayer={addTileLayer}
+      />
     </Panel>
   );
 };
