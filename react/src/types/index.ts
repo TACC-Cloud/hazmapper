@@ -5,6 +5,7 @@ export type {
   DesignSafeProjectCollection,
   DesignSafeProject,
   ProjectRequest,
+  ProjectUser,
 } from './projects';
 export type { AuthState, AuthenticatedUser, AuthToken } from './auth';
 export type { System } from './systems';

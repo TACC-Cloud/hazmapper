@@ -63,9 +63,31 @@ export const useFeatures = ({
   });
   return query;
 };
-export const useCurrentFeatures = (): UseQueryResult<FeatureCollection> => {
+
+interface CurrentFeaturesResult {
+  data: FeatureCollection | undefined;
+  isLatestQueryPending: boolean;
+  isLatestQueryError: boolean;
+}
+/**
+ * A hook that retrieves the most recently retrieved feature collection and provides
+ * access of loading/error state for ongoing queries.
+ *
+ * This hook tracks both the latest successful query data and the current query state.
+ * It will:
+ * - Always return the most recent successfully fetched data (if any exists)
+ * - Show loading state when the latest query is pending
+ * - Show error state if the latest query failed
+ * - Keep showing stale data even during loading or error states
+ *
+ * This is useful when:
+ * - You need access to feature data but don't know the exact query parameters used to originally fetch it
+ * - You want to show stale data while new data is loading
+ * - You want to handle loading/error states while preserving the last known good data
+ */
+export const useCurrentFeatures = (): CurrentFeaturesResult => {
   const queryClient = useQueryClient();
-  const latestQuery = queryClient
+  const latestSuccessfulQuery = queryClient
     .getQueriesData<FeatureCollection>({ queryKey: [KEY_USE_FEATURES] })
     .filter(([, value]) => Boolean(value))
     .reduce<[QueryKey, FeatureCollection | undefined]>(
@@ -86,11 +108,35 @@ export const useCurrentFeatures = (): UseQueryResult<FeatureCollection> => {
       [[], undefined]
     );
 
+  // Get the absolute latest query (might be pending or error)
+  const latestQuery = queryClient
+    .getQueriesData<FeatureCollection>({ queryKey: [KEY_USE_FEATURES] })
+    .reduce<[QueryKey, FeatureCollection | undefined]>(
+      (latest, current) => {
+        const currentState = queryClient.getQueryState(current[0]);
+        const latestState = latest
+          ? queryClient.getQueryState(latest[0])
+          : null;
+        if (
+          !latestState ||
+          (currentState &&
+            currentState.dataUpdatedAt > latestState.dataUpdatedAt)
+        ) {
+          return current;
+        }
+        return latest;
+      },
+      [[], undefined]
+    );
+
+  const latestQueryState =
+    latestQuery[0].length > 0
+      ? queryClient.getQueryState(latestQuery[0])
+      : null;
+
   return {
-    data: latestQuery?.[1],
-    isSuccess: !!latestQuery?.[1],
-    isLoading: false,
-    isError: false,
-    error: null,
-  } as UseQueryResult<FeatureCollection>;
+    data: latestSuccessfulQuery?.[1],
+    isLatestQueryPending: latestQueryState?.status === 'pending',
+    isLatestQueryError: latestQueryState?.status === 'error',
+  };
 };

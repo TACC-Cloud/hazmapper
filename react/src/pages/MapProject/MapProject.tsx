@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 
-import { Message, LoadingSpinner } from '@tacc/core-components';
+import { Message, Button, LoadingSpinner } from '@tacc/core-components';
 
 import Map from '@hazmapper/components/Map';
 import AssetsPanel from '@hazmapper/components/AssetsPanel';
@@ -12,16 +12,78 @@ import { queryPanelKey, Panel } from '@hazmapper/utils/panels';
 import {
   useFeatures,
   useProject,
+  useAuthenticatedUser,
   useTileServers,
   useFeatureSelection,
   KEY_USE_FEATURES,
 } from '@hazmapper/hooks';
+import * as ROUTES from '@hazmapper/constants/routes';
 import MapProjectNavBar from '@hazmapper/components/MapProjectNavBar';
+import MapControlBar from '@hazmapper/components/MapControlBar';
 import Filters from '@hazmapper/components/FiltersPanel/Filter';
 import { assetTypeOptions } from '@hazmapper/components/FiltersPanel/Filter';
 import { Project } from '@hazmapper/types';
 import HeaderNavBar from '@hazmapper/components/HeaderNavBar';
+import { MapPositionProvider } from '@hazmapper/context/MapContext';
+
 import styles from './MapProject.module.css';
+
+interface MapProjectAccessErrorProps {
+  error: any;
+}
+
+const MapProjectAccessError: React.FC<MapProjectAccessErrorProps> = ({
+  error,
+}) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const { data: authenticatedUser } = useAuthenticatedUser();
+  const isLoggedIn = !!authenticatedUser;
+
+  const getMessage = () => {
+    if (!error?.response) {
+      return 'Unable to load map project due to a server error';
+    }
+
+    switch (error.response.status) {
+      case 404:
+        return 'This map project does not exist';
+      case 403:
+        return isLoggedIn
+          ? "You don't have permission to access this map project"
+          : 'Please log in.'; /* no op as before this point, we ensure users are logged in non-public maps */
+      case 500:
+        return 'Unable to load map project due to a server error';
+      default:
+        return 'Unable to access this map';
+    }
+  };
+
+  const is403AndNotLoggedIn = error?.response?.status === 403 && !isLoggedIn;
+
+  return (
+    <div className={styles.errorContainer}>
+      <Message type="error" tagName="div">
+        <p>{getMessage()}</p>
+        {is403AndNotLoggedIn && (
+          <Button
+            type="link"
+            className={styles.userName}
+            onClick={() => {
+              const url = `${ROUTES.LOGIN}?to=${encodeURIComponent(
+                location.pathname
+              )}`;
+              navigate(url);
+            }}
+          >
+            Login
+          </Button>
+        )}
+      </Message>
+    </div>
+  );
+};
 
 interface MapProjectProps {
   /**
@@ -57,26 +119,19 @@ const MapProject: React.FC<MapProjectProps> = ({ isPublicView = false }) => {
   }, [projectUUID, queryClient]);
 
   if (isLoading) {
-    /* TODO_REACT show error and improve spinner https://tacc-main.atlassian.net/browse/WG-260*/
     return (
       <div className={styles.root}>
+        <HeaderNavBar />
         <LoadingSpinner />
       </div>
     );
   }
 
   if (error || !activeProject) {
-    /* TODO_REACT show error and improve spinner https://tacc-main.atlassian.net/browse/WG-260
-
-      * if no access, note why (missing project vs no access to project)
-      * if not logged in and project exists but they might have access, prompt to log in to see if accesable
-    */
-
     return (
-      <div className={styles.errorContainer}>
-        <Message tagName="span" type="error">
-          Error loading project
-        </Message>
+      <div className={styles.root}>
+        <HeaderNavBar />
+        <MapProjectAccessError error={error} />;
       </div>
     );
   }
@@ -134,11 +189,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     formatAssetTypeName(type)
   );
 
-  const {
-    data: rawFeatureCollection,
-    isLoading: isFeaturesLoading,
-    error: featuresError,
-  } = useFeatures({
+  const { data: rawFeatureCollection } = useFeatures({
     projectId: activeProject.id,
     isPublicView,
     assetTypes: formattedAssetTypes,
@@ -147,11 +198,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     toggleDateFilter,
   });
 
-  const {
-    data: tileServerLayers,
-    isLoading: isTileServerLayersLoading,
-    error: tileServerLayersError,
-  } = useTileServers({
+  const { data: tileServerLayers } = useTileServers({
     projectId: activeProject.id,
     isPublicView,
   });
@@ -161,72 +208,65 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
   const queryParams = new URLSearchParams(location.search);
   const activePanel = queryParams.get(queryPanelKey);
 
-  const error = featuresError || tileServerLayersError;
-
-  if (error) {
-    /* TODO https://tacc-main.atlassian.net/browse/WG-260 */
-    console.error(error);
-  }
-
-  const loading = isFeaturesLoading || isTileServerLayersLoading;
-
   const featureCollection = rawFeatureCollection ?? {
     type: 'FeatureCollection',
     features: [],
   };
 
   return (
-    <div className={styles.root}>
-      <HeaderNavBar />
-      <div className={styles.mapControlBar}>
-        MapTopControlBar TODO https://tacc-main.atlassian.net/browse/WG-260
-        {loading && <div> loading</div>}
-      </div>
-      <div className={styles.container}>
-        <MapProjectNavBar />
-        {activePanel && activePanel !== Panel.Manage && (
-          <div className={styles.panelContainer}>
-            {activePanel === Panel.Assets && (
-              <AssetsPanel
-                project={activeProject}
-                isPublicView={isPublicView}
-                featureCollection={featureCollection}
-              />
-            )}
-            {activePanel === Panel.Filters && (
-              <Filters
-                selectedAssetTypes={selectedAssetTypes}
-                onFiltersChange={setSelectedAssetTypes}
-                startDate={startDate}
-                setStartDate={setStartDate}
-                endDate={endDate}
-                setEndDate={setEndDate}
-                toggleDateFilter={toggleDateFilter}
-                setToggleDateFilter={setToggleDateFilter}
-              />
-            )}
-          </div>
-        )}
-        {activePanel === Panel.Manage && (
-          <ManageMapProjectModal isPublicView={isPublicView} />
-        )}
-        <div className={styles.map}>
-          <Map
-            baseLayers={tileServerLayers}
-            featureCollection={featureCollection}
-          />
-        </div>
-        {selectedFeature && (
-          <div className={styles.detailContainer}>
-            <AssetDetail
-              selectedFeature={selectedFeature}
-              onClose={() => toggleSelectedFeature(selectedFeature.id)}
-              isPublicView={activeProject.public}
+    <MapPositionProvider>
+      <div className={styles.root}>
+        <HeaderNavBar />
+        <MapControlBar
+          activeProject={activeProject}
+          isPublicView={isPublicView}
+        />
+        <div className={styles.container}>
+          <MapProjectNavBar />
+          {activePanel && activePanel !== Panel.Manage && (
+            <div className={styles.panelContainer}>
+              {activePanel === Panel.Assets && (
+                <AssetsPanel
+                  project={activeProject}
+                  isPublicView={isPublicView}
+                  featureCollection={featureCollection}
+                />
+              )}
+              {activePanel === Panel.Filters && (
+                <Filters
+                  selectedAssetTypes={selectedAssetTypes}
+                  onFiltersChange={setSelectedAssetTypes}
+                  startDate={startDate}
+                  setStartDate={setStartDate}
+                  endDate={endDate}
+                  setEndDate={setEndDate}
+                  toggleDateFilter={toggleDateFilter}
+                  setToggleDateFilter={setToggleDateFilter}
+                />
+              )}
+            </div>
+          )}
+          {activePanel === Panel.Manage && (
+            <ManageMapProjectModal isPublicView={isPublicView} />
+          )}
+          <div className={styles.map}>
+            <Map
+              baseLayers={tileServerLayers}
+              featureCollection={featureCollection}
             />
           </div>
-        )}
+          {selectedFeature && (
+            <div className={styles.detailContainer}>
+              <AssetDetail
+                selectedFeature={selectedFeature}
+                onClose={() => toggleSelectedFeature(selectedFeature.id)}
+                isPublicView={activeProject.public}
+              />
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </MapPositionProvider>
   );
 };
 
