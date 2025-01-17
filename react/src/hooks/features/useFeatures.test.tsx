@@ -49,7 +49,8 @@ describe('Feature Hooks', () => {
       wrapper: TestWrapper,
     });
 
-    expect(currentResult.current.isLoading).toBe(false);
+    expect(currentResult.current.isLatestQueryPending).toBe(false);
+    expect(currentResult.current.isLatestQueryError).toBe(false);
     expect(currentResult.current.data).toEqual(featureCollection);
   });
 });
