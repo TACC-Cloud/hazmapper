@@ -189,11 +189,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     formatAssetTypeName(type)
   );
 
-  const {
-    data: rawFeatureCollection,
-    isLoading: isFeaturesLoading,
-    error: featuresError,
-  } = useFeatures({
+  const { data: rawFeatureCollection } = useFeatures({
     projectId: activeProject.id,
     isPublicView,
     assetTypes: formattedAssetTypes,
@@ -202,11 +198,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     toggleDateFilter,
   });
 
-  const {
-    data: tileServerLayers,
-    isLoading: isTileServerLayersLoading,
-    error: tileServerLayersError,
-  } = useTileServers({
+  const { data: tileServerLayers } = useTileServers({
     projectId: activeProject.id,
     isPublicView,
   });
