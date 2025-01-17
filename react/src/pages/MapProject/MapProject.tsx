@@ -240,8 +240,8 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
                   setStartDate={setStartDate}
                   endDate={endDate}
                   setEndDate={setEndDate}
-                toggleDateFilter={toggleDateFilter}
-                setToggleDateFilter={setToggleDateFilter}
+                  toggleDateFilter={toggleDateFilter}
+                  setToggleDateFilter={setToggleDateFilter}
                 />
               )}
             </div>
