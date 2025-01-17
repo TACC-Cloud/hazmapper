@@ -208,13 +208,6 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
   const queryParams = new URLSearchParams(location.search);
   const activePanel = queryParams.get(queryPanelKey);
 
-  const error = featuresError || tileServerLayersError;
-
-  if (error) {
-    /* TODO https://tacc-main.atlassian.net/browse/WG-260 */
-    console.error(error);
-  }
-
   const featureCollection = rawFeatureCollection ?? {
     type: 'FeatureCollection',
     features: [],
