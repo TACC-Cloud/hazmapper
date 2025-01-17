@@ -10,9 +10,9 @@ import { Button, LoadingSpinner } from '@tacc/core-components';
 import {
   useDesignSafeProject,
   useProjectUsers,
-  useFeatureLoadingState,
   useMapMousePosition,
   useAuthenticatedUser,
+  useCurrentFeatures,
 } from '@hazmapper/hooks';
 import { Project } from '@hazmapper/types';
 import * as ROUTES from '@hazmapper/constants/routes';
@@ -77,7 +77,7 @@ const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
   });
 
   const { isLoading: isFeaturesLoading, isError: isFeaturesError } =
-    useFeatureLoadingState();
+    useCurrentFeatures();
 
   const mapPrefix = isPublicView ? 'Public Map' : 'Map';
 
