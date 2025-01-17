@@ -24,8 +24,11 @@ const CoordinatesDisplay = () => {
   if (!position) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 bg-white p-2 rounded shadow">
-      Lat: {position.lat.toFixed(4)} Lon: {position.lng.toFixed(4)}
+    <div className={styles.coordinatesDisplay}>
+      <span> Lat: </span>
+      <span>{position.lat.toFixed(4)}</span>
+      <span> Lon: </span>
+      <span>{position.lng.toFixed(4)}</span>
     </div>
   );
 };
@@ -49,19 +52,15 @@ const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
   const navigate = useNavigate();
   const { data: authenticatedUser } = useAuthenticatedUser();
 
-  const { data: activeProjectUsers } = activeProject?.id
-    ? useProjectUsers({
-        projectId: activeProject.id,
-        options: {
-          // Only fetch users when viewing a public map, user is authenticated, and
-          // there is an active project - this determines if we need to check list of users
-          // to see if current user can switch to private view
-          enabled: Boolean(
-            isPublicView && authenticatedUser && activeProject?.id
-          ),
-        },
-      })
-    : { data: null };
+  const { data: activeProjectUsers } = useProjectUsers({
+    projectId: activeProject?.id ?? -1, // Provide a dummy fallback value
+    options: {
+      // Only fetch users when viewing a public map, user is authenticated, and
+      // there is an active project - this determines if we need to check list of users
+      // to see if current user can switch to private view
+      enabled: Boolean(isPublicView && authenticatedUser && activeProject?.id),
+    },
+  });
 
   const designSafeProjectUUID = useMemo(() => {
     return activeProject?.system_id?.startsWith('project-')
@@ -101,40 +100,41 @@ const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
           <FontAwesomeIcon icon={faArrowLeft} />
         </Button>
       )}
-      <span>
-        {mapPrefix}: {activeProject?.name}
-      </span>
-      {designSafeProject && (
-        <span>
-          Project: {designSafeProject.value.projectId} |{' '}
-          {designSafeProject.value.title}
+      <div className={styles.infoContainer}>
+        <span className={styles.projectName}>
+          {mapPrefix}: {activeProject?.name}
         </span>
-      )}
-
-      {canSwitchToPrivateMap && (
-        // TODO: Add tooltip "View private map" to this button
-        <Button
-          onClick={() => {
-            const { pathname, search } = window.location;
-            const newPath = pathname.replace('/project-public/', '/project/');
-            navigate(`${newPath}${search}`);
-          }}
-          type="link"
-        >
-          <FontAwesomeIcon icon={faLock} />
-        </Button>
-      )}
-      {isFeaturesLoading && (
-        <div className={styles.loadingData}>
-          <LoadingSpinner placement="inline" />
-          <span>Loading Data</span>
-        </div>
-      )}
-      {isFeaturesError && (
-        <div className={styles.loadingData}>
-          <span>Error Loading Data TODO</span>
-        </div>
-      )}
+        {designSafeProject && (
+          <span className={styles.designSafeInfo}>
+            Project: {designSafeProject.value.projectId} |{' '}
+            {designSafeProject.value.title}
+          </span>
+        )}
+        {canSwitchToPrivateMap && (
+          // TODO_REACT: Add tooltip "View private map" to this button
+          <Button
+            onClick={() => {
+              const { pathname, search } = window.location;
+              const newPath = pathname.replace('/project-public/', '/project/');
+              navigate(`${newPath}${search}`);
+            }}
+            type="link"
+          >
+            <FontAwesomeIcon icon={faLock} />
+          </Button>
+        )}
+        {isFeaturesLoading && (
+          <div className={styles.loadingData}>
+            <LoadingSpinner placement="inline" />
+            <span>Loading Data</span>
+          </div>
+        )}
+        {isFeaturesError && (
+          <div className={styles.loadingData}>
+            <span>Error Loading Data</span>
+          </div>
+        )}
+      </div>
       <CoordinatesDisplay />
     </div>
   );
