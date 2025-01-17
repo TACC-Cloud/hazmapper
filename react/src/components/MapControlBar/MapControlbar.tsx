@@ -76,8 +76,10 @@ const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
     },
   });
 
-  const { isLoading: isFeaturesLoading, isError: isFeaturesError } =
-    useCurrentFeatures();
+  const {
+    isLatestQueryPending: isFeaturesLoading,
+    isLatestQueryError: isFeaturesError,
+  } = useCurrentFeatures();
 
   const mapPrefix = isPublicView ? 'Public Map' : 'Map';
 

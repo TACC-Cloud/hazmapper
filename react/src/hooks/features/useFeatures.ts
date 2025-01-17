@@ -64,6 +64,11 @@ export const useFeatures = ({
   return query;
 };
 
+interface CurrentFeaturesResult {
+  data: FeatureCollection | undefined;
+  isLatestQueryPending: boolean;
+  isLatestQueryError: boolean;
+}
 /**
  * A hook that retrieves the most recently retrieved feature collection and provides
  * access of loading/error state for ongoing queries.
@@ -80,7 +85,7 @@ export const useFeatures = ({
  * - You want to show stale data while new data is loading
  * - You want to handle loading/error states while preserving the last known good data
  */
-export const useCurrentFeatures = (): UseQueryResult<FeatureCollection> => {
+export const useCurrentFeatures = (): CurrentFeaturesResult => {
   const queryClient = useQueryClient();
   const latestSuccessfulQuery = queryClient
     .getQueriesData<FeatureCollection>({ queryKey: [KEY_USE_FEATURES] })
@@ -131,7 +136,7 @@ export const useCurrentFeatures = (): UseQueryResult<FeatureCollection> => {
 
   return {
     data: latestSuccessfulQuery?.[1],
-    isLoading: latestQueryState?.status === 'pending',
-    isError: latestQueryState?.status === 'error',
-  } as UseQueryResult<FeatureCollection>;
+    isLatestQueryPending: latestQueryState?.status === 'pending',
+    isLatestQueryError: latestQueryState?.status === 'error',
+  };
 };
