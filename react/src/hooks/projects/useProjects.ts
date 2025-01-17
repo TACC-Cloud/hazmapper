@@ -91,7 +91,12 @@ export function useProjectsWithDesignSafeInformation() {
       });
     }
     return projectQuery.data;
-  }, [dsProjectQuery.data, projectQuery.data]);
+  }, [
+    dsProjectQuery.data,
+    dsProjectQuery.isSuccess,
+    projectQuery.data,
+    projectQuery.isSuccess,
+  ]);
 
   return {
     data: alteredProjectData,

@@ -64,7 +64,7 @@ const MapProjectAccessError: React.FC<MapProjectAccessErrorProps> = ({
 
   return (
     <div className={styles.errorContainer}>
-      <Message type="error">
+      <Message type="error" tagName="div">
         <p>{getMessage()}</p>
         {is403AndNotLoggedIn && (
           <Button

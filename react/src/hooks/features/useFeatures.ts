@@ -116,9 +116,9 @@ export const useFeatureLoadingState = (): FeatureLoadingState => {
   const queryClient = useQueryClient();
 
   // Get all active feature queries
-  const featureQueries = queryClient.getQueriesData<FeatureCollection>([
-    KEY_USE_FEATURES,
-  ]);
+  const featureQueries = queryClient.getQueriesData<FeatureCollection>({
+    queryKey: [KEY_USE_FEATURES],
+  });
 
   // Get the states for all active queries
   const queryStates = featureQueries
@@ -127,7 +127,7 @@ export const useFeatureLoadingState = (): FeatureLoadingState => {
 
   return {
     // If any query is loading, we're loading
-    isLoading: queryStates.some((state) => state?.status === 'loading'),
+    isLoading: queryStates.some((state) => state?.status === 'pending'),
     // If any query has an error, we have an error
     isError: queryStates.some((state) => state?.status === 'error'),
   };
