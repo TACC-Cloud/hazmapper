@@ -8,11 +8,20 @@
   gap: 10px;
 }
 
-.loadingData {
+.loadingCommon {
   display: flex;
   align-items: center;
   white-space: nowrap;
   gap: 5px;
+}
+
+.loadingData {
+  composes: loadingCommon;
+}
+
+.loadingDataError {
+  composes: loadingCommon;
+  color: var(--global-color-danger--normal);
 }
 
 .homeArrow {

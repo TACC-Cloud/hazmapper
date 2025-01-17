@@ -130,7 +130,7 @@ const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
           </div>
         )}
         {isFeaturesError && (
-          <div className={styles.loadingData}>
+          <div className={styles.loadingDataError}>
             <span>Error Loading Data</span>
           </div>
         )}
