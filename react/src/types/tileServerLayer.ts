@@ -17,17 +17,17 @@ export interface TileServerLayer {
   /** The tile options of the layer. */
   tileOptions: {
     /** The maximum zoom level of the layer. */
-    maxZoom?: number;
+    maxZoom?: number | null;
     /** The minimum zoom level of the layer. */
-    minZoom?: number;
+    minZoom?: number | null;
     /** The maximum native zoom level of the layer. */
-    maxNativeZoom?: number;
+    maxNativeZoom?: number | null;
     /** The format of the layer. */
-    format?: string;
+    format?: string | null;
     /** Comma-separated list of layers. */
-    layers?: string;
+    layers?: string | null;
     /** The params for the layer. */
-    params?: WMSParams;
+    params?: WMSParams | string | null;
   };
   /** The user interface (UI) options of the layer. */
   uiOptions: {
@@ -38,8 +38,8 @@ export interface TileServerLayer {
     /** Whether the layer is active or not. */
     isActive: boolean;
     /** Whether to show an input for the layer or not. */
-    showInput?: boolean;
+    showInput?: boolean | null;
     /** Whether to show the description of the layer or not. Note: handles if opacity ui is shown */
-    showDescription?: boolean;
+    showDescription?: boolean | null;
   };
 }

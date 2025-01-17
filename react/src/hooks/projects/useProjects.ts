@@ -90,9 +90,8 @@ export const useDeleteProject = () => {
     endpoint: ({ projectId }) => `/projects/${projectId}/`,
     apiService: ApiService.Geoapi,
     options: {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: 'projects' });
-      },
+      onSuccess: () =>
+        queryClient.invalidateQueries({ queryKey: ['projects'] }),
     },
   });
 };

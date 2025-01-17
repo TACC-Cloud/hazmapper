@@ -7,12 +7,13 @@ import { Message, LoadingSpinner } from '@tacc/core-components';
 import Map from '@hazmapper/components/Map';
 import AssetsPanel from '@hazmapper/components/AssetsPanel';
 import AssetDetail from '@hazmapper/components/AssetDetail';
+import LayersPanel from '@hazmapper/components/LayersPanel';
 import ManageMapProjectModal from '@hazmapper/components/ManageMapProjectModal';
 import { queryPanelKey, Panel } from '@hazmapper/utils/panels';
 import {
   useFeatures,
   useProject,
-  useTileServers,
+  useGetTileServers,
   useFeatureSelection,
   KEY_USE_FEATURES,
 } from '@hazmapper/hooks';
@@ -151,7 +152,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     data: tileServerLayers,
     isLoading: isTileServerLayersLoading,
     error: tileServerLayersError,
-  } = useTileServers({
+  } = useGetTileServers({
     projectId: activeProject.id,
     isPublicView,
   });
@@ -203,6 +204,12 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
                 setEndDate={setEndDate}
                 toggleDateFilter={toggleDateFilter}
                 setToggleDateFilter={setToggleDateFilter}
+              />
+            )}
+            {activePanel === Panel.Layers && (
+              <LayersPanel
+                tileLayers={tileServerLayers}
+                projectId={activeProject.id}
               />
             )}
           </div>
