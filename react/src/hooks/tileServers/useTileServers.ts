@@ -38,14 +38,28 @@ export const useGetTileServers = ({
 };
 
 export const usePutTileServer = ({ projectId }: UsePostTileServerParams) => {
+  const queryClient = useQueryClient();
   return usePut<TileServerLayer[], TileServerLayer[]>({
     endpoint: `/projects/${projectId}/tile-servers/`,
+    options: {
+      onSuccess: () =>
+        queryClient.invalidateQueries({
+          queryKey: ['useGetTileServers'],
+        }),
+    },
   });
 };
 
 export const usePostTileServer = ({ projectId }: UsePostTileServerParams) => {
+  const queryClient = useQueryClient();
   return usePost<TileServerLayer, TileServerLayer>({
     endpoint: `/projects/${projectId}/tile-servers/`,
+    options: {
+      onSuccess: () =>
+        queryClient.invalidateQueries({
+          queryKey: ['useGetTileServers'],
+        }),
+    },
   });
 };
 

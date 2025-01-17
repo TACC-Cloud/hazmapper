@@ -41,6 +41,9 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { SortableItem } from './SortableItem';
+import { useSelector } from 'react-redux';
+import { RootState } from '@hazmapper/redux/store';
+import { isTokenValid } from '@hazmapper/utils/authUtils';
 
 const formLayerTheme: ThemeConfig = {
   components: {
@@ -118,13 +121,15 @@ const LayersPanel: React.FC<{
   tileLayers?: TileServerLayer[];
   projectId: number;
 }> = ({ tileLayers = [], projectId }) => {
+  const isAuthenticated = useSelector((state: RootState) =>
+    isTokenValid(state.auth.authToken)
+  );
   const [form] = Form.useForm();
   const { Header, Content } = Layout;
   const { mutate: updateTileLayers, isPending } = usePutTileServer({
     projectId,
   });
   const [editLayerField, setEditLayerField] = useState({});
-  const [saveButtonEnabled, setSaveButtonEnabled] = useState(false);
 
   const initialValues = useMemo(
     () => ({
@@ -152,10 +157,6 @@ const LayersPanel: React.FC<{
   useEffect(() => {
     reset(initialValues);
   }, [initialValues, reset]);
-
-  useEffect(() => {
-    if (isDirty && !saveButtonEnabled) setSaveButtonEnabled(true);
-  }, [isDirty, saveButtonEnabled]);
 
   type TLayerOptionsFormData = {
     tileLayers: {
@@ -202,12 +203,14 @@ const LayersPanel: React.FC<{
           <Header style={{ fontSize: '1.6rem' }}>
             <Flex justify="space-between" align="center">
               Tile Layers
-              <Button
-                type="default"
-                icon={<PlusOutlined />}
-                title="Add Layer"
-                size="middle"
-              />
+              {isAuthenticated && (
+                <Button
+                  type="default"
+                  icon={<PlusOutlined />}
+                  title="Add Layer"
+                  size="middle"
+                />
+              )}
             </Flex>
           </Header>
           <Content>
@@ -221,9 +224,6 @@ const LayersPanel: React.FC<{
                   onFinish={handleSubmit(saveLayerOptions, (error) => {
                     console.log('error submit data', error);
                   })}
-                  onValuesChange={() => {
-                    if (!saveButtonEnabled) setSaveButtonEnabled(true);
-                  }}
                 >
                   <fieldset disabled={isPending}>
                     <Flex vertical>
@@ -347,10 +347,12 @@ const LayersPanel: React.FC<{
                                           });
                                         }}
                                       />
-                                      <DeleteTileLayerButton
-                                        projectId={projectId}
-                                        tileLayerId={field.layer.id}
-                                      />
+                                      {isAuthenticated && (
+                                        <DeleteTileLayerButton
+                                          projectId={projectId}
+                                          tileLayerId={field.layer.id}
+                                        />
+                                      )}
                                     </Flex>
                                   </Flex>
                                   <FormItem
@@ -373,7 +375,7 @@ const LayersPanel: React.FC<{
                       </DndContext>
                     </Flex>
 
-                    {saveButtonEnabled && (
+                    {isDirty && isAuthenticated && (
                       <Flex
                         align="center"
                         justify="center"
