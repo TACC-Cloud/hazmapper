@@ -51,7 +51,7 @@ export const useDesignSafeProject = ({
 > => {
   const query = useGet<DesignSafeProject>({
     endpoint: `/api/projects/v2/${designSafeProjectUUID}/`,
-    key: ['designsafe-single-projectv2'],
+    key: ['designsafe-single-projectv2', designSafeProjectUUID],
     options,
     apiService: ApiService.DesignSafe,
     transform: (data) => data.baseProject,

@@ -73,7 +73,8 @@ export const projectMock: Project = {
   description: 'A sample project for testing purposes.',
   public: true,
   system_file: 'sample-file',
-  system_id: 'sample-id',
+  system_id:
+    'project-1234' /* 'project-' prefix implies its a DesignSafe project system */,
   system_path: '/path/to/sample',
   deletable: true,
   streetview_instances: null,

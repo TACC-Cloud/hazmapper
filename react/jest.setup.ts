@@ -1,5 +1,5 @@
 import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
-import { server } from '@hazmapper/test/testUtil';
+import { server, testQueryClient } from '@hazmapper/test/testUtil';
 
 /***** A) Setup the configuration used for unit testing *****/
 jest.mock('@hazmapper/hooks/environment/getLocalAppConfiguration', () => ({
@@ -75,6 +75,11 @@ beforeAll(() => {
     }
     originalWarn.apply(console, args);
   });
+});
+
+// Clear the React Query cache before each test
+beforeEach(() => {
+  testQueryClient.clear();
 });
 
 // Reset any runtime request handlers we may add during the tests
