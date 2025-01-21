@@ -61,18 +61,18 @@ export const tileLayerSchema = z.object({
   url: z.string().url().min(1, 'Required'),
   attribution: z.string(),
   tileOptions: z.object({
-    maxZoom: z.number().optional(),
-    minZoom: z.number().optional(),
-    maxNativeZoom: z.number().optional(),
-    format: z.string().optional(),
-    layers: z.string().optional(),
+    maxZoom: z.number().nullish(),
+    minZoom: z.number().nullish(),
+    maxNativeZoom: z.number().nullish(),
+    format: z.string().nullish(),
+    layers: z.string().nullish(),
   }),
   uiOptions: z.object({
     zIndex: z.number(),
     opacity: z.number(),
     isActive: z.boolean(),
-    showInput: z.boolean().optional(),
-    showDescription: z.boolean().optional(),
+    showInput: z.boolean().nullish(),
+    showDescription: z.boolean().nullish(),
   }),
 });
 
@@ -142,6 +142,7 @@ const LayersPanel: React.FC<{
     formState: { isDirty, isValid },
     reset,
     watch,
+    getFieldState,
   } = methods;
 
   useEffect(() => {
@@ -181,6 +182,8 @@ const LayersPanel: React.FC<{
       },
     })
   );
+
+  const [canDrag, setCanDrag] = useState(false);
 
   const handleDragDrop = (event) => {
     const { active, over } = event;
@@ -231,17 +234,13 @@ const LayersPanel: React.FC<{
                           items={fields.map((field) => field.id)}
                         >
                           {fields.map((field, index) => {
-                            const layerName = `tileLayers.${index}.layer.name`;
+                            const layerName: `tileLayers.${number}.layer.name` = `tileLayers.${index}.layer.name`;
                             const layerOpacity: `tileLayers.${number}.layer.uiOptions.opacity` = `tileLayers.${index}.layer.uiOptions.opacity`;
                             return (
                               <SortableItem
                                 key={field.id}
                                 id={field.id}
-                                disabled={
-                                  editLayerField[layerName] ||
-                                  editLayerField[layerOpacity] ||
-                                  isPending
-                                }
+                                disabled={!canDrag || isPending}
                               >
                                 <Flex vertical>
                                   <Flex
@@ -250,7 +249,10 @@ const LayersPanel: React.FC<{
                                     className={styles.tileLayer}
                                   >
                                     <HolderOutlined
+                                      id={`holder-${field.id}`}
                                       style={{ cursor: 'move' }}
+                                      onMouseEnter={() => setCanDrag(true)}
+                                      onMouseLeave={() => setCanDrag(false)}
                                     />
                                     <Flex>
                                       <Button
@@ -318,6 +320,10 @@ const LayersPanel: React.FC<{
                                         }
                                         title="Rename Layer"
                                         size="small"
+                                        disabled={
+                                          editLayerField[layerName] &&
+                                          getFieldState(layerName).invalid
+                                        }
                                         onClick={() =>
                                           setEditLayerField({
                                             ...editLayerField,
@@ -373,7 +379,6 @@ const LayersPanel: React.FC<{
                         </SortableContext>
                       </DndContext>
                     </Flex>
-
                     {isDirty && isAuthenticated && (
                       <Flex
                         align="center"

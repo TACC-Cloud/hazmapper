@@ -122,7 +122,7 @@ const CreateLayerModal: React.FC<{
         data.attributionLink
       ),
     };
-    createTileLayer(submitData);
+    createTileLayer(submitData as TileServerLayer);
   };
 
   const handleClose = useCallback(() => {
