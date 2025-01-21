@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import styles from './LayersPanel.module.css';
 import Panel from '@hazmapper/components/Panel';
 import {
   Layout,
@@ -10,12 +9,14 @@ import {
   ConfigProvider,
   ThemeConfig,
   Slider,
+  Tag,
 } from 'antd';
 import {
   PlusOutlined,
   EyeFilled,
   EyeInvisibleOutlined,
   SlidersFilled,
+  SlidersOutlined,
   EditFilled,
   CloseOutlined,
   CheckOutlined,
@@ -109,10 +110,12 @@ export const DeleteTileLayerButton: React.FC<UseDeleteTileServerParams> = ({
 const LayersPanel: React.FC<{
   tileLayers?: TileServerLayer[];
   projectId: number;
-}> = ({ tileLayers = [], projectId }) => {
+  isPublicView: boolean;
+}> = ({ tileLayers = [], projectId, isPublicView }) => {
   const isAuthenticated = useSelector((state: RootState) =>
     isTokenValid(state.auth.authToken)
   );
+  const canSaveForm = isAuthenticated && !isPublicView;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
   const { Header, Content } = Layout;
@@ -140,14 +143,11 @@ const LayersPanel: React.FC<{
     control,
     handleSubmit,
     formState: { isDirty, isValid },
-    reset,
     watch,
     getFieldState,
+    setValue,
+    getValues,
   } = methods;
-
-  useEffect(() => {
-    reset(initialValues);
-  }, [initialValues, reset]);
 
   type TLayerOptionsFormData = {
     tileLayers: {
@@ -155,18 +155,16 @@ const LayersPanel: React.FC<{
     }[];
   };
 
-  const saveLayerOptions = (data: TLayerOptionsFormData) => {
-    const reOrderedLayers = data.tileLayers.map((item, index) => ({
+  const reorderLayers = (data: TLayerOptionsFormData) =>
+    data.tileLayers.map((item, index) => ({
       ...item.layer,
       uiOptions: {
         ...item.layer.uiOptions,
         zIndex: -(index + 1),
       },
     }));
-    updateTileLayers(reOrderedLayers);
-  };
 
-  const { fields, move, update, insert } = useFieldArray({
+  const { fields, move, insert } = useFieldArray({
     control,
     name: 'tileLayers',
   });
@@ -195,222 +193,248 @@ const LayersPanel: React.FC<{
 
   return (
     <Panel title="Layers">
-      <div className={styles.root}>
-        <Flex vertical>
-          <Header style={{ fontSize: '1.6rem' }}>
-            <Flex justify="space-between" align="center">
-              Tile Layers
-              {isAuthenticated && (
-                <Button
-                  type="default"
-                  icon={<PlusOutlined />}
-                  title="Add Layer"
-                  size="middle"
-                  onClick={() => setIsModalOpen(true)}
-                />
-              )}
-            </Flex>
-          </Header>
-          <Content>
-            <ConfigProvider theme={formLayerTheme}>
-              <FormProvider {...methods}>
-                <Form
-                  form={form}
-                  style={{ maxWidth: 600 }}
-                  className={styles.root}
-                  layout="vertical"
-                  onFinish={handleSubmit(saveLayerOptions, (error) => {
+      <Flex vertical>
+        <Header style={{ fontSize: '1.6rem' }}>
+          <Flex justify="space-between" align="center">
+            Tile Layers
+            {canSaveForm && (
+              <Button
+                type="default"
+                icon={<PlusOutlined />}
+                title="Add Layer"
+                size="middle"
+                onClick={() => setIsModalOpen(true)}
+              />
+            )}
+          </Flex>
+        </Header>
+        <Content>
+          <ConfigProvider theme={formLayerTheme}>
+            <FormProvider {...methods}>
+              <Form
+                form={form}
+                style={{ maxWidth: 600 }}
+                layout="vertical"
+                onFinish={handleSubmit(
+                  (data) => updateTileLayers(reorderLayers(data)),
+                  (error) => {
                     console.log('error submit data', error);
-                  })}
-                >
-                  <fieldset disabled={isPending}>
-                    <Flex vertical>
-                      <DndContext
-                        collisionDetection={closestCenter}
-                        onDragEnd={handleDragDrop}
-                        sensors={sensors}
-                      >
-                        <SortableContext
-                          items={fields.map((field) => field.id)}
-                        >
-                          {fields.map((field, index) => {
-                            const layerName: `tileLayers.${number}.layer.name` = `tileLayers.${index}.layer.name`;
-                            const layerOpacity: `tileLayers.${number}.layer.uiOptions.opacity` = `tileLayers.${index}.layer.uiOptions.opacity`;
-                            return (
-                              <SortableItem
-                                key={field.id}
-                                id={field.id}
-                                disabled={!canDrag || isPending}
-                              >
-                                <Flex vertical>
-                                  <Flex
-                                    justify="space-between"
-                                    align="center"
-                                    className={styles.tileLayer}
-                                  >
-                                    <HolderOutlined
-                                      id={`holder-${field.id}`}
-                                      style={{ cursor: 'move' }}
-                                      onMouseEnter={() => setCanDrag(true)}
-                                      onMouseLeave={() => setCanDrag(false)}
-                                    />
-                                    <Flex>
-                                      <Button
-                                        type="text"
-                                        icon={
-                                          field.layer.uiOptions.isActive ? (
+                  }
+                )}
+              >
+                <fieldset disabled={isPending}>
+                  <Flex vertical>
+                    <DndContext
+                      collisionDetection={closestCenter}
+                      onDragEnd={handleDragDrop}
+                      sensors={sensors}
+                    >
+                      <SortableContext items={fields.map((field) => field.id)}>
+                        {fields.map((field, index) => {
+                          const layerName: `tileLayers.${number}.layer.name` = `tileLayers.${index}.layer.name`;
+                          const layerOpacity: `tileLayers.${number}.layer.uiOptions.opacity` = `tileLayers.${index}.layer.uiOptions.opacity`;
+                          return (
+                            <SortableItem
+                              key={field.id}
+                              id={field.id}
+                              disabled={!canDrag || isPending}
+                            >
+                              <Flex vertical>
+                                <Flex justify="space-between" align="center">
+                                  <HolderOutlined
+                                    id={`holder-${field.id}`}
+                                    style={{ cursor: 'move' }}
+                                    onMouseEnter={() => setCanDrag(true)}
+                                    onMouseLeave={() => setCanDrag(false)}
+                                  />
+                                  <Flex>
+                                    <FormItem
+                                      control={control}
+                                      name={`tileLayers.${index}.layer.uiOptions.isActive`}
+                                    >
+                                      <Tag.CheckableTag
+                                        style={{
+                                          marginRight: 0,
+                                          width: 24,
+                                          height: 24,
+                                        }}
+                                        checked={watch(
+                                          `tileLayers.${index}.layer.uiOptions.isActive`
+                                        )}
+                                        onChange={() => {
+                                          setValue(
+                                            `tileLayers.${index}.layer.uiOptions.isActive`,
+                                            !getValues(
+                                              `tileLayers.${index}.layer.uiOptions.isActive`
+                                            )
+                                          );
+                                        }}
+                                      >
+                                        <Flex
+                                          align="center"
+                                          justify="center"
+                                          style={{ height: '100%' }}
+                                        >
+                                          {watch(
+                                            `tileLayers.${index}.layer.uiOptions.isActive`
+                                          ) ? (
                                             <EyeFilled />
                                           ) : (
                                             <EyeInvisibleOutlined />
-                                          )
-                                        }
-                                        onClick={() => {
-                                          update(index, {
-                                            ...field,
-                                            layer: {
-                                              ...field.layer,
-                                              uiOptions: {
-                                                ...field.layer.uiOptions,
-                                                isActive:
-                                                  !field.layer.uiOptions
-                                                    .isActive,
-                                              },
-                                            },
-                                          });
-                                        }}
-                                      />
-                                    </Flex>
-                                    <Flex
-                                      style={{
-                                        width: '100%',
-                                        padding: '0 5px',
-                                      }}
-                                    >
-                                      {editLayerField[layerName] ? (
-                                        <FormItem
-                                          control={control}
-                                          name={`tileLayers.${index}.layer.name`}
-                                        >
-                                          <Input style={{ paddingLeft: '0' }} />
-                                        </FormItem>
-                                      ) : (
-                                        <span
-                                          title={watch(
-                                            `tileLayers.${index}.layer.name`
                                           )}
-                                        >
-                                          {truncateMiddle(
-                                            watch(
-                                              `tileLayers.${index}.layer.name`
-                                            ),
-                                            13
-                                          )}
-                                        </span>
-                                      )}
-                                    </Flex>
-                                    <Flex>
-                                      <Button
-                                        type="text"
-                                        icon={
-                                          editLayerField[layerName] ? (
-                                            <CheckOutlined />
-                                          ) : (
-                                            <EditFilled />
-                                          )
-                                        }
-                                        title="Rename Layer"
-                                        size="small"
-                                        disabled={
-                                          editLayerField[layerName] &&
-                                          getFieldState(layerName).invalid
-                                        }
-                                        onClick={() =>
-                                          setEditLayerField({
-                                            ...editLayerField,
-                                            [layerName]:
-                                              !editLayerField[layerName],
-                                          })
-                                        }
-                                      />
-                                      <Button
-                                        type="text"
-                                        icon={<SlidersFilled />}
-                                        title="Adjust Opacity"
-                                        size="small"
-                                        onClick={() => {
-                                          update(index, {
-                                            ...field,
-                                            layer: {
-                                              ...field.layer,
-                                              uiOptions: {
-                                                ...field.layer.uiOptions,
-                                                showDescription:
-                                                  !field.layer.uiOptions
-                                                    .showDescription,
-                                              },
-                                            },
-                                          });
-                                        }}
-                                      />
-                                      {isAuthenticated && (
-                                        <DeleteTileLayerButton
-                                          projectId={projectId}
-                                          tileLayerId={field.layer.id}
-                                        />
-                                      )}
-                                    </Flex>
+                                        </Flex>
+                                      </Tag.CheckableTag>
+                                    </FormItem>
                                   </Flex>
-                                  <FormItem
-                                    control={control}
-                                    name={layerOpacity}
+                                  <Flex
                                     style={{
                                       width: '100%',
                                       padding: '0 5px',
                                     }}
                                   >
-                                    {watch(
-                                      `tileLayers.${index}.layer.uiOptions.showDescription`
-                                    ) && <Slider min={0} max={1} step={0.1} />}
-                                  </FormItem>
+                                    {editLayerField[layerName] ? (
+                                      <FormItem
+                                        control={control}
+                                        name={`tileLayers.${index}.layer.name`}
+                                      >
+                                        <Input style={{ paddingLeft: '0' }} />
+                                      </FormItem>
+                                    ) : (
+                                      <span
+                                        title={watch(
+                                          `tileLayers.${index}.layer.name`
+                                        )}
+                                      >
+                                        {truncateMiddle(
+                                          watch(
+                                            `tileLayers.${index}.layer.name`
+                                          ),
+                                          13
+                                        )}
+                                      </span>
+                                    )}
+                                  </Flex>
+                                  <Flex align="center">
+                                    <Button
+                                      type="text"
+                                      icon={
+                                        editLayerField[layerName] ? (
+                                          <CheckOutlined />
+                                        ) : (
+                                          <EditFilled />
+                                        )
+                                      }
+                                      title="Rename Layer"
+                                      size="small"
+                                      disabled={
+                                        editLayerField[layerName] &&
+                                        getFieldState(layerName).invalid
+                                      }
+                                      onClick={() =>
+                                        setEditLayerField({
+                                          ...editLayerField,
+                                          [layerName]:
+                                            !editLayerField[layerName],
+                                        })
+                                      }
+                                    />
+                                    <FormItem
+                                      control={control}
+                                      name={`tileLayers.${index}.layer.uiOptions.showDescription`}
+                                    >
+                                      <Tag.CheckableTag
+                                        style={{
+                                          marginRight: 0,
+                                          width: 24,
+                                          height: 24,
+                                        }}
+                                        checked={
+                                          !!watch(
+                                            `tileLayers.${index}.layer.uiOptions.showDescription`
+                                          )
+                                        }
+                                        onChange={() => {
+                                          setValue(
+                                            `tileLayers.${index}.layer.uiOptions.showDescription`,
+                                            !getValues(
+                                              `tileLayers.${index}.layer.uiOptions.showDescription`
+                                            )
+                                          );
+                                        }}
+                                      >
+                                        <Flex
+                                          align="center"
+                                          justify="center"
+                                          style={{ height: '100%' }}
+                                        >
+                                          {watch(
+                                            `tileLayers.${index}.layer.uiOptions.showDescription`
+                                          ) ? (
+                                            <SlidersFilled />
+                                          ) : (
+                                            <SlidersOutlined />
+                                          )}
+                                        </Flex>
+                                      </Tag.CheckableTag>
+                                    </FormItem>
+                                    {canSaveForm && (
+                                      <DeleteTileLayerButton
+                                        projectId={projectId}
+                                        tileLayerId={field.layer.id}
+                                      />
+                                    )}
+                                  </Flex>
                                 </Flex>
-                              </SortableItem>
-                            );
-                          })}
-                        </SortableContext>
-                      </DndContext>
-                    </Flex>
-                    {isDirty && isAuthenticated && (
-                      <Flex
-                        align="center"
-                        justify="center"
-                        style={{ marginTop: '5rem' }}
-                        vertical
+                                <FormItem
+                                  control={control}
+                                  name={layerOpacity}
+                                  style={{
+                                    width: '100%',
+                                    padding: '0 5px',
+                                  }}
+                                >
+                                  {watch(
+                                    `tileLayers.${index}.layer.uiOptions.showDescription`
+                                  ) && <Slider min={0} max={1} step={0.1} />}
+                                </FormItem>
+                              </Flex>
+                            </SortableItem>
+                          );
+                        })}
+                      </SortableContext>
+                    </DndContext>
+                  </Flex>
+                  {isDirty && canSaveForm && (
+                    <Flex
+                      align="center"
+                      justify="center"
+                      style={{ marginTop: '5rem' }}
+                      vertical
+                    >
+                      <span
+                        style={{ textAlign: 'center', paddingBottom: '1rem' }}
                       >
-                        <span
-                          style={{ textAlign: 'center', paddingBottom: '1rem' }}
+                        Layer options have changed!
+                        <br /> Save to persist changes.
+                      </span>
+                      <Form.Item>
+                        <Button
+                          type="primary"
+                          htmlType="submit"
+                          disabled={!isValid}
+                          loading={isPending}
                         >
-                          Layer options have changed!
-                          <br /> Save to persist changes.
-                        </span>
-                        <Form.Item>
-                          <Button
-                            type="primary"
-                            htmlType="submit"
-                            disabled={!isValid}
-                            loading={isPending}
-                          >
-                            Save Layer Options
-                          </Button>
-                        </Form.Item>
-                      </Flex>
-                    )}
-                  </fieldset>
-                </Form>
-              </FormProvider>
-            </ConfigProvider>
-          </Content>
-        </Flex>
-      </div>
+                          Save Layer Options
+                        </Button>
+                      </Form.Item>
+                    </Flex>
+                  )}
+                </fieldset>
+              </Form>
+            </FormProvider>
+          </ConfigProvider>
+        </Content>
+      </Flex>
       <CreateLayerModal
         isOpen={isModalOpen}
         closeModal={() => setIsModalOpen(false)}

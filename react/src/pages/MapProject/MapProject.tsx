@@ -23,6 +23,7 @@ import { assetTypeOptions } from '@hazmapper/components/FiltersPanel/Filter';
 import { Project } from '@hazmapper/types';
 import HeaderNavBar from '@hazmapper/components/HeaderNavBar';
 import styles from './MapProject.module.css';
+import { Spinner } from '@hazmapper/common_components';
 
 interface MapProjectProps {
   /**
@@ -181,56 +182,62 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
       <HeaderNavBar />
       <div className={styles.mapControlBar}>
         MapTopControlBar TODO https://tacc-main.atlassian.net/browse/WG-260
-        {loading && <div> loading</div>}
       </div>
       <div className={styles.container}>
-        <MapProjectNavBar />
-        {activePanel && activePanel !== Panel.Manage && (
-          <div className={styles.panelContainer}>
-            {activePanel === Panel.Assets && (
-              <AssetsPanel
-                project={activeProject}
-                isPublicView={isPublicView}
+        {loading ? (
+          <Spinner />
+        ) : (
+          <>
+            <MapProjectNavBar />
+            {activePanel && activePanel !== Panel.Manage && (
+              <div className={styles.panelContainer}>
+                {activePanel === Panel.Assets && (
+                  <AssetsPanel
+                    project={activeProject}
+                    isPublicView={isPublicView}
+                    featureCollection={featureCollection}
+                  />
+                )}
+                {activePanel === Panel.Filters && (
+                  <Filters
+                    selectedAssetTypes={selectedAssetTypes}
+                    onFiltersChange={setSelectedAssetTypes}
+                    startDate={startDate}
+                    setStartDate={setStartDate}
+                    endDate={endDate}
+                    setEndDate={setEndDate}
+                    toggleDateFilter={toggleDateFilter}
+                    setToggleDateFilter={setToggleDateFilter}
+                  />
+                )}
+                {activePanel === Panel.Layers && (
+                  <LayersPanel
+                    tileLayers={tileServerLayers}
+                    projectId={activeProject.id}
+                    isPublicView={isPublicView}
+                  />
+                )}
+              </div>
+            )}
+            {activePanel === Panel.Manage && (
+              <ManageMapProjectModal isPublicView={isPublicView} />
+            )}
+            <div className={styles.map}>
+              <Map
+                baseLayers={tileServerLayers}
                 featureCollection={featureCollection}
               />
+            </div>
+            {selectedFeature && (
+              <div className={styles.detailContainer}>
+                <AssetDetail
+                  selectedFeature={selectedFeature}
+                  onClose={() => toggleSelectedFeature(selectedFeature.id)}
+                  isPublicView={activeProject.public}
+                />
+              </div>
             )}
-            {activePanel === Panel.Filters && (
-              <Filters
-                selectedAssetTypes={selectedAssetTypes}
-                onFiltersChange={setSelectedAssetTypes}
-                startDate={startDate}
-                setStartDate={setStartDate}
-                endDate={endDate}
-                setEndDate={setEndDate}
-                toggleDateFilter={toggleDateFilter}
-                setToggleDateFilter={setToggleDateFilter}
-              />
-            )}
-            {activePanel === Panel.Layers && (
-              <LayersPanel
-                tileLayers={tileServerLayers}
-                projectId={activeProject.id}
-              />
-            )}
-          </div>
-        )}
-        {activePanel === Panel.Manage && (
-          <ManageMapProjectModal isPublicView={isPublicView} />
-        )}
-        <div className={styles.map}>
-          <Map
-            baseLayers={tileServerLayers}
-            featureCollection={featureCollection}
-          />
-        </div>
-        {selectedFeature && (
-          <div className={styles.detailContainer}>
-            <AssetDetail
-              selectedFeature={selectedFeature}
-              onClose={() => toggleSelectedFeature(selectedFeature.id)}
-              isPublicView={activeProject.public}
-            />
-          </div>
+          </>
         )}
       </div>
     </div>
