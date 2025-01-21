@@ -2,6 +2,7 @@ import React from 'react';
 import useAuthenticatedUser from '@hazmapper/hooks/user/useAuthenticatedUser';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button, InlineMessage, LoadingSpinner } from '@tacc/core-components';
+import hazmapperHeaderLogo from '@hazmapper/assets/hazmapper-header-logo.png';
 import styles from './HeaderNavBar.module.css';
 import * as ROUTES from '@hazmapper/constants/routes';
 
@@ -44,11 +45,7 @@ export const HeaderNavBar: React.FC = () => {
       aria-label="return to project listings"
       tabIndex={0}
     >
-      <img
-        width="150px"
-        src="./src/assets/hazmapper-header-logo.png"
-        alt="Hazmapper Logo"
-      />
+      <img width="150px" src={hazmapperHeaderLogo} alt="Hazmapper Logo" />
       {userData?.username ? (
         <div className={styles.userName}>{userData.username}</div>
       ) : (
