@@ -52,6 +52,9 @@ export function shouldIgnoreError(args: any[]): boolean {
 /***** C) Setup testing and also ensure that we are mocking things in tests *****/
 
 beforeAll(() => {
+  // Uncomment next line to see all handlers
+  // console.log('Registered handlers:', server.listHandlers());
+
   // Establish mocking of APIs before all tests
   server.listen({
     onUnhandledRequest: 'error',
