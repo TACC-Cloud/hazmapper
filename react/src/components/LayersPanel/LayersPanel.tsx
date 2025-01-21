@@ -61,32 +61,18 @@ export const tileLayerSchema = z.object({
   url: z.string().url().min(1, 'Required'),
   attribution: z.string(),
   tileOptions: z.object({
-    maxZoom: z.number().nullish(),
-    minZoom: z.number().nullish(),
-    maxNativeZoom: z.number().nullish(),
-    format: z.string().nullish(),
-    layers: z.string().nullish(),
-    params: z
-      .object({
-        format: z.string().optional(),
-        layers: z.string(),
-        request: z.string().optional(),
-        service: z.string().optional(),
-        styles: z.string().optional(),
-        version: z.string().optional(),
-        transpaernt: z.boolean().optional(),
-        width: z.number().optional(),
-        height: z.number().optional(),
-      })
-      .or(z.string())
-      .nullish(),
+    maxZoom: z.number().optional(),
+    minZoom: z.number().optional(),
+    maxNativeZoom: z.number().optional(),
+    format: z.string().optional(),
+    layers: z.string().optional(),
   }),
   uiOptions: z.object({
     zIndex: z.number(),
     opacity: z.number(),
     isActive: z.boolean(),
-    showInput: z.boolean().nullish(),
-    showDescription: z.boolean().nullish(),
+    showInput: z.boolean().optional(),
+    showDescription: z.boolean().optional(),
   }),
 });
 
@@ -306,7 +292,11 @@ const LayersPanel: React.FC<{
                                           <Input style={{ paddingLeft: '0' }} />
                                         </FormItem>
                                       ) : (
-                                        <span>
+                                        <span
+                                          title={watch(
+                                            `tileLayers.${index}.layer.name`
+                                          )}
+                                        >
                                           {truncateMiddle(
                                             watch(
                                               `tileLayers.${index}.layer.name`

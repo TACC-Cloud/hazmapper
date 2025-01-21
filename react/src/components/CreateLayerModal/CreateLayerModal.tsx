@@ -65,11 +65,10 @@ const CreateLayerModal: React.FC<{
       type: 'tms',
       url: '',
       tileOptions: {
-        maxZoom: null,
-        minZoom: null,
-        format: null,
-        params: null,
-        layers: null,
+        maxZoom: undefined,
+        minZoom: undefined,
+        format: undefined,
+        layers: undefined,
       },
       uiOptions: {
         opacity: 0.5,
@@ -323,13 +322,6 @@ const CreateLayerModal: React.FC<{
                           control={control}
                           name="tileLayer.tileOptions.layers"
                           label="Layers (comma-separated)"
-                        >
-                          <Input />
-                        </FormItem>
-                        <FormItem
-                          control={control}
-                          name="tileLayer.tileOptions.params"
-                          label="Params"
                         >
                           <Input />
                         </FormItem>
