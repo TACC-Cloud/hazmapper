@@ -9,14 +9,19 @@ import {
 } from '@hazmapper/test/testUtil';
 import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
 
+import * as UserHooks from '@hazmapper/hooks/user/useAuthenticatedUser';
+
 const mockNavigate = jest.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigate,
-  useParams: () => ({ projectUUID: 'test-uuid' }),
-  useLocation: () => ({ pathname: '/test-path', search: '' }),
-}));
+jest.mock('react-router-dom', () => {
+  const actual = jest.requireActual('react-router-dom') as object;
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+    useParams: () => ({ projectUUID: 'test-uuid' }),
+    useLocation: () => ({ pathname: '/test-path', search: '' }),
+  };
+});
 
 jest.mock('@hazmapper/hooks/user/useAuthenticatedUser', () => ({
   __esModule: true,
@@ -87,13 +92,11 @@ describe('MapProject', () => {
   });
 
   test('shows login prompt for 403 error when not logged in', async () => {
-    jest
-      .spyOn(require('@hazmapper/hooks/user/useAuthenticatedUser'), 'default')
-      .mockImplementation(() => ({
-        data: null,
-        isLoading: false,
-        error: null,
-      }));
+    jest.spyOn(UserHooks, 'default').mockImplementation(() => ({
+      data: { username: '' },
+      isLoading: false,
+      error: null,
+    }));
 
     server.use(
       http.get(`${testDevConfiguration.geoapiUrl}/projects/`, async () => {
