@@ -7,6 +7,7 @@ import {
   designSafeProjectMock,
 } from '@hazmapper/__fixtures__/projectFixtures';
 import { users } from '@hazmapper/__fixtures__/usersFixtures';
+import { tileServerLayers } from '@hazmapper/__fixtures__/tileServerLayerFixture';
 
 // ArcGIS tiles GET
 export const arcgis_tiles = http.get('https://tiles.arcgis.com/*', () => {
@@ -26,10 +27,23 @@ export const designsafe_project = http.get(
     HttpResponse.json({ baseProject: designSafeProjectMock }, { status: 200 })
 );
 
-// GeoAPI Projects GET
-export const geoapi_projects_list = http.get(
+// GeoAPI Projects GET - handles both list and single project (i.e query is "?uuid=uuid")
+export const geoapi_get_projects = http.get(
   `${testDevConfiguration.geoapiUrl}/projects/`,
-  () => HttpResponse.json([projectMock], { status: 200 })
+  ({ request }) => {
+    const url = new URL(request.url);
+    const uuid = url.searchParams.get('uuid');
+
+    // If uuid is provided, return single project in array
+    if (uuid) {
+      return HttpResponse.json([projectMock], { status: 200 });
+    }
+
+    // No uuid means list all projects
+    return HttpResponse.json([projectMock /* other projects */], {
+      status: 200,
+    });
+  }
 );
 
 // GeoAPI Project Features GET
@@ -40,8 +54,14 @@ export const geoapi_project_features = http.get(
 
 // GeoAPI Project Users GET
 export const geoapi_project_users = http.get(
-  `${testDevConfiguration.geoapiUrl}/projects/:projectId/users`,
+  `${testDevConfiguration.geoapiUrl}/projects/:projectId/users/`,
   () => HttpResponse.json(users, { status: 200 })
+);
+
+// GeoAPI Project Tile Servers GET
+export const geoapi_project_tile_servers = http.get(
+  `${testDevConfiguration.geoapiUrl}/projects/:projectId/tile-servers/`,
+  () => HttpResponse.json(tileServerLayers, { status: 200 })
 );
 
 // Tapis Systems GET
@@ -68,9 +88,10 @@ export const defaultHandlers = [
   arcgis_tiles,
   designsafe_project,
   designsafe_projects,
-  geoapi_projects_list,
+  geoapi_get_projects,
   geoapi_project_features,
   geoapi_project_users,
+  geoapi_project_tile_servers,
   tapis_files_listing,
   tapis_systems,
 ];

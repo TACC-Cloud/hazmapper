@@ -106,7 +106,6 @@ const MapProject: React.FC<MapProjectProps> = ({ isPublicView = false }) => {
     error,
   } = useProject({
     projectUUID,
-    isPublicView,
     options: { enabled: !!projectUUID },
   });
 

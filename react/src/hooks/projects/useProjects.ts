@@ -18,17 +18,14 @@ export const useProjects = (): UseQueryResult<Project[]> => {
 
 interface UseProjectParams {
   projectUUID?: string;
-  isPublicView: boolean;
   options: object;
 }
 
 export const useProject = ({
   projectUUID,
-  isPublicView,
   options,
 }: UseProjectParams): UseQueryResult<Project> => {
-  const projectRoute = isPublicView ? 'public-projects' : 'projects';
-  const endpoint = `/${projectRoute}/?uuid=${projectUUID}`;
+  const endpoint = `/projects/?uuid=${projectUUID}`;
   const query = useGet<Project>({
     endpoint,
     key: ['project'],
