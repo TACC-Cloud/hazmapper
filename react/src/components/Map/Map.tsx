@@ -61,7 +61,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
   baseLayers = [],
   featureCollection,
 }) => {
-  const { selectedFeatureId, setSelectedFeatureId } = useFeatureSelection();
+  const { setSelectedFeatureId } = useFeatureSelection();
 
   const handleFeatureClick = useCallback(
     (feature: any) => {
@@ -69,7 +69,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
 
       //TODO handle clicking on streetview https://tacc-main.atlassian.net/browse/WG-392
     },
-    [selectedFeatureId]
+    [setSelectedFeatureId]
   );
 
   const activeBaseLayers = useMemo(
@@ -82,19 +82,19 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
     streetviewFeatures: Feature[];
   }
 
-  // Initial accumulator state
-  const initialAccumulator: FeatureAccumulator = {
-    generalGeoJsonFeatures: [],
-    markerFeatures: [],
-    streetviewFeatures: [],
-  };
-
   const {
     generalGeoJsonFeatures,
     markerFeatures,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     streetviewFeatures /* Add streetview support https://tacc-main.atlassian.net/browse/WG-392 */,
   } = useMemo(() => {
+    // Initial accumulator state
+    const initialAccumulator: FeatureAccumulator = {
+      generalGeoJsonFeatures: [],
+      markerFeatures: [],
+      streetviewFeatures: [],
+    };
+
     return featureCollection.features.reduce<FeatureAccumulator>(
       (accumulator, feature: Feature) => {
         if (feature.geometry.type === FeatureType.Point) {
