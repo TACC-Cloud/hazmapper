@@ -8,7 +8,6 @@ import nsfLogo from '@hazmapper/assets/nsf.png';
 import designsafeLogo from '@hazmapper/assets/designsafe.svg';
 import nheriLogo from '@hazmapper/assets/nheri.png';
 
-
 const MainMenu = () => {
   return (
     <div className={styles.root}>
