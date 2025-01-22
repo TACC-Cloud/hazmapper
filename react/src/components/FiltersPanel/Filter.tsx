@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './Filters.module.css';
 import DatePicker from 'react-datepicker';
+import { Button } from 'antd';
 import 'react-datepicker/dist/react-datepicker.css';
 
 interface FiltersProps {
@@ -10,6 +11,8 @@ interface FiltersProps {
   setStartDate: (date: Date) => void;
   endDate: Date;
   setEndDate: (date: Date) => void;
+  toggleDateFilter: boolean;
+  setToggleDateFilter: (toggleDateFilter: boolean) => void;
 }
 
 interface CustomInputProps {
@@ -33,6 +36,8 @@ const Filters: React.FC<FiltersProps> = ({
   setStartDate,
   endDate,
   setEndDate,
+  toggleDateFilter,
+  setToggleDateFilter,
 }) => {
   const handleFilterChange = (assetType: string) => {
     if (selectedAssetTypes.includes(assetType)) {
@@ -68,26 +73,37 @@ const Filters: React.FC<FiltersProps> = ({
   return (
     <div className={styles.root}>
       <h3>Filters</h3>
-      <h2>Date Range</h2>
-      <h5>Start Date</h5>
-      <DatePicker
-        selected={startDate}
-        onChange={(date: Date | null) => setStartDate(date as Date)}
-        selectsStart
-        startDate={startDate}
-        endDate={endDate}
-        customInput={<CustomInputWithTooltip />}
-      />
-      <h5>End Date</h5>
-      <DatePicker
-        selected={endDate}
-        onChange={(date: Date | null) => setEndDate(date as Date)}
-        selectsEnd
-        startDate={startDate}
-        endDate={endDate}
-        minDate={startDate}
-        customInput={<CustomInputWithTooltip />}
-      />
+      {toggleDateFilter ? (
+        <>
+          <Button onClick={() => setToggleDateFilter(false)}>
+            Disable Date Range Filter
+          </Button>
+          <h2>Date Range</h2>
+          <h5>Start Date</h5>
+          <DatePicker
+            selected={startDate}
+            onChange={(date: Date | null) => setStartDate(date as Date)}
+            selectsStart
+            startDate={startDate}
+            endDate={endDate}
+            customInput={<CustomInputWithTooltip />}
+          />
+          <h5>End Date</h5>
+          <DatePicker
+            selected={endDate}
+            onChange={(date: Date | null) => setEndDate(date as Date)}
+            selectsEnd
+            startDate={startDate}
+            endDate={endDate}
+            minDate={startDate}
+            customInput={<CustomInputWithTooltip />}
+          />
+        </>
+      ) : (
+        <Button type="primary" onClick={() => setToggleDateFilter(true)}>
+          Enable Date Range Filter
+        </Button>
+      )}
       <h2>Asset Types</h2>
       {Object.entries(assetTypeOptions).map(([key, value]) => (
         <div key={key}>

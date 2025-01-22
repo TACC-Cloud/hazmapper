@@ -141,3 +141,9 @@ export interface FeatureFileNode {
   featureType: FeatureTypeNullable;
   children?: FeatureFileNode[];
 }
+export interface QuestionnaireAsset {
+  filename: string;
+  coordinates: any;
+  path: string;
+  previewPath: string;
+}

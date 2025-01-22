@@ -3,6 +3,10 @@ import ProjectListing from '@hazmapper/components/Projects/ProjectListing';
 import styles from './layout.module.css';
 import { Button } from '@tacc/core-components';
 import HeaderNavBar from '@hazmapper/components/HeaderNavBar';
+import hazmapperLogo from '@hazmapper/assets/Hazmapper-Stack@4x.png';
+import nsfLogo from '@hazmapper/assets/nsf.png';
+import designsafeLogo from '@hazmapper/assets/designsafe.svg';
+import nheriLogo from '@hazmapper/assets/nheri.png';
 
 const MainMenu = () => {
   return (
@@ -10,10 +14,7 @@ const MainMenu = () => {
       <HeaderNavBar />
       <div className={styles.listingContainer}>
         <div className={styles.versionContainer}>
-          <img
-            src="./src/assets/Hazmapper-Stack@4x.png"
-            alt="Hazmapper Logo"
-          ></img>
+          <img src={hazmapperLogo} alt="Hazmapper Logo"></img>
           <div className={styles.version}>{'Version 2.19'}</div>
         </div>
         <ProjectListing />
@@ -53,20 +54,20 @@ const MainMenu = () => {
       <div className={styles.sponsorContainer}>
         <a href="https://www.nsf.gov/">
           <img
-            src="./src/assets/nsf.png"
+            src={nsfLogo}
             alt="National Science Foundation website"
             width="60px"
           />
         </a>
         <a href="https://www.designsafe-ci.org/">
           <img
-            src="./src/assets/designsafe.svg"
+            src={designsafeLogo}
             alt="NHERI DesignSafe website"
             width="200px"
           />
         </a>
         <a href="https://www.designsafe-ci.org/about/">
-          <img src="./src/assets/nheri.png" alt="NHERI website" width="150px" />
+          <img src={nheriLogo} alt="NHERI website" width="150px" />
         </a>
       </div>
     </div>

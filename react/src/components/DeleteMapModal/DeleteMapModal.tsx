@@ -17,7 +17,7 @@ const DeleteMapModal = ({
 }: DeleteMapModalProps) => {
   const {
     mutate: deleteProject,
-    isLoading: isDeletingProject,
+    isPending: isDeletingProject,
     isError,
     isSuccess,
   } = useDeleteProject();
