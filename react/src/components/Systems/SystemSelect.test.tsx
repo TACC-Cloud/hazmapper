@@ -3,23 +3,15 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { SystemSelect } from './SystemSelect';
 import systemsFixture from './Systems.fixture';
 
-jest.mock('@hazmapper/hooks', () => {
-  return {
-    useSystems: () => {
-      return {
-        data: systemsFixture,
-        myDataSystem: { id: 'designsafe.storage.default' },
-        communityDataSystem: { id: 'designsafe.storage.community' },
-        publishedDataSystem: { id: 'designsafe.storage.published' },
-      };
-    },
-    useProjectsWithDesignSafeInformation: () => {
-      return {
-        data: [],
-      };
-    },
-  };
-});
+jest.mock('../../hooks', () => ({
+  useDsProjects: jest.fn(() => ({ result: [] })),
+  useSystems: jest.fn(() => ({ 
+    data: systemsFixture,
+    myDataSystem: { id: 'designsafe.storage.default' },
+    communityDataSystem: { id: 'designsafe.storage.community' },
+    publishedDataSystem: { id: 'designsafe.storage.published' },
+  })),
+}));
 
 describe('System Select', () => {
   const mockOnSystemSelect = jest.fn();
