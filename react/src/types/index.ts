@@ -9,3 +9,5 @@ export type {
 export type { AuthState, AuthenticatedUser, AuthToken } from './auth';
 export type { System } from './systems';
 export * from './environment';
+export * from './pointCloud';
+export * from './task';
