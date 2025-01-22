@@ -73,7 +73,6 @@
     "@babel/preset-typescript": "^7.26.0",
     "@eslint/compat": "^1.2.5",
     "@eslint/js": "^9.18.0",
-    "@hookform/devtools": "^4.3.3",
     "@redux-devtools/core": "^4.0.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.1.0",
