@@ -1,22 +1,21 @@
 import React from 'react';
 import styles from './Panel.module.css';
-import { Layout, Flex } from 'antd';
+import { Layout, Flex, LayoutProps } from 'antd';
 
-interface Props {
-  title: string;
-  children: React.ReactNode;
-}
-
-const Panel: React.FC<Props> = ({ title, children }) => {
+const Panel: React.FC<LayoutProps & { panelTitle: string }> = ({
+  panelTitle,
+  children,
+  ...props
+}) => {
   const { Header, Content } = Layout;
 
   return (
-    <Flex vertical className={styles.root}>
-      <Layout>
-        <Header className={styles.header}>{title}</Header>
+    <Layout {...props}>
+      <Flex vertical className={styles.root}>
+        <Header className={styles.header}>{panelTitle}</Header>
         <Content>{children}</Content>
-      </Layout>
-    </Flex>
+      </Flex>
+    </Layout>
   );
 };
 

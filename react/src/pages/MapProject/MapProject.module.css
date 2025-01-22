@@ -34,14 +34,12 @@
 
 .panelContainer {
   width: var(--hazmapper-panel-width);
-  height: calc(
-    100vh - var(--hazmapper-header-navbar-height) -
-      var(--hazmapper-control-bar-height)
-  );
+  height: 100%;
   background-color: var(--global-color-primary--xx-light);
-  position: absolute;
+  position: fixed;
   left: var(--hazmapper-panel-navbar-width);
-  z-index: 5000;
+  overflow-y: auto;
+  z-index: 1050;
 }
 .detailContainer {
   min-width: 250px;
@@ -53,7 +51,7 @@
   right: 10px;
   top: 75px;
   bottom: 20px;
-  z-index: 5000;
+  z-index: 1050;
 }
 
 .map {

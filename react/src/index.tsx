@@ -29,9 +29,10 @@ const themeConfig: ThemeConfig = {
     Layout: {
       bodyBg: 'transparent',
       headerBg: 'transparent',
-      headerPadding: '0 16px',
+      headerPadding: 0,
       footerBg: 'transparent',
       footerPadding: '0 16px',
+      siderBg: 'transparent',
     },
   },
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './Filters.module.css';
 import DatePicker from 'react-datepicker';
-import { Button } from 'antd';
+import { Button, Flex } from 'antd';
 import 'react-datepicker/dist/react-datepicker.css';
 
 interface FiltersProps {
@@ -71,8 +71,7 @@ const Filters: React.FC<FiltersProps> = ({
   CustomInputWithTooltip.displayName = 'CustomInputWithTooltip';
 
   return (
-    <div className={styles.root}>
-      <h3>Filters</h3>
+    <Flex vertical className={styles.root}>
       {toggleDateFilter ? (
         <>
           <Button onClick={() => setToggleDateFilter(false)}>
@@ -117,7 +116,7 @@ const Filters: React.FC<FiltersProps> = ({
           </label>
         </div>
       ))}
-    </div>
+    </Flex>
   );
 };
 

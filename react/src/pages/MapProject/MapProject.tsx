@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
-
+import { Layout, Flex } from 'antd';
 import { Message, LoadingSpinner } from '@tacc/core-components';
 
 import Map from '@hazmapper/components/Map';
@@ -24,6 +24,7 @@ import { Project } from '@hazmapper/types';
 import HeaderNavBar from '@hazmapper/components/HeaderNavBar';
 import styles from './MapProject.module.css';
 import { Spinner } from '@hazmapper/common_components';
+import { Panel as BasePanel } from '@hazmapper/components/Panel';
 
 interface MapProjectProps {
   /**
@@ -177,20 +178,30 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     features: [],
   };
 
+  const { Header, Content, Sider } = Layout;
+
   return (
-    <div className={styles.root}>
-      <HeaderNavBar />
-      <div className={styles.mapControlBar}>
-        MapTopControlBar TODO https://tacc-main.atlassian.net/browse/WG-260
-      </div>
-      <div className={styles.container}>
-        {loading ? (
-          <Spinner />
-        ) : (
-          <>
+    <Layout style={{ height: '100vh' }}>
+      <Header>
+        <HeaderNavBar />
+        <div className={styles.mapControlBar}>
+          MapTopControlBar TODO https://tacc-main.atlassian.net/browse/WG-260
+        </div>
+      </Header>
+      <Layout>
+        <Sider width="auto">
+          <Flex
+            style={{
+              overflowY: 'auto',
+              height: '100%',
+            }}
+          >
             <MapProjectNavBar />
-            {activePanel && activePanel !== Panel.Manage && (
-              <div className={styles.panelContainer}>
+            {activePanel && activePanel !== Panel.Manage && !loading && (
+              <BasePanel
+                panelTitle={activePanel}
+                className={styles.panelContainer}
+              >
                 {activePanel === Panel.Assets && (
                   <AssetsPanel
                     project={activeProject}
@@ -217,30 +228,38 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
                     isPublicView={isPublicView}
                   />
                 )}
-              </div>
+              </BasePanel>
             )}
-            {activePanel === Panel.Manage && (
-              <ManageMapProjectModal isPublicView={isPublicView} />
-            )}
-            <div className={styles.map}>
-              <Map
-                baseLayers={tileServerLayers}
-                featureCollection={featureCollection}
-              />
-            </div>
-            {selectedFeature && (
-              <div className={styles.detailContainer}>
-                <AssetDetail
-                  selectedFeature={selectedFeature}
-                  onClose={() => toggleSelectedFeature(selectedFeature.id)}
-                  isPublicView={activeProject.public}
+          </Flex>
+        </Sider>
+        <Content>
+          {loading ? (
+            <Spinner />
+          ) : (
+            <>
+              {activePanel === Panel.Manage && (
+                <ManageMapProjectModal isPublicView={isPublicView} />
+              )}
+              <div className={styles.map}>
+                <Map
+                  baseLayers={tileServerLayers}
+                  featureCollection={featureCollection}
                 />
               </div>
-            )}
-          </>
-        )}
-      </div>
-    </div>
+              {selectedFeature && (
+                <div className={styles.detailContainer}>
+                  <AssetDetail
+                    selectedFeature={selectedFeature}
+                    onClose={() => toggleSelectedFeature(selectedFeature.id)}
+                    isPublicView={activeProject.public}
+                  />
+                </div>
+              )}
+            </>
+          )}
+        </Content>
+      </Layout>
+    </Layout>
   );
 };
 

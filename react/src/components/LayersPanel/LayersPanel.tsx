@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import Panel from '@hazmapper/components/Panel';
 import {
   Layout,
   Flex,
@@ -151,7 +150,7 @@ const LayersPanel: React.FC<{
   } = methods;
 
   useEffect(() => {
-    reset();
+    reset(initialValues);
     setEditLayerField({});
   }, [initialValues, reset]);
 
@@ -198,7 +197,7 @@ const LayersPanel: React.FC<{
   };
 
   return (
-    <Panel title="Layers">
+    <>
       <Flex vertical>
         <Header style={{ fontSize: '1.6rem' }}>
           <Flex justify="space-between" align="center">
@@ -447,7 +446,7 @@ const LayersPanel: React.FC<{
         projectId={projectId}
         addTileLayer={addTileLayer}
       />
-    </Panel>
+    </>
   );
 };
 
