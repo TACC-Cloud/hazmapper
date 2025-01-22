@@ -147,7 +147,13 @@ const LayersPanel: React.FC<{
     getFieldState,
     setValue,
     getValues,
+    reset,
   } = methods;
+
+  useEffect(() => {
+    reset();
+    setEditLayerField({});
+  }, [initialValues, reset]);
 
   type TLayerOptionsFormData = {
     tileLayers: {
