@@ -1,3 +1,4 @@
+// @ts-nocheck 
 /*
 * NOTE: questionnaireBuilder.ts and modal-questionnaire-viewer.component.style
 * derived from source provided written by Rapid Developers and provided to us on 2022.11.02
@@ -19,7 +20,7 @@
 *    by accessing https://rapid.apl.uw.edu/rapp/ and retreiving the code as the code is not minimized.
 */
 
-import * as $ from 'jquery';
+import $ from 'jquery';
 import { v4 as uuidv4 } from 'uuid';
 import * as L from 'leaflet';
 
@@ -894,17 +895,17 @@ class Section {
 }
 class Question {
   answer_index;
-  metadata;
-  parent_template;
+  //metadata;
+  //parent_template;
   section;
   question_num;
   template_question_num;
-  view_question_DOM;
+  //view_question_DOM;
   scroll_label;
   read_only_view;
   required = QuestionnaireBuilder.REQUIRED_DEFAULT;
   is_sub_question;
-  id;
+  //id;
   parent_question;
   decline;
   responseStrings;
@@ -945,13 +946,12 @@ class Question {
       if (section) { section.questions.push(this); }
       this.parent_template.question_map[this.template_question_num] = this;
       this.parent_template.question_id_map[this.id] = this;
-      return;
     }
 
     // note that any question type class that has a defined 'parent question' parameter is a SUB QUESTION
     // ONLY MULTIPLE CHOICE QUESTION TYPES HAVE SUB QUESTIONS
     // if sub question, don't create standard UI elements
-    if (parent_question) {
+    else if (parent_question) {
       this.is_sub_question = true;
       $('.subQuestionModalForm').fadeOut();
       if (!this.id) {
@@ -961,20 +961,20 @@ class Question {
         // this.parent_template.question_id_map[this.id] = this
       }
       this.parent_template.question_id_map[this.id] = this;
-      return;
+    } else {
+      if (parent_template.current_question_index !== -1) {
+        ++parent_template.current_question_index;
+      }
+
+      // if (!this.id) this.id = Utils.generateUUID();
+      if (!this.id) {
+        this.id = uuidv4();
+      }
+      section.questions.push(this);
+      // add to question map
+      this.parent_template.question_map[this.template_question_num] = this;
+      his.parent_template.question_id_map[this.id] = this;
     }
-
-    if (parent_template.current_question_index !== -1) {
-      ++parent_template.current_question_index;
-    }
-
-    // if (!this.id) this.id = Utils.generateUUID();
-    if (!this.id) { this.id = uuidv4(); }
-
-    section.questions.push(this);
-    // add to question map
-    this.parent_template.question_map[this.template_question_num] = this;
-    this.parent_template.question_id_map[this.id] = this;
   }
 
   getSubQuestionNumber() {
@@ -1111,13 +1111,13 @@ class Question {
 
 // multiple choice question types
 class SingleAnswer extends Question {
-  options;
+  /* options;
   instructions;
   responseIndexes;
   type;
   heading;
   label;
-  new_sub_question_index;
+  new_sub_question_index;*/
 
   constructor(
     metadata,
@@ -1613,7 +1613,7 @@ class SingleAnswer extends Question {
   }
 }
 class MultiAnswer extends SingleAnswer {
-  responseIndexes;
+  /*responseIndexes;*/
 
   constructor(
     metadata,
@@ -1791,9 +1791,9 @@ class YesNo extends SingleAnswer {
 
 // text entry question type
 class MultiText extends Question {
-  heading: null;
+  /*heading: null;
   questions;
-  is_decline_sub_question;
+  is_decline_sub_question;*/
 
   constructor(
     metadata,
@@ -1815,7 +1815,6 @@ class MultiText extends Question {
       parent_question,
       answer_index
     );
-
     const multi_text = this;
     multi_text.answer_index = answer_index;
 
@@ -2182,11 +2181,11 @@ class MultiText extends Question {
 
 // number fields
 class NumberField extends Question {
-  mode;
+  /*mode;
   type;
   heading: null;
   label;
-  instructions;
+  instructions;*/
 
   constructor(
     metadata,
@@ -2469,13 +2468,13 @@ class DateTime extends NumberField {
 
 // special question types
 class LocationField extends Question {
-  mode;
+  /*mode;
   type;
   heading: null;
   label;
   instructions;
   decline;
-  view_mode_map;
+  view_mode_map;*/
 
   constructor(
     metadata,
@@ -2741,7 +2740,7 @@ class LocationField extends Question {
   }
 }
 class RangeAnswer extends Question {
-  responseIndexes;
+  /*responseIndexes;
   decline;
   range;
   update_timer;
@@ -2749,7 +2748,7 @@ class RangeAnswer extends Question {
   type;
   heading: null;
   label;
-  is_decline_sub_question;
+  is_decline_sub_question;*/
 
   constructor(
     metadata,
@@ -3006,14 +3005,14 @@ class RangeAnswer extends Question {
   }
 }
 class Matrix extends Question {
-  type;
+  /*type;
   label;
   heading: null;
   instructions;
   mode;
   rows;
   columns;
-  responseMatrixIndexes;
+  responseMatrixIndexes;*/
 
   constructor(
     metadata,
@@ -3328,9 +3327,9 @@ class Matrix extends Question {
 
 // pages
 class TextPage extends Question {
-  heading;
+  /*heading;
   type;
-  label;
+  label;*/
   constructor(
     metadata,
     parent_template,
@@ -3408,9 +3407,9 @@ class TextPage extends Question {
   }
 }
 class EndPage {
-  type;
+  /*type;
   label;
-  heading;
+  heading;*/
   constructor() {
     this.type = 'End';
     this.label = 'End';

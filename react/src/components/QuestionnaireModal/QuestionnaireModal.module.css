@@ -1,0 +1,285 @@
+/* QuestionnaireView.module.css */
+
+/* Target all questionnaire content injected by jQuery */
+
+.questionnaireViewContainer :global(.view-only-questionnaire-container) {
+  cursor: default;
+  line-height: normal;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+}
+
+/* Question wrappers and structure */
+.questionnaireViewContainer :global(.questionWrapper) {
+  border-top: 2px solid #cccccc;
+}
+
+.questionnaireViewContainer :global(div.subQuestion) {
+  border-top: 1px solid #aaaaaa;
+  margin-left: 30px !important;
+  padding-top: 6px !important;
+}
+.questionnaireViewContainer :global(.subQuestion)::before {
+  color: #999999;
+  content: "Sub-question";
+  font-style: italic;
+  font-weight: var(--bold);
+}
+
+.questionnaireViewContainer :global(.subQuestionOptions) {
+  margin-left: 20px !important;
+}
+
+/* Overrides base styles that put a border bottom under a table row
+that effects subquestions */
+.questionnaireViewContainer :global(:is(.s-paragraph-table, .paragraph-table) p:not(:last-of-type), tr:not(:last-of-type) > :is(td, th)) {
+	 border-bottom: none !important;
+}
+
+.questionnaireViewContainer :global(.questionWrapper)
+.questionnaireViewContainer :global(.subQuestion) {
+  margin-top: 10px !important;
+  margin-bottom: 10px !important;
+}
+
+/* Question header styling */
+.questionnaireViewContainer :global(div.questionHeaderWrapper) {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-top: 10px !important;
+}
+
+.questionnaireViewContainer :global(p.questionNumber) {
+  font-weight: var(--bold);
+  font-size: var(--global-font-size--large);
+}
+
+.questionnaireViewContainer :global(p.questionType) {
+  font-size: var(--global-font-size--small);
+  font-weight: var(--bold);
+}
+
+.questionnaireViewContainer :global(p.questionType)::before {
+  color: #999999;
+  content: "Question Type:  ";
+  font-size: var(--global-font-size--small);
+  font-style: italic;
+  font-weight:  var(--bold);
+  margin-right: 4px !important;
+}
+
+/* Fields and labels */
+/* This is the "Required" tag on questions.*/
+.questionnaireViewContainer :global(.editFieldLabel) {
+  color: #660000;
+  font-size: var(--global-font-size--small);
+  font-style: italic;
+  font-weight: var(--bold);
+  margin-top: 4px !important;
+}
+
+.questionnaireViewContainer :global(p.headingText) {
+  font-weight: var(--bold);
+  margin-bottom: 10px !important;
+  margin-top: 10px !important;
+}
+
+.questionnaireViewContainer :global(p.questionText) {
+  margin-bottom: 10px !important;
+  margin-left: 10px !important;
+  margin-top: 10px !important;
+}
+
+.questionnaireViewContainer :global(p.instructionText) {
+  font-size: var(--global-font-size--small);
+  margin-left: 10px !important;
+  margin-top: 10px !important;
+}
+
+/* Dropdown and options */
+.questionnaireViewContainer :global(div.dropDownViewModeContainer) {
+  margin-left: 20px !important;
+  margin-top: 10px !important;
+}
+
+.questionnaireViewContainer :global(textarea.instructionField) {
+  font-style: italic;
+}
+
+/* Answer bubbles and shapes */
+.questionnaireViewContainer :global(div.answerBubbleViewMode),
+.questionnaireViewContainer :global(div.answerBubbleViewModeSelected),
+.questionnaireViewContainer :global(div.questionOptionShape),
+.questionnaireViewContainer :global(div.matrixOptionBubble.optionSelected) {
+  border: var(--global-border--thick);
+}
+.questionnaireViewContainer :global(div.answerBubbleViewMode),
+.questionnaireViewContainer :global(div.questionOptionShape),
+.questionnaireViewContainer :global(div.matrixOptionBubble.optionSelected) {
+  height: 0.8rem;
+  margin-right: 4px !important;
+  width: 0.8rem;
+}
+.questionnaireViewContainer :global(div.questionOptionShape) {
+  margin-bottom: .6rem;
+  border-radius: 50%;
+}
+
+.questionnaireViewContainer :global(.optionSelected),
+.questionnaireViewContainer :global(.answerBubbleViewModeSelected) {
+  background-color: rgb(51, 204, 255) !important;
+}
+.questionnaireViewContainer :global(.questionnaireQuestion) {
+    margin-top: 2px !important;
+}
+
+.questionnaireViewContainer :global(input.RangeAnswerField) {
+  color: hsl(180, 100%, 32%);
+  margin: 0 10px;
+  text-align: center;
+  width: 30px;
+}
+
+.questionnaireViewContainer :global(.rangeAnswers) {
+  margin-left: 20px !important;
+  margin-bottom: 10px !important;
+}
+.questionnaireViewContainer :global(p.rangeAnswer),
+.questionnaireViewContainer :global(p.rangeAnswerDoubleDigit) {
+  font-weight: var(--bold);
+  margin: 2px 4px !important;
+  padding: 0 5px 2px 3px !important;
+}
+.questionnaireViewContainer :global(p.rangeAnswer.selected),
+.questionnaireViewContainer :global(p.rangeAnswerDoubleDigit.selected) {
+  border: 2px solid #1779ba;
+  border-radius: 50%;
+}
+
+/* Table styles for alignment*/
+.questionnaireViewContainer :global(tr.questionOption) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.questionnaireViewContainer :global(tr.questionOption td) {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  background: none;
+  border-bottom: none !important;
+}
+.questionnaireViewContainer :global(.questionnaireQuestion) {
+  display: flex;
+  align-items: center;
+  margin-top: 2px !important;
+}
+.questionnaireViewContainer :global(.subQuestionOptions > tr ) {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+}
+.questionnaireViewContainer :global(.subQuestionOptions > tr > td) {
+  display: block;
+  align-content: center;
+  background: none;
+  border-bottom: none !important;
+}
+
+/* Matrix questions */
+.questionnaireViewContainer :global(.wrapper > table.matrixQuestionTable) {
+  margin-left: 10px !important;
+  margin-bottom: 10px !important;
+  border-bottom: 1px solid #dedede;
+  width: 90%;
+}
+
+.questionnaireViewContainer :global(p.questionMatrixColumnLabel) {
+  font-weight: var(--bold);
+  text-decoration: underline;
+}
+
+.questionnaireViewContainer :global(table.matrixQuestionTable > tr) {
+    margin-bottom: 4px !important;
+    margin-top: 4px !important;
+}
+
+.questionnaireViewContainer :global(table.matrixQuestionTable > tr > td) {
+  background: none;
+}
+
+.questionnaireViewContainer :global(table.matrixQuestionTable > tr:first-child > td) {
+  border-bottom: none !important;
+}
+
+.questionnaireViewContainer :global(td.spacer) {
+  visibility: hidden;
+}
+
+/* Button styling */
+.questionnaireViewContainer :global(.buttonDecline) {
+  display: none;
+  color: #660000 !important;
+  font-style: italic;    
+  margin-left: 4px !important;
+  margin-top: 6px !important;
+}
+
+/* Location components */
+.questionnaireViewContainer :global(.locationMapContainer > .leaflet-control-container) {
+  display: none;
+}
+
+/* Location map specific sizing */
+.questionnaireViewContainer :global(div.locationMapContainer) {
+  display: block;
+  height: 300px;     
+  width: 100%;
+  max-width: 500px; 
+  margin: 10px; 
+}
+
+.questionnaireViewContainer :global(.mapCanvas) {
+  width: 100%;
+  height: 100%;
+}
+
+.questionnaireViewContainer :global(p.locationQuestionDetails) {
+  font-weight: var(--bold);
+  margin-bottom: 5px !important;
+  margin-left: 10px !important;
+  margin-top: 5px !important;
+}
+
+.questionnaireViewContainer :global(input.locationLatLon) {
+  margin-left: 10px !important;
+}
+
+.questionnaireViewContainer :global(textarea.locationAddress) {
+  display: block;
+  min-height: 60px;
+  margin-bottom: 5px !important;
+  margin-left: 10px !important;
+  margin-top: 5px !important;
+  position: relative;
+  width: 50%;
+}
+
+/* Embedded assets */
+.questionnaireViewContainer :global(.embeddedAssetViewImg) {
+  display: block;
+  align-content: center;
+  max-width: 500px;
+  position: relative;
+  margin-left: 20px !important;
+  margin: 10px auto;
+}
+
+.questionnaireViewContainer :global(p.blackText) {
+    font-weight: var(--bold);
+    margin-left: 10px !important;
+    margin-top: 10px !important;
+}
+
