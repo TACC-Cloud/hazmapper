@@ -9,9 +9,9 @@ import {
 } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import { TiledMapLayer } from 'react-esri-leaflet';
-import { useWatch } from 'react-hook-form';
+import { useWatch, useFormContext } from 'react-hook-form';
 import {
-  TileServerLayer,
+  TLayerOptionsFormData,
   FeatureCollection,
   Feature,
   getFeatureType,
@@ -63,15 +63,14 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ featureCollection }) => {
     [selectedFeatureId]
   );
 
-  type TFormArrayItem = { layer: TileServerLayer }[];
-
-  const baseLayers: TFormArrayItem | undefined = useWatch({
+  const baseLayers = useWatch<TLayerOptionsFormData, 'tileLayers'>({
     name: 'tileLayers',
+    defaultValue: [],
   });
 
   const activeBaseLayers = useMemo(
     () =>
-      (baseLayers as TFormArrayItem)
+      baseLayers
         .map((item) => item.layer)
         .filter((layer) => layer.uiOptions.isActive),
     [baseLayers]

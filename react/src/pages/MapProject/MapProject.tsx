@@ -215,9 +215,10 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
 
   const initialValues = useMemo(
     () => ({
-      tileLayers: tileServerLayers
-        ?.sort((a, b) => b.uiOptions.zIndex - a.uiOptions.zIndex)
-        .map((layer) => ({ layer })),
+      tileLayers:
+        tileServerLayers
+          ?.sort((a, b) => b.uiOptions.zIndex - a.uiOptions.zIndex)
+          .map((layer) => ({ layer })) || [],
     }),
     [tileServerLayers]
   );

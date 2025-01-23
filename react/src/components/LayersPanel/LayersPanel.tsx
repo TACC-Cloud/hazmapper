@@ -31,7 +31,7 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import { SortableContext } from '@dnd-kit/sortable';
-import { TileServerLayer } from '@hazmapper/types';
+import { TileServerLayer, TLayerOptionsFormData } from '@hazmapper/types';
 import { truncateMiddle } from '@hazmapper/utils/truncateMiddle';
 import {
   usePutTileServer,
@@ -89,12 +89,6 @@ const LayersPanel: React.FC<{
     projectId,
   });
   const [editLayerField, setEditLayerField] = useState({});
-
-  type TLayerOptionsFormData = {
-    tileLayers: {
-      layer: TileServerLayer;
-    }[];
-  };
 
   const {
     control,
@@ -326,9 +320,9 @@ const LayersPanel: React.FC<{
                                         {watch(
                                           `tileLayers.${index}.layer.uiOptions.showDescription`
                                         ) ? (
-                                          <SlidersFilled />
+                                          <SlidersFilled title="Hide Opacity" />
                                         ) : (
-                                          <SlidersOutlined />
+                                          <SlidersOutlined title="Show Opacity" />
                                         )}
                                       </Flex>
                                     </Tag.CheckableTag>
