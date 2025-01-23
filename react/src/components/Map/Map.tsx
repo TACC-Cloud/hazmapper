@@ -9,7 +9,7 @@ import {
 } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import { TiledMapLayer } from 'react-esri-leaflet';
-import { useWatch, useFormContext } from 'react-hook-form';
+import { useWatch } from 'react-hook-form';
 import {
   TLayerOptionsFormData,
   FeatureCollection,

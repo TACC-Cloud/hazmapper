@@ -32,5 +32,5 @@ test('renders map', () => {
   };
 
   const { getByText } = renderInTest(<Wrapper />);
-  expect(getByText(/Map/)).toBeDefined();
+  expect(getByText(/Leaflet/)).toBeDefined();
 });
