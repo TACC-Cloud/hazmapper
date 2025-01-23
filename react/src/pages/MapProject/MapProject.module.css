@@ -41,7 +41,7 @@
   background-color: var(--global-color-primary--xx-light);
   position: absolute;
   left: var(--hazmapper-panel-navbar-width);
-  z-index: 5000;
+  z-index: 1000;
 }
 .detailContainer {
   min-width: 250px;
@@ -53,7 +53,7 @@
   right: 10px;
   top: 75px;
   bottom: 20px;
-  z-index: 5000;
+  z-index: 1000;
 }
 
 .map {

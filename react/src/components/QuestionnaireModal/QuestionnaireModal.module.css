@@ -22,7 +22,7 @@
 }
 .questionnaireViewContainer :global(.subQuestion)::before {
   color: #999999;
-  content: "Sub-question";
+  content: 'Sub-question';
   font-style: italic;
   font-weight: var(--bold);
 }
@@ -33,12 +33,18 @@
 
 /* Overrides base styles that put a border bottom under a table row
 that effects subquestions */
-.questionnaireViewContainer :global(:is(.s-paragraph-table, .paragraph-table) p:not(:last-of-type), tr:not(:last-of-type) > :is(td, th)) {
-	 border-bottom: none !important;
+.questionnaireViewContainer
+  :global(
+    :is(.s-paragraph-table, .paragraph-table) p:not(:last-of-type),
+    tr:not(:last-of-type) > :is(td, th)
+  ) {
+  border-bottom: none !important;
 }
 
-.questionnaireViewContainer :global(.questionWrapper)
-.questionnaireViewContainer :global(.subQuestion) {
+.questionnaireViewContainer
+  :global(.questionWrapper)
+  .questionnaireViewContainer
+  :global(.subQuestion) {
   margin-top: 10px !important;
   margin-bottom: 10px !important;
 }
@@ -63,10 +69,10 @@ that effects subquestions */
 
 .questionnaireViewContainer :global(p.questionType)::before {
   color: #999999;
-  content: "Question Type:  ";
+  content: 'Question Type:  ';
   font-size: var(--global-font-size--small);
   font-style: italic;
-  font-weight:  var(--bold);
+  font-weight: var(--bold);
   margin-right: 4px !important;
 }
 
@@ -123,7 +129,7 @@ that effects subquestions */
   width: 0.8rem;
 }
 .questionnaireViewContainer :global(div.questionOptionShape) {
-  margin-bottom: .6rem;
+  margin-bottom: 0.6rem;
   border-radius: 50%;
 }
 
@@ -132,7 +138,7 @@ that effects subquestions */
   background-color: rgb(51, 204, 255) !important;
 }
 .questionnaireViewContainer :global(.questionnaireQuestion) {
-    margin-top: 2px !important;
+  margin-top: 2px !important;
 }
 
 .questionnaireViewContainer :global(input.RangeAnswerField) {
@@ -176,7 +182,7 @@ that effects subquestions */
   align-items: center;
   margin-top: 2px !important;
 }
-.questionnaireViewContainer :global(.subQuestionOptions > tr ) {
+.questionnaireViewContainer :global(.subQuestionOptions > tr) {
   display: flex;
   flex-direction: row;
   align-content: center;
@@ -202,15 +208,16 @@ that effects subquestions */
 }
 
 .questionnaireViewContainer :global(table.matrixQuestionTable > tr) {
-    margin-bottom: 4px !important;
-    margin-top: 4px !important;
+  margin-bottom: 4px !important;
+  margin-top: 4px !important;
 }
 
 .questionnaireViewContainer :global(table.matrixQuestionTable > tr > td) {
   background: none;
 }
 
-.questionnaireViewContainer :global(table.matrixQuestionTable > tr:first-child > td) {
+.questionnaireViewContainer
+  :global(table.matrixQuestionTable > tr:first-child > td) {
   border-bottom: none !important;
 }
 
@@ -222,23 +229,24 @@ that effects subquestions */
 .questionnaireViewContainer :global(.buttonDecline) {
   display: none;
   color: #660000 !important;
-  font-style: italic;    
+  font-style: italic;
   margin-left: 4px !important;
   margin-top: 6px !important;
 }
 
 /* Location components */
-.questionnaireViewContainer :global(.locationMapContainer > .leaflet-control-container) {
+.questionnaireViewContainer
+  :global(.locationMapContainer > .leaflet-control-container) {
   display: none;
 }
 
 /* Location map specific sizing */
 .questionnaireViewContainer :global(div.locationMapContainer) {
   display: block;
-  height: 300px;     
+  height: 300px;
   width: 100%;
-  max-width: 500px; 
-  margin: 10px; 
+  max-width: 500px;
+  margin: 10px;
 }
 
 .questionnaireViewContainer :global(.mapCanvas) {
@@ -278,8 +286,7 @@ that effects subquestions */
 }
 
 .questionnaireViewContainer :global(p.blackText) {
-    font-weight: var(--bold);
-    margin-left: 10px !important;
-    margin-top: 10px !important;
+  font-weight: var(--bold);
+  margin-left: 10px !important;
+  margin-top: 10px !important;
 }
-
