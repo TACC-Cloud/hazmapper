@@ -17,7 +17,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { usePostTileServer } from '@hazmapper/hooks';
-import { tileLayerSchema } from '../LayersPanel';
+import { tileLayerSchema } from '@hazmapper/pages/MapProject';
 import { TileServerLayer } from '@hazmapper/types';
 import { PrimaryButton } from '@hazmapper/common_components/Button';
 

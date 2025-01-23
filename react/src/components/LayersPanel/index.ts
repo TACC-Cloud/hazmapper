@@ -1,1 +1,1 @@
-export { default, tileLayerSchema } from './LayersPanel';
+export { default } from './LayersPanel';
