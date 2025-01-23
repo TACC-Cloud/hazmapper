@@ -183,7 +183,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
         {loading && <div> loading</div>}
       </div>
       <div className={styles.container}>
-        <MapProjectNavBar />
+        <MapProjectNavBar isPublicView={isPublicView} />
         {activePanel && activePanel !== Panel.Manage && (
           <div className={styles.panelContainer}>
             {activePanel === Panel.Assets && (

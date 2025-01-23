@@ -48,7 +48,7 @@ const navItems: NavItem[] = [
     label: 'Streetview',
     imagePath: streetviewImage,
     panel: Panel.Streetview,
-    showWhenPublic: true,
+    showWhenPublic: false,
   },
   {
     label: 'Manage',
@@ -59,15 +59,28 @@ const navItems: NavItem[] = [
 ];
 
 interface NavBarPanelProps {
-  isPublicView?: boolean;
+  isPublicView: boolean;
 }
 
-const MapProjectNavBar: React.FC<NavBarPanelProps> = ({
-  isPublicView = false,
-}) => {
+const MapProjectNavBar: React.FC<NavBarPanelProps> = ({ isPublicView }) => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const activePanel = queryParams.get(queryPanelKey);
+
+  React.useEffect(() => {
+    if (isPublicView && activePanel) {
+      const currentPanel = navItems.find((item) => item.panel === activePanel);
+      if (currentPanel && !currentPanel.showWhenPublic) {
+        const updatedParams = new URLSearchParams(location.search);
+        updatedParams.delete(queryPanelKey);
+        window.history.replaceState(
+          {},
+          '',
+          `${location.pathname}?${updatedParams.toString()}`
+        );
+      }
+    }
+  }, [isPublicView, activePanel, location]);
 
   return (
     <div className={styles.root}>
@@ -75,6 +88,11 @@ const MapProjectNavBar: React.FC<NavBarPanelProps> = ({
         .filter((item) => (isPublicView ? item.showWhenPublic : true))
         .map((item) => {
           const updatedQueryParams = new URLSearchParams(location.search);
+
+          // Prevent navigation if public view and panel not public
+          if (isPublicView && !item.showWhenPublic) {
+            return null;
+          }
 
           if (activePanel === item.panel) {
             // If already active, we want to remove queryPanel key if user clicks again
