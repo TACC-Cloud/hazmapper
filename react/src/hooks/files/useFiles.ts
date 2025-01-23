@@ -1,4 +1,4 @@
-import { UseQueryResult } from 'react-query';
+import { UseQueryResult } from '@tanstack/react-query';
 import { useGet } from '../../requests';
 import { ApiService, File } from '../../types';
 

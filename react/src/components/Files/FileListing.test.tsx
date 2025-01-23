@@ -25,10 +25,6 @@ jest.mock('../../utils/fileUtils', () => ({
   serializeToChonkyFile: jest.fn(),
 }));
 
-jest.mock('react-jss', () => ({
-  createUseStyles: () => () => ({}),
-}));
-
 jest.mock('chonky', () => {
   const actualChonky = jest.requireActual('chonky');
   return {

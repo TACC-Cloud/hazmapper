@@ -1,6 +1,6 @@
 import { File } from '../types/file';
 
-export const files: File[] = [
+export const filesMock: File[] = [
   {
     name: 'Folder 3',
     path: 'user/Folder_2/Folder_3',
