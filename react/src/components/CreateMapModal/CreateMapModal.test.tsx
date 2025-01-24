@@ -10,6 +10,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { testQueryClient, server } from '@hazmapper/test/testUtil';
 import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
 import { projectMock } from '@hazmapper/__fixtures__/projectFixtures';
+import { filesMock } from '@hazmapper/__fixtures__/fileFixture';
 
 jest.mock('@hazmapper/hooks/user/useAuthenticatedUser', () => ({
   __esModule: true,
@@ -20,12 +21,31 @@ jest.mock('@hazmapper/hooks/user/useAuthenticatedUser', () => ({
   }),
 }));
 
+jest.mock('@hazmapper/hooks/files/useFiles', () => ({
+  __esModule: true,
+  useFiles: jest.fn(() => ({
+    data: filesMock,
+    refetch: jest.fn(),
+  })),
+}));
+
 const mockNavigate = jest.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockNavigate,
 }));
+
+jest.mock('chonky', () => {
+  const actualChonky = jest.requireActual('chonky');
+  return {
+    ...actualChonky,
+    FileBrowser: jest.fn(() => <div>Mock FileBrowser</div>),
+    FileNavbar: jest.fn(() => <div>Mock FileNavbar</div>),
+    FileList: jest.fn(() => <div>Mock FileList</div>),
+    ChonkyActions: actualChonky.ChonkyActions,
+  };
+});
 
 const toggleMock = jest.fn();
 

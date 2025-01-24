@@ -6,6 +6,10 @@ jest.mock('@hazmapper/hooks/environment/getLocalAppConfiguration', () => ({
   getLocalAppConfiguration: jest.fn(() => testDevConfiguration),
 }));
 
+jest.mock('react-jss', () => ({
+  createUseStyles: () => () => ({}),
+}));
+
 /***** B) Ignore some known warnings/errors *****/
 
 // List of `console.warn` messages that can be ignored

@@ -9,9 +9,9 @@ import {
 } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import { TiledMapLayer } from 'react-esri-leaflet';
-
+import { useWatch } from 'react-hook-form';
 import {
-  TileServerLayer,
+  TLayerOptionsFormData,
   FeatureCollection,
   Feature,
   getFeatureType,
@@ -27,11 +27,6 @@ import 'leaflet/dist/leaflet.css';
 import 'react-leaflet-markercluster/styles';
 
 interface LeafletMapProps {
-  /**
-   * Tile servers used as base layers of map
-   */
-  baseLayers?: TileServerLayer[];
-
   /**
    * Features of map
    */
@@ -56,10 +51,7 @@ const getFeatureStyle = (feature: any) => {
  *
  * Note this is not called Map as causes an issue with react-leaflet
  */
-const LeafletMap: React.FC<LeafletMapProps> = ({
-  baseLayers = [],
-  featureCollection,
-}) => {
+const LeafletMap: React.FC<LeafletMapProps> = ({ featureCollection }) => {
   const { selectedFeatureId, setSelectedFeatureId } = useFeatureSelection();
 
   const handleFeatureClick = useCallback(
@@ -71,8 +63,16 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
     [selectedFeatureId]
   );
 
+  const baseLayers = useWatch<TLayerOptionsFormData, 'tileLayers'>({
+    name: 'tileLayers',
+    defaultValue: [],
+  });
+
   const activeBaseLayers = useMemo(
-    () => baseLayers.filter((layer) => layer.uiOptions.isActive),
+    () =>
+      baseLayers
+        .map((item) => item.layer)
+        .filter((layer) => layer.uiOptions.isActive),
     [baseLayers]
   );
   interface FeatureAccumulator {
