@@ -8,12 +8,14 @@ type AssetButtonProps = {
   selectedFeature: Feature;
   featureSource: string;
   isPublicView: boolean;
+  onQuestionnaireClick?: () => void;
 };
 
 const AssetButton: React.FC<AssetButtonProps> = ({
   selectedFeature,
   featureSource,
   isPublicView,
+  onQuestionnaireClick,
 }) => {
   const pointCloudURL = DOMPurify.sanitize(featureSource + '/index.html');
 
@@ -30,8 +32,9 @@ const AssetButton: React.FC<AssetButtonProps> = ({
         </a>
       )}
       {featureType === FeatureType.Questionnaire && (
-        //TODO
-        <Button type="primary">View</Button>
+        <Button type="primary" onClick={onQuestionnaireClick}>
+          View
+        </Button>
       )}
       {featureType.includes(selectedFeature.geometry.type) && isPublicView && (
         //TODO

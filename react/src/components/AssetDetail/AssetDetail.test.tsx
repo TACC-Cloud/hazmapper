@@ -22,6 +22,7 @@ describe('AssetDetail', () => {
     onClose: jest.fn(),
     selectedFeature: mockImgFeature,
     isPublicView: false,
+    onQuestionnaireClick: jest.fn(),
   };
 
   it('renders all main components', async () => {
