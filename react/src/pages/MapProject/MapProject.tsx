@@ -308,8 +308,16 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
                       selectedFeature={selectedFeature}
                       onClose={() => toggleSelectedFeature(selectedFeature.id)}
                       isPublicView={activeProject.public}
+                      onQuestionnaireClick={handleQuestionnaireClick}
                     />
                   </div>
+                )}
+                {isQuestionnaireModalOpen && selectedFeature && (
+                  <QuestionnaireModal
+                    isOpen={isQuestionnaireModalOpen}
+                    close={() => setQuestionnaireModalOpen(false)}
+                    feature={selectedFeature}
+                  />
                 )}
               </>
             )}
