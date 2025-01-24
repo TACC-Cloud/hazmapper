@@ -4,7 +4,7 @@ import { SystemSelect } from './SystemSelect';
 import systemsFixture from './Systems.fixture';
 
 jest.mock('../../hooks', () => ({
-  useDsProjects: jest.fn(() => ({ result: [] })),
+  useDesignSafeProjects: jest.fn(() => ({ result: [] })),
   useSystems: jest.fn(() => ({
     data: systemsFixture,
     myDataSystem: { id: 'designsafe.storage.default' },
