@@ -4,4 +4,8 @@ export {
   useCurrentFeatures,
   KEY_USE_FEATURES,
 } from './useFeatures';
-export { useFeatureSelection } from './useFeatureSelection';
+export {
+  useFeatureSelection,
+  useFeatureAssetSource,
+  useFeatureAssetSourcePath,
+} from './useFeatureSelection';

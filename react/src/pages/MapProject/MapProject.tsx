@@ -23,6 +23,7 @@ import { assetTypeOptions } from '@hazmapper/components/FiltersPanel/Filter';
 import { Project } from '@hazmapper/types';
 import HeaderNavBar from '@hazmapper/components/HeaderNavBar';
 import styles from './MapProject.module.css';
+import QuestionnaireModal from '@hazmapper/components/QuestionnaireModal';
 import { Spinner } from '@hazmapper/common_components';
 import { Panel as BasePanel } from '@hazmapper/components/Panel';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -146,7 +147,10 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
   );
   const { selectedFeature, setSelectedFeatureId: toggleSelectedFeature } =
     useFeatureSelection();
-
+  const [isQuestionnaireModalOpen, setQuestionnaireModalOpen] = useState(false);
+  const handleQuestionnaireClick = () => {
+    setQuestionnaireModalOpen(true);
+  };
   const formatAssetTypeName = (name: string) => {
     switch (name) {
       case 'PointCloud':
@@ -304,8 +308,16 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
                       selectedFeature={selectedFeature}
                       onClose={() => toggleSelectedFeature(selectedFeature.id)}
                       isPublicView={isPublicView}
+                      onQuestionnaireClick={handleQuestionnaireClick}
                     />
                   </div>
+                )}
+                {isQuestionnaireModalOpen && selectedFeature && (
+                  <QuestionnaireModal
+                    isOpen={isQuestionnaireModalOpen}
+                    close={() => setQuestionnaireModalOpen(false)}
+                    feature={selectedFeature}
+                  />
                 )}
               </>
             )}
