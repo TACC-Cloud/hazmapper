@@ -1,7 +1,10 @@
 import React from 'react';
 import { render, screen, act } from '@testing-library/react';
 import AssetDetail from './AssetDetail';
-import { mockImgFeature } from '@hazmapper/__fixtures__/featuresFixture';
+import {
+  mockImgFeature,
+  mockPointFeature,
+} from '@hazmapper/__fixtures__/featuresFixture';
 import AssetGeometry from './AssetGeometry';
 
 jest.mock('@hazmapper/hooks', () => ({
@@ -24,7 +27,7 @@ describe('AssetDetail', () => {
     isPublicView: false,
   };
 
-  it('renders all main components', async () => {
+  it('renders all main components for image feature', async () => {
     const { getByText } = render(<AssetDetail {...AssetModalProps} />);
     const assetGeometry = screen.getByTestId('asset-geometry');
     await act(async () => {
@@ -35,5 +38,43 @@ describe('AssetDetail', () => {
     expect(getByText('Download')).toBeDefined();
     expect(getByText('Metadata')).toBeDefined();
     expect(assetGeometry).toBeDefined();
+  });
+
+  it('renders all main components for point feature', async () => {
+    const { getByText } = render(
+      <AssetDetail {...AssetModalProps} selectedFeature={mockPointFeature} />
+    );
+    const assetGeometry = screen.getByTestId('asset-geometry');
+    await act(async () => {
+      render(<AssetGeometry selectedFeature={mockPointFeature} />);
+    });
+
+    // Check for standard components
+    expect(getByText('Metadata')).toBeDefined();
+    expect(assetGeometry).toBeDefined();
+
+    // Check for DesignSafe button presence when not in public view
+    expect(getByText('Add Asset from DesignSafe')).toBeDefined();
+  });
+
+  it('renders all main components for point feature public view', async () => {
+    const { getByText, queryByText } = render(
+      <AssetDetail
+        {...AssetModalProps}
+        selectedFeature={mockPointFeature}
+        isPublicView={true}
+      />
+    );
+    const assetGeometry = screen.getByTestId('asset-geometry');
+    await act(async () => {
+      render(<AssetGeometry selectedFeature={mockPointFeature} />);
+    });
+
+    // Check for standard components
+    expect(getByText('Metadata')).toBeDefined();
+    expect(assetGeometry).toBeDefined();
+
+    // Verify some comopnents are not present in public view
+    expect(queryByText('Add Asset from DesignSafe')).toBeNull();
   });
 });
