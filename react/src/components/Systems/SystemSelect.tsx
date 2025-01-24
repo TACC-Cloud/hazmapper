@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useDsProjects, useSystems } from '../../hooks';
+import { useDesignSafeProjects, useSystems } from '../../hooks';
 import { DesignSafeProject } from '@hazmapper/types';
 
 interface SystemSelectProps {
@@ -18,7 +18,7 @@ export const SystemSelect: React.FC<SystemSelectProps> = ({
 
   const [dsProjects, setDsProjects] = useState<DesignSafeProject[]>([]);
 
-  const { data: dsProjectsResult } = useDsProjects();
+  const { data: dsProjectsResult } = useDesignSafeProjects();
 
   useEffect(() => {
     if (dsProjectsResult) {

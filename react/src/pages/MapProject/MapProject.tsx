@@ -162,35 +162,26 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     formatAssetTypeName(type)
   );
 
-  const { data: rawFeatureCollection } = useFeatures({
-    projectId: activeProject.id,
-    isPublicView,
-    assetTypes: formattedAssetTypes,
-    startDate,
-    endDate,
-    toggleDateFilter,
-  });
+  const { data: rawFeatureCollection, isLoading: isFeaturesLoading } =
+    useFeatures({
+      projectId: activeProject.id,
+      isPublicView,
+      assetTypes: formattedAssetTypes,
+      startDate,
+      endDate,
+      toggleDateFilter,
+    });
 
-  const {
-    data: tileServerLayers,
-    isLoading: isTileServerLayersLoading,
-    error: tileServerLayersError,
-  } = useGetTileServers({
-    projectId: activeProject.id,
-    isPublicView,
-  });
+  const { data: tileServerLayers, isLoading: isTileServerLayersLoading } =
+    useGetTileServers({
+      projectId: activeProject.id,
+      isPublicView,
+    });
 
   const location = useLocation();
 
   const queryParams = new URLSearchParams(location.search);
   const activePanel = queryParams.get(queryPanelKey);
-
-  const error = featuresError || tileServerLayersError;
-
-  if (error) {
-    /* TODO https://tacc-main.atlassian.net/browse/WG-260 */
-    console.error(error);
-  }
 
   const loading = isFeaturesLoading || isTileServerLayersLoading;
 
@@ -233,90 +224,94 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
 
   return (
     <FormProvider {...methods}>
-      <Layout style={{ height: '100vh' }}>
-        <Header>
-          <HeaderNavBar />
-          <MapControlBar
-            activeProject={activeProject}
-            isPublicView={isPublicView}
-          />
-        </Header>
-        <Layout>
-          <Sider width="auto">
-            <Flex
-              style={{
-                overflowY: 'auto',
-                height: '100%',
-              }}
-            >
-              <MapProjectNavBar />
-              {activePanel && activePanel !== Panel.Manage && !loading && (
-                <BasePanel
-                  panelTitle={activePanel}
-                  className={styles.panelContainer}
-                >
-                  {activePanel === Panel.Assets && (
-                    <AssetsPanel
-                      project={activeProject}
-                      isPublicView={isPublicView}
-                      featureCollection={featureCollection}
-                    />
-                  )}
-                  {activePanel === Panel.Filters && (
-                    <Filters
-                      selectedAssetTypes={selectedAssetTypes}
-                      onFiltersChange={setSelectedAssetTypes}
-                      startDate={startDate}
-                      setStartDate={setStartDate}
-                      endDate={endDate}
-                      setEndDate={setEndDate}
-                      toggleDateFilter={toggleDateFilter}
-                      setToggleDateFilter={setToggleDateFilter}
-                    />
-                  )}
-                  {activePanel === Panel.Layers && (
-                    <LayersPanel
-                      projectId={activeProject.id}
-                      isPublicView={isPublicView}
-                    />
-                  )}
-                </BasePanel>
-              )}
-            </Flex>
-          </Sider>
-          <Content>
-            {loading ? (
-              <Spinner />
-            ) : (
-              <>
-                {activePanel === Panel.Manage && (
-                  <ManageMapProjectModal isPublicView={isPublicView} />
+      <MapPositionProvider>
+        <Layout style={{ height: '100vh' }}>
+          <Header>
+            <HeaderNavBar />
+            <MapControlBar
+              activeProject={activeProject}
+              isPublicView={isPublicView}
+            />
+          </Header>
+          <Layout>
+            <Sider width="auto">
+              <Flex
+                style={{
+                  overflowY: 'auto',
+                  height: '100%',
+                }}
+              >
+                <MapProjectNavBar />
+                {activePanel && activePanel !== Panel.Manage && !loading && (
+                  <BasePanel
+                    panelTitle={activePanel}
+                    className={styles.panelContainer}
+                  >
+                    {activePanel === Panel.Assets && (
+                      <AssetsPanel
+                        project={activeProject}
+                        isPublicView={isPublicView}
+                        featureCollection={featureCollection}
+                      />
+                    )}
+                    {activePanel === Panel.Filters && (
+                      <Filters
+                        selectedAssetTypes={selectedAssetTypes}
+                        onFiltersChange={setSelectedAssetTypes}
+                        startDate={startDate}
+                        setStartDate={setStartDate}
+                        endDate={endDate}
+                        setEndDate={setEndDate}
+                        toggleDateFilter={toggleDateFilter}
+                        setToggleDateFilter={setToggleDateFilter}
+                      />
+                    )}
+                    {activePanel === Panel.Layers && (
+                      <LayersPanel
+                        projectId={activeProject.id}
+                        isPublicView={isPublicView}
+                      />
+                    )}
+                  </BasePanel>
                 )}
-                <div className={styles.map}>
-                  <Map featureCollection={featureCollection} />
-                </div>
-                {selectedFeature && (
-                  <div className={styles.detailContainer}>
-                    <AssetDetail
-                      selectedFeature={selectedFeature}
-                      onClose={() => toggleSelectedFeature(selectedFeature.id)}
-                      isPublicView={isPublicView}
-                      onQuestionnaireClick={handleQuestionnaireClick}
-                    />
+              </Flex>
+            </Sider>
+            <Content>
+              {loading ? (
+                <Spinner />
+              ) : (
+                <>
+                  {activePanel === Panel.Manage && (
+                    <ManageMapProjectModal isPublicView={isPublicView} />
+                  )}
+                  <div className={styles.map}>
+                    <Map featureCollection={featureCollection} />
                   </div>
-                )}
-                {isQuestionnaireModalOpen && selectedFeature && (
-                  <QuestionnaireModal
-                    isOpen={isQuestionnaireModalOpen}
-                    close={() => setQuestionnaireModalOpen(false)}
-                    feature={selectedFeature}
-                  />
-                )}
-              </>
-            )}
-          </Content>
+                  {selectedFeature && (
+                    <div className={styles.detailContainer}>
+                      <AssetDetail
+                        selectedFeature={selectedFeature}
+                        onClose={() =>
+                          toggleSelectedFeature(selectedFeature.id)
+                        }
+                        isPublicView={isPublicView}
+                        onQuestionnaireClick={handleQuestionnaireClick}
+                      />
+                    </div>
+                  )}
+                  {isQuestionnaireModalOpen && selectedFeature && (
+                    <QuestionnaireModal
+                      isOpen={isQuestionnaireModalOpen}
+                      close={() => setQuestionnaireModalOpen(false)}
+                      feature={selectedFeature}
+                    />
+                  )}
+                </>
+              )}
+            </Content>
+          </Layout>
         </Layout>
-      </Layout>
+      </MapPositionProvider>
     </FormProvider>
   );
 };
