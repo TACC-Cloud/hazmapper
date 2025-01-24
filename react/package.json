@@ -45,6 +45,7 @@
     "@turf/turf": "^7.2.0",
     "antd": "^5.23.1",
     "axios": "^1.7.9",
+    "chonky": "^2.3.2",
     "dompurify": "^3.2.3",
     "formik": "^2.4.6",
     "jwt-decode": "^4.0.0",
