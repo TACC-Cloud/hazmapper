@@ -303,7 +303,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
                     <AssetDetail
                       selectedFeature={selectedFeature}
                       onClose={() => toggleSelectedFeature(selectedFeature.id)}
-                      isPublicView={activeProject.public}
+                      isPublicView={isPublicView}
                     />
                   </div>
                 )}
