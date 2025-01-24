@@ -7,6 +7,10 @@ import { faArrowLeft, faLock } from '@fortawesome/free-solid-svg-icons';
 
 import { Button, LoadingSpinner } from '@tacc/core-components';
 
+import { Typography } from 'antd';
+
+const { Text } = Typography;
+
 import {
   useDesignSafeProject,
   useProjectUsers,
@@ -25,10 +29,9 @@ const CoordinatesDisplay = () => {
 
   return (
     <div className={styles.coordinatesDisplay}>
-      <span> Lat: </span>
-      <span>{position.lat.toFixed(4)}</span>
-      <span> Lon: </span>
-      <span>{position.lng.toFixed(4)}</span>
+      <Text>
+        Lat: {position.lat.toFixed(4)} Lon: {position.lng.toFixed(4)}
+      </Text>
     </div>
   );
 };
@@ -103,14 +106,14 @@ const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
         </Button>
       )}
       <div className={styles.infoContainer}>
-        <span className={styles.projectName}>
+        <Text ellipsis>
           {mapPrefix}: {activeProject?.name}
-        </span>
+        </Text>
         {designSafeProject && (
-          <span className={styles.designSafeInfo}>
+          <Text ellipsis>
             Project: {designSafeProject.value.projectId} |{' '}
             {designSafeProject.value.title}
-          </span>
+          </Text>
         )}
         {canSwitchToPrivateMap && (
           // TODO_REACT: Add tooltip "View private map" to this button

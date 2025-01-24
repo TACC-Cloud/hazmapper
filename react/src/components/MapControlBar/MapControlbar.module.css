@@ -40,15 +40,8 @@
   flex: 1;
   min-width: 0;
   display: flex;
-  gap: 10px; /* space between the map name and DS project name */
-}
-
-.projectName,
-.designSafeInfo {
-  white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
-  min-width: 0; /* allows the text to truncate */
+  gap: 10px; /* space between the map name and DS project name */
 }
 
 .coordinatesDisplay {
