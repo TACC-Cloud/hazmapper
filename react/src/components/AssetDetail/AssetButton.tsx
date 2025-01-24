@@ -36,7 +36,7 @@ const AssetButton: React.FC<AssetButtonProps> = ({
           View
         </Button>
       )}
-      {featureType.includes(selectedFeature.geometry.type) && isPublicView && (
+      {featureType.includes(selectedFeature.geometry.type) && !isPublicView && (
         //TODO
         <Button type="primary">Add Asset from DesignSafe</Button>
       )}
