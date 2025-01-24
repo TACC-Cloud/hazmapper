@@ -1,4 +1,4 @@
-export type { TileServerLayer } from './tileServerLayer';
+export * from './tileServerLayer';
 export * from './feature';
 export type {
   Project,

@@ -43,3 +43,9 @@ export interface TileServerLayer {
     showDescription?: boolean;
   };
 }
+
+export type TLayerOptionsFormData = {
+  tileLayers: {
+    layer: TileServerLayer;
+  }[];
+};
