@@ -36,7 +36,7 @@ const findFeatureById = (
  *
  * */
 export function useFeatureSelection(): UseFeatureSelectionReturn {
-  const currentFeatures = useCurrentFeatures();
+  const { data: currentFeatures } = useCurrentFeatures();
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
@@ -45,8 +45,8 @@ export function useFeatureSelection(): UseFeatureSelectionReturn {
     ? Number(searchParams.get(SELECTED_FEATURE_PARAM))
     : null;
 
-  const selectedFeature = currentFeatures.data
-    ? findFeatureById(currentFeatures.data, selectedFeatureId)
+  const selectedFeature = currentFeatures
+    ? findFeatureById(currentFeatures, selectedFeatureId)
     : null;
 
   const setSelectedFeatureId = useCallback(

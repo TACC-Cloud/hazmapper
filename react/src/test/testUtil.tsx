@@ -6,6 +6,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { setupServer } from 'msw/node';
 import store from '@hazmapper/redux/store';
 import { defaultHandlers } from '@hazmapper/test/handlers';
+import { MapPositionProvider } from '@hazmapper/context/MapContext';
 
 export const server = setupServer(...defaultHandlers);
 
@@ -27,9 +28,11 @@ export function renderInTest(children: ReactElement, path = '/') {
   return render(
     <Provider store={store}>
       <MemoryRouter initialEntries={[path]}>
-        <QueryClientProvider client={testQueryClient}>
-          {children}
-        </QueryClientProvider>
+        <MapPositionProvider>
+          <QueryClientProvider client={testQueryClient}>
+            {children}
+          </QueryClientProvider>
+        </MapPositionProvider>
       </MemoryRouter>
     </Provider>
   );
@@ -38,9 +41,11 @@ export function renderInTest(children: ReactElement, path = '/') {
 export const TestWrapper = ({ children }: { children: React.ReactNode }) => (
   <Provider store={store}>
     <MemoryRouter>
-      <QueryClientProvider client={testQueryClient}>
-        {children}
-      </QueryClientProvider>
+      <MapPositionProvider>
+        <QueryClientProvider client={testQueryClient}>
+          {children}
+        </QueryClientProvider>
+      </MapPositionProvider>
     </MemoryRouter>
   </Provider>
 );

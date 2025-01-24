@@ -20,6 +20,7 @@ import {
 import { useFeatureSelection } from '@hazmapper/hooks';
 import { MAP_CONFIG } from './config';
 import FitBoundsHandler from './FitBoundsHandler';
+import PositionTracker from './PositionTracker';
 import { createMarkerIcon, createClusterIcon } from './markerCreators';
 import { calculatePointCloudMarkerPosition } from './utils';
 
@@ -52,7 +53,7 @@ const getFeatureStyle = (feature: any) => {
  * Note this is not called Map as causes an issue with react-leaflet
  */
 const LeafletMap: React.FC<LeafletMapProps> = ({ featureCollection }) => {
-  const { selectedFeatureId, setSelectedFeatureId } = useFeatureSelection();
+  const { setSelectedFeatureId } = useFeatureSelection();
 
   const handleFeatureClick = useCallback(
     (feature: any) => {
@@ -60,7 +61,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ featureCollection }) => {
 
       //TODO handle clicking on streetview https://tacc-main.atlassian.net/browse/WG-392
     },
-    [selectedFeatureId]
+    [setSelectedFeatureId]
   );
 
   const baseLayers = useWatch<TLayerOptionsFormData, 'tileLayers'>({
@@ -81,19 +82,19 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ featureCollection }) => {
     streetviewFeatures: Feature[];
   }
 
-  // Initial accumulator state
-  const initialAccumulator: FeatureAccumulator = {
-    generalGeoJsonFeatures: [],
-    markerFeatures: [],
-    streetviewFeatures: [],
-  };
-
   const {
     generalGeoJsonFeatures,
     markerFeatures,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     streetviewFeatures /* Add streetview support https://tacc-main.atlassian.net/browse/WG-392 */,
   } = useMemo(() => {
+    // Initial accumulator state
+    const initialAccumulator: FeatureAccumulator = {
+      generalGeoJsonFeatures: [],
+      markerFeatures: [],
+      streetviewFeatures: [],
+    };
+
     return featureCollection.features.reduce<FeatureAccumulator>(
       (accumulator, feature: Feature) => {
         if (feature.geometry.type === FeatureType.Point) {
@@ -203,6 +204,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ featureCollection }) => {
       {/* Handles zooming to a specific feature or to all features */}
       <FitBoundsHandler featureCollection={featureCollection} />
       <ZoomControl position="bottomright" />
+      <PositionTracker />
     </MapContainer>
   );
 };

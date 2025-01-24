@@ -1,5 +1,5 @@
 import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
-import { server } from '@hazmapper/test/testUtil';
+import { server, testQueryClient } from '@hazmapper/test/testUtil';
 
 /***** A) Setup the configuration used for unit testing *****/
 jest.mock('@hazmapper/hooks/environment/getLocalAppConfiguration', () => ({
@@ -56,6 +56,9 @@ export function shouldIgnoreError(args: any[]): boolean {
 /***** C) Setup testing and also ensure that we are mocking things in tests *****/
 
 beforeAll(() => {
+  // Uncomment next line to see all handlers
+  // console.log('Registered handlers:', server.listHandlers());
+
   // Establish mocking of APIs before all tests
   server.listen({
     onUnhandledRequest: 'error',
@@ -79,6 +82,11 @@ beforeAll(() => {
     }
     originalWarn.apply(console, args);
   });
+});
+
+// Clear the React Query cache before each test
+beforeEach(() => {
+  testQueryClient.clear();
 });
 
 // Reset any runtime request handlers we may add during the tests
