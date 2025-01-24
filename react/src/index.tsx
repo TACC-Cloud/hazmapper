@@ -11,7 +11,7 @@ import { ConfigProvider, ThemeConfig } from 'antd';
 const themeConfig: ThemeConfig = {
   token: {
     borderRadius: 0,
-    colorPrimary: '#337ab7',
+    colorPrimary: '#74B566',
     colorError: '#d9534f',
     colorPrimaryTextHover: 'black',
     colorBorderSecondary: '#b7b7b7',
@@ -28,6 +28,11 @@ const themeConfig: ThemeConfig = {
     },
     Layout: {
       bodyBg: 'transparent',
+      headerBg: 'transparent',
+      headerPadding: 0,
+      footerBg: 'transparent',
+      footerPadding: '0 16px',
+      siderBg: 'transparent',
     },
   },
 };

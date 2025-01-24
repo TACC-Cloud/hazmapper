@@ -14,16 +14,18 @@ import { FeatureIcon } from '@hazmapper/components/FeatureIcon';
 import { Button, LoadingSpinner } from '@tacc/core-components';
 import styles from './AssetDetail.module.css';
 
-type AssetModalProps = {
+type AssetDetailProps = {
   onClose: () => void;
   selectedFeature: Feature;
   isPublicView: boolean;
+  onQuestionnaireClick;
 };
 
-const AssetDetail: React.FC<AssetModalProps> = ({
+const AssetDetail: React.FC<AssetDetailProps> = ({
   selectedFeature,
   onClose,
   isPublicView,
+  onQuestionnaireClick,
 }) => {
   const config = useAppConfiguration();
   const geoapiUrl = config.geoapiUrl;
@@ -61,6 +63,7 @@ const AssetDetail: React.FC<AssetModalProps> = ({
             selectedFeature={selectedFeature}
             featureSource={featureSource}
             isPublicView={isPublicView}
+            onQuestionnaireClick={onQuestionnaireClick}
           />
         </Suspense>
       </div>
