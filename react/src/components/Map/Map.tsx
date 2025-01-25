@@ -9,9 +9,9 @@ import {
 } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import { TiledMapLayer } from 'react-esri-leaflet';
-
+import { useWatch } from 'react-hook-form';
 import {
-  TileServerLayer,
+  TLayerOptionsFormData,
   FeatureCollection,
   Feature,
   getFeatureType,
@@ -20,6 +20,7 @@ import {
 import { useFeatureSelection } from '@hazmapper/hooks';
 import { MAP_CONFIG } from './config';
 import FitBoundsHandler from './FitBoundsHandler';
+import PositionTracker from './PositionTracker';
 import { createMarkerIcon, createClusterIcon } from './markerCreators';
 import { calculatePointCloudMarkerPosition } from './utils';
 
@@ -27,11 +28,6 @@ import 'leaflet/dist/leaflet.css';
 import 'react-leaflet-markercluster/styles';
 
 interface LeafletMapProps {
-  /**
-   * Tile servers used as base layers of map
-   */
-  baseLayers?: TileServerLayer[];
-
   /**
    * Features of map
    */
@@ -56,11 +52,8 @@ const getFeatureStyle = (feature: any) => {
  *
  * Note this is not called Map as causes an issue with react-leaflet
  */
-const LeafletMap: React.FC<LeafletMapProps> = ({
-  baseLayers = [],
-  featureCollection,
-}) => {
-  const { selectedFeatureId, setSelectedFeatureId } = useFeatureSelection();
+const LeafletMap: React.FC<LeafletMapProps> = ({ featureCollection }) => {
+  const { setSelectedFeatureId } = useFeatureSelection();
 
   const handleFeatureClick = useCallback(
     (feature: any) => {
@@ -68,11 +61,19 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
 
       //TODO handle clicking on streetview https://tacc-main.atlassian.net/browse/WG-392
     },
-    [selectedFeatureId]
+    [setSelectedFeatureId]
   );
 
+  const baseLayers = useWatch<TLayerOptionsFormData, 'tileLayers'>({
+    name: 'tileLayers',
+    defaultValue: [],
+  });
+
   const activeBaseLayers = useMemo(
-    () => baseLayers.filter((layer) => layer.uiOptions.isActive),
+    () =>
+      baseLayers
+        .map((item) => item.layer)
+        .filter((layer) => layer.uiOptions.isActive),
     [baseLayers]
   );
   interface FeatureAccumulator {
@@ -81,19 +82,19 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
     streetviewFeatures: Feature[];
   }
 
-  // Initial accumulator state
-  const initialAccumulator: FeatureAccumulator = {
-    generalGeoJsonFeatures: [],
-    markerFeatures: [],
-    streetviewFeatures: [],
-  };
-
   const {
     generalGeoJsonFeatures,
     markerFeatures,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     streetviewFeatures /* Add streetview support https://tacc-main.atlassian.net/browse/WG-392 */,
   } = useMemo(() => {
+    // Initial accumulator state
+    const initialAccumulator: FeatureAccumulator = {
+      generalGeoJsonFeatures: [],
+      markerFeatures: [],
+      streetviewFeatures: [],
+    };
+
     return featureCollection.features.reduce<FeatureAccumulator>(
       (accumulator, feature: Feature) => {
         if (feature.geometry.type === FeatureType.Point) {
@@ -203,6 +204,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({
       {/* Handles zooming to a specific feature or to all features */}
       <FitBoundsHandler featureCollection={featureCollection} />
       <ZoomControl position="bottomright" />
+      <PositionTracker />
     </MapContainer>
   );
 };

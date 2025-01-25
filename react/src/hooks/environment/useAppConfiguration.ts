@@ -105,7 +105,7 @@ export const useAppConfiguration = (): AppConfiguration => {
       console.error('Cannot find environment for host name ${hostname}');
       throw new Error('Cannot find environment for host name ${hostname}');
     }
-  }, []);
+  }, [basePath]);
   return appConfiguration;
 };
 

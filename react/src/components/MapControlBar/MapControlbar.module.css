@@ -1,0 +1,49 @@
+.root {
+  background-color: white;
+  height: var(--hazmapper-control-bar-height);
+  min-height: var(--hazmapper-control-bar-height);
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  gap: 10px;
+}
+
+.loadingCommon {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  gap: 5px;
+}
+
+.loadingData {
+  composes: loadingCommon;
+}
+
+.loadingDataError {
+  composes: loadingCommon;
+  color: var(--global-color-danger--normal);
+}
+
+.homeArrow {
+  color: white;
+  background-color: var(--global-color-accent--normal);
+  height: var(--hazmapper-control-bar-height);
+  width: var(--hazmapper-control-bar-height); /* Make it square */
+  padding: 0; /* Remove default button padding */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: -10px; /* Offset the parent's padding */
+}
+
+.infoContainer {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  overflow: hidden;
+  gap: 10px; /* space between the map name and DS project name */
+}
+
+.coordinatesDisplay {
+  margin-left: auto; /* push to right */
+}

@@ -2,6 +2,7 @@ import { UseQueryResult, useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import {
   Project,
+  DesignSafeProject,
   DesignSafeProjectCollection,
   ApiService,
 } from '@hazmapper/types';
@@ -17,17 +18,14 @@ export const useProjects = (): UseQueryResult<Project[]> => {
 
 interface UseProjectParams {
   projectUUID?: string;
-  isPublicView: boolean;
   options: object;
 }
 
 export const useProject = ({
   projectUUID,
-  isPublicView,
   options,
 }: UseProjectParams): UseQueryResult<Project> => {
-  const projectRoute = isPublicView ? 'public-projects' : 'projects';
-  const endpoint = `/${projectRoute}/?uuid=${projectUUID}`;
+  const endpoint = `/projects/?uuid=${projectUUID}`;
   const query = useGet<Project>({
     endpoint,
     key: ['project'],
@@ -37,19 +35,41 @@ export const useProject = ({
   return query;
 };
 
-export const useDsProjects = (): UseQueryResult<
+interface UseDesignSafeProjectParams {
+  designSafeProjectUUID: string;
+  options?: object;
+}
+
+export const useDesignSafeProject = ({
+  designSafeProjectUUID,
+  options = {},
+}: UseDesignSafeProjectParams): UseQueryResult<
+  DesignSafeProject | undefined
+> => {
+  const query = useGet<DesignSafeProject>({
+    endpoint: `/api/projects/v2/${designSafeProjectUUID}/`,
+    key: ['designsafe-single-projectv2', designSafeProjectUUID],
+    options,
+    apiService: ApiService.DesignSafe,
+    transform: (data) => data.baseProject,
+  });
+  return query;
+};
+
+export const useDesignSafeProjects = (): UseQueryResult<
   DesignSafeProjectCollection | undefined
 > => {
+  // TODO add offset and a high limit (as default is 100 for this endpoint)
   const query = useGet<DesignSafeProjectCollection>({
     endpoint: `/api/projects/v2/`,
-    key: ['projectsv2'],
+    key: ['designsafe-projectsv2'],
     apiService: ApiService.DesignSafe,
   });
   return query;
 };
 
 export function useProjectsWithDesignSafeInformation() {
-  const dsProjectQuery = useDsProjects();
+  const dsProjectQuery = useDesignSafeProjects();
   const projectQuery = useProjects();
 
   const alteredProjectData = useMemo(() => {
@@ -68,7 +88,12 @@ export function useProjectsWithDesignSafeInformation() {
       });
     }
     return projectQuery.data;
-  }, [dsProjectQuery.data, projectQuery.data]);
+  }, [
+    dsProjectQuery.data,
+    dsProjectQuery.isSuccess,
+    projectQuery.data,
+    projectQuery.isSuccess,
+  ]);
 
   return {
     data: alteredProjectData,
@@ -90,9 +115,8 @@ export const useDeleteProject = () => {
     endpoint: ({ projectId }) => `/projects/${projectId}/`,
     apiService: ApiService.Geoapi,
     options: {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: 'projects' });
-      },
+      onSuccess: () =>
+        queryClient.invalidateQueries({ queryKey: ['projects'] }),
     },
   });
 };
