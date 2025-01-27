@@ -2,7 +2,8 @@ import React from 'react';
 import DOMPurify from 'dompurify';
 import { Button } from '@tacc/core-components';
 import { Feature, FeatureType } from '@hazmapper/types';
-import { getFeatureType } from '@hazmapper/types';
+import { getFeatureType, IFileImportRequest } from '@hazmapper/types';
+import { useImportFeatureAsset } from '@hazmapper/hooks';
 
 type AssetButtonProps = {
   selectedFeature: Feature;
@@ -20,6 +21,26 @@ const AssetButton: React.FC<AssetButtonProps> = ({
   const pointCloudURL = DOMPurify.sanitize(featureSource + '/index.html');
 
   const featureType = getFeatureType(selectedFeature);
+  const projectId = selectedFeature.project_id;
+  const featureId = selectedFeature.id;
+  const {
+    mutate: importFeatureAsset,
+    isPending: isImporting,
+    isSuccess: isImportingSuccess,
+  } = useImportFeatureAsset(projectId, featureId);
+
+  const handleImportFeatureAsset = (importData: IFileImportRequest) => {
+    importFeatureAsset(importData);
+  };
+  const handleSubmit = () => {
+    const importData: IFileImportRequest = {
+      /*TODO Replace with passed in values from
+      FileBrowserModal. These are hardcoded to test.*/
+      system_id: 'project-4072868216578445806-242ac117-0001-012',
+      path: 'images_good/image.jpg',
+    };
+    handleImportFeatureAsset(importData);
+  };
 
   return (
     <>
@@ -36,9 +57,16 @@ const AssetButton: React.FC<AssetButtonProps> = ({
           View
         </Button>
       )}
-      {featureType.includes(selectedFeature.geometry.type) && isPublicView && (
+      {featureType.includes(selectedFeature.geometry.type) && !isPublicView && (
         //TODO
-        <Button type="primary">Add Asset from DesignSafe</Button>
+        <Button
+          type="primary"
+          onClick={handleSubmit}
+          isLoading={isImporting}
+          disabled={isImportingSuccess}
+        >
+          Add Asset from DesignSafe
+        </Button>
       )}
     </>
   );
