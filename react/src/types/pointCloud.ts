@@ -1,5 +1,9 @@
 import { Task } from './task';
 
+interface PointCLoudFileInfo {
+  name: string;
+}
+
 export interface PointCloud {
   id: number;
   description: string;
@@ -7,7 +11,7 @@ export interface PointCloud {
   feature_id?: number;
   task: Task;
   project_id: number;
-  files_info: string;
+  files_info: PointCLoudFileInfo[];
 }
 
 export interface PointCloudRequest {

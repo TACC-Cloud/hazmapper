@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Tooltip, List, Space, Flex } from 'antd';
 import {
   UploadOutlined,
   DeleteOutlined,
   InfoCircleOutlined,
 } from '@ant-design/icons';
-import { Project } from '@hazmapper/types';
+import PointCloudInfoModal from './PointCloudInfoModal';
+import { Project, PointCloud } from '@hazmapper/types';
 import { usePointClouds } from '@hazmapper/hooks';
 
 interface Props {
@@ -18,6 +19,8 @@ interface Props {
  * A tree of feature files that correspond to the map's features
  */
 const PointCloudPanel: React.FC<Props> = ({ project }) => {
+  const [pointCloudInfoModal, setPointCloudInfoModal] =
+    useState<PointCloud | null>(null);
   const { data: pointClouds } = usePointClouds({ projectId: project.id });
 
   const handleAddPointCloud = () => {
@@ -32,9 +35,7 @@ const PointCloudPanel: React.FC<Props> = ({ project }) => {
     console.log('Opening file browser for point cloud:', id);
   };
 
-  const handleInfo = (id: number) => {
-    console.log('Showing info for point cloud:', id);
-  };
+  const isPointCloudModalOpen = !!pointCloudInfoModal;
 
   return (
     <Flex vertical style={{ height: '100%' }}>
@@ -91,7 +92,7 @@ const PointCloudPanel: React.FC<Props> = ({ project }) => {
                   <Button
                     size="small"
                     icon={<InfoCircleOutlined />}
-                    onClick={() => handleInfo(pointCloud.id)}
+                    onClick={() => setPointCloudInfoModal(pointCloud)}
                   />
                 </Tooltip>
               </Space>
@@ -99,6 +100,12 @@ const PointCloudPanel: React.FC<Props> = ({ project }) => {
           </List.Item>
         )}
       />
+      {isPointCloudModalOpen && (
+        <PointCloudInfoModal
+          onClose={() => setPointCloudInfoModal(null)}
+          pointCloud={pointCloudInfoModal}
+        />
+      )}
     </Flex>
   );
 };
