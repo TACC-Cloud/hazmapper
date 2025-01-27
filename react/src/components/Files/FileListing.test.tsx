@@ -4,7 +4,7 @@ import { FileListing } from './FileListing';
 import {
   useFiles,
   useAuthenticatedUser,
-  useDsProjects,
+  useDesignSafeProjects,
   useSystems,
 } from '../../hooks';
 import { serializeToChonkyFile } from '../../utils/fileUtils';
@@ -16,7 +16,7 @@ jest.mock('../../hooks', () => ({
     data: [],
     refetch: jest.fn(),
   })),
-  useDsProjects: jest.fn(() => ({ result: [] })),
+  useDesignSafeProjects: jest.fn(() => ({ result: [] })),
   useAuthenticatedUser: jest.fn(() => ({ data: { username: 'test-user' } })),
   useSystems: jest.fn(() => ({ data: [] })),
 }));
@@ -43,7 +43,7 @@ describe('FileListing', () => {
 
   it('renders without crashing and displays "No systems available" if no systems are returned', () => {
     (useSystems as jest.Mock).mockReturnValue({ data: [], myDataSystem: null });
-    (useDsProjects as jest.Mock).mockReturnValue({
+    (useDesignSafeProjects as jest.Mock).mockReturnValue({
       result: [],
     });
     (useAuthenticatedUser as jest.Mock).mockReturnValue({
@@ -66,7 +66,7 @@ describe('FileListing', () => {
       data: [],
       refetch: jest.fn(),
     });
-    (useDsProjects as jest.Mock).mockReturnValue({
+    (useDesignSafeProjects as jest.Mock).mockReturnValue({
       data: [],
     });
     (useAuthenticatedUser as jest.Mock).mockReturnValue({
@@ -90,7 +90,7 @@ describe('FileListing', () => {
       data: [],
       refetch: jest.fn(),
     });
-    (useDsProjects as jest.Mock).mockReturnValue({
+    (useDesignSafeProjects as jest.Mock).mockReturnValue({
       data: [],
     });
     (useAuthenticatedUser as jest.Mock).mockReturnValue({
@@ -131,7 +131,7 @@ describe('FileListing', () => {
       refetch: jest.fn(),
     });
 
-    (useDsProjects as jest.Mock).mockReturnValue({
+    (useDesignSafeProjects as jest.Mock).mockReturnValue({
       data: [],
     });
 
@@ -175,7 +175,7 @@ describe('FileListing', () => {
       refetch: jest.fn(),
     });
 
-    (useDsProjects as jest.Mock).mockReturnValue({
+    (useDesignSafeProjects as jest.Mock).mockReturnValue({
       data: [],
     });
 
