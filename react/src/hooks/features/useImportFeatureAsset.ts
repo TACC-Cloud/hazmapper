@@ -8,5 +8,3 @@ export const useImportFeatureAsset = (projectId: number, featureId: number) => {
     apiService: ApiService.Geoapi,
   });
 };
-
-export default useImportFeatureAsset;
