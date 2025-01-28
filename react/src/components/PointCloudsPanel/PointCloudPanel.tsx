@@ -44,62 +44,63 @@ const PointCloudPanel: React.FC<Props> = ({ project }) => {
           Add
         </Button>
       </div>
+      {pointClouds && pointClouds.length > 0 && (
+        <List
+          style={{
+            flex: 1,
+            overflow: 'auto',
+            border: '1px solid #d9d9d9',
+            borderRadius: 8,
+            overflowX: 'hidden',
+          }}
+          dataSource={pointClouds}
+          renderItem={(pointCloud) => (
+            <List.Item
+              key={pointCloud.id}
+              style={{
+                padding: '8px',
+              }}
+            >
+              <Flex vertical gap="small" style={{ width: '100%' }}>
+                <Tooltip title={pointCloud.description}>
+                  <div
+                    style={{
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {pointCloud.description}
+                  </div>
+                </Tooltip>
 
-      <List
-        style={{
-          flex: 1,
-          overflow: 'auto',
-          border: '1px solid #d9d9d9',
-          borderRadius: 8,
-          overflowX: 'hidden',
-        }}
-        dataSource={pointClouds}
-        renderItem={(pointCloud) => (
-          <List.Item
-            key={pointCloud.id}
-            style={{
-              padding: '8px',
-            }}
-          >
-            <Flex vertical gap="small" style={{ width: '100%' }}>
-              <Tooltip title={pointCloud.description}>
-                <div
-                  style={{
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {pointCloud.description}
-                </div>
-              </Tooltip>
-
-              <Space wrap>
-                <Button
-                  size="small"
-                  icon={<UploadOutlined />}
-                  onClick={() => handleAddFile(pointCloud.id)}
-                >
-                  Add las/laz
-                </Button>
-                <Button
-                  size="small"
-                  danger
-                  icon={<DeleteOutlined />}
-                  onClick={() => handleDelete(pointCloud.id)}
-                />
-                <Tooltip title="View additional information">
+                <Space wrap>
                   <Button
                     size="small"
-                    icon={<InfoCircleOutlined />}
-                    onClick={() => setPointCloudInfoModal(pointCloud)}
+                    icon={<UploadOutlined />}
+                    onClick={() => handleAddFile(pointCloud.id)}
+                  >
+                    Add las/laz
+                  </Button>
+                  <Button
+                    size="small"
+                    danger
+                    icon={<DeleteOutlined />}
+                    onClick={() => handleDelete(pointCloud.id)}
                   />
-                </Tooltip>
-              </Space>
-            </Flex>
-          </List.Item>
-        )}
-      />
+                  <Tooltip title="View additional information">
+                    <Button
+                      size="small"
+                      icon={<InfoCircleOutlined />}
+                      onClick={() => setPointCloudInfoModal(pointCloud)}
+                    />
+                  </Tooltip>
+                </Space>
+              </Flex>
+            </List.Item>
+          )}
+        />
+      )}
       {isPointCloudModalOpen && (
         <PointCloudInfoModal
           onClose={() => setPointCloudInfoModal(null)}
