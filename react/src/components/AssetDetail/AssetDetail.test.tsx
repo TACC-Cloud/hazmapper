@@ -6,6 +6,7 @@ import {
   mockPointFeature,
 } from '@hazmapper/__fixtures__/featuresFixture';
 import AssetGeometry from './AssetGeometry';
+import AssetButton from './AssetButton';
 
 jest.mock('@hazmapper/hooks', () => ({
   useFeatureSelection: jest.fn(),
@@ -17,6 +18,11 @@ jest.mock('@hazmapper/hooks', () => ({
 jest.mock('./AssetGeometry', () => {
   return function AssetGeometry() {
     return <div data-testid="asset-geometry">Geometry Details</div>;
+  };
+});
+jest.mock('./AssetButton', () => {
+  return function AssetButton() {
+    return <div data-testid="asset-button">Asset Button</div>;
   };
 });
 
@@ -31,12 +37,13 @@ describe('AssetDetail', () => {
   it('renders all main components for image feature', async () => {
     const { getByText } = render(<AssetDetail {...AssetModalProps} />);
     const assetGeometry = screen.getByTestId('asset-geometry');
+    const assetButton = screen.getByTestId('asset-button');
     await act(async () => {
       render(<AssetGeometry selectedFeature={mockImgFeature} />);
     });
     // Check for title, button, and tables
     expect(getByText('Photo 4.jpg')).toBeDefined();
-    expect(getByText('Download')).toBeDefined();
+    expect(assetButton).toBeDefined();
     expect(getByText('Metadata')).toBeDefined();
     expect(assetGeometry).toBeDefined();
   });
@@ -46,6 +53,7 @@ describe('AssetDetail', () => {
       <AssetDetail {...AssetModalProps} selectedFeature={mockPointFeature} />
     );
     const assetGeometry = screen.getByTestId('asset-geometry');
+    const assetButton = screen.getByTestId('asset-button');
     await act(async () => {
       render(<AssetGeometry selectedFeature={mockPointFeature} />);
     });
@@ -54,8 +62,9 @@ describe('AssetDetail', () => {
     expect(getByText('Metadata')).toBeDefined();
     expect(assetGeometry).toBeDefined();
 
-    // Check for DesignSafe button presence when not in public view
-    expect(getByText('Add Asset from DesignSafe')).toBeDefined();
+    // Check that message feature has no asset appears
+    expect(getByText('This feature has no asset.')).toBeDefined();
+    expect(assetButton).toBeDefined();
   });
 
   it('renders all main components for point feature public view', async () => {
