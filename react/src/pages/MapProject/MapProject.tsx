@@ -266,9 +266,9 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
                         toggleDateFilter={toggleDateFilter}
                         setToggleDateFilter={setToggleDateFilter}
                       />
-            )}
-            {activePanel === Panel.PointClouds && !isPublicView && (
-              <PointCloudPanel project={activeProject} />
+                    )}
+                    {activePanel === Panel.PointClouds && !isPublicView && (
+                      <PointCloudPanel project={activeProject} />
                     )}
                     {activePanel === Panel.Layers && (
                       <LayersPanel

@@ -7,7 +7,46 @@ import {
 } from '@ant-design/icons';
 import PointCloudInfoModal from './PointCloudInfoModal';
 import { Project, PointCloud } from '@hazmapper/types';
-import { usePointClouds } from '@hazmapper/hooks';
+import {
+  usePointClouds,
+  useCreatePointCloud,
+  useDeletePointCloud,
+  useImportPointCloudFile,
+} from '@hazmapper/hooks';
+
+interface UploadPointCloudButtonProps {
+  pointCloud: PointCloud;
+}
+
+const UploadPointCloudButton: React.FC<UploadPointCloudButtonProps> = ({
+  pointCloud,
+}) => {
+  const { mutate: addPointCloudFile } = useImportPointCloudFile({
+    projectId: pointCloud.project_id,
+    pointCloudId: pointCloud.id,
+  });
+
+  const handleAddFile = () => {
+    console.log('TODO: Opening file browser for point cloud:', pointCloud.id);
+    addPointCloudFile({
+      files: [
+        {
+          system: 'project-4072868216578445806-242ac117-0001-012',
+          path: 'point_clouds_good/red-rocks.laz',
+        },
+      ],
+    });
+  };
+  return (
+    <Button
+      size="small"
+      icon={<UploadOutlined />}
+      onClick={() => handleAddFile()}
+    >
+      Add las/laz
+    </Button>
+  );
+};
 
 interface Props {
   /**
@@ -23,16 +62,22 @@ const PointCloudPanel: React.FC<Props> = ({ project }) => {
     useState<PointCloud | null>(null);
   const { data: pointClouds } = usePointClouds({ projectId: project.id });
 
+  const projectId = project.id;
+  const { mutate: createPointCloud } = useCreatePointCloud({ projectId });
+  const { mutate: deletePointCloud } = useDeletePointCloud();
+
   const handleAddPointCloud = () => {
     console.log('Adding new point cloud');
+    const dummyPointCloud = {
+      description: 'Red Rocks',
+      conversion_parameters: '',
+    };
+    createPointCloud(dummyPointCloud);
   };
 
   const handleDelete = (id: number) => {
     console.log('Deleting point cloud:', id);
-  };
-
-  const handleAddFile = (id: number) => {
-    console.log('Opening file browser for point cloud:', id);
+    deletePointCloud({ projectId: project.id, pointCloudId: id });
   };
 
   const isPointCloudModalOpen = !!pointCloudInfoModal;
@@ -75,13 +120,7 @@ const PointCloudPanel: React.FC<Props> = ({ project }) => {
                 </Tooltip>
 
                 <Space wrap>
-                  <Button
-                    size="small"
-                    icon={<UploadOutlined />}
-                    onClick={() => handleAddFile(pointCloud.id)}
-                  >
-                    Add las/laz
-                  </Button>
+                  <UploadPointCloudButton pointCloud={pointCloud} />
                   <Button
                     size="small"
                     danger
