@@ -1,7 +1,11 @@
 import React from 'react';
 import { fireEvent, waitFor } from '@testing-library/react';
 import PointCloudPanel from './PointCloudPanel';
-import { renderInTest, createSpyHandler, server } from '@hazmapper/test/testUtil';
+import {
+  renderInTest,
+  createSpyHandler,
+  server,
+} from '@hazmapper/test/testUtil';
 import { projectMock } from '@hazmapper/__fixtures__/projectFixtures';
 import { pointCloudMock } from '@hazmapper/__fixtures__/pointCloudFixtures';
 import { geoapi_project_point_clouds_delete } from '@hazmapper/test/handlers';
@@ -19,7 +23,9 @@ describe('PointCloudPanel', () => {
   });
 
   it('calls delete when delete button is clicked', async () => {
-    const { handler, spy } = createSpyHandler(geoapi_project_point_clouds_delete);
+    const { handler, spy } = createSpyHandler(
+      geoapi_project_point_clouds_delete
+    );
     server.use(handler);
 
     const { getAllByTestId } = renderInTest(
