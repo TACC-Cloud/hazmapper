@@ -6,7 +6,6 @@ import {
   mockPointFeature,
 } from '@hazmapper/__fixtures__/featuresFixture';
 import AssetGeometry from './AssetGeometry';
-import AssetButton from './AssetButton';
 
 jest.mock('@hazmapper/hooks', () => ({
   useFeatureSelection: jest.fn(),
