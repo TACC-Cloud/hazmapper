@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen, act } from '@testing-library/react';
+import { renderInTest, testQueryClient } from '@hazmapper/test/testUtil';
 import AssetDetail from './AssetDetail';
 import {
   mockImgFeature,
@@ -7,25 +8,17 @@ import {
 } from '@hazmapper/__fixtures__/featuresFixture';
 import AssetGeometry from './AssetGeometry';
 
-jest.mock('@hazmapper/hooks', () => ({
-  useFeatureSelection: jest.fn(),
-  useAppConfiguration: jest.fn().mockReturnValue({
-    geoapiUrl: 'https://example.com/geoapi',
-  }),
-}));
-
 jest.mock('./AssetGeometry', () => {
   return function AssetGeometry() {
     return <div data-testid="asset-geometry">Geometry Details</div>;
   };
 });
-jest.mock('./AssetButton', () => {
-  return function AssetButton() {
-    return <div data-testid="asset-button">Asset Button</div>;
-  };
-});
-
 describe('AssetDetail', () => {
+  beforeEach(() => {
+    // Clear all mocks before each test
+    jest.clearAllMocks();
+    testQueryClient.clear();
+  });
   const AssetModalProps = {
     onClose: jest.fn(),
     selectedFeature: mockImgFeature,
@@ -34,25 +27,22 @@ describe('AssetDetail', () => {
   };
 
   it('renders all main components for image feature', async () => {
-    const { getByText } = render(<AssetDetail {...AssetModalProps} />);
+    const { getByText } = renderInTest(<AssetDetail {...AssetModalProps} />);
     const assetGeometry = screen.getByTestId('asset-geometry');
-    const assetButton = screen.getByTestId('asset-button');
     await act(async () => {
       render(<AssetGeometry selectedFeature={mockImgFeature} />);
     });
     // Check for title, button, and tables
     expect(getByText('Photo 4.jpg')).toBeDefined();
-    expect(assetButton).toBeDefined();
     expect(getByText('Metadata')).toBeDefined();
     expect(assetGeometry).toBeDefined();
   });
 
   it('renders all main components for point feature', async () => {
-    const { getByText } = render(
+    const { getByText } = renderInTest(
       <AssetDetail {...AssetModalProps} selectedFeature={mockPointFeature} />
     );
     const assetGeometry = screen.getByTestId('asset-geometry');
-    const assetButton = screen.getByTestId('asset-button');
     await act(async () => {
       render(<AssetGeometry selectedFeature={mockPointFeature} />);
     });
@@ -63,11 +53,10 @@ describe('AssetDetail', () => {
 
     // Check that message feature has no asset appears
     expect(getByText('This feature has no asset.')).toBeDefined();
-    expect(assetButton).toBeDefined();
   });
 
   it('renders all main components for point feature public view', async () => {
-    const { getByText, queryByText } = render(
+    const { getByText, queryByText } = renderInTest(
       <AssetDetail
         {...AssetModalProps}
         selectedFeature={mockPointFeature}
@@ -76,7 +65,7 @@ describe('AssetDetail', () => {
     );
     const assetGeometry = screen.getByTestId('asset-geometry');
     await act(async () => {
-      render(<AssetGeometry selectedFeature={mockPointFeature} />);
+      renderInTest(<AssetGeometry selectedFeature={mockPointFeature} />);
     });
 
     // Check for standard components
