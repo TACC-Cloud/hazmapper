@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, List, Typography } from 'antd';
 import { PointCloud } from '@hazmapper/types';
 import { Link as RouterLink, useSearchParams } from 'react-router-dom';
-const { Text, Link } = Typography;
+const { Text } = Typography;
 
 interface PointCloudInfoModalProps {
   pointCloud: PointCloud;
@@ -44,7 +44,7 @@ const PointCloudInfoModal: React.FC<PointCloudInfoModalProps> = ({
     {
       label: 'Feature Id',
       content: pointCloud?.feature_id ? (
-        <RouterLink to={getFeatureLink(pointCloud.feature_id)} component={Link}>
+        <RouterLink to={getFeatureLink(pointCloud.feature_id)}>
           {pointCloud.feature_id}
         </RouterLink>
       ) : (
