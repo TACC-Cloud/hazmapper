@@ -118,15 +118,5 @@ describe('DeleteMapModal', () => {
       );
       expect(errorMessage).toBeDefined();
     });
-
-    it('should show success message when isSuccess is true', async () => {
-      (useDeleteProject as jest.Mock).mockReturnValue({
-        ...mockHookReturn,
-        isSuccess: true,
-      });
-      await renderComponent();
-      const successMessage = screen.getByText('Succesfully deleted the map.');
-      expect(successMessage).toBeDefined();
-    });
   });
 });

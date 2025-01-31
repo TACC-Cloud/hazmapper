@@ -6,7 +6,8 @@ import {
   DesignSafeProjectCollection,
   ApiService,
 } from '@hazmapper/types';
-import { useGet, useDelete } from '@hazmapper/requests';
+import { useGet, useDelete, usePut } from '@hazmapper/requests';
+import { useParams } from 'react-router-dom';
 
 export const useProjects = (): UseQueryResult<Project[]> => {
   const query = useGet<Project[]>({
@@ -117,6 +118,44 @@ export const useDeleteProject = () => {
     options: {
       onSuccess: () =>
         queryClient.invalidateQueries({ queryKey: ['projects'] }),
+    },
+  });
+};
+interface ProjectUpdateParams {
+  name: string;
+  description: string;
+  public: boolean;
+}
+
+export const useUpdateProjectInfo = () => {
+  const queryClient = useQueryClient();
+  const params = useParams<{ projectUUID: string }>();
+  const projectUUID = params.projectUUID ?? '';
+  const { data: project } = useProject({
+    projectUUID,
+    options: {
+      enabled: !!projectUUID,
+    },
+  });
+
+  return usePut<ProjectUpdateParams, Project>({
+    endpoint: `/projects/${project?.id}/`,
+    apiService: ApiService.Geoapi,
+    options: {
+      onSuccess: (updatedProject) => {
+        queryClient.setQueryData<Project[]>(
+          ['project', projectUUID],
+          (oldData) => {
+            if (!oldData) return [updatedProject];
+            return oldData.map((proj) => ({
+              ...proj,
+              name: updatedProject.name,
+              description: updatedProject.description,
+              public: updatedProject.public,
+            }));
+          }
+        );
+      },
     },
   });
 };

@@ -20,4 +20,7 @@
 
   /* Width of expanded panels (assets, layers, filters etc) to the right of panel navbar */
   --hazmapper-panel-width: 230px;
+
+  /* Width of wider expanded panels (i.e. Manage) to the right of panel navbar */
+  --hazmapper-panel-width--large: 500px;
 }
