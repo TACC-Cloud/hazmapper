@@ -233,7 +233,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
               isPublicView={isPublicView}
             />
           </Header>
-        <MapProjectNavBar isPublicView={isPublicView} />
+          <Layout>
             <Sider width="auto">
               <Flex
                 style={{
@@ -241,7 +241,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
                   height: '100%',
                 }}
               >
-                <MapProjectNavBar />
+                <MapProjectNavBar isPublicView={isPublicView} />
                 {activePanel && activePanel !== Panel.Manage && !loading && (
                   <BasePanel
                     panelTitle={activePanel}
