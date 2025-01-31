@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './AssetsPanel.module.css';
 import FeatureFileTree from '@hazmapper/components/FeatureFileTree';
 import { FeatureCollection, Project } from '@hazmapper/types';
 import { Button } from '@tacc/core-components';
 import { useFeatures } from '@hazmapper/hooks';
+import FileBrowserModal from '../FileBrowserModal/FileBrowserModal';
 
 const getFilename = (projectName: string) => {
   // Convert to lowercase filename based on projectName
@@ -78,10 +79,34 @@ const AssetsPanel: React.FC<Props> = ({
   featureCollection,
   project,
 }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
+  const allowedFileExtensions = [
+    'shp',
+    'jpg',
+    'jpeg',
+    'json',
+    'geojson',
+    'gpx',
+    'rq',
+    'png',
+  ];
+
   return (
     <div className={styles.root}>
       <div className={styles.topSection}>
-        <Button>Import from DesignSafe TODO/WG-387</Button>
+        <FileBrowserModal
+          isOpen={isModalOpen}
+          toggle={toggleModal}
+          allowedFileExtensions={allowedFileExtensions}
+        />
+        <Button onClick={toggleModal} type="secondary" iconNameBefore="add">
+          Import from DesignSafe
+        </Button>
       </div>
       <div className={styles.middleSection}>
         <FeatureFileTree
