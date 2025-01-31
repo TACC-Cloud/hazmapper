@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { Button, Tooltip, List, Space, Flex } from 'antd';
-import { InfoCircleOutlined } from '@ant-design/icons';
+import { InfoCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import PointCloudInfoModal from './PointCloudInfoModal';
+import PointCloudCreateModal from './PointCloudCreateModal';
 import {
   DeletePointCloudButton,
   UploadPointCloudButton,
 } from './PointCloudPanelButtons';
 
 import { Project, PointCloud } from '@hazmapper/types';
-import { usePointClouds, useCreatePointCloud } from '@hazmapper/hooks';
+import { usePointClouds } from '@hazmapper/hooks';
 
 interface Props {
   /**
@@ -22,29 +23,23 @@ interface Props {
 const PointCloudPanel: React.FC<Props> = ({ project }) => {
   const [pointCloudInfoModal, setPointCloudInfoModal] =
     useState<PointCloud | null>(null);
+  const [pointCloudCreateModal, setPointCloudCreateModal] =
+    useState<boolean>(false);
   const { data: pointClouds } = usePointClouds({ projectId: project.id });
 
-  const projectId = project.id;
-  const { mutate: createPointCloud } = useCreatePointCloud({ projectId });
-
-  const handleAddPointCloud = () => {
-    console.log('Adding new point cloud');
-    const dummyPointCloud = {
-      description: 'Red Rocks',
-      conversion_parameters: '',
-    };
-    createPointCloud(dummyPointCloud);
-  };
-
-  const isPointCloudModalOpen = !!pointCloudInfoModal;
+  const isPointCloudInfoModalOpen = !!pointCloudInfoModal;
 
   return (
     <Flex vertical style={{ height: '100%' }}>
-      <div style={{ marginBottom: 16 }}>
-        <Button type="primary" onClick={handleAddPointCloud}>
-          Add
-        </Button>
-      </div>
+      <Flex justify="flex-end" style={{ marginBottom: 16 }}>
+        <Button
+          type="default"
+          icon={<PlusOutlined />}
+          title="Add point cloud"
+          size="middle"
+          onClick={() => setPointCloudCreateModal(true)}
+        />
+      </Flex>
       {pointClouds && pointClouds.length > 0 && (
         <List
           style={{
@@ -94,10 +89,16 @@ const PointCloudPanel: React.FC<Props> = ({ project }) => {
           )}
         />
       )}
-      {isPointCloudModalOpen && (
+      {isPointCloudInfoModalOpen && (
         <PointCloudInfoModal
           onClose={() => setPointCloudInfoModal(null)}
           pointCloud={pointCloudInfoModal}
+        />
+      )}
+      {pointCloudCreateModal && (
+        <PointCloudCreateModal
+          projectId={project.id}
+          onClose={() => setPointCloudCreateModal(false)}
         />
       )}
     </Flex>
