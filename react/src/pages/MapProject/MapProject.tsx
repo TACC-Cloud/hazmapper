@@ -7,7 +7,6 @@ import { Message, LoadingSpinner } from '@tacc/core-components';
 import Map from '@hazmapper/components/Map';
 import AssetsPanel from '@hazmapper/components/AssetsPanel';
 import AssetDetail from '@hazmapper/components/AssetDetail';
-import PointCloudPanel from '@hazmapper/components/PointCloudsPanel';
 import ManageMapProjectModal from '@hazmapper/components/ManageMapProjectModal';
 import { queryPanelKey, Panel } from '@hazmapper/utils/panels';
 import {
@@ -205,9 +204,6 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
                 toggleDateFilter={toggleDateFilter}
                 setToggleDateFilter={setToggleDateFilter}
               />
-            )}
-            {activePanel === Panel.PointClouds && !isPublicView && (
-              <PointCloudPanel project={activeProject} />
             )}
           </div>
         )}

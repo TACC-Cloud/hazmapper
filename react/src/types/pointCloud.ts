@@ -9,8 +9,3 @@ export interface PointCloud {
   project_id: number;
   files_info: string;
 }
-
-export interface PointCloudRequest {
-  description: string;
-  conversion_parameters: string;
-}
