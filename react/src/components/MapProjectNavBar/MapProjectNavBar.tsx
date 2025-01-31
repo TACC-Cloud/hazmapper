@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './MapProjectNavBar.module.css';
 import { QueryNavItem } from '@tacc/core-components';
 import { queryPanelKey, Panel } from '@hazmapper/utils/panels';
@@ -64,6 +64,7 @@ interface NavBarPanelProps {
 
 const MapProjectNavBar: React.FC<NavBarPanelProps> = ({ isPublicView }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const activePanel = queryParams.get(queryPanelKey);
 
@@ -73,11 +74,9 @@ const MapProjectNavBar: React.FC<NavBarPanelProps> = ({ isPublicView }) => {
       if (currentPanel && !currentPanel.showWhenPublic) {
         const updatedParams = new URLSearchParams(location.search);
         updatedParams.delete(queryPanelKey);
-        window.history.replaceState(
-          {},
-          '',
-          `${location.pathname}?${updatedParams.toString()}`
-        );
+        navigate(`${location.pathname}?${updatedParams.toString()}`, {
+          replace: true,
+        });
       }
     }
   }, [isPublicView, activePanel, location]);
