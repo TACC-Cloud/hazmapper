@@ -79,7 +79,7 @@ const MapProjectNavBar: React.FC<NavBarPanelProps> = ({ isPublicView }) => {
         });
       }
     }
-  }, [isPublicView, activePanel, location]);
+  }, [isPublicView, activePanel, location, navigate]);
 
   return (
     <div className={styles.root}>
