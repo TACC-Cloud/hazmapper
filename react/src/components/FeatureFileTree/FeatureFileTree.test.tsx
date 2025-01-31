@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, waitFor } from '@testing-library/react';
+import { fireEvent, waitFor, act } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import FeatureFileTree from './FeatureFileTree';
 import { server, renderInTest } from '@hazmapper/test/testUtil';
@@ -24,11 +24,13 @@ describe('FeatureFileTree', () => {
     jest.clearAllMocks();
   });
 
-  it('renders feature list correctly', () => {
-    const { getByText } = renderInTest(
-      <FeatureFileTree {...defaultTreeProps} />
-    );
+  it('renders feature list correctly', async () => {
+    let rendered;
+    await act(async () => {
+      rendered = renderInTest(<FeatureFileTree {...defaultTreeProps} />);
+    });
 
+    const { getByText } = rendered;
     expect(getByText('foo')).toBeDefined();
     expect(getByText('image1.JPG')).toBeDefined();
     expect(getByText('image2.JPG')).toBeDefined();
@@ -48,37 +50,51 @@ describe('FeatureFileTree', () => {
       )
     );
 
-    const { getByTestId } = renderInTest(
-      <FeatureFileTree {...defaultTreeProps} />,
-      `/?selectedFeature=${featureId}`
-    );
+    let rendered;
+    await act(async () => {
+      rendered = renderInTest(
+        <FeatureFileTree {...defaultTreeProps} />,
+        `/?selectedFeature=${featureId}`
+      );
+    });
 
     // Find and click delete button (as featured is selected)
+    const { getByTestId } = rendered;
     const deleteButton = getByTestId('delete-feature-button');
-    fireEvent.click(deleteButton);
+    await act(async () => {
+      fireEvent.click(deleteButton);
+    });
 
     await waitFor(() => {
       expect(wasDeleted).toBeTruthy();
     });
   });
 
-  it('does not show delete button for public projects', () => {
-    const { queryByTestId } = renderInTest(
-      <FeatureFileTree {...defaultTreeProps} isPublicView={true} />,
-      '/?selectedFeature=1'
-    );
+  it('does not show delete button for public projects', async () => {
+    let rendered;
+    await act(async () => {
+      rendered = renderInTest(
+        <FeatureFileTree {...defaultTreeProps} isPublicView={true} />,
+        '/?selectedFeature=1'
+      );
+    });
 
     // Verify delete button is not present
+    const { queryByTestId } = rendered;
     const deleteButton = queryByTestId('delete-feature-button');
     expect(deleteButton).toBeNull();
   });
 
-  it('does not show delete button when no feature is selected', () => {
-    const { queryByTestId } = renderInTest(
-      <FeatureFileTree {...defaultTreeProps} isPublicView={false} />
-    );
+  it('does not show delete button when no feature is selected', async () => {
+    let rendered;
+    await act(async () => {
+      rendered = renderInTest(
+        <FeatureFileTree {...defaultTreeProps} isPublicView={false} />
+      );
+    });
 
     // Verify delete button is not present
+    const { queryByTestId } = rendered;
     const deleteButton = queryByTestId('delete-feature-button');
     expect(deleteButton).toBeNull();
   });

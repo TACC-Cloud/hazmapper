@@ -3,22 +3,26 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { SystemSelect } from './SystemSelect';
 import systemsFixture from './Systems.fixture';
 
-jest.mock('@hazmapper/hooks', () => {
-  return {
-    useSystems: () => {
-      return {
-        data: systemsFixture,
-      };
-    },
-  };
-});
+jest.mock('../../hooks', () => ({
+  useDesignSafeProjects: jest.fn(() => ({ result: [] })),
+  useSystems: jest.fn(() => ({
+    data: systemsFixture,
+    myDataSystem: { id: 'designsafe.storage.default' },
+    communityDataSystem: { id: 'designsafe.storage.community' },
+    publishedDataSystem: { id: 'designsafe.storage.published' },
+  })),
+}));
 
 describe('System Select', () => {
   const mockOnSystemSelect = jest.fn();
 
-  const renderComponent = () => {
+  const renderComponent = (showPublicSystems = true) => {
     return render(
-      <SystemSelect onSystemSelect={mockOnSystemSelect}></SystemSelect>
+      <SystemSelect
+        onSystemSelect={mockOnSystemSelect}
+        className="class-name"
+        showPublicSystems={showPublicSystems}
+      ></SystemSelect>
     );
   };
 
@@ -46,5 +50,12 @@ describe('System Select', () => {
     expect(mockOnSystemSelect).toHaveBeenCalledWith(
       'designsafe.storage.community'
     );
+  });
+
+  it('does not display public systems when showPublicSystems is false', () => {
+    renderComponent(false);
+    expect(screen.getByText('My Data')).toBeDefined();
+    expect(screen.queryByText('Community Data')).toBeNull();
+    expect(screen.queryByText('Published Data')).toBeNull();
   });
 });

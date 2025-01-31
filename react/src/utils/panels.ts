@@ -2,7 +2,7 @@ export const queryPanelKey = 'panel';
 
 export enum Panel {
   Assets = 'Assets',
-  PointClouds = 'PointClouds',
+  PointClouds = 'Point Clouds',
   Layers = 'Layers',
   Filters = 'Filters',
   Streetview = 'Streetview',

@@ -2,8 +2,9 @@
   height: 100%;
   width: var(--hazmapper-panel-navbar-width);
   min-width: var(--hazmapper-panel-navbar-width);
-  overflow-y: auto; /* Allows scrolling */
+  overflow-x: hidden; /* Hide horizontal scrollbar */
   padding-top: var(--global-space--section-top);
+  border-right: 1px solid #707070;
 }
 
 .root :global([class*='nav-content']) {
@@ -13,7 +14,7 @@
 
 .navItem {
   height: 70px;
-  width: 75px;
+  width: var(--hazmapper-panel-navbar-width);
   display: flex;
   flex-direction: column;
   align-items: center;

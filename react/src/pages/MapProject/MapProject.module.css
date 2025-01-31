@@ -1,25 +1,8 @@
-.errorContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  width: 100%;
-}
-
 .root {
   display: flex;
   flex-direction: column;
   width: 100vw;
   height: 100vh;
-}
-
-.mapControlBar {
-  background-color: white;
-  height: var(--hazmapper-control-bar-height);
-  min-height: var(--hazmapper-control-bar-height);
-  display: flex;
-  align-items: center;
-  padding: 0 10px;
 }
 
 .container {
@@ -34,14 +17,12 @@
 
 .panelContainer {
   width: var(--hazmapper-panel-width);
-  height: calc(
-    100vh - var(--hazmapper-header-navbar-height) -
-      var(--hazmapper-control-bar-height)
-  );
+  height: 100%;
   background-color: var(--global-color-primary--xx-light);
-  position: absolute;
+  position: fixed;
   left: var(--hazmapper-panel-navbar-width);
-  z-index: 5000;
+  overflow-y: auto;
+  z-index: 1050;
 }
 .detailContainer {
   min-width: 250px;
@@ -53,7 +34,7 @@
   right: 10px;
   top: 75px;
   bottom: 20px;
-  z-index: 5000;
+  z-index: 1050;
 }
 
 .map {

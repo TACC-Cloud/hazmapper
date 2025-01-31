@@ -147,3 +147,7 @@ export interface QuestionnaireAsset {
   path: string;
   previewPath: string;
 }
+export interface IFileImportRequest {
+  system_id: string;
+  path: string;
+}

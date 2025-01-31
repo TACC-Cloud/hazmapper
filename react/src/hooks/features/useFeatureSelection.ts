@@ -1,7 +1,9 @@
 import { useCallback } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { useCurrentFeatures } from '.';
 import { Feature, FeatureCollection } from '@hazmapper/types';
+import { useAppConfiguration } from '../environment';
 
 const SELECTED_FEATURE_PARAM = 'selectedFeature';
 
@@ -34,7 +36,7 @@ const findFeatureById = (
  *
  * */
 export function useFeatureSelection(): UseFeatureSelectionReturn {
-  const currentFeatures = useCurrentFeatures();
+  const { data: currentFeatures } = useCurrentFeatures();
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
@@ -43,8 +45,8 @@ export function useFeatureSelection(): UseFeatureSelectionReturn {
     ? Number(searchParams.get(SELECTED_FEATURE_PARAM))
     : null;
 
-  const selectedFeature = currentFeatures.data
-    ? findFeatureById(currentFeatures.data, selectedFeatureId)
+  const selectedFeature = currentFeatures
+    ? findFeatureById(currentFeatures, selectedFeatureId)
     : null;
 
   const setSelectedFeatureId = useCallback(
@@ -74,3 +76,48 @@ export function useFeatureSelection(): UseFeatureSelectionReturn {
     setSelectedFeatureId,
   };
 }
+/**
+ * Hook to get the feature asset source path
+ * @param feature - The feature for which to get the source path
+ * @returns A function to get the feature asset source path with an optional additional path
+ */
+
+export const useFeatureAssetSourcePath = (feature: Feature) => {
+  const config = useAppConfiguration();
+  return useCallback(
+    (optionalPath: string | null = null): string => {
+      const baseFeatureSource = `${config.geoapiUrl}/assets/${feature.assets[0].path}`;
+      return optionalPath
+        ? baseFeatureSource + optionalPath
+        : baseFeatureSource;
+    },
+    [config.geoapiUrl, feature]
+  );
+};
+
+/**
+ * Hook to fetch the feature asset source using React Query
+ * @param feature - The feature for which to get the source
+ * @param optionalPath - Optional path to append to the source path
+ * @returns React Query result with data, loading and error states
+ */
+export const useFeatureAssetSource = (
+  feature: Feature,
+  path: string | null = null
+) => {
+  const getFeatureAssetSourcePath = useFeatureAssetSourcePath(feature);
+
+  return useQuery({
+    queryKey: ['featureAsset', feature.id, path],
+    queryFn: async () => {
+      const featureSourcePath = getFeatureAssetSourcePath(path);
+      const response = await fetch(featureSourcePath, {
+        headers: { 'content-type': 'application/json' },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    },
+  });
+};

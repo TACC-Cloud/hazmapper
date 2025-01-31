@@ -1,27 +1,60 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
-
-import { Message, LoadingSpinner } from '@tacc/core-components';
+import { Layout, Flex } from 'antd';
+import { LoadingSpinner } from '@tacc/core-components';
 
 import Map from '@hazmapper/components/Map';
 import AssetsPanel from '@hazmapper/components/AssetsPanel';
 import AssetDetail from '@hazmapper/components/AssetDetail';
+import LayersPanel from '@hazmapper/components/LayersPanel';
 import ManageMapProjectModal from '@hazmapper/components/ManageMapProjectModal';
 import { queryPanelKey, Panel } from '@hazmapper/utils/panels';
 import {
   useFeatures,
   useProject,
-  useTileServers,
+  useGetTileServers,
   useFeatureSelection,
   KEY_USE_FEATURES,
 } from '@hazmapper/hooks';
 import MapProjectNavBar from '@hazmapper/components/MapProjectNavBar';
+import MapProjectAccessError from '@hazmapper/components/MapProjectAccessError';
+import MapControlBar from '@hazmapper/components/MapControlBar';
 import Filters from '@hazmapper/components/FiltersPanel/Filter';
 import { assetTypeOptions } from '@hazmapper/components/FiltersPanel/Filter';
 import { Project } from '@hazmapper/types';
 import HeaderNavBar from '@hazmapper/components/HeaderNavBar';
+import { MapPositionProvider } from '@hazmapper/context/MapContext';
+
 import styles from './MapProject.module.css';
+import QuestionnaireModal from '@hazmapper/components/QuestionnaireModal';
+import { Spinner } from '@hazmapper/common_components';
+import { Panel as BasePanel } from '@hazmapper/components/Panel';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { useForm, FormProvider } from 'react-hook-form';
+
+export const tileLayerSchema = z.object({
+  id: z.number(),
+  name: z.string().min(1, 'Required'),
+  type: z.string(),
+  url: z.string().url().min(1, 'Required'),
+  attribution: z.string(),
+  tileOptions: z.object({
+    maxZoom: z.number().nullish(),
+    minZoom: z.number().nullish(),
+    maxNativeZoom: z.number().nullish(),
+    format: z.string().nullish(),
+    layers: z.string().nullish(),
+  }),
+  uiOptions: z.object({
+    zIndex: z.number(),
+    opacity: z.number(),
+    isActive: z.boolean(),
+    showInput: z.boolean().nullish(),
+    showDescription: z.boolean().nullish(),
+  }),
+});
 
 interface MapProjectProps {
   /**
@@ -44,7 +77,6 @@ const MapProject: React.FC<MapProjectProps> = ({ isPublicView = false }) => {
     error,
   } = useProject({
     projectUUID,
-    isPublicView,
     options: { enabled: !!projectUUID },
   });
 
@@ -57,26 +89,19 @@ const MapProject: React.FC<MapProjectProps> = ({ isPublicView = false }) => {
   }, [projectUUID, queryClient]);
 
   if (isLoading) {
-    /* TODO_REACT show error and improve spinner https://tacc-main.atlassian.net/browse/WG-260*/
     return (
       <div className={styles.root}>
+        <HeaderNavBar />
         <LoadingSpinner />
       </div>
     );
   }
 
   if (error || !activeProject) {
-    /* TODO_REACT show error and improve spinner https://tacc-main.atlassian.net/browse/WG-260
-
-      * if no access, note why (missing project vs no access to project)
-      * if not logged in and project exists but they might have access, prompt to log in to see if accesable
-    */
-
     return (
-      <div className={styles.errorContainer}>
-        <Message tagName="span" type="error">
-          Error loading project
-        </Message>
+      <div className={styles.root}>
+        <HeaderNavBar />
+        <MapProjectAccessError error={error} />;
       </div>
     );
   }
@@ -118,7 +143,10 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
   );
   const { selectedFeature, setSelectedFeatureId: toggleSelectedFeature } =
     useFeatureSelection();
-
+  const [isQuestionnaireModalOpen, setQuestionnaireModalOpen] = useState(false);
+  const handleQuestionnaireClick = () => {
+    setQuestionnaireModalOpen(true);
+  };
   const formatAssetTypeName = (name: string) => {
     switch (name) {
       case 'PointCloud':
@@ -134,39 +162,26 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     formatAssetTypeName(type)
   );
 
-  const {
-    data: rawFeatureCollection,
-    isLoading: isFeaturesLoading,
-    error: featuresError,
-  } = useFeatures({
-    projectId: activeProject.id,
-    isPublicView,
-    assetTypes: formattedAssetTypes,
-    startDate,
-    endDate,
-    toggleDateFilter,
-  });
+  const { data: rawFeatureCollection, isLoading: isFeaturesLoading } =
+    useFeatures({
+      projectId: activeProject.id,
+      isPublicView,
+      assetTypes: formattedAssetTypes,
+      startDate,
+      endDate,
+      toggleDateFilter,
+    });
 
-  const {
-    data: tileServerLayers,
-    isLoading: isTileServerLayersLoading,
-    error: tileServerLayersError,
-  } = useTileServers({
-    projectId: activeProject.id,
-    isPublicView,
-  });
+  const { data: tileServerLayers, isLoading: isTileServerLayersLoading } =
+    useGetTileServers({
+      projectId: activeProject.id,
+      isPublicView,
+    });
 
   const location = useLocation();
 
   const queryParams = new URLSearchParams(location.search);
   const activePanel = queryParams.get(queryPanelKey);
-
-  const error = featuresError || tileServerLayersError;
-
-  if (error) {
-    /* TODO https://tacc-main.atlassian.net/browse/WG-260 */
-    console.error(error);
-  }
 
   const loading = isFeaturesLoading || isTileServerLayersLoading;
 
@@ -175,58 +190,129 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     features: [],
   };
 
+  const { Header, Content, Sider } = Layout;
+
+  const formSchema = z.object({
+    tileLayers: z.array(
+      z.object({
+        layer: tileLayerSchema, // Need to nest tile layer here since useFieldArray will add it's own `id` field, overwriting our own
+      })
+    ),
+  });
+
+  const initialValues = useMemo(
+    () => ({
+      tileLayers:
+        tileServerLayers
+          ?.sort((a, b) => b.uiOptions.zIndex - a.uiOptions.zIndex)
+          .map((layer) => ({ layer })) || [],
+    }),
+    [tileServerLayers]
+  );
+
+  const methods = useForm({
+    defaultValues: initialValues,
+    resolver: zodResolver(formSchema),
+    mode: 'onChange',
+  });
+
+  const { reset } = methods;
+
+  useEffect(() => {
+    reset(initialValues);
+  }, [initialValues, reset]);
+
   return (
-    <div className={styles.root}>
-      <HeaderNavBar />
-      <div className={styles.mapControlBar}>
-        MapTopControlBar TODO https://tacc-main.atlassian.net/browse/WG-260
-        {loading && <div> loading</div>}
-      </div>
-      <div className={styles.container}>
-        <MapProjectNavBar isPublicView={isPublicView} />
-        {activePanel && activePanel !== Panel.Manage && (
-          <div className={styles.panelContainer}>
-            {activePanel === Panel.Assets && (
-              <AssetsPanel
-                project={activeProject}
-                isPublicView={isPublicView}
-                featureCollection={featureCollection}
-              />
-            )}
-            {activePanel === Panel.Filters && (
-              <Filters
-                selectedAssetTypes={selectedAssetTypes}
-                onFiltersChange={setSelectedAssetTypes}
-                startDate={startDate}
-                setStartDate={setStartDate}
-                endDate={endDate}
-                setEndDate={setEndDate}
-                toggleDateFilter={toggleDateFilter}
-                setToggleDateFilter={setToggleDateFilter}
-              />
-            )}
-          </div>
-        )}
-        {activePanel === Panel.Manage && (
-          <ManageMapProjectModal isPublicView={isPublicView} />
-        )}
-        <div className={styles.map}>
-          <Map
-            baseLayers={tileServerLayers}
-            featureCollection={featureCollection}
-          />
-        </div>
-        {selectedFeature && (
-          <div className={styles.detailContainer}>
-            <AssetDetail
-              selectedFeature={selectedFeature}
-              onClose={() => toggleSelectedFeature(selectedFeature.id)}
-              isPublicView={activeProject.public}
+    <FormProvider {...methods}>
+      <MapPositionProvider>
+        <Layout style={{ height: '100vh' }}>
+          <Header>
+            <HeaderNavBar />
+            <MapControlBar
+              activeProject={activeProject}
+              isPublicView={isPublicView}
             />
-          </div>
-        )}
-      </div>
-    </div>
+          </Header>
+        <MapProjectNavBar isPublicView={isPublicView} />
+            <Sider width="auto">
+              <Flex
+                style={{
+                  overflowY: 'auto',
+                  height: '100%',
+                }}
+              >
+                <MapProjectNavBar />
+                {activePanel && activePanel !== Panel.Manage && !loading && (
+                  <BasePanel
+                    panelTitle={activePanel}
+                    className={styles.panelContainer}
+                  >
+                    {activePanel === Panel.Assets && (
+                      <AssetsPanel
+                        project={activeProject}
+                        isPublicView={isPublicView}
+                        featureCollection={featureCollection}
+                      />
+                    )}
+                    {activePanel === Panel.Filters && (
+                      <Filters
+                        selectedAssetTypes={selectedAssetTypes}
+                        onFiltersChange={setSelectedAssetTypes}
+                        startDate={startDate}
+                        setStartDate={setStartDate}
+                        endDate={endDate}
+                        setEndDate={setEndDate}
+                        toggleDateFilter={toggleDateFilter}
+                        setToggleDateFilter={setToggleDateFilter}
+                      />
+                    )}
+                    {activePanel === Panel.Layers && (
+                      <LayersPanel
+                        projectId={activeProject.id}
+                        isPublicView={isPublicView}
+                      />
+                    )}
+                  </BasePanel>
+                )}
+              </Flex>
+            </Sider>
+            <Content>
+              {loading ? (
+                <Spinner />
+              ) : (
+                <>
+                  {activePanel === Panel.Manage && (
+                    <ManageMapProjectModal isPublicView={isPublicView} />
+                  )}
+                  <div className={styles.map}>
+                    <Map featureCollection={featureCollection} />
+                  </div>
+                  {selectedFeature && (
+                    <div className={styles.detailContainer}>
+                      <AssetDetail
+                        selectedFeature={selectedFeature}
+                        onClose={() =>
+                          toggleSelectedFeature(selectedFeature.id)
+                        }
+                        isPublicView={isPublicView}
+                        onQuestionnaireClick={handleQuestionnaireClick}
+                      />
+                    </div>
+                  )}
+                  {isQuestionnaireModalOpen && selectedFeature && (
+                    <QuestionnaireModal
+                      isOpen={isQuestionnaireModalOpen}
+                      close={() => setQuestionnaireModalOpen(false)}
+                      feature={selectedFeature}
+                    />
+                  )}
+                </>
+              )}
+            </Content>
+          </Layout>
+        </Layout>
+      </MapPositionProvider>
+    </FormProvider>
   );
 };
 

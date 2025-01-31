@@ -196,3 +196,35 @@ export function useDelete<ResponseType, Variables>({
     ...options,
   });
 }
+
+export function usePut<RequestType, ResponseType>({
+  endpoint,
+  options = {},
+  apiService = ApiService.Geoapi,
+}: UsePostParams<RequestType, ResponseType>) {
+  const client = axios;
+  const state = store.getState();
+  const configuration = useAppConfiguration();
+
+  useEnsureAuthenticatedUserHasValidTapisToken();
+
+  const baseUrl = getBaseApiUrl(apiService, configuration);
+
+  const headers = getHeaders(apiService, state.auth);
+
+  const putUtil = async (requestData: RequestType) => {
+    const response = await client.put<ResponseType>(
+      `${baseUrl}${endpoint}`,
+      requestData,
+      {
+        headers: headers,
+      }
+    );
+    return response.data;
+  };
+
+  return useMutation<ResponseType, AxiosError, RequestType>({
+    mutationFn: putUtil,
+    ...options,
+  });
+}

@@ -1,1 +1,1 @@
-export { default } from './MapProject';
+export { default, tileLayerSchema } from './MapProject';
