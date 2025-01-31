@@ -53,6 +53,33 @@ export function shouldIgnoreError(args: any[]): boolean {
   return ignoredErrors.some((pattern) => pattern.test(messageStr));
 }
 
+/**
+ * Mock window.matchMedia for testing UI components that rely on media queries.
+ * JSDOM (used by Jest) doesn't implement matchMedia, but UI libraries like
+ * Ant Design require it for responsive features. This mock provides the
+ * minimum implementation needed for tests to run without errors.
+ *
+ * @example
+ * // A component using Ant Design's responsive features
+ * const List = () => {
+ *   const screens = useBreakpoint();
+ *   return screens.md ? <DesktopList /> : <MobileList />;
+ * };
+ */
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: jest.fn().mockImplementation((query) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(), // deprecated
+    removeListener: jest.fn(), // deprecated
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  })),
+});
+
 /***** C) Setup testing and also ensure that we are mocking things in tests *****/
 
 beforeAll(() => {

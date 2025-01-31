@@ -8,3 +8,8 @@ export interface File {
   type: string;
   url: string;
 }
+
+export interface TapisFilePath {
+  system: string;
+  path: string;
+}
