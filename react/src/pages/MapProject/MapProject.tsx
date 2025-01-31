@@ -241,8 +241,8 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
                   height: '100%',
                 }}
               >
-                <MapProjectNavBar />
-                {activePanel && !loading && (
+                <MapProjectNavBar isPublicView={isPublicView} />
+                {activePanel && activePanel !== Panel.Manage && !loading && (
                   <BasePanel
                     panelTitle={activePanel}
                     className={
