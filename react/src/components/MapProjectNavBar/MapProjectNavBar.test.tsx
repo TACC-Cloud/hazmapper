@@ -1,4 +1,4 @@
-import React, { act } from 'react';
+import React from 'react';
 import { render, waitFor } from '@testing-library/react';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 import MapProjectNavBar from './MapProjectNavBar';
