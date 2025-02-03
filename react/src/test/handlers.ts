@@ -71,6 +71,12 @@ export const geoapi_project_point_clouds = http.get(
   () => HttpResponse.json([pointCloudMock], { status: 200 })
 );
 
+// GeoAPI Project Point Clouds POST
+export const geoapi_project_point_clouds_create = http.post(
+  `${testDevConfiguration.geoapiUrl}/projects/:projectId/point-cloud/`,
+  () => HttpResponse.json([pointCloudMock], { status: 200 })
+);
+
 export const geoapi_project_point_clouds_delete = http.delete(
   `${testDevConfiguration.geoapiUrl}/projects/:projectId/point-cloud/:pointCloudId/`,
   async () => {

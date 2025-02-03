@@ -20,7 +20,7 @@ const PointCloudCreateModal: React.FC<PointCloudInfoModalProps> = ({
   projectId,
   onClose,
 }) => {
-  const methods = useForm<FormValues>(); // Initialize react-hook-form
+  const methods = useForm<FormValues>({ mode: 'onChange' });
   const { handleSubmit, control, formState } = methods;
   const { mutate: createPointCloud } = useCreatePointCloud({ projectId });
 
@@ -58,12 +58,12 @@ const PointCloudCreateModal: React.FC<PointCloudInfoModalProps> = ({
           <Controller
             name="description"
             control={control}
-            rules={{ required: 'Please enter a description' }} // Validation rule
+            rules={{ required: 'Please enter a description' }}
             render={({ field, fieldState }) => (
               <Form.Item
                 label="Description"
-                validateStatus={fieldState.error ? 'error' : ''} // Set error state
-                help={fieldState.error?.message} // Display error message
+                validateStatus={fieldState.error ? 'error' : ''}
+                help={fieldState.error?.message}
               >
                 <TextArea {...field} rows={1} />
               </Form.Item>

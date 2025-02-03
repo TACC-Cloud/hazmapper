@@ -51,6 +51,12 @@ export const TestWrapper = ({ children }: { children: React.ReactNode }) => (
   </Provider>
 );
 
+interface SpyHandlerArgs {
+  request: Request;
+  params?: any;
+  body?: any;
+}
+
 /**
  * Creates a new MSW handler that includes a spy function for testing.
  * Returns both the modified handler and the spy for assertions.
@@ -66,13 +72,33 @@ export const TestWrapper = ({ children }: { children: React.ReactNode }) => (
  * expect(spy).toHaveBeenCalled();
  */
 export const createSpyHandler = (originalHandler: any) => {
-  const spy = jest.fn();
+  const spy = jest.fn<void, [SpyHandlerArgs]>();
   const method = originalHandler.info.method.toLowerCase();
   const path = originalHandler.info.path;
   const resolver = originalHandler.resolver;
 
   const handler = http[method](path, async (...args) => {
-    spy();
+    // Try to extract JSON body if possible
+    let processedArgs: SpyHandlerArgs | undefined;
+    try {
+      if (args[0] && args[0].request) {
+        const bodyOrPromise = args[0].request.json
+          ? await args[0].request.json()
+          : null;
+        processedArgs = {
+          ...args[0],
+          body: bodyOrPromise,
+          params: args[0].params, // Explicitly include params
+        };
+      }
+    } catch (error) {
+      console.warn('Failed to parse JSON body', error);
+    }
+
+    // Call spy with processed arguments
+    if (processedArgs) {
+      spy(processedArgs);
+    }
     return resolver(...args);
   });
 
