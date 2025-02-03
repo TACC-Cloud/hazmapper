@@ -3,7 +3,7 @@ import { Project } from '@hazmapper/types';
 import { SectionMessage } from '@tacc/core-components';
 import { EditFilled, CheckOutlined } from '@ant-design/icons';
 import { Button, Flex, List, Input, Modal, notification } from 'antd';
-import { useUpdateProjectInfo } from '@hazmapper/hooks';
+import { useAppConfiguration, useUpdateProjectInfo } from '@hazmapper/hooks';
 import DeleteMapModal from '../DeleteMapModal/DeleteMapModal';
 
 interface MapTabProps {
@@ -19,8 +19,10 @@ const MapTabContent: React.FC<MapTabProps> = ({ project, onProjectUpdate }) => {
     'name' | 'description' | null
   >(null);
   const [editValue, setEditValue] = useState('');
+
   /* antd hook to manage notifications*/
   const [updateApi, contextHolder] = notification.useNotification();
+
   const [validationError, setValidationError] = useState(false);
   const { mutate, isPending, reset } = useUpdateProjectInfo();
 
@@ -90,6 +92,7 @@ const MapTabContent: React.FC<MapTabProps> = ({ project, onProjectUpdate }) => {
     setisDeleteModalOpen(false);
   };
 
+  const config = useAppConfiguration();
   return (
     <>
       {contextHolder}
@@ -130,7 +133,14 @@ const MapTabContent: React.FC<MapTabProps> = ({ project, onProjectUpdate }) => {
           </List.Item>
           <List.Item>
             <Flex vertical justify="center" gap="small">
-              <Button type="primary">View in Taggit</Button>
+              <Button
+                type="primary"
+                href={config.taggitUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                View in Taggit
+              </Button>
               {project.deletable && (
                 <Button danger onClick={() => setisDeleteModalOpen(true)}>
                   Delete map
