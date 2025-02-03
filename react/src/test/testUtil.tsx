@@ -92,7 +92,15 @@ export const createSpyHandler = (originalHandler: any) => {
         };
       }
     } catch (error) {
-      console.warn('Failed to parse JSON body', error);
+      // Ignore JSON parsing errors for DELETE requests
+      if (method !== 'delete') {
+        console.warn('Failed to parse JSON body', error);
+      }
+      processedArgs = {
+        ...args[0],
+        body: null,
+        params: args[0].params,
+      };
     }
 
     // Call spy with processed arguments

@@ -32,8 +32,10 @@ describe('PointCloudPanel', () => {
       <PointCloudPanel project={projectMock} />
     );
 
+    // Wait for point clouds to load and delete buttons to appear
     await waitFor(() => {
-      expect(getAllByTestId(/delete-point-cloud/)).toBeDefined();
+      const deleteButtons = getAllByTestId(/delete-point-cloud/);
+      expect(deleteButtons.length).toBeGreaterThan(0);
     });
 
     const deleteButtons = getAllByTestId(/delete-point-cloud/);
