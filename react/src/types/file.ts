@@ -9,6 +9,12 @@ export interface File {
   url: string;
 }
 
+export interface IFileImportRequest {
+  system_id: string;
+  path: string;
+}
+
+// TODO look at backend; so similar to IFileImportRequest but system instead of system_id. our backend is in consistent.
 export interface TapisFilePath {
   system: string;
   path: string;
