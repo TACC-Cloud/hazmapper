@@ -18,6 +18,5 @@ describe('PointCloudInfoModal', () => {
 
     const featureIdText = pointCloudMock.feature_id?.toString() || '';
     expect(getByText(featureIdText)).toBeDefined();
-
   });
 });
