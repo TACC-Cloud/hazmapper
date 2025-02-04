@@ -242,7 +242,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
                 }}
               >
                 <MapProjectNavBar isPublicView={isPublicView} />
-                {activePanel && activePanel !== Panel.Manage && !loading && (
+                {activePanel && !loading && (
                   <BasePanel
                     panelTitle={activePanel}
                     className={

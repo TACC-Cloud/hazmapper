@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import styles from './ManageMapProjectPanel.module.css';
 import type { TabsProps } from 'antd';
-import { Flex, Tabs } from 'antd';
-import { Project } from '@hazmapper/types';
+import { Flex, Tabs, notification, Card } from 'antd';
+import { Project, ProjectRequest } from '@hazmapper/types';
 import MapTabContent from './MapTabContent';
+import MembersTabContent from './MembersTabContent';
+import PublicTabContent from './PublicTabContent';
+import { useUpdateProjectInfo } from '@hazmapper/hooks';
+import SaveTabContent from './SaveTabContent';
 
 interface ManageMapProjectModalProps {
   project: Project;
@@ -16,15 +20,52 @@ const ManageMapProjectPanel: React.FC<ManageMapProjectModalProps> = ({
 }) => {
   const [activeKey, setActiveKey] = useState('1');
   const [activeProject, setActiveProject] = useState(initialProject);
+  const [updateApi, contextHolder] = notification.useNotification();
+
+  const { mutate, isPending, reset } = useUpdateProjectInfo();
 
   // Update activeProject when initialProject changes
   useEffect(() => {
     setActiveProject(initialProject);
   }, [initialProject]);
 
-  const handleProjectUpdate = (updatedProject: Project) => {
-    setActiveProject(updatedProject);
-    onProjectUpdate?.(updatedProject);
+  const handleProjectUpdate = (updateData: Partial<ProjectRequest>) => {
+    const newData: ProjectRequest = {
+      name: updateData.name ?? activeProject.name,
+      description: updateData.description ?? activeProject.description,
+      public: updateData.public ?? activeProject.public,
+    };
+
+    mutate(newData, {
+      onSuccess: (updatedProject) => {
+        setActiveProject((prev) => {
+          const newState = {
+            ...prev,
+            name: updatedProject.name,
+            description: updatedProject.description,
+            public: updatedProject.public,
+          };
+          return newState;
+        });
+        onProjectUpdate?.(updatedProject);
+        updateApi.open({
+          type: 'success',
+          message: 'Success!',
+          description: 'Your project was successfully updated.',
+          placement: 'topRight',
+          onClose: () => reset(),
+        });
+      },
+      onError: () => {
+        updateApi.open({
+          type: 'error',
+          message: 'Error!',
+          description: 'There was an error updating your project.',
+          placement: 'topRight',
+          onClose: () => reset(),
+        });
+      },
+    });
   };
 
   const items: TabsProps['items'] = [
@@ -32,31 +73,51 @@ const ManageMapProjectPanel: React.FC<ManageMapProjectModalProps> = ({
       label: 'Map',
       key: '1',
       children: (
-        <MapTabContent
-          project={activeProject}
-          onProjectUpdate={handleProjectUpdate}
-        />
+        <Card title="Map Details" type="inner">
+          <MapTabContent
+            project={activeProject}
+            onProjectUpdate={handleProjectUpdate}
+            isPending={isPending}
+          />
+        </Card>
       ),
     },
     {
       label: 'Members',
       key: '2',
-      children: 'TODO',
+      children: (
+        <Card title="Members" type="inner">
+          <MembersTabContent project={activeProject} />
+        </Card>
+      ),
     },
     {
       label: 'Public',
       key: '3',
-      children: 'TODO',
+      children: (
+        <Card type="inner" title="Public Access">
+          <PublicTabContent
+            project={activeProject}
+            onProjectUpdate={handleProjectUpdate}
+            isPending={isPending}
+          />
+        </Card>
+      ),
     },
     {
       label: 'Save',
       key: '4',
-      children: 'TODO',
+      children: (
+        <Card type="inner" title="Save Location">
+          <SaveTabContent project={activeProject}></SaveTabContent>
+        </Card>
+      ),
     },
   ];
 
   return (
     <Flex vertical className={styles.root}>
+      {contextHolder}
       <Tabs
         type="card"
         size="small"
