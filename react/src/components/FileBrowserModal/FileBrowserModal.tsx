@@ -25,6 +25,9 @@ const FileBrowserModal = ({
       title={<Header style={{ fontSize: '2rem' }}>Select Files</Header>}
       open={isOpen}
       onCancel={handleClose}
+      zIndex={
+        2000 /* TODO define somewhere to be reusable in different modals */
+      }
       footer={[
         <Button key="closeModalButton" onClick={handleClose}>
           Cancel
