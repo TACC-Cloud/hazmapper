@@ -16,6 +16,8 @@ import { useAuthenticatedUser, useSystems, useFiles } from '@hazmapper/hooks';
 import { File, System } from '@hazmapper/types';
 import { serializeToChonkyFile } from '@hazmapper/utils/fileUtils';
 
+const DEFAULT_NO_FILE_EXTENSIONS: string[] = [];
+
 const _FileBrowser = FileBrowser as React.MemoExoticComponent<
   React.ForwardRefExoticComponent<
     FileBrowserProps & {
@@ -37,7 +39,7 @@ export const FileListing: React.FC<FileListingProps> = ({
   showPublicSystems = true,
   onFileSelect,
   onFolderSelect,
-  allowedFileExtensions = [],
+  allowedFileExtensions = DEFAULT_NO_FILE_EXTENSIONS,
 }) => {
   const {
     data: systems = [],
