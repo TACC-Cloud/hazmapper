@@ -62,7 +62,7 @@ export const FileListing: React.FC<FileListingProps> = ({
     path:
       path || (selectedSystem?.id === myDataSystem?.id ? user?.username : ''),
     offset: '0',
-    limit: '100',
+    limit: '100' /* TODO https://tacc-main.atlassian.net/browse/WG-418 */,
     enabled: !!selectedSystem?.id,
   });
 
