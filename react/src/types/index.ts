@@ -9,5 +9,5 @@ export type {
 } from './projects';
 export type { AuthState, AuthenticatedUser, AuthToken } from './auth';
 export type { System } from './systems';
-export type { File } from './file';
+export * from './file';
 export * from './environment';

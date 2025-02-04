@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Modal, Button, Layout, Typography } from 'antd';
 import { FileListing } from '../Files';
+import { File, TapisFilePath } from '@hazmapper/types';
+import { convertFilesToTapisPaths } from '@hazmapper/utils/fileUtils';
 
 type FileBrowserModalProps = {
   isOpen: boolean;
   toggle: () => void;
-  allowedFileExtensions?: string[];
+  onImported?: (files: TapisFilePath[]) => void;
+  allowedFileExtensions: string[];
 };
 
 const { Content, Header } = Layout;
@@ -14,10 +17,28 @@ const { Text } = Typography;
 const FileBrowserModal = ({
   isOpen,
   toggle: parentToggle,
+  onImported,
   allowedFileExtensions = [],
 }: FileBrowserModalProps) => {
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+
   const handleClose = () => {
     parentToggle();
+  };
+
+  const handleFileSelect = (files: File[]) => {
+    console.log(files);
+    setSelectedFiles(files);
+  };
+
+  const handleImport = () => {
+    console.log(selectedFiles);
+    if (onImported) {
+      console.log(selectedFiles);
+      const tapisFilePaths = convertFilesToTapisPaths(selectedFiles);
+      onImported(tapisFilePaths);
+    }
+    handleClose();
   };
 
   return (
@@ -32,7 +53,12 @@ const FileBrowserModal = ({
         <Button key="closeModalButton" onClick={handleClose}>
           Cancel
         </Button>,
-        <Button key="importFilesButton" htmlType="submit" type="primary">
+        <Button
+          key="importFilesButton"
+          htmlType="submit"
+          type="primary"
+          onClick={handleImport}
+        >
           Import
         </Button>,
       ]}
@@ -54,6 +80,7 @@ const FileBrowserModal = ({
             disableSelection={false}
             showPublicSystems={true}
             allowedFileExtensions={allowedFileExtensions}
+            onFileSelect={handleFileSelect}
           />
         </div>
       </Content>
