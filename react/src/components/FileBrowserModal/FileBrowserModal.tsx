@@ -39,9 +39,11 @@ const FileBrowserModal = ({
       width={800}
     >
       <Content>
-        <Text type="secondary">
-          Allowed file types: shp, jpg, jpeg, json, geojson, gpx, rq
-        </Text>
+        {allowedFileExtensions?.length && (
+          <Text type="secondary">
+            Allowed file types: {allowedFileExtensions.join(', ')}
+          </Text>
+        )}
         <br />
         <Text type="secondary">
           Note: Only files are selectable, not folders. Double-click on a folder
