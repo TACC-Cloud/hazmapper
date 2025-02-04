@@ -34,6 +34,7 @@ const PublicTabContent: React.FC<PublicTabProps> = ({
             <Paragraph
               style={{ display: 'flex', justifyContent: 'space-evenly' }}
               copyable={{
+                text: `https://hazmapper.tacc.utexas.edu${config.basePath}project-public/${project.uuid}`,
                 icon: [
                   <CopyOutlined key="copy-icon" style={{ color: '#74B566' }} />,
                   <CopyFilled key="copied-icon" />,

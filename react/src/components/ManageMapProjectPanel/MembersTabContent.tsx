@@ -17,9 +17,10 @@ const MembersTabContent: React.FC<MembersTabProps> = ({ project }) => {
   return (
     <>
       <Flex vertical justify="center" align="center">
-        {!data ? (
+        {data ? (
           <Table
             dataSource={data}
+            rowKey={(data) => data.id}
             columns={[
               {
                 title: 'Username',
@@ -27,7 +28,11 @@ const MembersTabContent: React.FC<MembersTabProps> = ({ project }) => {
                 key: 'username',
               },
             ]}
-            pagination={{ position: ['bottomCenter'] }}
+            pagination={{
+              position: ['bottomCenter'],
+              hideOnSinglePage: true,
+              showSizeChanger: false,
+            }}
             style={{ width: '90%' }}
           >
             {isLoading && <LoadingSpinner />}
