@@ -37,7 +37,7 @@ describe('AssetsPanel', () => {
     const { getByText } = render(<AssetsPanel {...defaultProps} />);
 
     // Check for the presence of buttons
-    expect(getByText('Import from DesignSafe TODO/WG-387')).toBeDefined();
+    expect(getByText('Import from DesignSafe')).toBeDefined();
     expect(getByText('Export to GeoJSON')).toBeDefined();
   });
 
