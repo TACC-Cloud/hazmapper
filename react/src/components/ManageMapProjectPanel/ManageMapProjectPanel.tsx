@@ -22,7 +22,7 @@ const ManageMapProjectPanel: React.FC<ManageMapProjectModalProps> = ({
   const [activeProject, setActiveProject] = useState(initialProject);
   const [updateApi, contextHolder] = notification.useNotification();
 
-  const { mutate, isPending, reset } = useUpdateProjectInfo();
+  const { mutate, isPending } = useUpdateProjectInfo();
 
   // Update activeProject when initialProject changes
   useEffect(() => {
@@ -53,7 +53,7 @@ const ManageMapProjectPanel: React.FC<ManageMapProjectModalProps> = ({
           message: 'Success!',
           description: 'Your project was successfully updated.',
           placement: 'topRight',
-          onClose: () => reset(),
+          closable: false,
         });
       },
       onError: () => {
@@ -62,7 +62,7 @@ const ManageMapProjectPanel: React.FC<ManageMapProjectModalProps> = ({
           message: 'Error!',
           description: 'There was an error updating your project.',
           placement: 'topRight',
-          onClose: () => reset(),
+          closable: false,
         });
       },
     });
