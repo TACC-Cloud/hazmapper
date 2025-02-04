@@ -12,9 +12,9 @@ import {
 import { Icon } from '@tacc/core-components';
 import { SystemSelect } from '../Systems';
 import styles from './FileListing.module.css';
-import { useAuthenticatedUser, useSystems, useFiles } from '../../hooks';
-import { File, System } from '../../types';
-import { serializeToChonkyFile } from '../../utils/fileUtils';
+import { useAuthenticatedUser, useSystems, useFiles } from '@hazmapper/hooks';
+import { File, System } from '@hazmapper/types';
+import { serializeToChonkyFile } from '@hazmapper/utils/fileUtils';
 
 const _FileBrowser = FileBrowser as React.MemoExoticComponent<
   React.ForwardRefExoticComponent<
@@ -71,7 +71,7 @@ export const FileListing: React.FC<FileListingProps> = ({
     if (!selectedSystem && myDataSystem) {
       setSelectedSystem(myDataSystem || systems[0]);
     }
-  }, [systems, myDataSystem]);
+  }, [systems, myDataSystem, selectedSystem]);
 
   useEffect(() => {
     if (selectedSystem?.id) {
@@ -89,7 +89,7 @@ export const FileListing: React.FC<FileListingProps> = ({
     if (!folderChain.length && user?.username) {
       setFolderChain([{ id: user.username, name: user.username, isDir: true }]);
     }
-  }, [files, folderChain.length, user?.username]);
+  }, [files, folderChain.length, user?.username, allowedFileExtensions]);
 
   const FileListingIcon = (props: any) => <Icon name={props.icon} />;
 
@@ -160,7 +160,7 @@ export const FileListing: React.FC<FileListingProps> = ({
         onFileSelect?.(selectedFiles || []);
       }
     },
-    [chonkyFiles, files]
+    [files, onFileSelect, onFolderSelect, selectedFiles]
   );
 
   if (!systems.length) {
