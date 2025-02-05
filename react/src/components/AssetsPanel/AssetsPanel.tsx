@@ -83,10 +83,10 @@ const AssetsPanel: React.FC<Props> = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { mutate: createPointCloud } = useImportFeature(project.id);
+  const { mutate: importFeatureFiles } = useImportFeature(project.id);
 
   const handleFileImport = (files: TapisFilePath[]) => {
-    createPointCloud({ files });
+    importFeatureFiles({ files });
     setIsModalOpen(false);
   };
 
