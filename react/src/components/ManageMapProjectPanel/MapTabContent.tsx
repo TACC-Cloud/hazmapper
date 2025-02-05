@@ -1,28 +1,29 @@
 import React, { useState } from 'react';
-import { Project } from '@hazmapper/types';
+import { Project, ProjectRequest } from '@hazmapper/types';
 import { SectionMessage } from '@tacc/core-components';
-import { EditFilled, CheckOutlined } from '@ant-design/icons';
-import { Button, Flex, List, Input, Modal, notification } from 'antd';
-import { useUpdateProjectInfo } from '@hazmapper/hooks';
+import { EditFilled, CheckOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Button, Flex, List, Input, Modal } from 'antd';
+import { useAppConfiguration } from '@hazmapper/hooks';
 import DeleteMapModal from '../DeleteMapModal/DeleteMapModal';
 
 interface MapTabProps {
   project: Project;
-  onProjectUpdate: (updatedProject: Project) => void;
+  onProjectUpdate: (updateData: Partial<ProjectRequest>) => void;
+  isPending: boolean;
 }
 
-const MapTabContent: React.FC<MapTabProps> = ({ project, onProjectUpdate }) => {
-  //Editing map
+const MapTabContent: React.FC<MapTabProps> = ({
+  project,
+  onProjectUpdate,
+  isPending,
+}) => {
   const [editProjectField, setEditProjectField] = useState({});
   const [isEditModalOpen, setisEditModalOpen] = useState(false);
   const [currentField, setCurrentField] = useState<
     'name' | 'description' | null
   >(null);
   const [editValue, setEditValue] = useState('');
-  /* antd hook to manage notifications*/
-  const [updateApi, contextHolder] = notification.useNotification();
   const [validationError, setValidationError] = useState(false);
-  const { mutate, isPending, reset } = useUpdateProjectInfo();
 
   const handleEditClick = (fieldName: 'name' | 'description') => {
     setCurrentField(fieldName);
@@ -43,37 +44,10 @@ const MapTabContent: React.FC<MapTabProps> = ({ project, onProjectUpdate }) => {
     }
     setValidationError(false);
 
-    const updateData = {
-      name: currentField === 'name' ? editValue : project.name,
-      description:
-        currentField === 'description' ? editValue : project.description,
-      public: project.public,
-    };
-
-    mutate(updateData, {
-      onSuccess: (updatedProject) => {
-        setisEditModalOpen(false);
-        setCurrentField(null);
-        setEditProjectField({});
-        onProjectUpdate?.(updatedProject);
-        updateApi.open({
-          type: 'success',
-          message: '',
-          description: 'Your project was successfully updated.',
-          placement: 'topRight',
-          onClose: () => reset(),
-        });
-      },
-      onError: () => {
-        updateApi.open({
-          type: 'error',
-          message: 'Error!',
-          description: 'There was an error updating your project.',
-          placement: 'topRight',
-          onClose: () => reset(),
-        });
-      },
-    });
+    onProjectUpdate({ [currentField]: editValue });
+    setisEditModalOpen(false);
+    setCurrentField(null);
+    setEditProjectField({});
   };
 
   const handleEditModalCancel = () => {
@@ -81,7 +55,6 @@ const MapTabContent: React.FC<MapTabProps> = ({ project, onProjectUpdate }) => {
     setValidationError(false);
     setCurrentField(null);
     setEditProjectField({});
-    reset();
   };
 
   //Deleting map
@@ -90,9 +63,10 @@ const MapTabContent: React.FC<MapTabProps> = ({ project, onProjectUpdate }) => {
     setisDeleteModalOpen(false);
   };
 
+  const config = useAppConfiguration();
+
   return (
     <>
-      {contextHolder}
       <Flex vertical justify="center">
         <List itemLayout="vertical" style={{ marginLeft: 20, marginRight: 20 }}>
           <List.Item>
@@ -130,9 +104,21 @@ const MapTabContent: React.FC<MapTabProps> = ({ project, onProjectUpdate }) => {
           </List.Item>
           <List.Item>
             <Flex vertical justify="center" gap="small">
-              <Button type="primary">View in Taggit</Button>
+              <Button
+                type="primary"
+                href={config.taggitUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                View in Taggit
+              </Button>
               {project.deletable && (
-                <Button danger onClick={() => setisDeleteModalOpen(true)}>
+                <Button
+                  type="primary"
+                  danger
+                  icon={<DeleteOutlined />}
+                  onClick={() => setisDeleteModalOpen(true)}
+                >
                   Delete map
                 </Button>
               )}

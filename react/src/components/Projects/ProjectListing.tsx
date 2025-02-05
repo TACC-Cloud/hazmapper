@@ -90,6 +90,7 @@ const ProjectListing: React.FC = () => {
                         e.stopPropagation();
                         setSelectedProjectForDeletion(proj);
                       }}
+                      disabled={!proj.deletable}
                     ></Button>
                   </td>
                 </tr>
