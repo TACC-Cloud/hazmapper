@@ -57,7 +57,7 @@ const FileBrowserModal = ({
           htmlType="submit"
           type="primary"
           onClick={handleImport}
-          // TODO disabled
+          disabled={selectedFiles.length === 0} // Disable if no files are selected
         >
           Import
         </Button>,
