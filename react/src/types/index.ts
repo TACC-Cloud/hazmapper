@@ -11,3 +11,4 @@ export type { AuthState, AuthenticatedUser, AuthToken } from './auth';
 export type { System } from './systems';
 export * from './file';
 export * from './environment';
+export * from './geoapi';

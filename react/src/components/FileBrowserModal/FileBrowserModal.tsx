@@ -34,7 +34,6 @@ const FileBrowserModal = ({
   const handleImport = () => {
     console.log(selectedFiles);
     if (onImported) {
-      console.log(selectedFiles);
       const tapisFilePaths = convertFilesToTapisPaths(selectedFiles);
       onImported(tapisFilePaths);
     }
@@ -58,6 +57,7 @@ const FileBrowserModal = ({
           htmlType="submit"
           type="primary"
           onClick={handleImport}
+          // TODO disabled
         >
           Import
         </Button>,
