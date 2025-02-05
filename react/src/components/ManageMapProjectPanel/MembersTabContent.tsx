@@ -11,7 +11,10 @@ interface MembersTabProps {
 const MembersTabContent: React.FC<MembersTabProps> = ({ project }) => {
   const { data, isLoading, isError, error } = useProjectUsers({
     projectId: project.id,
-    options: {},
+    options: {
+      /* Only fetch if the map is associated with a DS project*/
+      enabled: Boolean(project.ds_project),
+    },
   });
 
   return (
