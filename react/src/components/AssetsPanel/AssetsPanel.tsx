@@ -14,14 +14,16 @@ const getFilename = (projectName: string) => {
 
 interface DownloadFeaturesButtonProps {
   project: Project;
+  isPublicView: boolean;
 }
 
 const DownloadFeaturesButton: React.FC<DownloadFeaturesButtonProps> = ({
   project,
+  isPublicView,
 }) => {
   const { isLoading: isDownloading, refetch: triggerDownload } = useFeatures({
     projectId: project.id,
-    isPublicView: project.public,
+    isPublicView: isPublicView,
     assetTypes: [], // Empty array to get all features
     options: {
       enabled: false, // Only fetch when triggered by user clicking button
@@ -124,7 +126,7 @@ const AssetsPanel: React.FC<Props> = ({
         />
       </div>
       <div className={styles.bottomSection}>
-        <DownloadFeaturesButton project={project} />
+        <DownloadFeaturesButton project={project} isPublicView={isPublicView} />
       </div>
     </div>
   );
