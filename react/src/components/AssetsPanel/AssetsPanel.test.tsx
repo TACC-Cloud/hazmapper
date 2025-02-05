@@ -7,6 +7,7 @@ import { useFeatures } from '@hazmapper/hooks';
 
 jest.mock('@hazmapper/hooks', () => ({
   useFeatures: jest.fn(),
+  useImportFeature: jest.fn(),
 }));
 
 // Mock FeatureFileTree component since it's a complex component and tested elswhere
