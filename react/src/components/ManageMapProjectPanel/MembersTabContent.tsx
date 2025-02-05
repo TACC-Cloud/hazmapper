@@ -13,9 +13,17 @@ const MembersTabContent: React.FC<MembersTabProps> = ({ project }) => {
     projectId: project.id,
     options: {
       /* Only fetch if the map is associated with a DS project*/
-      enabled: Boolean(project.ds_project),
+      enabled: Boolean(project.system_id.includes('project')),
     },
   });
+  if (isLoading) return <LoadingSpinner />;
+  if (isError)
+    return (
+      <SectionMessage type="error">
+        {' '}
+        There was an error loading the members of this project. Error: {error}
+      </SectionMessage>
+    );
 
   return (
     <>
@@ -37,16 +45,7 @@ const MembersTabContent: React.FC<MembersTabProps> = ({ project }) => {
               showSizeChanger: false,
             }}
             style={{ width: '90%' }}
-          >
-            {isLoading && <LoadingSpinner />}
-            {isError && (
-              <SectionMessage type="error">
-                {' '}
-                There was an error loading the members of this project. Error:{' '}
-                {error}
-              </SectionMessage>
-            )}
-          </Table>
+          ></Table>
         ) : (
           <Card type="inner">
             There are no members becuase this map is not saved to a DesignSafe
