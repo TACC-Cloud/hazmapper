@@ -8,6 +8,7 @@ import {
 } from '@hazmapper/__fixtures__/projectFixtures';
 import { users } from '@hazmapper/__fixtures__/usersFixtures';
 import { tileServerLayers } from '@hazmapper/__fixtures__/tileServerLayerFixture';
+import { pointCloudMock } from '@hazmapper/__fixtures__/pointCloudFixtures';
 
 // ArcGIS tiles GET
 export const arcgis_tiles = http.get('https://tiles.arcgis.com/*', () => {
@@ -64,6 +65,25 @@ export const geoapi_project_tile_servers = http.get(
   () => HttpResponse.json(tileServerLayers, { status: 200 })
 );
 
+// GeoAPI Project Point Clouds GET
+export const geoapi_project_point_clouds = http.get(
+  `${testDevConfiguration.geoapiUrl}/projects/:projectId/point-cloud/`,
+  () => HttpResponse.json([pointCloudMock], { status: 200 })
+);
+
+// GeoAPI Project Point Clouds POST
+export const geoapi_project_point_clouds_create = http.post(
+  `${testDevConfiguration.geoapiUrl}/projects/:projectId/point-cloud/`,
+  () => HttpResponse.json([pointCloudMock], { status: 200 })
+);
+
+export const geoapi_project_point_clouds_delete = http.delete(
+  `${testDevConfiguration.geoapiUrl}/projects/:projectId/point-cloud/:pointCloudId/`,
+  async () => {
+    return HttpResponse.json({}, { status: 200 });
+  }
+);
+
 // Tapis Systems GET
 export const tapis_systems = http.get(
   `${testDevConfiguration.tapisUrl}/v3/systems/`,
@@ -92,6 +112,8 @@ export const defaultHandlers = [
   geoapi_project_features,
   geoapi_project_users,
   geoapi_project_tile_servers,
+  geoapi_project_point_clouds,
+  geoapi_project_point_clouds_delete,
   tapis_files_listing,
   tapis_systems,
 ];
