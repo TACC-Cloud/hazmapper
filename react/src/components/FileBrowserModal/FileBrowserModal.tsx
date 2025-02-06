@@ -27,12 +27,10 @@ const FileBrowserModal = ({
   };
 
   const handleFileSelect = (files: File[]) => {
-    console.log(files);
     setSelectedFiles(files);
   };
 
   const handleImport = () => {
-    console.log(selectedFiles);
     if (onImported) {
       const tapisFilePaths = convertFilesToTapisPaths(selectedFiles);
       onImported(tapisFilePaths);
