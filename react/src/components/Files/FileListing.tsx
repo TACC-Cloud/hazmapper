@@ -42,6 +42,7 @@ export const FileListing: React.FC<FileListingProps> = ({
   allowedFileExtensions = DEFAULT_NO_FILE_EXTENSIONS,
 }) => {
   const {
+    isLoading: isSystemsLoading,
     data: systems = [],
     myDataSystem,
     communityDataSystem,
@@ -165,8 +166,8 @@ export const FileListing: React.FC<FileListingProps> = ({
     [files, onFileSelect, onFolderSelect, selectedFiles]
   );
 
-  if (!systems.length) {
-    return <p>No systems available.</p>;
+  if (!isSystemsLoading && !systems.length) {
+    return <p>Error: No systems available.</p>;
   }
 
   if (hasError) {
