@@ -42,7 +42,6 @@ const PointCloudCreateModal: React.FC<PointCloudInfoModalProps> = ({
       onCancel={onClose}
       footer={null}
       width={600}
-      zIndex={2000}
     >
       <div style={{ marginBottom: 16 }}>
         <Text>
