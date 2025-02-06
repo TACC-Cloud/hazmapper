@@ -83,9 +83,6 @@ const PointCloudInfoModal: React.FC<PointCloudInfoModalProps> = ({
       onCancel={onClose}
       footer={null}
       width={600}
-      zIndex={
-        2000 /* TODO define somewhere to be reusable in different modals */
-      }
     >
       <List
         dataSource={details}
