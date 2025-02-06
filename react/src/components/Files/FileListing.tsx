@@ -154,16 +154,16 @@ export const FileListing: React.FC<FileListingProps> = ({
         }
       } else if (data.id === ChonkyActions.ChangeSelection.id) {
         const filePaths = Array.from(data.payload.selection);
-
-        setSelectedFiles(
+        const newSelectedFiles =
           files?.filter(
             (f) => filePaths.includes(f.path) && f.type !== 'dir'
-          ) || []
-        );
-        onFileSelect?.(selectedFiles || []);
+          ) || [];
+
+        setSelectedFiles(newSelectedFiles);
+        onFileSelect?.(newSelectedFiles); // P
       }
     },
-    [files, onFileSelect, onFolderSelect, selectedFiles]
+    [files, onFileSelect, onFolderSelect]
   );
 
   if (!isSystemsLoading && !systems.length) {
