@@ -138,17 +138,8 @@ export const useUpdateProjectInfo = () => {
     apiService: ApiService.Geoapi,
     options: {
       onSuccess: (updatedProject) => {
-        queryClient.setQueryData<Project[]>(
-          ['project', projectUUID],
-          (oldData) => {
-            if (!oldData) return [{ ...currentProject, ...updatedProject }];
-            return oldData.map((proj) => ({
-              ...proj,
-              ...currentProject,
-              ...updatedProject,
-            }));
-          }
-        );
+        queryClient.invalidateQueries({ queryKey: ['projects'] });
+        queryClient.invalidateQueries({ queryKey: ['project'] });
       },
     },
   });
