@@ -158,14 +158,16 @@ export const FileListing: React.FC<FileListingProps> = ({
             (f) => filePaths.includes(f.path) && f.type !== 'dir'
           ) || [];
 
-        setSelectedFiles(newSelectedFiles);
         onFileSelect?.(newSelectedFiles); // P
       }
     },
     [files, onFileSelect, onFolderSelect]
   );
 
-  if (!isSystemsLoading && !systems.length) {
+  const unexpectedProblemWithSystems = !systems.length && !isSystemsLoading;
+
+  if (unexpectedProblemWithSystems) {
+    /* not an expected case */
     return <p>Error: No systems available.</p>;
   }
 

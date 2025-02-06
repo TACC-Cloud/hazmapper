@@ -23,10 +23,13 @@ describe('FileBrowserModal', () => {
     jest.clearAllMocks();
   });
 
-  it('renders correctly when open', () => {
+  it('renders correctly when open', async () => {
     renderInTest(<FileBrowserModal {...defaultProps} />);
 
-    expect(screen.getByText('Select Files')).toBeInTheDocument();
+    // Wait for systems data to load
+    await waitFor(() => {
+      expect(screen.getByText('Select Files')).toBeInTheDocument();
+    });
 
     expect(
       screen.getByText('Allowed file types: .foo, .bar')
@@ -41,20 +44,21 @@ describe('FileBrowserModal', () => {
     expect(screen.getByText('Cancel')).toBeInTheDocument();
     expect(screen.getByText('Import')).toBeInTheDocument();
 
-    // Import button should be disabled initially
     const importButton = screen
       .getByText('Import')
       .closest('button') as HTMLButtonElement;
     expect(importButton).toBeDisabled();
   });
 
-  it('handles cancel action correctly', () => {
+  it('handles cancel action correctly', async () => {
     renderInTest(<FileBrowserModal {...defaultProps} />);
 
-    // Click cancel button
-    fireEvent.click(screen.getByText('Cancel'));
+    // Wait for systems data to load
+    await waitFor(() => {
+      expect(screen.getByText('Select Files')).toBeInTheDocument();
+    });
 
-    // Check if toggle was called
+    fireEvent.click(screen.getByText('Cancel'));
     expect(defaultProps.toggle).toHaveBeenCalled();
   });
 });
