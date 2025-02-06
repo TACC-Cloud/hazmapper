@@ -57,7 +57,6 @@ export const FileListing: React.FC<FileListingProps> = ({
   const [selectedSystem, setSelectedSystem] = React.useState<System | null>(
     null
   );
-  const [selectedFiles, setSelectedFiles] = React.useState<File[]>([]);
   const [hasError, setHasError] = React.useState(false);
 
   const { data: files, refetch } = useFiles({
