@@ -1,15 +1,30 @@
 import React from 'react';
-import { screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 import FileBrowserModal from './FileBrowserModal';
 import { renderInTest } from '@hazmapper/test/testUtil';
 import '@testing-library/jest-dom';
 
-// Mock FeatureFileTree component since it's a complex component and tested elswhere
-jest.mock('@hazmapper/components/FeatureFileTree', () => {
-  return function MockFeatureFileTree() {
-    return <div data-testid="feature-file-tree">FeatureFileTree Component</div>;
-  };
-});
+// TODO see if we don't have to mock chonky
+jest.mock('chonky', () => ({
+  FileBrowser: jest.fn(({ children, onFileAction }) => (
+    <div
+      onClick={onFileAction}
+      onKeyDown={onFileAction}
+      role="button"
+      tabIndex={0}
+    >
+      {children}
+    </div>
+  )),
+  FileNavbar: jest.fn(() => <div>Mock FileNavbar</div>),
+  FileList: jest.fn(() => <div>Mock FileList</div>),
+  ChonkyActions: {
+    EnableListView: { id: 'enable-list-view' },
+    OpenFiles: { id: 'open-files' },
+    MouseClickFile: { id: 'mouse-click-file' },
+    ChangeSelection: { id: 'change-selection' },
+  },
+}));
 
 describe('FileBrowserModal', () => {
   const defaultProps = {
