@@ -30,7 +30,7 @@ export const designsafe_project = http.get(
 
 // GeoAPI Projects GET - handles both list and single project (i.e query is "?uuid=uuid")
 export const geoapi_get_projects = http.get(
-  `${testDevConfiguration.geoapiUrl}/projects/`,
+  `${testDevConfiguration.geoapiUrl}/:projects_or_project_public_segment/`,
   ({ request }) => {
     const url = new URL(request.url);
     const uuid = url.searchParams.get('uuid');
@@ -49,7 +49,7 @@ export const geoapi_get_projects = http.get(
 
 // GeoAPI Project Features GET
 export const geoapi_project_features = http.get(
-  `${testDevConfiguration.geoapiUrl}/projects/:projectId/features/`,
+  `${testDevConfiguration.geoapiUrl}/:projects_or_project_public_segment/:projectId/features/`,
   () => HttpResponse.json(featureCollection, { status: 200 })
 );
 
@@ -61,7 +61,7 @@ export const geoapi_project_users = http.get(
 
 // GeoAPI Project Tile Servers GET
 export const geoapi_project_tile_servers = http.get(
-  `${testDevConfiguration.geoapiUrl}/projects/:projectId/tile-servers/`,
+  `${testDevConfiguration.geoapiUrl}/:projects_or_project_public_segment/:projectId/tile-servers/`,
   () => HttpResponse.json(tileServerLayers, { status: 200 })
 );
 
