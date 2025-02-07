@@ -43,9 +43,6 @@ const FileBrowserModal = ({
       title={<Header style={{ fontSize: '2rem' }}>Select Files</Header>}
       open={isOpen}
       onCancel={handleClose}
-      zIndex={
-        2000 /* TODO define somewhere to be reusable in different modals */
-      }
       footer={[
         <Text key="fileCount" type="secondary" style={{ marginRight: 16 }}>
           {selectedFiles.length > 0 && `${selectedFiles.length} files selected`}
