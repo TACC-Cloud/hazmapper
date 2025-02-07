@@ -1,4 +1,5 @@
 export { useDeleteFeature } from './useDeleteFeature';
+export { useImportFeature } from './useImportFeature';
 export { useImportFeatureAsset } from './useImportFeatureAsset';
 export {
   useFeatures,
