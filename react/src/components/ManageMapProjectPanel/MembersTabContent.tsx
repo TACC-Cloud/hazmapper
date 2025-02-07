@@ -13,7 +13,7 @@ const MembersTabContent: React.FC<MembersTabProps> = ({ project }) => {
     projectId: project.id,
     options: {
       /* Only fetch if the map is associated with a DS project*/
-      enabled: Boolean(project.system_id.includes('project')),
+      enabled: Boolean(project.system_id.startsWith('project-')),
     },
   });
   if (isLoading) return <LoadingSpinner />;
@@ -48,8 +48,8 @@ const MembersTabContent: React.FC<MembersTabProps> = ({ project }) => {
           ></Table>
         ) : (
           <Card type="inner">
-            There are no members becuase this map is not saved to a DesignSafe
-            project. Members are managed by DesignSafe projects.
+            No members as map is not saved to a project. Members are managed by
+            DesignSafe projects.
           </Card>
         )}
       </Flex>

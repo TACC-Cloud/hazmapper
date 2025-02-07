@@ -137,7 +137,7 @@ export const useUpdateProjectInfo = () => {
     endpoint: `/projects/${currentProject?.id}/`,
     apiService: ApiService.Geoapi,
     options: {
-      onSuccess: (updatedProject) => {
+      onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['projects'] });
         queryClient.invalidateQueries({ queryKey: ['project'] });
       },

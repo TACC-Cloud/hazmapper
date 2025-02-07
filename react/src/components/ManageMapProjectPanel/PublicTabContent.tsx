@@ -22,6 +22,9 @@ const PublicTabContent: React.FC<PublicTabProps> = ({
   };
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const hostName = window.location.host;
+  const publicPath = `${hostName}/project-public/${project.uuid}`;
+
   const { Paragraph } = Typography;
   return (
     <Flex vertical gap="small">
@@ -34,7 +37,7 @@ const PublicTabContent: React.FC<PublicTabProps> = ({
             <Paragraph
               style={{ display: 'flex', justifyContent: 'space-evenly' }}
               copyable={{
-                text: `https://hazmapper.tacc.utexas.edu${config.basePath}project-public/${project.uuid}`,
+                text: `${hostName}${config.basePath}project-public/${project.uuid}`,
                 icon: [
                   <CopyOutlined key="copy-icon" style={{ color: '#74B566' }} />,
                   <CopyFilled key="copied-icon" />,
@@ -48,7 +51,7 @@ const PublicTabContent: React.FC<PublicTabProps> = ({
                 href={`${config.basePath}project-public/${project.uuid}`}
                 target="_blank"
                 rel="noreferrer"
-              >{`https://hazmapper.tacc.utexas.edu${config.basePath}project-public/${project.uuid}`}</Button>
+              >{`${publicPath}`}</Button>
             </Paragraph>
           </Card>
         </>

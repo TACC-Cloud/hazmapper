@@ -106,6 +106,7 @@ const MapTabContent: React.FC<MapTabProps> = ({
             <Flex vertical justify="center" gap="small">
               <Button
                 type="primary"
+                // TODO Improve navigating to taggit https://tacc-main.atlassian.net/browse/WG-430)
                 href={config.taggitUrl}
                 target="_blank"
                 rel="noreferrer"
