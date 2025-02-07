@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './AssetsPanel.module.css';
 import FeatureFileTree from '@hazmapper/components/FeatureFileTree';
-import { FeatureCollection, Project } from '@hazmapper/types';
+import { FeatureCollection, Project, TapisFilePath } from '@hazmapper/types';
 import { Button } from '@tacc/core-components';
-import { useFeatures } from '@hazmapper/hooks';
+import { useFeatures, useImportFeature } from '@hazmapper/hooks';
+import FileBrowserModal from '../FileBrowserModal/FileBrowserModal';
 
 const getFilename = (projectName: string) => {
   // Convert to lowercase filename based on projectName
@@ -13,14 +14,16 @@ const getFilename = (projectName: string) => {
 
 interface DownloadFeaturesButtonProps {
   project: Project;
+  isPublicView: boolean;
 }
 
 const DownloadFeaturesButton: React.FC<DownloadFeaturesButtonProps> = ({
   project,
+  isPublicView,
 }) => {
   const { isLoading: isDownloading, refetch: triggerDownload } = useFeatures({
     projectId: project.id,
-    isPublicView: project.public,
+    isPublicView: isPublicView,
     assetTypes: [], // Empty array to get all features
     options: {
       enabled: false, // Only fetch when triggered by user clicking button
@@ -78,10 +81,42 @@ const AssetsPanel: React.FC<Props> = ({
   featureCollection,
   project,
 }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { mutate: importFeatureFiles } = useImportFeature(project.id);
+
+  const handleFileImport = (files: TapisFilePath[]) => {
+    importFeatureFiles({ files });
+    setIsModalOpen(false);
+  };
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
+  const allowedFileExtensions = [
+    'shp',
+    'jpg',
+    'jpeg',
+    'json',
+    'geojson',
+    'gpx',
+    'rq',
+    'png',
+  ];
+
   return (
     <div className={styles.root}>
       <div className={styles.topSection}>
-        <Button>Import from DesignSafe TODO/WG-387</Button>
+        <FileBrowserModal
+          isOpen={isModalOpen}
+          toggle={toggleModal}
+          onImported={handleFileImport}
+          allowedFileExtensions={allowedFileExtensions}
+        />
+        <Button onClick={toggleModal} type="secondary" iconNameBefore="add">
+          Import from DesignSafe
+        </Button>
       </div>
       <div className={styles.middleSection}>
         <FeatureFileTree
@@ -91,7 +126,7 @@ const AssetsPanel: React.FC<Props> = ({
         />
       </div>
       <div className={styles.bottomSection}>
-        <DownloadFeaturesButton project={project} />
+        <DownloadFeaturesButton project={project} isPublicView={isPublicView} />
       </div>
     </div>
   );
