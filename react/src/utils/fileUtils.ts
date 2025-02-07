@@ -1,5 +1,5 @@
 import { FileData } from 'chonky';
-import { File } from '../types';
+import { TapisFilePath, File } from '@hazmapper/types';
 
 export const serializeToChonkyFile = (
   file: File,
@@ -19,3 +19,21 @@ export const serializeToChonkyFile = (
     file.type === 'dir' ||
     allowedFileExtensions.includes(file.name.split('.').pop() || ''),
 });
+
+export const convertFilesToTapisPaths = (files: File[]): TapisFilePath[] => {
+  return files.map((file) => {
+    // Remove the "tapis://" prefix
+    const urlWithoutPrefix = file.url.replace('tapis://', '');
+
+    // Split the remaining string at the first forward slash
+    // The first part will be the system, everything after is the path
+    const firstSlashIndex = urlWithoutPrefix.indexOf('/');
+    const system = urlWithoutPrefix.substring(0, firstSlashIndex);
+    const path = urlWithoutPrefix.substring(firstSlashIndex);
+
+    return {
+      system,
+      path,
+    };
+  });
+};

@@ -25,6 +25,7 @@ jest.mock('../../utils/fileUtils', () => ({
   serializeToChonkyFile: jest.fn(),
 }));
 
+// TODO see if we don't have to mock chonky
 jest.mock('chonky', () => {
   const actualChonky = jest.requireActual('chonky');
   return {

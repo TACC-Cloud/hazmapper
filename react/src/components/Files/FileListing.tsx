@@ -12,9 +12,11 @@ import {
 import { Icon } from '@tacc/core-components';
 import { SystemSelect } from '../Systems';
 import styles from './FileListing.module.css';
-import { useAuthenticatedUser, useSystems, useFiles } from '../../hooks';
-import { File, System } from '../../types';
-import { serializeToChonkyFile } from '../../utils/fileUtils';
+import { useAuthenticatedUser, useSystems, useFiles } from '@hazmapper/hooks';
+import { File, System } from '@hazmapper/types';
+import { serializeToChonkyFile } from '@hazmapper/utils/fileUtils';
+
+const DEFAULT_NO_FILE_EXTENSIONS: string[] = [];
 
 const _FileBrowser = FileBrowser as React.MemoExoticComponent<
   React.ForwardRefExoticComponent<
@@ -37,9 +39,10 @@ export const FileListing: React.FC<FileListingProps> = ({
   showPublicSystems = true,
   onFileSelect,
   onFolderSelect,
-  allowedFileExtensions = [],
+  allowedFileExtensions = DEFAULT_NO_FILE_EXTENSIONS,
 }) => {
   const {
+    isLoading: isSystemsLoading,
     data: systems = [],
     myDataSystem,
     communityDataSystem,
@@ -54,7 +57,6 @@ export const FileListing: React.FC<FileListingProps> = ({
   const [selectedSystem, setSelectedSystem] = React.useState<System | null>(
     null
   );
-  const [selectedFiles, setSelectedFiles] = React.useState<File[]>([]);
   const [hasError, setHasError] = React.useState(false);
 
   const { data: files, refetch } = useFiles({
@@ -62,7 +64,7 @@ export const FileListing: React.FC<FileListingProps> = ({
     path:
       path || (selectedSystem?.id === myDataSystem?.id ? user?.username : ''),
     offset: '0',
-    limit: '100',
+    limit: '100' /* TODO https://tacc-main.atlassian.net/browse/WG-418 */,
     enabled: !!selectedSystem?.id,
   });
 
@@ -71,7 +73,7 @@ export const FileListing: React.FC<FileListingProps> = ({
     if (!selectedSystem && myDataSystem) {
       setSelectedSystem(myDataSystem || systems[0]);
     }
-  }, [systems, myDataSystem]);
+  }, [systems, myDataSystem, selectedSystem]);
 
   useEffect(() => {
     if (selectedSystem?.id) {
@@ -89,7 +91,7 @@ export const FileListing: React.FC<FileListingProps> = ({
     if (!folderChain.length && user?.username) {
       setFolderChain([{ id: user.username, name: user.username, isDir: true }]);
     }
-  }, [files, folderChain.length, user?.username]);
+  }, [files, folderChain.length, user?.username, allowedFileExtensions]);
 
   const FileListingIcon = (props: any) => <Icon name={props.icon} />;
 
@@ -151,20 +153,22 @@ export const FileListing: React.FC<FileListingProps> = ({
         }
       } else if (data.id === ChonkyActions.ChangeSelection.id) {
         const filePaths = Array.from(data.payload.selection);
-
-        setSelectedFiles(
+        const newSelectedFiles =
           files?.filter(
             (f) => filePaths.includes(f.path) && f.type !== 'dir'
-          ) || []
-        );
-        onFileSelect?.(selectedFiles || []);
+          ) || [];
+
+        onFileSelect?.(newSelectedFiles); // P
       }
     },
-    [chonkyFiles, files]
+    [files, onFileSelect, onFolderSelect]
   );
 
-  if (!systems.length) {
-    return <p>No systems available.</p>;
+  const unexpectedProblemWithSystems = !systems.length && !isSystemsLoading;
+
+  if (unexpectedProblemWithSystems) {
+    /* not an expected case */
+    return <p>Error: No systems available.</p>;
   }
 
   if (hasError) {

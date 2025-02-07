@@ -15,6 +15,7 @@ const themeConfig: ThemeConfig = {
     colorError: '#d9534f',
     colorPrimaryTextHover: 'black',
     colorBorderSecondary: '#b7b7b7',
+    zIndexPopupBase: 2000,
   },
   components: {
     Table: {
