@@ -4,6 +4,7 @@ import FeatureFileTree from '@hazmapper/components/FeatureFileTree';
 import { FeatureCollection, Project, TapisFilePath } from '@hazmapper/types';
 import { Button } from '@tacc/core-components';
 import { useFeatures, useImportFeature } from '@hazmapper/hooks';
+import { IMPORTABLE_FEATURE_TYPES } from '@hazmapper/utils/fileUtils';
 import FileBrowserModal from '../FileBrowserModal/FileBrowserModal';
 
 const getFilename = (projectName: string) => {
@@ -94,17 +95,6 @@ const AssetsPanel: React.FC<Props> = ({
     setIsModalOpen(!isModalOpen);
   };
 
-  const allowedFileExtensions = [
-    'shp',
-    'jpg',
-    'jpeg',
-    'json',
-    'geojson',
-    'gpx',
-    'rq',
-    'png',
-  ];
-
   return (
     <div className={styles.root}>
       <div className={styles.topSection}>
@@ -112,7 +102,7 @@ const AssetsPanel: React.FC<Props> = ({
           isOpen={isModalOpen}
           toggle={toggleModal}
           onImported={handleFileImport}
-          allowedFileExtensions={allowedFileExtensions}
+          allowedFileExtensions={IMPORTABLE_FEATURE_TYPES}
         />
         <Button onClick={toggleModal} type="secondary" iconNameBefore="add">
           Import from DesignSafe
