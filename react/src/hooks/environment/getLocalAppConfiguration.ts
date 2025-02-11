@@ -21,7 +21,7 @@ export const getLocalAppConfiguration = (
     localDevelopmentConfiguration.designSafePortal ??
     DesignSafePortalEnvironment.PPRD;
 
-  // Check for possible mismatch on prod or staging as those deployed envionments are matched up with DS prod and pprd
+  // Check for possible mismatches in Geoapi production or Geoapi staging, as these deployed environments correspond to DS prod and pprd, respectively.
   if (
     (localDevelopmentConfiguration.geoapiBackend ===
       GeoapiBackendEnvironment.Production &&
