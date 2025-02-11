@@ -39,7 +39,7 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@hookform/resolvers": "^3.10.0",
     "@reduxjs/toolkit": "^2.5.0",
-    "@tacc/core-components": "^0.0.3-beta.0",
+    "@tacc/core-components": "^0.0.3",
     "@tacc/core-styles": "^2.37.2",
     "@tanstack/react-query": "^5.64.1",
     "@turf/turf": "^7.2.0",
