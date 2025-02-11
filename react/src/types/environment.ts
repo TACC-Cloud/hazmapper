@@ -45,6 +45,9 @@ export enum ApiService {
 export interface LocalAppConfiguration {
   /* The type of backend environment (production, staging, development, or local) */
   geoapiBackend: GeoapiBackendEnvironment;
+
+  /** Type of GeoAPI service. Defaults to PPRD if not provided */
+  designSafePortal?: DesignSafePortalEnvironment;
 }
 
 /**
