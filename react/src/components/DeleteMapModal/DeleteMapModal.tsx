@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Button, SectionMessage } from '@tacc/core-components';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -25,32 +25,32 @@ const DeleteMapModal = ({
     isSuccess,
   } = useDeleteProject();
 
-  // Effect to handle navigation on successful deletion
-  useEffect(() => {
-    if (isSuccess) {
-      parentToggle();
-      if (location.pathname.includes(`/project/${project.uuid}`)) {
-        // If on project page, navigate home with success state
-        navigate('/', {
-          replace: true,
-          state: { showDeleteSuccess: true },
-        });
-      } else {
-        // If not on project page, just navigate to current location with success state
-        navigate(location.pathname, {
-          replace: true,
-          state: { showDeleteSuccess: true },
-        });
-      }
-    }
-  }, [isSuccess, project.uuid, location.pathname, navigate, parentToggle]);
-
   const handleClose = () => {
     parentToggle();
   };
 
   const handleDeleteProject = () => {
-    deleteProject({ projectId: project.id });
+    deleteProject(
+      { projectId: project.id },
+      {
+        onSuccess: () => {
+          parentToggle();
+          if (location.pathname.includes(`/project/${project.uuid}`)) {
+            // If on project page, navigate home with success state
+            navigate('/', {
+              replace: true,
+              state: { onSuccess: true },
+            });
+          } else {
+            // If not on project page, just navigate to current location with success state
+            navigate(location, {
+              replace: true,
+              state: { onSuccess: true },
+            });
+          }
+        },
+      }
+    );
   };
 
   return (

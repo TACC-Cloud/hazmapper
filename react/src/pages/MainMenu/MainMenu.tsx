@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { notification } from 'antd';
 import ProjectListing from '@hazmapper/components/Projects/ProjectListing';
@@ -12,23 +12,31 @@ import nheriLogo from '@hazmapper/assets/nheri.png';
 
 const MainMenu = () => {
   const location = useLocation();
-  const [api, contextHolder] = notification.useNotification();
-  const hasShownNotification = useRef(false);
+  const [message, contextHolder] = notification.useNotification();
+  const [onDeleteSuccess, setOnDeleteSuccess] = useState(
+    location.state?.onSuccess
+  );
 
   useEffect(() => {
-    // Check if we arrived here after deleting a map and haven't shown notification yet
-    if (location.state?.showDeleteSuccess && !hasShownNotification.current) {
-      api.success({
+    if (location.state?.onSuccess) {
+      setOnDeleteSuccess(true);
+    }
+  }, [location.state]);
+
+  useEffect(() => {
+    if (onDeleteSuccess) {
+      message.destroy();
+      message.success({
         message: 'Success',
         description: 'Your map was successfully deleted.',
         placement: 'topRight',
       });
-      // Mark notification as shown
-      hasShownNotification.current = true;
-      // Clear the state so notification doesn't show again on refresh
+      // Clear the state after showing notification
       window.history.replaceState({}, document.title);
+      setOnDeleteSuccess(false);
     }
-  }, [location.state, api]);
+  }, [onDeleteSuccess, message]);
+
   return (
     <div className={styles.root}>
       {contextHolder}

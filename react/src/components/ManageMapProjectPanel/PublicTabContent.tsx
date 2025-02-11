@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Project, ProjectRequest } from '@hazmapper/types';
 import { Flex, Button, Card, Typography, Modal } from 'antd';
 import { CopyFilled, CopyOutlined, GlobalOutlined } from '@ant-design/icons';
-import { useAppConfiguration } from '@hazmapper/hooks';
 
 interface PublicTabProps {
   project: Project;
@@ -15,15 +14,14 @@ const PublicTabContent: React.FC<PublicTabProps> = ({
   onProjectUpdate,
   isPending,
 }) => {
-  const config = useAppConfiguration();
   const togglePublic = () => {
     onProjectUpdate({ public: !project.public });
     setIsModalOpen(false);
   };
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const hostName = window.location.host;
-  const publicPath = `${hostName}/project-public/${project.uuid}`;
+  const { pathname } = window.location;
+  const publicPath = pathname.replace('/project/', '/project-public/');
 
   const { Paragraph } = Typography;
   return (
@@ -37,7 +35,7 @@ const PublicTabContent: React.FC<PublicTabProps> = ({
             <Paragraph
               style={{ display: 'flex', justifyContent: 'space-evenly' }}
               copyable={{
-                text: `${hostName}${config.basePath}project-public/${project.uuid}`,
+                text: `${publicPath}`,
                 icon: [
                   <CopyOutlined key="copy-icon" style={{ color: '#74B566' }} />,
                   <CopyFilled key="copied-icon" />,
@@ -48,7 +46,7 @@ const PublicTabContent: React.FC<PublicTabProps> = ({
               <Button
                 type="link"
                 style={{ textWrap: 'wrap', textAlign: 'justify' }}
-                href={`${config.basePath}project-public/${project.uuid}`}
+                href={`${publicPath}`}
                 target="_blank"
                 rel="noreferrer"
               >{`${publicPath}`}</Button>
