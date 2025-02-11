@@ -1,5 +1,10 @@
-import { GeoapiBackendEnvironment, LocalAppConfiguration } from './types';
+import {
+  DesignSafePortalEnvironment,
+  GeoapiBackendEnvironment,
+  LocalAppConfiguration,
+} from './types';
 
 export const localDevelopmentConfiguration: LocalAppConfiguration = {
-  geoapiBackend: GeoapiBackendEnvironment.Production,
+  geoapiBackend: GeoapiBackendEnvironment.Staging,
+  designSafePortal: DesignSafePortalEnvironment.PPRD,
 };
