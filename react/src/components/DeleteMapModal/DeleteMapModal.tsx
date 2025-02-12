@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Button, SectionMessage } from '@tacc/core-components';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Project } from '../../types';
 import { useDeleteProject } from '../../hooks/projects/';
 
@@ -15,18 +16,41 @@ const DeleteMapModal = ({
   close: parentToggle,
   project,
 }: DeleteMapModalProps) => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const {
     mutate: deleteProject,
     isPending: isDeletingProject,
     isError,
     isSuccess,
   } = useDeleteProject();
+
   const handleClose = () => {
     parentToggle();
   };
 
   const handleDeleteProject = () => {
-    deleteProject({ projectId: project.id });
+    deleteProject(
+      { projectId: project.id },
+      {
+        onSuccess: () => {
+          parentToggle();
+          if (location.pathname.includes(`/project/${project.uuid}`)) {
+            // If on project page, navigate home with success state
+            navigate('/', {
+              replace: true,
+              state: { onSuccess: true },
+            });
+          } else {
+            // If not on project page, just navigate to current location with success state
+            navigate(location, {
+              replace: true,
+              state: { onSuccess: true },
+            });
+          }
+        },
+      }
+    );
   };
 
   return (
@@ -63,11 +87,6 @@ const DeleteMapModal = ({
         >
           Delete
         </Button>
-        {isSuccess && (
-          <SectionMessage type="success">
-            {'Succesfully deleted the map.'}
-          </SectionMessage>
-        )}
         {isError && (
           <SectionMessage type="error">
             {'There was an error deleting your map.'}
