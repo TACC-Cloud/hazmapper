@@ -7,6 +7,7 @@ import store from './redux/store';
 import { Provider } from 'react-redux';
 import { queryClient } from './queryClient';
 import { ConfigProvider, ThemeConfig } from 'antd';
+import { NotificationProvider } from '@hazmapper/context/NotificationProvider';
 
 const themeConfig: ThemeConfig = {
   token: {
@@ -43,7 +44,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <ConfigProvider theme={themeConfig}>
-          <App />
+          <NotificationProvider>
+            <App />
+          </NotificationProvider>
         </ConfigProvider>
       </QueryClientProvider>
     </Provider>
