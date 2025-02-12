@@ -11,23 +11,16 @@ import SaveTabContent from './SaveTabContent';
 
 interface ManageMapProjectModalProps {
   project: Project;
-  onProjectUpdate?: (updatedProject: Project) => void;
 }
 
 const ManageMapProjectPanel: React.FC<ManageMapProjectModalProps> = ({
-  project: initialProject,
-  onProjectUpdate,
+  project: activeProject
 }) => {
   const [activeKey, setActiveKey] = useState('1');
-  const [activeProject, setActiveProject] = useState(initialProject);
   const [updateApi, contextHolder] = notification.useNotification();
 
   const { mutate, isPending } = useUpdateProjectInfo();
 
-  // Update activeProject when initialProject changes
-  useEffect(() => {
-    setActiveProject(initialProject);
-  }, [initialProject]);
 
   const handleProjectUpdate = (updateData: Partial<ProjectRequest>) => {
     const newData: ProjectRequest = {
@@ -37,17 +30,7 @@ const ManageMapProjectPanel: React.FC<ManageMapProjectModalProps> = ({
     };
 
     mutate(newData, {
-      onSuccess: (updatedProject) => {
-        setActiveProject((prev) => {
-          const newState = {
-            ...prev,
-            name: updatedProject.name,
-            description: updatedProject.description,
-            public: updatedProject.public,
-          };
-          return newState;
-        });
-        onProjectUpdate?.(updatedProject);
+      onSuccess: () => {
         updateApi.open({
           type: 'success',
           message: 'Success!',
