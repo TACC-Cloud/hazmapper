@@ -29,7 +29,7 @@ const MainMenu = () => {
       message.success({
         message: 'Success',
         description: 'Your map was successfully deleted.',
-        placement: 'topRight',
+        placement: 'bottomLeft',
       });
       // Clear the state after showing notification
       window.history.replaceState({}, document.title);

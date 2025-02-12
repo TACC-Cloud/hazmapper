@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styles from './ManageMapProjectPanel.module.css';
 import type { TabsProps } from 'antd';
 import { Flex, Tabs, notification, Card } from 'antd';
@@ -14,13 +14,12 @@ interface ManageMapProjectModalProps {
 }
 
 const ManageMapProjectPanel: React.FC<ManageMapProjectModalProps> = ({
-  project: activeProject
+  project: activeProject,
 }) => {
   const [activeKey, setActiveKey] = useState('1');
   const [updateApi, contextHolder] = notification.useNotification();
 
   const { mutate, isPending } = useUpdateProjectInfo();
-
 
   const handleProjectUpdate = (updateData: Partial<ProjectRequest>) => {
     const newData: ProjectRequest = {
@@ -35,7 +34,7 @@ const ManageMapProjectPanel: React.FC<ManageMapProjectModalProps> = ({
           type: 'success',
           message: 'Success!',
           description: 'Your project was successfully updated.',
-          placement: 'topRight',
+          placement: 'bottomLeft',
           closable: false,
         });
       },
@@ -44,7 +43,7 @@ const ManageMapProjectPanel: React.FC<ManageMapProjectModalProps> = ({
           type: 'error',
           message: 'Error!',
           description: 'There was an error updating your project.',
-          placement: 'topRight',
+          placement: 'bottomLeft',
           closable: false,
         });
       },
