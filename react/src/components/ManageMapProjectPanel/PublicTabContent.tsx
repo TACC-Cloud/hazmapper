@@ -20,8 +20,10 @@ const PublicTabContent: React.FC<PublicTabProps> = ({
   };
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { pathname } = window.location;
-  const publicPath = pathname.replace('/project/', '/project-public/');
+  const publicPath = window.location.href.replace(
+    '/project/',
+    '/project-public/'
+  );
 
   const { Paragraph } = Typography;
   return (
