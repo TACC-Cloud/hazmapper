@@ -5,8 +5,10 @@ import {
   DesignSafeProject,
   DesignSafeProjectCollection,
   ApiService,
+  ProjectRequest,
 } from '@hazmapper/types';
-import { useGet, useDelete } from '@hazmapper/requests';
+import { useGet, useDelete, usePut } from '@hazmapper/requests';
+import { useParams } from 'react-router-dom';
 
 export const useProjects = (): UseQueryResult<Project[]> => {
   const query = useGet<Project[]>({
@@ -117,6 +119,28 @@ export const useDeleteProject = () => {
     options: {
       onSuccess: () =>
         queryClient.invalidateQueries({ queryKey: ['projects'] }),
+    },
+  });
+};
+export const useUpdateProjectInfo = () => {
+  const queryClient = useQueryClient();
+  const params = useParams<{ projectUUID: string }>();
+  const projectUUID = params.projectUUID ?? '';
+  const { data: currentProject } = useProject({
+    projectUUID,
+    options: {
+      enabled: !!projectUUID,
+    },
+  });
+
+  return usePut<ProjectRequest, Project>({
+    endpoint: `/projects/${currentProject?.id}/`,
+    apiService: ApiService.Geoapi,
+    options: {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['projects'] });
+        queryClient.invalidateQueries({ queryKey: ['project'] });
+      },
     },
   });
 };
