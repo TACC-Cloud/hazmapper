@@ -3,7 +3,11 @@ import styles from './AssetsPanel.module.css';
 import FeatureFileTree from '@hazmapper/components/FeatureFileTree';
 import { FeatureCollection, Project, TapisFilePath } from '@hazmapper/types';
 import { Button } from '@tacc/core-components';
-import { useFeatures, useImportFeature } from '@hazmapper/hooks';
+import {
+  useFeatures,
+  useImportFeature,
+  useNotification,
+} from '@hazmapper/hooks';
 import FileBrowserModal from '../FileBrowserModal/FileBrowserModal';
 
 const getFilename = (projectName: string) => {
@@ -81,17 +85,36 @@ const AssetsPanel: React.FC<Props> = ({
   featureCollection,
   project,
 }) => {
+  const notification = useNotification();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { mutate: importFeatureFiles } = useImportFeature(project.id);
 
   const handleFileImport = (files: TapisFilePath[]) => {
-    importFeatureFiles({ files });
-    setIsModalOpen(false);
-  };
-
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
+    importFeatureFiles(
+      { files },
+      {
+        onSuccess: () => {
+          setIsModalOpen(false);
+          notification.open({
+            type: 'success',
+            message: 'Success!',
+            description: 'Import started!',
+            placement: 'bottomLeft',
+            closable: false,
+          });
+        },
+        onError: () => {
+          notification.open({
+            type: 'error',
+            message: 'Error!',
+            description: 'Import failed! Try again?',
+            placement: 'bottomLeft',
+            closable: false,
+          });
+        },
+      }
+    );
   };
 
   const allowedFileExtensions = [
@@ -110,11 +133,15 @@ const AssetsPanel: React.FC<Props> = ({
       <div className={styles.topSection}>
         <FileBrowserModal
           isOpen={isModalOpen}
-          toggle={toggleModal}
+          toggle={() => setIsModalOpen(false)}
           onImported={handleFileImport}
           allowedFileExtensions={allowedFileExtensions}
         />
-        <Button onClick={toggleModal} type="secondary" iconNameBefore="add">
+        <Button
+          onClick={() => setIsModalOpen(true)}
+          type="secondary"
+          iconNameBefore="add"
+        >
           Import from DesignSafe
         </Button>
       </div>
