@@ -1,16 +1,19 @@
 import React, { useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { Notification } from '@hazmapper/types';
 import { useGet } from '@hazmapper/requests';
+import {
+  KEY_USE_FEATURES,
+  KEY_USE_POINT_CLOUDS,
+  KEY_USE_TILE_SERVERS,
+} from '@hazmapper/hooks';
 import { useNotification } from './useNotification';
 
 const POLLING_INTERVAL = 5000; // 5 seconds
 
-/* TODO
- *   disable if not logged in user
- */
-
 export const useGeoapiNotificationsPolling = () => {
-  const notificationToast = useNotification();
+  const queryClient = useQueryClient();
+  const notification = useNotification();
 
   const getStartDate = () => {
     // Get the current timestamp minus the polling interval
@@ -19,8 +22,8 @@ export const useGeoapiNotificationsPolling = () => {
     return then.toISOString();
   };
 
-  const { data: notifications } = useGet<Notification[]>({
-    endpoint: '/notifications',
+  const { data: recentNotifications } = useGet<Notification[]>({
+    endpoint: '/notifications/',
     key: ['notifications'],
     params: {
       startDate: getStartDate(),
@@ -33,14 +36,14 @@ export const useGeoapiNotificationsPolling = () => {
   });
 
   useEffect(() => {
-    if (notifications?.length) {
-      const hasSuccessNotification = notifications.some(
+    if (recentNotifications?.length) {
+      const hasSuccessNotification = recentNotifications.some(
         (note) => note.status === 'success'
       );
 
-      notifications.forEach((note) => {
-        notificationToast.open({
-          type: 'error',
+      recentNotifications.forEach((note) => {
+        notification.open({
+          type: note.status,
           message: 'Error!',
           description: note.message,
           placement: 'bottomLeft',
@@ -49,13 +52,21 @@ export const useGeoapiNotificationsPolling = () => {
       });
 
       if (hasSuccessNotification) {
-        console.log('TODO: invalidate relevant queries');
+        // we assume that if some action was updated we need to refresh things so
+        // we invalidate relevant queries.
+        queryClient.invalidateQueries({
+          queryKey: [
+            KEY_USE_FEATURES,
+            KEY_USE_POINT_CLOUDS,
+            KEY_USE_TILE_SERVERS,
+          ],
+        });
       }
     }
-  }, [notifications, notificationToast]);
+  }, [recentNotifications, notification, queryClient]);
 
   return {
-    notifications,
+    recentNotifications,
     isPolling: true,
   };
 };
