@@ -13,7 +13,7 @@ export const useProjectUsers = ({
 }: ProjectUsersParams): UseQueryResult<ProjectUser[]> => {
   const query = useGet<ProjectUser[]>({
     endpoint: `/projects/${projectId}/users/`,
-    key: ['active-project-users'],
+    key: ['active-project-users', projectId],
     options,
   });
   return query;

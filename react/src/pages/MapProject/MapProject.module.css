@@ -15,8 +15,7 @@
   flex: 1;
 }
 
-.panelContainer {
-  width: var(--hazmapper-panel-width);
+.basePanelContainer {
   height: 100%;
   background-color: var(--global-color-primary--xx-light);
   position: fixed;
@@ -24,6 +23,17 @@
   overflow-y: auto;
   z-index: 1050;
 }
+
+.panelContainer {
+  composes: basePanelContainer;
+  width: var(--hazmapper-panel-width);
+}
+
+.panelContainerWide {
+  composes: basePanelContainer;
+  width: var(--hazmapper-panel-width--large);
+}
+
 .detailContainer {
   min-width: 250px;
   max-width: 400px;

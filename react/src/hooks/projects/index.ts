@@ -5,6 +5,7 @@ export {
   useProject,
   useDesignSafeProject,
   useDesignSafeProjects,
+  useUpdateProjectInfo,
 } from './useProjects';
 
 export { default as useCreateProject } from './useCreateProject';
