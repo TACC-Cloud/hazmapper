@@ -9,7 +9,7 @@ import AssetsPanel from '@hazmapper/components/AssetsPanel';
 import AssetDetail from '@hazmapper/components/AssetDetail';
 import PointCloudPanel from '@hazmapper/components/PointCloudsPanel';
 import LayersPanel from '@hazmapper/components/LayersPanel';
-import ManageMapProjectModal from '@hazmapper/components/ManageMapProjectModal';
+import ManageMapProjectPanel from '@hazmapper/components/ManageMapProjectPanel';
 import { queryPanelKey, Panel } from '@hazmapper/utils/panels';
 import {
   useFeatures,
@@ -242,10 +242,14 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
                 }}
               >
                 <MapProjectNavBar isPublicView={isPublicView} />
-                {activePanel && activePanel !== Panel.Manage && !loading && (
+                {activePanel && !loading && (
                   <BasePanel
                     panelTitle={activePanel}
-                    className={styles.panelContainer}
+                    className={
+                      activePanel === Panel.Manage
+                        ? styles.panelContainerWide
+                        : styles.panelContainer
+                    }
                   >
                     {activePanel === Panel.Assets && (
                       <AssetsPanel
@@ -275,6 +279,9 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
                         isPublicView={isPublicView}
                       />
                     )}
+                    {activePanel === Panel.Manage && (
+                      <ManageMapProjectPanel project={activeProject} />
+                    )}
                   </BasePanel>
                 )}
               </Flex>
@@ -284,9 +291,6 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
                 <Spinner />
               ) : (
                 <>
-                  {activePanel === Panel.Manage && (
-                    <ManageMapProjectModal isPublicView={isPublicView} />
-                  )}
                   <div className={styles.map}>
                     <Map featureCollection={featureCollection} />
                   </div>

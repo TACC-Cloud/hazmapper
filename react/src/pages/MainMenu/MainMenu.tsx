@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { notification } from 'antd';
 import ProjectListing from '@hazmapper/components/Projects/ProjectListing';
 import styles from './layout.module.css';
 import { Button } from '@tacc/core-components';
@@ -9,8 +11,35 @@ import designsafeLogo from '@hazmapper/assets/designsafe.svg';
 import nheriLogo from '@hazmapper/assets/nheri.png';
 
 const MainMenu = () => {
+  const location = useLocation();
+  const [message, contextHolder] = notification.useNotification();
+  const [onDeleteSuccess, setOnDeleteSuccess] = useState(
+    location.state?.onSuccess
+  );
+
+  useEffect(() => {
+    if (location.state?.onSuccess) {
+      setOnDeleteSuccess(true);
+    }
+  }, [location.state]);
+
+  useEffect(() => {
+    if (onDeleteSuccess) {
+      message.destroy();
+      message.success({
+        message: 'Success',
+        description: 'Your map was successfully deleted.',
+        placement: 'bottomLeft',
+      });
+      // Clear the state after showing notification
+      window.history.replaceState({}, document.title);
+      setOnDeleteSuccess(false);
+    }
+  }, [onDeleteSuccess, message]);
+
   return (
     <div className={styles.root}>
+      {contextHolder}
       <HeaderNavBar />
       <div className={styles.listingContainer}>
         <div className={styles.versionContainer}>
