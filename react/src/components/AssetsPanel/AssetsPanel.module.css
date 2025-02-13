@@ -25,5 +25,5 @@
 
 .middleSection > div {
   flex: 1;
-  overflow: auto;
+  max-height: 95%;
 }
