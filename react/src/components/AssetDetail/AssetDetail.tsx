@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { useState, useCallback, Suspense } from 'react';
 import _ from 'lodash';
 import AssetGeometry from './AssetGeometry';
 import { useAppConfiguration } from '@hazmapper/hooks';
@@ -22,48 +22,54 @@ type AssetDetailProps = {
 };
 
 const AssetDetail: React.FC<AssetDetailProps> = ({
-  selectedFeature,
+  selectedFeature: initialFeature,
   onClose,
   isPublicView,
   onQuestionnaireClick,
 }) => {
   const config = useAppConfiguration();
   const geoapiUrl = config.geoapiUrl;
+  const [currentFeature, setCurrentFeature] = useState<Feature>(initialFeature);
+
+  const handleAssetUpdate = useCallback((updatedFeature: Feature) => {
+    setCurrentFeature(updatedFeature);
+  }, []);
 
   const featureSource: string =
-    geoapiUrl + '/assets/' + selectedFeature?.assets?.[0]?.path;
+    geoapiUrl + '/assets/' + currentFeature?.assets?.[0]?.path;
 
-  const featureType: FeatureType = getFeatureType(selectedFeature);
+  const featureType: FeatureType = getFeatureType(currentFeature);
 
   return (
     <div className={styles.root}>
       <div className={styles.topSection}>
         <FeatureIcon featureType={featureType as FeatureTypeNullable} />
-        {selectedFeature?.assets?.length > 0
-          ? selectedFeature?.assets.map((asset) =>
+        {currentFeature?.assets?.length > 0
+          ? currentFeature?.assets.map((asset) =>
               // To make sure fileTree name matches title and catches null
               asset.display_path
                 ? asset.display_path.split('/').pop()
                 : asset.id
                   ? asset.id
-                  : selectedFeature.id
+                  : currentFeature.id
             )
-          : selectedFeature?.id}
+          : currentFeature?.id}
         <Button type="link" iconNameAfter="close" onClick={onClose}></Button>
       </div>
       <div className={styles.middleSection}>
         <Suspense fallback={<LoadingSpinner />}>
           <div className={styles.assetContainer}>
             <AssetRenderer
-              selectedFeature={selectedFeature}
+              selectedFeature={currentFeature}
               featureSource={featureSource}
             />
           </div>
           <AssetButton
-            selectedFeature={selectedFeature}
+            selectedFeature={currentFeature}
             featureSource={featureSource}
             isPublicView={isPublicView}
             onQuestionnaireClick={onQuestionnaireClick}
+            onAssetUpdate={handleAssetUpdate}
           />
         </Suspense>
       </div>
@@ -79,8 +85,8 @@ const AssetDetail: React.FC<AssetDetailProps> = ({
                 </tr>
               </thead>
               <tbody>
-                {selectedFeature?.properties &&
-                Object.keys(selectedFeature.properties).length > 0 ? (
+                {currentFeature?.properties &&
+                Object.keys(currentFeature.properties).length > 0 ? (
                   (() => {
                     /* Function check that shows the "There are no metadata properties" 
                   in any of these cases:
@@ -88,7 +94,7 @@ const AssetDetail: React.FC<AssetDetailProps> = ({
                   - The properties object only contains keys that start with "_hazmapper"
                   - The properties object exists but has no properties*/
                     const filteredProperties = Object.entries(
-                      selectedFeature.properties
+                      currentFeature.properties
                     )
                       .filter(([key]) => !key.startsWith('_hazmapper'))
                       .sort(([keyA], [keyB]) => keyA.localeCompare(keyB));
@@ -118,7 +124,7 @@ const AssetDetail: React.FC<AssetDetailProps> = ({
                 )}
               </tbody>
             </table>
-            <AssetGeometry selectedFeature={selectedFeature} />
+            <AssetGeometry selectedFeature={currentFeature} />
           </div>
         </div>
       )}
