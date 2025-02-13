@@ -244,7 +244,6 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
             <Sider width="auto">
               <Flex
                 style={{
-                  overflowY: 'auto',
                   height: '100%',
                 }}
               >
