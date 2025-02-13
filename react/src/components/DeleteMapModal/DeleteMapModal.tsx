@@ -38,9 +38,7 @@ const DeleteMapModal = ({
           parentToggle();
           navigate(ROUTES.MAIN);
           notification.success({
-            message: 'Success',
             description: 'Your map was successfully deleted.',
-            placement: 'bottomLeft',
           });
         },
       }

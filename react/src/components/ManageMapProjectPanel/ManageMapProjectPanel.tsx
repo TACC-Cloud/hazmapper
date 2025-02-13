@@ -6,7 +6,7 @@ import { Project, ProjectRequest } from '@hazmapper/types';
 import MapTabContent from './MapTabContent';
 import MembersTabContent from './MembersTabContent';
 import PublicTabContent from './PublicTabContent';
-import { useUpdateProjectInfo } from '@hazmapper/hooks';
+import { useUpdateProjectInfo, useNotification } from '@hazmapper/hooks';
 import SaveTabContent from './SaveTabContent';
 
 interface ManageMapProjectModalProps {
@@ -17,7 +17,7 @@ const ManageMapProjectPanel: React.FC<ManageMapProjectModalProps> = ({
   project: activeProject,
 }) => {
   const [activeKey, setActiveKey] = useState('1');
-  const [updateApi, contextHolder] = notification.useNotification();
+  const notification = useNotification();
 
   const { mutate, isPending } = useUpdateProjectInfo();
 
@@ -30,21 +30,13 @@ const ManageMapProjectPanel: React.FC<ManageMapProjectModalProps> = ({
 
     mutate(newData, {
       onSuccess: () => {
-        updateApi.open({
-          type: 'success',
-          message: 'Success!',
+        notification.success({
           description: 'Your project was successfully updated.',
-          placement: 'bottomLeft',
-          closable: false,
         });
       },
       onError: () => {
-        updateApi.open({
-          type: 'error',
-          message: 'Error!',
+        notification.error({
           description: 'There was an error updating your project.',
-          placement: 'bottomLeft',
-          closable: false,
         });
       },
     });
@@ -99,7 +91,6 @@ const ManageMapProjectPanel: React.FC<ManageMapProjectModalProps> = ({
 
   return (
     <Flex vertical className={styles.root}>
-      {contextHolder}
       <Tabs
         type="card"
         size="small"

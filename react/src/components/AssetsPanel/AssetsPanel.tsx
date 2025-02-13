@@ -96,21 +96,13 @@ const AssetsPanel: React.FC<Props> = ({
       {
         onSuccess: () => {
           setIsModalOpen(false);
-          notification.open({
-            type: 'success',
-            message: 'Success!',
+          notification.success({
             description: 'Import started!',
-            placement: 'bottomLeft',
-            closable: false,
           });
         },
         onError: () => {
-          notification.open({
-            type: 'error',
-            message: 'Error!',
+          notification.error({
             description: 'Import failed! Try again?',
-            placement: 'bottomLeft',
-            closable: false,
           });
         },
       }

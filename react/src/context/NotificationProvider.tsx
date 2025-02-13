@@ -2,12 +2,15 @@ import React from 'react';
 import { notification } from 'antd';
 import type { ArgsProps } from 'antd/es/notification';
 
+// takes antd's ArgProps or just a descxriptino and optional message
+type NotificationConfig = ArgsProps | { description: string; message?: string };
+
 type NotificationAPI = {
-  success: (config: ArgsProps) => void;
-  error: (config: ArgsProps) => void;
-  info: (config: ArgsProps) => void;
-  warning: (config: ArgsProps) => void;
-  open: (config: ArgsProps) => void;
+  success: (config: NotificationConfig) => void;
+  error: (config: NotificationConfig) => void;
+  info: (config: NotificationConfig) => void;
+  warning: (config: NotificationConfig) => void;
+  open: (config: NotificationConfig) => void;
 };
 
 // Create context with default value and proper typing
@@ -24,16 +27,25 @@ export const NotificationProvider: React.FC<{
 }> = ({ children }) => {
   const [api, contextHolder] = notification.useNotification();
 
-  const notificationApi = React.useMemo(
-    () => ({
-      success: (config) => api.success(config),
-      error: (config) => api.error(config),
-      info: (config) => api.info(config),
-      warning: (config) => api.warning(config),
-      open: (config) => api.open(config),
-    }),
-    [api]
-  );
+  const notificationApi: NotificationAPI = React.useMemo(() => {
+    const defaultProps: Partial<ArgsProps> = {
+      placement: 'bottomLeft',
+      closable: false,
+    };
+
+    return {
+      success: (config) =>
+        api.success({ message: 'Success', ...defaultProps, ...config }),
+      error: (config) =>
+        api.error({ message: 'Error', ...defaultProps, ...config }),
+      info: (config) =>
+        api.info({ message: 'Info', ...defaultProps, ...config }),
+      warning: (config) =>
+        api.warning({ message: 'Warning', ...defaultProps, ...config }),
+      open: (config) =>
+        api.open({ message: 'Unknown', ...defaultProps, ...config }),
+    };
+  }, [api]);
 
   return (
     <NotificationContext.Provider value={notificationApi}>
