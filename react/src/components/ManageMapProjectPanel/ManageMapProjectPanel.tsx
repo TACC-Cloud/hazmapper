@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './ManageMapProjectPanel.module.css';
 import type { TabsProps } from 'antd';
-import { Flex, Tabs, notification, Card } from 'antd';
+import { Flex, Tabs, Card } from 'antd';
 import { Project, ProjectRequest } from '@hazmapper/types';
 import MapTabContent from './MapTabContent';
 import MembersTabContent from './MembersTabContent';

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Notification } from '@hazmapper/types';
 import { useGet } from '@hazmapper/requests';
