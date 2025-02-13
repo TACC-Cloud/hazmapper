@@ -9,6 +9,7 @@ import {
   useImportFeature,
   useNotification,
 } from '@hazmapper/hooks';
+import { IMPORTABLE_FEATURE_TYPES } from '@hazmapper/utils/fileUtils';
 import FileBrowserModal from '../FileBrowserModal/FileBrowserModal';
 
 const getFilename = (projectName: string) => {
@@ -114,17 +115,6 @@ const AssetsPanel: React.FC<Props> = ({
     );
   };
 
-  const allowedFileExtensions = [
-    'shp',
-    'jpg',
-    'jpeg',
-    'json',
-    'geojson',
-    'gpx',
-    'rq',
-    'png',
-  ];
-
   const { Content, Header, Footer } = Layout;
 
   return (
@@ -153,7 +143,7 @@ const AssetsPanel: React.FC<Props> = ({
         isOpen={isModalOpen}
         toggle={() => setIsModalOpen(false)}
         onImported={handleFileImport}
-        allowedFileExtensions={allowedFileExtensions}
+        allowedFileExtensions={IMPORTABLE_FEATURE_TYPES}
       />
     </>
   );
