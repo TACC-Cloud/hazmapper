@@ -11,7 +11,7 @@ const Panel: React.FC<LayoutProps & { panelTitle: string }> = ({
 
   return (
     <Layout {...props}>
-      <Flex vertical className={styles.root}>
+      <Flex vertical className={styles.root} flex={1}>
         <Header className={styles.header}>{panelTitle}</Header>
         <Content>{children}</Content>
       </Flex>

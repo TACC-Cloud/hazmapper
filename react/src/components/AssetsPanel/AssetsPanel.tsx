@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import styles from './AssetsPanel.module.css';
 import FeatureFileTree from '@hazmapper/components/FeatureFileTree';
 import { FeatureCollection, Project, TapisFilePath } from '@hazmapper/types';
-import { Button } from '@tacc/core-components';
+import { Flex, Layout, Button as AntButton } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import { useFeatures, useImportFeature } from '@hazmapper/hooks';
 import FileBrowserModal from '../FileBrowserModal/FileBrowserModal';
 
@@ -50,9 +51,13 @@ const DownloadFeaturesButton: React.FC<DownloadFeaturesButtonProps> = ({
   });
 
   return (
-    <Button isLoading={isDownloading} onClick={() => triggerDownload()}>
+    <AntButton
+      loading={isDownloading}
+      onClick={() => triggerDownload()}
+      type="primary"
+    >
       Export to GeoJSON
-    </Button>
+    </AntButton>
   );
 };
 
@@ -105,30 +110,37 @@ const AssetsPanel: React.FC<Props> = ({
     'png',
   ];
 
+  const { Content, Header, Footer } = Layout;
+
   return (
-    <div className={styles.root}>
-      <div className={styles.topSection}>
-        <FileBrowserModal
-          isOpen={isModalOpen}
-          toggle={toggleModal}
-          onImported={handleFileImport}
-          allowedFileExtensions={allowedFileExtensions}
-        />
-        <Button onClick={toggleModal} type="secondary" iconNameBefore="add">
-          Import from DesignSafe
-        </Button>
-      </div>
-      <div className={styles.middleSection}>
-        <FeatureFileTree
-          projectId={project.id}
-          isPublicView={isPublicView}
-          featureCollection={featureCollection}
-        />
-      </div>
-      <div className={styles.bottomSection}>
-        <DownloadFeaturesButton project={project} isPublicView={isPublicView} />
-      </div>
-    </div>
+    <>
+      <Flex vertical className={styles.root} flex={1}>
+        <Header className={styles.topSection}>
+          <AntButton onClick={toggleModal} icon={<PlusOutlined />}>
+            Import from DesignSafe
+          </AntButton>
+        </Header>
+        <Content className={styles.middleSection}>
+          <FeatureFileTree
+            projectId={project.id}
+            isPublicView={isPublicView}
+            featureCollection={featureCollection}
+          />
+        </Content>
+        <Footer className={styles.bottomSection}>
+          <DownloadFeaturesButton
+            project={project}
+            isPublicView={isPublicView}
+          />
+        </Footer>
+      </Flex>
+      <FileBrowserModal
+        isOpen={isModalOpen}
+        toggle={toggleModal}
+        onImported={handleFileImport}
+        allowedFileExtensions={allowedFileExtensions}
+      />
+    </>
   );
 };
 

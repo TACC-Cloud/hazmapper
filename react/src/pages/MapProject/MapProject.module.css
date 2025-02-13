@@ -5,19 +5,12 @@
   height: 100vh;
 }
 
-.container {
-  height: calc(
-    100vh - var(--hazmapper-header-navbar-height) -
-      var(--hazmapper-control-bar-height)
-  );
-  width: 100%;
-  display: flex;
-  flex: 1;
-}
-
 .panelContainer {
   width: var(--hazmapper-panel-width);
-  height: 100%;
+  height: calc(
+    100% - var(--hazmapper-header-navbar-height) -
+      var(--hazmapper-control-bar-height)
+  );
   background-color: var(--global-color-primary--xx-light);
   position: fixed;
   left: var(--hazmapper-panel-navbar-width);
