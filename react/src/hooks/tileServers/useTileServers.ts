@@ -12,6 +12,8 @@ interface UsePostTileServerParams {
   projectId: number;
 }
 
+export const KEY_USE_TILE_SERVERS = 'useGetTileServers';
+
 export interface UseDeleteTileServerParams {
   projectId: number;
   tileLayerId: number;
@@ -30,7 +32,7 @@ export const useGetTileServers = ({
 
   const query = useGet<TileServerLayer[]>({
     endpoint,
-    key: ['useGetTileServers', { projectId, isPublicView }],
+    key: [KEY_USE_TILE_SERVERS, { projectId, isPublicView }],
     options,
   });
 
@@ -44,7 +46,7 @@ export const usePutTileServer = ({ projectId }: UsePostTileServerParams) => {
     options: {
       onSuccess: () =>
         queryClient.invalidateQueries({
-          queryKey: ['useGetTileServers'],
+          queryKey: [KEY_USE_TILE_SERVERS],
         }),
     },
   });
@@ -66,7 +68,7 @@ export const useDeleteTileServer = ({
     options: {
       onSuccess: () =>
         queryClient.invalidateQueries({
-          queryKey: ['useGetTileServers'],
+          queryKey: [KEY_USE_TILE_SERVERS],
         }),
     },
   });

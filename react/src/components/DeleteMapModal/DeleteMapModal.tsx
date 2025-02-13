@@ -1,9 +1,11 @@
 import React from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Button, SectionMessage } from '@tacc/core-components';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Project } from '../../types';
-import { useDeleteProject } from '../../hooks/projects/';
+import { useNavigate } from 'react-router-dom';
+import { Project } from '@hazmapper/types';
+import { useDeleteProject } from '@hazmapper/hooks/projects/';
+import { useNotification } from '@hazmapper/hooks';
+import * as ROUTES from '@hazmapper/constants/routes';
 
 type DeleteMapModalProps = {
   isOpen: boolean;
@@ -17,14 +19,13 @@ const DeleteMapModal = ({
   project,
 }: DeleteMapModalProps) => {
   const navigate = useNavigate();
-  const location = useLocation();
+  const notification = useNotification();
   const {
     mutate: deleteProject,
     isPending: isDeletingProject,
     isError,
     isSuccess,
   } = useDeleteProject();
-
   const handleClose = () => {
     parentToggle();
   };
@@ -35,19 +36,10 @@ const DeleteMapModal = ({
       {
         onSuccess: () => {
           parentToggle();
-          if (location.pathname.includes(`/project/${project.uuid}`)) {
-            // If on project page, navigate home with success state
-            navigate('/', {
-              replace: true,
-              state: { onSuccess: true },
-            });
-          } else {
-            // If not on project page, just navigate to current location with success state
-            navigate(location, {
-              replace: true,
-              state: { onSuccess: true },
-            });
-          }
+          navigate(ROUTES.MAIN);
+          notification.success({
+            description: 'Your map was successfully deleted.',
+          });
         },
       }
     );

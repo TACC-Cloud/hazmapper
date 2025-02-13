@@ -4,7 +4,11 @@ import FeatureFileTree from '@hazmapper/components/FeatureFileTree';
 import { FeatureCollection, Project, TapisFilePath } from '@hazmapper/types';
 import { Flex, Layout, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { useFeatures, useImportFeature } from '@hazmapper/hooks';
+import {
+  useFeatures,
+  useImportFeature,
+  useNotification,
+} from '@hazmapper/hooks';
 import { IMPORTABLE_FEATURE_TYPES } from '@hazmapper/utils/fileUtils';
 import FileBrowserModal from '../FileBrowserModal/FileBrowserModal';
 
@@ -87,17 +91,28 @@ const AssetsPanel: React.FC<Props> = ({
   featureCollection,
   project,
 }) => {
+  const notification = useNotification();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { mutate: importFeatureFiles } = useImportFeature(project.id);
 
   const handleFileImport = (files: TapisFilePath[]) => {
-    importFeatureFiles({ files });
-    setIsModalOpen(false);
-  };
-
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
+    importFeatureFiles(
+      { files },
+      {
+        onSuccess: () => {
+          setIsModalOpen(false);
+          notification.success({
+            description: 'Import started!',
+          });
+        },
+        onError: () => {
+          notification.error({
+            description: 'Import failed! Try again?',
+          });
+        },
+      }
+    );
   };
 
   const { Content, Header, Footer } = Layout;
@@ -106,7 +121,7 @@ const AssetsPanel: React.FC<Props> = ({
     <>
       <Flex vertical className={styles.root} flex={1}>
         <Header className={styles.topSection}>
-          <Button onClick={toggleModal} icon={<PlusOutlined />}>
+          <Button onClick={() => setIsModalOpen(true)} icon={<PlusOutlined />}>
             Import from DesignSafe
           </Button>
         </Header>
@@ -126,7 +141,7 @@ const AssetsPanel: React.FC<Props> = ({
       </Flex>
       <FileBrowserModal
         isOpen={isModalOpen}
-        toggle={toggleModal}
+        toggle={() => setIsModalOpen(false)}
         onImported={handleFileImport}
         allowedFileExtensions={IMPORTABLE_FEATURE_TYPES}
       />

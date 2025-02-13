@@ -8,3 +8,4 @@ export * from './environment';
 export * from './pointCloud';
 export * from './task';
 export * from './geoapi';
+export * from './notification';

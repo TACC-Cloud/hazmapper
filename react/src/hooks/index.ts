@@ -7,3 +7,4 @@ export * from './projects';
 export * from './user';
 export * from './map';
 export * from './pointClouds';
+export * from './notifications';
