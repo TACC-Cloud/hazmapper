@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styles from './AssetsPanel.module.css';
 import FeatureFileTree from '@hazmapper/components/FeatureFileTree';
 import { FeatureCollection, Project, TapisFilePath } from '@hazmapper/types';
-import { Flex, Layout, Button as AntButton } from 'antd';
+import { Flex, Layout, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useFeatures, useImportFeature } from '@hazmapper/hooks';
 import FileBrowserModal from '../FileBrowserModal/FileBrowserModal';
@@ -51,13 +51,13 @@ const DownloadFeaturesButton: React.FC<DownloadFeaturesButtonProps> = ({
   });
 
   return (
-    <AntButton
+    <Button
       loading={isDownloading}
       onClick={() => triggerDownload()}
       type="primary"
     >
       Export to GeoJSON
-    </AntButton>
+    </Button>
   );
 };
 
@@ -116,9 +116,9 @@ const AssetsPanel: React.FC<Props> = ({
     <>
       <Flex vertical className={styles.root} flex={1}>
         <Header className={styles.topSection}>
-          <AntButton onClick={toggleModal} icon={<PlusOutlined />}>
+          <Button onClick={toggleModal} icon={<PlusOutlined />}>
             Import from DesignSafe
-          </AntButton>
+          </Button>
         </Header>
         <Content className={styles.middleSection}>
           <FeatureFileTree
