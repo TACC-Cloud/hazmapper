@@ -54,13 +54,33 @@ export const useGeoapiNotificationsPolling = () => {
       if (hasSuccessNotification) {
         // we assume that if some action was updated we need to refresh things so
         // we invalidate relevant queries.
-        queryClient.invalidateQueries({
-          queryKey: [
-            KEY_USE_FEATURES,
-            KEY_USE_POINT_CLOUDS,
-            KEY_USE_TILE_SERVERS,
-          ],
-        });
+        //  Note we are doing a force refetch as makes unique KEY_USE_FEATURES work
+
+        Promise.all(
+          [KEY_USE_FEATURES, KEY_USE_POINT_CLOUDS, KEY_USE_TILE_SERVERS].map(
+            (key) =>
+              queryClient
+                .invalidateQueries({
+                  queryKey: [key],
+                  refetchType: 'all',
+                })
+                .then(() => {
+                  const queries = queryClient.getQueriesData({
+                    queryKey: [key],
+                  });
+                  // Force refetch active queries for each key
+                  return Promise.all(
+                    queries.map(([queryKey]) =>
+                      queryClient.refetchQueries({
+                        queryKey,
+                        type: 'active',
+                        exact: true,
+                      })
+                    )
+                  );
+                })
+          )
+        );
       }
     }
   }, [recentNotifications, notification, queryClient]);
