@@ -1,6 +1,28 @@
 import { FileData } from 'chonky';
 import { TapisFilePath, File } from '@hazmapper/types';
 
+export const IMPORTABLE_FEATURE_TYPES = [
+  'shp',
+  'jpg',
+  'jpeg',
+  'json',
+  'geojson',
+  'gpx',
+  'rq',
+];
+
+export const IMPORTABLE_FEATURE_ASSET_TYPES = [
+  'jpeg',
+  'jpg',
+  'png',
+  'mp4',
+  'mov',
+  'mpeg4',
+  'webm',
+];
+
+export const IMPORTABLE_POINT_CLOUD_TYPES = ['las', 'laz'];
+
 export const serializeToChonkyFile = (
   file: File,
   allowedFileExtensions: string[]
