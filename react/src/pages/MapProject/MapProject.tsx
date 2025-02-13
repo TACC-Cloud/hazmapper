@@ -163,15 +163,14 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     formatAssetTypeName(type)
   );
 
-  const { data: rawFeatureCollection, isLoading: isFeaturesLoading } =
-    useFeatures({
-      projectId: activeProject.id,
-      isPublicView,
-      assetTypes: formattedAssetTypes,
-      startDate,
-      endDate,
-      toggleDateFilter,
-    });
+  const { data: rawFeatureCollection } = useFeatures({
+    projectId: activeProject.id,
+    isPublicView,
+    assetTypes: formattedAssetTypes,
+    startDate,
+    endDate,
+    toggleDateFilter,
+  });
 
   const { data: tileServerLayers, isLoading: isTileServerLayersLoading } =
     useGetTileServers({
@@ -184,7 +183,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
   const queryParams = new URLSearchParams(location.search);
   const activePanel = queryParams.get(queryPanelKey);
 
-  const loading = isFeaturesLoading || isTileServerLayersLoading;
+  const loading = isTileServerLayersLoading; // not considering isLoading of useFeatures as will show spinner on map
 
   const featureCollection = rawFeatureCollection ?? {
     type: 'FeatureCollection',
