@@ -45,7 +45,7 @@ const AssetButton: React.FC<AssetButtonProps> = ({
           setIsModalOpen(false);
           /*Uncomment these notifications when WG-422 is merged
           notification.success({
-            description: `Your asset was successful imported for feature ${selectedFeature.id}`,
+            description: `Your asset import for feature ${selectedFeature.id} started.`,
           });*/
         },
         onError: (/*error*/) => {
@@ -90,6 +90,7 @@ const AssetButton: React.FC<AssetButtonProps> = ({
           toggle={() => setIsModalOpen(false)}
           onImported={handleSubmit}
           allowedFileExtensions={IMPORTABLE_FEATURE_ASSET_TYPES}
+          isSingleSelectMode={true}
         />
       )}
     </>

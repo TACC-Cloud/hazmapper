@@ -1,9 +1,8 @@
-import React, { useState, useMemo } from 'react';
-import { Modal, Button, Layout, Typography } from 'antd';
+import React, { useState } from 'react';
+import { Modal, Button, Layout, Typography, Flex } from 'antd';
 import { FileListing } from '../Files';
 import { File, TapisFilePath } from '@hazmapper/types';
 import { convertFilesToTapisPaths } from '@hazmapper/utils/fileUtils';
-import { IMPORTABLE_FEATURE_ASSET_TYPES } from '@hazmapper/utils/fileUtils';
 import { SectionMessage } from '@tacc/core-components';
 
 type FileBrowserModalProps = {
@@ -11,6 +10,7 @@ type FileBrowserModalProps = {
   toggle: () => void;
   onImported?: (files: TapisFilePath[]) => void;
   allowedFileExtensions: string[];
+  isSingleSelectMode?: boolean;
 };
 
 const { Content, Header } = Layout;
@@ -21,15 +21,9 @@ const FileBrowserModal = ({
   toggle: parentToggle,
   onImported,
   allowedFileExtensions = [],
+  isSingleSelectMode = false,
 }: FileBrowserModalProps) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const isSingleSelectMode = useMemo(() => {
-    return (
-      JSON.stringify(allowedFileExtensions.sort()) ===
-      JSON.stringify(IMPORTABLE_FEATURE_ASSET_TYPES.sort())
-    );
-  }, [allowedFileExtensions]);
-
   const handleClose = () => {
     parentToggle();
   };
@@ -53,12 +47,20 @@ const FileBrowserModal = ({
       onCancel={handleClose}
       footer={[
         <Text key="fileCount" type="secondary" style={{ marginRight: 16 }}>
-          {isSingleSelectMode && selectedFiles.length > 1 && (
-            <SectionMessage type="error">
-              Adding multiple assets to a feature is not supported.
-            </SectionMessage>
-          )}
-          {selectedFiles.length > 0 && `${selectedFiles.length} files selected`}
+          <Flex vertical justify="space-evenly">
+            {isSingleSelectMode && selectedFiles.length > 1 && (
+              <SectionMessage type="error">
+                Adding multiple assets to a feature is not supported.
+              </SectionMessage>
+            )}
+            <Flex justify="space-between">
+              {isSingleSelectMode && (
+                <div>You may only import one asset per feature.</div>
+              )}
+              {selectedFiles.length > 0 &&
+                `${selectedFiles.length} files selected`}
+            </Flex>
+          </Flex>
         </Text>,
         <Button key="closeModalButton" onClick={handleClose}>
           Cancel
@@ -87,7 +89,7 @@ const FileBrowserModal = ({
         <br />
         <Text type="secondary">
           Note: Only files are selectable, not folders. Double-click on a folder
-          to navigate into it.
+          to navigate into it.{' '}
         </Text>
         <div style={{ marginTop: '1rem' }}>
           <FileListing
