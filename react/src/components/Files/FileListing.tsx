@@ -1,4 +1,5 @@
 import React, { ReactNode, useCallback, useEffect } from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
 import {
   ChonkyFileActionData,
   FileBrowser,
@@ -75,6 +76,11 @@ export const FileListing: React.FC<FileListingProps> = ({
     enabled: !!selectedSystem?.id,
   });
 
+  const methods = useForm();
+  const { watch } = methods;
+
+  const selectedSystemId = watch('system');
+
   useEffect(() => {
     if (selectedSystem?.id) {
       refetch();
@@ -101,12 +107,12 @@ export const FileListing: React.FC<FileListingProps> = ({
 
   const FileListingIcon = (props: any) => <Icon name={props.icon} />;
 
-  const handleSelectChange = (system: string) => {
+  useEffect(() => {
     setHasError(false);
     setChonkyFiles(new Array(8).fill(null));
     setFolderChain([null]);
 
-    const sys = systems.find((sys) => sys.id === system);
+    const sys = systems.find((sys) => sys.id === selectedSystemId);
 
     if (!sys) {
       setHasError(true);
@@ -131,7 +137,7 @@ export const FileListing: React.FC<FileListingProps> = ({
     }
 
     setFolderChain([{ id: rootFolder, name: rootFolderName, isDir: true }]);
-  };
+  }, [selectedSystemId]);
 
   const handleFileAction = useCallback(
     (data: ChonkyFileActionData) => {
@@ -196,11 +202,14 @@ export const FileListing: React.FC<FileListingProps> = ({
   return (
     <>
       <div className={`${styles['system-select-wrapper']}`}>
-        <SystemSelect
-          className={`${styles['system-select']}`}
-          showPublicSystems={showPublicSystems}
-          onSystemSelect={handleSelectChange}
-        />
+        <FormProvider {...methods}>
+          <form>
+            <SystemSelect
+              className={`${styles['system-select']}`}
+              showPublicSystems={showPublicSystems}
+            />
+          </form>
+        </FormProvider>
       </div>
       <div className={`${styles['file-browser']}`}>
         {hasError ? (

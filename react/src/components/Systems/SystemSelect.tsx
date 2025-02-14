@@ -4,21 +4,22 @@ import {
   useGetSystems,
   TransformedGetSystemsResponse,
 } from '../../hooks';
+import { useFormContext } from 'react-hook-form';
 import { DesignSafeProject } from '@hazmapper/types';
 
 interface SystemSelectProps {
   className: string;
   showPublicSystems: boolean;
-  onSystemSelect: (selectedSystem: string) => void;
 }
 
 export const SystemSelect: React.FC<SystemSelectProps> = ({
   className,
   showPublicSystems,
-  onSystemSelect,
 }) => {
-  const { data: systemsData = {} as TransformedGetSystemsResponse } =
-    useGetSystems();
+  const {
+    data: systemsData = {} as TransformedGetSystemsResponse,
+    isFetching,
+  } = useGetSystems();
   const { myDataSystem, communityDataSystem, publishedDataSystem } =
     systemsData;
 
@@ -26,18 +27,24 @@ export const SystemSelect: React.FC<SystemSelectProps> = ({
 
   const { data: dsProjectsResult } = useDesignSafeProjects();
 
+  const { register, reset } = useFormContext();
+
   useEffect(() => {
     if (dsProjectsResult) {
       setDsProjects(dsProjectsResult?.result || []);
     }
   }, [dsProjectsResult]);
 
+  useEffect(() => {
+    reset();
+  }, [isFetching]);
+
   return (
     <>
       <select
         className={className}
-        onChange={(e) => onSystemSelect(e.target.value)}
         defaultValue={myDataSystem?.id}
+        {...register('system')}
       >
         {myDataSystem && <option value={myDataSystem.id}>My Data</option>}
         {communityDataSystem && showPublicSystems && (

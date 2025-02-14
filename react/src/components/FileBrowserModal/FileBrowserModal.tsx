@@ -3,6 +3,7 @@ import { Modal, Button, Layout, Typography, Flex } from 'antd';
 import { FileListing } from '../Files';
 import { File, TapisFilePath } from '@hazmapper/types';
 import { convertFilesToTapisPaths } from '@hazmapper/utils/fileUtils';
+import { useQueryClient } from '@tanstack/react-query';
 
 type FileBrowserModalProps = {
   isOpen: boolean;
@@ -20,10 +21,12 @@ const FileBrowserModal = ({
   onImported,
   allowedFileExtensions = [],
 }: FileBrowserModalProps) => {
+  const queryClient = useQueryClient();
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
   const handleClose = () => {
     parentToggle();
+    queryClient.invalidateQueries({ queryKey: ['getSystems'] });
   };
 
   const handleFileSelect = (files: File[]) => {
