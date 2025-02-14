@@ -31,11 +31,8 @@ const AssetButton: React.FC<AssetButtonProps> = ({
   /* Uncomment when WG-422 polling is merged 
   const notification = useNotification();*/
   const featureId = selectedFeature.id;
-  const {
-    mutate: importFeatureAsset,
-    isPending: isImporting,
-    isSuccess: isImportingSuccess,
-  } = useImportFeatureAsset(projectId, featureId);
+  const { mutate: importFeatureAsset, isPending: isImporting } =
+    useImportFeatureAsset(projectId, featureId);
 
   const handleSubmit = (files: TapisFilePath[]) => {
     for (const file of files) {
@@ -82,7 +79,7 @@ const AssetButton: React.FC<AssetButtonProps> = ({
           type="primary"
           onClick={() => setIsModalOpen(true)}
           isLoading={isImporting}
-          disabled={isImportingSuccess}
+          disabled={isImporting}
         >
           Add Asset from DesignSafe
         </Button>
