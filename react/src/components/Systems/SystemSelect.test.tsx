@@ -5,11 +5,13 @@ import systemsFixture from './Systems.fixture';
 
 jest.mock('../../hooks', () => ({
   useDesignSafeProjects: jest.fn(() => ({ result: [] })),
-  useSystems: jest.fn(() => ({
-    data: systemsFixture,
-    myDataSystem: { id: 'designsafe.storage.default' },
-    communityDataSystem: { id: 'designsafe.storage.community' },
-    publishedDataSystem: { id: 'designsafe.storage.published' },
+  useGetSystems: jest.fn(() => ({
+    data: {
+      systems: systemsFixture,
+      myDataSystem: { id: 'designsafe.storage.default' },
+      communityDataSystem: { id: 'designsafe.storage.community' },
+      publishedDataSystem: { id: 'designsafe.storage.published' },
+    },
   })),
 }));
 

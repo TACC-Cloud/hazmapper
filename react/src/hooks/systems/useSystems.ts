@@ -1,45 +1,74 @@
-import { UseQueryResult } from '@tanstack/react-query';
-import { ApiService, System } from '@hazmapper/types';
+import { UseQueryResult, UseSuspenseQueryResult } from '@tanstack/react-query';
+import { ApiService, TTapisSystem } from '@hazmapper/types';
 import { useGet } from '../../requests';
-import { useMemo } from 'react';
 
-const useSystems = (): UseQueryResult<System[]> & {
-  myDataSystem?: System;
-  communityDataSystem?: System;
-  publishedDataSystem?: System;
-} => {
-  const queryResult = useGet<System[]>({
-    endpoint: '/v3/systems/?listType=ALL&limit=-1',
-    key: ['systemsv3'],
-    apiService: ApiService.Tapis,
-    transform: (data) => data.result,
-  });
-
-  const systems = queryResult.data || [];
-
-  const myDataSystem = useMemo(
-    () => systems.find((system) => system.id === 'designsafe.storage.default'),
-    [systems]
-  );
-
-  const communityDataSystem = useMemo(
-    () =>
-      systems.find((system) => system.id === 'designsafe.storage.community'),
-    [systems]
-  );
-
-  const publishedDataSystem = useMemo(
-    () =>
-      systems.find((system) => system.id === 'designsafe.storage.published'),
-    [systems]
-  );
-
-  return {
-    ...queryResult,
-    myDataSystem,
-    communityDataSystem,
-    publishedDataSystem,
-  };
+type TUseGetSystemsResponse = {
+  result: TTapisSystem[];
+  status: string;
 };
 
-export default useSystems;
+export type TransformedGetSystemsResponse = {
+  systems: TTapisSystem[];
+  myDataSystem?: TTapisSystem;
+  communityDataSystem?: TTapisSystem;
+  publishedDataSystem?: TTapisSystem;
+};
+
+type propsType = {
+  suspense?: boolean;
+  prefetch?: boolean;
+};
+
+const defaultProps: propsType = {
+  suspense: false,
+  prefetch: false,
+};
+
+export const useGetSystems = ({
+  suspense,
+  prefetch,
+}: propsType = defaultProps):
+  | UseSuspenseQueryResult<TransformedGetSystemsResponse>
+  | UseQueryResult<TransformedGetSystemsResponse> => {
+  const queryResult = useGet<
+    TUseGetSystemsResponse,
+    TransformedGetSystemsResponse
+  >({
+    endpoint: '/v3/systems/?listType=ALL&limit=-1',
+    key: ['getSystems'],
+    apiService: ApiService.Tapis,
+    suspense,
+    prefetch,
+    options: {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      staleTime: 1000 * 60 * 60, // 1 hr stale time
+      select: (data) => {
+        const systems = data.result;
+        const myDataSystem = systems.find(
+          (system) => system.id === 'designsafe.storage.default'
+        );
+
+        const communityDataSystem = systems.find(
+          (system) => system.id === 'designsafe.storage.community'
+        );
+
+        const publishedDataSystem = systems.find(
+          (system) => system.id === 'designsafe.storage.published'
+        );
+
+        return {
+          systems,
+          myDataSystem,
+          communityDataSystem,
+          publishedDataSystem,
+        };
+      },
+    },
+  });
+
+  return queryResult;
+};
+
+export default useGetSystems;

@@ -5,7 +5,7 @@ import {
   useFiles,
   useAuthenticatedUser,
   useDesignSafeProjects,
-  useSystems,
+  useGetSystems,
 } from '../../hooks';
 import { serializeToChonkyFile } from '../../utils/fileUtils';
 import { FileBrowser } from 'chonky';
@@ -18,7 +18,7 @@ jest.mock('../../hooks', () => ({
   })),
   useDesignSafeProjects: jest.fn(() => ({ result: [] })),
   useAuthenticatedUser: jest.fn(() => ({ data: { username: 'test-user' } })),
-  useSystems: jest.fn(() => ({ data: [] })),
+  useGetSystems: jest.fn(() => ({ data: { systems: [] } })),
 }));
 
 jest.mock('../../utils/fileUtils', () => ({
@@ -43,7 +43,9 @@ describe('FileListing', () => {
   });
 
   it('renders without crashing and displays "No systems available" if no systems are returned', () => {
-    (useSystems as jest.Mock).mockReturnValue({ data: [], myDataSystem: null });
+    (useGetSystems as jest.Mock).mockReturnValue({
+      data: { systems: [], myDataSystem: null },
+    });
     (useDesignSafeProjects as jest.Mock).mockReturnValue({
       result: [],
     });
@@ -58,9 +60,11 @@ describe('FileListing', () => {
   });
 
   it('renders the file browser when systems are available', () => {
-    (useSystems as jest.Mock).mockReturnValue({
-      data: [{ id: 'designsafe.storage.default' }],
-      myDataSystem: { id: 'designsafe.storage.default' },
+    (useGetSystems as jest.Mock).mockReturnValue({
+      data: {
+        systems: [{ id: 'designsafe.storage.default' }],
+        myDataSystem: { id: 'designsafe.storage.default' },
+      },
     });
 
     (useFiles as jest.Mock).mockReturnValue({
@@ -82,9 +86,11 @@ describe('FileListing', () => {
   it('handles system selection correctly', () => {
     const mockOnFolderSelect = jest.fn();
 
-    (useSystems as jest.Mock).mockReturnValue({
-      data: [{ id: 'designsafe.storage.default' }],
-      myDataSystem: { id: 'designsafe.storage.default' },
+    (useGetSystems as jest.Mock).mockReturnValue({
+      data: {
+        systems: [{ id: 'designsafe.storage.default' }],
+        myDataSystem: { id: 'designsafe.storage.default' },
+      },
     });
 
     (useFiles as jest.Mock).mockReturnValue({
@@ -122,9 +128,11 @@ describe('FileListing', () => {
       },
     ];
 
-    (useSystems as jest.Mock).mockReturnValue({
-      data: [{ id: 'designsafe.storage.default' }],
-      myDataSystem: { id: 'designsafe.storage.default' },
+    (useGetSystems as jest.Mock).mockReturnValue({
+      data: {
+        systems: [{ id: 'designsafe.storage.default' }],
+        myDataSystem: { id: 'designsafe.storage.default' },
+      },
     });
 
     (useFiles as jest.Mock).mockReturnValue({
@@ -166,9 +174,11 @@ describe('FileListing', () => {
   });
 
   it('shows an error message when the system is not found', () => {
-    (useSystems as jest.Mock).mockReturnValue({
-      data: [],
-      myDataSystem: null,
+    (useGetSystems as jest.Mock).mockReturnValue({
+      data: {
+        systems: [{ id: 'designsafe.storage.default' }],
+        myDataSystem: { id: 'designsafe.storage.default' },
+      },
     });
 
     (useFiles as jest.Mock).mockReturnValue({

@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useDesignSafeProjects, useSystems } from '../../hooks';
+import {
+  useDesignSafeProjects,
+  useGetSystems,
+  TransformedGetSystemsResponse,
+} from '../../hooks';
 import { DesignSafeProject } from '@hazmapper/types';
 
 interface SystemSelectProps {
@@ -13,8 +17,10 @@ export const SystemSelect: React.FC<SystemSelectProps> = ({
   showPublicSystems,
   onSystemSelect,
 }) => {
+  const { data: systemsData = {} as TransformedGetSystemsResponse } =
+    useGetSystems();
   const { myDataSystem, communityDataSystem, publishedDataSystem } =
-    useSystems();
+    systemsData;
 
   const [dsProjects, setDsProjects] = useState<DesignSafeProject[]>([]);
 
@@ -26,17 +32,12 @@ export const SystemSelect: React.FC<SystemSelectProps> = ({
     }
   }, [dsProjectsResult]);
 
-  useEffect(() => {
-    if (myDataSystem) {
-      onSystemSelect(myDataSystem?.id);
-    }
-  }, [myDataSystem]);
-
   return (
     <>
       <select
         className={className}
         onChange={(e) => onSystemSelect(e.target.value)}
+        defaultValue={myDataSystem?.id}
       >
         {myDataSystem && <option value={myDataSystem.id}>My Data</option>}
         {communityDataSystem && showPublicSystems && (

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Button, Layout, Typography } from 'antd';
+import { Modal, Button, Layout, Typography, Flex } from 'antd';
 import { FileListing } from '../Files';
 import { File, TapisFilePath } from '@hazmapper/types';
 import { convertFilesToTapisPaths } from '@hazmapper/utils/fileUtils';
@@ -73,14 +73,14 @@ const FileBrowserModal = ({
           Note: Only files are selectable, not folders. Double-click on a folder
           to navigate into it.
         </Text>
-        <div style={{ marginTop: '1rem' }}>
+        <Flex vertical style={{ marginTop: '1rem', height: '30em' }}>
           <FileListing
             disableSelection={false}
             showPublicSystems={true}
             allowedFileExtensions={allowedFileExtensions}
             onFileSelect={handleFileSelect}
           />
-        </div>
+        </Flex>
       </Content>
     </Modal>
   );
