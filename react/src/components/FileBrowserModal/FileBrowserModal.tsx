@@ -57,7 +57,7 @@ const FileBrowserModal = ({
         <Text key="fileCount" type="secondary" style={{ marginRight: 16 }}>
           {isSingleSelectMode && selectedFiles.length > 1 && (
             <SectionMessage type="error">
-              Adding multiple asset to a feature is not supported.
+              Adding multiple assets to a feature is not supported.
             </SectionMessage>
           )}
           {selectedFiles.length > 0 && `${selectedFiles.length} files selected`}
