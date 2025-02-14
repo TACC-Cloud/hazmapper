@@ -1,4 +1,4 @@
-import { UseQueryResult, UseSuspenseQueryResult } from '@tanstack/react-query';
+import { UseQueryResult } from '@tanstack/react-query';
 import { ApiService, TTapisSystem } from '@hazmapper/types';
 import { useGet } from '../../requests';
 
@@ -20,16 +20,12 @@ type propsType = {
 };
 
 const defaultProps: propsType = {
-  suspense: false,
   prefetch: false,
 };
 
 export const useGetSystems = ({
-  suspense,
   prefetch,
-}: propsType = defaultProps):
-  | UseSuspenseQueryResult<TransformedGetSystemsResponse>
-  | UseQueryResult<TransformedGetSystemsResponse> => {
+}: propsType = defaultProps): UseQueryResult<TransformedGetSystemsResponse> => {
   const queryResult = useGet<
     TUseGetSystemsResponse,
     TransformedGetSystemsResponse
@@ -37,7 +33,6 @@ export const useGetSystems = ({
     endpoint: '/v3/systems/?listType=ALL&limit=-1',
     key: ['getSystems'],
     apiService: ApiService.Tapis,
-    suspense,
     prefetch,
     options: {
       refetchOnMount: false,

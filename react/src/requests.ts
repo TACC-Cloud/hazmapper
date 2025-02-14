@@ -7,7 +7,6 @@ import {
   UseQueryOptions,
   UseMutationOptions,
   QueryKey,
-  useSuspenseQuery,
   useQueryClient,
 } from '@tanstack/react-query';
 import { useAppConfiguration } from '@hazmapper/hooks';
@@ -63,7 +62,6 @@ type UseGetParams<ResponseType, TransformedResponseType> = {
   >;
   transform?: (data: any) => ResponseType;
   apiService?: ApiService;
-  suspense?: boolean;
   prefetch?: boolean;
 };
 
@@ -73,15 +71,14 @@ type UsePostParams<RequestType, ResponseType> = {
   apiService?: ApiService;
 };
 
-export function useGet<ResponseType, TransformedResponseType = null>({
+export function useGet<ResponseType, TransformedResponseType = ResponseType>({
   endpoint,
   key: queryKey,
   params = {},
   options = {},
   apiService = ApiService.Geoapi,
   transform,
-  suspense = false,
-  prefetch = false,
+  prefetch,
 }: UseGetParams<ResponseType, TransformedResponseType>) {
   const client = axios;
   const state = store.getState();
@@ -129,15 +126,10 @@ export function useGet<ResponseType, TransformedResponseType = null>({
     queryFn: getUtil,
     ...options,
   };
-
   const queryClient = useQueryClient();
-  if (prefetch) {
-    queryClient.ensureQueryData(query);
-  }
+  if (prefetch) queryClient.ensureQueryData(query);
 
-  const queryHook = suspense ? useSuspenseQuery : useQuery;
-
-  return queryHook<ResponseType, AxiosError, TransformedResponseType>(query);
+  return useQuery<ResponseType, AxiosError, TransformedResponseType>(query);
 }
 
 export function usePost<RequestType, ResponseType>({

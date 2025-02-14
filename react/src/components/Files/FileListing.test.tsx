@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import { FileListing } from './FileListing';
 import {
   useFiles,
@@ -37,14 +38,59 @@ jest.mock('chonky', () => {
   };
 });
 
+jest.mock('react-hook-form', () => ({
+  ...jest.requireActual('react-hook-form'),
+  useFormContext: jest.fn(() => ({
+    register: jest.fn(),
+    setValue: jest.fn(),
+    getValues: jest.fn(() => ({})),
+    watch: jest.fn(),
+    formState: { errors: {} },
+    reset: jest.fn(),
+  })),
+  useForm: jest.fn(() => ({
+    register: jest.fn(),
+    handleSubmit: jest.fn(),
+    watch: jest.fn(),
+    setValue: jest.fn(),
+    getValues: jest.fn(),
+    formState: {
+      errors: {},
+    },
+    reset: jest.fn(),
+  })),
+}));
+
 describe('FileListing', () => {
   beforeEach(() => {
     jest.resetAllMocks();
+
+    (useForm as jest.Mock).mockReturnValue({
+      register: jest.fn(),
+      handleSubmit: jest.fn(),
+      watch: jest.fn(),
+      setValue: jest.fn(),
+      getValues: jest.fn(),
+      formState: {
+        errors: {},
+      },
+      reset: jest.fn(),
+    });
+    (useFormContext as jest.Mock).mockReturnValue({
+      register: jest.fn(),
+      setValue: jest.fn(),
+      getValues: jest.fn(() => ({})),
+      watch: jest.fn(),
+      formState: { errors: {} },
+      reset: jest.fn(),
+    });
   });
 
   it('renders without crashing and displays "No systems available" if no systems are returned', () => {
     (useGetSystems as jest.Mock).mockReturnValue({
       data: { systems: [], myDataSystem: null },
+      isFetched: true,
+      isLoading: false,
     });
     (useDesignSafeProjects as jest.Mock).mockReturnValue({
       result: [],
@@ -65,6 +111,8 @@ describe('FileListing', () => {
         systems: [{ id: 'designsafe.storage.default' }],
         myDataSystem: { id: 'designsafe.storage.default' },
       },
+      isFetched: true,
+      isLoading: false,
     });
 
     (useFiles as jest.Mock).mockReturnValue({
@@ -91,6 +139,8 @@ describe('FileListing', () => {
         systems: [{ id: 'designsafe.storage.default' }],
         myDataSystem: { id: 'designsafe.storage.default' },
       },
+      isFetched: true,
+      isLoading: false,
     });
 
     (useFiles as jest.Mock).mockReturnValue({
@@ -133,6 +183,8 @@ describe('FileListing', () => {
         systems: [{ id: 'designsafe.storage.default' }],
         myDataSystem: { id: 'designsafe.storage.default' },
       },
+      isFetched: true,
+      isLoading: false,
     });
 
     (useFiles as jest.Mock).mockReturnValue({
@@ -179,6 +231,8 @@ describe('FileListing', () => {
         systems: [{ id: 'designsafe.storage.default' }],
         myDataSystem: { id: 'designsafe.storage.default' },
       },
+      isFetched: true,
+      isLoading: false,
     });
 
     (useFiles as jest.Mock).mockReturnValue({
@@ -198,5 +252,41 @@ describe('FileListing', () => {
 
     const errorElement = screen.getByText(/No systems available/i);
     expect(document.body.contains(errorElement)).toBe(true);
+  });
+
+  it('should change selectedSystemId when select item changes', async () => {
+    (useGetSystems as jest.Mock).mockReturnValue({
+      data: {
+        systems: [{ id: 'designsafe.storage.default' }],
+        myDataSystem: { id: 'designsafe.storage.default' },
+      },
+      isFetched: true,
+      isLoading: false,
+    });
+    (useAuthenticatedUser as jest.Mock).mockReturnValue({
+      data: { username: 'test-user' },
+    });
+    (useFiles as jest.Mock).mockReturnValue({
+      data: [],
+      refetch: jest.fn(),
+    });
+
+    const TestComponent = () => {
+      const methods = useForm();
+      return (
+        <FormProvider {...methods}>
+          <FileListing disableSelection={false} />
+        </FormProvider>
+      );
+    };
+
+    render(<TestComponent />);
+
+    const select = screen.getByRole('combobox');
+    fireEvent.change(select, { target: { value: 'system2' } });
+
+    await waitFor(() => {
+      expect((select as HTMLSelectElement).value).toBe('system2');
+    });
   });
 });
