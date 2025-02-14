@@ -23,7 +23,6 @@ const FileBrowserModal = ({
   allowedFileExtensions = [],
 }: FileBrowserModalProps) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [isMultiSelectError, setIsMultiSelectError] = useState<boolean>(false);
   const isSingleSelectMode = useMemo(() => {
     return (
       JSON.stringify(allowedFileExtensions.sort()) ===
@@ -42,10 +41,6 @@ const FileBrowserModal = ({
   };
 
   const handleImport = () => {
-    setIsMultiSelectError(false);
-    if (isSingleSelectMode && selectedFiles.length > 1) {
-      setIsMultiSelectError(true);
-    }
     if (onImported) {
       const tapisFilePaths = convertFilesToTapisPaths(selectedFiles);
       onImported(tapisFilePaths);
