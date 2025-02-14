@@ -16,6 +16,7 @@ import {
   useProject,
   useGetTileServers,
   useFeatureSelection,
+  useGeoapiNotificationsPolling,
   KEY_USE_FEATURES,
 } from '@hazmapper/hooks';
 import MapProjectNavBar from '@hazmapper/components/MapProjectNavBar';
@@ -72,6 +73,11 @@ interface MapProjectProps {
 const MapProject: React.FC<MapProjectProps> = ({ isPublicView = false }) => {
   const { projectUUID } = useParams();
   const queryClient = useQueryClient();
+
+  /*TODO: notifications are user specific and lacking additional context.  See note in react/src/types/notification.ts and WG-431 */
+
+  /* TODO:  to be replaced by a non-pulling approach via socket-io, WG-278 */
+  useGeoapiNotificationsPolling();
 
   const {
     data: activeProject,

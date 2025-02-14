@@ -1070,7 +1070,7 @@ class Question {
       section.questions.push(this);
       // add to question map
       this.parent_template.question_map[this.template_question_num] = this;
-      his.parent_template.question_id_map[this.id] = this;
+      this.parent_template.question_id_map[this.id] = this;
     }
   }
 
