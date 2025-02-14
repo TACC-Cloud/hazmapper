@@ -10,6 +10,7 @@ type FileBrowserModalProps = {
   toggle: () => void;
   onImported?: (files: TapisFilePath[]) => void;
   allowedFileExtensions: string[];
+  singleSelectErrorMessage?: string;
   isSingleSelectMode?: boolean;
 };
 
@@ -22,6 +23,7 @@ const FileBrowserModal = ({
   onImported,
   allowedFileExtensions = [],
   isSingleSelectMode = false,
+  singleSelectErrorMessage = '',
 }: FileBrowserModalProps) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const handleClose = () => {
@@ -42,7 +44,11 @@ const FileBrowserModal = ({
 
   return (
     <Modal
-      title={<Header style={{ fontSize: '2rem' }}>Select Files</Header>}
+      title={
+        <Header style={{ fontSize: '2rem' }}>
+          Select File{!isSingleSelectMode && 's'}
+        </Header>
+      }
       open={isOpen}
       onCancel={handleClose}
       footer={[
@@ -50,13 +56,11 @@ const FileBrowserModal = ({
           <Flex vertical justify="space-evenly">
             {isSingleSelectMode && selectedFiles.length > 1 && (
               <SectionMessage type="error">
-                Adding multiple assets to a feature is not supported.
+                {singleSelectErrorMessage}
               </SectionMessage>
             )}
             <Flex justify="space-between">
-              {isSingleSelectMode && (
-                <div>You may only import one asset per feature.</div>
-              )}
+              {isSingleSelectMode && <div>You may only import one file.</div>}
               {selectedFiles.length > 0 &&
                 `${selectedFiles.length} files selected`}
             </Flex>

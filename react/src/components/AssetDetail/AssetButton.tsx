@@ -7,7 +7,7 @@ import {
   IFileImportRequest,
   TapisFilePath,
 } from '@hazmapper/types';
-import { useImportFeatureAsset /*, useNotification*/ } from '@hazmapper/hooks';
+import { useImportFeatureAsset, useNotification } from '@hazmapper/hooks';
 import FileBrowserModal from '../FileBrowserModal/FileBrowserModal';
 import { IMPORTABLE_FEATURE_ASSET_TYPES } from '@hazmapper/utils/fileUtils';
 
@@ -28,8 +28,7 @@ const AssetButton: React.FC<AssetButtonProps> = ({
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const featureType = getFeatureType(selectedFeature);
   const projectId = selectedFeature.project_id;
-  /* Uncomment when WG-422 polling is merged 
-  const notification = useNotification();*/
+  const notification = useNotification();
   const featureId = selectedFeature.id;
   const { mutate: importFeatureAsset, isPending: isImporting } =
     useImportFeatureAsset(projectId, featureId);
@@ -43,16 +42,15 @@ const AssetButton: React.FC<AssetButtonProps> = ({
       importFeatureAsset(importData, {
         onSuccess: () => {
           setIsModalOpen(false);
-          /*Uncomment these notifications when WG-422 is merged
           notification.success({
-            description: `Your asset import for feature ${selectedFeature.id} started.`,
-          });*/
+            description: `Your asset import for feature ${selectedFeature.id} was successful.`,
+          });
         },
-        onError: (/*error*/) => {
+        onError: (error) => {
           setIsModalOpen(false);
-          /*notification.success({
+          notification.success({
             description: `There was an error importing your asset for feature ${selectedFeature.id}. Error: ${error}`,
-          });*/
+          });
         },
       });
     }
@@ -91,6 +89,7 @@ const AssetButton: React.FC<AssetButtonProps> = ({
           onImported={handleSubmit}
           allowedFileExtensions={IMPORTABLE_FEATURE_ASSET_TYPES}
           isSingleSelectMode={true}
+          singleSelectErrorMessage="Adding multiple assets to a feature is not supported."
         />
       )}
     </>
