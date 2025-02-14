@@ -44,7 +44,7 @@ export const useGeoapiNotificationsPolling = () => {
       recentNotifications.forEach((note) => {
         notification.open({
           type: note.status,
-          message: `${note.status[0].toUpperCase()}${note.status.slice(1)}!`,
+          message: `${note.status[0].toUpperCase()}${note.status.slice(1)}`,
           description: note.message,
         });
       });

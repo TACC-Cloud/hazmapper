@@ -1,6 +1,7 @@
 import React from 'react';
 import { notification } from 'antd';
 import type { ArgsProps } from 'antd/es/notification';
+import { v4 as uuidv4 } from 'uuid';
 
 // takes antd's ArgProps or just a description and optional message
 type NotificationConfig = ArgsProps | { description: string; message?: string };
@@ -31,6 +32,8 @@ export const NotificationProvider: React.FC<{
     const defaultProps: Partial<ArgsProps> = {
       placement: 'bottomLeft',
       closable: false,
+      key: uuidv4(),
+      /* antd reuses notifications when you don’t specify a key; so previous notification might briefly reappear without key*/
     };
 
     return {
