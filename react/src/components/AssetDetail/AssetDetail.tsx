@@ -53,18 +53,24 @@ const AssetDetail: React.FC<AssetDetailProps> = ({
       </div>
       <div className={styles.middleSection}>
         <Suspense fallback={<LoadingSpinner />}>
-          <div className={styles.assetContainer}>
-            <AssetRenderer
-              selectedFeature={selectedFeature}
-              featureSource={featureSource}
-            />
-          </div>
-          <AssetButton
-            selectedFeature={selectedFeature}
-            featureSource={featureSource}
-            isPublicView={isPublicView}
-            onQuestionnaireClick={onQuestionnaireClick}
-          />
+          {featureType == FeatureType.Collection ? (
+            <div>Collections of assets not supported</div>
+          ) : (
+            <>
+              <div className={styles.assetContainer}>
+                <AssetRenderer
+                  selectedFeature={selectedFeature}
+                  featureSource={featureSource}
+                />
+              </div>
+              <AssetButton
+                selectedFeature={selectedFeature}
+                featureSource={featureSource}
+                isPublicView={isPublicView}
+                onQuestionnaireClick={onQuestionnaireClick}
+              />
+            </>
+          )}
         </Suspense>
       </div>
       {featureType !== FeatureType.Questionnaire && (
