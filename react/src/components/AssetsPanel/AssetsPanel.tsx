@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import styles from './AssetsPanel.module.css';
 import FeatureFileTree from '@hazmapper/components/FeatureFileTree';
 import { FeatureCollection, Project, TapisFilePath } from '@hazmapper/types';
-import { Button } from '@tacc/core-components';
+import { Flex, Layout, Button } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import {
   useFeatures,
   useImportFeature,
   useNotification,
 } from '@hazmapper/hooks';
+import { IMPORTABLE_FEATURE_TYPES } from '@hazmapper/utils/fileUtils';
 import FileBrowserModal from '../FileBrowserModal/FileBrowserModal';
 
 const getFilename = (projectName: string) => {
@@ -54,7 +56,11 @@ const DownloadFeaturesButton: React.FC<DownloadFeaturesButtonProps> = ({
   });
 
   return (
-    <Button isLoading={isDownloading} onClick={() => triggerDownload()}>
+    <Button
+      loading={isDownloading}
+      onClick={() => triggerDownload()}
+      type="primary"
+    >
       Export to GeoJSON
     </Button>
   );
@@ -109,45 +115,37 @@ const AssetsPanel: React.FC<Props> = ({
     );
   };
 
-  const allowedFileExtensions = [
-    'shp',
-    'jpg',
-    'jpeg',
-    'json',
-    'geojson',
-    'gpx',
-    'rq',
-    'png',
-  ];
+  const { Content, Header, Footer } = Layout;
 
   return (
-    <div className={styles.root}>
-      <div className={styles.topSection}>
-        <FileBrowserModal
-          isOpen={isModalOpen}
-          toggle={() => setIsModalOpen(false)}
-          onImported={handleFileImport}
-          allowedFileExtensions={allowedFileExtensions}
-        />
-        <Button
-          onClick={() => setIsModalOpen(true)}
-          type="secondary"
-          iconNameBefore="add"
-        >
-          Import from DesignSafe
-        </Button>
-      </div>
-      <div className={styles.middleSection}>
-        <FeatureFileTree
-          projectId={project.id}
-          isPublicView={isPublicView}
-          featureCollection={featureCollection}
-        />
-      </div>
-      <div className={styles.bottomSection}>
-        <DownloadFeaturesButton project={project} isPublicView={isPublicView} />
-      </div>
-    </div>
+    <>
+      <Flex vertical className={styles.root} flex={1}>
+        <Header className={styles.topSection}>
+          <Button onClick={() => setIsModalOpen(true)} icon={<PlusOutlined />}>
+            Import from DesignSafe
+          </Button>
+        </Header>
+        <Content className={styles.middleSection}>
+          <FeatureFileTree
+            projectId={project.id}
+            isPublicView={isPublicView}
+            featureCollection={featureCollection}
+          />
+        </Content>
+        <Footer className={styles.bottomSection}>
+          <DownloadFeaturesButton
+            project={project}
+            isPublicView={isPublicView}
+          />
+        </Footer>
+      </Flex>
+      <FileBrowserModal
+        isOpen={isModalOpen}
+        toggle={() => setIsModalOpen(false)}
+        onImported={handleFileImport}
+        allowedFileExtensions={IMPORTABLE_FEATURE_TYPES}
+      />
+    </>
   );
 };
 

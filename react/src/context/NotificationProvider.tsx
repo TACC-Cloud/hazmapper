@@ -2,7 +2,7 @@ import React from 'react';
 import { notification } from 'antd';
 import type { ArgsProps } from 'antd/es/notification';
 
-// takes antd's ArgProps or just a descxriptino and optional message
+// takes antd's ArgProps or just a description and optional message
 type NotificationConfig = ArgsProps | { description: string; message?: string };
 
 type NotificationAPI = {
