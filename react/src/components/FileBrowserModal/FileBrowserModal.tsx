@@ -30,8 +30,6 @@ const FileBrowserModal = ({
     );
   }, [allowedFileExtensions]);
 
-  console.log(isSingleSelectMode);
-
   const handleClose = () => {
     parentToggle();
   };
