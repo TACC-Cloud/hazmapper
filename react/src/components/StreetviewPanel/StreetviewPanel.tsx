@@ -33,8 +33,8 @@ const StreetviewPanel: React.FC = () => {
           We are currently upgrading Streetview to add necessary updates to our
           Mapillary integration. With these updates, you can expect a smoother
           experience when viewing sequences, publishing DesignSafe images to
-          Mapillary, and importing Streetview assets directly onto onto your
-          maps. Thank you for your patience.
+          Mapillary, and importing Streetview assets directly onto your maps.
+          Thank you for your patience.
         </Text>
       </Card>
     </ConfigProvider>
