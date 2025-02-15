@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import DOMPurify from 'dompurify';
 import { Button } from '@tacc/core-components';
 import { Feature, FeatureType } from '@hazmapper/types';
-import { getFeatureType, IFileImportRequest } from '@hazmapper/types';
-import { useImportFeatureAsset } from '@hazmapper/hooks';
+import {
+  getFeatureType,
+  IFileImportRequest,
+  TapisFilePath,
+} from '@hazmapper/types';
+import { useImportFeatureAsset, useNotification } from '@hazmapper/hooks';
+import FileBrowserModal from '../FileBrowserModal/FileBrowserModal';
+import { IMPORTABLE_FEATURE_ASSET_TYPES } from '@hazmapper/utils/fileUtils';
 
 type AssetButtonProps = {
   selectedFeature: Feature;
@@ -19,27 +25,35 @@ const AssetButton: React.FC<AssetButtonProps> = ({
   onQuestionnaireClick,
 }) => {
   const pointCloudURL = DOMPurify.sanitize(featureSource + '/index.html');
-
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const featureType = getFeatureType(selectedFeature);
   const projectId = selectedFeature.project_id;
+  const notification = useNotification();
   const featureId = selectedFeature.id;
-  const {
-    mutate: importFeatureAsset,
-    isPending: isImporting,
-    isSuccess: isImportingSuccess,
-  } = useImportFeatureAsset(projectId, featureId);
+  const { mutate: importFeatureAsset, isPending: isImporting } =
+    useImportFeatureAsset(projectId, featureId);
 
-  const handleImportFeatureAsset = (importData: IFileImportRequest) => {
-    importFeatureAsset(importData);
-  };
-  const handleSubmit = () => {
-    const importData: IFileImportRequest = {
-      /*TODO Replace with passed in values from
-      FileBrowserModal. These are hardcoded to test.*/
-      system_id: 'project-4072868216578445806-242ac117-0001-012',
-      path: 'images_good/image.jpg',
-    };
-    handleImportFeatureAsset(importData);
+  const handleSubmit = (files: TapisFilePath[]) => {
+    for (const file of files) {
+      const importData: IFileImportRequest = {
+        system_id: file.system,
+        path: file.path,
+      };
+      importFeatureAsset(importData, {
+        onSuccess: () => {
+          setIsModalOpen(false);
+          notification.success({
+            description: `Your asset import for feature ${selectedFeature.id} was successful.`,
+          });
+        },
+        onError: (error) => {
+          setIsModalOpen(false);
+          notification.success({
+            description: `There was an error importing your asset for feature ${selectedFeature.id}. Error: ${error}`,
+          });
+        },
+      });
+    }
   };
 
   return (
@@ -61,12 +75,22 @@ const AssetButton: React.FC<AssetButtonProps> = ({
         //TODO
         <Button
           type="primary"
-          onClick={handleSubmit}
+          onClick={() => setIsModalOpen(true)}
           isLoading={isImporting}
-          disabled={isImportingSuccess}
+          disabled={isImporting}
         >
           Add Asset from DesignSafe
         </Button>
+      )}
+      {isModalOpen && (
+        <FileBrowserModal
+          isOpen={isModalOpen}
+          toggle={() => setIsModalOpen(false)}
+          onImported={handleSubmit}
+          allowedFileExtensions={IMPORTABLE_FEATURE_ASSET_TYPES}
+          isSingleSelectMode={true}
+          singleSelectErrorMessage="Adding multiple assets to a feature is not supported."
+        />
       )}
     </>
   );
