@@ -1,28 +1,51 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { SystemSelect } from './SystemSelect';
 import systemsFixture from './Systems.fixture';
 
 jest.mock('../../hooks', () => ({
   useDesignSafeProjects: jest.fn(() => ({ result: [] })),
-  useSystems: jest.fn(() => ({
-    data: systemsFixture,
-    myDataSystem: { id: 'designsafe.storage.default' },
-    communityDataSystem: { id: 'designsafe.storage.community' },
-    publishedDataSystem: { id: 'designsafe.storage.published' },
+  useGetSystems: jest.fn(() => ({
+    data: {
+      systems: systemsFixture,
+      myDataSystem: { id: 'designsafe.storage.default' },
+      communityDataSystem: { id: 'designsafe.storage.community' },
+      publishedDataSystem: { id: 'designsafe.storage.published' },
+    },
+    isFetching: true,
+  })),
+}));
+
+jest.mock('react-hook-form', () => ({
+  ...jest.requireActual('react-hook-form'),
+  useFormContext: jest.fn(() => ({
+    register: jest.fn(),
+    setValue: jest.fn(),
+    getValues: jest.fn(() => ({})),
+    watch: jest.fn(),
+    formState: { errors: {} },
+    reset: jest.fn(),
+  })),
+  useForm: jest.fn(() => ({
+    register: jest.fn(),
+    handleSubmit: jest.fn(),
+    watch: jest.fn(),
+    setValue: jest.fn(),
+    getValues: jest.fn(),
+    formState: {
+      errors: {},
+    },
+    reset: jest.fn(),
   })),
 }));
 
 describe('System Select', () => {
-  const mockOnSystemSelect = jest.fn();
-
   const renderComponent = (showPublicSystems = true) => {
     return render(
       <SystemSelect
-        onSystemSelect={mockOnSystemSelect}
         className="class-name"
         showPublicSystems={showPublicSystems}
-      ></SystemSelect>
+      />
     );
   };
 
@@ -35,20 +58,9 @@ describe('System Select', () => {
 
   it('calls onSystemSelect with deafult value', () => {
     renderComponent();
-
-    expect(mockOnSystemSelect).toHaveBeenCalledWith(
+    const select = screen.getByRole('combobox');
+    expect((select as HTMLSelectElement).value).toBe(
       'designsafe.storage.default'
-    );
-  });
-
-  it('calls onSystemSelect correctly on option change', () => {
-    renderComponent();
-
-    fireEvent.change(screen.getByRole('combobox'), {
-      target: { value: 'designsafe.storage.community' },
-    });
-    expect(mockOnSystemSelect).toHaveBeenCalledWith(
-      'designsafe.storage.community'
     );
   });
 

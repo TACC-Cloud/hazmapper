@@ -9,39 +9,19 @@
   content: '\00D7'; /* Unicode character for 'X' */
 }
 
-.field-wrapper-alt {
-  margin-top: -0.5rem;
-  margin-bottom: -0.1rem;
+.field-wrapper-alt > div > input {
+  margin-top: -1rem;
+  margin-bottom: 1rem;
   max-width: 40em;
 }
 
-.field-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.input-custom-size {
+.field-wrapper > div {
   flex-grow: 1;
-  width: 37.55rem;
-  padding-right: 90px;
 }
 
 .hazmapper-suffix {
   font-weight: bold;
-  position: absolute;
-  right: 8px;
-  top: 30px;
   padding-left: 8px;
-}
-
-/* Adding media queries for mobile devices */
-@media (max-width: 440px) {
-  .input-custom-size {
-    width: 115%;
-  }
 }
 
 .section {
@@ -57,4 +37,8 @@
   font-style: italic;
   font-weight: 100;
   padding-bottom: 2rem;
+}
+
+.section-table-wrapper {
+  height: 100%;
 }

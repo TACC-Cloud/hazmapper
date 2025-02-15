@@ -7,8 +7,10 @@ import hazmapperLogo from '@hazmapper/assets/Hazmapper-Stack@4x.png';
 import nsfLogo from '@hazmapper/assets/nsf.png';
 import designsafeLogo from '@hazmapper/assets/designsafe.svg';
 import nheriLogo from '@hazmapper/assets/nheri.png';
+import { useGetSystems } from '@hazmapper/hooks';
 
 const MainMenu = () => {
+  useGetSystems({ prefetch: true });
   return (
     <div className={styles.root}>
       <HeaderNavBar />
