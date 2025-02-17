@@ -201,7 +201,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     features: [],
   };
 
-  const { Header, Content, Sider } = Layout;
+  const { Content, Sider } = Layout;
 
   const formSchema = z.object({
     tileLayers: z.array(
@@ -237,13 +237,11 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     <FormProvider {...methods}>
       <MapPositionProvider>
         <Layout style={{ height: '100vh' }}>
-          <Header>
-            <HeaderNavBar />
-            <MapControlBar
-              activeProject={activeProject}
-              isPublicView={isPublicView}
-            />
-          </Header>
+          <HeaderNavBar />
+          <MapControlBar
+            activeProject={activeProject}
+            isPublicView={isPublicView}
+          />
           <Layout>
             <Sider width="auto">
               <Flex
