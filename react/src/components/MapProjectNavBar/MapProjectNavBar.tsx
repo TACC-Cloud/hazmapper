@@ -77,9 +77,12 @@ const MapProjectNavBar: React.FC<NavBarPanelProps> = ({ isPublicView }) => {
   const activePanel = queryParams.get(queryPanelKey);
 
   React.useEffect(() => {
-    if (isPublicView && activePanel) {
+    if (activePanel) {
       const currentPanel = navItems.find((item) => item.panel === activePanel);
-      if (currentPanel && !currentPanel.showWhenPublic) {
+      if (
+        (currentPanel && !currentPanel.showWhenPublic && isPublicView) ||
+        (currentPanel && currentPanel.showWhenPrivate && isPublicView)
+      ) {
         const updatedParams = new URLSearchParams(location.search);
         updatedParams.delete(queryPanelKey);
         navigate(`${location.pathname}?${updatedParams.toString()}`, {
@@ -100,13 +103,13 @@ const MapProjectNavBar: React.FC<NavBarPanelProps> = ({ isPublicView }) => {
           if (isPublicView && !item.showWhenPublic) {
             return null;
           }
+          if (!isPublicView && item.showWhenPrivate == false) {
+            return null;
+          }
 
           if (activePanel === item.panel) {
             // If already active, we want to remove queryPanel key if user clicks again
             updatedQueryParams.delete(queryPanelKey);
-          }
-          if (!isPublicView && item.showWhenPrivate == false) {
-            return null;
           } else {
             // Set the queryPanelKey to the current item's panel
             updatedQueryParams.set(queryPanelKey, item.panel);

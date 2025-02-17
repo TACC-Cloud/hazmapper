@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { Layout, Flex } from 'antd';
-import { LoadingSpinner } from '@tacc/core-components';
+import { LoadingSpinner, Message } from '@tacc/core-components';
 
 import Map from '@hazmapper/components/Map';
 import AssetsPanel from '@hazmapper/components/AssetsPanel';
@@ -111,6 +111,21 @@ const MapProject: React.FC<MapProjectProps> = ({ isPublicView = false }) => {
       <div className={styles.root}>
         <HeaderNavBar />
         <MapProjectAccessError error={error} />;
+      </div>
+    );
+  }
+  if (isPublicView && activeProject.public === false) {
+    return (
+      <div className={styles.root}>
+        <HeaderNavBar />
+        <div className={styles.errorContainer}>
+          <Message type="error" tagName="div">
+            <p>
+              This is not a public map. You are unauthorized to view this
+              private map.{' '}
+            </p>
+          </Message>
+        </div>
       </div>
     );
   }

@@ -30,7 +30,7 @@ export const useProject = ({
   const endpoint = `/projects/?uuid=${projectUUID}`;
   const query = useGet<Project>({
     endpoint,
-    key: ['project'],
+    key: ['project', projectUUID],
     options,
     transform: (data) => data[0], // result is a list with a single Project
   });
@@ -139,7 +139,7 @@ export const useUpdateProjectInfo = () => {
     options: {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['projects'] });
-        queryClient.invalidateQueries({ queryKey: ['project'] });
+        queryClient.invalidateQueries({ queryKey: ['project', projectUUID] });
       },
     },
   });
