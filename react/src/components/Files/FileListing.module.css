@@ -10,7 +10,7 @@
 }
 
 .file-browser {
-  height: 30em;
+  flex-grow: 1;
 }
 
 .icon.icon-opeenParentFolder {

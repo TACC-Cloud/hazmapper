@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { QueryClientProvider } from '@tanstack/react-query';
-import App from './AppRouter';
+import { appRouter } from './AppRouter';
+import { RouterProvider } from 'react-router-dom';
 import './index.css';
 import store from './redux/store';
 import { Provider } from 'react-redux';
@@ -45,7 +46,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       <QueryClientProvider client={queryClient}>
         <ConfigProvider theme={themeConfig}>
           <NotificationProvider>
-            <App />
+            <RouterProvider router={appRouter} />
           </NotificationProvider>
         </ConfigProvider>
       </QueryClientProvider>

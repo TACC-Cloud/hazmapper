@@ -1,12 +1,6 @@
 import React, { ReactElement } from 'react';
 import { useSelector } from 'react-redux';
-import {
-  BrowserRouter,
-  Route,
-  Routes,
-  Navigate,
-  useLocation,
-} from 'react-router-dom';
+import { Navigate, useLocation, createBrowserRouter } from 'react-router-dom';
 import * as ROUTES from '@hazmapper/constants/routes';
 import MapProject from '@hazmapper/pages/MapProject';
 import MainMenu from '@hazmapper/pages/MainMenu';
@@ -16,18 +10,16 @@ import Callback from '@hazmapper/pages/Callback/Callback';
 import StreetviewCallback from '@hazmapper/pages/StreetviewCallback/StreetviewCallback';
 import { RootState } from '@hazmapper/redux/store';
 import { isTokenValid } from '@hazmapper/utils/authUtils';
-import { useBasePath } from '@hazmapper/hooks/environment';
 
 interface ProtectedRouteProps {
-  isAuthenticated: boolean;
   children: ReactElement;
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
-  children,
-  isAuthenticated,
-}) => {
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const location = useLocation();
+  const isAuthenticated = useSelector((state: RootState) =>
+    isTokenValid(state.auth.authToken)
+  );
 
   if (!isAuthenticated) {
     const url = `/login?to=${encodeURIComponent(location.pathname)}`;
@@ -37,46 +29,54 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   return children;
 };
 
-function AppRouter() {
-  const isAuthenticated = useSelector((state: RootState) =>
-    isTokenValid(state.auth.authToken)
-  );
-
-  const basePath = useBasePath();
-
-  return (
-    <BrowserRouter basename={basePath}>
-      <Routes>
-        <Route
-          path={ROUTES.MAIN}
-          element={
-            <ProtectedRoute isAuthenticated={isAuthenticated}>
+export const appRouter = createBrowserRouter(
+  [
+    {
+      id: 'root',
+      path: ROUTES.MAIN,
+      children: [
+        {
+          path: '',
+          element: (
+            <ProtectedRoute>
               <MainMenu />
             </ProtectedRoute>
-          }
-        />
-        <Route path={ROUTES.LOGIN} element={<Login />} />
-        <Route path={ROUTES.LOGOUT} element={<Logout />} />
-        <Route
-          path={ROUTES.PROJECT}
-          element={
-            <ProtectedRoute isAuthenticated={isAuthenticated}>
+          ),
+        },
+        {
+          path: ROUTES.LOGIN,
+          element: <Login />,
+        },
+        {
+          path: ROUTES.LOGOUT,
+          element: <Logout />,
+        },
+        {
+          path: ROUTES.PROJECT,
+          element: (
+            <ProtectedRoute>
               <MapProject />
             </ProtectedRoute>
-          }
-        />
-        <Route
-          path={ROUTES.PUBLIC_PROJECT}
-          element={<MapProject isPublicView />}
-        />
-        <Route path={ROUTES.CALLBACK} element={<Callback />} />
-        <Route
-          path={ROUTES.STREETVIEW_CALLBACK}
-          element={<StreetviewCallback />}
-        />
-      </Routes>
-    </BrowserRouter>
-  );
-}
-
-export default AppRouter;
+          ),
+        },
+        {
+          path: ROUTES.PUBLIC_PROJECT,
+          element: <MapProject isPublicView />,
+        },
+        {
+          path: ROUTES.CALLBACK,
+          element: <Callback />,
+        },
+        {
+          path: ROUTES.STREETVIEW_CALLBACK,
+          element: <StreetviewCallback />,
+        },
+        {
+          path: '*',
+          element: <Navigate to={'/'} replace={true} />,
+        },
+      ],
+    },
+  ],
+  { basename: '/' }
+);

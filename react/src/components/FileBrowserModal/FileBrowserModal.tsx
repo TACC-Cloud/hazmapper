@@ -3,6 +3,7 @@ import { Modal, Button, Layout, Typography, Flex } from 'antd';
 import { FileListing } from '../Files';
 import { File, TapisFilePath } from '@hazmapper/types';
 import { convertFilesToTapisPaths } from '@hazmapper/utils/fileUtils';
+import { useQueryClient } from '@tanstack/react-query';
 import { SectionMessage } from '@tacc/core-components';
 
 type FileBrowserModalProps = {
@@ -25,9 +26,11 @@ const FileBrowserModal = ({
   isSingleSelectMode = false,
   singleSelectErrorMessage = '',
 }: FileBrowserModalProps) => {
+  const queryClient = useQueryClient();
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const handleClose = () => {
     parentToggle();
+    queryClient.invalidateQueries({ queryKey: ['getSystems'] });
   };
 
   const handleFileSelect = (files: File[]) => {
@@ -95,14 +98,14 @@ const FileBrowserModal = ({
           Note: Only files are selectable, not folders. Double-click on a folder
           to navigate into it.{' '}
         </Text>
-        <div style={{ marginTop: '1rem' }}>
+        <Flex vertical style={{ marginTop: '1rem', height: '30em' }}>
           <FileListing
             disableSelection={false}
             showPublicSystems={true}
             allowedFileExtensions={allowedFileExtensions}
             onFileSelect={handleFileSelect}
           />
-        </div>
+        </Flex>
       </Content>
     </Modal>
   );
