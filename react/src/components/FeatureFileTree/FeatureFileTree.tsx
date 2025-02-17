@@ -173,7 +173,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
     );
   };
 
-  if (!treeData.length)
+  if (!treeData.length && featureCollection.features.length !== 0)
     return (
       <Flex justify="center" align="center" flex={1}>
         <Spin />
