@@ -1,56 +1,106 @@
-import React, { useState } from 'react';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { Button, Section, SectionTableWrapper } from '@tacc/core-components';
-import styles from './CreateMapModal.module.css';
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
-import useCreateProject from '@hazmapper/hooks/projects/useCreateProject';
-import useAuthenticatedUser from '@hazmapper/hooks/user/useAuthenticatedUser';
+import React, { useEffect, useState, useRef } from 'react';
+import { Section, SectionTableWrapper } from '@tacc/core-components';
+import { FormItem } from 'react-hook-form-antd';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button, Form, Input, Checkbox, Modal, Layout, Flex } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { z } from 'zod';
+import { useAuthenticatedUser, useCreateProject } from '@hazmapper/hooks';
 import { ProjectRequest } from '@hazmapper/types';
-import {
-  FormikInput,
-  FormikTextarea,
-  FormikCheck,
-} from '@tacc/core-components';
-import { FileListing } from '../Files';
-import { Flex } from 'antd';
+import { FileListing } from '@hazmapper/components/Files';
+import { truncateMiddle } from '@hazmapper/utils/truncateMiddle';
+import styles from './CreateMapModal.module.css';
 
 type CreateMapModalProps = {
   isOpen: boolean;
-  toggle: () => void;
+  closeModal: () => void;
 };
 
-// Yup validation schema
-const validationSchema = Yup.object({
-  name: Yup.string().required('Name is required'),
-  description: Yup.string().required('Description is required'),
-  system_file: Yup.string()
-    .matches(
+const validationSchema = z.object({
+  name: z.string().nonempty('Name is required'),
+  description: z.string().nonempty('Description is required'),
+  systemFile: z
+    .string()
+    .regex(
       /^[A-Za-z0-9-_]+$/,
       'Only letters, numbers, hyphens, and underscores are allowed'
     )
-    .required(' File name is required'),
+    .nonempty('File name is required'),
 });
 
-const CreateMapModal = ({
-  isOpen,
-  toggle: parentToggle,
-}: CreateMapModalProps) => {
+const CreateMapModal = ({ isOpen, closeModal }: CreateMapModalProps) => {
+  const [form] = Form.useForm();
+  const methods = useForm({
+    defaultValues: {
+      name: '',
+      description: '',
+      systemFile: '',
+      systemId: 'designsafe.storage.default',
+      systemPath: '',
+      syncFolder: false,
+      saveLocationDisplay: 'My Data',
+    },
+    resolver: zodResolver(validationSchema),
+    mode: 'onChange',
+  });
+  const {
+    control,
+    handleSubmit,
+    formState: { isDirty, isValid },
+    reset,
+    watch,
+    setValue,
+    getValues,
+  } = methods;
+
   const [errorMessage, setErrorMessage] = useState('');
   const { data: userData } = useAuthenticatedUser();
   const { mutate: createProject, isPending: isCreatingProject } =
     useCreateProject();
   const navigate = useNavigate();
+  const oldSystemFilename = useRef('');
+
+  const mapName = watch('name');
+
+  const { Header } = Layout;
+
+  useEffect(() => {
+    // Replace spaces with underscores for systemFile mirroring
+    const systemFilename = mapName.replace(/\s+/g, '_');
+
+    // Fetch the previous system file name via ref
+    const oldName = oldSystemFilename.current;
+
+    // Update systemFile only if it matches the previous name and if name/systemFile are different
+    const systemFile = getValues('systemFile');
+    if (systemFile === oldName && systemFile !== systemFilename) {
+      setValue('systemFile', systemFilename);
+      oldSystemFilename.current = systemFilename;
+    }
+  }, [mapName]);
+
   const handleClose = () => {
-    setErrorMessage(''); // Clear the error message
-    parentToggle(); // Call the original toggle function passed as a prop
+    setErrorMessage('');
+    closeModal();
+    reset();
   };
 
-  const [saveLocation, setSaveLocation] = useState('My Data');
-
   const handleDirectoryChange = (directory: string) => {
-    setSaveLocation(directory === userData?.username ? 'My Data' : directory);
+    const systemId = getValues('systemId');
+    const saveLocationDisplay =
+      systemId === 'designsafe.storage.default'
+        ? directory.replace(
+            new RegExp(`^${userData?.username}(/)?`),
+            'My Data/'
+          )
+        : directory.replace(new RegExp(`^(/)?`), 'Project Root/');
+    setValue('saveLocationDisplay', saveLocationDisplay);
+    setValue('systemPath', directory);
+  };
+
+  const handleSystemChange = (system: string) => {
+    setValue('systemId', system);
   };
 
   const handleCreateProject = (projectData: ProjectRequest) => {
@@ -62,7 +112,7 @@ const CreateMapModal = ({
         // Handle error messages while creating new project
         if (err?.response?.status === 409) {
           setErrorMessage(
-            'That folder is already syncing with a different map.'
+            'This folder is already synced with a different map.'
           );
         } else {
           setErrorMessage(
@@ -73,163 +123,150 @@ const CreateMapModal = ({
     });
   };
 
-  const handleSubmit = (values) => {
+  const handleSubmitCallback = () => {
     if (!userData) {
       setErrorMessage('User information is not available');
       return;
     }
+    const values = getValues();
     const projectData: ProjectRequest = {
       name: values.name,
       description: values.description,
-      system_file: values.system_file,
-      system_id: values.system_id,
+      system_file: values.systemFile,
+      system_id: values.systemId,
       system_path: `/${userData.username}`,
       watch_content: values.syncFolder,
       watch_users: values.syncFolder,
     };
     handleCreateProject(projectData);
   };
+
   return (
-    <Modal isOpen={isOpen} toggle={handleClose} size="xl">
-      <ModalHeader toggle={handleClose}>Create a New Map</ModalHeader>
-      <ModalBody>
-        <Section
-          bodyClassName="has-loaded-dashboard"
-          contentLayoutName={'twoColumn'}
-          // contentShouldScroll
-          className={`${styles['section']}`}
-          content={
-            <>
-              <SectionTableWrapper
-                className={`${styles['section-table-wrapper']}`}
+    <Modal
+      title={<Header>Create a New Map</Header>}
+      width={1200}
+      open={isOpen}
+      onCancel={handleClose}
+      footer={[
+        <Flex key="footerButtons">
+          <Button onClick={handleClose} style={{ marginRight: 10 }}>
+            Cancel
+          </Button>
+          <Button
+            form="createLayerForm"
+            htmlType="submit"
+            loading={isCreatingProject}
+            disabled={!isDirty || !isValid}
+            type="primary"
+          >
+            Create Layer
+          </Button>
+        </Flex>,
+      ]}
+    >
+      <Section
+        bodyClassName="has-loaded-dashboard"
+        contentLayoutName={'twoColumn'}
+        className={`${styles['section']}`}
+        content={
+          <>
+            <SectionTableWrapper
+              className={`${styles['section-table-wrapper']}`}
+            >
+              <Form
+                form={form}
+                name="createLayerForm"
+                onFinish={handleSubmit(handleSubmitCallback, console.error)}
+                layout="vertical"
+                className={`${styles['formRoot']}`}
               >
-                <Formik
-                  initialValues={{
-                    name: '',
-                    description: '',
-                    system_file: '',
-                    system_id: 'designsafe.storage.default',
-                    system_path: '',
-                    syncFolder: false,
-                  }}
-                  validationSchema={validationSchema}
-                  onSubmit={handleSubmit}
-                  initialStatus={{ oldName: '' }}
+                <FormItem
+                  control={control}
+                  name="name"
+                  label="Name"
+                  required
+                  data-testid="name-input"
                 >
-                  {({ values, setFieldValue, setStatus, status }) => {
-                    // Replace spaces with underscores for system_file mirroring
-                    const systemFileName = values.name.replace(/\s+/g, '_');
-
-                    // Update system_file only if it matches the previous name and if name/system_file are different
-                    if (
-                      values.system_file === status.oldName &&
-                      values.system_file !== systemFileName
-                    ) {
-                      setFieldValue('system_file', systemFileName);
-                      setStatus({ oldName: systemFileName });
+                  <Input />
+                </FormItem>
+                <FormItem
+                  control={control}
+                  name="description"
+                  label="Description"
+                  required
+                >
+                  <Input.TextArea />
+                </FormItem>
+                <FormItem
+                  control={control}
+                  name="systemFile"
+                  label="Custom File Name"
+                  required
+                >
+                  <Input
+                    addonAfter={
+                      <span className={`${styles['hazmapper-suffix']}`}>
+                        .hazmapper
+                      </span>
                     }
-
-                    return (
-                      <Form className="c-form" name="map-form-info">
-                        {/* TODO: Remove superfluous empty tag, and re-nest markup */}
-                        {/* NOTE: Added to simplify diff of PR #239 */}
-                        <>
-                          <Field
-                            component={FormikInput}
-                            name="name"
-                            label="Name"
-                            required
-                            data-testid="name-input"
-                          />
-                          <Field
-                            component={FormikTextarea}
-                            name="description"
-                            label="Description"
-                            required
-                          />
-                          <Flex
-                            align="center"
-                            flex={1}
-                            className={`${styles['field-wrapper']}`}
-                          >
-                            <Field
-                              component={FormikInput}
-                              name="system_file"
-                              label="Custom File Name"
-                              required
-                            />
-                            <span className={`${styles['hazmapper-suffix']}`}>
-                              .hazmapper
-                            </span>
-                          </Flex>
-                          <div className={`${styles['field-wrapper-alt']}`}>
-                            <Field
-                              component={FormikInput}
-                              name="save-location"
-                              label="Save Location"
-                              value={saveLocation}
-                              readOnly
-                              disabled
-                            />
-                          </div>
-                          <Field
-                            component={FormikCheck}
-                            name="syncFolder"
-                            label="Sync Folder"
-                            description="When enabled, files in this folder are automatically synced into the map periodically."
-                          />
-                        </>
-                        {errorMessage && (
-                          <div className="c-form__errors">{errorMessage}</div>
-                        )}
-                        <ModalFooter className="justify-content-start">
-                          <Button
-                            size="short"
-                            type="secondary"
-                            onClick={handleClose}
-                          >
-                            Close
-                          </Button>
-                          <Button
-                            size="short"
-                            type="primary"
-                            attr="submit"
-                            isLoading={isCreatingProject}
-                          >
-                            Create
-                          </Button>
-                        </ModalFooter>
-                      </Form>
-                    );
-                  }}
-                </Formik>
-              </SectionTableWrapper>
-              <SectionTableWrapper
-                className={`${styles['section-table-wrapper']}`}
-                manualHeader={
-                  <>
-                    <h2 className={`${styles['link-heading']}`}>
-                      Select Link Save Location
-                    </h2>
-                    <h4 className={`${styles['link-subheading']}`}>
-                      If no folder is selected, the link file will be saved to
-                      the root of the selected system.If you select a project,
-                      you can link the current map to the project.
-                    </h4>
-                  </>
-                }
-                manualContent={
-                  <FileListing
-                    disableSelection={false}
-                    onFolderSelect={handleDirectoryChange}
-                    showPublicSystems={false}
                   />
-                }
-              />
-            </>
-          }
-        />
-      </ModalBody>
+                </FormItem>
+                <div className={`${styles['field-wrapper-alt']}`}>
+                  <FormItem
+                    control={control}
+                    name="saveLocationDisplay"
+                    label="Save Location"
+                    data-testid="name-input"
+                  >
+                    <span title={watch('saveLocationDisplay')}>
+                      {truncateMiddle(watch('saveLocationDisplay'), 78)}
+                    </span>
+                  </FormItem>
+                </div>
+                <FormItem
+                  control={control}
+                  name="syncFolder"
+                  label="Sync Folder"
+                  className={`${styles['checkboxWrapper']}`}
+                >
+                  <Checkbox />
+                  <br />
+                  <span className={`${styles['checkbox-label']}`}>
+                    When enabled, files in this folder are automatically synced
+                    into the map periodically.
+                  </span>
+                </FormItem>
+                {errorMessage && (
+                  <div className="c-form__errors">{errorMessage}</div>
+                )}
+              </Form>
+            </SectionTableWrapper>
+            <SectionTableWrapper
+              className={`${styles['section-table-wrapper']}`}
+              manualHeader={
+                <>
+                  <h2 className={`${styles['link-heading']}`}>
+                    Select Link Save Location
+                  </h2>
+                  <h4 className={`${styles['link-subheading']}`}>
+                    If no folder is selected, the link file will be saved to the
+                    root of the selected system.If you select a project, you can
+                    link the current map to the project.
+                  </h4>
+                </>
+              }
+              manualContent={
+                <FileListing
+                  disableSelection={false}
+                  onFolderSelect={handleDirectoryChange}
+                  showPublicSystems={false}
+                  onSystemSelect={handleSystemChange}
+                />
+              }
+            />
+          </>
+        }
+      />
     </Modal>
   );
 };
