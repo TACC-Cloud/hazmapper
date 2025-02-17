@@ -14,6 +14,7 @@ import {
   FormikCheck,
 } from '@tacc/core-components';
 import { FileListing } from '../Files';
+import { Flex } from 'antd';
 
 type CreateMapModalProps = {
   isOpen: boolean;
@@ -46,10 +47,10 @@ const CreateMapModal = ({
     parentToggle(); // Call the original toggle function passed as a prop
   };
 
-  const [saveLocation, setSaveLocation] = useState('');
+  const [saveLocation, setSaveLocation] = useState('My Data');
 
   const handleDirectoryChange = (directory: string) => {
-    setSaveLocation(directory);
+    setSaveLocation(directory === userData?.username ? 'My Data' : directory);
   };
 
   const handleCreateProject = (projectData: ProjectRequest) => {
@@ -99,7 +100,9 @@ const CreateMapModal = ({
           className={`${styles['section']}`}
           content={
             <>
-              <SectionTableWrapper>
+              <SectionTableWrapper
+                className={`${styles['section-table-wrapper']}`}
+              >
                 <Formik
                   initialValues={{
                     name: '',
@@ -144,18 +147,21 @@ const CreateMapModal = ({
                             label="Description"
                             required
                           />
-                          <div className={`${styles['field-wrapper']}`}>
+                          <Flex
+                            align="center"
+                            flex={1}
+                            className={`${styles['field-wrapper']}`}
+                          >
                             <Field
                               component={FormikInput}
                               name="system_file"
                               label="Custom File Name"
                               required
-                              className={`${styles['input-custom-size']}`}
                             />
                             <span className={`${styles['hazmapper-suffix']}`}>
                               .hazmapper
                             </span>
-                          </div>
+                          </Flex>
                           <div className={`${styles['field-wrapper-alt']}`}>
                             <Field
                               component={FormikInput}
@@ -199,6 +205,7 @@ const CreateMapModal = ({
                 </Formik>
               </SectionTableWrapper>
               <SectionTableWrapper
+                className={`${styles['section-table-wrapper']}`}
                 manualHeader={
                   <>
                     <h2 className={`${styles['link-heading']}`}>

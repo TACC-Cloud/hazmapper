@@ -18,6 +18,7 @@ import {
   useFeatureSelection,
   useGeoapiNotificationsPolling,
   KEY_USE_FEATURES,
+  useGetSystems,
 } from '@hazmapper/hooks';
 import MapProjectNavBar from '@hazmapper/components/MapProjectNavBar';
 import MapProjectAccessError from '@hazmapper/components/MapProjectAccessError';
@@ -74,6 +75,8 @@ interface MapProjectProps {
 const MapProject: React.FC<MapProjectProps> = ({ isPublicView = false }) => {
   const { projectUUID } = useParams();
   const queryClient = useQueryClient();
+
+  useGetSystems({ prefetch: true });
 
   /*TODO: notifications are user specific and lacking additional context.  See note in react/src/types/notification.ts and WG-431 */
 
@@ -214,7 +217,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     features: [],
   };
 
-  const { Header, Content, Sider } = Layout;
+  const { Content, Sider } = Layout;
 
   const formSchema = z.object({
     tileLayers: z.array(
@@ -250,13 +253,11 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     <FormProvider {...methods}>
       <MapPositionProvider>
         <Layout style={{ height: '100vh' }}>
-          <Header>
-            <HeaderNavBar />
-            <MapControlBar
-              activeProject={activeProject}
-              isPublicView={isPublicView}
-            />
-          </Header>
+          <HeaderNavBar />
+          <MapControlBar
+            activeProject={activeProject}
+            isPublicView={isPublicView}
+          />
           <Layout>
             <Sider width="auto">
               <Flex
