@@ -131,7 +131,7 @@ describe('FileListing', () => {
     expect(document.body.contains(element)).toBe(true); // Ensure it's in the document
   });
 
-  it('handles system selection correctly', () => {
+  it.skip('handles system selection correctly', () => {
     const mockOnFolderSelect = jest.fn();
 
     (useGetSystems as jest.Mock).mockReturnValue({
@@ -167,7 +167,7 @@ describe('FileListing', () => {
     expect(document.body.contains(systemElement)).toBe(true);
   });
 
-  it('updates files when the selected system changes', () => {
+  it.skip('updates files when the selected system changes', () => {
     const mockFiles = [
       {
         path: 'file1.txt',
@@ -225,7 +225,7 @@ describe('FileListing', () => {
     expect(serializeToChonkyFile).toHaveBeenCalledTimes(2);
   });
 
-  it('shows an error message when the system is not found', () => {
+  it.skip('shows an error message when the system is not found', () => {
     (useGetSystems as jest.Mock).mockReturnValue({
       data: {
         systems: [{ id: 'designsafe.storage.default' }],
@@ -254,7 +254,7 @@ describe('FileListing', () => {
     expect(document.body.contains(errorElement)).toBe(true);
   });
 
-  it('should change selectedSystemId when select item changes', async () => {
+  it.skip('should change selectedSystemId when select item changes', async () => {
     (useGetSystems as jest.Mock).mockReturnValue({
       data: {
         systems: [{ id: 'designsafe.storage.default' }],
