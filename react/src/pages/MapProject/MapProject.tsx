@@ -16,7 +16,9 @@ import {
   useProject,
   useGetTileServers,
   useFeatureSelection,
+  useGeoapiNotificationsPolling,
   KEY_USE_FEATURES,
+  useGetSystems,
 } from '@hazmapper/hooks';
 import MapProjectNavBar from '@hazmapper/components/MapProjectNavBar';
 import MapProjectAccessError from '@hazmapper/components/MapProjectAccessError';
@@ -34,6 +36,7 @@ import { Panel as BasePanel } from '@hazmapper/components/Panel';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useForm, FormProvider } from 'react-hook-form';
+import StreetviewPanel from '@hazmapper/components/StreetviewPanel';
 
 export const tileLayerSchema = z.object({
   id: z.number(),
@@ -71,6 +74,13 @@ interface MapProjectProps {
 const MapProject: React.FC<MapProjectProps> = ({ isPublicView = false }) => {
   const { projectUUID } = useParams();
   const queryClient = useQueryClient();
+
+  useGetSystems({ prefetch: true });
+
+  /*TODO: notifications are user specific and lacking additional context.  See note in react/src/types/notification.ts and WG-431 */
+
+  /* TODO:  to be replaced by a non-pulling approach via socket-io, WG-278 */
+  useGeoapiNotificationsPolling();
 
   const {
     data: activeProject,
@@ -190,7 +200,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     features: [],
   };
 
-  const { Header, Content, Sider } = Layout;
+  const { Content, Sider } = Layout;
 
   const formSchema = z.object({
     tileLayers: z.array(
@@ -226,13 +236,11 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     <FormProvider {...methods}>
       <MapPositionProvider>
         <Layout style={{ height: '100vh' }}>
-          <Header>
-            <HeaderNavBar />
-            <MapControlBar
-              activeProject={activeProject}
-              isPublicView={isPublicView}
-            />
-          </Header>
+          <HeaderNavBar />
+          <MapControlBar
+            activeProject={activeProject}
+            isPublicView={isPublicView}
+          />
           <Layout>
             <Sider width="auto">
               <Flex
@@ -278,6 +286,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
                         isPublicView={isPublicView}
                       />
                     )}
+                    {activePanel === Panel.Streetview && <StreetviewPanel />}
                     {activePanel === Panel.Manage && (
                       <ManageMapProjectPanel project={activeProject} />
                     )}

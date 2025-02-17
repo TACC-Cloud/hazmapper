@@ -1,5 +1,6 @@
 .root {
   padding: 5px;
+  height: inherit;
 }
 
 .header {

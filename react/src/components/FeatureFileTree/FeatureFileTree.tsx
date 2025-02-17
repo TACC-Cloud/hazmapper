@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { Tree } from 'antd';
+import { Tree, Flex, Spin } from 'antd';
 import type { DataNode } from 'antd/es/tree';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -173,7 +173,12 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
     );
   };
 
-  if (!treeData.length) return null;
+  if (!treeData.length && featureCollection.features.length !== 0)
+    return (
+      <Flex justify="center" align="center" flex={1}>
+        <Spin />
+      </Flex>
+    );
 
   return (
     <div className={styles.root} ref={ref}>

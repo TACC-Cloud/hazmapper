@@ -1,4 +1,5 @@
 import React, { ReactNode, useCallback, useEffect } from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
 import {
   ChonkyFileActionData,
   FileBrowser,
@@ -9,11 +10,18 @@ import {
   FileBrowserProps,
   FileBrowserHandle,
 } from 'chonky';
+import { Flex } from 'antd';
 import { Icon } from '@tacc/core-components';
+import { Spinner } from '@hazmapper/common_components';
 import { SystemSelect } from '../Systems';
 import styles from './FileListing.module.css';
-import { useAuthenticatedUser, useSystems, useFiles } from '@hazmapper/hooks';
-import { File, System } from '@hazmapper/types';
+import {
+  useAuthenticatedUser,
+  useGetSystems,
+  useFiles,
+  TransformedGetSystemsResponse,
+} from '@hazmapper/hooks';
+import { File, TTapisSystem } from '@hazmapper/types';
 import { serializeToChonkyFile } from '@hazmapper/utils/fileUtils';
 
 const DEFAULT_NO_FILE_EXTENSIONS: string[] = [];
@@ -43,19 +51,23 @@ export const FileListing: React.FC<FileListingProps> = ({
 }) => {
   const {
     isLoading: isSystemsLoading,
-    data: systems = [],
+    data: systemsData = {} as TransformedGetSystemsResponse,
+    isFetched: isSystemsFetched,
+  } = useGetSystems();
+  const {
+    systems = [],
     myDataSystem,
     communityDataSystem,
     publishedDataSystem,
-  } = useSystems();
+  } = systemsData;
 
   const { data: user } = useAuthenticatedUser();
 
   const [chonkyFiles, setChonkyFiles] = React.useState<any>([]);
   const [folderChain, setFolderChain] = React.useState<any>([]);
   const [path, setPath] = React.useState<string>('');
-  const [selectedSystem, setSelectedSystem] = React.useState<System | null>(
-    null
+  const [selectedSystem, setSelectedSystem] = React.useState<TTapisSystem>(
+    myDataSystem as TTapisSystem
   );
   const [hasError, setHasError] = React.useState(false);
 
@@ -68,12 +80,10 @@ export const FileListing: React.FC<FileListingProps> = ({
     enabled: !!selectedSystem?.id,
   });
 
-  // Automatically select the default system or the first available one
-  useEffect(() => {
-    if (!selectedSystem && myDataSystem) {
-      setSelectedSystem(myDataSystem || systems[0]);
-    }
-  }, [systems, myDataSystem, selectedSystem]);
+  const methods = useForm();
+  const { watch } = methods;
+
+  const selectedSystemId = watch('system');
 
   useEffect(() => {
     if (selectedSystem?.id) {
@@ -91,15 +101,22 @@ export const FileListing: React.FC<FileListingProps> = ({
     if (!folderChain.length && user?.username) {
       setFolderChain([{ id: user.username, name: user.username, isDir: true }]);
     }
-  }, [files, folderChain.length, user?.username, allowedFileExtensions]);
+  }, [
+    files,
+    folderChain.length,
+    user?.username,
+    allowedFileExtensions,
+    hasError,
+  ]);
 
   const FileListingIcon = (props: any) => <Icon name={props.icon} />;
 
-  const handleSelectChange = (system: string) => {
+  useEffect(() => {
+    setHasError(false);
     setChonkyFiles(new Array(8).fill(null));
     setFolderChain([null]);
 
-    const sys = systems.find((sys) => sys.id === system);
+    const sys = systems.find((sys) => sys.id === selectedSystemId);
 
     if (!sys) {
       setHasError(true);
@@ -124,7 +141,7 @@ export const FileListing: React.FC<FileListingProps> = ({
     }
 
     setFolderChain([{ id: rootFolder, name: rootFolderName, isDir: true }]);
-  };
+  }, [selectedSystemId]);
 
   const handleFileAction = useCallback(
     (data: ChonkyFileActionData) => {
@@ -164,40 +181,60 @@ export const FileListing: React.FC<FileListingProps> = ({
     [files, onFileSelect, onFolderSelect]
   );
 
-  const unexpectedProblemWithSystems = !systems.length && !isSystemsLoading;
+  const unexpectedProblemWithSystems =
+    !systems.length && !isSystemsLoading && isSystemsFetched;
 
   if (unexpectedProblemWithSystems) {
     /* not an expected case */
-    return <p>Error: No systems available.</p>;
+    return (
+      <div className={`${styles['file-browser']}`}>
+        <Flex align="center" justify="center" style={{ height: '100%' }}>
+          Error: No systems available.
+        </Flex>
+      </div>
+    );
   }
 
-  if (hasError) {
-    return <p>There was an error loading the system.</p>;
+  if (isSystemsLoading || !isSystemsFetched) {
+    return (
+      <Flex className={`${styles['file-browser']}`}>
+        <Spinner />
+      </Flex>
+    );
   }
 
   return (
     <>
       <div className={`${styles['system-select-wrapper']}`}>
-        <SystemSelect
-          className={`${styles['system-select']}`}
-          showPublicSystems={showPublicSystems}
-          onSystemSelect={handleSelectChange}
-        />
+        <FormProvider {...methods}>
+          <form>
+            <SystemSelect
+              className={`${styles['system-select']}`}
+              showPublicSystems={showPublicSystems}
+            />
+          </form>
+        </FormProvider>
       </div>
       <div className={`${styles['file-browser']}`}>
-        <_FileBrowser
-          files={chonkyFiles}
-          folderChain={folderChain}
-          defaultFileViewActionId={ChonkyActions.EnableListView.id}
-          disableSelection={disableSelection}
-          disableDragAndDropProvider
-          clearSelectionOnOutsideClick
-          iconComponent={FileListingIcon}
-          onFileAction={handleFileAction}
-        >
-          <FileNavbar />
-          <FileList />
-        </_FileBrowser>
+        {hasError ? (
+          <Flex align="center" justify="center" style={{ height: '100%' }}>
+            There was an error loading the system.
+          </Flex>
+        ) : (
+          <_FileBrowser
+            files={chonkyFiles}
+            folderChain={folderChain}
+            defaultFileViewActionId={ChonkyActions.EnableListView.id}
+            disableSelection={disableSelection}
+            disableDragAndDropProvider
+            clearSelectionOnOutsideClick
+            iconComponent={FileListingIcon}
+            onFileAction={handleFileAction}
+          >
+            <FileNavbar />
+            <FileList />
+          </_FileBrowser>
+        )}
       </div>
     </>
   );

@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { QueryClientProvider } from '@tanstack/react-query';
-import App from './AppRouter';
+import { appRouter } from './AppRouter';
+import { RouterProvider } from 'react-router-dom';
 import './index.css';
 import store from './redux/store';
 import { Provider } from 'react-redux';
 import { queryClient } from './queryClient';
 import { ConfigProvider, ThemeConfig } from 'antd';
+import { NotificationProvider } from '@hazmapper/context/NotificationProvider';
 
 const themeConfig: ThemeConfig = {
   token: {
@@ -43,7 +45,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <ConfigProvider theme={themeConfig}>
-          <App />
+          <NotificationProvider>
+            <RouterProvider router={appRouter} />
+          </NotificationProvider>
         </ConfigProvider>
       </QueryClientProvider>
     </Provider>

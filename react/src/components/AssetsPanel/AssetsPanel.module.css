@@ -1,6 +1,4 @@
 .root {
-  display: flex;
-  flex-direction: column;
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -16,14 +14,9 @@
 }
 
 .middleSection {
-  flex: 1 1 auto;
-  overflow: hidden;
-  min-height: 0;
+  flex: 0 1 auto;
+  overflow: auto;
+  min-height: 10rem;
   display: flex;
   flex-direction: column;
-}
-
-.middleSection > div {
-  flex: 1;
-  max-height: 95%;
 }

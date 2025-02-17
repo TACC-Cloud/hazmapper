@@ -4,7 +4,11 @@ import FeatureFileTree from '@hazmapper/components/FeatureFileTree';
 import { FeatureCollection, Project, TapisFilePath } from '@hazmapper/types';
 import { Flex, Layout, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { useFeatures, useImportFeature } from '@hazmapper/hooks';
+import {
+  useFeatures,
+  useImportFeature,
+  useNotification,
+} from '@hazmapper/hooks';
 import { IMPORTABLE_FEATURE_TYPES } from '@hazmapper/utils/fileUtils';
 import FileBrowserModal from '../FileBrowserModal/FileBrowserModal';
 
@@ -17,11 +21,13 @@ const getFilename = (projectName: string) => {
 interface DownloadFeaturesButtonProps {
   project: Project;
   isPublicView: boolean;
+  disabled: boolean;
 }
 
 const DownloadFeaturesButton: React.FC<DownloadFeaturesButtonProps> = ({
   project,
   isPublicView,
+  disabled,
 }) => {
   const { isLoading: isDownloading, refetch: triggerDownload } = useFeatures({
     projectId: project.id,
@@ -56,6 +62,7 @@ const DownloadFeaturesButton: React.FC<DownloadFeaturesButtonProps> = ({
       loading={isDownloading}
       onClick={() => triggerDownload()}
       type="primary"
+      disabled={disabled}
     >
       Export to GeoJSON
     </Button>
@@ -87,26 +94,37 @@ const AssetsPanel: React.FC<Props> = ({
   featureCollection,
   project,
 }) => {
+  const notification = useNotification();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { mutate: importFeatureFiles } = useImportFeature(project.id);
 
   const handleFileImport = (files: TapisFilePath[]) => {
-    importFeatureFiles({ files });
-    setIsModalOpen(false);
-  };
-
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
+    importFeatureFiles(
+      { files },
+      {
+        onSuccess: () => {
+          setIsModalOpen(false);
+          notification.success({
+            description: 'Import started!',
+          });
+        },
+        onError: () => {
+          notification.error({
+            description: 'Import failed! Try again?',
+          });
+        },
+      }
+    );
   };
 
   const { Content, Header, Footer } = Layout;
 
   return (
     <>
-      <Flex vertical className={styles.root} flex={1}>
+      <Flex vertical className={styles.root}>
         <Header className={styles.topSection}>
-          <Button onClick={toggleModal} icon={<PlusOutlined />}>
+          <Button onClick={() => setIsModalOpen(true)} icon={<PlusOutlined />}>
             Import from DesignSafe
           </Button>
         </Header>
@@ -121,12 +139,13 @@ const AssetsPanel: React.FC<Props> = ({
           <DownloadFeaturesButton
             project={project}
             isPublicView={isPublicView}
+            disabled={featureCollection?.features.length === 0}
           />
         </Footer>
       </Flex>
       <FileBrowserModal
         isOpen={isModalOpen}
-        toggle={toggleModal}
+        toggle={() => setIsModalOpen(false)}
         onImported={handleFileImport}
         allowedFileExtensions={IMPORTABLE_FEATURE_TYPES}
       />
