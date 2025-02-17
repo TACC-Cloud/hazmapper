@@ -153,13 +153,14 @@ const CreateMapModal = ({ isOpen, closeModal }: CreateMapModalProps) => {
             Cancel
           </Button>
           <Button
-            form="createLayerForm"
+            form="createMapForm"
             htmlType="submit"
             loading={isCreatingProject}
             disabled={!isDirty || !isValid}
             type="primary"
+            name="Create Map"
           >
-            Create Layer
+            Create Map
           </Button>
         </Flex>,
       ]}
@@ -175,19 +176,13 @@ const CreateMapModal = ({ isOpen, closeModal }: CreateMapModalProps) => {
             >
               <Form
                 form={form}
-                name="createLayerForm"
+                name="createMapForm"
                 onFinish={handleSubmit(handleSubmitCallback, console.error)}
                 layout="vertical"
                 className={`${styles['formRoot']}`}
               >
-                <FormItem
-                  control={control}
-                  name="name"
-                  label="Name"
-                  required
-                  data-testid="name-input"
-                >
-                  <Input />
+                <FormItem control={control} name="name" label="Name" required>
+                  <Input data-testid="name-input" />
                 </FormItem>
                 <FormItem
                   control={control}
@@ -195,7 +190,7 @@ const CreateMapModal = ({ isOpen, closeModal }: CreateMapModalProps) => {
                   label="Description"
                   required
                 >
-                  <Input.TextArea />
+                  <Input.TextArea data-testid="description" />
                 </FormItem>
                 <FormItem
                   control={control}
@@ -204,6 +199,7 @@ const CreateMapModal = ({ isOpen, closeModal }: CreateMapModalProps) => {
                   required
                 >
                   <Input
+                    data-testid="custom-file-name"
                     addonAfter={
                       <span className={`${styles['hazmapper-suffix']}`}>
                         .hazmapper
@@ -216,7 +212,6 @@ const CreateMapModal = ({ isOpen, closeModal }: CreateMapModalProps) => {
                     control={control}
                     name="saveLocationDisplay"
                     label="Save Location"
-                    data-testid="name-input"
                   >
                     <span title={watch('saveLocationDisplay')}>
                       {truncateMiddle(watch('saveLocationDisplay'), 78)}
@@ -229,12 +224,13 @@ const CreateMapModal = ({ isOpen, closeModal }: CreateMapModalProps) => {
                   label="Sync Folder"
                   className={`${styles['checkboxWrapper']}`}
                 >
-                  <Checkbox />
-                  <br />
-                  <span className={`${styles['checkbox-label']}`}>
-                    When enabled, files in this folder are automatically synced
-                    into the map periodically.
-                  </span>
+                  <Flex align="center">
+                    <Checkbox />
+                    <span style={{ marginLeft: 15 }}>
+                      When enabled, files in this folder are synced into the map
+                      periodically.
+                    </span>
+                  </Flex>
                 </FormItem>
                 {errorMessage && (
                   <div className="c-form__errors">{errorMessage}</div>
