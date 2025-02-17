@@ -10,14 +10,12 @@ interface MapTabProps {
   project: Project;
   onProjectUpdate: (updateData: Partial<ProjectRequest>) => void;
   isPending: boolean;
-  isPublicView: boolean;
 }
 
 const MapTabContent: React.FC<MapTabProps> = ({
   project,
   onProjectUpdate,
   isPending,
-  isPublicView,
 }) => {
   const [editProjectField, setEditProjectField] = useState({});
   const [isEditModalOpen, setisEditModalOpen] = useState(false);
