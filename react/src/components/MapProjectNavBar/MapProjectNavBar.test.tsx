@@ -14,8 +14,8 @@ describe('MapProjectNavBar', () => {
     expect(getByText('Assets')).toBeDefined();
     expect(getByText('Layers')).toBeDefined();
     expect(getByText('Filters')).toBeDefined();
-    expect(getByText('Manage')).toBeDefined();
     // Streetview and Point Clouds should not be rendered for public maps
+    expect(queryByText('Manage')).toBeNull();
     expect(queryByText('Streetview')).toBeNull();
     expect(queryByText('Point Clouds')).toBeNull();
   });
