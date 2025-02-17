@@ -21,11 +21,13 @@ const getFilename = (projectName: string) => {
 interface DownloadFeaturesButtonProps {
   project: Project;
   isPublicView: boolean;
+  disabled: boolean;
 }
 
 const DownloadFeaturesButton: React.FC<DownloadFeaturesButtonProps> = ({
   project,
   isPublicView,
+  disabled,
 }) => {
   const { isLoading: isDownloading, refetch: triggerDownload } = useFeatures({
     projectId: project.id,
@@ -60,6 +62,7 @@ const DownloadFeaturesButton: React.FC<DownloadFeaturesButtonProps> = ({
       loading={isDownloading}
       onClick={() => triggerDownload()}
       type="primary"
+      disabled={disabled}
     >
       Export to GeoJSON
     </Button>
@@ -119,7 +122,7 @@ const AssetsPanel: React.FC<Props> = ({
 
   return (
     <>
-      <Flex vertical className={styles.root} flex={1}>
+      <Flex vertical className={styles.root}>
         <Header className={styles.topSection}>
           <Button onClick={() => setIsModalOpen(true)} icon={<PlusOutlined />}>
             Import from DesignSafe
@@ -136,6 +139,7 @@ const AssetsPanel: React.FC<Props> = ({
           <DownloadFeaturesButton
             project={project}
             isPublicView={isPublicView}
+            disabled={featureCollection?.features.length === 0}
           />
         </Footer>
       </Flex>
