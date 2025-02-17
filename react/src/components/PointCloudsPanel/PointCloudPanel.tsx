@@ -30,82 +30,86 @@ const PointCloudPanel: React.FC<Props> = ({ project }) => {
   const isPointCloudInfoModalOpen = !!pointCloudInfoModal;
 
   return (
-    <Layout style={{ height: '100%' }}>
-      <Header>
-        <Flex justify="flex-end">
-          <Button
-            type="default"
-            icon={<PlusOutlined />}
-            title="Add point cloud"
-            size="middle"
-            onClick={() => setPointCloudCreateModal(true)}
-          />
+    <Flex vertical style={{ height: '100%' }} flex={1}>
+      <Layout style={{ height: '100%' }}>
+        <Flex justify="center" align="center">
+          <Header>
+            <Button
+              type="default"
+              icon={<PlusOutlined />}
+              title="Add point cloud"
+              size="middle"
+              onClick={() => setPointCloudCreateModal(true)}
+            >
+              Add Point Cloud
+            </Button>
+          </Header>
         </Flex>
-      </Header>
-      <Content>
-        {pointClouds && pointClouds.length > 0 && (
-          <List
-            style={{
-              flex: 1,
-              overflow: 'auto',
-              border: '1px solid #d9d9d9',
-              borderRadius: 8,
-              overflowX: 'hidden',
-            }}
-            dataSource={pointClouds}
-            renderItem={(pointCloud) => (
-              <List.Item
-                key={pointCloud.id}
-                style={{
-                  padding: '8px',
-                }}
-              >
-                <Flex vertical gap="small" style={{ width: '100%' }}>
-                  <Tooltip title={pointCloud.description}>
-                    <div
-                      style={{
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      {pointCloud.description}
-                    </div>
-                  </Tooltip>
-
-                  <Space wrap>
-                    <UploadPointCloudButton pointCloud={pointCloud} />
-                    <DeletePointCloudButton
-                      projectId={pointCloud.project_id}
-                      pointCloudId={pointCloud.id}
-                    />
-                    <Tooltip title="View additional information">
-                      <Button
-                        size="small"
-                        icon={<InfoCircleOutlined />}
-                        onClick={() => setPointCloudInfoModal(pointCloud)}
-                      />
+        <Content>
+          {pointClouds && pointClouds.length > 0 && (
+            <List
+              style={{
+                flex: 1,
+                overflow: 'auto',
+                border: '1px solid #d9d9d9',
+                borderRadius: 8,
+                overflowX: 'hidden',
+              }}
+              dataSource={pointClouds}
+              renderItem={(pointCloud) => (
+                <List.Item
+                  key={pointCloud.id}
+                  style={{
+                    padding: '8px',
+                  }}
+                >
+                  <Flex vertical gap="small" style={{ width: '100%' }}>
+                    <Tooltip title={pointCloud.description}>
+                      <div
+                        style={{
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        {pointCloud.description}
+                      </div>
                     </Tooltip>
-                  </Space>
-                </Flex>
-              </List.Item>
-            )}
-          />
-        )}
-        {isPointCloudInfoModalOpen && (
-          <PointCloudInfoModal
-            onClose={() => setPointCloudInfoModal(null)}
-            pointCloud={pointCloudInfoModal}
-          />
-        )}
-        {pointCloudCreateModal && (
-          <PointCloudCreateModal
-            projectId={project.id}
-            onClose={() => setPointCloudCreateModal(false)}
-          />
-        )}
-      </Content>
-    </Layout>
+
+                    <Space wrap>
+                      <UploadPointCloudButton pointCloud={pointCloud} />
+                      <DeletePointCloudButton
+                        projectId={pointCloud.project_id}
+                        pointCloudId={pointCloud.id}
+                      />
+                      <Tooltip title="View additional information">
+                        <Button
+                          size="small"
+                          icon={<InfoCircleOutlined />}
+                          onClick={() => setPointCloudInfoModal(pointCloud)}
+                        />
+                      </Tooltip>
+                    </Space>
+                  </Flex>
+                </List.Item>
+              )}
+            />
+          )}
+          {isPointCloudInfoModalOpen && (
+            <PointCloudInfoModal
+              onClose={() => setPointCloudInfoModal(null)}
+              pointCloud={pointCloudInfoModal}
+            />
+          )}
+          {pointCloudCreateModal && (
+            <PointCloudCreateModal
+              projectId={project.id}
+              onClose={() => setPointCloudCreateModal(false)}
+            />
+          )}
+        </Content>
+      </Layout>
+    </Flex>
   );
 };
 
