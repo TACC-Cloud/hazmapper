@@ -36,6 +36,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useForm, FormProvider } from 'react-hook-form';
 import StreetviewPanel from '@hazmapper/components/StreetviewPanel';
+import PublicInfoPanel from '@hazmapper/components/PublicInfoPanel';
 
 export const tileLayerSchema = z.object({
   id: z.number(),
@@ -287,8 +288,14 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
                       />
                     )}
                     {activePanel === Panel.Streetview && <StreetviewPanel />}
-                    {activePanel === Panel.Manage && (
+                    {activePanel === Panel.Manage && !isPublicView && (
                       <ManageMapProjectPanel project={activeProject} />
+                    )}
+                    {activePanel === Panel.Info && isPublicView && (
+                      <PublicInfoPanel
+                        project={activeProject}
+                        isPublicView={true}
+                      />
                     )}
                   </BasePanel>
                 )}

@@ -7,4 +7,5 @@ export enum Panel {
   Filters = 'Filters',
   Streetview = 'Streetview',
   Manage = 'Manage',
+  Info = 'Info',
 }

@@ -16,6 +16,7 @@ interface NavItem {
   imagePath: string;
   panel: Panel;
   showWhenPublic: boolean;
+  showWhenPrivate?: boolean;
 }
 
 const navItems: NavItem[] = [
@@ -54,7 +55,14 @@ const navItems: NavItem[] = [
     label: 'Manage',
     imagePath: manageImage,
     panel: Panel.Manage,
+    showWhenPublic: false,
+  },
+  {
+    label: 'Info',
+    imagePath: manageImage,
+    panel: Panel.Info,
     showWhenPublic: true,
+    showWhenPrivate: false,
   },
 ];
 
@@ -96,6 +104,9 @@ const MapProjectNavBar: React.FC<NavBarPanelProps> = ({ isPublicView }) => {
           if (activePanel === item.panel) {
             // If already active, we want to remove queryPanel key if user clicks again
             updatedQueryParams.delete(queryPanelKey);
+          }
+          if (!isPublicView && item.showWhenPrivate == false) {
+            return null;
           } else {
             // Set the queryPanelKey to the current item's panel
             updatedQueryParams.set(queryPanelKey, item.panel);

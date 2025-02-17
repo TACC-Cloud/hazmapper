@@ -10,12 +10,14 @@ interface MapTabProps {
   project: Project;
   onProjectUpdate: (updateData: Partial<ProjectRequest>) => void;
   isPending: boolean;
+  isPublicView: boolean;
 }
 
 const MapTabContent: React.FC<MapTabProps> = ({
   project,
   onProjectUpdate,
   isPending,
+  isPublicView,
 }) => {
   const [editProjectField, setEditProjectField] = useState({});
   const [isEditModalOpen, setisEditModalOpen] = useState(false);
@@ -67,102 +69,136 @@ const MapTabContent: React.FC<MapTabProps> = ({
 
   return (
     <>
-      <Flex vertical justify="center">
-        <List itemLayout="vertical" style={{ marginLeft: 20, marginRight: 20 }}>
-          <List.Item>
-            <List.Item.Meta title={'Name:'} style={{ marginBottom: 0 }} />
-            <Flex justify="space-between">
-              {project.name}
-              <Button
-                onClick={() => handleEditClick('name')}
-                type="text"
-                icon={
-                  editProjectField['name'] ? <CheckOutlined /> : <EditFilled />
-                }
-              />
-            </Flex>
-          </List.Item>
-          <List.Item>
-            <List.Item.Meta
-              title={'Description:'}
-              style={{ marginBottom: 0 }}
-            />
-            <Flex justify="space-between">
-              {project.description}
-              <Button
-                onClick={() => handleEditClick('description')}
-                type="text"
-                icon={
-                  editProjectField['description'] ? (
-                    <CheckOutlined />
-                  ) : (
-                    <EditFilled />
-                  )
-                }
-              />
-            </Flex>
-          </List.Item>
-          <List.Item>
-            <Flex vertical justify="center" gap="small">
-              <Button
-                type="primary"
-                // TODO Improve navigating to taggit https://tacc-main.atlassian.net/browse/WG-430)
-                href={config.taggitUrl}
-                target="_blank"
-                rel="noreferrer"
-              >
-                View in Taggit
-              </Button>
-              {project.deletable && (
+      {!isPublicView ? (
+        <>
+          <Flex vertical justify="center">
+            <List
+              itemLayout="vertical"
+              style={{ marginLeft: 20, marginRight: 20 }}
+            >
+              <List.Item>
+                <List.Item.Meta title={'Name:'} style={{ marginBottom: 0 }} />
+                <Flex justify="space-between">
+                  {project.name}
+                  <Button
+                    onClick={() => handleEditClick('name')}
+                    type="text"
+                    icon={
+                      editProjectField['name'] ? (
+                        <CheckOutlined />
+                      ) : (
+                        <EditFilled />
+                      )
+                    }
+                  />
+                </Flex>
+              </List.Item>
+              <List.Item>
+                <List.Item.Meta
+                  title={'Description:'}
+                  style={{ marginBottom: 0 }}
+                />
+                <Flex justify="space-between">
+                  {project.description}
+                  <Button
+                    onClick={() => handleEditClick('description')}
+                    type="text"
+                    icon={
+                      editProjectField['description'] ? (
+                        <CheckOutlined />
+                      ) : (
+                        <EditFilled />
+                      )
+                    }
+                  />
+                </Flex>
+              </List.Item>
+              <List.Item>
+                <Flex vertical justify="center" gap="small">
+                  <Button
+                    type="primary"
+                    // TODO Improve navigating to taggit https://tacc-main.atlassian.net/browse/WG-430)
+                    href={config.taggitUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    View in Taggit
+                  </Button>
+                  {project.deletable && (
+                    <Button
+                      type="primary"
+                      danger
+                      icon={<DeleteOutlined />}
+                      onClick={() => setisDeleteModalOpen(true)}
+                    >
+                      Delete map
+                    </Button>
+                  )}
+                </Flex>
+              </List.Item>
+            </List>
+          </Flex>
+          <Modal
+            title={`Edit ${currentField?.charAt(0).toUpperCase()}${currentField?.slice(1)}`}
+            open={isEditModalOpen}
+            onOk={onEditSubmit}
+            onCancel={handleEditModalCancel}
+            confirmLoading={isPending}
+            footer={[
+              <>
+                <Button onClick={handleEditModalCancel}>Cancel</Button>
                 <Button
                   type="primary"
-                  danger
-                  icon={<DeleteOutlined />}
-                  onClick={() => setisDeleteModalOpen(true)}
+                  loading={isPending}
+                  onClick={onEditSubmit}
                 >
-                  Delete map
+                  Update
                 </Button>
+              </>,
+            ]}
+          >
+            <Flex vertical justify="space-between">
+              <h5>Enter updated {currentField}:</h5>
+              <Input
+                value={editValue}
+                onChange={(e) => {
+                  setEditValue(e.target.value);
+                  setValidationError(false);
+                }}
+              />
+              {validationError && (
+                <SectionMessage type="error">
+                  The {currentField} cannot be blank.
+                </SectionMessage>
               )}
             </Flex>
-          </List.Item>
-        </List>
-      </Flex>
-      <Modal
-        title={`Edit ${currentField?.charAt(0).toUpperCase()}${currentField?.slice(1)}`}
-        open={isEditModalOpen}
-        onOk={onEditSubmit}
-        onCancel={handleEditModalCancel}
-        confirmLoading={isPending}
-        footer={[
-          <>
-            <Button onClick={handleEditModalCancel}>Cancel</Button>
-            <Button type="primary" loading={isPending} onClick={onEditSubmit}>
-              Update
-            </Button>
-          </>,
-        ]}
-      >
-        <Flex vertical justify="space-between">
-          <h5>Enter updated {currentField}:</h5>
-          <Input
-            value={editValue}
-            onChange={(e) => {
-              setEditValue(e.target.value);
-              setValidationError(false);
-            }}
+          </Modal>
+          <DeleteMapModal
+            isOpen={isDeleteModalOpen}
+            project={project}
+            close={handleDeleteClose}
           />
-          {validationError && (
-            <SectionMessage type="error">
-              The {currentField} cannot be blank.
-            </SectionMessage>
-          )}
-        </Flex>
-      </Modal>
-      <DeleteMapModal
-        isOpen={isDeleteModalOpen}
-        project={project}
-        close={handleDeleteClose}
-      />
+        </>
+      ) : (
+        <>
+          <Flex vertical justify="center">
+            <List itemLayout="vertical">
+              <List.Item>
+                <List.Item.Meta title={'Name:'} style={{ marginBottom: 0 }} />
+
+                {project.name}
+              </List.Item>
+              <List.Item>
+                <List.Item.Meta
+                  title={'Description:'}
+                  style={{ marginBottom: 0 }}
+                />
+                {project.description}
+              </List.Item>
+            </List>
+          </Flex>
+        </>
+      )}
     </>
   );
 };
