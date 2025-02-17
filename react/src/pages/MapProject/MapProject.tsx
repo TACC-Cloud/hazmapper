@@ -123,10 +123,7 @@ const MapProject: React.FC<MapProjectProps> = ({ isPublicView = false }) => {
         <HeaderNavBar />
         <div className={styles.errorContainer}>
           <Message type="error" tagName="div">
-            <p>
-              This is not a public map. You are unauthorized to view this
-              private map.{' '}
-            </p>
+            <p>This is not a public map</p>
           </Message>
         </div>
       </div>

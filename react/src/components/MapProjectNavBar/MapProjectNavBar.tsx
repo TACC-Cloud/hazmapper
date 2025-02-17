@@ -16,7 +16,7 @@ interface NavItem {
   imagePath: string;
   panel: Panel;
   showWhenPublic: boolean;
-  showWhenPrivate?: boolean;
+  hideWhenPrivate?: boolean;
 }
 
 const navItems: NavItem[] = [
@@ -62,7 +62,7 @@ const navItems: NavItem[] = [
     imagePath: manageImage,
     panel: Panel.Info,
     showWhenPublic: true,
-    showWhenPrivate: false,
+    hideWhenPrivate: true,
   },
 ];
 
@@ -81,7 +81,7 @@ const MapProjectNavBar: React.FC<NavBarPanelProps> = ({ isPublicView }) => {
       const currentPanel = navItems.find((item) => item.panel === activePanel);
       if (
         (currentPanel && !currentPanel.showWhenPublic && isPublicView) ||
-        (currentPanel && currentPanel.showWhenPrivate && isPublicView)
+        (currentPanel && currentPanel.hideWhenPrivate && !isPublicView)
       ) {
         const updatedParams = new URLSearchParams(location.search);
         updatedParams.delete(queryPanelKey);
@@ -103,7 +103,7 @@ const MapProjectNavBar: React.FC<NavBarPanelProps> = ({ isPublicView }) => {
           if (isPublicView && !item.showWhenPublic) {
             return null;
           }
-          if (!isPublicView && item.showWhenPrivate == false) {
+          if (!isPublicView && item.hideWhenPrivate == true) {
             return null;
           }
 
