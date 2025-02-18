@@ -39,6 +39,7 @@ interface FileListingProps {
   showPublicSystems?: boolean;
   onFileSelect?: (files: File[]) => void;
   onFolderSelect?: (folder: string) => void;
+  onSystemSelect?: (system: string) => void;
   allowedFileExtensions?: string[];
 }
 
@@ -47,6 +48,7 @@ export const FileListing: React.FC<FileListingProps> = ({
   showPublicSystems = true,
   onFileSelect,
   onFolderSelect,
+  onSystemSelect,
   allowedFileExtensions = DEFAULT_NO_FILE_EXTENSIONS,
 }) => {
   const {
@@ -127,6 +129,7 @@ export const FileListing: React.FC<FileListingProps> = ({
     const rootFolder = sys.id === myDataSystem?.id ? user?.username : '/';
     setPath(rootFolder);
 
+    onSystemSelect?.(sys.id);
     onFolderSelect?.(rootFolder);
     let rootFolderName: string;
 

@@ -18,10 +18,6 @@ const ProjectListing: React.FC = () => {
     navigate(`/project/${projectId}`);
   };
 
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
-
   const { data, isLoading, isError, error } =
     useProjectsWithDesignSafeInformation();
 
@@ -63,8 +59,15 @@ const ProjectListing: React.FC = () => {
               <th className={styles.mapColumn}>Map</th>
               <th className={styles.projectColumn}>Project</th>
               <th className={styles.buttonColumn}>
-                <CreateMapModal isOpen={isModalOpen} toggle={toggleModal} />
-                <Button onClick={toggleModal} type="link" iconNameBefore="add">
+                <CreateMapModal
+                  isOpen={isModalOpen}
+                  closeModal={() => setIsModalOpen(false)}
+                />
+                <Button
+                  onClick={() => setIsModalOpen(true)}
+                  type="link"
+                  iconNameBefore="add"
+                >
                   Create a New Map
                 </Button>
               </th>
@@ -100,7 +103,7 @@ const ProjectListing: React.FC = () => {
                 <EmptyTablePlaceholder type="info">
                   No maps found.
                   <br />
-                  <Button type="link" onClick={toggleModal}>
+                  <Button type="link" onClick={() => setIsModalOpen(true)}>
                     Create New Map
                   </Button>{' '}
                   to get started.

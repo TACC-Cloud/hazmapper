@@ -37,6 +37,15 @@ const themeConfig: ThemeConfig = {
       footerPadding: '0 16px',
       siderBg: 'transparent',
     },
+    Form: {
+      itemMarginBottom: 14,
+    },
+    Input: {
+      paddingBlock: 14,
+    },
+    InputNumber: {
+      paddingBlock: 15,
+    },
   },
 };
 
