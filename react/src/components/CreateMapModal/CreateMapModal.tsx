@@ -1,9 +1,17 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Section, SectionTableWrapper } from '@tacc/core-components';
 import { FormItem } from 'react-hook-form-antd';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Form, Input, Checkbox, Modal, Layout, Flex } from 'antd';
+import {
+  Button,
+  Form,
+  Input,
+  Checkbox,
+  Splitter,
+  Modal,
+  Layout,
+  Flex,
+} from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { useAuthenticatedUser, useCreateProject } from '@hazmapper/hooks';
@@ -165,104 +173,91 @@ const CreateMapModal = ({ isOpen, closeModal }: CreateMapModalProps) => {
         </Flex>,
       ]}
     >
-      <Section
-        bodyClassName="has-loaded-dashboard"
-        contentLayoutName={'twoColumn'}
-        className={`${styles['section']}`}
-        content={
-          <>
-            <SectionTableWrapper
-              className={`${styles['section-table-wrapper']}`}
+      <Splitter style={{ minHeight: '50vh' }}>
+        <Splitter.Panel style={{ padding: 10 }} resizable={false}>
+          <Form
+            form={form}
+            name="createMapForm"
+            onFinish={handleSubmit(handleSubmitCallback, console.error)}
+            layout="vertical"
+            className={`${styles['formRoot']}`}
+          >
+            <FormItem control={control} name="name" label="Name" required>
+              <Input data-testid="name-input" />
+            </FormItem>
+            <FormItem
+              control={control}
+              name="description"
+              label="Description"
+              required
             >
-              <Form
-                form={form}
-                name="createMapForm"
-                onFinish={handleSubmit(handleSubmitCallback, console.error)}
-                layout="vertical"
-                className={`${styles['formRoot']}`}
-              >
-                <FormItem control={control} name="name" label="Name" required>
-                  <Input data-testid="name-input" />
-                </FormItem>
-                <FormItem
-                  control={control}
-                  name="description"
-                  label="Description"
-                  required
-                >
-                  <Input.TextArea data-testid="description" />
-                </FormItem>
-                <FormItem
-                  control={control}
-                  name="systemFile"
-                  label="Custom File Name"
-                  required
-                >
-                  <Input
-                    data-testid="custom-file-name"
-                    addonAfter={
-                      <span className={`${styles['hazmapper-suffix']}`}>
-                        .hazmapper
-                      </span>
-                    }
-                  />
-                </FormItem>
-                <div className={`${styles['field-wrapper-alt']}`}>
-                  <FormItem
-                    control={control}
-                    name="saveLocationDisplay"
-                    label="Save Location"
-                  >
-                    <span title={watch('saveLocationDisplay')}>
-                      {truncateMiddle(watch('saveLocationDisplay'), 78)}
-                    </span>
-                  </FormItem>
-                </div>
-                <FormItem
-                  control={control}
-                  name="syncFolder"
-                  label="Sync Folder"
-                  className={`${styles['checkboxWrapper']}`}
-                >
-                  <Flex align="center">
-                    <Checkbox />
-                    <span style={{ marginLeft: 15 }}>
-                      When enabled, files in this folder are synced into the map
-                      periodically.
-                    </span>
-                  </Flex>
-                </FormItem>
-                {errorMessage && (
-                  <div className="c-form__errors">{errorMessage}</div>
-                )}
-              </Form>
-            </SectionTableWrapper>
-            <SectionTableWrapper
-              className={`${styles['section-table-wrapper']}`}
-              manualHeader={
-                <>
-                  <h2 className={`${styles['link-heading']}`}>
-                    Select Link Save Location
-                  </h2>
-                  <h4 className={`${styles['link-subheading']}`}>
-                    If no folder is selected, the link file will be saved to the
-                    root of the selected system.If you select a project, you can
-                    link the current map to the project.
-                  </h4>
-                </>
-              }
-              manualContent={
-                <FileListing
-                  disableSelection={false}
-                  onFolderSelect={handleDirectoryChange}
-                  showPublicSystems={false}
-                  onSystemSelect={handleSystemChange}
-                />
-              }
+              <Input.TextArea data-testid="description" />
+            </FormItem>
+            <FormItem
+              control={control}
+              name="systemFile"
+              label="Custom File Name"
+              required
+            >
+              <Input
+                data-testid="custom-file-name"
+                addonAfter={
+                  <span className={`${styles['hazmapper-suffix']}`}>
+                    .hazmapper
+                  </span>
+                }
+              />
+            </FormItem>
+            <FormItem
+              control={control}
+              name="saveLocationDisplay"
+              label="Save Location"
+              data-testid="name-input"
+            >
+              <span title={watch('saveLocationDisplay')}>
+                {truncateMiddle(watch('saveLocationDisplay'), 78)}
+              </span>
+            </FormItem>
+
+            <FormItem
+              control={control}
+              name="syncFolder"
+              label="Sync Folder"
+              className={`${styles['checkboxWrapper']}`}
+            >
+              <Flex align="center">
+                <Checkbox />
+                <span style={{ marginLeft: 15 }}>
+                  When enabled, files in this folder are synced into the map
+                  periodically.
+                </span>
+              </Flex>
+            </FormItem>
+            {errorMessage && (
+              <div className="c-form__errors">{errorMessage}</div>
+            )}
+          </Form>
+        </Splitter.Panel>
+
+        <Splitter.Panel resizable={false} style={{ padding: 10 }}>
+          <Flex vertical style={{ height: '100%' }}>
+            <h2 className={`${styles['link-heading']}`}>
+              Select Link Save Location
+            </h2>
+            <h4 className={`${styles['link-subheading']}`}>
+              If no folder is selected, the link file will be saved to the root
+              of the selected system.If you select a project, you can link the
+              current map to the project.
+            </h4>
+            <FileListing
+              disableSelection={false}
+              onFolderSelect={handleDirectoryChange}
+              showPublicSystems={false}
+              onSystemSelect={handleSystemChange}
             />
-          </>
-        }
-      />
+          </Flex>
+        </Splitter.Panel>
+      </Splitter>
     </Modal>
   );
 };
