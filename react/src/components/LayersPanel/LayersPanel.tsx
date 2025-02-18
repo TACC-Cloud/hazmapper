@@ -266,28 +266,31 @@ const LayersPanel: React.FC<{
                                   )}
                                 </Flex>
                                 <Flex align="center">
-                                  <Button
-                                    type="text"
-                                    icon={
-                                      editLayerField[layerName] ? (
-                                        <CheckOutlined />
-                                      ) : (
-                                        <EditFilled />
-                                      )
-                                    }
-                                    title="Rename Layer"
-                                    size="small"
-                                    disabled={
-                                      editLayerField[layerName] &&
-                                      getFieldState(layerName).invalid
-                                    }
-                                    onClick={() =>
-                                      setEditLayerField({
-                                        ...editLayerField,
-                                        [layerName]: !editLayerField[layerName],
-                                      })
-                                    }
-                                  />
+                                  {!isPublicView && (
+                                    <Button
+                                      type="text"
+                                      icon={
+                                        editLayerField[layerName] ? (
+                                          <CheckOutlined />
+                                        ) : (
+                                          <EditFilled />
+                                        )
+                                      }
+                                      title="Rename Layer"
+                                      size="small"
+                                      disabled={
+                                        editLayerField[layerName] &&
+                                        getFieldState(layerName).invalid
+                                      }
+                                      onClick={() =>
+                                        setEditLayerField({
+                                          ...editLayerField,
+                                          [layerName]:
+                                            !editLayerField[layerName],
+                                        })
+                                      }
+                                    />
+                                  )}
                                   <FormItem
                                     control={control}
                                     name={`tileLayers.${index}.layer.uiOptions.showDescription`}

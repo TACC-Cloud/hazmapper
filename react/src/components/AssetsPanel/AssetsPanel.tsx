@@ -130,11 +130,16 @@ const AssetsPanel: React.FC<Props> = ({
   return (
     <>
       <Flex vertical className={styles.root}>
-        <Header className={styles.topSection}>
-          <Button onClick={() => setIsModalOpen(true)} icon={<PlusOutlined />}>
-            Import from DesignSafe
-          </Button>
-        </Header>
+        {!isPublicView && (
+          <Header className={styles.topSection}>
+            <Button
+              onClick={() => setIsModalOpen(true)}
+              icon={<PlusOutlined />}
+            >
+              Import from DesignSafe
+            </Button>
+          </Header>
+        )}
         <Content className={styles.middleSection}>
           <FeatureFileTree
             projectId={project.id}
