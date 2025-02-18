@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
 import DOMPurify from 'dompurify';
-import { Button } from '@tacc/core-components';
+// import { Button } from '@tacc/core-components';
+import { Button } from 'antd';
 import { Feature, FeatureType } from '@hazmapper/types';
 import {
   getFeatureType,
   IFileImportRequest,
   TapisFilePath,
 } from '@hazmapper/types';
-import { useImportFeatureAsset, useNotification } from '@hazmapper/hooks';
+import {
+  useImportFeatureAsset,
+  useNotification,
+  useFeatureAssetSourcePath,
+} from '@hazmapper/hooks';
 import FileBrowserModal from '../FileBrowserModal/FileBrowserModal';
 import { IMPORTABLE_FEATURE_ASSET_TYPES } from '@hazmapper/utils/fileUtils';
 
@@ -32,6 +37,8 @@ const AssetButton: React.FC<AssetButtonProps> = ({
   const featureId = selectedFeature.id;
   const { mutate: importFeatureAsset, isPending: isImporting } =
     useImportFeatureAsset(projectId, featureId);
+  const getFeatureAssetSourcePath = useFeatureAssetSourcePath(selectedFeature);
+  const featureAssetSourcePath = getFeatureAssetSourcePath();
 
   const handleSubmit = (files: TapisFilePath[]) => {
     for (const file of files) {
@@ -59,7 +66,15 @@ const AssetButton: React.FC<AssetButtonProps> = ({
   return (
     <>
       {featureType === FeatureType.Image && (
-        <Button /*TODO add Download*/ type="primary">Download</Button>
+        <Button
+          type="primary"
+          href={featureAssetSourcePath}
+          download={`feature-${selectedFeature.id}.jpeg`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Download
+        </Button>
       )}
       {featureType === FeatureType.PointCloud && (
         <a href={pointCloudURL} target="_blank" rel="noreferrer">
