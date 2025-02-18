@@ -29,7 +29,7 @@ const SaveTabContent: React.FC<SaveTabProps> = ({ project }) => {
 
     if (project.system_id) {
       if (project.system_id.startsWith('project')) {
-        dsFolderHref = `${dsDataDepotUrl}projects/${dsProj?.value.projectId}${project.system_path}`;
+        dsFolderHref = `${dsDataDepotUrl}projects/${dsProj?.value.projectId}/${project.system_path}`;
 
         if (project.system_file) {
           dsProjectHref = `${dsDataDepotUrl}projects/${dsProj?.value.projectId}`;
@@ -98,9 +98,9 @@ const SaveTabContent: React.FC<SaveTabProps> = ({ project }) => {
                   rel="noreferrer"
                   style={{ padding: 0 }}
                 >
-                  {dsProj?.value.projectId}
+                  {dsProj.value.projectId}
                   {' | '}
-                  {project.name}
+                  {dsProj.value.title}
                 </Button>
               ) : (
                 <Button
@@ -110,7 +110,7 @@ const SaveTabContent: React.FC<SaveTabProps> = ({ project }) => {
                   rel="noreferrer"
                   style={{ padding: 0 }}
                 >
-                  {project.system_id}
+                  My Data
                 </Button>
               )}
             </>
