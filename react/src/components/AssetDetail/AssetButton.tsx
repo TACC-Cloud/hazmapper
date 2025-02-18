@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import DOMPurify from 'dompurify';
-// import { Button } from '@tacc/core-components';
 import { Button } from 'antd';
 import { Feature, FeatureType } from '@hazmapper/types';
 import {
@@ -91,7 +90,7 @@ const AssetButton: React.FC<AssetButtonProps> = ({
         <Button
           type="primary"
           onClick={() => setIsModalOpen(true)}
-          isLoading={isImporting}
+          loading={isImporting}
           disabled={isImporting}
         >
           Add Asset from DesignSafe
