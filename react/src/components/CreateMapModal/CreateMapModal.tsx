@@ -161,90 +161,86 @@ const CreateMapModal = ({ isOpen, closeModal }: CreateMapModalProps) => {
             Cancel
           </Button>
           <Button
-            form="createLayerForm"
+            form="createMapForm"
             htmlType="submit"
             loading={isCreatingProject}
             disabled={!isDirty || !isValid}
             type="primary"
+            name="Create Map"
           >
-            Create Layer
+            Create Map
           </Button>
         </Flex>,
       ]}
     >
-      <Splitter style={{ height: '100%' }}>
-        <>
-          <Splitter.Panel style={{ padding: 10 }} resizable={false}>
-            <Form
-              form={form}
-              name="createLayerForm"
-              onFinish={handleSubmit(handleSubmitCallback, console.error)}
-              layout="vertical"
-              className={`${styles['formRoot']}`}
+      <Splitter style={{ minHeight: '50vh' }}>
+        <Splitter.Panel style={{ padding: 10 }} resizable={false}>
+          <Form
+            form={form}
+            name="createMapForm"
+            onFinish={handleSubmit(handleSubmitCallback, console.error)}
+            layout="vertical"
+            className={`${styles['formRoot']}`}
+          >
+            <FormItem control={control} name="name" label="Name" required>
+              <Input data-testid="name-input" />
+            </FormItem>
+            <FormItem
+              control={control}
+              name="description"
+              label="Description"
+              required
             >
-              <FormItem
-                control={control}
-                name="name"
-                label="Name"
-                required
-                data-testid="name-input"
-              >
-                <Input />
-              </FormItem>
-              <FormItem
-                control={control}
-                name="description"
-                label="Description"
-                required
-              >
-                <Input.TextArea />
-              </FormItem>
-              <FormItem
-                control={control}
-                name="systemFile"
-                label="Custom File Name"
-                required
-              >
-                <Input
-                  addonAfter={
-                    <span className={`${styles['hazmapper-suffix']}`}>
-                      .hazmapper
-                    </span>
-                  }
-                />
-              </FormItem>
-              <div className={`${styles['field-wrapper-alt']}`}>
-                <FormItem
-                  control={control}
-                  name="saveLocationDisplay"
-                  label="Save Location"
-                  data-testid="name-input"
-                >
-                  <span title={watch('saveLocationDisplay')}>
-                    {truncateMiddle(watch('saveLocationDisplay'), 78)}
+              <Input.TextArea data-testid="description" />
+            </FormItem>
+            <FormItem
+              control={control}
+              name="systemFile"
+              label="Custom File Name"
+              required
+            >
+              <Input
+                data-testid="custom-file-name"
+                addonAfter={
+                  <span className={`${styles['hazmapper-suffix']}`}>
+                    .hazmapper
                   </span>
-                </FormItem>
-              </div>
-              <FormItem
-                control={control}
-                name="syncFolder"
-                label="Sync Folder"
-                className={`${styles['checkboxWrapper']}`}
-              >
-                <Checkbox />
-                <br />
-                <span className={`${styles['checkbox-label']}`}>
-                  When enabled, files in this folder are automatically synced
-                  into the map periodically.
-                </span>
-              </FormItem>
-              {errorMessage && (
-                <div className="c-form__errors">{errorMessage}</div>
-              )}
-            </Form>
-          </Splitter.Panel>
+                }
+              />
+            </FormItem>
+            <FormItem
+              control={control}
+              name="saveLocationDisplay"
+              label="Save Location"
+              data-testid="name-input"
+            >
+              <span title={watch('saveLocationDisplay')}>
+                {truncateMiddle(watch('saveLocationDisplay'), 78)}
+              </span>
+            </FormItem>
 
-          <Splitter.Panel resizable={false} style={{ padding: 10 }}>
+            <FormItem
+              control={control}
+              name="syncFolder"
+              label="Sync Folder"
+              className={`${styles['checkboxWrapper']}`}
+            >
+              <Flex align="center">
+                <Checkbox />
+                <span style={{ marginLeft: 15 }}>
+                  When enabled, files in this folder are synced into the map
+                  periodically.
+                </span>
+              </Flex>
+            </FormItem>
+            {errorMessage && (
+              <div className="c-form__errors">{errorMessage}</div>
+            )}
+          </Form>
+        </Splitter.Panel>
+
+        <Splitter.Panel resizable={false} style={{ padding: 10 }}>
+          <Flex vertical style={{ height: '100%' }}>
             <h2 className={`${styles['link-heading']}`}>
               Select Link Save Location
             </h2>
@@ -253,17 +249,14 @@ const CreateMapModal = ({ isOpen, closeModal }: CreateMapModalProps) => {
               of the selected system.If you select a project, you can link the
               current map to the project.
             </h4>
-            manualContent=
-            {
-              <FileListing
-                disableSelection={false}
-                onFolderSelect={handleDirectoryChange}
-                showPublicSystems={false}
-                onSystemSelect={handleSystemChange}
-              />
-            }
-          </Splitter.Panel>
-        </>
+            <FileListing
+              disableSelection={false}
+              onFolderSelect={handleDirectoryChange}
+              showPublicSystems={false}
+              onSystemSelect={handleSystemChange}
+            />
+          </Flex>
+        </Splitter.Panel>
       </Splitter>
     </Modal>
   );
