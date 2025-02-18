@@ -76,7 +76,7 @@ export const appRouter = createBrowserRouter(
         },
         {
           path: '*',
-          element: <Navigate to={'/'} replace={true} />,
+          element: <Navigate to={basePath} replace={true} />,
         },
       ],
     },

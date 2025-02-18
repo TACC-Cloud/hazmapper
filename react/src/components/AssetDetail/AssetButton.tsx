@@ -7,11 +7,7 @@ import {
   IFileImportRequest,
   TapisFilePath,
 } from '@hazmapper/types';
-import {
-  useImportFeatureAsset,
-  useNotification,
-  useFeatureAssetSourcePath,
-} from '@hazmapper/hooks';
+import { useImportFeatureAsset, useNotification } from '@hazmapper/hooks';
 import FileBrowserModal from '../FileBrowserModal/FileBrowserModal';
 import { IMPORTABLE_FEATURE_ASSET_TYPES } from '@hazmapper/utils/fileUtils';
 
@@ -36,8 +32,6 @@ const AssetButton: React.FC<AssetButtonProps> = ({
   const featureId = selectedFeature.id;
   const { mutate: importFeatureAsset, isPending: isImporting } =
     useImportFeatureAsset(projectId, featureId);
-  const getFeatureAssetSourcePath = useFeatureAssetSourcePath(selectedFeature);
-  const featureAssetSourcePath = getFeatureAssetSourcePath();
 
   const handleSubmit = (files: TapisFilePath[]) => {
     for (const file of files) {
@@ -67,7 +61,7 @@ const AssetButton: React.FC<AssetButtonProps> = ({
       {featureType === FeatureType.Image && (
         <Button
           type="primary"
-          href={featureAssetSourcePath}
+          href={featureSource}
           download={`feature-${selectedFeature.id}.jpeg`}
           target="_blank"
           rel="noopener noreferrer"
