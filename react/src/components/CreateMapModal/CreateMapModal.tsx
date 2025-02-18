@@ -212,13 +212,11 @@ const CreateMapModal = ({ isOpen, closeModal }: CreateMapModalProps) => {
               control={control}
               name="saveLocationDisplay"
               label="Save Location"
-              data-testid="name-input"
             >
               <span title={watch('saveLocationDisplay')}>
                 {truncateMiddle(watch('saveLocationDisplay'), 78)}
               </span>
             </FormItem>
-
             <FormItem
               control={control}
               name="syncFolder"
