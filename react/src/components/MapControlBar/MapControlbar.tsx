@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faLock } from '@fortawesome/free-solid-svg-icons';
 
-import { Button, LoadingSpinner } from '@tacc/core-components';
+import { LoadingSpinner } from '@tacc/core-components';
 
-import { Typography } from 'antd';
+import { Typography, Button, Tooltip } from 'antd';
 
 const { Text } = Typography;
 
@@ -116,17 +116,22 @@ const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
           </Text>
         )}
         {canSwitchToPrivateMap && (
-          // TODO_REACT: Add tooltip "View private map" to this button
-          <Button
-            onClick={() => {
-              const { pathname, search } = window.location;
-              const newPath = pathname.replace('/project-public/', '/project/');
-              navigate(`${newPath}${search}`);
-            }}
-            type="link"
-          >
-            <FontAwesomeIcon icon={faLock} />
-          </Button>
+          <Tooltip title="View private map">
+            <Button
+              onClick={() => {
+                const { pathname, search } = window.location;
+                const newPath = pathname.replace(
+                  '/project-public/',
+                  '/project/'
+                );
+                navigate(`${newPath}${search}`);
+              }}
+              type="link"
+              title="View private map"
+            >
+              <FontAwesomeIcon icon={faLock} />
+            </Button>
+          </Tooltip>
         )}
         {isFeaturesLoading && (
           <div className={styles.loadingData}>
