@@ -5,6 +5,7 @@ import AssetDetail from './AssetDetail';
 import {
   mockImgFeature,
   mockPointFeature,
+  featureCollection,
 } from '@hazmapper/__fixtures__/featuresFixture';
 import AssetGeometry from './AssetGeometry';
 
