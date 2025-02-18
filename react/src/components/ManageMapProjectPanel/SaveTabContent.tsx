@@ -29,7 +29,7 @@ const SaveTabContent: React.FC<SaveTabProps> = ({ project }) => {
 
     if (project.system_id) {
       if (project.system_id.startsWith('project')) {
-        dsFolderHref = `${dsDataDepotUrl}projects/${dsProj?.value.projectId}${project.system_path}`;
+        dsFolderHref = `${dsDataDepotUrl}projects/${dsProj?.value.projectId}/${project.system_path}`;
 
         if (project.system_file) {
           dsProjectHref = `${dsDataDepotUrl}projects/${dsProj?.value.projectId}`;
