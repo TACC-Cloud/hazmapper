@@ -98,9 +98,9 @@ const SaveTabContent: React.FC<SaveTabProps> = ({ project }) => {
                   rel="noreferrer"
                   style={{ padding: 0 }}
                 >
-                  {dsProj?.value.projectId}
+                  {dsProj.value.projectId}
                   {' | '}
-                  {project.name}
+                  {dsProj.value.title}
                 </Button>
               ) : (
                 <Button
@@ -110,7 +110,7 @@ const SaveTabContent: React.FC<SaveTabProps> = ({ project }) => {
                   rel="noreferrer"
                   style={{ padding: 0 }}
                 >
-                  {project.system_id}
+                  My Data
                 </Button>
               )}
             </>
