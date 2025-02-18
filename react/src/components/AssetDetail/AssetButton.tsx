@@ -86,7 +86,6 @@ const AssetButton: React.FC<AssetButtonProps> = ({
         </Button>
       )}
       {featureType.includes(selectedFeature.geometry.type) && !isPublicView && (
-        //TODO
         <Button
           type="primary"
           onClick={() => setIsModalOpen(true)}
