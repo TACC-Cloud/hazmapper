@@ -142,7 +142,7 @@ const CreateMapModal = ({ isOpen, closeModal }: CreateMapModalProps) => {
       description: values.description,
       system_file: values.systemFile,
       system_id: values.systemId,
-      system_path: `/${userData.username}`,
+      system_path: values.systemPath,
       watch_content: values.syncFolder,
       watch_users: values.syncFolder,
     };
