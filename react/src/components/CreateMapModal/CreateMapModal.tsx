@@ -31,8 +31,8 @@ const validationSchema = z.object({
   systemFile: z
     .string()
     .regex(
-      /^[A-Za-z0-9-_]+$/,
-      'Only letters, numbers, hyphens, and underscores are allowed'
+      /^[A-Za-z0-9-_.]+$/,
+      'Only letters, numbers, hyphens, underscores, and periods are allowed'
     )
     .nonempty('File name is required'),
 });
@@ -59,6 +59,7 @@ const CreateMapModal = ({ isOpen, closeModal }: CreateMapModalProps) => {
     reset,
     watch,
     setValue,
+    trigger,
     getValues,
   } = methods;
 
@@ -84,6 +85,7 @@ const CreateMapModal = ({ isOpen, closeModal }: CreateMapModalProps) => {
     const systemFile = getValues('systemFile');
     if (systemFile === oldName && systemFile !== systemFilename) {
       setValue('systemFile', systemFilename);
+      trigger('systemFile');
       oldSystemFilename.current = systemFilename;
     }
   }, [getValues, mapName, setValue]);
@@ -92,6 +94,7 @@ const CreateMapModal = ({ isOpen, closeModal }: CreateMapModalProps) => {
     setErrorMessage('');
     closeModal();
     reset();
+    oldSystemFilename.current = '';
   };
 
   const handleDirectoryChange = (directory: string) => {

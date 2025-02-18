@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import DOMPurify from 'dompurify';
-import { Button } from '@tacc/core-components';
+import { Button } from 'antd';
 import { Feature, FeatureType } from '@hazmapper/types';
 import {
   getFeatureType,
@@ -59,7 +59,15 @@ const AssetButton: React.FC<AssetButtonProps> = ({
   return (
     <>
       {featureType === FeatureType.Image && (
-        <Button /*TODO add Download*/ type="primary">Download</Button>
+        <Button
+          type="primary"
+          href={featureSource}
+          download={`feature-${selectedFeature.id}.jpeg`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Download
+        </Button>
       )}
       {featureType === FeatureType.PointCloud && (
         <a href={pointCloudURL} target="_blank" rel="noreferrer">
@@ -72,11 +80,10 @@ const AssetButton: React.FC<AssetButtonProps> = ({
         </Button>
       )}
       {featureType.includes(selectedFeature.geometry.type) && !isPublicView && (
-        //TODO
         <Button
           type="primary"
           onClick={() => setIsModalOpen(true)}
-          isLoading={isImporting}
+          loading={isImporting}
           disabled={isImporting}
         >
           Add Asset from DesignSafe

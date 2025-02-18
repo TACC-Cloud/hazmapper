@@ -1,2 +1,2 @@
-export { default as useBasePath } from './useBasePath';
+export { default as getBasePath } from './getBasePath';
 export { default as useAppConfiguration } from './useAppConfiguration';
