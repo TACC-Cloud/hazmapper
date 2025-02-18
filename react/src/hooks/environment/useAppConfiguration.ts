@@ -7,7 +7,7 @@ import {
   DesignSafePortalEnvironment,
 } from '@hazmapper/types';
 import { getGeoapiUrl, getDesignsafePortalUrl } from './utils';
-import useBasePath from './useBasePath';
+import getBasePath from './getBasePath';
 import { getLocalAppConfiguration } from './getLocalAppConfiguration';
 
 /**
@@ -20,7 +20,7 @@ import { getLocalAppConfiguration } from './getLocalAppConfiguration';
  * - Production (hazmapper.tacc.utexas.edu without path prefix)
  */
 export const useAppConfiguration = (): AppConfiguration => {
-  const basePath = useBasePath();
+  const basePath = getBasePath();
 
   const appConfiguration = useMemo(() => {
     const hostname = window && window.location && window.location.hostname;

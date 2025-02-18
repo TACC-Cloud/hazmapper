@@ -10,6 +10,7 @@ import Callback from '@hazmapper/pages/Callback/Callback';
 import StreetviewCallback from '@hazmapper/pages/StreetviewCallback/StreetviewCallback';
 import { RootState } from '@hazmapper/redux/store';
 import { isTokenValid } from '@hazmapper/utils/authUtils';
+import { getBasePath } from './hooks';
 
 interface ProtectedRouteProps {
   children: ReactElement;
@@ -28,6 +29,8 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
   return children;
 };
+
+const basePath = getBasePath();
 
 export const appRouter = createBrowserRouter(
   [
@@ -73,10 +76,10 @@ export const appRouter = createBrowserRouter(
         },
         {
           path: '*',
-          element: <Navigate to={'/'} replace={true} />,
+          element: <Navigate to={basePath} replace={true} />,
         },
       ],
     },
   ],
-  { basename: '/' }
+  { basename: basePath }
 );

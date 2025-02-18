@@ -14,7 +14,7 @@
 }
 
 .middleSection {
-  flex: 0 1 auto;
+  flex: 1 1 auto;
   overflow: auto;
   min-height: 10rem;
   display: flex;

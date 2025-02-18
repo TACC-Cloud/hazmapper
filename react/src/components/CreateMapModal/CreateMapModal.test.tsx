@@ -147,7 +147,7 @@ describe('CreateMapModal', () => {
     await waitFor(() => {
       expect(
         screen.getByText(
-          'Only letters, numbers, hyphens, and underscores are allowed'
+          'Only letters, numbers, hyphens, underscores, and periods are allowed'
         )
       ).toBeTruthy();
     });
