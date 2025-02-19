@@ -186,15 +186,14 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     formatAssetTypeName(type)
   );
 
-  const { data: rawFeatureCollection, isLoading: isFeaturesLoading } =
-    useFeatures({
-      projectId: activeProject.id,
-      isPublicView,
-      assetTypes: formattedAssetTypes,
-      startDate,
-      endDate,
-      toggleDateFilter,
-    });
+  const { data: rawFeatureCollection } = useFeatures({
+    projectId: activeProject.id,
+    isPublicView,
+    assetTypes: formattedAssetTypes,
+    startDate,
+    endDate,
+    toggleDateFilter,
+  });
 
   const { data: tileServerLayers, isLoading: isTileServerLayersLoading } =
     useGetTileServers({
@@ -206,8 +205,6 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
 
   const queryParams = new URLSearchParams(location.search);
   const activePanel = queryParams.get(queryPanelKey);
-
-  const loading = isFeaturesLoading || isTileServerLayersLoading;
 
   const featureCollection = rawFeatureCollection ?? {
     type: 'FeatureCollection',
@@ -263,7 +260,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
                 }}
               >
                 <MapProjectNavBar isPublicView={isPublicView} />
-                {activePanel && !loading && (
+                {activePanel && !isTileServerLayersLoading && (
                   <BasePanel
                     panelTitle={activePanel}
                     className={
@@ -315,33 +312,31 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
               </Flex>
             </Sider>
             <Content>
-              {loading ? (
+              {isTileServerLayersLoading ? (
                 <Spinner />
               ) : (
                 <>
                   <div className={styles.map}>
                     <Map featureCollection={featureCollection} />
                   </div>
-                  {selectedFeature && (
-                    <div className={styles.detailContainer}>
-                      <AssetDetail
-                        selectedFeature={selectedFeature}
-                        onClose={() =>
-                          toggleSelectedFeature(selectedFeature.id)
-                        }
-                        isPublicView={isPublicView}
-                        onQuestionnaireClick={handleQuestionnaireClick}
-                      />
-                    </div>
-                  )}
-                  {isQuestionnaireModalOpen && selectedFeature && (
-                    <QuestionnaireModal
-                      isOpen={isQuestionnaireModalOpen}
-                      close={() => setQuestionnaireModalOpen(false)}
-                      feature={selectedFeature}
-                    />
-                  )}
                 </>
+              )}
+              {selectedFeature && (
+                <div className={styles.detailContainer}>
+                  <AssetDetail
+                    selectedFeature={selectedFeature}
+                    onClose={() => toggleSelectedFeature(selectedFeature.id)}
+                    isPublicView={isPublicView}
+                    onQuestionnaireClick={handleQuestionnaireClick}
+                  />
+                </div>
+              )}
+              {isQuestionnaireModalOpen && selectedFeature && (
+                <QuestionnaireModal
+                  isOpen={isQuestionnaireModalOpen}
+                  close={() => setQuestionnaireModalOpen(false)}
+                  feature={selectedFeature}
+                />
               )}
             </Content>
           </Layout>
