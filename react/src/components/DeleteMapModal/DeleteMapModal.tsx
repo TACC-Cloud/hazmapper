@@ -1,6 +1,5 @@
 import React from 'react';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { Button, SectionMessage } from '@tacc/core-components';
+import { Modal, Layout, Flex, Alert } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { Project } from '@hazmapper/types';
 import { useDeleteProject } from '@hazmapper/hooks/projects/';
@@ -26,6 +25,9 @@ const DeleteMapModal = ({
     isError,
     isSuccess,
   } = useDeleteProject();
+
+  const { Header } = Layout;
+
   const handleClose = () => {
     parentToggle();
   };
@@ -46,45 +48,55 @@ const DeleteMapModal = ({
   };
 
   return (
-    <Modal size="lg" isOpen={isOpen} toggle={handleClose}>
-      <ModalHeader toggle={handleClose}>
-        Delete Map: {project?.name}{' '}
-      </ModalHeader>
-      <ModalBody>
+    <Modal
+      open={isOpen}
+      onCancel={handleClose}
+      title={<Header>Delete Map: {project?.name}</Header>}
+      onOk={handleDeleteProject}
+      okText="Delete"
+      cancelText={isSuccess ? 'Close' : 'Cancel'}
+      okButtonProps={{
+        loading: isDeletingProject,
+        disabled: isSuccess || !project?.deletable,
+      }}
+    >
+      <Flex vertical style={{ paddingBottom: 20 }}>
         {project?.deletable ? (
-          <>
-            Are you sure you want to delete this map? All associated features,
-            metadata, and saved files will be deleted.
-            {project?.public && <b> Note that this is a public map. </b>}
-            <br />
-            <b>
-              <u>This cannot be undone.</u>
-            </b>
-          </>
+          <Alert
+            type="warning"
+            message={
+              <span>
+                Are you sure you want to delete this map? All associated
+                features, metadata, and saved files will be deleted.
+                <br />
+                <br />
+                {project?.public && (
+                  <b>
+                    {' '}
+                    Note that this is a public map.
+                    <br />
+                    <br />
+                  </b>
+                )}
+                <b>
+                  <u>This cannot be undone.</u>
+                </b>
+              </span>
+            }
+          />
         ) : (
-          'You don’t have permission to delete this map.'
+          "You don't have permission to delete this map."
         )}
-      </ModalBody>
-      <ModalFooter className="justify-content-start">
-        <Button size="short" type="secondary" onClick={handleClose}>
-          {isSuccess ? 'Close' : 'Cancel'}
-        </Button>
-        <Button
-          size="short"
-          type="primary"
-          attr="submit"
-          isLoading={isDeletingProject}
-          onClick={handleDeleteProject}
-          disabled={isSuccess || !project?.deletable}
-        >
-          Delete
-        </Button>
+
         {isError && (
-          <SectionMessage type="error">
-            {'There was an error deleting your map.'}
-          </SectionMessage>
+          <Flex justify="center" align="center" style={{ paddingTop: 20 }}>
+            <Alert
+              type="error"
+              message="There was an error deleting your map."
+            />
+          </Flex>
         )}
-      </ModalFooter>
+      </Flex>
     </Modal>
   );
 };
