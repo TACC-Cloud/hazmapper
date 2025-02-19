@@ -24,6 +24,15 @@ describe('AssetsPanel', () => {
     isPublicView: false,
   };
 
+  beforeEach(() => {
+    // Mock the link click to prevent actual navigation
+    HTMLAnchorElement.prototype.click = jest.fn();
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   it('renders all main components', () => {
     const { getByText } = renderInTest(<AssetsPanel {...defaultProps} />);
 
@@ -32,9 +41,10 @@ describe('AssetsPanel', () => {
     expect(getByText('Export to GeoJSON')).toBeDefined();
   });
 
-  it('handles GeoJSON export correctly', async () => {
-    // Mock the useFeatures hook for download scenario
-    // Create a spy handler for the create API endpoint
+  it('test export-to-geojson button', async () => {
+    // Spy on URL.createObjectURL to capture the blob
+    const createObjectURLSpy = jest.spyOn(URL, 'createObjectURL');
+
     const { handler, spy } = createSpyHandler(geoapi_project_features);
     server.use(handler);
 
@@ -45,8 +55,16 @@ describe('AssetsPanel', () => {
       fireEvent.click(screen.getByText('Export to GeoJSON'));
     });
 
+    // Wait for the API call to get features
     await waitFor(() => {
       expect(spy).toHaveBeenCalledTimes(1);
     });
+
+    // Verify the geojson blob was created with correct content
+    expect(createObjectURLSpy).toHaveBeenCalled();
+    const blob = createObjectURLSpy.mock.calls[0][0] as Blob;
+    expect(blob.type).toBe('application/json');
+    const content = JSON.parse(await blob.text());
+    expect(content).toEqual(featureCollection);
   });
 });
