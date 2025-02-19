@@ -38,6 +38,7 @@ import * as z from 'zod';
 import { useForm, FormProvider } from 'react-hook-form';
 import StreetviewPanel from '@hazmapper/components/StreetviewPanel';
 import PublicInfoPanel from '@hazmapper/components/PublicInfoPanel';
+import dayjs from 'dayjs';
 
 export const tileLayerSchema = z.object({
   id: z.number(),
@@ -161,10 +162,9 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     Object.keys(assetTypeOptions)
   );
   const [toggleDateFilter, setToggleDateFilter] = React.useState(false);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(
-    new Date(Date.now() + 24 * 60 * 60 * 1000)
-  );
+  const [startDate, setStartDate] = useState(dayjs().startOf('day'));
+  const [endDate, setEndDate] = useState(dayjs().add(1, 'day').startOf('day'));
+
   const { selectedFeature, setSelectedFeatureId: toggleSelectedFeature } =
     useFeatureSelection();
   const [isQuestionnaireModalOpen, setQuestionnaireModalOpen] = useState(false);
