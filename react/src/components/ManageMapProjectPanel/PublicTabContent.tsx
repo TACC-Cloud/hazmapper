@@ -20,10 +20,10 @@ const PublicTabContent: React.FC<PublicTabProps> = ({
   };
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const publicPath = window.location.href.replace(
+  const publicPath = `${window.location.origin}${window.location.pathname.replace(
     '/project/',
     '/project-public/'
-  );
+  )}`;
 
   const { Paragraph } = Typography;
   return (
@@ -47,7 +47,11 @@ const PublicTabContent: React.FC<PublicTabProps> = ({
             >
               <Button
                 type="link"
-                style={{ textWrap: 'wrap', textAlign: 'justify' }}
+                style={{
+                  textWrap: 'wrap',
+                  textAlign: 'justify',
+                  display: 'contents',
+                }}
                 href={`${publicPath}`}
                 target="_blank"
                 rel="noreferrer"
