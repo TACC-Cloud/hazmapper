@@ -43,6 +43,7 @@ const DownloadFeaturesButton: React.FC<DownloadFeaturesButtonProps> = ({
   const triggerDownload = () => {
     refetch().then(({ data }) => {
       if (data) {
+        // Create and trigger download
         const blob = new Blob([JSON.stringify(data)], {
           type: 'application/json',
         });
