@@ -58,6 +58,7 @@ const DeleteMapModal = ({
       okButtonProps={{
         loading: isDeletingProject,
         disabled: isSuccess || !project?.deletable,
+        'data-testid': 'delete-map-button',
       }}
     >
       <Flex vertical style={{ paddingBottom: 20 }}>
