@@ -2,6 +2,10 @@
 
 /* Target all questionnaire content injected by jQuery */
 
+.questionnaireViewContainer {
+  overflow: auto;
+}
+
 .questionnaireViewContainer :global(.view-only-questionnaire-container) {
   cursor: default;
   line-height: normal;
