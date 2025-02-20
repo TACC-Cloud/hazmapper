@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
-import { LoadingSpinner, SectionMessage } from '@tacc/core-components';
+import { Modal, Layout, Flex, Alert } from 'antd';
 import { Feature } from '../../types';
 import {
   useFeatureAssetSource,
@@ -30,6 +29,8 @@ const QuestionnaireModal = ({
     error,
   } = useFeatureAssetSource(feature, '/questionnaire.rq');
   const getFeatureAssetSourcePath = useFeatureAssetSourcePath(feature);
+  const { Header } = Layout;
+
   useEffect(() => {
     const loadQuestionnaire = async () => {
       try {
@@ -56,28 +57,41 @@ const QuestionnaireModal = ({
   }, [isOpen, featureSource, getFeatureAssetSourcePath]);
 
   return (
-    <Modal isOpen={isOpen} toggle={close} size="lg">
-      <ModalHeader toggle={close}>
-        Questionnaire:{' '}
-        {feature?.assets?.length > 0
-          ? feature.assets.map((asset) =>
-              asset.display_path
-                ? asset.display_path.split('/').pop()
-                : (asset.id ?? feature.id)
-            )
-          : feature?.id}
-      </ModalHeader>
-      <ModalBody>
-        <div className={styles.questionnaireViewContainer}>
-          <div id="questionnaire-view" ref={questionnaireRef} />
-        </div>
-        {isLoading && <LoadingSpinner />}
-        {isError && (
-          <SectionMessage type="error">
-            Error loading questionnaire: {error.message}
-          </SectionMessage>
+    <Modal
+      open={isOpen}
+      onCancel={close}
+      loading={isLoading}
+      width={800}
+      footer={null}
+      title={
+        <Header style={{ height: 'fit-content' }}>
+          Questionnaire:
+          {feature?.assets?.length > 0
+            ? feature.assets.map((asset) =>
+                asset.display_path
+                  ? asset.display_path.split('/').pop()
+                  : (asset.id ?? feature.id)
+              )
+            : feature?.id}
+        </Header>
+      }
+    >
+      <Flex vertical flex={1} style={{ minHeight: '20vh', maxHeight: '70vh' }}>
+        {!isError ? (
+          <div className={styles.questionnaireViewContainer}>
+            <div id="questionnaire-view" ref={questionnaireRef} />
+          </div>
+        ) : (
+          isError && (
+            <Flex justify="center" align="center" flex={1}>
+              <Alert
+                type="error"
+                message={`Error loading questionnaire: ${error.message}`}
+              />
+            </Flex>
+          )
         )}
-      </ModalBody>
+      </Flex>
     </Modal>
   );
 };

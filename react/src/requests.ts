@@ -113,7 +113,7 @@ export function useGet<ResponseType, TransformedResponseType = ResponseType>({
       }
       analytics_params = { ...analytics_params, guest_uuid: guestUuid };
     }
-    params = { ...analytics_params };
+    params = { ...params, ...analytics_params };
   }
 
   const getUtil = async () => {

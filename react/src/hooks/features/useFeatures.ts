@@ -5,13 +5,14 @@ import {
 } from '@tanstack/react-query';
 import { FeatureCollection } from '@hazmapper/types';
 import { useGet } from '@hazmapper/requests';
+import type { Dayjs } from 'dayjs';
 
 interface UseFeaturesParams {
   projectId: number;
   isPublicView: boolean;
   assetTypes: string[];
-  startDate?: Date;
-  endDate?: Date;
+  startDate?: Dayjs;
+  endDate?: Dayjs;
   toggleDateFilter?: boolean;
   options?: object;
 }
@@ -29,12 +30,21 @@ export const useFeatures = ({
 }: UseFeaturesParams): UseQueryResult<FeatureCollection> => {
   // TODO can be reworked as /projects can be used and /public-projects can be removed since we are no longer a WSO2 API
   const featuresRoute = isPublicView ? 'public-projects' : 'projects';
-  let endpoint = `/${featuresRoute}/${projectId}/features/`;
+  const endpoint = `/${featuresRoute}/${projectId}/features/`;
+
+  let queryParams = {};
   if (assetTypes?.length) {
-    endpoint += `?assetType=${assetTypes.join(',')}`;
+    queryParams = {
+      ...queryParams,
+      assetType: assetTypes.join(','),
+    };
   }
   if (startDate && endDate && toggleDateFilter) {
-    endpoint += `&startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`;
+    queryParams = {
+      ...queryParams,
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString(),
+    };
   }
 
   const defaultQueryOptions = {
@@ -54,12 +64,11 @@ export const useFeatures = ({
         projectId,
         isPublicView,
         assetTypes,
-        startDate,
-        endDate,
-        toggleDateFilter,
+        queryParams,
       },
     ],
     options: { ...defaultQueryOptions, ...options },
+    params: queryParams,
   });
   return query;
 };
