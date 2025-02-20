@@ -29,11 +29,7 @@ const DownloadFeaturesButton: React.FC<DownloadFeaturesButtonProps> = ({
   isPublicView,
   disabled,
 }) => {
-  const {
-    data,
-    isLoading: isDownloading,
-    refetch,
-  } = useFeatures({
+  const { isLoading: isDownloading, refetch } = useFeatures({
     projectId: project.id,
     isPublicView: isPublicView,
     assetTypes: [], // Empty array to get all features
@@ -45,23 +41,25 @@ const DownloadFeaturesButton: React.FC<DownloadFeaturesButtonProps> = ({
   });
 
   const triggerDownload = () => {
-    refetch();
+    refetch().then(({ data }) => {
+      if (data) {
+        // Create and trigger download
+        const blob = new Blob([JSON.stringify(data)], {
+          type: 'application/json',
+        });
 
-    // Create and trigger download
-    const blob = new Blob([JSON.stringify(data)], {
-      type: 'application/json',
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = getFilename(project.name);
+
+        document.body.appendChild(link);
+        link.click();
+
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      }
     });
-
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = getFilename(project.name);
-
-    document.body.appendChild(link);
-    link.click();
-
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
   };
 
   return (
