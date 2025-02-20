@@ -82,9 +82,12 @@ export const createSpyHandler = (originalHandler: any) => {
     let processedArgs: SpyHandlerArgs | undefined;
     try {
       if (args[0] && args[0].request) {
-        const bodyOrPromise = args[0].request.json
-          ? await args[0].request.json()
-          : null;
+        // Only try to parse JSON for POST, PUT, PATCH
+        const shouldParseBody = ['post', 'put', 'patch'].includes(method);
+        const bodyOrPromise =
+          shouldParseBody && args[0].request.json
+            ? await args[0].request.json()
+            : null;
         processedArgs = {
           ...args[0],
           body: bodyOrPromise,
@@ -92,10 +95,8 @@ export const createSpyHandler = (originalHandler: any) => {
         };
       }
     } catch (error) {
-      // Ignore JSON parsing errors for DELETE requests
-      if (method !== 'delete') {
-        console.warn('Failed to parse JSON body', error);
-      }
+      console.warn('Failed to parse JSON body', error);
+
       processedArgs = {
         ...args[0],
         body: null,
