@@ -28,9 +28,7 @@ export const useFeatures = ({
   toggleDateFilter,
   options = {},
 }: UseFeaturesParams): UseQueryResult<FeatureCollection> => {
-  // TODO can be reworked as /projects can be used and /public-projects can be removed since we are no longer a WSO2 API
-  const featuresRoute = isPublicView ? 'public-projects' : 'projects';
-  const endpoint = `/${featuresRoute}/${projectId}/features/`;
+  const endpoint = `/projects/${projectId}/features/`;
 
   let queryParams = {};
   if (assetTypes?.length) {
