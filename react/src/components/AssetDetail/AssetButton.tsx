@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DOMPurify from 'dompurify';
 import { Button } from 'antd';
 import { Feature, FeatureType } from '@hazmapper/types';
@@ -28,10 +28,15 @@ const AssetButton: React.FC<AssetButtonProps> = ({
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const featureType = getFeatureType(selectedFeature);
   const projectId = selectedFeature.project_id;
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const notification = useNotification();
   const featureId = selectedFeature.id;
   const { mutate: importFeatureAsset, isPending: isImporting } =
     useImportFeatureAsset(projectId, featureId);
+
+  useEffect(() => {
+    setIsSuccess(false);
+  }, [selectedFeature.id]);
 
   const handleSubmit = (files: TapisFilePath[]) => {
     for (const file of files) {
@@ -42,6 +47,7 @@ const AssetButton: React.FC<AssetButtonProps> = ({
       importFeatureAsset(importData, {
         onSuccess: () => {
           setIsModalOpen(false);
+          setIsSuccess(true);
           notification.success({
             description: `Your asset import for feature ${selectedFeature.id} was successful.`,
           });
@@ -84,7 +90,7 @@ const AssetButton: React.FC<AssetButtonProps> = ({
           type="primary"
           onClick={() => setIsModalOpen(true)}
           loading={isImporting}
-          disabled={isImporting}
+          disabled={isImporting || isSuccess}
         >
           Add Asset from DesignSafe
         </Button>
