@@ -8,6 +8,8 @@ import {
  */
 export function getGeoapiUrl(backend: GeoapiBackendEnvironment): string {
   switch (backend) {
+    case GeoapiBackendEnvironment.Test:
+      return 'https://geoapi.unittest';
     case GeoapiBackendEnvironment.Local:
       return 'http://localhost:8888';
     case GeoapiBackendEnvironment.Experimental:
