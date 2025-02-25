@@ -50,7 +50,6 @@ const AssetButton: React.FC<AssetButtonProps> = ({
       importFeatureAsset(importData, {
         onSuccess: () => {
           setIsModalOpen(false);
-          setIsSuccess(true);
           notification.success({
             description: `Your asset import for feature ${selectedFeature.id} was successful.`,
           });
