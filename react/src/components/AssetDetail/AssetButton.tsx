@@ -28,15 +28,18 @@ const AssetButton: React.FC<AssetButtonProps> = ({
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const featureType = getFeatureType(selectedFeature);
   const projectId = selectedFeature.project_id;
-  const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const notification = useNotification();
   const featureId = selectedFeature.id;
-  const { mutate: importFeatureAsset, isPending: isImporting } =
-    useImportFeatureAsset(projectId, featureId);
+  const {
+    mutate: importFeatureAsset,
+    isPending: isImporting,
+    isSuccess,
+    reset,
+  } = useImportFeatureAsset(projectId, featureId);
 
   useEffect(() => {
-    setIsSuccess(false);
-  }, [selectedFeature.id]);
+    reset();
+  }, [selectedFeature.id, reset]);
 
   const handleSubmit = (files: TapisFilePath[]) => {
     for (const file of files) {
