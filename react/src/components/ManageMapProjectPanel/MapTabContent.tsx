@@ -76,7 +76,6 @@ const MapTabContent: React.FC<MapTabProps> = ({
 
     // note that entire project gets stringified but only `id` is used by taggit
     localStorage.setItem(lastProjectKeyword, JSON.stringify(project));
-    debugger;
     navigate(config.taggitUrl);
   };
 
@@ -120,10 +119,9 @@ const MapTabContent: React.FC<MapTabProps> = ({
           <List.Item>
             <Flex vertical justify="center" gap="small">
               <Button
+                data-testid="taggit-button"
                 type="primary"
                 onClick={() => navigateToCorrespondingTaggitGallery()}
-                target="_blank"
-                rel="noreferrer"
               >
                 View in Taggit
               </Button>
