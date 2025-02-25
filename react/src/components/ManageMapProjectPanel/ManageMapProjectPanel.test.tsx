@@ -24,9 +24,9 @@ describe('ManageMapProjectPanel', () => {
     expect(within(activeTab).getByText(/Map Details/i)).toBeDefined();
 
     // Ensure other tab content is NOT present in the active tab
-    expect(within(activeTab).queryByText(/Members/i)).not.toBeDefined();
-    expect(within(activeTab).queryByText(/Public Access/i)).not.toBeDefined();
-    expect(within(activeTab).queryByText(/Save Location/i)).not.toBeDefined();
+    expect(within(activeTab).queryByText(/Members/i)).toBeNull();
+    expect(within(activeTab).queryByText(/Public Access/i)).toBeNull();
+    expect(within(activeTab).queryByText(/Save Location/i)).toBeNull();
   });
 
   it('switches between tabs correctly', () => {
@@ -42,6 +42,6 @@ describe('ManageMapProjectPanel', () => {
     expect(within(activeTab).getByText(/Members/i)).toBeDefined();
 
     // Ensure the previous tab content is NOT present in the active tab
-    expect(within(activeTab).queryByText(/Map Details/i)).not.toBeDefined();
+    expect(within(activeTab).queryByText(/Map Details/i)).toBeNull();
   });
 });
