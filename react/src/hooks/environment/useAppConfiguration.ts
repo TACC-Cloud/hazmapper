@@ -46,6 +46,7 @@ export const useAppConfiguration = (): AppConfiguration => {
     ) {
       const appConfig: AppConfiguration = {
         basePath: basePath,
+        geoapiEnv: GeoapiBackendEnvironment.Staging,
         geoapiUrl: getGeoapiUrl(GeoapiBackendEnvironment.Staging),
         designsafePortalUrl: getDesignsafePortalUrl(
           DesignSafePortalEnvironment.PPRD
@@ -67,6 +68,7 @@ export const useAppConfiguration = (): AppConfiguration => {
     ) {
       const appConfig: AppConfiguration = {
         basePath: basePath,
+        geoapiEnv: GeoapiBackendEnvironment.Dev,
         geoapiUrl: getGeoapiUrl(GeoapiBackendEnvironment.Dev),
         designsafePortalUrl: getDesignsafePortalUrl(
           DesignSafePortalEnvironment.PPRD
@@ -86,6 +88,7 @@ export const useAppConfiguration = (): AppConfiguration => {
     } else if (/^hazmapper.tacc.utexas.edu/.test(hostname)) {
       const appConfig: AppConfiguration = {
         basePath: basePath,
+        geoapiEnv: GeoapiBackendEnvironment.Production,
         geoapiUrl: getGeoapiUrl(GeoapiBackendEnvironment.Production),
         designsafePortalUrl: getDesignsafePortalUrl(
           DesignSafePortalEnvironment.Production
