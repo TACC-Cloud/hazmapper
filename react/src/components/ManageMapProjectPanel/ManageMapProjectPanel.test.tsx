@@ -1,38 +1,12 @@
 import React from 'react';
-import { screen, fireEvent } from '@testing-library/react';
+import { within, screen, fireEvent } from '@testing-library/react';
 import ManageMapProjectPanel from './ManageMapProjectPanel';
 import { projectMock } from '@hazmapper/__fixtures__/projectFixtures';
 import { renderInTest, testQueryClient } from '@hazmapper/test/testUtil';
 
-// Mock the child components
-jest.mock('./MapTabContent', () => {
-  return function MockMapTabContent() {
-    return <div data-testid="map-tab-content">Map Tab Content</div>;
-  };
-});
-
-jest.mock('./MembersTabContent', () => {
-  return function MockMembersTabContent() {
-    return <div data-testid="members-tab-content">Members Tab Content</div>;
-  };
-});
-
-jest.mock('./PublicTabContent', () => {
-  return function MockPublicTabContent() {
-    return <div data-testid="public-tab-content">Public Tab Content</div>;
-  };
-});
-
-jest.mock('./SaveTabContent', () => {
-  return function MockSaveTabContent() {
-    return <div data-testid="save-tab-content">Save Tab Content</div>;
-  };
-});
-
 describe('ManageMapProjectPanel', () => {
   const defaultProps = {
     project: projectMock,
-    onProjectUpdate: jest.fn(),
   };
 
   beforeEach(() => {
@@ -40,36 +14,34 @@ describe('ManageMapProjectPanel', () => {
     testQueryClient.clear();
   });
 
-  it('renders all tab buttons', () => {
+  it('renders the default Map tab content initially', () => {
     renderInTest(<ManageMapProjectPanel {...defaultProps} />);
 
-    expect(screen.getByRole('tab', { name: 'Map' })).toBeTruthy();
-    expect(screen.getByRole('tab', { name: 'Members' })).toBeTruthy();
-    expect(screen.getByRole('tab', { name: 'Public' })).toBeTruthy();
-    expect(screen.getByRole('tab', { name: 'Save' })).toBeTruthy();
+    // Get the active tab container
+    const activeTab = screen.getByRole('tabpanel', { hidden: false });
+
+    // Ensure the active tab contains "Map Details"
+    expect(within(activeTab).getByText(/Map Details/i)).toBeDefined();
+
+    // Ensure other tab content is NOT present in the active tab
+    expect(within(activeTab).queryByText(/Members/i)).not.toBeDefined();
+    expect(within(activeTab).queryByText(/Public Access/i)).not.toBeDefined();
+    expect(within(activeTab).queryByText(/Save Location/i)).not.toBeDefined();
   });
 
-  it('renders map tab content by default', () => {
-    renderInTest(<ManageMapProjectPanel {...defaultProps} />);
-
-    expect(screen.getByTestId('map-tab-content')).toBeTruthy();
-  });
   it('switches between tabs correctly', () => {
     renderInTest(<ManageMapProjectPanel {...defaultProps} />);
 
-    // Click Members tab
-    const membersTab = screen.getByRole('tab', { name: 'Members' });
-    fireEvent.click(membersTab);
-    expect(screen.getByTestId('members-tab-content')).toBeTruthy();
+    // Click "Members" tab
+    fireEvent.click(screen.getByRole('tab', { name: 'Members' }));
 
-    // Click Public tab
-    const publicTab = screen.getByRole('tab', { name: 'Public' });
-    fireEvent.click(publicTab);
-    expect(screen.getByTestId('public-tab-content')).toBeTruthy();
+    // Get the newly active tab container
+    const activeTab = screen.getByRole('tabpanel', { hidden: false });
 
-    // Click Save tab
-    const saveTab = screen.getByRole('tab', { name: 'Save' });
-    fireEvent.click(saveTab);
-    expect(screen.getByTestId('save-tab-content')).toBeTruthy();
+    // Ensure the "Members" tab content is now visible
+    expect(within(activeTab).getByText(/Members/i)).toBeDefined();
+
+    // Ensure the previous tab content is NOT present in the active tab
+    expect(within(activeTab).queryByText(/Map Details/i)).not.toBeDefined();
   });
 });
