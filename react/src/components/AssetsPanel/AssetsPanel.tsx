@@ -29,7 +29,7 @@ const DownloadFeaturesButton: React.FC<DownloadFeaturesButtonProps> = ({
   isPublicView,
   disabled,
 }) => {
-  const { isLoading: isDownloading, refetch: triggerDownload } = useFeatures({
+  const { isLoading: isDownloading, refetch } = useFeatures({
     projectId: project.id,
     isPublicView: isPublicView,
     assetTypes: [], // Empty array to get all features
@@ -37,7 +37,12 @@ const DownloadFeaturesButton: React.FC<DownloadFeaturesButtonProps> = ({
       enabled: false, // Only fetch when triggered by user clicking button
       gcTime: 0,
       staleTime: 0,
-      onSuccess: (data: FeatureCollection) => {
+    },
+  });
+
+  const triggerDownload = () => {
+    refetch().then(({ data }) => {
+      if (data) {
         // Create and trigger download
         const blob = new Blob([JSON.stringify(data)], {
           type: 'application/json',
@@ -53,9 +58,9 @@ const DownloadFeaturesButton: React.FC<DownloadFeaturesButtonProps> = ({
 
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
-      },
-    },
-  });
+      }
+    });
+  };
 
   return (
     <Button
@@ -123,11 +128,16 @@ const AssetsPanel: React.FC<Props> = ({
   return (
     <>
       <Flex vertical className={styles.root}>
-        <Header className={styles.topSection}>
-          <Button onClick={() => setIsModalOpen(true)} icon={<PlusOutlined />}>
-            Import from DesignSafe
-          </Button>
-        </Header>
+        {!isPublicView && (
+          <Header className={styles.topSection}>
+            <Button
+              onClick={() => setIsModalOpen(true)}
+              icon={<PlusOutlined />}
+            >
+              Import from DesignSafe
+            </Button>
+          </Header>
+        )}
         <Content className={styles.middleSection}>
           <FeatureFileTree
             projectId={project.id}

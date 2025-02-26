@@ -38,6 +38,7 @@ import * as z from 'zod';
 import { useForm, FormProvider } from 'react-hook-form';
 import StreetviewPanel from '@hazmapper/components/StreetviewPanel';
 import PublicInfoPanel from '@hazmapper/components/PublicInfoPanel';
+import dayjs from 'dayjs';
 
 export const tileLayerSchema = z.object({
   id: z.number(),
@@ -161,10 +162,9 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     Object.keys(assetTypeOptions)
   );
   const [toggleDateFilter, setToggleDateFilter] = React.useState(false);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(
-    new Date(Date.now() + 24 * 60 * 60 * 1000)
-  );
+  const [startDate, setStartDate] = useState(dayjs().startOf('day'));
+  const [endDate, setEndDate] = useState(dayjs().add(1, 'day').startOf('day'));
+
   const { selectedFeature, setSelectedFeatureId: toggleSelectedFeature } =
     useFeatureSelection();
   const [isQuestionnaireModalOpen, setQuestionnaireModalOpen] = useState(false);
@@ -205,8 +205,6 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
 
   const queryParams = new URLSearchParams(location.search);
   const activePanel = queryParams.get(queryPanelKey);
-
-  const loading = isTileServerLayersLoading; // not considering isLoading of useFeatures as will show spinner on map
 
   const featureCollection = rawFeatureCollection ?? {
     type: 'FeatureCollection',
@@ -262,7 +260,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
                 }}
               >
                 <MapProjectNavBar isPublicView={isPublicView} />
-                {activePanel && !loading && (
+                {activePanel && !isTileServerLayersLoading && (
                   <BasePanel
                     panelTitle={activePanel}
                     className={
@@ -314,33 +312,31 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
               </Flex>
             </Sider>
             <Content>
-              {loading ? (
+              {isTileServerLayersLoading ? (
                 <Spinner />
               ) : (
                 <>
                   <div className={styles.map}>
                     <Map featureCollection={featureCollection} />
                   </div>
-                  {selectedFeature && (
-                    <div className={styles.detailContainer}>
-                      <AssetDetail
-                        selectedFeature={selectedFeature}
-                        onClose={() =>
-                          toggleSelectedFeature(selectedFeature.id)
-                        }
-                        isPublicView={isPublicView}
-                        onQuestionnaireClick={handleQuestionnaireClick}
-                      />
-                    </div>
-                  )}
-                  {isQuestionnaireModalOpen && selectedFeature && (
-                    <QuestionnaireModal
-                      isOpen={isQuestionnaireModalOpen}
-                      close={() => setQuestionnaireModalOpen(false)}
-                      feature={selectedFeature}
-                    />
-                  )}
                 </>
+              )}
+              {selectedFeature && (
+                <div className={styles.detailContainer}>
+                  <AssetDetail
+                    selectedFeature={selectedFeature}
+                    onClose={() => toggleSelectedFeature(selectedFeature.id)}
+                    isPublicView={isPublicView}
+                    onQuestionnaireClick={handleQuestionnaireClick}
+                  />
+                </div>
+              )}
+              {isQuestionnaireModalOpen && selectedFeature && (
+                <QuestionnaireModal
+                  isOpen={isQuestionnaireModalOpen}
+                  close={() => setQuestionnaireModalOpen(false)}
+                  feature={selectedFeature}
+                />
               )}
             </Content>
           </Layout>

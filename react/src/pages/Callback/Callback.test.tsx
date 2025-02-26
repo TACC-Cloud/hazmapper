@@ -3,7 +3,7 @@ import { renderInTest } from '@hazmapper/test/testUtil';
 import Callback from './Callback';
 
 test('renders callback', async () => {
-  const { getByText } = renderInTest(<Callback />, '/callback');
+  const { getByTestId } = renderInTest(<Callback />, '/callback');
 
-  expect(getByText(/Logging in/)).toBeDefined();
+  expect(getByTestId('spin')).toBeTruthy();
 });

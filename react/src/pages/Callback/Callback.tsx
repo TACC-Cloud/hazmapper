@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { jwtDecode } from 'jwt-decode';
 import { loginSuccess } from '../../redux/authSlice';
+import { Flex, Spin } from 'antd';
 import { AuthenticatedUser, AuthToken } from '@hazmapper/types';
 
 export default function CallbackPage() {
@@ -29,5 +30,9 @@ export default function CallbackPage() {
     }
   }, [dispatch, location, navigate]);
 
-  return <div>Logging in.</div>;
+  return (
+    <Flex justify="center" align="center" style={{ height: '100vh' }}>
+      <Spin size="large" data-testid="spin" />
+    </Flex>
+  );
 }

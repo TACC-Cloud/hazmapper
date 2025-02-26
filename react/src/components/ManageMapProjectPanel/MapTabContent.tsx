@@ -3,6 +3,7 @@ import { Project, ProjectRequest } from '@hazmapper/types';
 import { SectionMessage } from '@tacc/core-components';
 import { EditFilled, CheckOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Button, Flex, List, Input, Modal } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import { useAppConfiguration } from '@hazmapper/hooks';
 import DeleteMapModal from '../DeleteMapModal/DeleteMapModal';
 
@@ -65,6 +66,19 @@ const MapTabContent: React.FC<MapTabProps> = ({
 
   const config = useAppConfiguration();
 
+  const navigate = useNavigate();
+
+  const navigateToCorrespondingTaggitGallery = () => {
+    // We set some info in local storage for Taggit and then navigate to Taggit
+
+    // key for local storage is backend-specific
+    const lastProjectKeyword = `${config.geoapiEnv}LastProject`;
+
+    // note that entire project gets stringified but only `id` is used by taggit
+    localStorage.setItem(lastProjectKeyword, JSON.stringify(project));
+    navigate(config.taggitUrl);
+  };
+
   return (
     <>
       <Flex vertical justify="center">
@@ -105,11 +119,9 @@ const MapTabContent: React.FC<MapTabProps> = ({
           <List.Item>
             <Flex vertical justify="center" gap="small">
               <Button
+                data-testid="taggit-button"
                 type="primary"
-                // TODO Improve navigating to taggit https://tacc-main.atlassian.net/browse/WG-430)
-                href={config.taggitUrl}
-                target="_blank"
-                rel="noreferrer"
+                onClick={() => navigateToCorrespondingTaggitGallery()}
               >
                 View in Taggit
               </Button>

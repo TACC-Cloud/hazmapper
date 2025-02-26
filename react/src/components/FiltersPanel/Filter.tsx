@@ -1,23 +1,19 @@
 import React from 'react';
 import styles from './Filters.module.css';
-import DatePicker from 'react-datepicker';
-import { Button, Flex } from 'antd';
-import 'react-datepicker/dist/react-datepicker.css';
+import { DatePicker } from 'antd';
+import { Button, Flex, Tooltip } from 'antd';
+import type { Dayjs } from 'dayjs';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
 interface FiltersProps {
   selectedAssetTypes: string[];
   onFiltersChange: (selectedAssetTypes: string[]) => void;
-  startDate: Date;
-  setStartDate: (date: Date) => void;
-  endDate: Date;
-  setEndDate: (date: Date) => void;
+  startDate: Dayjs;
+  setStartDate: (date: Dayjs) => void;
+  endDate: Dayjs;
+  setEndDate: (date: Dayjs) => void;
   toggleDateFilter: boolean;
   setToggleDateFilter: (toggleDateFilter: boolean) => void;
-}
-
-interface CustomInputProps {
-  value?: string;
-  onClick?: () => void;
 }
 
 export const assetTypeOptions = {
@@ -47,29 +43,6 @@ const Filters: React.FC<FiltersProps> = ({
     }
   };
 
-  const CustomInputWithTooltip = React.forwardRef<
-    HTMLInputElement,
-    CustomInputProps
-  >(({ value, onClick }, ref) => (
-    <div className={styles.customInputContainer}>
-      <input
-        className={styles.customInput}
-        value={value}
-        onClick={onClick}
-        ref={ref}
-        readOnly
-      />
-      <span
-        className={styles.tooltip}
-        title="Choose the date(s) corresponding to when the data collection occurred in the field, not when the data was uploaded to the map project."
-      >
-        ?
-      </span>
-    </div>
-  ));
-
-  CustomInputWithTooltip.displayName = 'CustomInputWithTooltip';
-
   return (
     <Flex vertical className={styles.root}>
       {toggleDateFilter ? (
@@ -77,26 +50,31 @@ const Filters: React.FC<FiltersProps> = ({
           <Button onClick={() => setToggleDateFilter(false)}>
             Disable Date Range Filter
           </Button>
-          <h2>Date Range</h2>
-          <h5>Start Date</h5>
-          <DatePicker
-            selected={startDate}
-            onChange={(date: Date | null) => setStartDate(date as Date)}
-            selectsStart
-            startDate={startDate}
-            endDate={endDate}
-            customInput={<CustomInputWithTooltip />}
-          />
-          <h5>End Date</h5>
-          <DatePicker
-            selected={endDate}
-            onChange={(date: Date | null) => setEndDate(date as Date)}
-            selectsEnd
-            startDate={startDate}
-            endDate={endDate}
-            minDate={startDate}
-            customInput={<CustomInputWithTooltip />}
-          />
+          <Flex vertical>
+            <h2>
+              <Flex align="center" justify="space-between">
+                Date Range
+                <Tooltip
+                  title="Choose the date(s) corresponding to when the data collection occurred in the field, not when the data was uploaded to the map project."
+                  placement="right"
+                >
+                  <Button type="link" icon={<QuestionCircleOutlined />} />
+                </Tooltip>
+              </Flex>
+            </h2>
+            <h5>Start Date</h5>
+            <DatePicker
+              defaultValue={startDate}
+              onChange={setStartDate}
+              allowClear={false}
+            />
+            <h5>End Date</h5>
+            <DatePicker
+              defaultValue={endDate}
+              onChange={setEndDate}
+              allowClear={false}
+            />
+          </Flex>
         </>
       ) : (
         <Button type="primary" onClick={() => setToggleDateFilter(true)}>

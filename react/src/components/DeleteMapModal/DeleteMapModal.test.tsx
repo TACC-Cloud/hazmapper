@@ -91,13 +91,17 @@ describe('DeleteMapModal', () => {
 
     it('should disable delete button for non-deletable projects', async () => {
       await renderComponent(nonDeletableProjectMock);
-      const deleteButton = screen.getByText('Delete') as HTMLButtonElement;
+      const deleteButton = screen.getByTestId(
+        'delete-map-button'
+      ) as HTMLButtonElement;
       expect(deleteButton.disabled).toBe(true);
     });
 
     it('should enable delete button for deletable projects', async () => {
       await renderComponent();
-      const deleteButton = screen.getByText('Delete') as HTMLButtonElement;
+      const deleteButton = screen.getByTestId(
+        'delete-map-button'
+      ) as HTMLButtonElement;
       expect(deleteButton.disabled).toBe(false);
     });
 
