@@ -43,10 +43,6 @@ const defaultGeoJsonOptions = {
   },
 };
 
-const getFeatureStyle = (feature: any) => {
-  return feature.properties?.style || defaultGeoJsonOptions.style;
-};
-
 /**
  * A component that displays a leaflet map of hazmapper data
  *
@@ -54,6 +50,11 @@ const getFeatureStyle = (feature: any) => {
  */
 const LeafletMap: React.FC<LeafletMapProps> = ({ featureCollection }) => {
   const { setSelectedFeatureId } = useFeatureSelection();
+
+  const getMemoizedFeatureStyle = useMemo(() => {
+    return (feature: any) =>
+      feature.properties?.style || defaultGeoJsonOptions.style;
+  }, []);
 
   const handleFeatureClick = useCallback(
     (feature: any) => {
@@ -126,6 +127,42 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ featureCollection }) => {
     );
   }, [featureCollection.features]);
 
+  const markerComponents = useMemo(
+    () =>
+      markerFeatures.map((feature) => {
+        const geometry = feature.geometry as GeoJSON.Point;
+        return (
+          <Marker
+            key={feature.id}
+            icon={createMarkerIcon(feature)}
+            position={[geometry.coordinates[1], geometry.coordinates[0]]}
+            eventHandlers={{
+              click: () => handleFeatureClick(feature),
+              contextmenu: () => handleFeatureClick(feature),
+            }}
+          />
+        );
+      }),
+    [markerFeatures, handleFeatureClick] // Only rebuild if features or click handler changes
+  );
+
+  // Memoize GeoJSON components
+  const geoJsonComponents = useMemo(
+    () =>
+      generalGeoJsonFeatures.map((feature) => (
+        <GeoJSON
+          key={feature.id}
+          data={feature.geometry}
+          style={() => getMemoizedFeatureStyle(feature)}
+          eventHandlers={{
+            click: () => handleFeatureClick(feature),
+            contextmenu: () => handleFeatureClick(feature),
+          }}
+        />
+      )),
+    [generalGeoJsonFeatures, handleFeatureClick, getMemoizedFeatureStyle]
+  );
+
   return (
     <MapContainer
       center={MAP_CONFIG.startingCenter}
@@ -161,17 +198,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ featureCollection }) => {
         )
       )}
       {/* General GeoJSON Features (including point cloud geometries) */}
-      {generalGeoJsonFeatures.map((feature) => (
-        <GeoJSON
-          key={feature.id}
-          data={feature.geometry}
-          style={() => getFeatureStyle(feature)}
-          eventHandlers={{
-            click: () => handleFeatureClick(feature),
-            contextmenu: () => handleFeatureClick(feature),
-          }}
-        />
-      ))}
+      {geoJsonComponents}
       {/* Marker Features with Clustering (also includes point cloud markers) */}
       <MarkerClusterGroup
         zIndexOffset={1}
@@ -186,20 +213,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ featureCollection }) => {
         spiderfyOnZoom={MAP_CONFIG.maxPointSelectedFeatureZoom}
         zoomToBoundsOnClick={true}
       >
-        {markerFeatures.map((feature) => {
-          const geometry = feature.geometry as GeoJSON.Point;
-          return (
-            <Marker
-              key={feature.id}
-              icon={createMarkerIcon(feature)}
-              position={[geometry.coordinates[1], geometry.coordinates[0]]}
-              eventHandlers={{
-                click: () => handleFeatureClick(feature),
-                contextmenu: () => handleFeatureClick(feature),
-              }}
-            />
-          );
-        })}
+        {markerComponents}
       </MarkerClusterGroup>
       {/* Handles zooming to a specific feature or to all features */}
       <FitBoundsHandler featureCollection={featureCollection} />
@@ -209,4 +223,7 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ featureCollection }) => {
   );
 };
 
-export default LeafletMap;
+export default React.memo(LeafletMap, (prevProps, nextProps) => {
+  // Only re-render if featureCollection reference changes
+  return prevProps.featureCollection === nextProps.featureCollection;
+});

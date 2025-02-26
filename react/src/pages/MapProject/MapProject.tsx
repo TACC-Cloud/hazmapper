@@ -206,10 +206,14 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
   const queryParams = new URLSearchParams(location.search);
   const activePanel = queryParams.get(queryPanelKey);
 
-  const featureCollection = rawFeatureCollection ?? {
-    type: 'FeatureCollection',
-    features: [],
-  };
+  const featureCollection = useMemo(
+    () =>
+      rawFeatureCollection ?? {
+        type: 'FeatureCollection',
+        features: [],
+      },
+    [rawFeatureCollection]
+  );
 
   const { Content, Sider } = Layout;
 

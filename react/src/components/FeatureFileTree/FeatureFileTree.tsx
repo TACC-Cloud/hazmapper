@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import { Tree, Flex, Spin } from 'antd';
 import type { DataNode } from 'antd/es/tree';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -52,9 +52,11 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
   const { height, ref } = useResizeDetector();
 
   const [expanded, setExpanded] = useState<string[]>([]);
-  const [treeData, setTreeData] = useState<TreeDataNode[]>([]);
 
-  useEffect(() => {
+  const memoizedHeight = useMemo(() => height, [height]);
+
+  // Memoize the expensive tree data computation
+  const { treeData, expandedDirectories } = useMemo(() => {
     const fileNodeArray = featureCollectionToFileNodeArray(featureCollection);
 
     const getDirectoryNodeIds = (nodes: FeatureFileNode[]): string[] => {
@@ -70,12 +72,8 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
           }
         }
       }
-
       return directoryIds;
     };
-
-    // Have all directories be in 'expanded' (i.e. everything is expanded)
-    const expandedDirectories = getDirectoryNodeIds(fileNodeArray);
 
     const convertToTreeNode = (node: FeatureFileNode) => ({
       title: node.name,
@@ -85,14 +83,22 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
       featureNode: node,
     });
 
-    // Convert features into Antd's DataNode (i.e. TreeDataNode) and our internal class FeatureFileNode
-    setTreeData(fileNodeArray.map(convertToTreeNode));
-    setExpanded(expandedDirectories);
+    return {
+      // Convert features into Antd's DataNode (i.e. TreeDataNode) and our internal class FeatureFileNode
+      treeData: fileNodeArray.map(convertToTreeNode),
+      // Have all directories be in 'expanded' (i.e. everything is expanded)
+      expandedDirectories: getDirectoryNodeIds(fileNodeArray),
+    };
   }, [featureCollection]);
 
-  const handleExpand = (newExpandedKeys) => {
+  // Set initial expanded state
+  useEffect(() => {
+    setExpanded(expandedDirectories);
+  }, [expandedDirectories]);
+
+  const handleExpand = useCallback((newExpandedKeys) => {
     setExpanded(newExpandedKeys);
-  };
+  }, []);
 
   const handleDelete = useCallback(
     (nodeId: string) => (e: React.MouseEvent) => {
@@ -187,7 +193,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
         treeData={treeData}
         expandedKeys={expanded}
         selectable={false}
-        height={height}
+        height={memoizedHeight}
         titleRender={titleRender}
         showIcon={false}
         switcherIcon={null}
@@ -199,4 +205,10 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
   );
 };
 
-export default FeatureFileTree;
+export default React.memo(FeatureFileTree, (prevProps, nextProps) => {
+  return (
+    prevProps.featureCollection === nextProps.featureCollection &&
+    prevProps.isPublicView === nextProps.isPublicView &&
+    prevProps.projectId === nextProps.projectId
+  );
+});
