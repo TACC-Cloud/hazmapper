@@ -274,11 +274,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
                     }
                   >
                     {activePanel === Panel.Assets && (
-                      <AssetsPanel
-                        project={activeProject}
-                        isPublicView={isPublicView}
-                        featureCollection={featureCollection}
-                      />
+                     <div>dummy</div>
                     )}
                     {activePanel === Panel.Filters && (
                       <Filters

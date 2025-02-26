@@ -101,8 +101,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
   }, []);
 
   const handleDelete = useCallback(
-    (nodeId: string) => (e: React.MouseEvent) => {
-      e.stopPropagation();
+    (nodeId: string) => {
       const featureId = parseInt(nodeId, 10);
 
       if (isNaN(featureId)) {
@@ -119,65 +118,138 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
     [projectId, deleteFeature]
   );
 
-  const titleRender = (node: TreeDataNode) => {
-    const featureNode = node.featureNode as FeatureFileNode;
-    const isSelected =
-      !featureNode.isDirectory && selectedFeatureId === Number(node.key);
-    const isExpanded = expanded.includes(node.key);
+  interface NodeTitleProps {
+    node: TreeDataNode;
+    isSelected: boolean;
+    isExpanded: boolean;
+    onDelete: (nodeId: string) => void;
+    isPublicView: boolean;
+    isPending: boolean;
+    onSelect: (id: number) => void;
+    onToggleExpand: (key: string) => void;
+  }
 
-    const toggleNode = (e: React.MouseEvent | React.KeyboardEvent) => {
-      if (featureNode.isDirectory) {
+  const NodeTitle = React.memo(
+    function NodeTitle({
+      node,
+      isSelected,
+      isExpanded,
+      onDelete,
+      isPublicView,
+      isPending,
+      onSelect,
+      onToggleExpand,
+    }: NodeTitleProps) {
+      const featureNode = node.featureNode;
+
+      const handleClick = (e: React.MouseEvent | React.KeyboardEvent) => {
         e.stopPropagation();
+        if (!featureNode.isDirectory) {
+          onSelect(Number(node.key));
+        } else {
+          onToggleExpand(node.key);
+        }
+      };
 
-        // Toggle expanded state
-        const newExpanded = expanded.includes(node.key)
-          ? expanded.filter((k) => k !== node.key)
-          : [...expanded, node.key];
-        setExpanded(newExpanded);
-      } else {
-        e.stopPropagation();
+      const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleClick(e);
+        }
+      };
 
-        setSelectedFeatureId(Number(node.key));
+      return (
+        <div
+          className={styles.treeNode}
+          onClick={handleClick}
+          onKeyDown={handleKeyDown}
+          role="button"
+          tabIndex={0}
+          data-testid={`tree-node-${featureNode.nodeId}`}
+        >
+          {featureNode.isDirectory ? (
+            <FontAwesomeIcon
+              icon={isExpanded ? faFolderOpen : faFolderClosed}
+              size="sm"
+            />
+          ) : (
+            <FeatureIcon featureType={featureNode.featureType} />
+          )}
+          <span className={styles.fileName}>{featureNode.name}</span>
+          {!isPublicView && isSelected && (
+            <Button
+              size="small"
+              type="primary"
+              iconNameBefore="trash"
+              isLoading={isPending}
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(featureNode.nodeId);
+              }}
+              dataTestid="delete-feature-button"
+            />
+          )}
+        </div>
+      );
+    },
+    (prevProps, nextProps) => {
+      return (
+        prevProps.isSelected === nextProps.isSelected &&
+        prevProps.isExpanded === nextProps.isExpanded &&
+        prevProps.isPending === nextProps.isPending
+      );
+    }
+  );
+
+  const onSelect = useCallback(
+    (id: number) => {
+      if (id !== selectedFeatureId) {
+        setSelectedFeatureId(id);
       }
-    };
+    },
+    [selectedFeatureId, setSelectedFeatureId]
+  );
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        toggleNode(e);
-      }
-    };
+  const onToggleExpand = useCallback(
+    (key: string) => {
+      const newExpanded = expanded.includes(key)
+        ? expanded.filter((k) => k !== key)
+        : [...expanded, key];
+      setExpanded(newExpanded);
+    },
+    [expanded, setExpanded]
+  );
 
-    return (
-      <div
-        className={styles.treeNode}
-        onClick={toggleNode}
-        onKeyDown={handleKeyDown}
-        role="button"
-        tabIndex={0}
-        data-testid={`tree-node-${featureNode.nodeId}`}
-      >
-        {featureNode.isDirectory ? (
-          <FontAwesomeIcon
-            icon={isExpanded ? faFolderOpen : faFolderClosed}
-            size="sm"
-          />
-        ) : (
-          <FeatureIcon featureType={featureNode.featureType} />
-        )}
-        <span className={styles.fileName}>{featureNode.name}</span>
-        {!isPublicView && isSelected && (
-          <Button
-            size="small"
-            type="primary"
-            iconNameBefore="trash"
-            isLoading={isPending}
-            onClick={(e) => handleDelete(featureNode.nodeId)(e)}
-            dataTestid="delete-feature-button"
-          />
-        )}
-      </div>
-    );
-  };
+  const titleRender = useCallback(
+    (node: TreeDataNode) => {
+      const featureNode = node.featureNode as FeatureFileNode;
+      const isSelected =
+        !featureNode.isDirectory && selectedFeatureId === Number(node.key);
+      const isExpanded = expanded.includes(node.key);
+
+      return (
+        <NodeTitle
+          node={node}
+          isSelected={isSelected}
+          isExpanded={isExpanded}
+          onDelete={handleDelete}
+          isPublicView={isPublicView}
+          isPending={isPending}
+          onSelect={onSelect}
+          onToggleExpand={onToggleExpand}
+        />
+      );
+    },
+    [
+      selectedFeatureId,
+      expanded,
+      NodeTitle,
+      handleDelete,
+      isPublicView,
+      isPending,
+      onSelect,
+      onToggleExpand,
+    ]
+  );
 
   if (!treeData.length && featureCollection.features.length !== 0)
     return (
