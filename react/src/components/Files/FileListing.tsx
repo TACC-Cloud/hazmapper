@@ -65,7 +65,9 @@ export const FileListing: React.FC<FileListingProps> = ({
 
   const { data: user } = useAuthenticatedUser();
 
-  const [chonkyFiles, setChonkyFiles] = React.useState<any>([]);
+  const [chonkyFiles, setChonkyFiles] = React.useState<any>(
+    new Array(8).fill(null)
+  );
   const [folderChain, setFolderChain] = React.useState<any>([]);
   const [path, setPath] = React.useState<string>('');
   const [selectedSystem, setSelectedSystem] = React.useState<TTapisSystem>(
@@ -97,7 +99,7 @@ export const FileListing: React.FC<FileListingProps> = ({
     setChonkyFiles(
       files?.map((file) =>
         serializeToChonkyFile(file, allowedFileExtensions)
-      ) || []
+      ) || new Array(8).fill(null)
     );
 
     if (!folderChain.length && user?.username) {
@@ -160,6 +162,7 @@ export const FileListing: React.FC<FileListingProps> = ({
 
           onFolderSelect?.(file.id);
         } else {
+          if (!file.selectable) return;
           const selectedFile = files?.find((f) => f.path === file.id);
           if (selectedFile) {
             onFileSelect?.([selectedFile]);
@@ -178,7 +181,7 @@ export const FileListing: React.FC<FileListingProps> = ({
             (f) => filePaths.includes(f.path) && f.type !== 'dir'
           ) || [];
 
-        onFileSelect?.(newSelectedFiles); // P
+        onFileSelect?.(newSelectedFiles);
       }
     },
     [files, onFileSelect, onFolderSelect]
