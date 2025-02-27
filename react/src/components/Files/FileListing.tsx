@@ -97,7 +97,7 @@ export const FileListing: React.FC<FileListingProps> = ({
 
   const selectedSystemId = watch('system');
 
-  const setRootFolderChain = (sys = selectedSystem) => {
+  const setRootFolderChain = (rootPath, sys = selectedSystem) => {
     let rootFolderName: string;
 
     if (sys.id === myDataSystem?.id) {
@@ -110,7 +110,7 @@ export const FileListing: React.FC<FileListingProps> = ({
       rootFolderName = 'Project';
     }
 
-    setFolderChain([{ id: rootFolderName, name: rootFolderName, isDir: true }]);
+    setFolderChain([{ id: rootPath, name: rootFolderName, isDir: true }]);
   };
 
   useEffect(() => {
@@ -178,7 +178,7 @@ export const FileListing: React.FC<FileListingProps> = ({
       });
     }
     if (!folderChain.length && user?.username) {
-      setRootFolderChain();
+      setRootFolderChain(user.username);
     }
   }, [files, folderChain.length, user?.username, allowedFileExtensions]);
 
@@ -210,7 +210,7 @@ export const FileListing: React.FC<FileListingProps> = ({
 
     onSystemSelect?.(sys.id);
     onFolderSelect?.(rootFolder);
-    setRootFolderChain(sys);
+    setRootFolderChain(rootFolder, sys);
   }, [selectedSystemId]);
 
   const handleFileAction = useCallback(
