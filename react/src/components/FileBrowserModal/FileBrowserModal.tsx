@@ -54,6 +54,7 @@ const FileBrowserModal = ({
       }
       open={isOpen}
       onCancel={handleClose}
+      destroyOnClose={true}
       footer={[
         <Text key="fileCount" type="secondary" style={{ marginRight: 16 }}>
           <Flex vertical justify="space-evenly">
