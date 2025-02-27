@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+
 import {
   useQueryClient,
   UseQueryResult,
@@ -96,6 +98,7 @@ interface CurrentFeaturesResult {
  */
 export const useCurrentFeatures = (): CurrentFeaturesResult => {
   const queryClient = useQueryClient();
+
   const latestSuccessfulQuery = queryClient
     .getQueriesData<FeatureCollection>({ queryKey: [KEY_USE_FEATURES] })
     .filter(([, value]) => Boolean(value))
@@ -143,9 +146,35 @@ export const useCurrentFeatures = (): CurrentFeaturesResult => {
       ? queryClient.getQueryState(latestQuery[0])
       : null;
 
+  // Use a ref to keep track of the previous data
+  const prevDataRef = useRef<FeatureCollection | undefined>(undefined);
+  const prevStateRef = useRef<{ pending: boolean; error: boolean }>({
+    pending: false,
+    error: false,
+  });
+
+  // Compare the current data with the previous data
+  const currentData = latestSuccessfulQuery?.[1];
+  const isPending = latestQueryState?.status === 'pending';
+  const isError = latestQueryState?.status === 'error';
+
+  // Only update the ref if the data has actually changed
+  if (currentData !== prevDataRef.current) {
+    prevDataRef.current = currentData;
+  }
+
+  // Only update state refs if they changed
+  if (
+    isPending !== prevStateRef.current.pending ||
+    isError !== prevStateRef.current.error
+  ) {
+    prevStateRef.current = { pending: isPending, error: isError };
+  }
+
+  // Create the return object using the refs to maintain reference equality
   return {
-    data: latestSuccessfulQuery?.[1],
-    isLatestQueryPending: latestQueryState?.status === 'pending',
-    isLatestQueryError: latestQueryState?.status === 'error',
+    data: prevDataRef.current,
+    isLatestQueryPending: prevStateRef.current.pending,
+    isLatestQueryError: prevStateRef.current.error,
   };
 };
