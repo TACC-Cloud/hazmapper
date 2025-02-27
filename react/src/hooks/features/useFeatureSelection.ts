@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { useCurrentFeatures } from '.';
@@ -45,9 +45,11 @@ export function useFeatureSelection(): UseFeatureSelectionReturn {
     ? Number(searchParams.get(SELECTED_FEATURE_PARAM))
     : null;
 
-  const selectedFeature = currentFeatures
-    ? findFeatureById(currentFeatures, selectedFeatureId)
-    : null;
+  const selectedFeature = useMemo(() => {
+    return currentFeatures
+      ? findFeatureById(currentFeatures, selectedFeatureId)
+      : null;
+  }, [currentFeatures, selectedFeatureId]);
 
   const setSelectedFeatureId = useCallback(
     (featureId: number) => {
@@ -67,7 +69,8 @@ export function useFeatureSelection(): UseFeatureSelectionReturn {
         { replace: true }
       );
     },
-    [navigate, location.pathname, searchParams, selectedFeatureId]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [navigate, location.pathname, selectedFeatureId] // Not searchParams to avoid rerender; selectedFeatureId is enough
   );
 
   return {
