@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback, useEffect, useRef } from 'react';
 import {
   MapContainer,
   ZoomControl,
@@ -12,12 +12,11 @@ import { TiledMapLayer } from 'react-esri-leaflet';
 import { useWatch } from 'react-hook-form';
 import {
   TLayerOptionsFormData,
-  FeatureCollection,
   Feature,
   getFeatureType,
   FeatureType,
 } from '@hazmapper/types';
-import { useFeatureSelection } from '@hazmapper/hooks';
+import { useCurrentFeatures, useFeatureSelection } from '@hazmapper/hooks';
 import { MAP_CONFIG } from './config';
 import FitBoundsHandler from './FitBoundsHandler';
 import PositionTracker from './PositionTracker';
@@ -26,13 +25,6 @@ import { calculatePointCloudMarkerPosition } from './utils';
 
 import 'leaflet/dist/leaflet.css';
 import 'react-leaflet-markercluster/styles';
-
-interface LeafletMapProps {
-  /**
-   * Features of map
-   */
-  featureCollection: FeatureCollection;
-}
 
 const defaultGeoJsonOptions = {
   style: {
@@ -48,18 +40,17 @@ const defaultGeoJsonOptions = {
  *
  * Note this is not called Map as causes an issue with react-leaflet
  */
-const LeafletMap: React.FC<LeafletMapProps> = ({ featureCollection }) => {
+const LeafletMap: React.FC = () => {
+  const { data: featureCollection } = useCurrentFeatures();
   const { setSelectedFeatureId } = useFeatureSelection();
 
-  const getMemoizedFeatureStyle = useMemo(() => {
-    return (feature: any) =>
-      feature.properties?.style || defaultGeoJsonOptions.style;
+  const getFeatureStyle = useCallback((feature) => {
+    return feature.properties?.style || defaultGeoJsonOptions.style;
   }, []);
 
   const handleFeatureClick = useCallback(
     (feature: any) => {
       setSelectedFeatureId(feature.id);
-
       //TODO handle clicking on streetview https://tacc-main.atlassian.net/browse/WG-392
     },
     [setSelectedFeatureId]
@@ -71,17 +62,14 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ featureCollection }) => {
   });
 
   const activeBaseLayers = useMemo(
-    () =>
-      baseLayers
+    () => {
+      return baseLayers
         .map((item) => item.layer)
-        .filter((layer) => layer.uiOptions.isActive),
-    [baseLayers]
+        .filter((layer) => layer.uiOptions.isActive);
+    },
+    // Use a custom equality check for the dependency array
+    [JSON.stringify(baseLayers)]
   );
-  interface FeatureAccumulator {
-    generalGeoJsonFeatures: Feature[] /* non-point features, includes point cloud outlines */;
-    markerFeatures: Feature[];
-    streetviewFeatures: Feature[];
-  }
 
   const {
     generalGeoJsonFeatures,
@@ -89,6 +77,12 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ featureCollection }) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     streetviewFeatures /* Add streetview support https://tacc-main.atlassian.net/browse/WG-392 */,
   } = useMemo(() => {
+    interface FeatureAccumulator {
+      generalGeoJsonFeatures: Feature[] /* non-point features, includes point cloud outlines */;
+      markerFeatures: Feature[];
+      streetviewFeatures: Feature[];
+    }
+
     // Initial accumulator state
     const initialAccumulator: FeatureAccumulator = {
       generalGeoJsonFeatures: [],
@@ -96,7 +90,11 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ featureCollection }) => {
       streetviewFeatures: [],
     };
 
-    return featureCollection.features.reduce<FeatureAccumulator>(
+    if (featureCollection == undefined) {
+      return initialAccumulator;
+    }
+
+    const result = featureCollection?.features.reduce<FeatureAccumulator>(
       (accumulator, feature: Feature) => {
         if (feature.geometry.type === FeatureType.Point) {
           accumulator.markerFeatures.push(feature);
@@ -125,43 +123,40 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ featureCollection }) => {
       },
       initialAccumulator
     );
-  }, [featureCollection.features]);
+    return result;
+  }, [featureCollection]);
 
-  const markerComponents = useMemo(
-    () =>
-      markerFeatures.map((feature) => {
-        const geometry = feature.geometry as GeoJSON.Point;
-        return (
-          <Marker
-            key={feature.id}
-            icon={createMarkerIcon(feature)}
-            position={[geometry.coordinates[1], geometry.coordinates[0]]}
-            eventHandlers={{
-              click: () => handleFeatureClick(feature),
-              contextmenu: () => handleFeatureClick(feature),
-            }}
-          />
-        );
-      }),
-    [markerFeatures, handleFeatureClick] // Only rebuild if features or click handler changes
-  );
-
-  // Memoize GeoJSON components
-  const geoJsonComponents = useMemo(
-    () =>
-      generalGeoJsonFeatures.map((feature) => (
-        <GeoJSON
+  const markerComponents = useMemo(() => {
+    return markerFeatures.map((feature) => {
+      const geometry = feature.geometry as GeoJSON.Point;
+      return (
+        <Marker
           key={feature.id}
-          data={feature.geometry}
-          style={() => getMemoizedFeatureStyle(feature)}
+          icon={createMarkerIcon(feature)}
+          position={[geometry.coordinates[1], geometry.coordinates[0]]}
           eventHandlers={{
             click: () => handleFeatureClick(feature),
             contextmenu: () => handleFeatureClick(feature),
           }}
         />
-      )),
-    [generalGeoJsonFeatures, handleFeatureClick, getMemoizedFeatureStyle]
-  );
+      );
+    });
+  }, [markerFeatures, handleFeatureClick]); // Only rebuild if features or click handler changes
+
+  // Memoize GeoJSON components
+  const geoJsonComponents = useMemo(() => {
+    return generalGeoJsonFeatures.map((feature) => (
+      <GeoJSON
+        key={feature.id}
+        data={feature.geometry}
+        style={() => getFeatureStyle(feature)}
+        eventHandlers={{
+          click: () => handleFeatureClick(feature),
+          contextmenu: () => handleFeatureClick(feature),
+        }}
+      />
+    ));
+  }, [generalGeoJsonFeatures, handleFeatureClick, getFeatureStyle]);
 
   return (
     <MapContainer
@@ -223,7 +218,4 @@ const LeafletMap: React.FC<LeafletMapProps> = ({ featureCollection }) => {
   );
 };
 
-export default React.memo(LeafletMap, (prevProps, nextProps) => {
-  // Only re-render if featureCollection reference changes
-  return prevProps.featureCollection === nextProps.featureCollection;
-});
+export default LeafletMap;

@@ -1,16 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { Layout, Flex } from 'antd';
 import { LoadingSpinner, Message } from '@tacc/core-components';
 
 import Map from '@hazmapper/components/Map';
-import AssetsPanel from '@hazmapper/components/AssetsPanel';
 import AssetDetail from '@hazmapper/components/AssetDetail';
-import PointCloudPanel from '@hazmapper/components/PointCloudsPanel';
-import LayersPanel from '@hazmapper/components/LayersPanel';
-import ManageMapProjectPanel from '@hazmapper/components/ManageMapProjectPanel';
-import { queryPanelKey, Panel } from '@hazmapper/utils/panels';
 import {
   useFeatures,
   useProject,
@@ -21,9 +16,9 @@ import {
   useGetSystems,
 } from '@hazmapper/hooks';
 import MapProjectNavBar from '@hazmapper/components/MapProjectNavBar';
+import MapProjectPanelContent from '@hazmapper/components/MapProjectPanelContent';
 import MapProjectAccessError from '@hazmapper/components/MapProjectAccessError';
 import MapControlBar from '@hazmapper/components/MapControlBar';
-import Filters from '@hazmapper/components/FiltersPanel/Filter';
 import { assetTypeOptions } from '@hazmapper/components/FiltersPanel/Filter';
 import { Project } from '@hazmapper/types';
 import HeaderNavBar from '@hazmapper/components/HeaderNavBar';
@@ -32,12 +27,11 @@ import { MapPositionProvider } from '@hazmapper/context/MapContext';
 import styles from './MapProject.module.css';
 import QuestionnaireModal from '@hazmapper/components/QuestionnaireModal';
 import { Spinner } from '@hazmapper/common_components';
-import { Panel as BasePanel } from '@hazmapper/components/Panel';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useForm, FormProvider } from 'react-hook-form';
-import StreetviewPanel from '@hazmapper/components/StreetviewPanel';
-import PublicInfoPanel from '@hazmapper/components/PublicInfoPanel';
+
 import dayjs from 'dayjs';
 
 export const tileLayerSchema = z.object({
@@ -61,6 +55,21 @@ export const tileLayerSchema = z.object({
     showDescription: z.boolean().nullish(),
   }),
 });
+
+const MapContent = React.memo(() => {
+  // Add this effect to track when MapContent renders
+  React.useEffect(() => {
+    console.log('MapContent rendered despite memoization');
+  }, []);
+
+  return (
+    <div className={styles.map}>
+      <Map />
+    </div>
+  );
+});
+
+MapContent.displayName = 'MapContent';
 
 interface MapProjectProps {
   /**
@@ -201,20 +210,6 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
       isPublicView,
     });
 
-  const location = useLocation();
-
-  const queryParams = new URLSearchParams(location.search);
-  const activePanel = queryParams.get(queryPanelKey);
-
-  const featureCollection = useMemo(
-    () =>
-      rawFeatureCollection ?? {
-        type: 'FeatureCollection',
-        features: [],
-      },
-    [rawFeatureCollection]
-  );
-
   const { Content, Sider } = Layout;
 
   const formSchema = z.object({
@@ -264,63 +259,24 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
                 }}
               >
                 <MapProjectNavBar isPublicView={isPublicView} />
-                {activePanel && !isTileServerLayersLoading && (
-                  <BasePanel
-                    panelTitle={activePanel}
-                    className={
-                      activePanel === Panel.Manage
-                        ? styles.panelContainerWide
-                        : styles.panelContainer
-                    }
-                  >
-                    {activePanel === Panel.Assets && (
-                     <div>dummy</div>
-                    )}
-                    {activePanel === Panel.Filters && (
-                      <Filters
-                        selectedAssetTypes={selectedAssetTypes}
-                        onFiltersChange={setSelectedAssetTypes}
-                        startDate={startDate}
-                        setStartDate={setStartDate}
-                        endDate={endDate}
-                        setEndDate={setEndDate}
-                        toggleDateFilter={toggleDateFilter}
-                        setToggleDateFilter={setToggleDateFilter}
-                      />
-                    )}
-                    {activePanel === Panel.PointClouds && !isPublicView && (
-                      <PointCloudPanel project={activeProject} />
-                    )}
-                    {activePanel === Panel.Layers && (
-                      <LayersPanel
-                        projectId={activeProject.id}
-                        isPublicView={isPublicView}
-                      />
-                    )}
-                    {activePanel === Panel.Streetview && <StreetviewPanel />}
-                    {activePanel === Panel.Manage && !isPublicView && (
-                      <ManageMapProjectPanel project={activeProject} />
-                    )}
-                    {activePanel === Panel.Info && isPublicView && (
-                      <PublicInfoPanel
-                        project={activeProject}
-                        isPublicView={true}
-                      />
-                    )}
-                  </BasePanel>
+                {!isTileServerLayersLoading && (
+                  <MapProjectPanelContent
+                    isPublicView={isPublicView}
+                    project={activeProject}
+                    selectedAssetTypes={selectedAssetTypes}
+                    onFiltersChange={setSelectedAssetTypes}
+                    startDate={startDate}
+                    setStartDate={setStartDate}
+                    endDate={endDate}
+                    setEndDate={setEndDate}
+                    toggleDateFilter={toggleDateFilter}
+                    setToggleDateFilter={setToggleDateFilter}
+                  />
                 )}
               </Flex>
             </Sider>
             <Content>
-              {isTileServerLayersLoading ? (
-                <Spinner />
-              ) : (
-                <>
-                  <div className={styles.map}>
-                    <Map featureCollection={featureCollection} />
-                  </div>
-                </>
-              )}
+              {isTileServerLayersLoading ? <Spinner /> : <MapContent />}
               {selectedFeature && (
                 <div className={styles.detailContainer}>
                   <AssetDetail

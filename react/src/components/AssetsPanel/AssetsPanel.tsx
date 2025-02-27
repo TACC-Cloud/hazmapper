@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import styles from './AssetsPanel.module.css';
 import FeatureFileTree from '@hazmapper/components/FeatureFileTree';
-import { FeatureCollection, Project, TapisFilePath } from '@hazmapper/types';
+import { Project, TapisFilePath } from '@hazmapper/types';
 import { Flex, Layout, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import {
   useFeatures,
+  useCurrentFeatures,
   useImportFeature,
   useNotification,
 } from '@hazmapper/hooks';
@@ -21,14 +22,14 @@ const getFilename = (projectName: string) => {
 interface DownloadFeaturesButtonProps {
   project: Project;
   isPublicView: boolean;
-  disabled: boolean;
 }
 
 const DownloadFeaturesButton: React.FC<DownloadFeaturesButtonProps> = ({
   project,
   isPublicView,
-  disabled,
 }) => {
+  const { data: featureCollection } = useCurrentFeatures();
+
   const { isLoading: isDownloading, refetch } = useFeatures({
     projectId: project.id,
     isPublicView: isPublicView,
@@ -67,7 +68,7 @@ const DownloadFeaturesButton: React.FC<DownloadFeaturesButtonProps> = ({
       loading={isDownloading}
       onClick={() => triggerDownload()}
       type="primary"
-      disabled={disabled}
+      disabled={featureCollection === undefined || !featureCollection.features}
     >
       Export to GeoJSON
     </Button>
@@ -75,11 +76,6 @@ const DownloadFeaturesButton: React.FC<DownloadFeaturesButtonProps> = ({
 };
 
 interface Props {
-  /**
-   * Features of map
-   */
-  featureCollection: FeatureCollection;
-
   /**
    * Whether or not the map project is a public view.
    */
@@ -94,11 +90,7 @@ interface Props {
 /**
  * A panel component that displays info on feature assets
  */
-const AssetsPanel: React.FC<Props> = ({
-  isPublicView,
-  featureCollection,
-  project,
-}) => {
+const AssetsPanel: React.FC<Props> = ({ isPublicView, project }) => {
   const notification = useNotification();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -139,17 +131,12 @@ const AssetsPanel: React.FC<Props> = ({
           </Header>
         )}
         <Content className={styles.middleSection}>
-          <FeatureFileTree
-            projectId={project.id}
-            isPublicView={isPublicView}
-            featureCollection={featureCollection}
-          />
+          <FeatureFileTree projectId={project.id} isPublicView={isPublicView} />
         </Content>
         <Footer className={styles.bottomSection}>
           <DownloadFeaturesButton
             project={project}
             isPublicView={isPublicView}
-            disabled={featureCollection?.features.length === 0}
           />
         </Footer>
       </Flex>

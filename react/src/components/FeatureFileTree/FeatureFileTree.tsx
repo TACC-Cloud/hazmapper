@@ -9,8 +9,12 @@ import {
 import { useResizeDetector } from 'react-resize-detector';
 import { Button } from '@tacc/core-components';
 import { featureCollectionToFileNodeArray } from '@hazmapper/utils/featureTreeUtils';
-import { FeatureCollection, FeatureFileNode } from '@hazmapper/types';
-import { useDeleteFeature, useFeatureSelection } from '@hazmapper/hooks';
+import { FeatureFileNode } from '@hazmapper/types';
+import {
+  useCurrentFeatures,
+  useDeleteFeature,
+  useFeatureSelection,
+} from '@hazmapper/hooks';
 import { FeatureIcon } from '@hazmapper/components/FeatureIcon';
 import styles from './FeatureFileTree.module.css';
 
@@ -22,11 +26,6 @@ interface TreeDataNode extends DataNode {
   featureNode: FeatureFileNode;
 }
 interface FeatureFileTreeProps {
-  /**
-   * Features of map
-   */
-  featureCollection: FeatureCollection;
-
   /**
    * Whether or not the map project is public.
    */
@@ -42,22 +41,36 @@ interface FeatureFileTreeProps {
  * A tree of feature files that correspond to the map's features
  */
 const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
-  featureCollection,
   isPublicView,
   projectId,
 }) => {
   const { mutate: deleteFeature, isPending } = useDeleteFeature();
+  const { data: featureCollection } = useCurrentFeatures();
   const { selectedFeatureId, setSelectedFeatureId } = useFeatureSelection();
 
   const { height, ref } = useResizeDetector();
 
   const [expanded, setExpanded] = useState<string[]>([]);
 
-  const memoizedHeight = useMemo(() => height, [height]);
+  // Create a stable reference to featureCollection to prevent unnecessary recalculations
+  const stableFeatureCollection = useMemo(() => {
+    return featureCollection || { type: 'FeatureCollection', features: [] };
+  }, [featureCollection]);
 
   // Memoize the expensive tree data computation
   const { treeData, expandedDirectories } = useMemo(() => {
-    const fileNodeArray = featureCollectionToFileNodeArray(featureCollection);
+    // Early return if no data
+    if (
+      !stableFeatureCollection ||
+      !stableFeatureCollection.features ||
+      stableFeatureCollection.features.length === 0
+    ) {
+      return { treeData: [], expandedDirectories: [] };
+    }
+
+    const fileNodeArray = featureCollectionToFileNodeArray(
+      stableFeatureCollection
+    );
 
     const getDirectoryNodeIds = (nodes: FeatureFileNode[]): string[] => {
       const directoryIds: string[] = [];
@@ -89,7 +102,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
       // Have all directories be in 'expanded' (i.e. everything is expanded)
       expandedDirectories: getDirectoryNodeIds(fileNodeArray),
     };
-  }, [featureCollection]);
+  }, [stableFeatureCollection]);
 
   // Set initial expanded state
   useEffect(() => {
@@ -195,7 +208,8 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
       return (
         prevProps.isSelected === nextProps.isSelected &&
         prevProps.isExpanded === nextProps.isExpanded &&
-        prevProps.isPending === nextProps.isPending
+        prevProps.isPending === nextProps.isPending &&
+        prevProps.isPublicView === nextProps.isPublicView
       );
     }
   );
@@ -216,7 +230,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
         : [...expanded, key];
       setExpanded(newExpanded);
     },
-    [expanded, setExpanded]
+    [expanded]
   );
 
   const titleRender = useCallback(
@@ -251,7 +265,8 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
     ]
   );
 
-  if (!treeData.length && featureCollection.features.length !== 0)
+  // Show loading state during tree processing
+  if (!treeData.length && stableFeatureCollection.features.length !== 0)
     return (
       <Flex justify="center" align="center" flex={1}>
         <Spin />
@@ -265,7 +280,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
         treeData={treeData}
         expandedKeys={expanded}
         selectable={false}
-        height={memoizedHeight}
+        height={height}
         titleRender={titleRender}
         showIcon={false}
         switcherIcon={null}
@@ -277,10 +292,4 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
   );
 };
 
-export default React.memo(FeatureFileTree, (prevProps, nextProps) => {
-  return (
-    prevProps.featureCollection === nextProps.featureCollection &&
-    prevProps.isPublicView === nextProps.isPublicView &&
-    prevProps.projectId === nextProps.projectId
-  );
-});
+export default FeatureFileTree;
