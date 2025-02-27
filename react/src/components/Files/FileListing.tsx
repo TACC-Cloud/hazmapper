@@ -307,7 +307,7 @@ export const FileListing: React.FC<FileListingProps> = ({
             defaultSortActionId={null}
           >
             <FileNavbar />
-            <FileList data-testid="file-list" />
+            <FileList />
             {loadingMoreFiles && (
               <p style={{ textAlign: 'center' }}>Loading...</p>
             )}
