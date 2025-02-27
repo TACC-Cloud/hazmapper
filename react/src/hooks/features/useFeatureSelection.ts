@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { useCurrentFeatures } from '.';
@@ -41,9 +41,17 @@ export function useFeatureSelection(): UseFeatureSelectionReturn {
   const location = useLocation();
   const [searchParams] = useSearchParams();
 
+  // Get the selected feature ID from the URL
   const selectedFeatureId = searchParams.get(SELECTED_FEATURE_PARAM)
     ? Number(searchParams.get(SELECTED_FEATURE_PARAM))
     : null;
+
+  // Store the selectedFeatureId in a ref to prevent re-creating setSelectedFeatureId unnecessarily
+  const selectedFeatureIdRef = useRef(selectedFeatureId);
+
+  useEffect(() => {
+    selectedFeatureIdRef.current = selectedFeatureId;
+  }, [selectedFeatureId]);
 
   const selectedFeature = useMemo(() => {
     return currentFeatures
@@ -55,7 +63,7 @@ export function useFeatureSelection(): UseFeatureSelectionReturn {
     (featureId: number) => {
       const newSearchParams = new URLSearchParams(searchParams);
 
-      if (selectedFeatureId === Number(featureId)) {
+      if (selectedFeatureIdRef.current === Number(featureId)) {
         newSearchParams.delete(SELECTED_FEATURE_PARAM);
       } else {
         newSearchParams.set(SELECTED_FEATURE_PARAM, String(featureId));
@@ -70,7 +78,7 @@ export function useFeatureSelection(): UseFeatureSelectionReturn {
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [navigate, location.pathname, selectedFeatureId] // Not searchParams to avoid rerender; selectedFeatureId is enough
+    [navigate, location.pathname] // No searchParams/selectedFeatureId to avoid rerender;  use refs instead
   );
 
   return {
