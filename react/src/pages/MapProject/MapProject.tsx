@@ -195,7 +195,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     formatAssetTypeName(type)
   );
 
-  const { data: rawFeatureCollection } = useFeatures({
+  useFeatures({
     projectId: activeProject.id,
     isPublicView,
     assetTypes: formattedAssetTypes,

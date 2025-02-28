@@ -74,14 +74,14 @@ export const TestWrapper = ({ children }: { children: React.ReactNode }) => (
 export const WithUseFeaturesComponent: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const { data, isLoading } = useFeatures({
+  const {isLoading } = useFeatures({
     projectId: 1,
     isPublicView: false,
     assetTypes: ['type1', 'type2'],
   });
 
   if (isLoading) {
-    return <div>loading. Consider using waitForAllQueriesToResolve </div>;
+    return <div>Loading. Consider using waitForAllQueriesToResolve </div>;
   }
 
   return <>{children}</>;
