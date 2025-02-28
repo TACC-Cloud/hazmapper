@@ -242,10 +242,12 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
 
   const titleRender = useCallback(
     (node: TreeDataNode) => {
-      const featureNode = node.featureNode as FeatureFileNode;
+      /* eslint-disable react/prop-types */
+      const featureNode: FeatureFileNode = node.featureNode;
       const isSelected =
         !featureNode.isDirectory && selectedFeatureId === Number(node.key);
       const isExpanded = expanded.includes(node.key);
+      /* eslint-enable react/prop-types */
 
       return (
         <NodeTitle

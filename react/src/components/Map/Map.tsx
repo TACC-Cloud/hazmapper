@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useEffect, useRef } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import {
   MapContainer,
   ZoomControl,
@@ -61,15 +61,13 @@ const LeafletMap: React.FC = () => {
     defaultValue: [],
   });
 
-  const activeBaseLayers = useMemo(
-    () => {
-      return baseLayers
-        .map((item) => item.layer)
-        .filter((layer) => layer.uiOptions.isActive);
-    },
-    // Use a custom equality check for the dependency array
-    [JSON.stringify(baseLayers)]
-  );
+  const baseLayersKey = useMemo(() => JSON.stringify(baseLayers), [baseLayers]);
+
+  const activeBaseLayers = useMemo(() => {
+    return baseLayers
+      .map((item) => item.layer)
+      .filter((layer) => layer.uiOptions.isActive);
+  }, [baseLayersKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const {
     generalGeoJsonFeatures,
