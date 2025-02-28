@@ -92,7 +92,7 @@ export const tapis_systems = http.get(
 
 // Tapis Files GET
 export const tapis_files_listing = http.get(
-  `${testDevConfiguration.tapisUrl}/v3/files/listing/*`,
+  `${testDevConfiguration.tapisUrl}/v3/files/ops/*`,
   () =>
     HttpResponse.json(
       {
