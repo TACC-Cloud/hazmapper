@@ -56,21 +56,6 @@ export const tileLayerSchema = z.object({
   }),
 });
 
-const MapContent = React.memo(() => {
-  // Add this effect to track when MapContent renders
-  React.useEffect(() => {
-    console.log('MapContent rendered despite memoization');
-  }, []);
-
-  return (
-    <div className={styles.map}>
-      <Map />
-    </div>
-  );
-});
-
-MapContent.displayName = 'MapContent';
-
 interface MapProjectProps {
   /**
    * Whether or not the map project is public.
@@ -276,7 +261,7 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
               </Flex>
             </Sider>
             <Content>
-              {isTileServerLayersLoading ? <Spinner /> : <MapContent />}
+              {isTileServerLayersLoading ? <Spinner /> : <Map />}
               {selectedFeature && (
                 <div className={styles.detailContainer}>
                   <AssetDetail
