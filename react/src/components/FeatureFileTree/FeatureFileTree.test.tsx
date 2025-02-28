@@ -1,9 +1,12 @@
 import React from 'react';
-import { fireEvent, waitFor, act } from '@testing-library/react';
+import { fireEvent, waitFor, act, screen } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import FeatureFileTree from './FeatureFileTree';
-import { server, renderInTest } from '@hazmapper/test/testUtil';
-import { featureCollection } from '@hazmapper/__fixtures__/featuresFixture';
+import {
+  server,
+  renderInTestWaitForQueries,
+  WithUseFeaturesComponent,
+} from '@hazmapper/test/testUtil';
 import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
 
 jest.mock('react-resize-detector', () => ({
@@ -15,7 +18,6 @@ jest.mock('react-resize-detector', () => ({
 
 describe('FeatureFileTree', () => {
   const defaultTreeProps = {
-    featureCollection: featureCollection,
     isPublicView: false,
     projectId: 1,
   };
@@ -25,15 +27,15 @@ describe('FeatureFileTree', () => {
   });
 
   it('renders feature list correctly', async () => {
-    let rendered;
-    await act(async () => {
-      rendered = renderInTest(<FeatureFileTree {...defaultTreeProps} />);
-    });
+    await renderInTestWaitForQueries(
+      <WithUseFeaturesComponent>
+        <FeatureFileTree {...defaultTreeProps} />
+      </WithUseFeaturesComponent>
+    );
 
-    const { getByText } = rendered;
-    expect(getByText('foo')).toBeDefined();
-    expect(getByText('image1.JPG')).toBeDefined();
-    expect(getByText('image2.JPG')).toBeDefined();
+    expect(screen.getByText('foo')).toBeDefined();
+    expect(screen.getByText('image1.JPG')).toBeDefined();
+    expect(screen.getByText('image2.JPG')).toBeDefined();
   });
 
   it('handles feature deletion for non-public projects', async () => {
@@ -50,17 +52,15 @@ describe('FeatureFileTree', () => {
       )
     );
 
-    let rendered;
-    await act(async () => {
-      rendered = renderInTest(
-        <FeatureFileTree {...defaultTreeProps} />,
-        `/?selectedFeature=${featureId}`
-      );
-    });
+    await renderInTestWaitForQueries(
+      <WithUseFeaturesComponent>
+        <FeatureFileTree {...defaultTreeProps} />
+      </WithUseFeaturesComponent>,
+      `/?selectedFeature=${featureId}`
+    );
 
     // Find and click delete button (as featured is selected)
-    const { getByTestId } = rendered;
-    const deleteButton = getByTestId('delete-feature-button');
+    const deleteButton = screen.getByTestId('delete-feature-button');
     await act(async () => {
       fireEvent.click(deleteButton);
     });
@@ -71,31 +71,26 @@ describe('FeatureFileTree', () => {
   });
 
   it('does not show delete button for public projects', async () => {
-    let rendered;
-    await act(async () => {
-      rendered = renderInTest(
-        <FeatureFileTree {...defaultTreeProps} isPublicView={true} />,
-        '/?selectedFeature=1'
-      );
-    });
+    await renderInTestWaitForQueries(
+      <WithUseFeaturesComponent>
+        <FeatureFileTree {...defaultTreeProps} isPublicView={true} />
+      </WithUseFeaturesComponent>
+    );
 
     // Verify delete button is not present
-    const { queryByTestId } = rendered;
-    const deleteButton = queryByTestId('delete-feature-button');
+    const deleteButton = screen.queryByTestId('delete-feature-button');
     expect(deleteButton).toBeNull();
   });
 
   it('does not show delete button when no feature is selected', async () => {
-    let rendered;
-    await act(async () => {
-      rendered = renderInTest(
+    await renderInTestWaitForQueries(
+      <WithUseFeaturesComponent>
         <FeatureFileTree {...defaultTreeProps} isPublicView={false} />
-      );
-    });
+      </WithUseFeaturesComponent>
+    );
 
     // Verify delete button is not present
-    const { queryByTestId } = rendered;
-    const deleteButton = queryByTestId('delete-feature-button');
+    const deleteButton = screen.queryByTestId('delete-feature-button');
     expect(deleteButton).toBeNull();
   });
 });

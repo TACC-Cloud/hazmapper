@@ -62,10 +62,10 @@ const DownloadFeaturesButton: React.FC<DownloadFeaturesButtonProps> = ({
       }
     });
   };
-
   return (
     <Button
       loading={isDownloading}
+      data-testid="exportGeoJson"
       onClick={() => triggerDownload()}
       type="primary"
       disabled={featureCollection === undefined || !featureCollection.features}

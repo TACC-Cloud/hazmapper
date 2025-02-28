@@ -54,7 +54,9 @@ const MapProjectPanelContent: React.FC<MapProjectPanelContentProps> = ({
           : styles.panelContainer
       }
     >
-      {activePanel === Panel.Assets && <AssetsPanel project={project} />}
+      {activePanel === Panel.Assets && (
+        <AssetsPanel project={project} isPublicView={isPublicView} />
+      )}
       {activePanel === Panel.Filters && (
         <Filters
           selectedAssetTypes={selectedAssetTypes}

@@ -1,5 +1,5 @@
-import React, { ReactElement } from 'react';
-import { render } from '@testing-library/react';
+import React, { ReactNode, ReactElement } from 'react';
+import { render, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter } from 'react-router-dom';
@@ -8,6 +8,7 @@ import { http } from 'msw';
 import store from '@hazmapper/redux/store';
 import { defaultHandlers } from '@hazmapper/test/handlers';
 import { MapPositionProvider } from '@hazmapper/context/MapContext';
+import { useFeatures } from '@hazmapper/hooks';
 
 export const server = setupServer(...defaultHandlers);
 
@@ -39,6 +40,22 @@ export function renderInTest(children: ReactElement, path = '/') {
   );
 }
 
+export async function waitForAllQueriesToResolve(queryClient: QueryClient) {
+  await waitFor(() => expect(queryClient.isFetching()).toBe(0));
+}
+
+export async function renderInTestWaitForQueries(
+  children: ReactElement,
+  path = '/'
+) {
+  const rendered = renderInTest(children, path);
+
+  // Wait for all queries to finish before proceeding
+  await waitForAllQueriesToResolve(testQueryClient);
+
+  return rendered;
+}
+
 export const TestWrapper = ({ children }: { children: React.ReactNode }) => (
   <Provider store={store}>
     <MemoryRouter>
@@ -50,6 +67,25 @@ export const TestWrapper = ({ children }: { children: React.ReactNode }) => (
     </MemoryRouter>
   </Provider>
 );
+
+/**
+ * Helper component to add useFeatures hook
+ */
+export const WithUseFeaturesComponent: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const { data, isLoading } = useFeatures({
+    projectId: 1,
+    isPublicView: false,
+    assetTypes: ['type1', 'type2'],
+  });
+
+  if (isLoading) {
+    return <div>loading. Consider using waitForAllQueriesToResolve </div>;
+  }
+
+  return <>{children}</>;
+};
 
 interface SpyHandlerArgs {
   request: Request;
