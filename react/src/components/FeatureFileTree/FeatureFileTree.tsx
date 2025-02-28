@@ -48,11 +48,14 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
   const { data: featureCollection } = useCurrentFeatures();
   const { selectedFeatureId, setSelectedFeatureId } = useFeatureSelection();
 
-  const { height: rawHeight, ref } = useResizeDetector();
+  const { height: rawHeight, ref } = useResizeDetector({
+    refreshMode: 'debounce',
+    refreshRate: 50, // Small debounce to avoid initial extreme values seen on comonent remount
+  });
 
-  // Ensure height is within reasonable bounds (prevent extreme values); TODO being set to unrealisitc value when re-opening panel
+  // More restrictive bounds check
   const height =
-    rawHeight && rawHeight > 0 && rawHeight < 10000 ? rawHeight : 1000;
+    rawHeight && rawHeight > 50 && rawHeight < 3000 ? rawHeight : 500;
 
   const [expanded, setExpanded] = useState<string[]>([]);
 
