@@ -58,3 +58,13 @@ export const convertFilesToTapisPaths = (files: File[]): TapisFilePath[] => {
     };
   });
 };
+
+export const renderFilePathLabel = (
+  path: string,
+  username: string,
+  systemId: string
+) => {
+  return systemId === 'designsafe.storage.default'
+    ? path.replace(new RegExp(`^${username}(/)?`), 'My Data/')
+    : path.replace(new RegExp(`^(/)?`), 'Project Root/');
+};
