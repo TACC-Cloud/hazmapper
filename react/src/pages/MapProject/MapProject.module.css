@@ -5,28 +5,6 @@
   height: 100vh;
 }
 
-.basePanelContainer {
-  height: calc(
-    100% - var(--hazmapper-header-navbar-height) -
-      var(--hazmapper-control-bar-height)
-  );
-  background-color: var(--global-color-primary--xx-light);
-  position: fixed;
-  left: var(--hazmapper-panel-navbar-width);
-  overflow-y: auto;
-  z-index: 1050;
-}
-
-.panelContainer {
-  composes: basePanelContainer;
-  width: var(--hazmapper-panel-width);
-}
-
-.panelContainerWide {
-  composes: basePanelContainer;
-  width: var(--hazmapper-panel-width--large);
-}
-
 .detailContainer {
   min-width: 250px;
   max-width: 400px;

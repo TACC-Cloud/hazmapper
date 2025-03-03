@@ -8,7 +8,7 @@ import { MAP_CONFIG } from './config';
 import L from 'leaflet';
 
 const FitBoundsHandler: React.FC<{
-  featureCollection: FeatureCollection;
+  featureCollection: FeatureCollection | undefined;
 }> = ({ featureCollection }) => {
   const map = useMap();
   const hasFeatures = useRef(false);
@@ -48,6 +48,9 @@ const FitBoundsHandler: React.FC<{
 
   // Handle initial bounds when features are loaded
   useEffect(() => {
+    // Guard against undefined featureCollection
+    if (featureCollection === undefined) return;
+
     if (
       featureCollection.features.length &&
       !selectedFeatureId &&
@@ -64,6 +67,9 @@ const FitBoundsHandler: React.FC<{
 
   // Handle selected feature bounds
   useEffect(() => {
+    // Guard against undefined featureCollection
+    if (featureCollection === undefined) return;
+
     if (selectedFeatureId) {
       const activeFeature = featureCollection.features.find(
         (f) => f.id === selectedFeatureId

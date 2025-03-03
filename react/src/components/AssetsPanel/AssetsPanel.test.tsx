@@ -7,8 +7,11 @@ import {
   createSpyHandler,
   server,
   renderInTest,
+  WithUseFeaturesComponent,
+  renderInTestWaitForQueries,
 } from '@hazmapper/test/testUtil';
 import { geoapi_project_features } from '@hazmapper/test/handlers';
+import '@testing-library/jest-dom';
 
 // Mock FeatureFileTree component since it's a complex component and tested elswhere
 jest.mock('@hazmapper/components/FeatureFileTree', () => {
@@ -19,7 +22,6 @@ jest.mock('@hazmapper/components/FeatureFileTree', () => {
 
 describe('AssetsPanel', () => {
   const defaultProps = {
-    featureCollection,
     project: projectMock,
     isPublicView: false,
   };
@@ -48,16 +50,29 @@ describe('AssetsPanel', () => {
     const { handler, spy } = createSpyHandler(geoapi_project_features);
     server.use(handler);
 
-    renderInTest(<AssetsPanel {...defaultProps} />);
+    await renderInTestWaitForQueries(
+      <WithUseFeaturesComponent>
+        <AssetsPanel {...defaultProps} />
+      </WithUseFeaturesComponent>
+    );
+
+    const exportButton = screen
+      .getByText('Export to GeoJSON')
+      .closest('button') as HTMLButtonElement;
+
+    // Wait for Export button to be enabled before clicking
+    await waitFor(() => {
+      expect(exportButton).not.toBeDisabled();
+    });
 
     // Click export button
     await act(async () => {
       fireEvent.click(screen.getByText('Export to GeoJSON'));
     });
 
-    // Wait for the API call to get features
+    // Wait for the API call to get features for download (so second request)
     await waitFor(() => {
-      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledTimes(2);
     });
 
     // Verify the geojson blob was created with correct content

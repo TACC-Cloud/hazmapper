@@ -2,7 +2,6 @@ import React from 'react';
 import { renderInTest } from '@hazmapper/test/testUtil';
 import Map from './Map';
 import { tileServerLayers } from '../../__fixtures__/tileServerLayerFixture';
-import { featureCollection } from '../../__fixtures__/featuresFixture';
 import { MapPositionProvider } from '@hazmapper/context/MapContext';
 import { useForm, FormProvider } from 'react-hook-form';
 import * as z from 'zod';
@@ -28,7 +27,7 @@ test('renders map', () => {
     return (
       <FormProvider {...methods}>
         <MapPositionProvider>
-          <Map featureCollection={featureCollection} />
+          <Map />
         </MapPositionProvider>
       </FormProvider>
     );

@@ -38,6 +38,8 @@ module.exports = {
     // Exclude secrets and other files
     '!src/secret_local*ts',
     '!src/types/react*.ts',
+    // Exclude questionaiire files as mostly 3rd party
+    '!src/components/QuestionnaireModal/questionnaireBuilder.ts',
     // Exclude build/dist directories
     '!dist/**/*',
     '!build/**/*',

@@ -40,13 +40,17 @@ function getFullPathFromFeature(feature: Feature): string {
  * a node for all the features + their parent directories)
  */
 export function featureCollectionToFileNodeArray(
-  featureCollection: FeatureCollection
+  featureCollection: FeatureCollection | undefined
 ): FeatureFileNode[] {
   const rootNodes: FeatureFileNode[] = [];
   const nodeMap: { [key: string]: FeatureFileNode[] } = {};
 
   function normalizePath(path: string): string {
     return path.replace(/^\/+|\/+$/g, '');
+  }
+
+  if (featureCollection === undefined) {
+    return rootNodes;
   }
 
   // Sort features by normalized path
