@@ -14,7 +14,6 @@ export const IMPORTABLE_FEATURE_TYPES = [
 export const IMPORTABLE_FEATURE_ASSET_TYPES = [
   'jpeg',
   'jpg',
-  'png',
   'mp4',
   'mov',
   'mpeg4',
