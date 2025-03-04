@@ -10,6 +10,15 @@ jest.mock('react-jss', () => ({
   createUseStyles: () => () => ({}),
 }));
 
+// Mock ResizeObserver (react-resize-detector) as not supported by jest/jsdom
+jest.mock('react-resize-detector', () => ({
+  useResizeDetector: () => ({
+    ref: null,
+    width: 800,
+    height: 600,
+  }),
+}));
+
 /***** B) Ignore some known warnings/errors *****/
 
 // List of `console.warn` messages that can be ignored

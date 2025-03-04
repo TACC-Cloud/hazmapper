@@ -1,7 +1,22 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { useFeatures, useCurrentFeatures } from './useFeatures';
 import { featureCollection } from '@hazmapper/__fixtures__/featuresFixture';
-import { TestWrapper, testQueryClient } from '@hazmapper/test/testUtil';
+import {
+  TestWrapper,
+  WithUseFeatureManager,
+  testQueryClient,
+} from '@hazmapper/test/testUtil';
+import '@testing-library/jest-dom';
+
+export const TestWrapperWithUseFeatureManager = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => (
+  <TestWrapper>
+    <WithUseFeatureManager>{children}</WithUseFeatureManager>
+  </TestWrapper>
+);
 
 describe('Feature Hooks', () => {
   afterEach(() => {
@@ -13,10 +28,9 @@ describe('Feature Hooks', () => {
       () =>
         useFeatures({
           projectId: 80,
-          isPublicView: false,
           assetTypes: ['image'],
         }),
-      { wrapper: TestWrapper }
+      { wrapper: TestWrapperWithUseFeatureManager }
     );
 
     expect(result.current.isLoading).toBe(true);
@@ -29,28 +43,19 @@ describe('Feature Hooks', () => {
   });
 
   it('useCurrentFeatures should return cached features', async () => {
-    // First, populate the cache with a features query
-    const { result: featuresResult } = renderHook(
-      () =>
-        useFeatures({
-          projectId: 80,
-          isPublicView: false,
-          assetTypes: ['image'],
-        }),
-      { wrapper: TestWrapper }
-    );
-
-    await waitFor(() => {
-      expect(featuresResult.current.isSuccess).toBe(true);
-    });
-
     // Now test useCurrentFeatures
     const { result: currentResult } = renderHook(() => useCurrentFeatures(), {
-      wrapper: TestWrapper,
+      wrapper: TestWrapperWithUseFeatureManager,
     });
 
-    expect(currentResult.current.isLatestQueryPending).toBe(false);
-    expect(currentResult.current.isLatestQueryError).toBe(false);
-    expect(currentResult.current.data).toEqual(featureCollection);
+    await waitFor(() => {
+      expect(currentResult.current).not.toBeNull();
+    });
+
+    await waitFor(() => {
+      expect(currentResult.current.data).toEqual(featureCollection);
+      expect(currentResult.current.isFetching).toBe(false);
+      expect(currentResult.current.isError).toBe(false);
+    });
   });
 });
