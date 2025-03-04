@@ -14,7 +14,6 @@ export const IMPORTABLE_FEATURE_TYPES = [
 export const IMPORTABLE_FEATURE_ASSET_TYPES = [
   'jpeg',
   'jpg',
-  'png',
   'mp4',
   'mov',
   'mpeg4',
@@ -58,4 +57,14 @@ export const convertFilesToTapisPaths = (files: File[]): TapisFilePath[] => {
       path,
     };
   });
+};
+
+export const renderFilePathLabel = (
+  path: string,
+  username: string,
+  systemId: string
+) => {
+  return systemId === 'designsafe.storage.default'
+    ? path.replace(new RegExp(`^${username}(/)?`), 'My Data/')
+    : path.replace(new RegExp(`^(/)?`), 'Project Root/');
 };
