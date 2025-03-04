@@ -51,7 +51,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
 
   const { height: rawHeight, ref } = useResizeDetector({
     refreshMode: 'debounce',
-    refreshRate: 50, // Small debounce to avoid initial extreme values seen on comonent remount
+    refreshRate: 50, // Small debounce to avoid initial extreme values seen on component remount
   });
 
   // More restrictive bounds check
