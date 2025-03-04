@@ -1,5 +1,5 @@
-import React, { ReactElement } from 'react';
-import { render } from '@testing-library/react';
+import React, { ReactNode, ReactElement } from 'react';
+import { render, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter } from 'react-router-dom';
@@ -8,6 +8,8 @@ import { http } from 'msw';
 import store from '@hazmapper/redux/store';
 import { defaultHandlers } from '@hazmapper/test/handlers';
 import { MapPositionProvider } from '@hazmapper/context/MapContext';
+import { FeatureManager } from '@hazmapper/components/FeatureManager';
+import dayjs from 'dayjs';
 
 export const server = setupServer(...defaultHandlers);
 
@@ -39,6 +41,22 @@ export function renderInTest(children: ReactElement, path = '/') {
   );
 }
 
+export async function waitForAllQueriesToResolve(queryClient: QueryClient) {
+  await waitFor(() => expect(queryClient.isFetching()).toBe(0));
+}
+
+export async function renderInTestWaitForQueries(
+  children: ReactElement,
+  path = '/'
+) {
+  const rendered = renderInTest(children, path);
+
+  // Wait for all queries to finish before proceeding
+  await waitForAllQueriesToResolve(testQueryClient);
+
+  return rendered;
+}
+
 export const TestWrapper = ({ children }: { children: React.ReactNode }) => (
   <Provider store={store}>
     <MemoryRouter>
@@ -50,6 +68,31 @@ export const TestWrapper = ({ children }: { children: React.ReactNode }) => (
     </MemoryRouter>
   </Provider>
 );
+
+/**
+ * Helper component to add useFeatures and the update of zustand state to make
+ * useCurrentFeatures work
+ */
+export const WithUseFeatureManager: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const startDate = dayjs('2025-01-01').startOf('day');
+  const endDate = dayjs('2025-01-31').endOf('day');
+
+  return (
+    <>
+      {/* Use FeatureManager so that it triggers useFeatures internally and updates the store */}
+      <FeatureManager
+        projectId={1}
+        assetTypes={['foo']}
+        startDate={startDate}
+        endDate={endDate}
+        toggleDateFilter={false}
+      />
+      {children}
+    </>
+  );
+};
 
 interface SpyHandlerArgs {
   request: Request;

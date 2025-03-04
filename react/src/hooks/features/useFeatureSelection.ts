@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { useCurrentFeatures } from '.';
@@ -41,19 +41,29 @@ export function useFeatureSelection(): UseFeatureSelectionReturn {
   const location = useLocation();
   const [searchParams] = useSearchParams();
 
+  // Get the selected feature ID from the URL
   const selectedFeatureId = searchParams.get(SELECTED_FEATURE_PARAM)
     ? Number(searchParams.get(SELECTED_FEATURE_PARAM))
     : null;
 
-  const selectedFeature = currentFeatures
-    ? findFeatureById(currentFeatures, selectedFeatureId)
-    : null;
+  // Store the selectedFeatureId in a ref to prevent re-creating setSelectedFeatureId unnecessarily
+  const selectedFeatureIdRef = useRef(selectedFeatureId);
+
+  useEffect(() => {
+    selectedFeatureIdRef.current = selectedFeatureId;
+  }, [selectedFeatureId]);
+
+  const selectedFeature = useMemo(() => {
+    return currentFeatures
+      ? findFeatureById(currentFeatures, selectedFeatureId)
+      : null;
+  }, [currentFeatures, selectedFeatureId]);
 
   const setSelectedFeatureId = useCallback(
     (featureId: number) => {
       const newSearchParams = new URLSearchParams(searchParams);
 
-      if (selectedFeatureId === Number(featureId)) {
+      if (selectedFeatureIdRef.current === Number(featureId)) {
         newSearchParams.delete(SELECTED_FEATURE_PARAM);
       } else {
         newSearchParams.set(SELECTED_FEATURE_PARAM, String(featureId));
@@ -67,7 +77,8 @@ export function useFeatureSelection(): UseFeatureSelectionReturn {
         { replace: true }
       );
     },
-    [navigate, location.pathname, searchParams, selectedFeatureId]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [navigate, location.pathname] // No searchParams/selectedFeatureId to avoid rerender;  use refs instead
   );
 
   return {
