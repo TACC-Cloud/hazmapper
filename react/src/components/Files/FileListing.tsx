@@ -26,7 +26,7 @@ import { serializeToChonkyFile } from '@hazmapper/utils/fileUtils';
 import { debounce } from 'lodash';
 
 const DEFAULT_NO_FILE_EXTENSIONS: string[] = [];
-const DEFAULT_FILE_LIMIT = 50;
+const DEFAULT_FILE_LIMIT = 500;
 
 const _FileBrowser = FileBrowser as React.MemoExoticComponent<
   React.ForwardRefExoticComponent<
@@ -100,11 +100,11 @@ export const FileListing: React.FC<FileListingProps> = ({
   const setRootFolderChain = (rootPath, sys = selectedSystem) => {
     let rootFolderName: string;
 
-    if (sys.id === myDataSystem?.id) {
+    if (sys?.id === myDataSystem?.id) {
       rootFolderName = 'My Data';
-    } else if (sys.id === communityDataSystem?.id) {
+    } else if (sys?.id === communityDataSystem?.id) {
       rootFolderName = 'Community Data';
-    } else if (sys.id === publishedDataSystem?.id) {
+    } else if (sys?.id === publishedDataSystem?.id) {
       rootFolderName = 'Published Data';
     } else {
       rootFolderName = 'Project';
@@ -185,7 +185,7 @@ export const FileListing: React.FC<FileListingProps> = ({
   const FileListingIcon = (props: any) => <Icon name={props.icon} />;
 
   useEffect(() => {
-    if (!selectedSystemId || selectedSystem.id === selectedSystemId) {
+    if (!selectedSystemId || selectedSystem?.id === selectedSystemId) {
       return;
     }
 
