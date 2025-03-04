@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import { useQueryClient } from '@tanstack/react-query';
 import { Layout, Flex } from 'antd';
 import { LoadingSpinner, Message } from '@tacc/core-components';
 
@@ -8,12 +7,10 @@ import { FeatureManager } from '@hazmapper/components/FeatureManager';
 import Map from '@hazmapper/components/Map';
 import AssetDetail from '@hazmapper/components/AssetDetail';
 import {
-  useCurrentFeaturesStore,
   useProject,
   useGetTileServers,
   useFeatureSelection,
   useGeoapiNotificationsPolling,
-  KEY_USE_FEATURES,
   useGetSystems,
 } from '@hazmapper/hooks';
 import MapProjectNavBar from '@hazmapper/components/MapProjectNavBar';
@@ -70,7 +67,6 @@ interface MapProjectProps {
  */
 const MapProject: React.FC<MapProjectProps> = ({ isPublicView = false }) => {
   const { projectUUID } = useParams();
-  const queryClient = useQueryClient();
 
   useGetSystems({ prefetch: true });
 
@@ -87,17 +83,6 @@ const MapProject: React.FC<MapProjectProps> = ({ isPublicView = false }) => {
     projectUUID,
     options: { enabled: !!projectUUID },
   });
-
-  const { setReset } = useCurrentFeaturesStore.getState();
-
-  // Clear feature queries and our stored data when changing projects to prevent stale features from
-  // briefly appearing and causing incorrect map bounds/zoom during navigation
-  useEffect(() => {
-    return () => {
-      queryClient.removeQueries({ queryKey: [KEY_USE_FEATURES] });
-      setReset();
-    };
-  }, [projectUUID, setReset, queryClient]);
 
   if (isLoading) {
     return (
