@@ -2,7 +2,12 @@ import React, { useMemo } from 'react';
 import { Project } from '@hazmapper/types';
 import { List, Button } from 'antd';
 import { LoadingSpinner, SectionMessage } from '@tacc/core-components';
-import { useAppConfiguration, useDesignSafeProjects } from '@hazmapper/hooks';
+import {
+  useAppConfiguration,
+  useDesignSafeProjects,
+  useAuthenticatedUser,
+} from '@hazmapper/hooks';
+import { renderFilePathLabel } from '@hazmapper/utils/fileUtils';
 
 interface SaveTabProps {
   project: Project;
@@ -16,6 +21,7 @@ const SaveTabContent: React.FC<SaveTabProps> = ({ project }) => {
     isLoading,
     error,
   } = useDesignSafeProjects();
+  const { data: userData } = useAuthenticatedUser();
   const dsDataDepotUrl = `${config.designsafePortalUrl}/data/browser/`;
   const dsProj = designSafeProjects?.result?.find(
     (ds_project) =>
@@ -79,7 +85,11 @@ const SaveTabContent: React.FC<SaveTabProps> = ({ project }) => {
                 rel="noreferrer"
                 style={{ padding: 0 }}
               >
-                {project.system_path}
+                {renderFilePathLabel(
+                  project.system_path,
+                  userData?.username || '',
+                  project.system_id
+                )}
               </Button>
             </>
           }
