@@ -18,6 +18,7 @@ import { useAuthenticatedUser, useCreateProject } from '@hazmapper/hooks';
 import { ProjectRequest } from '@hazmapper/types';
 import { FileListing } from '@hazmapper/components/Files';
 import { truncateMiddle } from '@hazmapper/utils/truncateMiddle';
+import { renderFilePathLabel } from '@hazmapper/utils/fileUtils';
 import styles from './CreateMapModal.module.css';
 
 type CreateMapModalProps = {
@@ -99,13 +100,11 @@ const CreateMapModal = ({ isOpen, closeModal }: CreateMapModalProps) => {
 
   const handleDirectoryChange = (directory: string) => {
     const systemId = getValues('systemId');
-    const saveLocationDisplay =
-      systemId === 'designsafe.storage.default'
-        ? directory.replace(
-            new RegExp(`^${userData?.username}(/)?`),
-            'My Data/'
-          )
-        : directory.replace(new RegExp(`^(/)?`), 'Project Root/');
+    const saveLocationDisplay = renderFilePathLabel(
+      directory,
+      userData?.username || '',
+      systemId
+    );
     setValue('saveLocationDisplay', saveLocationDisplay);
     setValue('systemPath', directory);
   };

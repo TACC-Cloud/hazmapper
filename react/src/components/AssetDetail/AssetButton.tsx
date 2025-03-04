@@ -56,7 +56,7 @@ const AssetButton: React.FC<AssetButtonProps> = ({
         },
         onError: (error) => {
           setIsModalOpen(false);
-          notification.success({
+          notification.error({
             description: `There was an error importing your asset for feature ${selectedFeature.id}. Error: ${error}`,
           });
         },
