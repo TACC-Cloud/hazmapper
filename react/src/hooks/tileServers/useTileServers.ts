@@ -27,8 +27,7 @@ export const useGetTileServers = ({
     refetchOnMount: false,
   },
 }: UseGetTileServerParams): UseQueryResult<TileServerLayer[]> => {
-  const tileServersRoute = isPublicView ? 'public-projects' : 'projects';
-  const endpoint = `/${tileServersRoute}/${projectId}/tile-servers/`;
+  const endpoint = `/projects/${projectId}/tile-servers/`;
 
   const query = useGet<TileServerLayer[]>({
     endpoint,

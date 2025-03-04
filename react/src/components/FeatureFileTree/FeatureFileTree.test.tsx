@@ -5,7 +5,7 @@ import FeatureFileTree from './FeatureFileTree';
 import {
   server,
   renderInTestWaitForQueries,
-  WithUseFeaturesComponent,
+  WithUseFeatureManager,
 } from '@hazmapper/test/testUtil';
 import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
 
@@ -28,9 +28,9 @@ describe('FeatureFileTree', () => {
 
   it('renders feature list correctly', async () => {
     await renderInTestWaitForQueries(
-      <WithUseFeaturesComponent>
+      <WithUseFeatureManager>
         <FeatureFileTree {...defaultTreeProps} />
-      </WithUseFeaturesComponent>
+      </WithUseFeatureManager>
     );
 
     expect(screen.getByText('foo')).toBeDefined();
@@ -53,9 +53,9 @@ describe('FeatureFileTree', () => {
     );
 
     await renderInTestWaitForQueries(
-      <WithUseFeaturesComponent>
+      <WithUseFeatureManager>
         <FeatureFileTree {...defaultTreeProps} />
-      </WithUseFeaturesComponent>,
+      </WithUseFeatureManager>,
       `/?selectedFeature=${featureId}`
     );
 
@@ -72,9 +72,9 @@ describe('FeatureFileTree', () => {
 
   it('does not show delete button for public projects', async () => {
     await renderInTestWaitForQueries(
-      <WithUseFeaturesComponent>
+      <WithUseFeatureManager>
         <FeatureFileTree {...defaultTreeProps} isPublicView={true} />
-      </WithUseFeaturesComponent>
+      </WithUseFeatureManager>
     );
 
     // Verify delete button is not present
@@ -84,9 +84,9 @@ describe('FeatureFileTree', () => {
 
   it('does not show delete button when no feature is selected', async () => {
     await renderInTestWaitForQueries(
-      <WithUseFeaturesComponent>
+      <WithUseFeatureManager>
         <FeatureFileTree {...defaultTreeProps} isPublicView={false} />
-      </WithUseFeaturesComponent>
+      </WithUseFeatureManager>
     );
 
     // Verify delete button is not present

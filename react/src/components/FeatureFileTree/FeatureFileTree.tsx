@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import { Tree, Flex, Spin } from 'antd';
 import type { DataNode } from 'antd/es/tree';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faFolderClosed,
@@ -59,25 +60,18 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
 
   const [expanded, setExpanded] = useState<string[]>([]);
 
-  // Create a stable reference to featureCollection to prevent unnecessary recalculations
-  const stableFeatureCollection = useMemo(() => {
-    return featureCollection || { type: 'FeatureCollection', features: [] };
-  }, [featureCollection]);
-
   // Memoize the expensive tree data computation
   const { treeData, expandedDirectories } = useMemo(() => {
     // Early return if no data
     if (
-      !stableFeatureCollection ||
-      !stableFeatureCollection.features ||
-      stableFeatureCollection.features.length === 0
+      !featureCollection ||
+      !featureCollection.features ||
+      featureCollection.features.length === 0
     ) {
       return { treeData: [], expandedDirectories: [] };
     }
 
-    const fileNodeArray = featureCollectionToFileNodeArray(
-      stableFeatureCollection
-    );
+    const fileNodeArray = featureCollectionToFileNodeArray(featureCollection);
 
     const getDirectoryNodeIds = (nodes: FeatureFileNode[]): string[] => {
       const directoryIds: string[] = [];
@@ -109,7 +103,7 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
       // Have all directories be in 'expanded' (i.e. everything is expanded)
       expandedDirectories: getDirectoryNodeIds(fileNodeArray),
     };
-  }, [stableFeatureCollection]);
+  }, [featureCollection]);
 
   // Set initial expanded state
   useEffect(() => {
@@ -275,13 +269,16 @@ const FeatureFileTree: React.FC<FeatureFileTreeProps> = ({
   );
 
   // Show loading state during tree processing
-  if (!treeData.length && stableFeatureCollection.features.length !== 0)
+  if (
+    featureCollection === undefined ||
+    (!treeData.length && featureCollection.features.length !== 0)
+  ) {
     return (
       <Flex justify="center" align="center" flex={1}>
         <Spin />
       </Flex>
     );
-
+  }
   return (
     <div className={styles.root} ref={ref}>
       <Tree

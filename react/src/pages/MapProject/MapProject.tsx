@@ -4,10 +4,11 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Layout, Flex } from 'antd';
 import { LoadingSpinner, Message } from '@tacc/core-components';
 
+import { FeatureManager } from '@hazmapper/components/FeatureManager';
 import Map from '@hazmapper/components/Map';
 import AssetDetail from '@hazmapper/components/AssetDetail';
 import {
-  useFeatures,
+  useCurrentFeaturesStore,
   useProject,
   useGetTileServers,
   useFeatureSelection,
@@ -87,13 +88,16 @@ const MapProject: React.FC<MapProjectProps> = ({ isPublicView = false }) => {
     options: { enabled: !!projectUUID },
   });
 
-  // Clear feature queries when changing projects to prevent stale features from
+  const { setReset } = useCurrentFeaturesStore.getState();
+
+  // Clear feature queries and our stored data when changing projects to prevent stale features from
   // briefly appearing and causing incorrect map bounds/zoom during navigation
   useEffect(() => {
     return () => {
       queryClient.removeQueries({ queryKey: [KEY_USE_FEATURES] });
+      setReset();
     };
-  }, [projectUUID, queryClient]);
+  }, [projectUUID, setReset, queryClient]);
 
   if (isLoading) {
     return (
@@ -180,15 +184,6 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     formatAssetTypeName(type)
   );
 
-  useFeatures({
-    projectId: activeProject.id,
-    isPublicView,
-    assetTypes: formattedAssetTypes,
-    startDate,
-    endDate,
-    toggleDateFilter,
-  });
-
   const { data: tileServerLayers, isLoading: isTileServerLayersLoading } =
     useGetTileServers({
       projectId: activeProject.id,
@@ -261,6 +256,13 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
               </Flex>
             </Sider>
             <Content>
+              <FeatureManager
+                projectId={activeProject.id}
+                assetTypes={formattedAssetTypes}
+                startDate={startDate}
+                endDate={endDate}
+                toggleDateFilter={toggleDateFilter}
+              />
               {isTileServerLayersLoading ? <Spinner /> : <Map />}
               {selectedFeature && (
                 <div className={styles.detailContainer}>

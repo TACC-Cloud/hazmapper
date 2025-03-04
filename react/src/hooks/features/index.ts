@@ -4,6 +4,7 @@ export { useImportFeatureAsset } from './useImportFeatureAsset';
 export {
   useFeatures,
   useCurrentFeatures,
+  useCurrentFeaturesStore,
   KEY_USE_FEATURES,
 } from './useFeatures';
 export {

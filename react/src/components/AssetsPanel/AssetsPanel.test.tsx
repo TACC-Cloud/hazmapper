@@ -4,13 +4,10 @@ import AssetsPanel from './AssetsPanel';
 import { featureCollection } from '@hazmapper/__fixtures__/featuresFixture';
 import { projectMock } from '@hazmapper/__fixtures__/projectFixtures';
 import {
-  createSpyHandler,
-  server,
   renderInTest,
-  WithUseFeaturesComponent,
+  WithUseFeatureManager,
   renderInTestWaitForQueries,
 } from '@hazmapper/test/testUtil';
-import { geoapi_project_features } from '@hazmapper/test/handlers';
 import '@testing-library/jest-dom';
 
 // Mock FeatureFileTree component since it's a complex component and tested elswhere
@@ -47,13 +44,10 @@ describe('AssetsPanel', () => {
     // Spy on URL.createObjectURL to capture the blob
     const createObjectURLSpy = jest.spyOn(URL, 'createObjectURL');
 
-    const { handler, spy } = createSpyHandler(geoapi_project_features);
-    server.use(handler);
-
     await renderInTestWaitForQueries(
-      <WithUseFeaturesComponent>
+      <WithUseFeatureManager>
         <AssetsPanel {...defaultProps} />
-      </WithUseFeaturesComponent>
+      </WithUseFeatureManager>
     );
 
     const exportButton = screen
@@ -70,13 +64,11 @@ describe('AssetsPanel', () => {
       fireEvent.click(screen.getByText('Export to GeoJSON'));
     });
 
-    // Wait for the API call to get features for download (so second request)
     await waitFor(() => {
-      expect(spy).toHaveBeenCalledTimes(2);
+      expect(createObjectURLSpy).toHaveBeenCalled();
     });
 
     // Verify the geojson blob was created with correct content
-    expect(createObjectURLSpy).toHaveBeenCalled();
     const blob = createObjectURLSpy.mock.calls[0][0] as Blob;
     expect(blob.type).toBe('application/json');
     const content = JSON.parse(await blob.text());

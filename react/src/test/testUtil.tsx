@@ -8,7 +8,8 @@ import { http } from 'msw';
 import store from '@hazmapper/redux/store';
 import { defaultHandlers } from '@hazmapper/test/handlers';
 import { MapPositionProvider } from '@hazmapper/context/MapContext';
-import { useFeatures } from '@hazmapper/hooks';
+import { FeatureManager } from '@hazmapper/components/FeatureManager';
+import dayjs from 'dayjs';
 
 export const server = setupServer(...defaultHandlers);
 
@@ -69,22 +70,28 @@ export const TestWrapper = ({ children }: { children: React.ReactNode }) => (
 );
 
 /**
- * Helper component to add useFeatures hook
+ * Helper component to add useFeatures and the update of zustand state to make
+ * useCurrentFeatures work
  */
-export const WithUseFeaturesComponent: React.FC<{ children: ReactNode }> = ({
+export const WithUseFeatureManager: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const { isLoading } = useFeatures({
-    projectId: 1,
-    isPublicView: false,
-    assetTypes: ['type1', 'type2'],
-  });
+  const startDate = dayjs('2025-01-01').startOf('day');
+  const endDate = dayjs('2025-01-31').endOf('day');
 
-  if (isLoading) {
-    return <div>Loading. Consider using waitForAllQueriesToResolve </div>;
-  }
-
-  return <>{children}</>;
+  return (
+    <>
+      {/* Use FeatureManager so that it triggers useFeatures internally and updates the store */}
+      <FeatureManager
+        projectId={1}
+        assetTypes={['foo']}
+        startDate={startDate}
+        endDate={endDate}
+        toggleDateFilter={false}
+      />
+      {children}
+    </>
+  );
 };
 
 interface SpyHandlerArgs {

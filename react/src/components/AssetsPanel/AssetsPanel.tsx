@@ -21,18 +21,15 @@ const getFilename = (projectName: string) => {
 
 interface DownloadFeaturesButtonProps {
   project: Project;
-  isPublicView: boolean;
 }
 
 const DownloadFeaturesButton: React.FC<DownloadFeaturesButtonProps> = ({
   project,
-  isPublicView,
 }) => {
   const { data: featureCollection } = useCurrentFeatures();
 
   const { isLoading: isDownloading, refetch } = useFeatures({
     projectId: project.id,
-    isPublicView: isPublicView,
     assetTypes: [], // Empty array to get all features
     options: {
       enabled: false, // Only fetch when triggered by user clicking button
@@ -134,10 +131,7 @@ const AssetsPanel: React.FC<Props> = ({ isPublicView, project }) => {
           <FeatureFileTree projectId={project.id} isPublicView={isPublicView} />
         </Content>
         <Footer className={styles.bottomSection}>
-          <DownloadFeaturesButton
-            project={project}
-            isPublicView={isPublicView}
-          />
+          <DownloadFeaturesButton project={project} />
         </Footer>
       </Flex>
       <FileBrowserModal

@@ -30,7 +30,7 @@ export const designsafe_project = http.get(
 
 // GeoAPI Projects GET - handles both list and single project (i.e query is "?uuid=uuid")
 export const geoapi_get_projects = http.get(
-  `${testDevConfiguration.geoapiUrl}/:projects_or_project_public_segment/`,
+  `${testDevConfiguration.geoapiUrl}/projects/`,
   ({ request }) => {
     const url = new URL(request.url);
     const uuid = url.searchParams.get('uuid');
@@ -49,7 +49,7 @@ export const geoapi_get_projects = http.get(
 
 // GeoAPI Project Features GET
 export const geoapi_project_features = http.get(
-  `${testDevConfiguration.geoapiUrl}/:projects_or_project_public_segment/:projectId/features/`,
+  `${testDevConfiguration.geoapiUrl}/projects/:projectId/features/`,
   () => HttpResponse.json(featureCollection, { status: 200 })
 );
 
@@ -61,7 +61,7 @@ export const geoapi_project_users = http.get(
 
 // GeoAPI Project Tile Servers GET
 export const geoapi_project_tile_servers = http.get(
-  `${testDevConfiguration.geoapiUrl}/:projects_or_project_public_segment/:projectId/tile-servers/`,
+  `${testDevConfiguration.geoapiUrl}/projects/:projectId/tile-servers/`,
   () => HttpResponse.json(tileServerLayers, { status: 200 })
 );
 
@@ -77,11 +77,17 @@ export const geoapi_project_point_clouds_create = http.post(
   () => HttpResponse.json([pointCloudMock], { status: 200 })
 );
 
+// GeoAPI Project Point Clouds DELETE
 export const geoapi_project_point_clouds_delete = http.delete(
   `${testDevConfiguration.geoapiUrl}/projects/:projectId/point-cloud/:pointCloudId/`,
   async () => {
     return HttpResponse.json({}, { status: 200 });
   }
+);
+
+export const geoapi_notifications = http.get(
+  `${testDevConfiguration.geoapiUrl}/notifications/`,
+  () => HttpResponse.json([], { status: 200 })
 );
 
 // Tapis Systems GET
@@ -108,6 +114,7 @@ export const defaultHandlers = [
   arcgis_tiles,
   designsafe_project,
   designsafe_projects,
+  geoapi_notifications,
   geoapi_get_projects,
   geoapi_project_features,
   geoapi_project_users,
