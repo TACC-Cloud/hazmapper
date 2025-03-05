@@ -22,6 +22,9 @@ export class JwtInterceptor implements HttpInterceptor {
       request.url.includes(this.envService.tapisUrl) ||
       request.url.includes(this.envService.apiUrl) ||
       request.url.includes(this.envService.designSafePortalUrl);
+
+    let headers: { [key: string]: string } = {};
+
     if (isTargetUrl) {
       if (this.authSvc.isLoggedInButTokenExpired()) {
         // check for an expired user token and get user to relogin if expired
@@ -30,21 +33,16 @@ export class JwtInterceptor implements HttpInterceptor {
 
       if (this.authSvc.isLoggedIn()) {
         // add tapis token to Geoapi or Tapis requests
-        request = request.clone({
-          setHeaders: {
-            'X-Tapis-Token': this.authSvc.userToken.token,
-          },
-        });
+        headers['X-Tapis-Token'] = this.authSvc.userToken.token;
       }
     }
 
     if (request.url.indexOf(this.envService.apiUrl) > -1) {
+      const isPublicView = this.isPublicProjectRequest(request);
+
       // Add information about what app is making the request
-
-      // Using query params instead of custom headers due to https://tacc-main.atlassian.net/browse/WG-191
-      let analytics_params = {};
-
-      analytics_params = { ...analytics_params, application: 'hazmapper' };
+      headers['X-Geoapi-Application'] = 'hazmapper';
+      headers['X-Geoapi-Is-Public-View'] = isPublicView ? 'True' : 'False';
 
       // for guest users, add a unique id
       if (!this.authSvc.isLoggedIn()) {
@@ -56,16 +54,13 @@ export class JwtInterceptor implements HttpInterceptor {
           localStorage.setItem('guestUuid', guestUuid);
         }
 
-        analytics_params = { ...analytics_params, guest_uuid: guestUuid };
+        headers['X-Guest-UUID'] = guestUuid;
       }
-      /* Send analytics-related params to projects endpoint only (until we use headers
-        again in https://tacc-main.atlassian.net/browse/WG-192) */
-      if (this.isProjectFeaturesRequest(request)) {
-        // Clone the request and add query parameters
-        request = request.clone({
-          setParams: { ...request.params, ...analytics_params },
-        });
-      }
+    }
+
+    // Apply headers if there are any to set
+    if (Object.keys(headers).length > 0) {
+      request = request.clone({ setHeaders: headers });
     }
 
     if (
@@ -96,13 +91,10 @@ export class JwtInterceptor implements HttpInterceptor {
   }
 
   /**
-   * Determines whether a given HTTP request targets the features endpoint of a project or public project.
-   *
-   * This endpoint is being logged with extra information for analytics purposes.
+   * Determines whether the current view is for a public project.
+   * It checks if the browser's URL contains "/project-public/" instead of "/projects/".
    */
-  private isProjectFeaturesRequest(request: HttpRequest<any>): boolean {
-    // Regular expression to match /projects/{projectId}/features or /public-projects/{projectId}/features
-    const urlPattern = /\/(projects|public-projects)\/\d+\/features\/?(?:\?.*)?/;
-    return request.method === 'GET' && urlPattern.test(request.url);
+  private isPublicProjectRequest(): boolean {
+    return window.location.pathname.includes('/project-public/');
   }
 }
