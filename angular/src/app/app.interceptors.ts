@@ -38,11 +38,11 @@ export class JwtInterceptor implements HttpInterceptor {
     }
 
     if (request.url.indexOf(this.envService.apiUrl) > -1) {
-      const isPublicView = this.isPublicProjectRequest(request);
+      const isPublicView = this.isPublicProjectRequest();
 
       // Add information about what app is making the request
       headers['X-Geoapi-Application'] = 'hazmapper';
-      headers['X-Geoapi-Is-Public-View'] = isPublicView ? 'True' : 'False';
+      headers['X-Geoapi-IsPublicView'] = isPublicView ? 'True' : 'False';
 
       // for guest users, add a unique id
       if (!this.authSvc.isLoggedIn()) {
