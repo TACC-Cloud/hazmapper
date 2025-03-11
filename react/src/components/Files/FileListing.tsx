@@ -23,8 +23,10 @@ import {
 } from '@hazmapper/hooks';
 import { File, TTapisSystem } from '@hazmapper/types';
 import { serializeToChonkyFile } from '@hazmapper/utils/fileUtils';
+import { debounce } from 'lodash';
 
 const DEFAULT_NO_FILE_EXTENSIONS: string[] = [];
+const DEFAULT_FILE_LIMIT = 500;
 
 const _FileBrowser = FileBrowser as React.MemoExoticComponent<
   React.ForwardRefExoticComponent<
@@ -65,20 +67,28 @@ export const FileListing: React.FC<FileListingProps> = ({
 
   const { data: user } = useAuthenticatedUser();
 
-  const [chonkyFiles, setChonkyFiles] = React.useState<any>([]);
+  const [chonkyFiles, setChonkyFiles] = React.useState<any>(
+    new Array(8).fill(null)
+  );
   const [folderChain, setFolderChain] = React.useState<any>([]);
-  const [path, setPath] = React.useState<string>('');
   const [selectedSystem, setSelectedSystem] = React.useState<TTapisSystem>(
     myDataSystem as TTapisSystem
   );
   const [hasError, setHasError] = React.useState(false);
+  const [loadingMoreFiles, setLoadingMoreFiles] = React.useState(false);
+  const [hasMoreFiles, setHasMoreFiles] = React.useState(false);
+  const [listingState, setListingState] = React.useState({
+    path: '',
+    offset: 0,
+  });
 
   const { data: files, refetch } = useFiles({
     system: selectedSystem?.id || '',
     path:
-      path || (selectedSystem?.id === myDataSystem?.id ? user?.username : ''),
-    offset: '0',
-    limit: '100' /* TODO https://tacc-main.atlassian.net/browse/WG-418 */,
+      listingState.path ||
+      (selectedSystem?.id === myDataSystem?.id ? user?.username : ''),
+    offset: listingState.offset.toString(),
+    limit: DEFAULT_FILE_LIMIT.toString(),
     enabled: !!selectedSystem?.id,
   });
 
@@ -87,33 +97,98 @@ export const FileListing: React.FC<FileListingProps> = ({
 
   const selectedSystemId = watch('system');
 
+  const setRootFolderChain = (rootPath, sys = selectedSystem) => {
+    let rootFolderName: string;
+
+    if (sys?.id === myDataSystem?.id) {
+      rootFolderName = 'My Data';
+    } else if (sys?.id === communityDataSystem?.id) {
+      rootFolderName = 'Community Data';
+    } else if (sys?.id === publishedDataSystem?.id) {
+      rootFolderName = 'Published Data';
+    } else {
+      rootFolderName = 'Project';
+    }
+
+    setFolderChain([{ id: rootPath, name: rootFolderName, isDir: true }]);
+  };
+
   useEffect(() => {
     if (selectedSystem?.id) {
       refetch();
     }
-  }, [selectedSystem, path, refetch]);
+  }, [selectedSystem, listingState, refetch]);
 
   useEffect(() => {
-    setChonkyFiles(
-      files?.map((file) =>
-        serializeToChonkyFile(file, allowedFileExtensions)
-      ) || []
-    );
+    if (files) {
+      setLoadingMoreFiles(false);
+      const fileListWrapper = document.querySelector('.chonky-fileListWrapper');
 
-    if (!folderChain.length && user?.username) {
-      setFolderChain([{ id: user.username, name: user.username, isDir: true }]);
+      if (!fileListWrapper) return;
+
+      const dynamicListContainer = fileListWrapper.querySelector(
+        '[class^="listContainer-"]'
+      );
+
+      if (!dynamicListContainer) return;
+
+      const handleScroll = debounce(() => {
+        if (!hasMoreFiles) return;
+        const { scrollTop, scrollHeight, clientHeight } = dynamicListContainer;
+        if (scrollTop + clientHeight >= scrollHeight - 20) {
+          setLoadingMoreFiles(true);
+          setListingState((prev) => ({
+            ...prev,
+            offset: prev.offset + DEFAULT_FILE_LIMIT,
+          }));
+        }
+      }, 250);
+
+      dynamicListContainer.addEventListener('scroll', handleScroll);
+      return () =>
+        dynamicListContainer.removeEventListener('scroll', handleScroll);
     }
-  }, [
-    files,
-    folderChain.length,
-    user?.username,
-    allowedFileExtensions,
-    hasError,
-  ]);
+  }, [files, hasMoreFiles]);
+
+  useEffect(() => {
+    if (files) {
+      if (files.length < DEFAULT_FILE_LIMIT || files.length === 0) {
+        setHasMoreFiles(false);
+      } else {
+        setHasMoreFiles(true);
+      }
+
+      setChonkyFiles((prevFiles) => {
+        const filteredPrevFiles = prevFiles.filter(Boolean); // Filter out nulls
+        const newChonkyFiles = files.map((file) =>
+          serializeToChonkyFile(file, allowedFileExtensions)
+        );
+
+        if (
+          JSON.stringify(prevFiles) ===
+          JSON.stringify([...prevFiles, ...newChonkyFiles])
+        ) {
+          setHasMoreFiles(false);
+          return prevFiles;
+        }
+
+        return listingState.offset === 0
+          ? newChonkyFiles
+          : [...filteredPrevFiles, ...newChonkyFiles];
+      });
+    }
+    if (!folderChain.length && user?.username) {
+      setRootFolderChain(user.username);
+    }
+  }, [files, folderChain.length, user?.username, allowedFileExtensions]);
 
   const FileListingIcon = (props: any) => <Icon name={props.icon} />;
 
   useEffect(() => {
+    if (!selectedSystemId || selectedSystem?.id === selectedSystemId) {
+      return;
+    }
+
     setHasError(false);
     setChonkyFiles(new Array(8).fill(null));
     setFolderChain([null]);
@@ -127,23 +202,15 @@ export const FileListing: React.FC<FileListingProps> = ({
 
     setSelectedSystem(sys);
     const rootFolder = sys.id === myDataSystem?.id ? user?.username : '/';
-    setPath(rootFolder);
+
+    setListingState({
+      path: rootFolder,
+      offset: 0,
+    });
 
     onSystemSelect?.(sys.id);
     onFolderSelect?.(rootFolder);
-    let rootFolderName: string;
-
-    if (sys.id === myDataSystem?.id) {
-      rootFolderName = 'My Data';
-    } else if (sys.id === communityDataSystem?.id) {
-      rootFolderName = 'Community Data';
-    } else if (sys.id === publishedDataSystem?.id) {
-      rootFolderName = 'Published Data';
-    } else {
-      rootFolderName = 'Project';
-    }
-
-    setFolderChain([{ id: rootFolder, name: rootFolderName, isDir: true }]);
+    setRootFolderChain(rootFolder, sys);
   }, [selectedSystemId]);
 
   const handleFileAction = useCallback(
@@ -152,7 +219,10 @@ export const FileListing: React.FC<FileListingProps> = ({
         const file: FileData = data.payload.targetFile as FileData;
 
         if (file.isDir) {
-          setPath(file.id);
+          setListingState({
+            path: file.id,
+            offset: 0,
+          });
           setFolderChain((prev) => {
             const index = prev.findIndex((folder) => folder.id === file.id);
             return index === -1 ? [...prev, file] : prev.slice(0, index + 1);
@@ -160,6 +230,7 @@ export const FileListing: React.FC<FileListingProps> = ({
 
           onFolderSelect?.(file.id);
         } else {
+          if (!file.selectable) return;
           const selectedFile = files?.find((f) => f.path === file.id);
           if (selectedFile) {
             onFileSelect?.([selectedFile]);
@@ -178,7 +249,7 @@ export const FileListing: React.FC<FileListingProps> = ({
             (f) => filePaths.includes(f.path) && f.type !== 'dir'
           ) || [];
 
-        onFileSelect?.(newSelectedFiles); // P
+        onFileSelect?.(newSelectedFiles);
       }
     },
     [files, onFileSelect, onFolderSelect]
@@ -233,9 +304,13 @@ export const FileListing: React.FC<FileListingProps> = ({
             clearSelectionOnOutsideClick
             iconComponent={FileListingIcon}
             onFileAction={handleFileAction}
+            defaultSortActionId={null}
           >
             <FileNavbar />
             <FileList />
+            {loadingMoreFiles && (
+              <p style={{ textAlign: 'center' }}>Loading...</p>
+            )}
           </_FileBrowser>
         )}
       </div>

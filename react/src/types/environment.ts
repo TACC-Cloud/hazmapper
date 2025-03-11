@@ -7,6 +7,7 @@ export enum GeoapiBackendEnvironment {
   Dev = 'dev',
   Experimental = 'experimental',
   Local = 'local',
+  Test = 'test', // for unit testing
 }
 
 /**
@@ -71,6 +72,9 @@ export interface MapillaryConfiguration {
 export interface AppConfiguration {
   /** Base URL path for the application. */
   basePath: string;
+
+  /** Geoapi environments. */
+  geoapiEnv: GeoapiBackendEnvironment;
 
   /** URL for the GeoAPI service. */
   geoapiUrl: string;

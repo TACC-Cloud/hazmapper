@@ -1,4 +1,9 @@
-import { AppConfiguration, MapillaryConfiguration } from '@hazmapper/types';
+import {
+  AppConfiguration,
+  GeoapiBackendEnvironment,
+  MapillaryConfiguration,
+} from '@hazmapper/types';
+import { getGeoapiUrl } from '@hazmapper/hooks/environment/utils';
 
 export const mapillaryConfig: MapillaryConfiguration = {
   authUrl: 'https://www.mapillary.com/connect',
@@ -14,7 +19,8 @@ export const mapillaryConfig: MapillaryConfiguration = {
 
 export const testDevConfiguration: AppConfiguration = {
   basePath: '/test',
-  geoapiUrl: 'https://geoapi.unittest',
+  geoapiEnv: GeoapiBackendEnvironment.Test,
+  geoapiUrl: getGeoapiUrl(GeoapiBackendEnvironment.Test),
   designsafePortalUrl: 'https://designsafeci.unittest',
   tapisUrl: 'https://tapis.io.unittest',
   mapillary: mapillaryConfig,

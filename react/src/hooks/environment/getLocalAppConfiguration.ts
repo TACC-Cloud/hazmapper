@@ -36,11 +36,12 @@ export const getLocalAppConfiguration = (
 
   const appConfig: AppConfiguration = {
     basePath: basePath,
+    geoapiEnv: localDevelopmentConfiguration.geoapiBackend,
     geoapiUrl: getGeoapiUrl(localDevelopmentConfiguration.geoapiBackend),
     designsafePortalUrl: getDesignsafePortalUrl(designSafePortal),
     tapisUrl: 'https://designsafe.tapis.io',
     mapillary: mapillaryConfig,
-    taggitUrl: origin + '/taggit-staging',
+    taggitUrl: origin + '/taggit-local', // TODO: we don't support allowing taggit to run at the same time in local dev env
   };
   appConfig.mapillary.clientId = '5156692464392931';
   appConfig.mapillary.clientSecret =
