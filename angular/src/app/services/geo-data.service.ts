@@ -87,10 +87,9 @@ export class GeoDataService {
 
   getFeatures(projectId: number): void {
     const qstring: string = querystring.stringify(this._assetFilters.toJson());
-    const projectRoute = 'projects';
     this.setLoadFeatureData(true);
     this.http
-      .get<FeatureCollection>(this.envService.apiUrl + `/${projectRoute}/${projectId}/features/` + '?' + qstring)
+      .get<FeatureCollection>(this.envService.apiUrl + `/projects/${projectId}/features/` + '?' + qstring)
       .subscribe((fc: FeatureCollection) => {
         fc.features = fc.features.map((feat: Feature) => {
           const feature = new Feature(feat);
@@ -124,8 +123,7 @@ export class GeoDataService {
 
   getPointClouds(projectId: number) {
     this.setLoadPointCloudData(true);
-    const projectRoute = 'projects';
-    this.http.get<Array<IPointCloud>>(this.envService.apiUrl + `/${projectRoute}/${projectId}/point-cloud/`).subscribe((resp) => {
+    this.http.get<Array<IPointCloud>>(this.envService.apiUrl + `/projects/${projectId}/point-cloud/`).subscribe((resp) => {
       this.setLoadPointCloudData(false);
       this._pointClouds.next(resp);
     });
@@ -297,8 +295,7 @@ export class GeoDataService {
 
   getOverlays(projectId: number): void {
     this.setLoadOverlayData(true);
-    const projectRoute = 'projects';
-    this.http.get(this.envService.apiUrl + `/${projectRoute}/${projectId}/overlays/`).subscribe((ovs: Array<Overlay>) => {
+    this.http.get(this.envService.apiUrl + `/projects/${projectId}/overlays/`).subscribe((ovs: Array<Overlay>) => {
       this._overlays.next(ovs);
       this.setLoadOverlayData(false);
     });
@@ -442,8 +439,7 @@ export class GeoDataService {
   }
 
   getTileServers(projectId: number): void {
-    const projectRoute = 'projects';
-    this.http.get(this.envService.apiUrl + `/${projectRoute}/${projectId}/tile-servers/`).subscribe((tsv: Array<TileServer>) => {
+    this.http.get(this.envService.apiUrl + `/projects/${projectId}/tile-servers/`).subscribe((tsv: Array<TileServer>) => {
       tsv.sort((a, b) => {
         return b.uiOptions.zIndex - a.uiOptions.zIndex;
       });
