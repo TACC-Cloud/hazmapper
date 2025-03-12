@@ -5,18 +5,10 @@ import { projectMock } from '@hazmapper/__fixtures__/projectFixtures';
 import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
 import MapTabContent from './MapTabContent';
 
-const mockNavigate = jest.fn();
-
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigate,
-}));
-
 describe('MapTabContent', () => {
   const mockOnProjectUpdate = jest.fn();
 
   beforeEach(() => {
-    mockNavigate.mockClear();
     jest.clearAllMocks();
   });
 
@@ -37,6 +29,9 @@ describe('MapTabContent', () => {
   });
 
   it('navigates to Taggit when "View in Taggit" button is clicked', async () => {
+    const windowOpenSpy = jest
+      .spyOn(window, 'open')
+      .mockImplementation(() => null);
     renderInTest(
       <MapTabContent
         project={projectMock}
@@ -54,7 +49,12 @@ describe('MapTabContent', () => {
         JSON.stringify(projectMock)
       );
     });
-    await waitFor(() => expect(mockNavigate).toHaveBeenCalledTimes(1));
-    expect(mockNavigate).toHaveBeenCalledWith(testDevConfiguration.taggitUrl);
+    await waitFor(() => expect(windowOpenSpy).toHaveBeenCalledTimes(1));
+    expect(windowOpenSpy).toHaveBeenCalledWith(
+      testDevConfiguration.taggitUrl,
+      '_blank',
+      'noreferrer noopener'
+    );
+    windowOpenSpy.mockRestore();
   });
 });
