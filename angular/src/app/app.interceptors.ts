@@ -23,7 +23,7 @@ export class JwtInterceptor implements HttpInterceptor {
       request.url.includes(this.envService.apiUrl) ||
       request.url.includes(this.envService.designSafePortalUrl);
 
-    let headers: { [key: string]: string } = {};
+    const headers: { [key: string]: string } = {};
 
     if (isTargetUrl) {
       if (this.authSvc.isLoggedInButTokenExpired()) {
