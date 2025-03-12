@@ -24,7 +24,6 @@ export const useFeatures = ({
   toggleDateFilter,
   options = {},
 }: UseFeaturesParams): UseQueryResult<FeatureCollection> => {
-  // TODO can be reworked as /projects can be used and /public-projects can be removed since we are no longer a WSO2 API
   const endpoint = `/projects/${projectId}/features/`;
 
   const queryParams = useMemo(() => {

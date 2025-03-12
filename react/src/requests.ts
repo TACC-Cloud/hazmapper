@@ -41,15 +41,35 @@ function usesTapisToken(apiService: ApiService) {
 }
 
 export function getHeaders(apiService: ApiService, auth: AuthState) {
-  const hasTapisAuthToken = !!auth.authToken?.token;
+  const headers: { [key: string]: string } = {};
 
-  if (hasTapisAuthToken && usesTapisToken(apiService)) {
-    return { 'X-Tapis-Token': auth.authToken?.token };
+  if (usesTapisToken(apiService) && auth.authToken?.token) {
+    headers['X-Tapis-Token'] = auth.authToken.token;
+  }
+
+  if (apiService === ApiService.Geoapi) {
+    // Add analytics-related headers for GeoAPI requests
+    headers['X-Geoapi-Application'] = 'hazmapper';
+
+    // Determine if the user is in public view mode based on the browser's URL
+    const isPublicView = window.location.pathname.includes('/project-public/');
+    headers['X-Geoapi-IsPublicView'] = isPublicView ? 'True' : 'False';
+
+    // for guest users, add a unique id
+    if (!auth.authToken?.token) {
+      // get (or create if needed) the guestUserID in local storage
+      let guestUuid = localStorage.getItem('guestUuid');
+      if (!guestUuid) {
+        guestUuid = uuidv4();
+        localStorage.setItem('guestUuid', guestUuid as string);
+      }
+      headers['X-Guest-UUID'] = guestUuid;
+    }
   }
 
   // TODO_REACT add mapillary support
 
-  return {};
+  return headers;
 }
 
 type UseGetParams<ResponseType, TransformedResponseType> = {
@@ -90,31 +110,6 @@ export function useGet<ResponseType, TransformedResponseType = ResponseType>({
   const headers = getHeaders(apiService, state.auth);
 
   const url = `${baseUrl}${endpoint}`;
-
-  /* TODO_V3 Send analytics-related params to features endpoint (i.e.
-    /projects/<project_id>/features or /public-projects/<project_id>/features)
-    only (until we use headers again in
-    https://tacc-main.atlassian.net/browse/WG-192). We are using query params
-    instead of custom headers due to https://tacc-main.atlassian.net/browse/WG-191 */
-  if (/\/(projects|public-projects)\/\d+\/features/.test(endpoint)) {
-    let analytics_params = {};
-
-    analytics_params = { ...analytics_params, application: 'hazmapper' };
-
-    // for guest users, add a unique id
-    if (!state.auth.authToken?.token) {
-      // Get (or create if needed) the guestUserID in local storage
-
-      let guestUuid = localStorage.getItem('guestUuid');
-
-      if (!guestUuid) {
-        guestUuid = uuidv4();
-        localStorage.setItem('guestUuid', guestUuid as string);
-      }
-      analytics_params = { ...analytics_params, guest_uuid: guestUuid };
-    }
-    params = { ...params, ...analytics_params };
-  }
 
   const getUtil = async () => {
     const request = await client.get(url, { headers, params });
