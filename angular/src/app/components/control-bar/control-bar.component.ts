@@ -62,7 +62,7 @@ export class ControlBarComponent implements OnInit, OnDestroy {
       this.subscription.add(
         combineLatest([this.projectsService.activeProject, this.agaveSystemsService.projects]).subscribe(([activeProject, dsProjects]) => {
           if (activeProject) {
-            this.geoDataService.getDataForProject(activeProject.id, this.isPublicView);
+            this.geoDataService.getDataForProject(activeProject.id);
             this.streetviewAuthenticationService.getStreetviews().subscribe();
             this.streetviewAuthenticationService.activeStreetview.subscribe((asv: Streetview) => {
               if (asv) {
@@ -81,7 +81,7 @@ export class ControlBarComponent implements OnInit, OnDestroy {
         this.projectsService.activeProject.subscribe((next) => {
           this.activeProject = next;
           if (this.activeProject) {
-            this.geoDataService.getDataForProject(next.id, this.isPublicView);
+            this.geoDataService.getDataForProject(next.id);
           } else {
             this.geoDataService.clearData();
           }
@@ -104,7 +104,7 @@ export class ControlBarComponent implements OnInit, OnDestroy {
       this.notificationsService.notifications.subscribe((next) => {
         const hasSuccessNotification = next.some((note) => note.status === 'success');
         if (hasSuccessNotification) {
-          this.geoDataService.getDataForProject(this.activeProject.id, false);
+          this.geoDataService.getDataForProject(this.activeProject.id);
         }
       })
     );

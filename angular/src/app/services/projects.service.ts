@@ -125,8 +125,7 @@ export class ProjectsService {
     this._activeProject.next(null);
     this._projectUsers.next(null);
 
-    const projectRoute = usePublicRoute ? 'public-projects' : 'projects';
-    this.http.get<Project[]>(this.envService.apiUrl + `/${projectRoute}/?uuid=` + uuid).subscribe(
+    this.http.get<Project[]>(this.envService.apiUrl + `/projects/?uuid=` + uuid).subscribe(
       (resp) => {
         if (usePublicRoute) {
           this._activeProject.next(resp[0]);
