@@ -30,7 +30,7 @@ export class PointCloudsPanelComponent implements OnInit {
     const modal: BsModalRef = this.bsModalService.show(ModalCreatePointCloudComponent);
     modal.content.onClose.subscribe((next) => {
       console.log(next);
-      this.geoDataService.getPointClouds(this.activeProject.id, false);
+      this.geoDataService.getPointClouds(this.activeProject.id);
     });
   }
 }

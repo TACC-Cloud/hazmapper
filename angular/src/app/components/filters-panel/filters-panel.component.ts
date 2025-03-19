@@ -37,6 +37,6 @@ export class FiltersPanelComponent implements OnInit {
 
   updateAssetTypeFilters(ftype: string): void {
     this.filterService.updateEnabledAssetTypes(ftype);
-    this.geoDataService.getFeatures(this.activeProject.id, false);
+    this.geoDataService.getFeatures(this.activeProject.id);
   }
 }
