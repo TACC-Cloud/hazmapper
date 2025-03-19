@@ -27,7 +27,7 @@ import { debounce } from 'lodash';
 import { useQueryClient } from '@tanstack/react-query';
 
 const DEFAULT_NO_FILE_EXTENSIONS: string[] = [];
-const DEFAULT_FILE_LIMIT = 50;
+const DEFAULT_FILE_LIMIT = 500;
 
 const _FileBrowser = FileBrowser as React.MemoExoticComponent<
   React.ForwardRefExoticComponent<
