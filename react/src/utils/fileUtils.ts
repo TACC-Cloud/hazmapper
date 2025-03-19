@@ -38,7 +38,9 @@ export const serializeToChonkyFile = (
   icon: file.type === 'dir' ? 'folder' : 'file',
   selectable:
     file.type === 'dir' ||
-    allowedFileExtensions.includes(file.name.split('.').pop() || ''),
+    allowedFileExtensions.includes(
+      file.name.split('.').pop()?.toLowerCase() || ''
+    ),
 });
 
 export const convertFilesToTapisPaths = (files: File[]): TapisFilePath[] => {
