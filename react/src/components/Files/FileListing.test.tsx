@@ -10,6 +10,8 @@ import {
 } from '../../hooks';
 import { serializeToChonkyFile } from '../../utils/fileUtils';
 import { FileBrowser } from 'chonky';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { testQueryClient } from '@hazmapper/test/testUtil';
 
 // Mock dependencies
 jest.mock('../../hooks', () => ({
@@ -99,7 +101,11 @@ describe('FileListing', () => {
       data: { username: 'test-user' },
     });
     (useFiles as jest.Mock).mockReturnValue({ data: [] });
-    render(<FileListing disableSelection={false} />);
+    render(
+      <QueryClientProvider client={testQueryClient}>
+        <FileListing disableSelection={false} />
+      </QueryClientProvider>
+    );
 
     const element = screen.getByText(/No systems available/i);
     expect(document.body.contains(element)).toBe(true);
@@ -125,8 +131,11 @@ describe('FileListing', () => {
     (useAuthenticatedUser as jest.Mock).mockReturnValue({
       data: { username: 'test-user' },
     });
-    render(<FileListing disableSelection={false} />);
-
+    render(
+      <QueryClientProvider client={testQueryClient}>
+        <FileListing disableSelection={false} />
+      </QueryClientProvider>
+    );
     const element = screen.getByText(/My Data/i);
     expect(document.body.contains(element)).toBe(true); // Ensure it's in the document
   });
