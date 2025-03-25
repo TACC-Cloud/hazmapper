@@ -197,6 +197,8 @@ export const FileListing: React.FC<FileListingProps> = ({
       });
 
       setIsFilesProcessed(true);
+    } else {
+      setChonkyFiles([]);
     }
     if (!folderChain.length && user?.username) {
       setRootFolderChain(user.username);
