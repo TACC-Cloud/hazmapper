@@ -170,7 +170,7 @@ export const FileListing: React.FC<FileListingProps> = ({
   }, [isFilesProcessed]);
 
   useEffect(() => {
-    if (files && files.length > 0) {
+    if (files) {
       if (files.length < DEFAULT_FILE_LIMIT || files.length === 0) {
         setHasMoreFiles(false);
       } else {
@@ -182,6 +182,10 @@ export const FileListing: React.FC<FileListingProps> = ({
         const newChonkyFiles = files.map((file) =>
           serializeToChonkyFile(file, allowedFileExtensions)
         );
+
+        if (files.length === 0) {
+          return [];
+        }
 
         if (
           JSON.stringify(prevFiles) ===
@@ -197,8 +201,6 @@ export const FileListing: React.FC<FileListingProps> = ({
       });
 
       setIsFilesProcessed(true);
-    } else {
-      setChonkyFiles([]);
     }
     if (!folderChain.length && user?.username) {
       setRootFolderChain(user.username);
@@ -209,8 +211,6 @@ export const FileListing: React.FC<FileListingProps> = ({
     if (!selectedSystemId) {
       return;
     }
-
-    queryClient.setQueryData(['getFiles'], []);
 
     const rootFolder =
       selectedSystemId === myDataSystem?.id ? user?.username : '/';
