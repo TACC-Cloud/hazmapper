@@ -49,7 +49,7 @@ const MapProjectPanelContent: React.FC<MapProjectPanelContentProps> = ({
     <BasePanel
       panelTitle={activePanel}
       className={
-        activePanel === Panel.Manage
+        activePanel === Panel.Manage || activePanel === Panel.Streetview
           ? styles.panelContainerWide
           : styles.panelContainer
       }

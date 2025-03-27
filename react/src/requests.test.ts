@@ -31,4 +31,11 @@ describe('getHeaders', () => {
       'X-Geoapi-IsPublicView': 'False',
     });
   });
+
+  it('returns Authorization header for Mapillary', () => {
+    const headers = getHeaders(ApiService.Mapillary, authenticatedUser, '1234');
+    expect(headers).toEqual({
+      authorization: `OAuth 1234`,
+    });
+  });
 });

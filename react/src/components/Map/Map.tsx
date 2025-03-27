@@ -35,6 +35,27 @@ const defaultGeoJsonOptions = {
   },
 };
 
+const streetviewStyle = {
+  default: {
+    fill: false,
+    weight: 10,
+    color: '#22C7FF',
+    opacity: 0.6,
+  },
+  select: {
+    fill: false,
+    weight: 12,
+    color: '#22C7FF',
+    opacity: 1,
+  },
+  hover: {
+    fill: false,
+    weight: 12,
+    color: '#22C7FF',
+    opacity: 0.8,
+  },
+};
+
 /**
  * A component that displays a leaflet map of hazmapper data
  *
@@ -45,13 +66,14 @@ const LeafletMap: React.FC = () => {
   const { setSelectedFeatureId } = useFeatureSelection();
 
   const getFeatureStyle = useCallback((feature) => {
+    if (getFeatureType(feature) === FeatureType.Streetview) {
+      return streetviewStyle.default;
+    }
     return feature.properties?.style || defaultGeoJsonOptions.style;
   }, []);
-
   const handleFeatureClick = useCallback(
     (feature: any) => {
       setSelectedFeatureId(feature.id);
-      //TODO handle clicking on streetview https://tacc-main.atlassian.net/browse/WG-392
     },
     [setSelectedFeatureId]
   );
@@ -69,60 +91,56 @@ const LeafletMap: React.FC = () => {
       .filter((layer) => layer.uiOptions.isActive);
   }, [baseLayersKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const {
-    generalGeoJsonFeatures,
-    markerFeatures,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    streetviewFeatures /* Add streetview support https://tacc-main.atlassian.net/browse/WG-392 */,
-  } = useMemo(() => {
-    interface FeatureAccumulator {
-      generalGeoJsonFeatures: Feature[] /* non-point features, includes point cloud outlines */;
-      markerFeatures: Feature[];
-      streetviewFeatures: Feature[];
-    }
+  const { generalGeoJsonFeatures, markerFeatures, streetviewFeatures } =
+    useMemo(() => {
+      interface FeatureAccumulator {
+        generalGeoJsonFeatures: Feature[] /* non-point features, includes point cloud outlines */;
+        markerFeatures: Feature[];
+        streetviewFeatures: Feature[];
+      }
 
-    // Initial accumulator state
-    const initialAccumulator: FeatureAccumulator = {
-      generalGeoJsonFeatures: [],
-      markerFeatures: [],
-      streetviewFeatures: [],
-    };
+      // Initial accumulator state
+      const initialAccumulator: FeatureAccumulator = {
+        generalGeoJsonFeatures: [],
+        markerFeatures: [],
+        streetviewFeatures: [],
+      };
 
-    if (featureCollection == undefined) {
-      return initialAccumulator;
-    }
+      if (featureCollection == undefined) {
+        return initialAccumulator;
+      }
 
-    const result = featureCollection?.features.reduce<FeatureAccumulator>(
-      (accumulator, feature: Feature) => {
-        if (feature.geometry.type === FeatureType.Point) {
-          accumulator.markerFeatures.push(feature);
-        } else {
-          if (getFeatureType(feature) === FeatureType.PointCloud) {
-            // Add a marker at the calculated position
-            const markerPosition = calculatePointCloudMarkerPosition(
-              feature.geometry
-            );
-            const pointCloudMarker: Feature = {
-              ...feature,
-              geometry: {
-                type: 'Point',
-                coordinates: [markerPosition.lng, markerPosition.lat],
-              },
-            };
-
-            accumulator.markerFeatures.push(pointCloudMarker);
-            // Also keep the original geometry for rendering
-            accumulator.generalGeoJsonFeatures.push(feature);
+      const result = featureCollection?.features.reduce<FeatureAccumulator>(
+        (accumulator, feature: Feature) => {
+          if (feature.geometry.type === FeatureType.Point) {
+            accumulator.markerFeatures.push(feature);
           } else {
-            accumulator.generalGeoJsonFeatures.push(feature);
+            if (getFeatureType(feature) === FeatureType.PointCloud) {
+              // Add a marker at the calculated position
+              const markerPosition = calculatePointCloudMarkerPosition(
+                feature.geometry
+              );
+              const pointCloudMarker: Feature = {
+                ...feature,
+                geometry: {
+                  type: 'Point',
+                  coordinates: [markerPosition.lng, markerPosition.lat],
+                },
+              };
+
+              accumulator.markerFeatures.push(pointCloudMarker);
+              // Also keep the original geometry for rendering
+              accumulator.generalGeoJsonFeatures.push(feature);
+            } else {
+              accumulator.generalGeoJsonFeatures.push(feature);
+            }
           }
-        }
-        return accumulator;
-      },
-      initialAccumulator
-    );
-    return result;
-  }, [featureCollection]);
+          return accumulator;
+        },
+        initialAccumulator
+      );
+      return result;
+    }, [featureCollection]);
 
   const markerComponents = useMemo(() => {
     return markerFeatures.map((feature) => {
@@ -143,7 +161,9 @@ const LeafletMap: React.FC = () => {
 
   // Memoize GeoJSON components
   const geoJsonComponents = useMemo(() => {
-    return generalGeoJsonFeatures.map((feature) => (
+    const combinedFeatures = [...generalGeoJsonFeatures, ...streetviewFeatures];
+
+    return combinedFeatures.map((feature) => (
       <GeoJSON
         key={feature.id}
         data={feature.geometry}
@@ -154,7 +174,12 @@ const LeafletMap: React.FC = () => {
         }}
       />
     ));
-  }, [generalGeoJsonFeatures, handleFeatureClick, getFeatureStyle]);
+  }, [
+    generalGeoJsonFeatures,
+    streetviewFeatures,
+    handleFeatureClick,
+    getFeatureStyle,
+  ]);
 
   return (
     <MapContainer

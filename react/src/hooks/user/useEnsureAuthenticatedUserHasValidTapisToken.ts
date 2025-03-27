@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { isTokenValid } from '@hazmapper/utils/authUtils';
-import { RootState } from '../../redux/store';
+import { RootState } from '@hazmapper/redux/store';
 
 export function useEnsureAuthenticatedUserHasValidTapisToken() {
   const navigate = useNavigate();
