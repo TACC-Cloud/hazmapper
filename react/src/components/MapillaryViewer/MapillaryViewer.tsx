@@ -43,7 +43,7 @@ const MapillaryViewer: React.FC<MapillaryViewerProps> = ({
   const featureType: FeatureType = getFeatureType(feature);
   const displayName = shortDisplayText(feature);
 
-  const { imageId } = useMapillaryViewer();
+  const { imageId, setCurrentPosition } = useMapillaryViewer();
 
   const mapillaryFirstImageId = feature.assets[0].original_name;
 
@@ -65,9 +65,20 @@ const MapillaryViewer: React.FC<MapillaryViewerProps> = ({
         },
       });
 
-      // Listen for first image load
-      viewerRef.current.on('image', () => {
-        setIsLoadingViewer(false); // image successfully loaded; can turn of spinner
+      viewerRef.current.on('image', (newImageEvent) => {
+        if (isLoadingViewer) {
+          // at least first image successfully loaded; can turn of spinner
+          setIsLoadingViewer(false);
+        }
+
+        // Get the position from each image event and update our context (to be used by map)
+        if (newImageEvent && newImageEvent.image) {
+          const latLng = newImageEvent.image.lngLat;
+          if (latLng) {
+            // Note: Mapillary returns [lng, lat] but our context (and Leaflet) expects [lat, lng]
+            setCurrentPosition([latLng.lat, latLng.lng]);
+          }
+        }
       });
 
       console.log('moving to image', { mapillaryFirstImageId });

@@ -22,6 +22,7 @@ import FitBoundsHandler from './FitBoundsHandler';
 import PositionTracker from './PositionTracker';
 import { createMarkerIcon, createClusterIcon } from './markerCreators';
 import { calculatePointCloudMarkerPosition } from './utils';
+import MapillaryPositionMarker from './MapillaryPositionMarker';
 
 import 'leaflet/dist/leaflet.css';
 import 'react-leaflet-markercluster/styles';
@@ -192,6 +193,7 @@ const LeafletMap: React.FC = () => {
       maxBounds={MAP_CONFIG.maxBounds}
       preferCanvas={true}
     >
+      {/* Base layers */}
       {activeBaseLayers?.map((layer) =>
         layer.type === 'wms' ? (
           <WMSTileLayer
@@ -215,8 +217,10 @@ const LeafletMap: React.FC = () => {
           />
         )
       )}
+
       {/* General GeoJSON Features (including point cloud geometries) */}
       {geoJsonComponents}
+
       {/* Marker Features with Clustering (also includes point cloud markers) */}
       <MarkerClusterGroup
         zIndexOffset={1}
@@ -233,9 +237,16 @@ const LeafletMap: React.FC = () => {
       >
         {markerComponents}
       </MarkerClusterGroup>
+
+      {/* This marker will automatically appear when the Mapillary viewer is active */}
+      <MapillaryPositionMarker />
+
       {/* Handles zooming to a specific feature or to all features */}
       <FitBoundsHandler featureCollection={featureCollection} />
+
       <ZoomControl position="bottomright" />
+
+      {/* Track position (which is displayed on MapControllbar */}
       <PositionTracker />
     </MapContainer>
   );
