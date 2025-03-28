@@ -8,7 +8,7 @@ import { getGeoapiUrl } from '@hazmapper/hooks/environment/utils';
 export const mapillaryConfig: MapillaryConfiguration = {
   authUrl: 'https://www.mapillary.com/connect',
   tokenUrl: 'https://graph.mapillary.com/token',
-  apiUrl: 'https://graph.mapillary.com/',
+  apiUrl: 'https://graph.mapillary.com',
   tileUrl: 'https://tiles.mapillary.com/',
   scope:
     'user:email+user:read+user:write+public:write+public:upload+private:read+private:write+private:upload',

@@ -19,7 +19,7 @@ const MapillaryPositionMarker: React.FC = () => {
 
   return (
     <Marker position={currentPosition} icon={markerIcon}>
-      <Popup>Current Mapillary Position</Popup>
+      <Popup>Current position in the viewer</Popup>
     </Marker>
   );
 };

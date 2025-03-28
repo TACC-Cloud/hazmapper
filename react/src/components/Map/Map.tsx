@@ -16,12 +16,18 @@ import {
   getFeatureType,
   FeatureType,
 } from '@hazmapper/types';
-import { useCurrentFeatures, useFeatureSelection } from '@hazmapper/hooks';
+import {
+  useCurrentFeatures,
+  useFeatureSelection,
+  useMapillaryViewerMoveToNearestPoint,
+} from '@hazmapper/hooks';
 import { MAP_CONFIG } from './config';
 import FitBoundsHandler from './FitBoundsHandler';
 import PositionTracker from './PositionTracker';
 import { createMarkerIcon, createClusterIcon } from './markerCreators';
 import { calculatePointCloudMarkerPosition } from './utils';
+import { getSequenceID } from '@hazmapper/utils/featureUtils';
+import { getPixelBboxAroundPoint } from '@hazmapper/utils/leafletUtils';
 import MapillaryPositionMarker from './MapillaryPositionMarker';
 
 import 'leaflet/dist/leaflet.css';
@@ -60,11 +66,13 @@ const streetviewStyle = {
 /**
  * A component that displays a leaflet map of hazmapper data
  *
- * Note this is not called Map as causes an issue with react-leaflet
+ * Note this is not called `Map` as causes an issue with react-leaflet
  */
 const LeafletMap: React.FC = () => {
   const { data: featureCollection } = useCurrentFeatures();
   const { setSelectedFeatureId } = useFeatureSelection();
+  const { moveToImageNearThisPosition } =
+    useMapillaryViewerMoveToNearestPoint();
 
   const getFeatureStyle = useCallback((feature) => {
     if (getFeatureType(feature) === FeatureType.Streetview) {
@@ -72,11 +80,27 @@ const LeafletMap: React.FC = () => {
     }
     return feature.properties?.style || defaultGeoJsonOptions.style;
   }, []);
+
   const handleFeatureClick = useCallback(
-    (feature: any) => {
+    async (feature: any, event: any) => {
+      if (getFeatureType(feature) === FeatureType.Streetview) {
+        if (event.type === 'click') {
+          const map = event.target._map as L.Map;
+          const sequenceID = getSequenceID(feature);
+          const bounds = getPixelBboxAroundPoint(map, event.latlng, 10);
+          const didMove = await moveToImageNearThisPosition(bounds, sequenceID);
+          if (didMove) {
+            // return early if we are handling this move to avoid
+            // unselecting streeetview feature below with setSelectedFeatureId
+            return;
+          }
+        }
+      }
+
+      // select/unselect features
       setSelectedFeatureId(feature.id);
     },
-    [setSelectedFeatureId]
+    [moveToImageNearThisPosition, setSelectedFeatureId]
   );
 
   const baseLayers = useWatch<TLayerOptionsFormData, 'tileLayers'>({
@@ -152,8 +176,8 @@ const LeafletMap: React.FC = () => {
           icon={createMarkerIcon(feature)}
           position={[geometry.coordinates[1], geometry.coordinates[0]]}
           eventHandlers={{
-            click: () => handleFeatureClick(feature),
-            contextmenu: () => handleFeatureClick(feature),
+            click: (e) => handleFeatureClick(feature, e),
+            contextmenu: (e) => handleFeatureClick(feature, e),
           }}
         />
       );
@@ -170,8 +194,8 @@ const LeafletMap: React.FC = () => {
         data={feature.geometry}
         style={() => getFeatureStyle(feature)}
         eventHandlers={{
-          click: () => handleFeatureClick(feature),
-          contextmenu: () => handleFeatureClick(feature),
+          click: (e) => handleFeatureClick(feature, e),
+          contextmenu: (e) => handleFeatureClick(feature, e),
         }}
       />
     ));

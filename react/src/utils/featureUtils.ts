@@ -13,3 +13,13 @@ export const shortDisplayText = (feature: Feature): string => {
 
   return asset?.id?.toString() ?? String(feature.id);
 };
+
+/**
+ * Get sequence id
+ *
+ *   Note: Feature needs to be FeatureType.Streetview
+ */
+export const getSequenceID = (feature: Feature): string => {
+  const sequenceId = feature.assets[0].display_path.split('/').pop();
+  return sequenceId || '';
+};

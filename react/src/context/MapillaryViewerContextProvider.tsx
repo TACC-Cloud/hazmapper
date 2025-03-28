@@ -8,14 +8,17 @@ import React, {
 import { LatLngTuple } from 'leaflet';
 
 interface MapillaryViewerContextType {
-  sequenceId: string;
-  setSequenceId: Dispatch<SetStateAction<string>>;
-  imageId: string;
-  setImageId: Dispatch<SetStateAction<string>>;
-  currentPosition: LatLngTuple | null;
-  setCurrentPosition: Dispatch<SetStateAction<LatLngTuple | null>>;
-  show: boolean;
-  setShow: Dispatch<SetStateAction<boolean>>;
+  sequenceId: string; // ID of the current Mapillary sequence
+  setSequenceId: Dispatch<SetStateAction<string>>; // Updates the current sequence ID
+
+  imageId: string; // ID of the currently displayed image
+  setImageId: Dispatch<SetStateAction<string>>; // Updates the current image ID
+
+  currentPosition: LatLngTuple | null; // Geographical position of the current image
+  setCurrentPosition: Dispatch<SetStateAction<LatLngTuple | null>>; // Updates the position
+
+  show: boolean; // Whether the Mapillary viewer is currently visible
+  setShow: Dispatch<SetStateAction<boolean>>; // Toggles visibility of the viewer
 }
 
 /**

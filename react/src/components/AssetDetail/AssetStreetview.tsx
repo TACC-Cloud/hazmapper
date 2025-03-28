@@ -39,7 +39,7 @@ const MapillaryViewerButton: React.FC<MapillaryViewerButtonProps> = ({
     <Flex justify="center" style={{ marginTop: '1rem' }}>
       <Tooltip
         title={
-          hasMapillaryToken ? 'View' : 'Unable unless logged into Mapillary'
+          hasMapillaryToken ? 'View' : 'Log in to Mapillary to use this feature'
         }
       >
         {/* To allow tooltips on disabled buttons, wrap inside span */}
