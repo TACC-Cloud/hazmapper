@@ -2,6 +2,20 @@ import { useGet } from '@hazmapper/requests';
 import { ApiService, StreetviewSequence } from '@hazmapper/types';
 import { useMapillaryToken } from '@hazmapper/context/MapillaryTokenProvider';
 import { UseQueryResult } from '@tanstack/react-query';
+import { useContext } from 'react';
+import { MapillaryViewerContext } from '@hazmapper/context/MapillaryViewerContextProvider';
+
+/**
+ * Custom hook for accessing and manipulating MapillaryViewer state.
+ */
+export const useMapillaryViewer = () => {
+  const context = useContext(MapillaryViewerContext);
+  if (!context)
+    throw new Error(
+      'useMapillaryViewer must be used within a MapillaryViewerProvider'
+    );
+  return context;
+};
 
 interface UseMapillaryImageIdParams {
   sequenceId: string | undefined;

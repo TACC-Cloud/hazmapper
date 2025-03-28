@@ -9,6 +9,7 @@ import Login from '@hazmapper/pages/Login/Login';
 import Callback from '@hazmapper/pages/Callback/Callback';
 import { RootState } from '@hazmapper/redux/store';
 import { MapillaryTokenProvider } from '@hazmapper/context/MapillaryTokenProvider';
+import { MapillaryViewerProvider } from './context/MapillaryViewerContextProvider';
 import { isTokenValid } from '@hazmapper/utils/authUtils';
 import { getBasePath } from './hooks';
 
@@ -59,7 +60,9 @@ export const appRouter = createBrowserRouter(
           element: (
             <ProtectedRoute>
               <MapillaryTokenProvider>
-                <MapProject />
+                <MapillaryViewerProvider>
+                  <MapProject />
+                </MapillaryViewerProvider>
               </MapillaryTokenProvider>
             </ProtectedRoute>
           ),
