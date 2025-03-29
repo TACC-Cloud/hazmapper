@@ -27,8 +27,8 @@ jest.mock('@hazmapper/hooks/user/useAuthenticatedUser', () => ({
   __esModule: true,
   default: () => ({
     data: { username: 'mockUser' },
-    isLoading: false,
-    error: null,
+    username: 'mockUser',
+    hasValidTapisToken: true,
   }),
 }));
 
@@ -94,8 +94,8 @@ describe('MapProject', () => {
   test('shows login prompt for 403 error when not logged in', async () => {
     jest.spyOn(UserHooks, 'default').mockImplementation(() => ({
       data: { username: '' },
-      isLoading: false,
-      error: null,
+      username: '',
+      hasValidTapisToken: false,
     }));
 
     server.use(

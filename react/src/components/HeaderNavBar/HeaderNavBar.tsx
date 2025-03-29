@@ -1,7 +1,7 @@
 import React from 'react';
 import useAuthenticatedUser from '@hazmapper/hooks/user/useAuthenticatedUser';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Button, InlineMessage, LoadingSpinner } from '@tacc/core-components';
+import { Button } from '@tacc/core-components';
 import hazmapperHeaderLogo from '@hazmapper/assets/hazmapper-header-logo.png';
 import styles from './HeaderNavBar.module.css';
 import * as ROUTES from '@hazmapper/constants/routes';
@@ -10,11 +10,7 @@ export const HeaderNavBar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const {
-    data: userData,
-    isLoading: isUserLoading,
-    error: isUserError,
-  } = useAuthenticatedUser();
+  const { username } = useAuthenticatedUser();
 
   const handleLogin = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -22,19 +18,6 @@ export const HeaderNavBar: React.FC = () => {
     const url = `${ROUTES.LOGIN}?to=${encodeURIComponent(location.pathname)}`;
     navigate(url);
   };
-
-  if (isUserLoading) {
-    return <LoadingSpinner />;
-  }
-
-  if (isUserError) {
-    return (
-      <InlineMessage type="error">
-        {' '}
-        There was an error loading your username.
-      </InlineMessage>
-    );
-  }
 
   return (
     <div
@@ -46,8 +29,8 @@ export const HeaderNavBar: React.FC = () => {
       tabIndex={0}
     >
       <img width="150px" src={hazmapperHeaderLogo} alt="Hazmapper Logo" />
-      {userData?.username ? (
-        <div className={styles.userName}>{userData.username}</div>
+      {username ? (
+        <div className={styles.userName}>{username}</div>
       ) : (
         <Button type="link" className={styles.userName} onClick={handleLogin}>
           Login

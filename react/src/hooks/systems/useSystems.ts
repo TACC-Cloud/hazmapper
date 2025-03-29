@@ -15,16 +15,18 @@ export type TransformedGetSystemsResponse = {
 };
 
 type propsType = {
-  suspense?: boolean;
   prefetch?: boolean;
+  enabled?: boolean;
 };
 
 const defaultProps: propsType = {
   prefetch: false,
+  enabled: true,
 };
 
 export const useGetSystems = ({
   prefetch,
+  enabled,
 }: propsType = defaultProps): UseQueryResult<TransformedGetSystemsResponse> => {
   const queryResult = useGet<
     TUseGetSystemsResponse,
@@ -35,6 +37,7 @@ export const useGetSystems = ({
     apiService: ApiService.Tapis,
     prefetch,
     options: {
+      enabled,
       refetchOnMount: false,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
