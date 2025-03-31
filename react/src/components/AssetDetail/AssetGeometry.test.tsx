@@ -34,7 +34,6 @@ describe('AssetGeometry', () => {
     );
     expect(getByText('Geometry: Line String')).toBeDefined();
     expect(getByText('Length (m)')).toBeDefined();
-    // Check that the length value is displayed correctly
     expect(getByText('Length (m)').nextElementSibling?.textContent).toBe(
       '120.42'
     );
@@ -47,7 +46,6 @@ describe('AssetGeometry', () => {
     );
     expect(getByText('Geometry: Polygon')).toBeDefined();
     expect(getByText('Area (m²)')).toBeDefined();
-    // Check that the area value is displayed correctly
     expect(getByText('Area (m²)').nextElementSibling?.textContent).toBe(
       '4917.50'
     );
