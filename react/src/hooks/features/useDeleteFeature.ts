@@ -29,7 +29,6 @@ export function useDeleteFeature() {
         );
         queryClient.invalidateQueries({
           queryKey: [KEY_USE_FEATURES],
-          meta: { reason: 'deletion' },
         });
 
         // Update Zustand store
