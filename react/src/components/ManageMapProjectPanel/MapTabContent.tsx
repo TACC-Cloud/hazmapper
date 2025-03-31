@@ -3,7 +3,6 @@ import { Project, ProjectRequest } from '@hazmapper/types';
 import { SectionMessage } from '@tacc/core-components';
 import { EditFilled, CheckOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Button, Flex, List, Input, Modal } from 'antd';
-import { useNavigate } from 'react-router-dom';
 import { useAppConfiguration } from '@hazmapper/hooks';
 import DeleteMapModal from '../DeleteMapModal/DeleteMapModal';
 
@@ -66,8 +65,6 @@ const MapTabContent: React.FC<MapTabProps> = ({
 
   const config = useAppConfiguration();
 
-  const navigate = useNavigate();
-
   const navigateToCorrespondingTaggitGallery = () => {
     // We set some info in local storage for Taggit and then navigate to Taggit
 
@@ -76,7 +73,7 @@ const MapTabContent: React.FC<MapTabProps> = ({
 
     // note that entire project gets stringified but only `id` is used by taggit
     localStorage.setItem(lastProjectKeyword, JSON.stringify(project));
-    navigate(config.taggitUrl);
+    window.open(config.taggitUrl, '_blank', 'noreferrer noopener');
   };
 
   return (

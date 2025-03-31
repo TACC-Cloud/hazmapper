@@ -265,6 +265,47 @@ export const mockPointFeature: Feature = {
   assets: [],
 };
 
+/* outline of ROC building */
+export const mockPolygonFeature: Feature = {
+  id: 100002,
+  project_id: 100,
+  type: 'Feature',
+  properties: {},
+  geometry: {
+    type: 'Polygon',
+    coordinates: [
+      [
+        [-97.72615552541615, 30.39020755823151],
+        [-97.72497754777392, 30.389828528170284],
+        [-97.7248597435117, 30.390092736470493],
+        [-97.72501920782376, 30.39014983950544],
+        [-97.724983480877, 30.3902375228444],
+        [-97.72599137078491, 30.39056060620544],
+        [-97.72615552541615, 30.39020755823151],
+      ],
+    ],
+  },
+  styles: null,
+  assets: [],
+};
+
+/* line along south side of ROC building */
+export const mockLineFeature: Feature = {
+  id: 100003,
+  project_id: 100,
+  type: 'Feature',
+  properties: {},
+  geometry: {
+    coordinates: [
+      [-97.7261476238652, 30.390195588919497],
+      [-97.72496908641067, 30.38982235634731],
+    ],
+    type: 'LineString',
+  },
+  styles: null,
+  assets: [],
+};
+
 export const mockVideoFeature: Feature = {
   id: 100002,
   project_id: 100,
