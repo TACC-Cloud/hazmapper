@@ -3,6 +3,19 @@ import { useSelector } from 'react-redux';
 import { isTokenValid } from '@hazmapper/utils/authUtils';
 import { RootState } from '../../redux/store';
 
+/**
+ * useEnsureAuthenticatedUserHasValidTapisToken
+ *
+ * A hook that ensures the current authenticated user has a valid Tapis auth token.
+ * If the token is invalid, the user is automatically redirected to the login page.
+ *
+ * Useful for protecting private routes or pages that require an authenticated session.
+ *
+ * See `hasValidTapisToken from `useAuthenticatedUser` if you want similar functionality
+ * without the redirection
+ *
+ * @returns {void}
+ */
 export function useEnsureAuthenticatedUserHasValidTapisToken() {
   const navigate = useNavigate();
   const location = useLocation();

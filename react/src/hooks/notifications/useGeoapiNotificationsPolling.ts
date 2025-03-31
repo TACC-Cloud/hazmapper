@@ -6,6 +6,7 @@ import {
   KEY_USE_FEATURES,
   KEY_USE_POINT_CLOUDS,
   KEY_USE_TILE_SERVERS,
+  useAuthenticatedUser,
 } from '@hazmapper/hooks';
 import { useNotification } from './useNotification';
 
@@ -14,6 +15,7 @@ const POLLING_INTERVAL = 5000; // 5 seconds
 export const useGeoapiNotificationsPolling = () => {
   const queryClient = useQueryClient();
   const notification = useNotification();
+  const { hasValidTapisToken } = useAuthenticatedUser();
 
   const getStartDate = () => {
     // Get the current timestamp minus the polling interval
@@ -32,6 +34,7 @@ export const useGeoapiNotificationsPolling = () => {
       refetchInterval: POLLING_INTERVAL,
       refetchIntervalInBackground: true,
       retry: 3,
+      enabled: hasValidTapisToken,
     },
   });
 

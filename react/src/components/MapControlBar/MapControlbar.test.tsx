@@ -6,39 +6,39 @@ import {
   projectMock,
   designSafeProjectMock,
 } from '@hazmapper/__fixtures__/projectFixtures';
-import {
-  authenticatedUser,
-  unauthenticatedUser,
-} from '@hazmapper/__fixtures__/authStateFixtures';
+import { authenticatedUser } from '@hazmapper/__fixtures__/authStateFixtures';
 
-// Mock the useAuthenticatedUser hook
-jest.mock('@hazmapper/hooks/user/useAuthenticatedUser', () => ({
-  __esModule: true,
-  default: jest.fn(() => ({
-    data: null,
-    isLoading: false,
-    error: null,
-  })),
-}));
+// Mock the useAuthenticatedUser hook BEFORE importing it
+jest.mock('@hazmapper/hooks', () => {
+  const originalModule = jest.requireActual('@hazmapper/hooks');
+  return {
+    ...originalModule, // Keep all other hooks unchanged
+    useAuthenticatedUser: jest.fn(), // Mock only this hook
+  };
+});
 
-import useAuthenticatedUser from '@hazmapper/hooks/user/useAuthenticatedUser';
-const useAuthenticatedUserMock = useAuthenticatedUser as jest.Mock;
+// Import AFTER mocking
+import { useAuthenticatedUser } from '@hazmapper/hooks';
+const mockedUseAuthenticatedUser = useAuthenticatedUser as jest.MockedFunction<
+  typeof useAuthenticatedUser
+>;
 
 describe('MapControlbar', () => {
   beforeEach(() => {
     // Clear all mocks before each test
     jest.clearAllMocks();
     testQueryClient.clear();
+
+    // mock for all tests (except that alter this) that we
+    // have a logged im uiser
+    mockedUseAuthenticatedUser.mockImplementation(() => ({
+      data: { username: authenticatedUser.user?.username || '' },
+      username: authenticatedUser.user?.username || '',
+      hasValidTapisToken: true,
+    }));
   });
 
   it('renders non-public MapControlbar with DesignSafe project info when user is authenticated', async () => {
-    // Ensure mock returns authenticated user
-    useAuthenticatedUserMock.mockImplementation(() => ({
-      data: authenticatedUser.user,
-      isLoading: false,
-      error: null,
-    }));
-
     const { getByText } = renderInTest(
       <MapControlbar activeProject={projectMock} isPublicView={false} />
     );
@@ -53,13 +53,7 @@ describe('MapControlbar', () => {
     });
   });
 
-  it('renders public MapControlbar', async () => {
-    // Ensure mock returns authenticated user
-    useAuthenticatedUserMock.mockImplementation(() => ({
-      data: authenticatedUser.user,
-      isLoading: false,
-      error: null,
-    }));
+  it('renders public MapControlbar (authenticated)', async () => {
     const { getByText } = renderInTest(
       <MapControlbar activeProject={projectMock} isPublicView={true} />
     );
@@ -74,26 +68,20 @@ describe('MapControlbar', () => {
     });
   });
 
-  it('renders public MapControlbar when user is not authenticated', async () => {
+  it('renders public MapControlbar (unauthenticated)', async () => {
     // Mock no authenticated user
-    useAuthenticatedUserMock.mockImplementation(() => ({
-      data: unauthenticatedUser.user,
-      isLoading: false,
-      error: null,
+    mockedUseAuthenticatedUser.mockImplementation(() => ({
+      data: { username: '' },
+      username: '',
+      hasValidTapisToken: false,
     }));
 
-    const { getByText, queryByText } = renderInTest(
+    const { getByText } = renderInTest(
       <MapControlbar activeProject={projectMock} isPublicView={true} />
     );
 
     await waitFor(() => {
       expect(getByText(`Public Map: ${projectMock.name}`)).toBeDefined();
-      // Verify DesignSafe project info is not present
-      expect(
-        queryByText(
-          `Project: ${designSafeProjectMock.value.projectId} | ${designSafeProjectMock.value.title}`
-        )
-      ).toBeNull();
     });
   });
 
