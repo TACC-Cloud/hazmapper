@@ -69,7 +69,13 @@ export const appRouter = createBrowserRouter(
         },
         {
           path: ROUTES.PUBLIC_PROJECT,
-          element: <MapProject isPublicView />,
+          element: (
+            <MapillaryTokenProvider>
+              <MapillaryViewerProvider>
+                <MapProject isPublicView />
+              </MapillaryViewerProvider>
+            </MapillaryTokenProvider>
+          ),
         },
         {
           path: ROUTES.CALLBACK,

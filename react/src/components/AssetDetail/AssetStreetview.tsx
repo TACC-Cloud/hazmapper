@@ -3,7 +3,6 @@ import { Flex, Button, Tooltip } from 'antd';
 import { PlayCircleOutlined, ExportOutlined } from '@ant-design/icons';
 import { Feature } from '@hazmapper/types';
 import {
-  useAuthenticatedUser,
   useMapillaryUserConnection,
   useMapillaryViewer,
 } from '@hazmapper/hooks';
@@ -60,14 +59,14 @@ const MapillaryViewerButton: React.FC<MapillaryViewerButtonProps> = ({
 };
 
 type AssetStreetviewProps = {
+  isPublicView: boolean;
   feature: Feature;
 };
 
-const AssetStreetview: React.FC<AssetStreetviewProps> = ({ feature }) => {
-  const { data: authenticatedUser } = useAuthenticatedUser();
-
-  const isLoggedIn = !!authenticatedUser;
-
+const AssetStreetview: React.FC<AssetStreetviewProps> = ({
+  isPublicView,
+  feature,
+}) => {
   const sequenceId = feature.assets[0].display_path.split('/').pop();
   const mapillaryFirstImageId = feature.assets[0].original_name;
 
@@ -82,8 +81,8 @@ const AssetStreetview: React.FC<AssetStreetviewProps> = ({ feature }) => {
         height="100%"
         width="100%"
       ></iframe>
-      {/* Only for logged-in users who potentially could have mapillary auth */}
-      {isLoggedIn && sequenceId && mapillaryFirstImageId && (
+      {/* Only for non-public-view of map where a logged-in users could potentially have mapillary auth */}
+      {!isPublicView && sequenceId && mapillaryFirstImageId && (
         <MapillaryViewerButton
           sequenceId={sequenceId}
           mapillaryFirstImageId={mapillaryFirstImageId}

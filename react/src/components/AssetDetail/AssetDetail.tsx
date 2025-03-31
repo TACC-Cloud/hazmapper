@@ -52,6 +52,7 @@ const AssetDetail: React.FC<AssetDetailProps> = ({
             <>
               <div className={styles.assetContainer}>
                 <AssetRenderer
+                  isPublicView={isPublicView}
                   selectedFeature={selectedFeature}
                   featureSource={featureSource}
                 />
