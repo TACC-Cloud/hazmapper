@@ -53,7 +53,7 @@ interface Props {
  */
 const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
   const navigate = useNavigate();
-  const { data: authenticatedUser } = useAuthenticatedUser();
+  const { username, hasValidTapisToken } = useAuthenticatedUser();
 
   const { data: activeProjectUsers } = useProjectUsers({
     projectId: activeProject?.id ?? -1, // Provide a dummy fallback value
@@ -61,7 +61,7 @@ const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
       // Only fetch users when viewing a public map, user is authenticated, and
       // there is an active project - this determines if we need to check list of users
       // to see if current user can switch to private view
-      enabled: Boolean(isPublicView && authenticatedUser && activeProject?.id),
+      enabled: Boolean(isPublicView && hasValidTapisToken && activeProject?.id),
     },
   });
 
@@ -74,8 +74,8 @@ const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
   const { data: designSafeProject } = useDesignSafeProject({
     designSafeProjectUUID: designSafeProjectUUID,
     options: {
-      // Only fetch users when user is authenticated
-      enabled: Boolean(authenticatedUser && designSafeProjectUUID),
+      // Only fetch DS project when there is an associated one and when user is authenticated
+      enabled: Boolean(hasValidTapisToken && designSafeProjectUUID),
     },
   });
 
@@ -87,8 +87,8 @@ const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
   /* for public maps, check if user is logged in and in the activeProjectUsers list */
   const canSwitchToPrivateMap =
     isPublicView &&
-    authenticatedUser &&
-    activeProjectUsers?.find((u) => u.username === authenticatedUser.username)
+    hasValidTapisToken &&
+    activeProjectUsers?.find((u) => u.username === username)
       ? true
       : false;
 

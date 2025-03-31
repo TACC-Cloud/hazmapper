@@ -68,7 +68,11 @@ interface MapProjectProps {
 const MapProject: React.FC<MapProjectProps> = ({ isPublicView = false }) => {
   const { projectUUID } = useParams();
 
-  useGetSystems({ prefetch: true });
+  /* prefetch systems for non-public projects (for public projects,
+   *  user might not be authed so can't get systems) as file manager
+   * will need it
+   */
+  useGetSystems({ prefetch: !isPublicView, enabled: !isPublicView });
 
   /*TODO: notifications are user specific and lacking additional context.  See note in react/src/types/notification.ts and WG-431 */
 
