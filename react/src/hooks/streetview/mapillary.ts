@@ -1,9 +1,6 @@
 import { useCallback, useContext } from 'react';
-import { useGet } from '@hazmapper/requests';
-import { ApiService } from '@hazmapper/types';
 import { useMapillaryToken } from '@hazmapper/context/MapillaryTokenProvider';
 import { useAppConfiguration } from '@hazmapper/hooks';
-import { UseQueryResult } from '@tanstack/react-query';
 import { MapillaryViewerContext } from '@hazmapper/context/MapillaryViewerContextProvider';
 import { LatLngBounds } from 'leaflet';
 
@@ -21,67 +18,6 @@ export const useMapillaryViewer = () => {
       'useMapillaryViewer must be used within a MapillaryViewerProvider'
     );
   return context;
-};
-
-interface UseMapillaryImageIdParams {
-  sequenceId: string | undefined;
-  lat: number | undefined;
-  lng: number | undefined;
-}
-
-/* Ask mapillary for a first image id from sequence number that is closes to nearest point
- *
- *  See https://www.mapillary.com/developer/api-documentation#image
- *
- *  Note, enable is false so only fetching manually
- *
- */
-const useMapillaryFirstImageIdNearestPoint = ({
-  sequenceId,
-  lat,
-  lng,
-}: UseMapillaryImageIdParams): UseQueryResult<string> => {
-  const isValid = !!(sequenceId && lat != null && lng != null);
-
-  if (!isValid) {
-    // Return a dummy query result — this avoids the request
-    return {
-      data: undefined,
-      refetch: () => Promise.resolve({} as any),
-      isFetching: false,
-      isSuccess: false,
-      isError: false,
-      error: null,
-    } as UseQueryResult<string>;
-  }
-
-  const params = {
-    sequence_id: String(sequenceId),
-    close_to: `${lng},${lat}`, // Format: longitude,latitude
-    limit: '1', // Only need the closest image
-    fields: 'id', // Only requesting the ID
-  };
-  const endpoint = `/images/`;
-
-  const query = useGet<string>({
-    endpoint,
-    key: [
-      'mapillary_nearest_image_id_to_point',
-      {
-        sequenceId,
-        lat,
-        lng,
-      },
-    ],
-    apiService: ApiService.Mapillary,
-    params,
-    transform: (data) => data?.data?.[0]?.id, // just get the first (and only) one
-    options: {
-      enabled: false, // only fetch manually
-      refetchOnWindowFocus: false,
-    },
-  });
-  return query;
 };
 
 interface FetchNearestImageParams {
@@ -112,8 +48,8 @@ const _fetchNearestMapillaryImageId = async ({
   const params = new URLSearchParams({
     sequence_id: sequenceId,
     bbox: bboxParam,
-    limit: '1',
-    fields: 'id',
+    limit: '1', // Only need the closest image
+    fields: 'id', // Only requesting the ID
   });
 
   const res = await fetch(`${mapillaryApiUrl}/images/?${params}`, {
