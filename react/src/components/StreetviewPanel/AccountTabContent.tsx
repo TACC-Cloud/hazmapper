@@ -11,7 +11,7 @@ import {
 const { Text } = Typography;
 
 const AccountTabContent = () => {
-  /* TODO remove after WG-XXX, the we can just redirect instead of getting a temp token before redirect */
+  /* TODO remove after WG-472, the we can just redirect instead of getting a temp token before redirect */
   const { mutate: getTempToken, isPending: isGettingTempToken } =
     useMapillaryTempAuthToken();
   const {

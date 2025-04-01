@@ -44,7 +44,7 @@ interface MapillaryTempTokenResponse {
   tempToken: string;
 }
 
-/* Get a temp token to start auth process; TODO remove after WG-XXX */
+/* Get a temp token to start auth process; TODO remove after WG-472 */
 export function useMapillaryTempAuthToken(): UseMutationResult<
   MapillaryTempTokenResponse,
   Error,
