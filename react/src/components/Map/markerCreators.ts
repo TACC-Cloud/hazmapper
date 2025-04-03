@@ -1,5 +1,5 @@
 import L, { MarkerCluster } from 'leaflet';
-import { getFeatureType, FeatureType } from '@hazmapper/types';
+import { getFeatureType, FeatureType, Feature } from '@hazmapper/types';
 import { featureTypeToIcon } from '@hazmapper/utils/featureIconUtil';
 import styles from './Map.module.css';
 
@@ -95,7 +95,7 @@ const _createIconMarker = (
   });
 };
 
-const _createFeatureTypeMarker = (featureType: FeatureType) => {
+export const createFeatureTypeMarker = (featureType: FeatureType) => {
   const icon = featureTypeToIcon(featureType);
   const iconPath = icon.icon[4];
   const viewBoxWidth = icon.icon[0];
@@ -152,7 +152,7 @@ export const createClusterIcon = (cluster: MarkerCluster) => {
  * 3. Otherwise -> Use feature type specific marker (i.e. appropriate fa icon)
  *
  */
-export const createMarkerIcon = (feature) => {
+export const createMarkerIcon = (feature: Feature) => {
   const customStyle = feature.properties?.style;
   if (customStyle) {
     if (customStyle.faIcon) {
@@ -166,5 +166,5 @@ export const createMarkerIcon = (feature) => {
     return _createCircleMarker();
   }
 
-  return _createFeatureTypeMarker(featureType);
+  return createFeatureTypeMarker(featureType);
 };

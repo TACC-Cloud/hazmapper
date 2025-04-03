@@ -12,6 +12,7 @@ import {
   useFeatureSelection,
   useGeoapiNotificationsPolling,
   useGetSystems,
+  useMapillaryViewer,
 } from '@hazmapper/hooks';
 import MapProjectNavBar from '@hazmapper/components/MapProjectNavBar';
 import MapProjectPanelContent from '@hazmapper/components/MapProjectPanelContent';
@@ -31,6 +32,7 @@ import * as z from 'zod';
 import { useForm, FormProvider } from 'react-hook-form';
 
 import dayjs from 'dayjs';
+import MapillaryViewer from '@hazmapper/components/MapillaryViewer';
 
 export const tileLayerSchema = z.object({
   id: z.number(),
@@ -154,6 +156,8 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
 
   const { selectedFeature, setSelectedFeatureId: toggleSelectedFeature } =
     useFeatureSelection();
+  const { show: showMapillaryViewer, setShow: setShowMapillaryViewer } =
+    useMapillaryViewer();
   const [isQuestionnaireModalOpen, setQuestionnaireModalOpen] = useState(false);
   const handleQuestionnaireClick = () => {
     setQuestionnaireModalOpen(true);
@@ -260,6 +264,14 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
                     onClose={() => toggleSelectedFeature(selectedFeature.id)}
                     isPublicView={isPublicView}
                     onQuestionnaireClick={handleQuestionnaireClick}
+                  />
+                </div>
+              )}
+              {selectedFeature && showMapillaryViewer && (
+                <div className={styles.mapillaryViewerContainer}>
+                  <MapillaryViewer
+                    feature={selectedFeature}
+                    onClose={() => setShowMapillaryViewer(false)}
                   />
                 </div>
               )}

@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import _ from 'lodash';
 import AssetGeometry from './AssetGeometry';
 import { useAppConfiguration } from '@hazmapper/hooks';
+import { shortDisplayText } from '@hazmapper/utils/featureUtils';
 import AssetRenderer from './AssetRenderer';
 import AssetButton from './AssetButton';
 import {
@@ -34,21 +35,13 @@ const AssetDetail: React.FC<AssetDetailProps> = ({
     geoapiUrl + '/assets/' + selectedFeature?.assets?.[0]?.path;
 
   const featureType: FeatureType = getFeatureType(selectedFeature);
+  const displayName = shortDisplayText(selectedFeature);
 
   return (
     <div className={styles.root}>
       <div className={styles.topSection}>
         <FeatureIcon featureType={featureType as FeatureTypeNullable} />
-        {selectedFeature?.assets?.length > 0
-          ? selectedFeature?.assets.map((asset) =>
-              // To make sure fileTree name matches title and catches null
-              asset.display_path
-                ? asset.display_path.split('/').pop()
-                : asset.id
-                  ? asset.id
-                  : selectedFeature.id
-            )
-          : selectedFeature?.id}
+        {displayName}
         <Button type="link" iconNameAfter="close" onClick={onClose}></Button>
       </div>
       <div className={styles.middleSection}>
@@ -59,6 +52,7 @@ const AssetDetail: React.FC<AssetDetailProps> = ({
             <>
               <div className={styles.assetContainer}>
                 <AssetRenderer
+                  isPublicView={isPublicView}
                   selectedFeature={selectedFeature}
                   featureSource={featureSource}
                 />
