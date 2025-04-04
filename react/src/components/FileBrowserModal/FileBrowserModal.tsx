@@ -29,6 +29,7 @@ const FileBrowserModal = ({
   const queryClient = useQueryClient();
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const handleClose = () => {
+    setSelectedFiles([]);
     parentToggle();
     queryClient.invalidateQueries({ queryKey: ['getSystems'] });
   };

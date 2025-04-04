@@ -21,9 +21,10 @@ import {
   useFiles,
   TransformedGetSystemsResponse,
 } from '@hazmapper/hooks';
-import { File, TTapisSystem } from '@hazmapper/types';
+import { File } from '@hazmapper/types';
 import { serializeToChonkyFile } from '@hazmapper/utils/fileUtils';
 import { debounce } from 'lodash';
+import { useQueryClient } from '@tanstack/react-query';
 
 const DEFAULT_NO_FILE_EXTENSIONS: string[] = [];
 const DEFAULT_FILE_LIMIT = 500;
@@ -71,40 +72,47 @@ export const FileListing: React.FC<FileListingProps> = ({
     new Array(8).fill(null)
   );
   const [folderChain, setFolderChain] = React.useState<any>([]);
-  const [selectedSystem, setSelectedSystem] = React.useState<TTapisSystem>(
-    myDataSystem as TTapisSystem
-  );
-  const [hasError, setHasError] = React.useState(false);
   const [loadingMoreFiles, setLoadingMoreFiles] = React.useState(false);
   const [hasMoreFiles, setHasMoreFiles] = React.useState(false);
   const [listingState, setListingState] = React.useState({
     path: '',
     offset: 0,
   });
+  const [isFilesProcessed, setIsFilesProcessed] = React.useState(false);
 
-  const { data: files, refetch } = useFiles({
-    system: selectedSystem?.id || '',
-    path:
-      listingState.path ||
-      (selectedSystem?.id === myDataSystem?.id ? user?.username : ''),
-    offset: listingState.offset.toString(),
-    limit: DEFAULT_FILE_LIMIT.toString(),
-    enabled: !!selectedSystem?.id,
+  const methods = useForm({
+    defaultValues: {
+      system: myDataSystem?.id || '',
+    },
   });
-
-  const methods = useForm();
   const { watch } = methods;
 
   const selectedSystemId = watch('system');
 
-  const setRootFolderChain = (rootPath, sys = selectedSystem) => {
+  const queryClient = useQueryClient();
+
+  const {
+    data: files,
+    refetch,
+    isError: isFileListingError,
+  } = useFiles({
+    system: selectedSystemId || '',
+    path:
+      listingState.path ||
+      (selectedSystemId === myDataSystem?.id ? user?.username : ''),
+    offset: listingState.offset.toString(),
+    limit: DEFAULT_FILE_LIMIT.toString(),
+    enabled: false,
+  });
+
+  const setRootFolderChain = (rootPath, sys = selectedSystemId) => {
     let rootFolderName: string;
 
-    if (sys?.id === myDataSystem?.id) {
+    if (sys === myDataSystem?.id) {
       rootFolderName = 'My Data';
-    } else if (sys?.id === communityDataSystem?.id) {
+    } else if (sys === communityDataSystem?.id) {
       rootFolderName = 'Community Data';
-    } else if (sys?.id === publishedDataSystem?.id) {
+    } else if (sys === publishedDataSystem?.id) {
       rootFolderName = 'Published Data';
     } else {
       rootFolderName = 'Project';
@@ -114,13 +122,20 @@ export const FileListing: React.FC<FileListingProps> = ({
   };
 
   useEffect(() => {
-    if (selectedSystem?.id) {
+    if (selectedSystemId && listingState.path) {
+      if (!loadingMoreFiles) {
+        setChonkyFiles(new Array(8).fill(null));
+      }
+      setIsFilesProcessed(false);
+      queryClient.resetQueries({
+        queryKey: ['getFiles'],
+      });
       refetch();
     }
-  }, [selectedSystem, listingState, refetch]);
+  }, [listingState]);
 
   useEffect(() => {
-    if (files) {
+    if (isFilesProcessed) {
       setLoadingMoreFiles(false);
       const fileListWrapper = document.querySelector('.chonky-fileListWrapper');
 
@@ -148,7 +163,7 @@ export const FileListing: React.FC<FileListingProps> = ({
       return () =>
         dynamicListContainer.removeEventListener('scroll', handleScroll);
     }
-  }, [files, hasMoreFiles]);
+  }, [isFilesProcessed]);
 
   useEffect(() => {
     if (files) {
@@ -164,6 +179,10 @@ export const FileListing: React.FC<FileListingProps> = ({
           serializeToChonkyFile(file, allowedFileExtensions)
         );
 
+        if (files.length === 0) {
+          return [];
+        }
+
         if (
           JSON.stringify(prevFiles) ===
           JSON.stringify([...prevFiles, ...newChonkyFiles])
@@ -176,42 +195,32 @@ export const FileListing: React.FC<FileListingProps> = ({
           ? newChonkyFiles
           : [...filteredPrevFiles, ...newChonkyFiles];
       });
+
+      setIsFilesProcessed(true);
     }
     if (!folderChain.length && user?.username) {
       setRootFolderChain(user.username);
     }
-  }, [files, folderChain.length, user?.username, allowedFileExtensions]);
-
-  const FileListingIcon = (props: any) => <Icon name={props.icon} />;
+  }, [files]);
 
   useEffect(() => {
-    if (!selectedSystemId || selectedSystem?.id === selectedSystemId) {
+    if (!selectedSystemId) {
       return;
     }
 
-    setHasError(false);
-    setChonkyFiles(new Array(8).fill(null));
-    setFolderChain([null]);
-
-    const sys = systems.find((sys) => sys.id === selectedSystemId);
-
-    if (!sys) {
-      setHasError(true);
-      return;
-    }
-
-    setSelectedSystem(sys);
-    const rootFolder = sys.id === myDataSystem?.id ? user?.username : '/';
+    const rootFolder =
+      selectedSystemId === myDataSystem?.id ? user?.username : '/';
 
     setListingState({
       path: rootFolder,
       offset: 0,
     });
-
-    onSystemSelect?.(sys.id);
+    onSystemSelect?.(selectedSystemId);
     onFolderSelect?.(rootFolder);
-    setRootFolderChain(rootFolder, sys);
+    setRootFolderChain(rootFolder, selectedSystemId);
   }, [selectedSystemId]);
+
+  const FileListingIcon = (props: any) => <Icon name={props.icon} />;
 
   const handleFileAction = useCallback(
     (data: ChonkyFileActionData) => {
@@ -290,29 +299,29 @@ export const FileListing: React.FC<FileListingProps> = ({
         </FormProvider>
       </div>
       <div className={`${styles['file-browser']}`}>
-        {hasError ? (
-          <Flex align="center" justify="center" style={{ height: '100%' }}>
-            There was an error loading the system.
-          </Flex>
-        ) : (
-          <_FileBrowser
-            files={chonkyFiles}
-            folderChain={folderChain}
-            defaultFileViewActionId={ChonkyActions.EnableListView.id}
-            disableSelection={disableSelection}
-            disableDragAndDropProvider
-            clearSelectionOnOutsideClick
-            iconComponent={FileListingIcon}
-            onFileAction={handleFileAction}
-            defaultSortActionId={null}
-          >
-            <FileNavbar />
+        <_FileBrowser
+          files={chonkyFiles}
+          folderChain={folderChain}
+          defaultFileViewActionId={ChonkyActions.EnableListView.id}
+          disableSelection={disableSelection}
+          disableDragAndDropProvider
+          clearSelectionOnOutsideClick
+          iconComponent={FileListingIcon}
+          onFileAction={handleFileAction}
+          defaultSortActionId={null}
+        >
+          <FileNavbar />
+          {isFileListingError ? (
+            <Flex align="center" justify="center" style={{ height: '100%' }}>
+              There was an error loading this directory.
+            </Flex>
+          ) : (
             <FileList />
-            {loadingMoreFiles && (
-              <p style={{ textAlign: 'center' }}>Loading...</p>
-            )}
-          </_FileBrowser>
-        )}
+          )}
+          {loadingMoreFiles && (
+            <p style={{ textAlign: 'center' }}>Loading...</p>
+          )}
+        </_FileBrowser>
       </div>
     </>
   );
