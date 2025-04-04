@@ -122,18 +122,14 @@ export const FileListing: React.FC<FileListingProps> = ({
   };
 
   useEffect(() => {
-    if (isFileListingError) {
-      queryClient.setQueryData(['getFiles'], []);
-      setChonkyFiles([]);
-    }
-  }, [isFileListingError]);
-
-  useEffect(() => {
     if (selectedSystemId && listingState.path) {
       if (!loadingMoreFiles) {
         setChonkyFiles(new Array(8).fill(null));
       }
       setIsFilesProcessed(false);
+      queryClient.resetQueries({
+        queryKey: ['getFiles'],
+      });
       refetch();
     }
   }, [listingState]);
@@ -211,10 +207,6 @@ export const FileListing: React.FC<FileListingProps> = ({
     if (!selectedSystemId) {
       return;
     }
-
-    queryClient.resetQueries({
-      queryKey: ['getFiles'],
-    });
 
     const rootFolder =
       selectedSystemId === myDataSystem?.id ? user?.username : '/';
@@ -319,7 +311,13 @@ export const FileListing: React.FC<FileListingProps> = ({
           defaultSortActionId={null}
         >
           <FileNavbar />
-          <FileList />
+          {isFileListingError ? (
+            <Flex align="center" justify="center" style={{ height: '100%' }}>
+              There was an error loading this directory.
+            </Flex>
+          ) : (
+            <FileList />
+          )}
           {loadingMoreFiles && (
             <p style={{ textAlign: 'center' }}>Loading...</p>
           )}
