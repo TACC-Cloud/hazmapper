@@ -12,11 +12,26 @@ export default function CallbackPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    /* TODO use hash instead of search https://tacc-main.atlassian.net/browse/WG-367 */
-    const params = new URLSearchParams(location.search);
     const redirectTo = localStorage.getItem('toParam') || '/';
-    const token = params.get('access_token');
-    const expiresAt = params.get('expires_at');
+    let token: string | null = '';
+    let expiresAt: string | null = '';
+
+    // First, try to get token from hash
+    if (location.hash && location.hash.length > 1) {
+      // Parse the hash manually (remove the # character)
+      const hashParams = new URLSearchParams(location.hash.substring(1));
+      token = hashParams.get('access_token');
+      expiresAt = hashParams.get('expires_at');
+    }
+
+    // TODO drop using query parameters once https://tacc-main.atlassian.net/browse/WG-367
+    // has made its way to prod
+    // If not found in hash, try query parameters
+    if (!token || !expiresAt) {
+      const queryParams = new URLSearchParams(location.search);
+      token = queryParams.get('access_token');
+      expiresAt = queryParams.get('expires_at');
+    }
 
     if (token && expiresAt) {
       const username = jwtDecode(token)['tapis/username'];

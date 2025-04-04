@@ -8,3 +8,4 @@ export * from './user';
 export * from './map';
 export * from './pointClouds';
 export * from './notifications';
+export * from './streetview';

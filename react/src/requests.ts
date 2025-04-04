@@ -10,6 +10,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { useAppConfiguration } from '@hazmapper/hooks';
+import { useMapillaryToken } from '@hazmapper/context/MapillaryTokenProvider';
 
 import { useEnsureAuthenticatedUserHasValidTapisToken } from '@hazmapper/hooks';
 import { ApiService, AppConfiguration, AuthState } from '@hazmapper/types';
@@ -26,6 +27,8 @@ function getBaseApiUrl(
       return configuration.designsafePortalUrl;
     case ApiService.Tapis:
       return configuration.tapisUrl;
+    case ApiService.Mapillary:
+      return configuration.mapillary.apiUrl;
     default:
       throw new Error('Unsupported api service Type.');
   }
@@ -40,7 +43,11 @@ function usesTapisToken(apiService: ApiService) {
   return servicesUsingTapisToken.includes(apiService);
 }
 
-export function getHeaders(apiService: ApiService, auth: AuthState) {
+export function getHeaders(
+  apiService: ApiService,
+  auth: AuthState,
+  mapillaryAuthToken?: string | null
+) {
   const headers: { [key: string]: string } = {};
 
   if (usesTapisToken(apiService) && auth.authToken?.token) {
@@ -67,7 +74,9 @@ export function getHeaders(apiService: ApiService, auth: AuthState) {
     }
   }
 
-  // TODO_REACT add mapillary support
+  if (apiService === ApiService.Mapillary && mapillaryAuthToken) {
+    headers['authorization'] = `OAuth ${mapillaryAuthToken}`;
+  }
 
   return headers;
 }
@@ -103,11 +112,12 @@ export function useGet<ResponseType, TransformedResponseType = ResponseType>({
   const client = axios;
   const state = store.getState();
   const configuration = useAppConfiguration();
+  const { accessToken: mapillaryAuthToken } = useMapillaryToken();
 
   useEnsureAuthenticatedUserHasValidTapisToken();
 
   const baseUrl = getBaseApiUrl(apiService, configuration);
-  const headers = getHeaders(apiService, state.auth);
+  const headers = getHeaders(apiService, state.auth, mapillaryAuthToken);
 
   const url = `${baseUrl}${endpoint}`;
 

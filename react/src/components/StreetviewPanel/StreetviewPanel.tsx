@@ -1,6 +1,14 @@
 import React from 'react';
 import { ToolOutlined } from '@ant-design/icons';
-import { Card, ConfigProvider, ThemeConfig, Flex, Typography } from 'antd';
+import {
+  Card,
+  ConfigProvider,
+  ThemeConfig,
+  Flex,
+  Typography,
+  Divider,
+} from 'antd';
+import AccountTabContent from './AccountTabContent';
 
 const streetviewTheme: ThemeConfig = {
   components: {
@@ -37,6 +45,9 @@ const StreetviewPanel: React.FC = () => {
           Thank you for your patience.
         </Text>
       </Card>
+      {/* Temp divider to separate the coming-soon text and the basic login feature */}
+      <Divider />
+      <AccountTabContent />
     </ConfigProvider>
   );
 };

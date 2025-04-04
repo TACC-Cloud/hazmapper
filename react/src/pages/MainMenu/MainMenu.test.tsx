@@ -6,9 +6,8 @@ import { renderInTest } from '@hazmapper/test/testUtil';
 jest.mock('@hazmapper/hooks/user/useAuthenticatedUser', () => ({
   __esModule: true,
   default: () => ({
-    data: { username: 'mockUser' },
-    isLoading: false,
-    error: null,
+    username: 'mockUser',
+    hasValidTapisToken: true,
   }),
 }));
 

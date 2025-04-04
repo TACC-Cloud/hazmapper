@@ -12,10 +12,7 @@ interface AssetGeometryProps {
 const AssetGeometry: React.FC<AssetGeometryProps> = ({ selectedFeature }) => {
   if (!selectedFeature?.geometry) return null;
 
-  const bbox =
-    selectedFeature.geometry.type !== 'Point'
-      ? turf.bbox(selectedFeature as TFeature)
-      : null;
+  const bbox = turf.bbox(selectedFeature.geometry);
 
   const geometryType = selectedFeature.geometry.type;
 
@@ -33,11 +30,11 @@ const AssetGeometry: React.FC<AssetGeometryProps> = ({ selectedFeature }) => {
           <tbody>
             <tr>
               <td>Latitude</td>
-              <td>{turf.bbox(selectedFeature.geometry)[0]}</td>
+              <td>{bbox[1]}</td>
             </tr>
             <tr>
               <td>Longitude</td>
-              <td>{turf.bbox(selectedFeature.geometry)[1]}</td>
+              <td>{bbox[0]}</td>
             </tr>
           </tbody>
         </table>
@@ -73,12 +70,17 @@ const AssetGeometry: React.FC<AssetGeometryProps> = ({ selectedFeature }) => {
           <tbody>
             <tr>
               <td>Length (m)</td>
-              <td>{turf.length(selectedFeature as TFeature).toFixed(2)}</td>
+              <td>
+                {turf
+                  .length(selectedFeature as TFeature, { units: 'meters' })
+                  .toFixed(2)}
+              </td>
             </tr>
           </tbody>
         </table>
       )}
-      {geometryType !== FeatureType.Point && bbox && (
+      {/* Bounding box for non-point geometries */}
+      {geometryType !== FeatureType.Point && (
         <table>
           <thead>
             {selectedFeature.geometry.type === 'GeometryCollection' && (
@@ -102,13 +104,13 @@ const AssetGeometry: React.FC<AssetGeometryProps> = ({ selectedFeature }) => {
             </tr>
             <tr>
               <td>Minimum</td>
-              <td>{turf.bbox(selectedFeature.geometry)[1]}</td>
-              <td>{turf.bbox(selectedFeature.geometry)[0]}</td>
+              <td>{bbox[1]}</td>
+              <td>{bbox[0]}</td>
             </tr>
             <tr>
               <td>Maximum</td>
-              <td>{turf.bbox(selectedFeature.geometry)[3]}</td>
-              <td>{turf.bbox(selectedFeature.geometry)[2]}</td>
+              <td>{bbox[3]}</td>
+              <td>{bbox[2]}</td>
             </tr>
           </tbody>
         </table>

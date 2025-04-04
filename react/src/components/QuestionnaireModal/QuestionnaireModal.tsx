@@ -5,6 +5,7 @@ import {
   useFeatureAssetSource,
   useFeatureAssetSourcePath,
 } from '@hazmapper/hooks';
+import { shortDisplayText } from '@hazmapper/utils/featureUtils';
 import { QuestionnaireBuilder } from './questionnaireBuilder';
 import $ from 'jquery';
 import styles from './QuestionnaireModal.module.css';
@@ -56,6 +57,8 @@ const QuestionnaireModal = ({
     };
   }, [isOpen, featureSource, getFeatureAssetSourcePath]);
 
+  const displayName = shortDisplayText(feature);
+
   return (
     <Modal
       open={isOpen}
@@ -65,14 +68,7 @@ const QuestionnaireModal = ({
       footer={null}
       title={
         <Header style={{ height: 'fit-content' }}>
-          Questionnaire:
-          {feature?.assets?.length > 0
-            ? feature.assets.map((asset) =>
-                asset.display_path
-                  ? asset.display_path.split('/').pop()
-                  : (asset.id ?? feature.id)
-              )
-            : feature?.id}
+          Questionnaire: {displayName}
         </Header>
       }
     >

@@ -7,8 +7,9 @@ import MainMenu from '@hazmapper/pages/MainMenu';
 import Logout from '@hazmapper/pages/Logout/Logout';
 import Login from '@hazmapper/pages/Login/Login';
 import Callback from '@hazmapper/pages/Callback/Callback';
-import StreetviewCallback from '@hazmapper/pages/StreetviewCallback/StreetviewCallback';
 import { RootState } from '@hazmapper/redux/store';
+import { MapillaryTokenProvider } from '@hazmapper/context/MapillaryTokenProvider';
+import { MapillaryViewerProvider } from './context/MapillaryViewerContextProvider';
 import { isTokenValid } from '@hazmapper/utils/authUtils';
 import { getBasePath } from './hooks';
 
@@ -58,21 +59,27 @@ export const appRouter = createBrowserRouter(
           path: ROUTES.PROJECT,
           element: (
             <ProtectedRoute>
-              <MapProject />
+              <MapillaryTokenProvider>
+                <MapillaryViewerProvider>
+                  <MapProject />
+                </MapillaryViewerProvider>
+              </MapillaryTokenProvider>
             </ProtectedRoute>
           ),
         },
         {
           path: ROUTES.PUBLIC_PROJECT,
-          element: <MapProject isPublicView />,
+          element: (
+            <MapillaryTokenProvider>
+              <MapillaryViewerProvider>
+                <MapProject isPublicView />
+              </MapillaryViewerProvider>
+            </MapillaryTokenProvider>
+          ),
         },
         {
           path: ROUTES.CALLBACK,
           element: <Callback />,
-        },
-        {
-          path: ROUTES.STREETVIEW_CALLBACK,
-          element: <StreetviewCallback />,
         },
         {
           path: '*',

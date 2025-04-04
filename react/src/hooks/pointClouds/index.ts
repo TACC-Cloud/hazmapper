@@ -78,17 +78,6 @@ export function useDeletePointCloud() {
   });
 }
 
-/*
-mportPointCloudFileFromTapis(projectId: number, pointCloudId: number, files: Array<RemoteFile>): void {
-    const tmp = files.map((f) => ({ system: f.system, path: f.path }));
-    const payload = {
-      files: tmp,
-    };
-    this.http.post(this.envService.apiUrl + `/projects/${projectId}/point-cloud/${pointCloudId}/import/`, payload).subscribe(
-      (resp) => {},
-      (error) => {
-      */
-
 type pointCloudParams = {
   projectId: number;
   pointCloudId: number;

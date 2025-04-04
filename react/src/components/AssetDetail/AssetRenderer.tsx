@@ -3,13 +3,16 @@ import { Feature, FeatureType, getFeatureType } from '@hazmapper/types';
 import { SectionMessage } from '@tacc/core-components';
 import AssetPointCloud from './AssetPointCloud';
 import AssetQuestionnaire from './AssetQuestionnaire';
+import AssetStreetview from './AssetStreetview';
 
 interface AssetRendererProps {
+  isPublicView: boolean;
   selectedFeature: Feature;
   featureSource: string;
 }
 
 const AssetRenderer: React.FC<AssetRendererProps> = ({
+  isPublicView,
   selectedFeature,
   featureSource,
 }) => {
@@ -30,6 +33,13 @@ const AssetRenderer: React.FC<AssetRendererProps> = ({
       );
     case FeatureType.PointCloud:
       return <AssetPointCloud featureSource={featureSource} />;
+    case FeatureType.Streetview:
+      return (
+        <AssetStreetview
+          feature={selectedFeature}
+          isPublicView={isPublicView}
+        />
+      );
     case FeatureType.Questionnaire:
       return (
         <AssetQuestionnaire

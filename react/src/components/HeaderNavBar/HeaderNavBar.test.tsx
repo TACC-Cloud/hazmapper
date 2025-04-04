@@ -15,9 +15,8 @@ jest.mock('react-router-dom', () => ({
 }));
 
 const mockAuthenticatedUser = {
-  data: null,
-  isLoading: false,
-  error: null,
+  username: '',
+  hasValidTapisToken: false,
 };
 
 jest.mock('@hazmapper/hooks/user/useAuthenticatedUser', () => {
@@ -32,7 +31,7 @@ jest.mock('@hazmapper/hooks/user/useAuthenticatedUser', () => {
 describe('HeaderNavBar', () => {
   beforeEach(() => {
     mockNavigate.mockClear();
-    mockAuthenticatedUser.data = null;
+    mockAuthenticatedUser.username = '';
   });
 
   test('clicking login button should navigate to login with correct return URL', () => {
@@ -62,7 +61,7 @@ describe('HeaderNavBar', () => {
 
   test('displays username when user is authenticated', () => {
     Object.assign(mockAuthenticatedUser, {
-      data: { username: 'testUser' },
+      username: 'testUser',
     });
 
     const { getByText, queryByText } = renderInTest(<HeaderNavBar />);

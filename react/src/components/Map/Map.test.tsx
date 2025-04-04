@@ -3,6 +3,8 @@ import { renderInTest } from '@hazmapper/test/testUtil';
 import Map from './Map';
 import { tileServerLayers } from '../../__fixtures__/tileServerLayerFixture';
 import { MapPositionProvider } from '@hazmapper/context/MapContext';
+import { MapillaryTokenProvider } from '@hazmapper/context/MapillaryTokenProvider';
+import { MapillaryViewerProvider } from '@hazmapper/context/MapillaryViewerContextProvider';
 import { useForm, FormProvider } from 'react-hook-form';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -27,7 +29,11 @@ test('renders map', () => {
     return (
       <FormProvider {...methods}>
         <MapPositionProvider>
-          <Map />
+          <MapillaryTokenProvider>
+            <MapillaryViewerProvider>
+              <Map />
+            </MapillaryViewerProvider>
+          </MapillaryTokenProvider>
         </MapPositionProvider>
       </FormProvider>
     );
