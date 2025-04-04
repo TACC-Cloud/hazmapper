@@ -129,7 +129,7 @@ export const FileListing: React.FC<FileListingProps> = ({
   }, [isFileListingError]);
 
   useEffect(() => {
-    if (selectedSystemId) {
+    if (selectedSystemId && listingState.path) {
       if (!loadingMoreFiles) {
         setChonkyFiles(new Array(8).fill(null));
       }
@@ -211,6 +211,10 @@ export const FileListing: React.FC<FileListingProps> = ({
     if (!selectedSystemId) {
       return;
     }
+
+    queryClient.resetQueries({
+      queryKey: ['getFiles'],
+    });
 
     const rootFolder =
       selectedSystemId === myDataSystem?.id ? user?.username : '/';
