@@ -19,11 +19,12 @@ export const useFiles = ({
 }: UseFilesParams): UseQueryResult<File[]> => {
   const query = useGet<File[]>({
     endpoint: `/v3/files/ops/${system}/${path}?offset=${offset}&limit=${limit}`,
-    key: ['files'],
+    key: ['getFiles'],
     apiService: ApiService.Tapis,
     transform: (data) => data.result,
     options: {
       enabled,
+      retry: 0,
     },
   });
   return query;
