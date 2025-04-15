@@ -1,5 +1,67 @@
 # Changelog
 
+## [2.20] - 2024-04-15
+
+### Changed
+
+* update/add link to main page from nav bar by @nathanfranklin in https://github.com/TACC-Cloud/hazmapper/pull/286
+* update/add hook for selected feature by @nathanfranklin in https://github.com/TACC-Cloud/hazmapper/pull/288
+* hotfix:  use pprd.designsafe-ci.org by @nathanfranklin in https://github.com/TACC-Cloud/hazmapper/pull/291
+* hotfix:  show duplicate file paths in feature tree by @nathanfranklin in https://github.com/TACC-Cloud/hazmapper/pull/294
+* task/wg 381 assets view image video no asset by @sophia-massie in https://github.com/TACC-Cloud/hazmapper/pull/292
+* task/WG-5: complete leaflet map by @nathanfranklin in https://github.com/TACC-Cloud/hazmapper/pull/284
+* hotfix: enable `preferCanvas` option in MapContainer by @nathanfranklin in https://github.com/TACC-Cloud/hazmapper/pull/299
+* task/WG-394: Global Antd styling by @rstijerina in https://github.com/TACC-Cloud/hazmapper/pull/298
+* task/wg 403 create asset geometry component by @sophia-massie in https://github.com/TACC-Cloud/hazmapper/pull/295
+* task/WG-393-Asset-Detail-Pointclouds by @sophia-massie in https://github.com/TACC-Cloud/hazmapper/pull/296
+* task/WG-277: Implement Date Range Filter by @rstijerina in https://github.com/TACC-Cloud/hazmapper/pull/297
+* task/WG-389-Asset-Panel-Questionnaire by @sophia-massie in https://github.com/TACC-Cloud/hazmapper/pull/300
+* update packages by @rstijerina in https://github.com/TACC-Cloud/hazmapper/pull/301
+* hotfix: update image import syntax for vite asset handling by @nathanfranklin in https://github.com/TACC-Cloud/hazmapper/pull/305
+* task/WG-253 - File Listing Component using Chonky by @shayanaijaz in https://github.com/TACC-Cloud/hazmapper/pull/230
+* task/WG-240: Tile Layers Panel by @rstijerina in https://github.com/TACC-Cloud/hazmapper/pull/304
+* task/WG 411 Questionnaire Modal by @sophia-massie in https://github.com/TACC-Cloud/hazmapper/pull/306
+* task/ fix hiding of 'add feature asset button' when isPublicView by @nathanfranklin in https://github.com/TACC-Cloud/hazmapper/pull/307
+* task/WG-260 add map control bar by @nathanfranklin in https://github.com/TACC-Cloud/hazmapper/pull/303
+* task/WG-401-Add-Asset-to-Feature-Hook by @sophia-massie in https://github.com/TACC-Cloud/hazmapper/pull/308
+* hotfix/fix non-public nav items routes by @nathanfranklin in https://github.com/TACC-Cloud/hazmapper/pull/310
+* task/WG-239 point cloud panel by @nathanfranklin in https://github.com/TACC-Cloud/hazmapper/pull/311
+* set zindex for antd popups like modals by @nathanfranklin in https://github.com/TACC-Cloud/hazmapper/pull/315
+* task/WG-387 - Import from Designsafe Modal by @shayanaijaz in https://github.com/TACC-Cloud/hazmapper/pull/312
+* task/use core components 0.0.3 by @nathanfranklin in https://github.com/TACC-Cloud/hazmapper/pull/309
+* hotfix/allow user to set which DesignSafe site to use in local dev by @nathanfranklin in https://github.com/TACC-Cloud/hazmapper/pull/318
+* task/wg 243 manage project by @sophia-massie in https://github.com/TACC-Cloud/hazmapper/pull/313
+* task/WG-425: Fix asset panel css by @rstijerina in https://github.com/TACC-Cloud/hazmapper/pull/321
+* task/WG-427: add file modal to point cloud by @nathanfranklin in https://github.com/TACC-Cloud/hazmapper/pull/317
+* Task/WG-422 poll notifications by @nathanfranklin in https://github.com/TACC-Cloud/hazmapper/pull/320
+* Task/WG-428-import-asset-to-feature by @sophia-massie in https://github.com/TACC-Cloud/hazmapper/pull/323
+* Task/WG-244-Panel-Streetview by @sophia-massie in https://github.com/TACC-Cloud/hazmapper/pull/324
+* WG-433: Fix systems filebrowser by @rstijerina in https://github.com/TACC-Cloud/hazmapper/pull/325
+* task/WG-429-Public-Map-Info-Panel by @sophia-massie in https://github.com/TACC-Cloud/hazmapper/pull/327
+* bug/WG-434: Refactor Create Map modal by @rstijerina in https://github.com/TACC-Cloud/hazmapper/pull/328
+* fix/WG-436: use system path during project creation by @nathanfranklin in https://github.com/TACC-Cloud/hazmapper/pull/330
+* task/WG-402: Asset feature image download; Various Fixes by @rstijerina in https://github.com/TACC-Cloud/hazmapper/pull/331
+* task/WG-458 export geojson by @nathanfranklin in https://github.com/TACC-Cloud/hazmapper/pull/332
+* Testing Session UI/UX fixes by @rstijerina in https://github.com/TACC-Cloud/hazmapper/pull/333
+* bug/wg-447-import-loading-bug by @sophia-massie in https://github.com/TACC-Cloud/hazmapper/pull/334
+* task/WG-430: implement taggit gallery navigation by @nathanfranklin in https://github.com/TACC-Cloud/hazmapper/pull/335
+* bug/WG-449-Success-toast-with-error-msg by @sophia-massie in https://github.com/TACC-Cloud/hazmapper/pull/336
+* task/WG-439, task/WG-437: Use system path util by @rstijerina in https://github.com/TACC-Cloud/hazmapper/pull/338
+* task/WG-432 rework hooks, maps, and feature tree to minimize renders by @nathanfranklin in https://github.com/TACC-Cloud/hazmapper/pull/339
+* task/WG-418 - File Listing Component Enhancement and Fixes by @shayanaijaz in https://github.com/TACC-Cloud/hazmapper/pull/337
+* hotfix/remove public route by @nathanfranklin in https://github.com/TACC-Cloud/hazmapper/pull/340
+* bug/wg 465 taggit button fix by @sophia-massie in https://github.com/TACC-Cloud/hazmapper/pull/341
+* hotfix/avoid queries when not logged by @nathanfranklin in https://github.com/TACC-Cloud/hazmapper/pull/347
+* hotfix/length calculation and point lat lon by @nathanfranklin in https://github.com/TACC-Cloud/hazmapper/pull/348
+* task/WG-392 add basic mapillary functions by @nathanfranklin in https://github.com/TACC-Cloud/hazmapper/pull/349
+* task/WG-482: Get all systems (via -1) from tapis by @nathanfranklin in https://github.com/TACC-Cloud/hazmapper/pull/351
+* task/WG-466/469 -  File Listing Fixes by @shayanaijaz in https://github.com/TACC-Cloud/hazmapper/pull/342
+
+## New Contributors
+* @rstijerina made their first contribution in https://github.com/TACC-Cloud/hazmapper/pull/298
+
+**Full Changelog**: https://github.com/TACC-Cloud/hazmapper/compare/v2.19...v2.20
+
 ## [2.19] - 2024-12-05
 
 ### Changed
