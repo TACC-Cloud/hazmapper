@@ -7,6 +7,7 @@ import path from 'path';
 // eslint-disable-next-line
 export default defineConfig(({ command, mode }) => {
   return {
+    base: './',
     plugins: [
       react(),
       visualizer({
