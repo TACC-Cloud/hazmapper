@@ -36,14 +36,27 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
 }));
 
-jest.mock('chonky', () => {
-  const actualChonky = jest.requireActual('chonky');
+jest.mock('@aperturerobotics/chonky', () => {
   return {
-    ...actualChonky,
-    FileBrowser: jest.fn(() => <div>Mock FileBrowser</div>),
+    FileBrowser: jest.fn(({ children, onFileAction }) => (
+      <div
+        onClick={onFileAction}
+        onKeyDown={onFileAction}
+        role="button"
+        tabIndex={0}
+      >
+        {children}
+      </div>
+    )),
     FileNavbar: jest.fn(() => <div>Mock FileNavbar</div>),
     FileList: jest.fn(() => <div>Mock FileList</div>),
-    ChonkyActions: actualChonky.ChonkyActions,
+    FileData: jest.fn(),
+    ChonkyActions: {
+      EnableListView: { id: 'enable-list-view' },
+      OpenFiles: { id: 'open-files' },
+      MouseClickFile: { id: 'mouse-click-file' },
+      ChangeSelection: { id: 'change-selection' },
+    },
   };
 });
 

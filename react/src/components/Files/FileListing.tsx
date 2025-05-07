@@ -9,7 +9,7 @@ import {
   ChonkyActions,
   FileBrowserProps,
   FileBrowserHandle,
-} from 'chonky';
+} from '@aperturerobotics/chonky';
 import { Flex } from 'antd';
 import { Icon } from '@tacc/core-components';
 import { Spinner } from '@hazmapper/common_components';
@@ -32,6 +32,22 @@ const DEFAULT_FILE_LIMIT = 500;
 const _FileBrowser = FileBrowser as React.MemoExoticComponent<
   React.ForwardRefExoticComponent<
     FileBrowserProps & {
+      children?: ReactNode;
+    } & React.RefAttributes<FileBrowserHandle>
+  >
+>;
+
+const _FileNavbar = FileNavbar as React.MemoExoticComponent<
+  React.ForwardRefExoticComponent<
+    {
+      children?: ReactNode;
+    } & React.RefAttributes<FileBrowserHandle>
+  >
+>;
+
+const _FileList = FileList as React.MemoExoticComponent<
+  React.ForwardRefExoticComponent<
+    {
       children?: ReactNode;
     } & React.RefAttributes<FileBrowserHandle>
   >
@@ -310,13 +326,13 @@ export const FileListing: React.FC<FileListingProps> = ({
           onFileAction={handleFileAction}
           defaultSortActionId={null}
         >
-          <FileNavbar />
+          <_FileNavbar />
           {isFileListingError ? (
             <Flex align="center" justify="center" style={{ height: '100%' }}>
               There was an error loading this directory.
             </Flex>
           ) : (
-            <FileList />
+            <_FileList />
           )}
           {loadingMoreFiles && (
             <p style={{ textAlign: 'center' }}>Loading...</p>
