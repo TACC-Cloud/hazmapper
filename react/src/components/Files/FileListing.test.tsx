@@ -9,7 +9,7 @@ import {
   useGetSystems,
 } from '../../hooks';
 import { serializeToChonkyFile } from '../../utils/fileUtils';
-import { FileBrowser } from 'chonky';
+import { FileBrowser } from '@aperturerobotics/chonky';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { testQueryClient } from '@hazmapper/test/testUtil';
 
@@ -29,14 +29,17 @@ jest.mock('../../utils/fileUtils', () => ({
 }));
 
 // TODO see if we don't have to mock chonky
-jest.mock('chonky', () => {
-  const actualChonky = jest.requireActual('chonky');
+jest.mock('@aperturerobotics/chonky', () => {
   return {
-    ...actualChonky,
     FileBrowser: jest.fn((props) => <div {...props}>Mock FileBrowser</div>),
     FileNavbar: jest.fn(() => <div>Mock FileNavbar</div>),
     FileList: jest.fn(() => <div>Mock FileList</div>),
-    ChonkyActions: actualChonky.ChonkyActions,
+    ChonkyActions: {
+      EnableListView: { id: 'enable-list-view' },
+      OpenFiles: { id: 'open-files' },
+      MouseClickFile: { id: 'mouse-click-file' },
+      ChangeSelection: { id: 'change-selection' },
+    },
   };
 });
 

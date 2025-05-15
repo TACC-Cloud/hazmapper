@@ -5,7 +5,7 @@ import { renderInTest } from '@hazmapper/test/testUtil';
 import '@testing-library/jest-dom';
 
 // TODO see if we don't have to mock chonky
-jest.mock('chonky', () => ({
+jest.mock('@aperturerobotics/chonky', () => ({
   FileBrowser: jest.fn(({ children, onFileAction }) => (
     <div
       onClick={onFileAction}
