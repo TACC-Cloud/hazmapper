@@ -9,6 +9,10 @@ const esModules = [
   '@tacc/core-components',
   'uuid',
   'react-leaflet-markercluster',
+  '@aperturerobotics/chonky',
+  'react-dnd',
+  'dnd-core',
+  '@react-dnd',
 ].join('|');
 
 module.exports = {

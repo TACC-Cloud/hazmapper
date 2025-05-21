@@ -1,4 +1,4 @@
-import { FileData } from 'chonky';
+import { FileData } from '@aperturerobotics/chonky';
 import { TapisFilePath, File } from '@hazmapper/types';
 
 export const IMPORTABLE_FEATURE_TYPES = [
