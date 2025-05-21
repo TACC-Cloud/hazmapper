@@ -24,15 +24,6 @@ export default function CallbackPage() {
       expiresAt = hashParams.get('expires_at');
     }
 
-    // TODO drop using query parameters once https://tacc-main.atlassian.net/browse/WG-367
-    // has made its way to prod
-    // If not found in hash, try query parameters
-    if (!token || !expiresAt) {
-      const queryParams = new URLSearchParams(location.search);
-      token = queryParams.get('access_token');
-      expiresAt = queryParams.get('expires_at');
-    }
-
     if (token && expiresAt) {
       const username = jwtDecode(token)['tapis/username'];
 
