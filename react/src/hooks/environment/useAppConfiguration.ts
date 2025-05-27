@@ -6,7 +6,11 @@ import {
   GeoapiBackendEnvironment,
   DesignSafePortalEnvironment,
 } from '@hazmapper/types';
-import { getGeoapiUrl, getDesignsafePortalUrl } from './utils';
+import {
+  getGeoapiUrl,
+  getDesignsafePortalUrl,
+  getHazmapperBase,
+} from './utils';
 import getBasePath from './getBasePath';
 import { getLocalAppConfiguration } from './getLocalAppConfiguration';
 
@@ -38,12 +42,11 @@ export const useAppConfiguration = (): AppConfiguration => {
       clientToken: '',
     };
 
+    const hazmapperBase = getHazmapperBase();
+
     if (/^localhost/.test(hostname) || /^hazmapper.local/.test(hostname)) {
       return getLocalAppConfiguration(basePath, mapillaryConfig);
-    } else if (
-      /^hazmapper.tacc.utexas.edu/.test(hostname) &&
-      pathname.startsWith('/staging')
-    ) {
+    } else if (hostname === hazmapperBase && pathname.startsWith('/staging')) {
       const appConfig: AppConfiguration = {
         basePath: basePath,
         geoapiEnv: GeoapiBackendEnvironment.Staging,
@@ -62,10 +65,7 @@ export const useAppConfiguration = (): AppConfiguration => {
       appConfig.mapillary.clientToken =
         'MLY|4936281379826603|f8c4732d3c9d96582b86158feb1c1a7a';
       return appConfig;
-    } else if (
-      /^hazmapper.tacc.utexas.edu/.test(hostname) &&
-      pathname.startsWith('/dev')
-    ) {
+    } else if (hostname === hazmapperBase && pathname.startsWith('/dev')) {
       const appConfig: AppConfiguration = {
         basePath: basePath,
         geoapiEnv: GeoapiBackendEnvironment.Dev,
@@ -85,7 +85,7 @@ export const useAppConfiguration = (): AppConfiguration => {
       appConfig.mapillary.clientToken =
         'MLY|4936281379826603|f8c4732d3c9d96582b86158feb1c1a7a';
       return appConfig;
-    } else if (/^hazmapper.tacc.utexas.edu/.test(hostname)) {
+    } else if (hostname === hazmapperBase) {
       const appConfig: AppConfiguration = {
         basePath: basePath,
         geoapiEnv: GeoapiBackendEnvironment.Production,

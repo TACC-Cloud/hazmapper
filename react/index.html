@@ -10,7 +10,9 @@
     <script>
       var hostname = window.location.hostname;
       var pathname = window.location.pathname;
-      var isHazmapper = /^hazmapper.tacc.utexas.edu/.test(hostname);
+      const isHazmapper =
+        hostname === 'hazmapper.tacc.utexas.edu' ||
+        hostname === 'hazmapper-tmp.tacc.utexas.edu';
       // Set base URL dynamically
       if (isHazmapper && pathname.startsWith('/staging-react')) {
         document.getElementById('base').href = '/staging-react/';
