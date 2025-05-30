@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-import { Button, Tooltip, List, Space, Flex, Layout } from 'antd';
-import { InfoCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import React, { useRef, useState, useEffect } from 'react';
+import { Button, Flex, Layout, Spin } from 'antd';
+import { FixedSizeList as VirtualList } from 'react-window';
+import { useResizeDetector } from 'react-resize-detector';
+import { PlusOutlined } from '@ant-design/icons';
 import PointCloudInfoModal from './PointCloudInfoModal';
 import PointCloudCreateModal from './PointCloudCreateModal';
-import {
-  DeletePointCloudButton,
-  UploadPointCloudButton,
-} from './PointCloudPanelButtons';
+import { PointCloudPanelListItem } from './PointCloudPanelListItem';
 
 import { Project, PointCloud } from '@hazmapper/types';
 import { usePointClouds } from '@hazmapper/hooks';
@@ -21,17 +20,42 @@ interface Props {
 }
 
 const PointCloudPanel: React.FC<Props> = ({ project }) => {
+  const { ref: scrollContainerRef, height: listHeight } = useResizeDetector();
   const [pointCloudInfoModal, setPointCloudInfoModal] =
     useState<PointCloud | null>(null);
   const [pointCloudCreateModal, setPointCloudCreateModal] =
     useState<boolean>(false);
-  const { data: pointClouds } = usePointClouds({ projectId: project.id });
+  const { data: pointClouds, isLoading } = usePointClouds({
+    projectId: project.id,
+  });
+
+  // Add state for dynamic item height, and when to show list and reference for measuring
+  const [itemHeight, setItemHeight] = useState<number>(120);
+  const [isListReady, setIsListReady] = useState<boolean>(false);
+  const sampleItemRef = useRef<HTMLDivElement>(null);
+
+  // Measure height when data is available
+  useEffect(() => {
+    if (pointClouds && pointClouds.length > 0) {
+      // Small delay to ensure DOM has updated
+      setTimeout(() => {
+        if (sampleItemRef.current) {
+          const height = sampleItemRef.current.getBoundingClientRect().height;
+          setItemHeight(Math.ceil(height));
+          setIsListReady(true);
+        } else {
+          // Fallback if measurement fails
+          setIsListReady(true);
+        }
+      }, 0);
+    }
+  }, [pointClouds]);
 
   const isPointCloudInfoModalOpen = !!pointCloudInfoModal;
 
   return (
     <Flex vertical style={{ height: '100%' }} flex={1}>
-      <Layout style={{ height: '100%' }}>
+      <Layout style={{ height: '100%', flex: 1 }}>
         <Flex justify="center" align="center">
           <Header>
             <Button
@@ -45,9 +69,22 @@ const PointCloudPanel: React.FC<Props> = ({ project }) => {
             </Button>
           </Header>
         </Flex>
-        <Content>
-          {pointClouds && pointClouds.length > 0 && (
-            <List
+        <Content style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+          {isLoading && (
+            <div
+              style={{
+                flex: 1,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Spin />
+            </div>
+          )}
+          {!isLoading && pointClouds && pointClouds.length > 0 && (
+            <div
+              ref={scrollContainerRef}
               style={{
                 flex: 1,
                 overflow: 'auto',
@@ -55,45 +92,54 @@ const PointCloudPanel: React.FC<Props> = ({ project }) => {
                 borderRadius: 8,
                 overflowX: 'hidden',
               }}
-              dataSource={pointClouds}
-              renderItem={(pointCloud) => (
-                <List.Item
-                  key={pointCloud.id}
+            >
+              {/* Hidden sample item for measurement */}
+              {!isListReady && (
+                <div
+                  ref={sampleItemRef}
                   style={{
-                    padding: '8px',
+                    position: 'absolute',
+                    visibility: 'hidden',
+                    padding: 8,
+                    width: '100%',
                   }}
                 >
-                  <Flex vertical gap="small" style={{ width: '100%' }}>
-                    <Tooltip title={pointCloud.description}>
+                  <PointCloudPanelListItem
+                    pointCloud={pointClouds[0]}
+                    onViewInfo={setPointCloudInfoModal}
+                  />
+                </div>
+              )}
+
+              {/* Only show list once measurement is complete */}
+              {isListReady && (
+                <VirtualList
+                  height={listHeight || 300}
+                  itemCount={pointClouds.length}
+                  itemSize={itemHeight}
+                  width="100%"
+                >
+                  {({ index, style }) => {
+                    const pointCloud = pointClouds[index];
+                    return (
                       <div
                         style={{
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap',
+                          ...style,
+                          padding: 8,
+                          borderBottom: '1px solid #f0f0f0',
                         }}
+                        key={pointCloud.id}
                       >
-                        {pointCloud.description}
-                      </div>
-                    </Tooltip>
-
-                    <Space wrap>
-                      <UploadPointCloudButton pointCloud={pointCloud} />
-                      <DeletePointCloudButton
-                        projectId={pointCloud.project_id}
-                        pointCloudId={pointCloud.id}
-                      />
-                      <Tooltip title="View additional information">
-                        <Button
-                          size="small"
-                          icon={<InfoCircleOutlined />}
-                          onClick={() => setPointCloudInfoModal(pointCloud)}
+                        <PointCloudPanelListItem
+                          pointCloud={pointCloud}
+                          onViewInfo={setPointCloudInfoModal}
                         />
-                      </Tooltip>
-                    </Space>
-                  </Flex>
-                </List.Item>
+                      </div>
+                    );
+                  }}
+                </VirtualList>
               )}
-            />
+            </div>
           )}
           {isPointCloudInfoModalOpen && (
             <PointCloudInfoModal
