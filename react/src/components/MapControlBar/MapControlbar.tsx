@@ -7,7 +7,7 @@ import { faArrowLeft, faLock } from '@fortawesome/free-solid-svg-icons';
 
 import { LoadingSpinner } from '@tacc/core-components';
 
-import { Typography, Button, Tooltip } from 'antd';
+import { Typography, Button, Tooltip, Flex } from 'antd';
 
 const { Text } = Typography;
 
@@ -162,13 +162,15 @@ const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView,project })
           </div>
         )}
       </div>
-      <Button
-        data-testid="taggit-button"
-        type="primary"
-        onClick={() => navigateToCorrespondingTaggitGallery()}
-      >
-        View in Taggit
-      </Button>
+      <Flex justify="center" gap="small">
+        <Button className={styles.taggitButton}
+          data-testid="taggit-button"
+          type="primary"
+          onClick={() => navigateToCorrespondingTaggitGallery()}
+        >
+          View Project in Taggit
+        </Button>
+      </Flex>
       <CoordinatesDisplay />
     </div>
   );
