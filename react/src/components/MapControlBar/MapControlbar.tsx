@@ -17,6 +17,7 @@ import {
   useMapMousePosition,
   useAuthenticatedUser,
   useCurrentFeatures,
+  useAppConfiguration,
 } from '@hazmapper/hooks';
 import { Project } from '@hazmapper/types';
 import * as ROUTES from '@hazmapper/constants/routes';
@@ -46,12 +47,17 @@ interface Props {
    * Whether or not the map project is a public view.
    */
   isPublicView: boolean;
+
+  /**
+   * Project info for Taggit link.
+   */
+project: Project;
 }
 
 /**
  * A horizontal control bar on top
  */
-const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
+const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView,project }) => {
   const navigate = useNavigate();
   const { username, hasValidTapisToken } = useAuthenticatedUser();
 
@@ -91,6 +97,19 @@ const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
     activeProjectUsers?.find((u) => u.username === username)
       ? true
       : false;
+
+  const config = useAppConfiguration();
+
+  const navigateToCorrespondingTaggitGallery = () => {
+    // We set some info in local storage for Taggit and then navigate to Taggit
+
+    // key for local storage is backend-specific
+    const lastProjectKeyword = `${config.geoapiEnv}LastProject`;
+
+    // note that entire project gets stringified but only `id` is used by taggit
+    localStorage.setItem(lastProjectKeyword, JSON.stringify(project));
+    window.open(config.taggitUrl, '_blank', 'noreferrer noopener');
+  };
 
   return (
     <div className={styles.root}>
@@ -143,6 +162,13 @@ const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
           </div>
         )}
       </div>
+      <Button
+        data-testid="taggit-button"
+        type="primary"
+        onClick={() => navigateToCorrespondingTaggitGallery()}
+      >
+        View in Taggit
+      </Button>
       <CoordinatesDisplay />
     </div>
   );

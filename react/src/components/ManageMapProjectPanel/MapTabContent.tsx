@@ -3,7 +3,7 @@ import { Project, ProjectRequest } from '@hazmapper/types';
 import { SectionMessage } from '@tacc/core-components';
 import { EditFilled, CheckOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Button, Flex, List, Input, Modal } from 'antd';
-import { useAppConfiguration } from '@hazmapper/hooks';
+// import { useAppConfiguration } from '@hazmapper/hooks';
 import DeleteMapModal from '../DeleteMapModal/DeleteMapModal';
 
 interface MapTabProps {
@@ -63,6 +63,7 @@ const MapTabContent: React.FC<MapTabProps> = ({
     setisDeleteModalOpen(false);
   };
 
+{/*
   const config = useAppConfiguration();
 
   const navigateToCorrespondingTaggitGallery = () => {
@@ -75,6 +76,7 @@ const MapTabContent: React.FC<MapTabProps> = ({
     localStorage.setItem(lastProjectKeyword, JSON.stringify(project));
     window.open(config.taggitUrl, '_blank', 'noreferrer noopener');
   };
+*/}
 
   return (
     <>
@@ -115,6 +117,7 @@ const MapTabContent: React.FC<MapTabProps> = ({
           </List.Item>
           <List.Item>
             <Flex vertical justify="center" gap="small">
+              {/*
               <Button
                 data-testid="taggit-button"
                 type="primary"
@@ -122,6 +125,7 @@ const MapTabContent: React.FC<MapTabProps> = ({
               >
                 View in Taggit
               </Button>
+              */}
               {project.deletable && (
                 <Button
                   type="primary"
