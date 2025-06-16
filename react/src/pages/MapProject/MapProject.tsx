@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, Suspense } from 'react';
 import { useParams } from 'react-router-dom';
 import { Layout, Flex } from 'antd';
 import { LoadingSpinner, Message } from '@tacc/core-components';
 
 import { FeatureManager } from '@hazmapper/components/FeatureManager';
-import Map from '@hazmapper/components/Map';
 import AssetDetail from '@hazmapper/components/AssetDetail';
 import {
   useProject,
@@ -33,6 +32,8 @@ import { useForm, FormProvider } from 'react-hook-form';
 
 import dayjs from 'dayjs';
 import MapillaryViewer from '@hazmapper/components/MapillaryViewer';
+
+const Map = React.lazy(() => import('@hazmapper/components/Map'));
 
 export const tileLayerSchema = z.object({
   id: z.number(),
@@ -256,7 +257,13 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
                 endDate={endDate}
                 toggleDateFilter={toggleDateFilter}
               />
-              {isTileServerLayersLoading ? <Spinner /> : <Map />}
+              {isTileServerLayersLoading ? (
+                <Spinner />
+              ) : (
+                <Suspense fallback={<Spinner />}>
+                  <Map />
+                </Suspense>
+              )}
               {selectedFeature && (
                 <div className={styles.detailContainer}>
                   <AssetDetail
