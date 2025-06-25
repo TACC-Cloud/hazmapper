@@ -38,6 +38,7 @@ export const useGetSystems = ({
     prefetch,
     options: {
       enabled,
+      retry: false,
       refetchOnMount: false,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
