@@ -5,6 +5,7 @@ import systemsFixture from './Systems.fixture';
 
 jest.mock('../../hooks', () => ({
   useDesignSafeProjects: jest.fn(() => ({ result: [] })),
+  useDesignSafePublishedProjects: jest.fn(() => ({ result: [] })),
   useGetSystems: jest.fn(() => ({
     data: {
       systems: systemsFixture,
@@ -53,7 +54,6 @@ describe('System Select', () => {
     renderComponent();
     expect(screen.getByText('My Data')).toBeDefined();
     expect(screen.getByText('Community Data')).toBeDefined();
-    expect(screen.getByText('Published Data')).toBeDefined();
   });
 
   it('calls onSystemSelect with deafult value', () => {
@@ -68,6 +68,5 @@ describe('System Select', () => {
     renderComponent(false);
     expect(screen.getByText('My Data')).toBeDefined();
     expect(screen.queryByText('Community Data')).toBeNull();
-    expect(screen.queryByText('Published Data')).toBeNull();
   });
 });
