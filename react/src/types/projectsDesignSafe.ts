@@ -78,3 +78,35 @@ export interface DesignSafeProject {
 export interface DesignSafeProjectCollection {
   result?: DesignSafeProject[];
 }
+
+export interface DesignSafePublishedProject {
+  projectId: string;
+  title: string;
+  description: string;
+  keywords: string[];
+  type: string;
+  dataTypes: string[];
+  pi: {
+    inst: string;
+    role: string;
+    email: string;
+    fname: string;
+    lname: string;
+    username: string;
+  };
+  created: string; // ISO date string
+}
+
+export interface DesignSafePublishedProjectCollection {
+  result: DesignSafePublishedProject[];
+  total: number;
+}
+
+/* Much more complicated type in reality.
+     -there are two versions (old and new, i.e. post july 2026
+*/
+export interface DesignSafePublishedProjectDetail {
+  tree: {
+    basePath: string;
+  };
+}

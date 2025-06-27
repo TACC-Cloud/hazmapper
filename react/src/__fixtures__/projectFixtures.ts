@@ -1,8 +1,11 @@
 import {
   Project,
+  ProjectRequest,
   DesignSafeProject,
   DesignSafeProjectCollection,
-  ProjectRequest,
+  DesignSafePublishedProject,
+  DesignSafePublishedProjectCollection,
+  DesignSafePublishedProjectDetail,
 } from '../types';
 
 export const designSafeProjectMock: DesignSafeProject = {
@@ -95,3 +98,34 @@ export const projectRequestMock: ProjectRequest = {
   watch_content: true,
   watch_users: false,
 };
+
+export const designSafePublishedProjectMock: DesignSafePublishedProject = {
+  projectId: 'PRJ-1234',
+  title: 'Published Project Example',
+  description: 'This is a sample published project for testing.',
+  keywords: ['earthquake', 'simulation'],
+  type: 'simulation',
+  dataTypes: ['image', 'video'],
+  pi: {
+    inst: 'University of Somewhere',
+    role: 'pi',
+    email: 'pi@example.edu',
+    fname: 'Alice',
+    lname: 'Smith',
+    username: 'asmith',
+  },
+  created: '2023-05-15T12:00:00Z',
+};
+
+export const designSafePublishedProjectCollectionMock: DesignSafePublishedProjectCollection =
+  {
+    result: [designSafePublishedProjectMock],
+    total: 1,
+  };
+
+export const designSafePublishedProjectDetailMock: DesignSafePublishedProjectDetail =
+  {
+    tree: {
+      basePath: '/published-data/PRJ-1234',
+    },
+  };

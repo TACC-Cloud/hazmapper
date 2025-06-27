@@ -11,7 +11,6 @@ export type TransformedGetSystemsResponse = {
   systems: TTapisSystem[];
   myDataSystem?: TTapisSystem;
   communityDataSystem?: TTapisSystem;
-  publishedDataSystem?: TTapisSystem;
 };
 
 type propsType = {
@@ -53,15 +52,10 @@ export const useGetSystems = ({
           (system) => system.id === 'designsafe.storage.community'
         );
 
-        const publishedDataSystem = systems.find(
-          (system) => system.id === 'designsafe.storage.published'
-        );
-
         return {
           systems,
           myDataSystem,
           communityDataSystem,
-          publishedDataSystem,
         };
       },
     },
