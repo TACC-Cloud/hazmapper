@@ -76,12 +76,7 @@ export const FileListing: React.FC<FileListingProps> = ({
     data: systemsData = {} as TransformedGetSystemsResponse,
     isFetched: isSystemsFetched,
   } = useGetSystems();
-  const {
-    systems = [],
-    myDataSystem,
-    communityDataSystem,
-    publishedDataSystem,
-  } = systemsData;
+  const { systems = [], myDataSystem, communityDataSystem } = systemsData;
 
   const { data: user } = useAuthenticatedUser();
 
