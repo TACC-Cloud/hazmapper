@@ -145,8 +145,6 @@ export const FileListing: React.FC<FileListingProps> = ({
       rootFolderName = 'My Data';
     } else if (sys === communityDataSystem?.id) {
       rootFolderName = 'Community Data';
-    } else if (sys === publishedDataSystem?.id) {
-      rootFolderName = 'Published Data';
     } else {
       rootFolderName = 'Project';
     }

@@ -86,19 +86,21 @@ export const SystemSelect: React.FC<SystemSelectProps> = ({
             );
           })}
         </optgroup>
-        <optgroup label="Published Data">
-          {dsPublishedProjects?.map((publishedProject) => {
-            return (
-              <option
-                key={publishedProject.projectId}
-                /* value is PRJ (i.e. PRJ-123) */
-                value={`designsafe.storage.published/${publishedProject.projectId}`}
-              >
-                {publishedProject.projectId} | {publishedProject.title}
-              </option>
-            );
-          })}
-        </optgroup>
+        {showPublicSystems && (
+          <optgroup label="Published Data">
+            {dsPublishedProjects?.map((publishedProject) => {
+              return (
+                <option
+                  key={publishedProject.projectId}
+                  /* value is PRJ (i.e. PRJ-123) */
+                  value={`designsafe.storage.published/${publishedProject.projectId}`}
+                >
+                  {publishedProject.projectId} | {publishedProject.title}
+                </option>
+              );
+            })}
+          </optgroup>
+        )}
       </select>
     </>
   );
