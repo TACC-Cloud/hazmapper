@@ -63,21 +63,6 @@ const MapTabContent: React.FC<MapTabProps> = ({
     setisDeleteModalOpen(false);
   };
 
-{/*
-  const config = useAppConfiguration();
-
-  const navigateToCorrespondingTaggitGallery = () => {
-    // We set some info in local storage for Taggit and then navigate to Taggit
-
-    // key for local storage is backend-specific
-    const lastProjectKeyword = `${config.geoapiEnv}LastProject`;
-
-    // note that entire project gets stringified but only `id` is used by taggit
-    localStorage.setItem(lastProjectKeyword, JSON.stringify(project));
-    window.open(config.taggitUrl, '_blank', 'noreferrer noopener');
-  };
-*/}
-
   return (
     <>
       <Flex vertical justify="center">
