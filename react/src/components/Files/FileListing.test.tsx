@@ -6,6 +6,8 @@ import {
   useFiles,
   useAuthenticatedUser,
   useDesignSafeProjects,
+  useDesignSafePublishedProjects,
+  useDesignSafePublishedProjectDetail,
   useGetSystems,
 } from '../../hooks';
 import { serializeToChonkyFile } from '../../utils/fileUtils';
@@ -19,7 +21,15 @@ jest.mock('../../hooks', () => ({
     data: [],
     refetch: jest.fn(),
   })),
-  useDesignSafeProjects: jest.fn(() => ({ result: [] })),
+  useDesignSafeProjects: jest.fn(() => ({ data: [] })),
+  useDesignSafePublishedProjects: jest.fn(() => ({
+    data: { result: [] },
+    isFetching: false,
+  })),
+  useDesignSafePublishedProjectDetail: jest.fn(() => ({
+    data: undefined,
+    isSuccess: false,
+  })),
   useAuthenticatedUser: jest.fn(() => ({ data: { username: 'test-user' } })),
   useGetSystems: jest.fn(() => ({ data: { systems: [] } })),
 }));
@@ -130,6 +140,12 @@ describe('FileListing', () => {
     });
     (useDesignSafeProjects as jest.Mock).mockReturnValue({
       data: [],
+    });
+    (useDesignSafePublishedProjects as jest.Mock).mockReturnValue({
+      data: [],
+    });
+    (useDesignSafePublishedProjectDetail as jest.Mock).mockReturnValue({
+      data: undefined,
     });
     (useAuthenticatedUser as jest.Mock).mockReturnValue({
       data: { username: 'test-user' },

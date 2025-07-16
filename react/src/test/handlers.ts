@@ -5,6 +5,8 @@ import { featureCollection } from '@hazmapper/__fixtures__/featuresFixture';
 import {
   projectMock,
   designSafeProjectMock,
+  designSafePublishedProjectCollectionMock,
+  designSafePublishedProjectDetailMock,
 } from '@hazmapper/__fixtures__/projectFixtures';
 import { users } from '@hazmapper/__fixtures__/usersFixtures';
 import { tileServerLayers } from '@hazmapper/__fixtures__/tileServerLayerFixture';
@@ -26,6 +28,19 @@ export const designsafe_project = http.get(
   `${testDevConfiguration.designsafePortalUrl}/api/projects/v2/:designSafeProjectUUID/`,
   () =>
     HttpResponse.json({ baseProject: designSafeProjectMock }, { status: 200 })
+);
+
+// DesignSafe published projects listing GET
+export const designsafe_get_published_projects = http.get(
+  `${testDevConfiguration.designsafePortalUrl}/api/publications/v2*`,
+  () =>
+    HttpResponse.json(designSafePublishedProjectCollectionMock, { status: 200 })
+);
+
+// DesignSafe (single) (detailed) published project GET
+export const designsafe_get_published_project = http.get(
+  `${testDevConfiguration.designsafePortalUrl}/api/publications/v2/:projectID/`,
+  () => HttpResponse.json(designSafePublishedProjectDetailMock, { status: 200 })
 );
 
 // GeoAPI Projects GET - handles both list and single project (i.e query is "?uuid=uuid")
@@ -114,6 +129,8 @@ export const defaultHandlers = [
   arcgis_tiles,
   designsafe_project,
   designsafe_projects,
+  designsafe_get_published_projects,
+  designsafe_get_published_project,
   geoapi_notifications,
   geoapi_get_projects,
   geoapi_project_features,
