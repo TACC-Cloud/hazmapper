@@ -103,7 +103,8 @@ describe('MapControlbar', () => {
    * - Test 2 is experiment.
    * - Test 3 and Test 4 throw the same error:
    *    "could not find react-redux context value;
-   *    please ensure the component is wrapped in a <Provider>""
+   *    please ensure the component is wrapped in a <Provider>"
+   * - Test 5 throws Router in Router error.
    */
 
   //////////////////////////////////////////////////////////////////////////
@@ -158,87 +159,128 @@ describe('MapControlbar', () => {
 
     //////////////////////////////////////////////////////////////////////////
   // TEST v3.
-  // test('navigates to Taggit when "View in Taggit" button is clicked', () => {
-  //   const mockNavigate = jest.fn();
-  //   (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
-
-  //   render(
-  //     <MemoryRouter>
-  //       <MapControlbar />
-  //     </MemoryRouter>
-  //   );
-
-  //   fireEvent.click(screen.getByRole('button', { name: /view in taggit/i }));
-  //   expect(mockNavigate).toHaveBeenCalledWith('/taggit'); // replace with actual path
-  // });
-
-  //////////////////////////////////////////////////////////////////////////
-  // TEST v4.
-  it('navigates to Taggit when "View in Taggit" button is clicked', () => {
-    // Before this one test.
-    const originalOpen = window.open;
-    const originalLocalStorage = global.localStorage;
-
-    // Mock window.open
-    window.open = jest.fn();
-
-    // Mock localStorage
-    const localStorageMock = (() => {
-      let store: Record<string, string> = {};
-      return {
-        getItem: jest.fn((key) => store[key]),
-        setItem: jest.fn((key, value) => {
-          store[key] = value;
-        }),
-        clear: jest.fn(() => {
-          store = {};
-        }),
-      };
-    })();
-    Object.defineProperty(window, 'localStorage', {
-      value: localStorageMock,
-    });
-
-    const fakeProject = { id: 'abc123', name: 'Test Project' };
-    const config = testDevConfiguration;
-
+  test('navigates to Taggit when "View in Taggit" button is clicked', () => {
     const mockNavigate = jest.fn();
     (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
 
     render(
       <MemoryRouter>
-        <MapControlbar
-          activeProject={fakeProject}
-          designSafeProject={null}
-          isPublicView={false}
-          isFeaturesLoading={false}
-          isFeaturesError={false}
-          canSwitchToPrivateMap={false}
-          project={fakeProject}
-          onProjectUpdate={jest.fn()}
-        />
+        <MapControlbar />
       </MemoryRouter>
     );
 
-    const button = screen.getByTestId('taggit-button');
-    fireEvent.click(button);
-
-    const expectedKey = `${config.geoapiEnv}LastProject`;
-    expect(localStorage.setItem).toHaveBeenCalledWith(
-      expectedKey,
-      JSON.stringify(fakeProject)
-    );
-
-    expect(window.open).toHaveBeenCalledWith(
-      config.taggitUrl,
-      '_blank',
-      'noreferrer noopener'
-    );
-
-    // After this one test.
-    window.open = originalOpen;
-    global.localStorage = originalLocalStorage;
+    fireEvent.click(screen.getByRole('button', { name: /view in taggit/i }));
+    expect(mockNavigate).toHaveBeenCalledWith('/taggit'); // replace with actual path
   });
+
+  //////////////////////////////////////////////////////////////////////////
+  // TEST v4.
+  // it('navigates to Taggit when "View in Taggit" button is clicked', () => {
+  //   // Before this one test.
+  //   const originalOpen = window.open;
+  //   const originalLocalStorage = global.localStorage;
+
+  //   // Mock window.open
+  //   window.open = jest.fn();
+
+  //   // Mock localStorage
+  //   const localStorageMock = (() => {
+  //     let store: Record<string, string> = {};
+  //     return {
+  //       getItem: jest.fn((key) => store[key]),
+  //       setItem: jest.fn((key, value) => {
+  //         store[key] = value;
+  //       }),
+  //       clear: jest.fn(() => {
+  //         store = {};
+  //       }),
+  //     };
+  //   })();
+  //   Object.defineProperty(window, 'localStorage', {
+  //     value: localStorageMock,
+  //   });
+
+  //   const fakeProject = { id: 'abc123', name: 'Test Project' };
+  //   const config = testDevConfiguration;
+
+  //   const mockNavigate = jest.fn();
+  //   (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
+
+  //   render(
+  //     <MemoryRouter>
+  //       <MapControlbar
+  //         activeProject={fakeProject}
+  //         designSafeProject={null}
+  //         isPublicView={false}
+  //         isFeaturesLoading={false}
+  //         isFeaturesError={false}
+  //         canSwitchToPrivateMap={false}
+  //         project={fakeProject}
+  //         onProjectUpdate={jest.fn()}
+  //       />
+  //     </MemoryRouter>
+  //   );
+
+  //   const button = screen.getByTestId('taggit-button');
+  //   fireEvent.click(button);
+
+  //   const expectedKey = `${config.geoapiEnv}LastProject`;
+  //   expect(localStorage.setItem).toHaveBeenCalledWith(
+  //     expectedKey,
+  //     JSON.stringify(fakeProject)
+  //   );
+
+  //   expect(window.open).toHaveBeenCalledWith(
+  //     config.taggitUrl,
+  //     '_blank',
+  //     'noreferrer noopener'
+  //   );
+
+  //   // After this one test.
+  //   window.open = originalOpen;
+  //   global.localStorage = originalLocalStorage;
+  // });
+
+    //////////////////////////////////////////////////////////////////////////
+  // TEST v5. (Original Test Extended).
+  // it('navigates to Taggit when "View in Taggit" button is clicked', async () => {
+  //   const fakeProject = { id: 'abc123', name: 'Test Project' };
+
+  //   const windowOpenSpy = jest
+  //     .spyOn(window, 'open')
+  //     .mockImplementation(() => null);
+  //   renderInTest(
+  //     <MemoryRouter>
+  //       <MapControlbar
+  //         activeProject={fakeProject}
+  //         designSafeProject={null}
+  //         isPublicView={false}
+  //         isFeaturesLoading={false}
+  //         isFeaturesError={false}
+  //         canSwitchToPrivateMap={false}
+  //         project={fakeProject}
+  //         onProjectUpdate={jest.fn()}
+  //       />
+  //     </MemoryRouter>
+  //   );
+
+  //   const taggitButton = screen.getByTestId('taggit-button');
+  //   fireEvent.click(taggitButton);
+
+  //   await waitFor(() => {
+  //     // Taggit will read from local storage
+  //     expect(localStorage.getItem('testLastProject')).toBe(
+  //       JSON.stringify(projectMock)
+  //     );
+  //   });
+  //   await waitFor(() => expect(windowOpenSpy).toHaveBeenCalledTimes(1));
+  //   expect(windowOpenSpy).toHaveBeenCalledWith(
+  //     testDevConfiguration.taggitUrl,
+  //     '_blank',
+  //     'noreferrer noopener'
+  //   );
+  //   windowOpenSpy.mockRestore();
+  // });
 
   afterEach(() => {
     jest.clearAllMocks();
