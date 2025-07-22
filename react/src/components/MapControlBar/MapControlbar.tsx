@@ -102,7 +102,7 @@ const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
     const lastProjectKeyword = `${config.geoapiEnv}LastProject`;
 
     // note that entire project gets stringified but only `id` is used by taggit
-    localStorage.setItem(lastProjectKeyword, JSON.stringify(project));
+    localStorage.setItem(lastProjectKeyword, JSON.stringify(activeProject));
     window.open(config.taggitUrl, '_blank', 'noreferrer noopener');
   };
 
