@@ -85,6 +85,36 @@ describe('MapControlbar', () => {
     });
   });
 
+  it('navigates to Taggit when "View in Taggit" button is clicked', async () => {
+    const windowOpenSpy = jest
+      .spyOn(window, 'open')
+      .mockImplementation(() => null);
+    renderInTest(
+      <MapTabContent
+        project={projectMock}
+        onProjectUpdate={mockOnProjectUpdate}
+        isPending={false}
+      />
+    );
+
+    const taggitButton = screen.getByTestId('taggit-button');
+    fireEvent.click(taggitButton);
+
+    await waitFor(() => {
+      // Taggit will read from local storage
+      expect(localStorage.getItem('testLastProject')).toBe(
+        JSON.stringify(projectMock)
+      );
+    });
+    await waitFor(() => expect(windowOpenSpy).toHaveBeenCalledTimes(1));
+    expect(windowOpenSpy).toHaveBeenCalledWith(
+      testDevConfiguration.taggitUrl,
+      '_blank',
+      'noreferrer noopener'
+    );
+    windowOpenSpy.mockRestore();
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
   });
