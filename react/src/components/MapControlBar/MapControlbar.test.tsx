@@ -31,24 +31,6 @@ jest.mock('react-router-dom', () => ({
   useNavigate: jest.fn(),
 }));
 
-// const CoordinatesDisplay = () => {
-//   const { position } = useMapMousePosition();
-//   if (!position) return null;
-
-//   return (
-//     <div className={styles.coordinatesDisplay}>
-//       <Text>
-//         Lat: {position.lat.toFixed(4)} Lon: {position.lng.toFixed(4)}
-//       </Text>
-//     </div>
-//   );
-// };
-
-// Mock CoordinatesDisplay and other irrelevant children
-// jest.mock('../CoordinatesDisplay', () => (
-//   <div data-testid="coordinates-display" />
-// ));
-
 describe('MapControlbar', () => {
   beforeEach(() => {
     // Clear all mocks before each test
@@ -218,6 +200,7 @@ describe('MapControlbar', () => {
     });
 
     const fakeProject = { id: 'abc123', name: 'Test Project' };
+    const config = testDevConfiguration;
 
     const mockNavigate = jest.fn();
     (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
