@@ -1,5 +1,6 @@
 import React from 'react';
-import { waitFor } from '@testing-library/react';
+import { waitFor, render, screen, fireEvent  } from '@testing-library/react';
+import { useNavigate } from 'react-router-dom';
 import { renderInTest, testQueryClient } from '@hazmapper/test/testUtil';
 import MapControlbar from './MapControlbar';
 import {
@@ -7,6 +8,7 @@ import {
   designSafeProjectMock,
 } from '@hazmapper/__fixtures__/projectFixtures';
 import { authenticatedUser } from '@hazmapper/__fixtures__/authStateFixtures';
+import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
 
 // Mock the useAuthenticatedUser hook BEFORE importing it
 jest.mock('@hazmapper/hooks', () => {
@@ -22,6 +24,30 @@ import { useAuthenticatedUser } from '@hazmapper/hooks';
 const mockedUseAuthenticatedUser = useAuthenticatedUser as jest.MockedFunction<
   typeof useAuthenticatedUser
 >;
+
+// Mock the Router
+// jest.mock('react-router-dom', () => ({
+//   ...jest.requireActual('react-router-dom'),
+//   useNavigate: jest.fn(),
+// }));
+
+// const CoordinatesDisplay = () => {
+//   const { position } = useMapMousePosition();
+//   if (!position) return null;
+
+//   return (
+//     <div className={styles.coordinatesDisplay}>
+//       <Text>
+//         Lat: {position.lat.toFixed(4)} Lon: {position.lng.toFixed(4)}
+//       </Text>
+//     </div>
+//   );
+// };
+
+// Mock CoordinatesDisplay and other irrelevant children
+// jest.mock('../CoordinatesDisplay', () => (
+//   <div data-testid="coordinates-display" />
+// ));
 
 describe('MapControlbar', () => {
   beforeEach(() => {
@@ -85,34 +111,115 @@ describe('MapControlbar', () => {
     });
   });
 
-  it('navigates to Taggit when "View in Taggit" button is clicked', async () => {
-    const windowOpenSpy = jest
-      .spyOn(window, 'open')
-      .mockImplementation(() => null);
-    renderInTest(
-      <MapTabContent
-        project={projectMock}
-        onProjectUpdate={mockOnProjectUpdate}
-        isPending={false}
+  // it('navigates to Taggit when "View in Taggit" button is clicked', async () => {
+  //   const windowOpenSpy = jest
+  //     .spyOn(window, 'open')
+  //     .mockImplementation(() => null);
+  //   renderInTest(
+  //     <MapTabContent
+  //       project={projectMock}
+  //       onProjectUpdate={mockOnProjectUpdate}
+  //       isPending={false}
+  //     />
+  //   );
+
+  //   const taggitButton = screen.getByTestId('taggit-button');
+  //   fireEvent.click(taggitButton);
+
+  //   await waitFor(() => {
+  //     // Taggit will read from local storage
+  //     expect(localStorage.getItem('testLastProject')).toBe(
+  //       JSON.stringify(projectMock)
+  //     );
+  //   });
+  //   await waitFor(() => expect(windowOpenSpy).toHaveBeenCalledTimes(1));
+  //   expect(windowOpenSpy).toHaveBeenCalledWith(
+  //     testDevConfiguration.taggitUrl,
+  //     '_blank',
+  //     'noreferrer noopener'
+  //   );
+  //   windowOpenSpy.mockRestore();
+  // });
+
+
+  // it('navigates to Taggit when "View in Taggit" button is clicked', () => {
+  //   const mockNavigate = jest.fn();
+  //   (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
+
+  //   render(<MapControlbar activeProject={projectMock} isPublicView={true} />);
+
+  //   const taggitButton = screen.getByTestId('taggit-button');
+  //   fireEvent.click(taggitButton);
+
+  //   expect(mockNavigate).toHaveBeenCalledWith(
+  //     testDevConfiguration.taggitUrl,
+  //     '_blank',
+  //     'noreferrer noopener'
+  //   );
+  // });
+
+
+  it('navigates to Taggit when "View in Taggit" button is clicked', () => {
+    const originalOpen = window.open;
+    const originalLocalStorage = global.localStorage;
+
+    jest.mock('react-router-dom', () => ({
+      ...jest.requireActual('react-router-dom'),
+      useNavigate: jest.fn(),
+    }));
+
+    // Mock window.open
+    window.open = jest.fn();
+
+    // Mock localStorage
+    const localStorageMock = (() => {
+      let store: Record<string, string> = {};
+      return {
+        getItem: jest.fn((key) => store[key]),
+        setItem: jest.fn((key, value) => {
+          store[key] = value;
+        }),
+        clear: jest.fn(() => {
+          store = {};
+        }),
+      };
+    })();
+    Object.defineProperty(window, 'localStorage', {
+      value: localStorageMock,
+    });
+
+    const fakeProject = { id: 'abc123', name: 'Test Project' };
+
+    render(
+      <MapControlbar
+        activeProject={fakeProject}
+        designSafeProject={null}
+        isPublicView={false}
+        isFeaturesLoading={false}
+        isFeaturesError={false}
+        canSwitchToPrivateMap={false}
+        project={fakeProject}
+        onProjectUpdate={jest.fn()}
       />
     );
 
-    const taggitButton = screen.getByTestId('taggit-button');
-    fireEvent.click(taggitButton);
+    const button = screen.getByTestId('taggit-button');
+    fireEvent.click(button);
 
-    await waitFor(() => {
-      // Taggit will read from local storage
-      expect(localStorage.getItem('testLastProject')).toBe(
-        JSON.stringify(projectMock)
-      );
-    });
-    await waitFor(() => expect(windowOpenSpy).toHaveBeenCalledTimes(1));
-    expect(windowOpenSpy).toHaveBeenCalledWith(
-      testDevConfiguration.taggitUrl,
+    const expectedKey = `${config.geoapiEnv}LastProject`;
+    expect(localStorage.setItem).toHaveBeenCalledWith(
+      expectedKey,
+      JSON.stringify(fakeProject)
+    );
+
+    expect(window.open).toHaveBeenCalledWith(
+      config.taggitUrl,
       '_blank',
       'noreferrer noopener'
     );
-    windowOpenSpy.mockRestore();
+
+    window.open = originalOpen;
+    global.localStorage = originalLocalStorage;
   });
 
   afterEach(() => {
