@@ -163,7 +163,7 @@ const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
           type="primary"
           onClick={() => navigateToCorrespondingTaggitGallery()}
         >
-          View Project in Taggit
+          View in Taggit
         </Button>
       </Flex>
       <CoordinatesDisplay />
