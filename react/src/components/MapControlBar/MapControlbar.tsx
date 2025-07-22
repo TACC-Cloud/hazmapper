@@ -39,7 +39,7 @@ const CoordinatesDisplay = () => {
 
 interface Props {
   /**
-   * Active project
+   * Active project (info for Taggit link).
    */
   activeProject: Project;
 
@@ -47,17 +47,12 @@ interface Props {
    * Whether or not the map project is a public view.
    */
   isPublicView: boolean;
-
-  /**
-   * Project info for Taggit link.
-   */
-project: Project;
 }
 
 /**
  * A horizontal control bar on top
  */
-const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView,project }) => {
+const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
   const navigate = useNavigate();
   const { username, hasValidTapisToken } = useAuthenticatedUser();
 
