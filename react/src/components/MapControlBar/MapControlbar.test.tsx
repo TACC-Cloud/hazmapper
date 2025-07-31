@@ -107,8 +107,54 @@ describe('MapControlbar', () => {
    * - Test 5 throws Router in Router error.
    */
 
+  /**
+   * No Tests Defined:
+   *    Test Suites: 1 failed, 29 passed, 30 total
+   *    Tests:       1 failed, 6 skipped, 81 passed, 88 total
+   *    FAIL  src/components/FeatureFileTree/FeatureFileTree.test.tsx (13.001 s)
+   *
+   *
+   * Test 1:
+   *    Test Suites: 1 failed, 29 passed, 30 total
+   *    Tests:       1 failed, 6 skipped, 82 passed, 89 total
+   *    FAIL  src/components/MapControlBar/MapControlbar.test.tsx (9.314 s)
+   *    # ReferenceError: MapTabContent is not defined
+   *
+   *
+   * Test 2:
+   *    Test Suites: 2 failed, 28 passed, 30 total
+   *    Tests:       2 failed, 6 skipped, 81 passed, 89 total
+   *    FAIL  src/components/FeatureFileTree/FeatureFileTree.test.tsx (8.671 s)
+   *    FAIL  src/components/MapControlBar/MapControlbar.test.tsx (9.591 s)
+   *    # useNavigate() may be used only in the context of a <Router> component.
+   *
+   * Test 3:
+   *    Test Suites: 2 failed, 28 passed, 30 total
+   *    Tests:       1 failed, 6 skipped, 78 passed, 85 total
+   *    FAIL  src/components/FeatureFileTree/FeatureFileTree.test.tsx (9.185 s)
+   *    FAIL  src/components/MapControlBar/MapControlbar.test.tsx
+   *    # Cannot find module 'redux-mock-store' from
+   *        'src/components/MapControlBar/MapControlbar.test.tsx'
+   *
+   * Test 4:
+   *    Test Suites: 2 failed, 28 passed, 30 total
+   *    Tests:       2 failed, 6 skipped, 81 passed, 89 total
+   *    FAIL  src/components/FeatureFileTree/FeatureFileTree.test.tsx (9.289 s)
+   *    FAIL  src/components/MapControlBar/MapControlbar.test.tsx
+   *    # could not find react-redux context value;
+   *        please ensure the component is wrapped in a <Provider>
+   *
+   * Test 5:
+   *    Test Suites: 1 failed, 29 passed, 30 total
+   *    Tests:       1 failed, 6 skipped, 82 passed, 89 total
+   *    FAIL  src/components/MapControlBar/MapControlbar.test.tsx (9.537 s)
+   *    # You cannot render a <Router> inside another <Router>.
+   *      You should never have more than one in your app.
+   */
+
   //////////////////////////////////////////////////////////////////////////
   // TEST v1. (Original Test).
+
   // it('navigates to Taggit when "View in Taggit" button is clicked', async () => {
   //   const windowOpenSpy = jest
   //     .spyOn(window, 'open')
@@ -141,6 +187,7 @@ describe('MapControlbar', () => {
 
   //////////////////////////////////////////////////////////////////////////
   // TEST v2.
+
   // it('navigates to Taggit when "View in Taggit" button is clicked', () => {
   //   const mockNavigate = jest.fn();
   //   (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
@@ -159,31 +206,33 @@ describe('MapControlbar', () => {
 
     //////////////////////////////////////////////////////////////////////////
   // TEST v3.
-  test('navigates to Taggit when "View in Taggit" button is clicked', () => {
-    // Mock the Provider
-    const mockStore = configureStore([]);
-    // const store = mockStore({
-    //   // user: { name: 'Alice' },
-    // });
-    const store = mockStore(testDevConfiguration);
 
-    const mockNavigate = jest.fn();
-    (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
+  // test('navigates to Taggit when "View in Taggit" button is clicked', () => {
+  //   // Mock the Provider
+  //   const mockStore = configureStore([]);
+  //   // const store = mockStore({
+  //   //   // user: { name: 'Alice' },
+  //   // });
+  //   const store = mockStore(testDevConfiguration);
 
-    render(
-      <Provider store={store}>
-        <MemoryRouter>
-          <MapControlbar />
-        </MemoryRouter>
-      </Provider>
-    );
+  //   const mockNavigate = jest.fn();
+  //   (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
 
-    fireEvent.click(screen.getByRole('button', { name: /view in taggit/i }));
-    expect(mockNavigate).toHaveBeenCalledWith('/taggit'); // replace with actual path
-  });
+  //   render(
+  //     <Provider store={store}>
+  //       <MemoryRouter>
+  //         <MapControlbar />
+  //       </MemoryRouter>
+  //     </Provider>
+  //   );
+
+  //   fireEvent.click(screen.getByRole('button', { name: /view in taggit/i }));
+  //   expect(mockNavigate).toHaveBeenCalledWith('/taggit'); // replace with actual path
+  // });
 
   //////////////////////////////////////////////////////////////////////////
   // TEST v4.
+
   // it('navigates to Taggit when "View in Taggit" button is clicked', () => {
   //   // Before this one test.
   //   const originalOpen = window.open;
@@ -250,46 +299,50 @@ describe('MapControlbar', () => {
   //   global.localStorage = originalLocalStorage;
   // });
 
-    //////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////
   // TEST v5. (Original Test Extended).
-  // it('navigates to Taggit when "View in Taggit" button is clicked', async () => {
-  //   const fakeProject = { id: 'abc123', name: 'Test Project' };
 
-  //   const windowOpenSpy = jest
-  //     .spyOn(window, 'open')
-  //     .mockImplementation(() => null);
-  //   renderInTest(
-  //     <MemoryRouter>
-  //       <MapControlbar
-  //         activeProject={fakeProject}
-  //         designSafeProject={null}
-  //         isPublicView={false}
-  //         isFeaturesLoading={false}
-  //         isFeaturesError={false}
-  //         canSwitchToPrivateMap={false}
-  //         project={fakeProject}
-  //         onProjectUpdate={jest.fn()}
-  //       />
-  //     </MemoryRouter>
-  //   );
+  it('navigates to Taggit when "View in Taggit" button is clicked', async () => {
+    const testProject = projectMock;
+    const testDSProject = designSafeProjectMock;
 
-  //   const taggitButton = screen.getByTestId('taggit-button');
-  //   fireEvent.click(taggitButton);
+    const windowOpenSpy = jest
+      .spyOn(window, 'open')
+      .mockImplementation(() => null);
+    renderInTest(
+      // <MemoryRouter>
+      <MapControlbar
+        activeProject={testProject}
+        designSafeProject={testDSProject}
+        isPublicView={false}
+        isFeaturesLoading={false}
+        isFeaturesError={false}
+        canSwitchToPrivateMap={false}
+        project={testProject}
+        onProjectUpdate={jest.fn()}
+      />
+      // </MemoryRouter>
+    );
 
-  //   await waitFor(() => {
-  //     // Taggit will read from local storage
-  //     expect(localStorage.getItem('testLastProject')).toBe(
-  //       JSON.stringify(projectMock)
-  //     );
-  //   });
-  //   await waitFor(() => expect(windowOpenSpy).toHaveBeenCalledTimes(1));
-  //   expect(windowOpenSpy).toHaveBeenCalledWith(
-  //     testDevConfiguration.taggitUrl,
-  //     '_blank',
-  //     'noreferrer noopener'
-  //   );
-  //   windowOpenSpy.mockRestore();
-  // });
+    const taggitButton = screen.getByTestId('taggit-button');
+    fireEvent.click(taggitButton);
+
+    await waitFor(() => {
+      // Taggit will read from local storage
+      expect(localStorage.getItem('testLastProject')).toBe(
+        JSON.stringify(projectMock)
+      );
+    });
+    await waitFor(() => expect(windowOpenSpy).toHaveBeenCalledTimes(1));
+    expect(windowOpenSpy).toHaveBeenCalledWith(
+      testDevConfiguration.taggitUrl,
+      '_blank',
+      'noreferrer noopener'
+    );
+    windowOpenSpy.mockRestore();
+  });
+
+  //////////////////////////////////////////////////////////////////////////
 
   afterEach(() => {
     jest.clearAllMocks();
