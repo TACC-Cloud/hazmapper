@@ -89,31 +89,6 @@ describe('MapControlbar', () => {
     });
   });
 
-  /**
-   * TO DO:
-   * - Figure out how to properly fire off the Taggit button test.
-   * - Event most fire from within the MapControlbar context.
-   *
-   * TEST NOTES:
-   * - Test 1 is the original grafted in from MapTabContents for reference.
-   * - Test 2 is experiment.
-   * - Test 3 and Test 4 throw the same error:
-   *    "could not find react-redux context value;
-   *    please ensure the component is wrapped in a <Provider>"
-   * - Test 5 throws Router in Router error.
-   */
-
-  /**
-   * Test Results:
-   *    Test Suites: 1 failed, 29 passed, 30 total
-   *    Tests:       1 failed, 6 skipped, 82 passed, 89 total
-   *    FAIL  src/components/MapControlBar/MapControlbar.test.tsx (9.537 s)
-   *    # You cannot render a <Router> inside another <Router>.
-   *      You should never have more than one in your app.
-   */
-
-  // TEST (Original Test Extended).
-
   it('navigates to Taggit when "View in Taggit" button is clicked', async () => {
     const testProject = projectMock;
     const testDSProject = designSafeProjectMock;
