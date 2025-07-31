@@ -1,14 +1,14 @@
 import React from 'react';
-import { waitFor, render, screen, fireEvent  } from '@testing-library/react';
-import { MemoryRouter , useNavigate } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { waitFor, render, screen, fireEvent } from '@testing-library/react';
+import { MemoryRouter, useNavigate } from 'react-router-dom';
 import { renderInTest, testQueryClient } from '@hazmapper/test/testUtil';
 import MapControlbar from './MapControlbar';
-import {
-  projectMock,
-  designSafeProjectMock,
-} from '@hazmapper/__fixtures__/projectFixtures';
+import { projectMock, designSafeProjectMock } from '@hazmapper/__fixtures__/projectFixtures';
 import { authenticatedUser } from '@hazmapper/__fixtures__/authStateFixtures';
+import configureStore from 'redux-mock-store'; // or use your real store
 import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
+
 
 // Mock the useAuthenticatedUser hook BEFORE importing it
 jest.mock('@hazmapper/hooks', () => {
@@ -160,13 +160,22 @@ describe('MapControlbar', () => {
     //////////////////////////////////////////////////////////////////////////
   // TEST v3.
   test('navigates to Taggit when "View in Taggit" button is clicked', () => {
+    // Mock the Provider
+    const mockStore = configureStore([]);
+    // const store = mockStore({
+    //   // user: { name: 'Alice' },
+    // });
+    const store = mockStore(testDevConfiguration);
+
     const mockNavigate = jest.fn();
     (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
 
     render(
-      <MemoryRouter>
-        <MapControlbar />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <MapControlbar />
+        </MemoryRouter>
+      </Provider>
     );
 
     fireEvent.click(screen.getByRole('button', { name: /view in taggit/i }));
