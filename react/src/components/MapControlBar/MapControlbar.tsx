@@ -158,7 +158,8 @@ const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
         )}
       </div>
       <Flex justify="center" gap="small">
-        <Button className={styles.taggitButton}
+        <Button
+          className={styles.taggitButton}
           data-testid="taggit-button"
           type="primary"
           onClick={() => navigateToCorrespondingTaggitGallery()}

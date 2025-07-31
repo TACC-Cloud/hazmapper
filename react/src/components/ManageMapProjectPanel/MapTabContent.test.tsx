@@ -1,8 +1,6 @@
-import React from 'react';
-import { screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { renderInTest } from '@hazmapper/test/testUtil';
 import { projectMock } from '@hazmapper/__fixtures__/projectFixtures';
-import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
 import MapTabContent from './MapTabContent';
 
 describe('MapTabContent', () => {

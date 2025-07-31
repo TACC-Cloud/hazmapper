@@ -1,10 +1,12 @@
 import { waitFor, screen, fireEvent } from '@testing-library/react';
 import { renderInTest, testQueryClient } from '@hazmapper/test/testUtil';
 import MapControlbar from './MapControlbar';
-import { projectMock, designSafeProjectMock } from '@hazmapper/__fixtures__/projectFixtures';
+import {
+  projectMock,
+  designSafeProjectMock,
+} from '@hazmapper/__fixtures__/projectFixtures';
 import { authenticatedUser } from '@hazmapper/__fixtures__/authStateFixtures';
 import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
-
 
 // Mock the useAuthenticatedUser hook BEFORE importing it
 jest.mock('@hazmapper/hooks', () => {
