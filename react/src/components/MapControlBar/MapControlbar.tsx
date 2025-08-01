@@ -39,7 +39,7 @@ const CoordinatesDisplay = () => {
 
 interface Props {
   /**
-   * Active project (info for Taggit link).
+   * Active project.
    */
   activeProject: Project;
 
@@ -49,7 +49,7 @@ interface Props {
   isPublicView: boolean;
 
   /**
-   * Placeholder property for use when declared later.
+   * Property declared later.
    */
   designSafeProject?: object;
 }
