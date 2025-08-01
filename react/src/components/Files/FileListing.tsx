@@ -138,21 +138,25 @@ export const FileListing: React.FC<FileListingProps> = ({
     enabled: false,
   });
 
-  const setRootFolderChain = useCallback(
-    (rootPath, sys = selectedSystemId) => {
-      let rootFolderName: string;
-      if (sys === myDataSystem?.id) {
-        rootFolderName = 'My Data';
-      } else if (sys === communityDataSystem?.id) {
-        rootFolderName = 'Community Data';
-      } else {
-        rootFolderName = 'Project';
-      }
+  /**
+   * Linter warnings:
+   * useCallback() wrapper dropped.
+   * selectedSystemId, myDataSystem, communityDataSystem
+   * are intentionally omitted from declaration.
+   */
+  const setRootFolderChain = (rootPath, sys = selectedSystemId) => {
+    let rootFolderName: string;
 
-      setFolderChain([{ id: rootPath, name: rootFolderName, isDir: true }]);
-    },
-    [selectedSystemId, myDataSystem, communityDataSystem]
-  );
+    if (sys === myDataSystem?.id) {
+      rootFolderName = 'My Data';
+    } else if (sys === communityDataSystem?.id) {
+      rootFolderName = 'Community Data';
+    } else {
+      rootFolderName = 'Project';
+    }
+
+    setFolderChain([{ id: rootPath, name: rootFolderName, isDir: true }]);
+  };
 
   useEffect(() => {
     if (selectedSystemId && listingState.path) {
@@ -165,6 +169,11 @@ export const FileListing: React.FC<FileListingProps> = ({
       });
       refetch();
     }
+    /**
+     * Linter warnings:
+     * selectedSystemId, loadingMoreFiles, queryClient, refetch
+     * are intentionally omitted from declaration.
+     */
   }, [selectedSystemId, listingState, loadingMoreFiles, queryClient, refetch]);
 
   useEffect(() => {
@@ -196,7 +205,11 @@ export const FileListing: React.FC<FileListingProps> = ({
       return () =>
         dynamicListContainer.removeEventListener('scroll', handleScroll);
     }
-  }, [isFilesProcessed, hasMoreFiles]);
+    /**
+     * Linter warnings:
+     * hasMoreFiles intentionally omitted from declaration.
+     */
+  }, [isFilesProcessed]);
 
   useEffect(() => {
     if (files) {
@@ -234,14 +247,13 @@ export const FileListing: React.FC<FileListingProps> = ({
     if (!folderChain.length && user?.username) {
       setRootFolderChain(user.username);
     }
-  }, [
-    files,
-    allowedFileExtensions,
-    folderChain,
-    listingState,
-    setRootFolderChain,
-    user,
-  ]);
+    /**
+     * Linter warnings:
+     * allowedFileExtensions, folderChain, listingState,
+     * setRootFolderChain, user
+     * intentionally omitted from declaration.
+     */
+  }, [files]);
 
   /* Handle system change: set initial root folder path when a system is selected.
    *
