@@ -174,7 +174,7 @@ export const FileListing: React.FC<FileListingProps> = ({
      * selectedSystemId, loadingMoreFiles, queryClient, refetch
      * are intentionally omitted from declaration.
      */
-  }, [selectedSystemId, listingState, loadingMoreFiles, queryClient, refetch]);
+  }, [listingState]);
 
   useEffect(() => {
     if (isFilesProcessed) {
