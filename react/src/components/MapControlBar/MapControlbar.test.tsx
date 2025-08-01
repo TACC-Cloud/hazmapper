@@ -106,7 +106,7 @@ describe('MapControlbar', () => {
         // isFeaturesLoading={false}
         // isFeaturesError={false}
         // canSwitchToPrivateMap={false}
-        project={testProject}
+        // project={testProject}
         onProjectUpdate={jest.fn()}
       />
     );
