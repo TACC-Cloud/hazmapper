@@ -103,11 +103,6 @@ describe('MapControlbar', () => {
         activeProject={testProject}
         designSafeProject={testDSProject}
         isPublicView={false}
-        // isFeaturesLoading={false}
-        // isFeaturesError={false}
-        // canSwitchToPrivateMap={false}
-        // project={testProject}
-        // onProjectUpdate={jest.fn()}
       />
     );
 
