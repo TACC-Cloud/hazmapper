@@ -138,19 +138,21 @@ export const FileListing: React.FC<FileListingProps> = ({
     enabled: false,
   });
 
-  const setRootFolderChain = (rootPath, sys = selectedSystemId) => {
-    let rootFolderName: string;
+  const setRootFolderChain = useCallback(
+    (rootPath, sys = selectedSystemId) => {
+      let rootFolderName: string;
+      if (sys === myDataSystem?.id) {
+        rootFolderName = 'My Data';
+      } else if (sys === communityDataSystem?.id) {
+        rootFolderName = 'Community Data';
+      } else {
+        rootFolderName = 'Project';
+      }
 
-    if (sys === myDataSystem?.id) {
-      rootFolderName = 'My Data';
-    } else if (sys === communityDataSystem?.id) {
-      rootFolderName = 'Community Data';
-    } else {
-      rootFolderName = 'Project';
-    }
-
-    setFolderChain([{ id: rootPath, name: rootFolderName, isDir: true }]);
-  };
+      setFolderChain([{ id: rootPath, name: rootFolderName, isDir: true }]);
+    },
+    [selectedSystemId, myDataSystem, communityDataSystem]
+  );
 
   useEffect(() => {
     if (selectedSystemId && listingState.path) {
