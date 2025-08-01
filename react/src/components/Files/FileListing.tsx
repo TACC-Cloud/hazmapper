@@ -163,7 +163,7 @@ export const FileListing: React.FC<FileListingProps> = ({
       });
       refetch();
     }
-  }, [listingState]);
+  }, [selectedSystemId, listingState, loadingMoreFiles, queryClient, refetch]);
 
   useEffect(() => {
     if (isFilesProcessed) {
@@ -194,7 +194,7 @@ export const FileListing: React.FC<FileListingProps> = ({
       return () =>
         dynamicListContainer.removeEventListener('scroll', handleScroll);
     }
-  }, [isFilesProcessed]);
+  }, [isFilesProcessed, hasMoreFiles]);
 
   useEffect(() => {
     if (files) {
@@ -232,7 +232,14 @@ export const FileListing: React.FC<FileListingProps> = ({
     if (!folderChain.length && user?.username) {
       setRootFolderChain(user.username);
     }
-  }, [files]);
+  }, [
+    files,
+    allowedFileExtensions,
+    folderChain,
+    listingState,
+    setRootFolderChain,
+    user,
+  ]);
 
   /* Handle system change: set initial root folder path when a system is selected.
    *
