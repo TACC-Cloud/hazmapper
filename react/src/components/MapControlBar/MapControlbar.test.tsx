@@ -105,7 +105,7 @@ describe('MapControlbar', () => {
         isPublicView={false}
         // isFeaturesLoading={false}
         // isFeaturesError={false}
-        canSwitchToPrivateMap={false}
+        // canSwitchToPrivateMap={false}
         project={testProject}
         onProjectUpdate={jest.fn()}
       />
