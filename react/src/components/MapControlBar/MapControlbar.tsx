@@ -47,11 +47,6 @@ interface Props {
    * Whether or not the map project is a public view.
    */
   isPublicView: boolean;
-
-  /**
-   * Placeholder property for use when declared later.
-   */
-  designSafeProject?: object;
 }
 
 /**
