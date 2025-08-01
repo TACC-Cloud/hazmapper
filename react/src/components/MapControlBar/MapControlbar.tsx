@@ -162,6 +162,7 @@ const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
           </div>
         )}
       </div>
+      <CoordinatesDisplay />
       <Flex justify="center" gap="small">
         <Button
           className={styles.taggitButton}
@@ -172,7 +173,6 @@ const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
           View in Taggit
         </Button>
       </Flex>
-      <CoordinatesDisplay />
     </div>
   );
 };
