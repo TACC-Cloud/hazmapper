@@ -1,6 +1,5 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import store from './redux/store';
-import { AxiosError } from 'axios';
 import {
   useQuery,
   useMutation,
@@ -15,6 +14,21 @@ import { useMapillaryToken } from '@hazmapper/context/MapillaryTokenProvider';
 import { useEnsureAuthenticatedUserHasValidTapisToken } from '@hazmapper/hooks';
 import { ApiService, AppConfiguration, AuthState } from '@hazmapper/types';
 import { v4 as uuidv4 } from 'uuid';
+
+const getApiClient = (apiService: ApiService) => {
+  const axiosConfig = {
+    timeout: 60 * 1000, // 1 minute
+  };
+  if (apiService === ApiService.Geoapi) {
+    Object.assign(axiosConfig, {
+      xsrfCookieName: 'csrftoken',
+      xsrfHeaderName: 'x-csrftoken',
+      withCredentials: true, // Ensure cookies are sent with requests
+      withXSRFToken: true,
+    });
+  }
+  return axios.create(axiosConfig);
+};
 
 function getBaseApiUrl(
   apiService: ApiService,
@@ -109,7 +123,7 @@ export function useGet<ResponseType, TransformedResponseType = ResponseType>({
   transform,
   prefetch,
 }: UseGetParams<ResponseType, TransformedResponseType>) {
-  const client = axios;
+  const client = getApiClient(apiService);
   const state = store.getState();
   const configuration = useAppConfiguration();
   const { accessToken: mapillaryAuthToken } = useMapillaryToken();
@@ -142,7 +156,7 @@ export function usePost<RequestType, ResponseType>({
   options = {},
   apiService = ApiService.Geoapi,
 }: UsePostParams<RequestType, ResponseType>) {
-  const client = axios;
+  const client = getApiClient(apiService);
   const state = store.getState();
   const configuration = useAppConfiguration();
 
@@ -183,7 +197,7 @@ export function useDelete<ResponseType, Variables>({
   options = {},
   apiService = ApiService.Geoapi,
 }: UseDeleteParams<ResponseType, Variables>) {
-  const client = axios;
+  const client = getApiClient(apiService);
   const state = store.getState();
   const configuration = useAppConfiguration();
 
@@ -214,7 +228,7 @@ export function usePut<RequestType, ResponseType>({
   options = {},
   apiService = ApiService.Geoapi,
 }: UsePostParams<RequestType, ResponseType>) {
-  const client = axios;
+  const client = getApiClient(apiService);
   const state = store.getState();
   const configuration = useAppConfiguration();
 
