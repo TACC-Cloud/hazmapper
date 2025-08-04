@@ -93,17 +93,13 @@ describe('MapControlbar', () => {
 
   it('navigates to Taggit when "View in Taggit" button is clicked', async () => {
     const testProject = projectMock;
-    const testDSProject = designSafeProjectMock;
 
     const windowOpenSpy = jest
       .spyOn(window, 'open')
       .mockImplementation(() => null);
+
     renderInTest(
-      <MapControlbar
-        activeProject={testProject}
-        designSafeProject={testDSProject}
-        isPublicView={false}
-      />
+      <MapControlbar activeProject={testProject} isPublicView={false} />
     );
 
     const taggitButton = screen.getByTestId('taggit-button');
