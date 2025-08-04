@@ -89,7 +89,7 @@ const CreateMapModal = ({ isOpen, closeModal }: CreateMapModalProps) => {
       trigger('systemFile');
       oldSystemFilename.current = systemFilename;
     }
-  }, [getValues, mapName, setValue]);
+  }, [getValues, mapName, setValue, trigger]);
 
   const handleClose = () => {
     setErrorMessage('');
