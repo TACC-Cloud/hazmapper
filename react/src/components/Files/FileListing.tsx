@@ -174,7 +174,7 @@ export const FileListing: React.FC<FileListingProps> = ({
      * selectedSystemId, loadingMoreFiles, queryClient, refetch
      * are intentionally omitted from declaration.
      */
-     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listingState]);
 
   useEffect(() => {
@@ -210,6 +210,7 @@ export const FileListing: React.FC<FileListingProps> = ({
      * Linter warnings:
      * hasMoreFiles intentionally omitted from declaration.
      */
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFilesProcessed]);
 
   useEffect(() => {
@@ -254,7 +255,7 @@ export const FileListing: React.FC<FileListingProps> = ({
      * setRootFolderChain, user
      * intentionally omitted from declaration.
      */
-     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [files]);
 
   /* Handle system change: set initial root folder path when a system is selected.
