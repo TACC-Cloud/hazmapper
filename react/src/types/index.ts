@@ -1,6 +1,7 @@
 export * from './tileServerLayer';
 export * from './feature';
 export * from './projects';
+export * from './projectsDesignSafe';
 export * from './auth';
 export * from './systems';
 export * from './file';

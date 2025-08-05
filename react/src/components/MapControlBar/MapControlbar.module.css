@@ -46,5 +46,12 @@
 }
 
 .coordinatesDisplay {
+  width: 20rem;
   margin-left: auto; /* push to right */
+}
+
+.taggitButton {
+  height: auto;
+  padding: 2px;
+  width: 16rem;
 }

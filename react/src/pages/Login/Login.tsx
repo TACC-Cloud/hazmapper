@@ -26,7 +26,7 @@ function Login() {
       const GEOAPI_AUTH_URL = `${configuration.geoapiUrl}/auth/login?to=${toParam}`;
       window.location.href = GEOAPI_AUTH_URL;
     }
-  }, []);
+  }, [location, isAuthenticated, navigate, configuration]);
 
   return <div>Logging in...</div>;
 }

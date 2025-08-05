@@ -20,6 +20,7 @@ import {
   useGetSystems,
   useFiles,
   TransformedGetSystemsResponse,
+  useDesignSafePublishedProjectDetail,
 } from '@hazmapper/hooks';
 import { File } from '@hazmapper/types';
 import { serializeToChonkyFile } from '@hazmapper/utils/fileUtils';
@@ -75,12 +76,7 @@ export const FileListing: React.FC<FileListingProps> = ({
     data: systemsData = {} as TransformedGetSystemsResponse,
     isFetched: isSystemsFetched,
   } = useGetSystems();
-  const {
-    systems = [],
-    myDataSystem,
-    communityDataSystem,
-    publishedDataSystem,
-  } = systemsData;
+  const { systems = [], myDataSystem, communityDataSystem } = systemsData;
 
   const { data: user } = useAuthenticatedUser();
 
@@ -103,7 +99,28 @@ export const FileListing: React.FC<FileListingProps> = ({
   });
   const { watch } = methods;
 
-  const selectedSystemId = watch('system');
+  const rawSelectedSystem = watch('system');
+
+  /**
+   * Normalize the selected system ID and extract the published project ID if present.
+   */
+  let selectedSystemId = rawSelectedSystem;
+  let publishedPrjId: string | undefined;
+
+  if (
+    !!rawSelectedSystem &&
+    rawSelectedSystem.startsWith('designsafe.storage.published/PRJ-')
+  ) {
+    selectedSystemId = 'designsafe.storage.published';
+    publishedPrjId = rawSelectedSystem.split('/').pop(); // "PRJ-123"
+  }
+  const projectDetailResult = useDesignSafePublishedProjectDetail({
+    designSafeProjectPRJ: publishedPrjId,
+    options: { enabled: !!publishedPrjId },
+  });
+
+  const publishedProjectDetail = projectDetailResult?.data;
+  const hasResolvedPublishedProject = projectDetailResult?.isSuccess;
 
   const queryClient = useQueryClient();
 
@@ -121,6 +138,12 @@ export const FileListing: React.FC<FileListingProps> = ({
     enabled: false,
   });
 
+  /**
+   * Linter warnings:
+   * useCallback() wrapper dropped.
+   * selectedSystemId, myDataSystem, communityDataSystem
+   * are intentionally omitted from declaration.
+   */
   const setRootFolderChain = (rootPath, sys = selectedSystemId) => {
     let rootFolderName: string;
 
@@ -128,8 +151,6 @@ export const FileListing: React.FC<FileListingProps> = ({
       rootFolderName = 'My Data';
     } else if (sys === communityDataSystem?.id) {
       rootFolderName = 'Community Data';
-    } else if (sys === publishedDataSystem?.id) {
-      rootFolderName = 'Published Data';
     } else {
       rootFolderName = 'Project';
     }
@@ -148,6 +169,12 @@ export const FileListing: React.FC<FileListingProps> = ({
       });
       refetch();
     }
+    /**
+     * Linter warnings:
+     * selectedSystemId, loadingMoreFiles, queryClient, refetch
+     * are intentionally omitted from declaration.
+     */
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listingState]);
 
   useEffect(() => {
@@ -179,6 +206,11 @@ export const FileListing: React.FC<FileListingProps> = ({
       return () =>
         dynamicListContainer.removeEventListener('scroll', handleScroll);
     }
+    /**
+     * Linter warnings:
+     * hasMoreFiles intentionally omitted from declaration.
+     */
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFilesProcessed]);
 
   useEffect(() => {
@@ -217,24 +249,53 @@ export const FileListing: React.FC<FileListingProps> = ({
     if (!folderChain.length && user?.username) {
       setRootFolderChain(user.username);
     }
+    /**
+     * Linter warnings:
+     * allowedFileExtensions, folderChain, listingState,
+     * setRootFolderChain, user
+     * intentionally omitted from declaration.
+     */
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [files]);
 
+  /* Handle system change: set initial root folder path when a system is selected.
+   *
+   * For published-based systems (starting with "designsafe.storage.published/PRJ-"),
+   * fetch the path from the backend.
+   */
   useEffect(() => {
-    if (!selectedSystemId) {
-      return;
-    }
+    if (!selectedSystemId) return;
 
-    const rootFolder =
-      selectedSystemId === myDataSystem?.id ? user?.username : '/';
+    // If this is a published project, wait until it's fetched
+    if (publishedPrjId && !hasResolvedPublishedProject) return;
+
+    // For most things (i.e. projects or community data), the root folder is /
+    let rootFolder = '/';
+    const systemId = selectedSystemId;
+
+    // For published projects (i.e. publications) or My Data its slightly different
+    if (publishedPrjId) {
+      rootFolder = publishedProjectDetail?.tree.basePath ?? '';
+    } else if (systemId === myDataSystem?.id) {
+      rootFolder = user?.username;
+    }
 
     setListingState({
       path: rootFolder,
       offset: 0,
     });
-    onSystemSelect?.(selectedSystemId);
+    onSystemSelect?.(systemId);
     onFolderSelect?.(rootFolder);
-    setRootFolderChain(rootFolder, selectedSystemId);
-  }, [selectedSystemId]);
+    setRootFolderChain(rootFolder, systemId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    selectedSystemId,
+    publishedPrjId,
+    myDataSystem?.id,
+    user?.username,
+    publishedProjectDetail,
+    hasResolvedPublishedProject,
+  ]);
 
   const FileListingIcon = (props: any) => <Icon name={props.icon} />;
 
