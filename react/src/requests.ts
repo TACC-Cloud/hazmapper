@@ -12,7 +12,10 @@ import {
 import { useAppConfiguration } from '@hazmapper/hooks';
 import { useMapillaryToken } from '@hazmapper/context/MapillaryTokenProvider';
 
-import { useEnsureAuthenticatedUserHasValidTapisToken } from '@hazmapper/hooks';
+import {
+  useEnsureAuthenticatedUserHasValidTapisToken,
+  useIsPublicProjectRoute,
+} from '@hazmapper/hooks';
 import { ApiService, AppConfiguration, AuthState } from '@hazmapper/types';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -43,11 +46,19 @@ function usesTapisToken(apiService: ApiService) {
   return servicesUsingTapisToken.includes(apiService);
 }
 
-export function getHeaders(
-  apiService: ApiService,
-  auth: AuthState,
-  mapillaryAuthToken?: string | null
-) {
+interface GetHeadersOptions {
+  apiService: ApiService;
+  auth: AuthState;
+  mapillaryAuthToken?: string | null;
+  isPublicRoute?: boolean;
+}
+
+export function getHeaders({
+  apiService,
+  auth,
+  mapillaryAuthToken,
+  isPublicRoute = false,
+}: GetHeadersOptions) {
   const headers: { [key: string]: string } = {};
 
   if (usesTapisToken(apiService) && auth.authToken?.token) {
@@ -57,10 +68,7 @@ export function getHeaders(
   if (apiService === ApiService.Geoapi) {
     // Add analytics-related headers for GeoAPI requests
     headers['X-Geoapi-Application'] = 'hazmapper';
-
-    // Determine if the user is in public view mode based on the browser's URL
-    const isPublicView = window.location.pathname.includes('/project-public/');
-    headers['X-Geoapi-IsPublicView'] = isPublicView ? 'True' : 'False';
+    headers['X-Geoapi-IsPublicView'] = isPublicRoute ? 'True' : 'False';
 
     // for guest users, add a unique id
     if (!auth.authToken?.token) {
@@ -114,10 +122,19 @@ export function useGet<ResponseType, TransformedResponseType = ResponseType>({
   const configuration = useAppConfiguration();
   const { accessToken: mapillaryAuthToken } = useMapillaryToken();
 
-  useEnsureAuthenticatedUserHasValidTapisToken();
+  const isPublicRoute = useIsPublicProjectRoute();
+
+  // Check auth and redirect only if not a public route
+  useEnsureAuthenticatedUserHasValidTapisToken({ redirect: !isPublicRoute });
 
   const baseUrl = getBaseApiUrl(apiService, configuration);
-  const headers = getHeaders(apiService, state.auth, mapillaryAuthToken);
+
+  const headers = getHeaders({
+    apiService,
+    auth: state.auth,
+    mapillaryAuthToken,
+    isPublicRoute,
+  });
 
   const url = `${baseUrl}${endpoint}`;
 
@@ -150,7 +167,10 @@ export function usePost<RequestType, ResponseType>({
 
   const baseUrl = getBaseApiUrl(apiService, configuration);
 
-  const headers = getHeaders(apiService, state.auth);
+  const headers = getHeaders({
+    apiService,
+    auth: state.auth,
+  });
 
   const postUtil = async (requestData: RequestType) => {
     const response = await client.post<ResponseType>(
@@ -190,7 +210,10 @@ export function useDelete<ResponseType, Variables>({
   useEnsureAuthenticatedUserHasValidTapisToken();
 
   const baseUrl = getBaseApiUrl(apiService, configuration);
-  const headers = getHeaders(apiService, state.auth);
+  const headers = getHeaders({
+    apiService,
+    auth: state.auth,
+  });
 
   const deleteUtil = async (variables: Variables) => {
     const finalEndpoint =
@@ -218,11 +241,12 @@ export function usePut<RequestType, ResponseType>({
   const state = store.getState();
   const configuration = useAppConfiguration();
 
-  useEnsureAuthenticatedUserHasValidTapisToken();
-
   const baseUrl = getBaseApiUrl(apiService, configuration);
 
-  const headers = getHeaders(apiService, state.auth);
+  const headers = getHeaders({
+    apiService,
+    auth: state.auth,
+  });
 
   const putUtil = async (requestData: RequestType) => {
     const response = await client.put<ResponseType>(
