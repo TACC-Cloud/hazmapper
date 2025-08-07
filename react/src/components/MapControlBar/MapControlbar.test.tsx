@@ -1,5 +1,4 @@
-import React from 'react';
-import { waitFor } from '@testing-library/react';
+import { waitFor, screen, fireEvent } from '@testing-library/react';
 import { renderInTest, testQueryClient } from '@hazmapper/test/testUtil';
 import MapControlbar from './MapControlbar';
 import {
@@ -7,6 +6,7 @@ import {
   designSafeProjectMock,
 } from '@hazmapper/__fixtures__/projectFixtures';
 import { authenticatedUser } from '@hazmapper/__fixtures__/authStateFixtures';
+import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
 
 // Mock the useAuthenticatedUser hook BEFORE importing it
 jest.mock('@hazmapper/hooks', () => {
@@ -22,6 +22,12 @@ import { useAuthenticatedUser } from '@hazmapper/hooks';
 const mockedUseAuthenticatedUser = useAuthenticatedUser as jest.MockedFunction<
   typeof useAuthenticatedUser
 >;
+
+// Mock the Router
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: jest.fn(),
+}));
 
 describe('MapControlbar', () => {
   beforeEach(() => {
@@ -83,6 +89,35 @@ describe('MapControlbar', () => {
     await waitFor(() => {
       expect(getByText(`Public Map: ${projectMock.name}`)).toBeDefined();
     });
+  });
+
+  it('navigates to Taggit when "View in Taggit" button is clicked', async () => {
+    const testProject = projectMock;
+
+    const windowOpenSpy = jest
+      .spyOn(window, 'open')
+      .mockImplementation(() => null);
+
+    renderInTest(
+      <MapControlbar activeProject={testProject} isPublicView={false} />
+    );
+
+    const taggitButton = screen.getByTestId('taggit-button');
+    fireEvent.click(taggitButton);
+
+    await waitFor(() => {
+      // Taggit will read from local storage
+      expect(localStorage.getItem('testLastProject')).toBe(
+        JSON.stringify(projectMock)
+      );
+    });
+    await waitFor(() => expect(windowOpenSpy).toHaveBeenCalledTimes(1));
+    expect(windowOpenSpy).toHaveBeenCalledWith(
+      testDevConfiguration.taggitUrl,
+      '_blank',
+      'noreferrer noopener'
+    );
+    windowOpenSpy.mockRestore();
   });
 
   afterEach(() => {

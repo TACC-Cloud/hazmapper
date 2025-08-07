@@ -92,7 +92,14 @@ const MapillaryViewer: React.FC<MapillaryViewerProps> = ({
       viewerRef.current?.remove();
       viewerRef.current = null;
     };
-  }, [height, mapillaryToken, mapillaryFirstImageId, setIsLoadingViewer]);
+  }, [
+    height,
+    mapillaryToken,
+    mapillaryFirstImageId,
+    isLoadingViewer,
+    setIsLoadingViewer,
+    setCurrentPosition,
+  ]);
 
   // Update viewer when imageId changes (if viewer already exists)
   useEffect(() => {
