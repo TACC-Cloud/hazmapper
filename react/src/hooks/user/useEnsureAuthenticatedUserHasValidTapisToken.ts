@@ -14,7 +14,7 @@ interface UseEnsureOptions {
  * useEnsureAuthenticatedUserHasValidTapisToken
  *
  * A hook that ensures the current authenticated user has a valid Tapis auth token.
- * If the token is invalid and `redirect` id true (default), the user is
+ * If the token is invalid and `redirect` is true (default), the user is
  * automatically redirected to the login page.
  *
  * Useful for protecting private routes or pages that require an authenticated session.
@@ -23,7 +23,7 @@ interface UseEnsureOptions {
  * map routes where token validation is optinal.
  *
  * See `hasValidTapisToken from `useAuthenticatedUser` if you want similar functionality
- * without the redirection
+ * without the possibility of redirection
  *
  * @returns {void}
  */
@@ -34,7 +34,8 @@ export function useEnsureAuthenticatedUserHasValidTapisToken({
   const location = useLocation();
   const authToken = useSelector((state: RootState) => state.auth.authToken);
 
-  // if user has auth token, ensure its valid and if not,
+  // if user has auth token but is expired, we need to determine if we need
+  // to redirect to login (`redirect`)
   if (authToken && !isTokenValid(authToken)) {
     if (redirect) {
       navigate(`/login?to=${encodeURIComponent(location.pathname)}`);
