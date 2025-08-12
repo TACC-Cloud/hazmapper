@@ -7,7 +7,10 @@ import {
 
 describe('getHeaders', () => {
   it('returns Authorization header for Geoapi', () => {
-    const headers = getHeaders(ApiService.Geoapi, authenticatedUser);
+    const headers = getHeaders({
+      apiService: ApiService.Geoapi,
+      auth: authenticatedUser,
+    });
     expect(headers).toEqual({
       'X-Tapis-Token': `${authenticatedUser.authToken?.token}`,
       'X-Geoapi-Application': 'hazmapper',
@@ -16,7 +19,10 @@ describe('getHeaders', () => {
   });
 
   it('returns no auth-related headers for unauthenticatedUser', () => {
-    const headers = getHeaders(ApiService.Geoapi, unauthenticatedUser);
+    const headers = getHeaders({
+      apiService: ApiService.Geoapi,
+      auth: unauthenticatedUser,
+    });
     expect(headers).toEqual({
       'X-Geoapi-Application': 'hazmapper',
       'X-Geoapi-IsPublicView': 'False',
@@ -25,7 +31,10 @@ describe('getHeaders', () => {
   });
 
   it('returns analytics headers for Geoapi', () => {
-    const headers = getHeaders(ApiService.Geoapi, authenticatedUser);
+    const headers = getHeaders({
+      apiService: ApiService.Geoapi,
+      auth: authenticatedUser,
+    });
     expect(headers).toMatchObject({
       'X-Geoapi-Application': 'hazmapper',
       'X-Geoapi-IsPublicView': 'False',
@@ -33,7 +42,11 @@ describe('getHeaders', () => {
   });
 
   it('returns Authorization header for Mapillary', () => {
-    const headers = getHeaders(ApiService.Mapillary, authenticatedUser, '1234');
+    const headers = getHeaders({
+      apiService: ApiService.Mapillary,
+      auth: authenticatedUser,
+      mapillaryAuthToken: '1234',
+    });
     expect(headers).toEqual({
       authorization: `OAuth 1234`,
     });
