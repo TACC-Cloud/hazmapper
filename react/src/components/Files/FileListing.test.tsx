@@ -30,7 +30,7 @@ jest.mock('../../hooks', () => ({
     data: undefined,
     isSuccess: false,
   })),
-  useAuthenticatedUser: jest.fn(() => ({ data: { username: 'test-user' } })),
+  useAuthenticatedUser: jest.fn(() => ({ username: 'test-user' })),
   useGetSystems: jest.fn(() => ({ data: { systems: [] } })),
 }));
 
@@ -111,7 +111,7 @@ describe('FileListing', () => {
       result: [],
     });
     (useAuthenticatedUser as jest.Mock).mockReturnValue({
-      data: { username: 'test-user' },
+      username: 'test-user',
     });
     (useFiles as jest.Mock).mockReturnValue({ data: [] });
     render(
@@ -148,7 +148,7 @@ describe('FileListing', () => {
       data: undefined,
     });
     (useAuthenticatedUser as jest.Mock).mockReturnValue({
-      data: { username: 'test-user' },
+      username: 'test-user',
     });
     render(
       <QueryClientProvider client={testQueryClient}>
@@ -179,7 +179,7 @@ describe('FileListing', () => {
       data: [],
     });
     (useAuthenticatedUser as jest.Mock).mockReturnValue({
-      data: { username: 'test-user' },
+      username: 'test-user',
     });
     render(
       <FileListing
@@ -225,7 +225,7 @@ describe('FileListing', () => {
     });
 
     (useAuthenticatedUser as jest.Mock).mockReturnValue({
-      data: { username: 'test-user' },
+      username: 'test-user',
     });
 
     (serializeToChonkyFile as jest.Mock).mockImplementation((file) => ({
@@ -273,7 +273,7 @@ describe('FileListing', () => {
     });
 
     (useAuthenticatedUser as jest.Mock).mockReturnValue({
-      data: { username: 'test-user' },
+      username: 'test-user',
     });
 
     render(<FileListing disableSelection={false} />);
@@ -292,7 +292,7 @@ describe('FileListing', () => {
       isLoading: false,
     });
     (useAuthenticatedUser as jest.Mock).mockReturnValue({
-      data: { username: 'test-user' },
+      username: 'test-user',
     });
     (useFiles as jest.Mock).mockReturnValue({
       data: [],

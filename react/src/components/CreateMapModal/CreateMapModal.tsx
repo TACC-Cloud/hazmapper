@@ -65,7 +65,7 @@ const CreateMapModal = ({ isOpen, closeModal }: CreateMapModalProps) => {
   } = methods;
 
   const [errorMessage, setErrorMessage] = useState('');
-  const { data: userData } = useAuthenticatedUser();
+  const { username } = useAuthenticatedUser();
   const { mutate: createProject, isPending: isCreatingProject } =
     useCreateProject();
   const navigate = useNavigate();
@@ -102,7 +102,7 @@ const CreateMapModal = ({ isOpen, closeModal }: CreateMapModalProps) => {
     const systemId = getValues('systemId');
     const saveLocationDisplay = renderFilePathLabel(
       directory,
-      userData?.username || '',
+      username || '',
       systemId
     );
     setValue('saveLocationDisplay', saveLocationDisplay);
@@ -134,7 +134,7 @@ const CreateMapModal = ({ isOpen, closeModal }: CreateMapModalProps) => {
   };
 
   const handleSubmitCallback = () => {
-    if (!userData) {
+    if (!username) {
       setErrorMessage('User information is not available');
       return;
     }
