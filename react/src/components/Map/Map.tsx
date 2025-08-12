@@ -229,7 +229,13 @@ const LeafletMap: React.FC = () => {
             {...layer.tileOptions}
           />
         ) : layer.type === 'arcgis' ? (
-          <TiledMapLayer key={layer.id} url={layer.url} maxZoom={24} />
+          <TiledMapLayer
+            key={layer.id}
+            url={layer.url}
+            maxZoom={24}
+            zIndex={layer.uiOptions.zIndex}
+            opacity={layer.uiOptions.opacity}
+          />
         ) : (
           <TileLayer
             key={layer.id}
