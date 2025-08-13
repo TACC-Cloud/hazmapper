@@ -13,10 +13,16 @@ export default function CallbackPage() {
 
   useEffect(() => {
     const redirectTo = localStorage.getItem('toParam') || '/';
+    let token: string | null = '';
+    let expiresAt: string | null = '';
 
-    const searchParams = new URLSearchParams(location.search);
-    const token = searchParams.get('access_token');
-    const expiresAt = searchParams.get('expires_at');
+    // First, try to get token from hash
+    if (location.hash && location.hash.length > 1) {
+      // Parse the hash manually (remove the # character)
+      const hashParams = new URLSearchParams(location.hash.substring(1));
+      token = hashParams.get('access_token');
+      expiresAt = hashParams.get('expires_at');
+    }
 
     if (token && expiresAt) {
       const username = jwtDecode(token)['tapis/username'];
