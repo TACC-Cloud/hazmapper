@@ -232,7 +232,7 @@ const LeafletMap: React.FC = () => {
           <TiledMapLayer
             key={layer.id}
             url={layer.url}
-            maxZoom={24}
+            maxZoom={MAP_CONFIG.maxZoom}
             zIndex={layer.uiOptions.zIndex}
             opacity={layer.uiOptions.opacity}
           />
