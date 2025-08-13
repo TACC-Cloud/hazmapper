@@ -33,6 +33,8 @@ import { useForm, FormProvider } from 'react-hook-form';
 import dayjs from 'dayjs';
 import MapillaryViewer from '@hazmapper/components/MapillaryViewer';
 
+import WebsocketNotifications from '@hazmapper/components/WebsocketNotifications';
+
 const Map = React.lazy(() => import('@hazmapper/components/Map'));
 
 export const tileLayerSchema = z.object({
@@ -122,10 +124,13 @@ const MapProject: React.FC<MapProjectProps> = ({ isPublicView = false }) => {
   }
 
   return (
-    <LoadedMapProject
-      isPublicView={isPublicView}
-      activeProject={activeProject}
-    />
+    <>
+      <LoadedMapProject
+        isPublicView={isPublicView}
+        activeProject={activeProject}
+      />
+      <WebsocketNotifications />
+    </>
   );
 };
 
