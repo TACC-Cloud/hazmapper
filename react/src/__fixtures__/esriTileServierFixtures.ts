@@ -1,6 +1,6 @@
 export const esriTileServerMetadata = {
   id: '984af830afa010ea',
-  name: 'PonderosaElementary_20190328',
+  name: 'Something',
   capabilities: 'Map,TilesOnly,Tilemap',
   description: '',
   serviceDescription: '',
@@ -176,15 +176,14 @@ export const esriTileServerMetadata = {
     ],
   },
   documentInfo: {
-    title: 'PonderosaElementary_20190328',
-    author: 'uwrapid_UW',
+    title: 'Something',
+    author: 'author',
     comments: '',
-    subject: 'Imagery of Ponderosa Elementary, captured on March 28, 2019. ',
+    subject: 'Imagery taken ',
     category: '',
-    keywords: 'RAPID',
+    keywords: 'KEYWORD',
     credits: '',
-    Title:
-      'C:\\Users\\Coreteam\\Documents\\ArcGIS\\Projects\\RPD1014OrthoImagery\\RPD1014OrthoImagery.aprx',
+    Title: 'C:\\Users\\abcd.aprx',
     Author: '',
     Comments: '',
     Subject: '',
@@ -205,7 +204,7 @@ export const esriTileServerMetadata = {
   layers: [
     {
       id: 0,
-      name: 'Ponderosa_ortho_20190328.tif',
+      name: 'abcd.tif',
       parentLayerId: -1,
       defaultVisibility: true,
       subLayerIds: null,
