@@ -31,7 +31,8 @@ export function convertExtentToLatLng(extent: ExtentProperties): {
 
     // WGS84 (already degrees)
     if (wkid === 4326) {
-      if (xmin < -180 || xmax > 180 || ymin < -90 || ymax > 90) throw new Error('Out-of-range 4326 coords');
+      if (xmin < -180 || xmax > 180 || ymin < -90 || ymax > 90)
+        throw new Error('Out-of-range 4326 coords');
       return { bounds: L.latLngBounds([ymin, xmin], [ymax, xmax]) };
     }
 
