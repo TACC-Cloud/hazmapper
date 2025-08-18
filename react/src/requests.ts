@@ -49,11 +49,7 @@ function getBaseApiUrl(
 }
 
 function usesTapisToken(apiService: ApiService) {
-  const servicesUsingTapisToken = [
-    ApiService.Geoapi,
-    ApiService.Tapis,
-    ApiService.DesignSafe,
-  ];
+  const servicesUsingTapisToken = [ApiService.Tapis, ApiService.DesignSafe];
   return servicesUsingTapisToken.includes(apiService);
 }
 
