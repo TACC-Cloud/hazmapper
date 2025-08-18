@@ -8,6 +8,7 @@ import { RootState } from '@hazmapper/redux/store';
 
 interface UseEnsureOptions {
   redirect?: boolean;
+  isTapisTokenRequest?: boolean;
 }
 
 /**
@@ -29,6 +30,7 @@ interface UseEnsureOptions {
  */
 export function useEnsureAuthenticatedUserHasValidTapisToken({
   redirect = true,
+  isTapisTokenRequest = true,
 }: UseEnsureOptions = {}) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -36,7 +38,7 @@ export function useEnsureAuthenticatedUserHasValidTapisToken({
 
   // if user has auth token but is expired, we need to determine if we need
   // to redirect to login (`redirect`)
-  if (authToken && !isTokenValid(authToken)) {
+  if (authToken && !isTokenValid(authToken) && isTapisTokenRequest) {
     if (redirect) {
       navigate(`/login?to=${encodeURIComponent(location.pathname)}`);
     } else {

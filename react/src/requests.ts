@@ -63,15 +63,22 @@ interface GetHeadersOptions {
   isPublicRoute?: boolean;
 }
 
-export function getHeaders({
+export function useGetHeaders({
   apiService,
   auth,
   mapillaryAuthToken,
   isPublicRoute = false,
 }: GetHeadersOptions) {
   const headers: { [key: string]: string } = {};
+  const isTapisTokenRequest = usesTapisToken(apiService);
 
-  if (usesTapisToken(apiService) && auth.authToken?.token) {
+  // If request uses Tapis token, check auth and redirect if not a public route
+  useEnsureAuthenticatedUserHasValidTapisToken({
+    redirect: !isPublicRoute,
+    isTapisTokenRequest,
+  });
+
+  if (isTapisTokenRequest && auth.authToken?.token) {
     headers['X-Tapis-Token'] = auth.authToken.token;
   }
 
@@ -134,12 +141,9 @@ export function useGet<ResponseType, TransformedResponseType = ResponseType>({
 
   const isPublicRoute = useIsPublicProjectRoute();
 
-  // Check auth and redirect only if not a public route
-  useEnsureAuthenticatedUserHasValidTapisToken({ redirect: !isPublicRoute });
-
   const baseUrl = getBaseApiUrl(apiService, configuration);
 
-  const headers = getHeaders({
+  const headers = useGetHeaders({
     apiService,
     auth: state.auth,
     mapillaryAuthToken,
@@ -173,11 +177,9 @@ export function usePost<RequestType, ResponseType>({
   const state = store.getState();
   const configuration = useAppConfiguration();
 
-  useEnsureAuthenticatedUserHasValidTapisToken();
-
   const baseUrl = getBaseApiUrl(apiService, configuration);
 
-  const headers = getHeaders({
+  const headers = useGetHeaders({
     apiService,
     auth: state.auth,
   });
@@ -217,10 +219,8 @@ export function useDelete<ResponseType, Variables>({
   const state = store.getState();
   const configuration = useAppConfiguration();
 
-  useEnsureAuthenticatedUserHasValidTapisToken();
-
   const baseUrl = getBaseApiUrl(apiService, configuration);
-  const headers = getHeaders({
+  const headers = useGetHeaders({
     apiService,
     auth: state.auth,
   });
@@ -253,7 +253,7 @@ export function usePut<RequestType, ResponseType>({
 
   const baseUrl = getBaseApiUrl(apiService, configuration);
 
-  const headers = getHeaders({
+  const headers = useGetHeaders({
     apiService,
     auth: state.auth,
   });
