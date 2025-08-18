@@ -1,2 +1,2 @@
 export { useNotification } from './useNotification';
-export { useGeoapiNotificationsPolling } from './useGeoapiNotificationsPolling';
+export { useGeoapiNotifications } from './useGeoapiNotifications';

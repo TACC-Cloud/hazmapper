@@ -9,7 +9,7 @@ import {
   useProject,
   useGetTileServers,
   useFeatureSelection,
-  useGeoapiNotificationsPolling,
+  useGeoapiNotifications,
   useGetSystems,
   useMapillaryViewer,
 } from '@hazmapper/hooks';
@@ -32,8 +32,6 @@ import { useForm, FormProvider } from 'react-hook-form';
 
 import dayjs from 'dayjs';
 import MapillaryViewer from '@hazmapper/components/MapillaryViewer';
-
-import WebsocketNotifications from '@hazmapper/components/WebsocketNotifications';
 
 const Map = React.lazy(() => import('@hazmapper/components/Map'));
 
@@ -81,8 +79,7 @@ const MapProject: React.FC<MapProjectProps> = ({ isPublicView = false }) => {
 
   /*TODO: notifications are user specific and lacking additional context.  See note in react/src/types/notification.ts and WG-431 */
 
-  /* TODO:  to be replaced by a non-pulling approach via socket-io, WG-278 */
-  // useGeoapiNotificationsPolling();
+  useGeoapiNotifications();
 
   const {
     data: activeProject,
@@ -124,13 +121,10 @@ const MapProject: React.FC<MapProjectProps> = ({ isPublicView = false }) => {
   }
 
   return (
-    <>
-      <LoadedMapProject
-        isPublicView={isPublicView}
-        activeProject={activeProject}
-      />
-      <WebsocketNotifications />
-    </>
+    <LoadedMapProject
+      isPublicView={isPublicView}
+      activeProject={activeProject}
+    />
   );
 };
 

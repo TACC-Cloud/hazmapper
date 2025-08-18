@@ -1,58 +1,42 @@
 import { useEffect } from 'react';
+import useWebSocket from 'react-use-websocket';
 import { useQueryClient } from '@tanstack/react-query';
-import { Notification } from '@hazmapper/types';
-import { useGet } from '@hazmapper/requests';
 import {
   KEY_USE_FEATURES,
   KEY_USE_POINT_CLOUDS,
   KEY_USE_TILE_SERVERS,
-  useAuthenticatedUser,
 } from '@hazmapper/hooks';
 import { useNotification } from './useNotification';
 
-const POLLING_INTERVAL = 5000; // 5 seconds
+type WebsocketNotification = {
+  id: number;
+  user: string;
+  tenant_id: string;
+  created: string;
+  status: 'success' | 'warning' | 'error';
+  message: string;
+  viewed: boolean;
+};
 
-export const useGeoapiNotificationsPolling = () => {
+export const useGeoapiNotifications = () => {
   const queryClient = useQueryClient();
   const notification = useNotification();
-  const { hasValidTapisToken } = useAuthenticatedUser();
-
-  const getStartDate = () => {
-    // Get the current timestamp minus the polling interval
-    const now = new Date();
-    const then = new Date(now.getTime() - POLLING_INTERVAL);
-    return then.toISOString();
-  };
-
-  const { data: recentNotifications } = useGet<Notification[]>({
-    endpoint: '/notifications/',
-    key: ['notifications'],
-    params: {
-      startDate: getStartDate(),
-    },
-    options: {
-      refetchInterval: POLLING_INTERVAL,
-      refetchIntervalInBackground: true,
-      retry: 3,
-      enabled: hasValidTapisToken,
-    },
-  });
+  const { lastMessage } = useWebSocket('ws://localhost:8000/ws');
 
   useEffect(() => {
-    if (recentNotifications?.length) {
-      const hasSuccessNotification = recentNotifications.some(
-        (note) => note.status === 'success'
-      );
-
-      recentNotifications.forEach((note) => {
-        notification.open({
-          type: note.status,
-          message: `${note.status[0].toUpperCase()}${note.status.slice(1)}`,
-          description: note.message,
-        });
+    if (lastMessage !== null) {
+      let data: WebsocketNotification;
+      try {
+        data = JSON.parse(lastMessage.data);
+      } catch {
+        console.error('Failed to parse WebSocket message:', lastMessage.data);
+        return;
+      }
+      notification[data.status]({
+        description: data.message,
       });
 
-      if (hasSuccessNotification) {
+      if (data.status === 'success') {
         // we assume that if some action was updated we need to refresh things so
         // we invalidate relevant queries.
         //  Note we are doing a force refetch as makes unique KEY_USE_FEATURES work
@@ -84,10 +68,5 @@ export const useGeoapiNotificationsPolling = () => {
         );
       }
     }
-  }, [recentNotifications, notification, queryClient]);
-
-  return {
-    recentNotifications,
-    isPolling: true,
-  };
+  }, [lastMessage, notification, queryClient]);
 };
