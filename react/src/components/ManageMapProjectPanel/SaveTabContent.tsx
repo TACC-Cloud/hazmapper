@@ -21,7 +21,7 @@ const SaveTabContent: React.FC<SaveTabProps> = ({ project }) => {
     isLoading,
     error,
   } = useDesignSafeProjects();
-  const { data: userData } = useAuthenticatedUser();
+  const { username } = useAuthenticatedUser();
   const dsDataDepotUrl = `${config.designsafePortalUrl}/data/browser/`;
   const dsProj = designSafeProjects?.result?.find(
     (ds_project) =>
@@ -87,7 +87,7 @@ const SaveTabContent: React.FC<SaveTabProps> = ({ project }) => {
               >
                 {renderFilePathLabel(
                   project.system_path,
-                  userData?.username || '',
+                  username,
                   project.system_id
                 )}
               </Button>

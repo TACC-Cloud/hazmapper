@@ -15,7 +15,6 @@ import { filesMock } from '@hazmapper/__fixtures__/fileFixture';
 jest.mock('@hazmapper/hooks/user/useAuthenticatedUser', () => ({
   __esModule: true,
   default: () => ({
-    data: { username: 'mockUser' },
     username: 'mockUser',
     hasValidTapisToken: true,
   }),

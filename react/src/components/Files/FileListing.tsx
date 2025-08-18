@@ -78,7 +78,7 @@ export const FileListing: React.FC<FileListingProps> = ({
   } = useGetSystems();
   const { systems = [], myDataSystem, communityDataSystem } = systemsData;
 
-  const { data: user } = useAuthenticatedUser();
+  const { username } = useAuthenticatedUser();
 
   const [chonkyFiles, setChonkyFiles] = React.useState<any>(
     new Array(8).fill(null)
@@ -132,7 +132,7 @@ export const FileListing: React.FC<FileListingProps> = ({
     system: selectedSystemId || '',
     path:
       listingState.path ||
-      (selectedSystemId === myDataSystem?.id ? user?.username : ''),
+      (selectedSystemId === myDataSystem?.id ? username : ''),
     offset: listingState.offset.toString(),
     limit: DEFAULT_FILE_LIMIT.toString(),
     enabled: false,
@@ -246,8 +246,8 @@ export const FileListing: React.FC<FileListingProps> = ({
 
       setIsFilesProcessed(true);
     }
-    if (!folderChain.length && user?.username) {
-      setRootFolderChain(user.username);
+    if (!folderChain.length && username) {
+      setRootFolderChain(username);
     }
     /**
      * Linter warnings:
@@ -277,7 +277,7 @@ export const FileListing: React.FC<FileListingProps> = ({
     if (publishedPrjId) {
       rootFolder = publishedProjectDetail?.tree.basePath ?? '';
     } else if (systemId === myDataSystem?.id) {
-      rootFolder = user?.username;
+      rootFolder = username;
     }
 
     setListingState({
@@ -292,7 +292,7 @@ export const FileListing: React.FC<FileListingProps> = ({
     selectedSystemId,
     publishedPrjId,
     myDataSystem?.id,
-    user?.username,
+    username,
     publishedProjectDetail,
     hasResolvedPublishedProject,
   ]);
