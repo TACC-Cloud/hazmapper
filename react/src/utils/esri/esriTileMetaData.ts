@@ -1,5 +1,5 @@
 import { EsriMetadata } from '@hazmapper/types/esri';
-import { safeConvertExtentToLatLng } from './extentProject';
+import { convertExtentToLatLng } from './extentProject';
 
 export interface ParsedEsriMetadata {
   zoomLevels: {
@@ -19,7 +19,7 @@ export interface ParsedEsriMetadata {
  */
 export function parseEsriMetadata(
   metadata: EsriMetadata,
-  serviceUrlForLogging?: string
+  serviceUrlForLogging: string
 ): ParsedEsriMetadata {
   let zoomLevels: ParsedEsriMetadata['zoomLevels'] = {};
   let bounds: L.LatLngBounds | undefined;
@@ -49,10 +49,18 @@ export function parseEsriMetadata(
   }
 
   // Bounds
-  const ext = metadata.fullExtent || metadata.initialExtent;
+  const ext = metadata.fullExtent;
   if (ext) {
-    const r = safeConvertExtentToLatLng(ext);
-    if (r.bounds?.isValid()) bounds = r.bounds;
+    const { bounds: convertedBounds, error } = convertExtentToLatLng(ext);
+    if (convertedBounds?.isValid()) {
+      bounds = convertedBounds;
+    } else if (error) {
+      console.warn(
+        `[parseEsriMetadata] Extent conversion failed for "${
+          metadata.name || serviceUrlForLogging
+        }": ${error}`
+      );
+    }
   }
 
   return { zoomLevels, bounds };
