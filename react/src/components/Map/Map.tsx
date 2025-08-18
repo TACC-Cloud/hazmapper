@@ -8,7 +8,6 @@ import {
   GeoJSON,
 } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
-import { TiledMapLayer } from 'react-esri-leaflet';
 import { useWatch } from 'react-hook-form';
 import {
   TLayerOptionsFormData,
@@ -29,6 +28,7 @@ import { calculatePointCloudMarkerPosition } from './utils';
 import { getSequenceID } from '@hazmapper/utils/featureUtils';
 import { getPixelBboxAroundPoint } from '@hazmapper/utils/leafletUtils';
 import MapillaryPositionMarker from './MapillaryPositionMarker';
+import EsriTiledMapLayer from './EsriTiledMapLayer';
 
 import 'leaflet/dist/leaflet.css';
 import 'react-leaflet-markercluster/styles';
@@ -229,7 +229,7 @@ const LeafletMap: React.FC = () => {
             {...layer.tileOptions}
           />
         ) : layer.type === 'arcgis' ? (
-          <TiledMapLayer
+          <EsriTiledMapLayer
             key={layer.id}
             url={layer.url}
             maxZoom={MAP_CONFIG.maxZoom}
