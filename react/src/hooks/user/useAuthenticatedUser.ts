@@ -1,35 +1,43 @@
-import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
 import { isTokenValid } from '@hazmapper/utils/authUtils';
+import { useSuspenseQuery, queryOptions } from '@tanstack/react-query';
+import { getApiClient } from '@hazmapper/requests';
+import { AuthToken, AuthState } from '@hazmapper/types';
+import { useAppConfiguration } from '@hazmapper/hooks';
 
-/**
- * A hook that returns authentication-related user information
- *
- * This hook performs no side effects (e.g., no navigation or redirect).
- * For side-effect-driven authentication, use `useEnsureAuthenticatedUserHasValidTapisToken` instead.
- *
- * @returns An object containing:
- *  - `username`: the authenticated user's username (empty string if unauthenticated),
- *  - `hasValidTapisToken`: a boolean indicating whether the stored auth token is valid.
- */
-
-const useAuthenticatedUser = (): {
+export type TAuthState = {
   username: string;
+  authToken: AuthToken | null;
   hasValidTapisToken: boolean;
-} => {
-  let username = useSelector((state: RootState) => state.auth.user?.username);
-
-  if (!username) {
-    username = '';
-  }
-
-  const authToken = useSelector((state: RootState) => state.auth.authToken);
-  const hasValidTapisToken = !!authToken && isTokenValid(authToken);
-
-  return {
-    username,
-    hasValidTapisToken,
-  };
+  isAuthenticated: boolean;
 };
+
+async function getAuthenticatedUser(baseUrl: string) {
+  const apiClient = getApiClient();
+  const endpoint = `${baseUrl}/auth/user/`;
+  const res = await apiClient.get<AuthState>(endpoint);
+  return res.data;
+}
+
+export const getAuthenticatedUserQuery = (baseUrl: string) =>
+  queryOptions({
+    queryKey: ['authenticated-user'],
+    queryFn: () => getAuthenticatedUser(baseUrl),
+    staleTime: 1000 * 60 * 5, // 5 minute stale time
+    select: (data): TAuthState => {
+      const hasValidTapisToken =
+        !!data.authToken && isTokenValid(data.authToken);
+      return {
+        username: data.user?.username || '',
+        authToken: data.authToken,
+        hasValidTapisToken,
+        isAuthenticated: !!data.authToken && !!data.user?.username,
+      };
+    },
+  });
+
+function useAuthenticatedUser() {
+  const { geoapiUrl } = useAppConfiguration();
+  return useSuspenseQuery(getAuthenticatedUserQuery(geoapiUrl));
+}
 
 export default useAuthenticatedUser;

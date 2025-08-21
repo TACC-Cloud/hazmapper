@@ -1,5 +1,4 @@
 import axios, { AxiosError } from 'axios';
-import store from './redux/store';
 import {
   useQuery,
   useMutation,
@@ -7,6 +6,7 @@ import {
   UseMutationOptions,
   QueryKey,
   useQueryClient,
+  AnyUseQueryOptions,
 } from '@tanstack/react-query';
 import { useAppConfiguration } from '@hazmapper/hooks';
 import { useMapillaryToken } from '@hazmapper/context/MapillaryTokenProvider';
@@ -14,11 +14,12 @@ import { useMapillaryToken } from '@hazmapper/context/MapillaryTokenProvider';
 import {
   useEnsureAuthenticatedUserHasValidTapisToken,
   useIsPublicProjectRoute,
+  useAuthenticatedUser,
 } from '@hazmapper/hooks';
-import { ApiService, AppConfiguration, AuthState } from '@hazmapper/types';
+import { ApiService, AppConfiguration } from '@hazmapper/types';
 import { v4 as uuidv4 } from 'uuid';
 
-const getApiClient = (apiService: ApiService) => {
+export const getApiClient = (apiService: ApiService = ApiService.Geoapi) => {
   const axiosConfig = {
     timeout: 60 * 1000, // 1 minute
   };
@@ -58,28 +59,29 @@ function usesTapisToken(apiService: ApiService) {
 
 interface GetHeadersOptions {
   apiService: ApiService;
-  auth: AuthState;
   mapillaryAuthToken?: string | null;
   isPublicRoute?: boolean;
 }
 
 export function useGetHeaders({
   apiService,
-  auth,
   mapillaryAuthToken,
   isPublicRoute = false,
 }: GetHeadersOptions) {
   const headers: { [key: string]: string } = {};
   const isTapisTokenRequest = usesTapisToken(apiService);
+  const {
+    data: { authToken },
+  } = useAuthenticatedUser();
 
   // If request uses Tapis token, check auth and redirect if not a public route
   useEnsureAuthenticatedUserHasValidTapisToken({
-    redirect: !isPublicRoute,
     isTapisTokenRequest,
+    authToken,
   });
 
-  if (isTapisTokenRequest && auth.authToken?.token) {
-    headers['X-Tapis-Token'] = auth.authToken.token;
+  if (isTapisTokenRequest && authToken?.token) {
+    headers['X-Tapis-Token'] = authToken.token;
   }
 
   if (apiService === ApiService.Geoapi) {
@@ -88,7 +90,7 @@ export function useGetHeaders({
     headers['X-Geoapi-IsPublicView'] = isPublicRoute ? 'True' : 'False';
 
     // for guest users, add a unique id
-    if (!auth.authToken?.token) {
+    if (!authToken?.token) {
       // get (or create if needed) the guestUserID in local storage
       let guestUuid = localStorage.getItem('guestUuid');
       if (!guestUuid) {
@@ -135,7 +137,6 @@ export function useGet<ResponseType, TransformedResponseType = ResponseType>({
   prefetch,
 }: UseGetParams<ResponseType, TransformedResponseType>) {
   const client = getApiClient(apiService);
-  const state = store.getState();
   const configuration = useAppConfiguration();
   const { accessToken: mapillaryAuthToken } = useMapillaryToken();
 
@@ -145,7 +146,6 @@ export function useGet<ResponseType, TransformedResponseType = ResponseType>({
 
   const headers = useGetHeaders({
     apiService,
-    auth: state.auth,
     mapillaryAuthToken,
     isPublicRoute,
   });
@@ -157,10 +157,11 @@ export function useGet<ResponseType, TransformedResponseType = ResponseType>({
     return transform ? transform(request.data) : request.data;
   };
 
-  const query = {
+  const query: AnyUseQueryOptions = {
     queryKey,
     queryFn: getUtil,
     ...options,
+    retry: false,
   };
   const queryClient = useQueryClient();
   if (prefetch) queryClient.ensureQueryData(query);
@@ -174,14 +175,12 @@ export function usePost<RequestType, ResponseType>({
   apiService = ApiService.Geoapi,
 }: UsePostParams<RequestType, ResponseType>) {
   const client = getApiClient(apiService);
-  const state = store.getState();
   const configuration = useAppConfiguration();
 
   const baseUrl = getBaseApiUrl(apiService, configuration);
 
   const headers = useGetHeaders({
     apiService,
-    auth: state.auth,
   });
 
   const postUtil = async (requestData: RequestType) => {
@@ -216,13 +215,11 @@ export function useDelete<ResponseType, Variables>({
   apiService = ApiService.Geoapi,
 }: UseDeleteParams<ResponseType, Variables>) {
   const client = getApiClient(apiService);
-  const state = store.getState();
   const configuration = useAppConfiguration();
 
   const baseUrl = getBaseApiUrl(apiService, configuration);
   const headers = useGetHeaders({
     apiService,
-    auth: state.auth,
   });
 
   const deleteUtil = async (variables: Variables) => {
@@ -248,14 +245,12 @@ export function usePut<RequestType, ResponseType>({
   apiService = ApiService.Geoapi,
 }: UsePostParams<RequestType, ResponseType>) {
   const client = getApiClient(apiService);
-  const state = store.getState();
   const configuration = useAppConfiguration();
 
   const baseUrl = getBaseApiUrl(apiService, configuration);
 
   const headers = useGetHeaders({
     apiService,
-    auth: state.auth,
   });
 
   const putUtil = async (requestData: RequestType) => {

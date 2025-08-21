@@ -10,11 +10,6 @@ import {
 import { useNotification } from './useNotification';
 import { NotificationAPI } from '@hazmapper/context/NotificationProvider';
 import { AuthState } from '@hazmapper/types';
-import {
-  setAuthenticatedUserFromLocalStorage,
-  removeAuthenticatedUserFromLocalStorage,
-} from '@hazmapper/utils/authUtils';
-
 type WebsocketNotification = {
   status: 'success' | 'warning' | 'error';
   message: string;
@@ -65,7 +60,9 @@ const processNotification = (
 export const useGeoapiNotifications = () => {
   const queryClient = useQueryClient();
   const notification = useNotification();
-  const { username } = useAuthenticatedUser();
+  const {
+    data: { username },
+  } = useAuthenticatedUser();
   const { lastMessage } = useWebSocket('ws://localhost:8000/ws');
 
   useEffect(() => {
@@ -87,10 +84,10 @@ export const useGeoapiNotifications = () => {
       } else if ((data as AuthState).authToken) {
         // If backend sends auth state in websocket, update local storage auth state.
         // This can be removed once auth state is no longer tracked in local storage.
-        if ((data as AuthState).user?.username !== username) {
-          removeAuthenticatedUserFromLocalStorage();
+        if ((data as AuthState).user?.username === username) {
+          console.log('Updating auth state from WebSocket:', data);
+          queryClient.setQueryData(['authenticated-user'], data);
         }
-        setAuthenticatedUserFromLocalStorage(data as AuthState);
       }
     }
   }, [lastMessage, queryClient, notification, username]);
