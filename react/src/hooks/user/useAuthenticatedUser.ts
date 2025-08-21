@@ -22,7 +22,9 @@ export const getAuthenticatedUserQuery = (baseUrl: string) =>
   queryOptions({
     queryKey: ['authenticated-user'],
     queryFn: () => getAuthenticatedUser(baseUrl),
-    staleTime: 1000 * 60 * 5, // 5 minute stale time
+    staleTime: 1000 * 60 * 60 * 4 - 1000 * 60 * 5, // 3hrs 55 minutes stale time
+    refetchInterval: 1000 * 60 * 30, // Refetch every 30 minutes
+    refetchIntervalInBackground: true,
     select: (data): TAuthState => {
       const hasValidTapisToken =
         !!data.authToken && isTokenValid(data.authToken);

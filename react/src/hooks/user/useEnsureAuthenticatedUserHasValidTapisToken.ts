@@ -32,11 +32,11 @@ export function useEnsureAuthenticatedUserHasValidTapisToken({
   const navigate = useNavigate();
   const location = useLocation();
   // if user has auth token but is expired, we need to determine if we need
-  // to redirect to login (`redirect`)
+  // to redirect to login. This should no longer occur with `useAuthenticatedUser`
+  // which refetches every 30 minutes to ensure the token is valid.
 
   useEffect(() => {
     if (isTapisTokenRequest && authToken && !isTokenValid(authToken)) {
-      // TODO: refresh token
       navigate(`/login?to=${encodeURIComponent(location.pathname)}`);
     }
   }, [isTapisTokenRequest, authToken, location.pathname, navigate]);
