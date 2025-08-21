@@ -1,11 +1,9 @@
 import React, { ReactNode, ReactElement } from 'react';
 import { render, waitFor } from '@testing-library/react';
-import { Provider } from 'react-redux';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter } from 'react-router-dom';
 import { setupServer } from 'msw/node';
 import { http } from 'msw';
-import store from '@hazmapper/redux/store';
 import { defaultHandlers } from '@hazmapper/test/handlers';
 import { MapPositionProvider } from '@hazmapper/context/MapContext';
 import { FeatureManager } from '@hazmapper/components/FeatureManager';
@@ -29,15 +27,13 @@ export const testQueryClient = new QueryClient({
 
 export function renderInTest(children: ReactElement, path = '/') {
   return render(
-    <Provider store={store}>
-      <MemoryRouter initialEntries={[path]}>
-        <MapPositionProvider>
-          <QueryClientProvider client={testQueryClient}>
-            {children}
-          </QueryClientProvider>
-        </MapPositionProvider>
-      </MemoryRouter>
-    </Provider>
+    <MemoryRouter initialEntries={[path]}>
+      <MapPositionProvider>
+        <QueryClientProvider client={testQueryClient}>
+          {children}
+        </QueryClientProvider>
+      </MapPositionProvider>
+    </MemoryRouter>
   );
 }
 
@@ -58,15 +54,13 @@ export async function renderInTestWaitForQueries(
 }
 
 export const TestWrapper = ({ children }: { children: React.ReactNode }) => (
-  <Provider store={store}>
-    <MemoryRouter>
-      <MapPositionProvider>
-        <QueryClientProvider client={testQueryClient}>
-          {children}
-        </QueryClientProvider>
-      </MapPositionProvider>
-    </MemoryRouter>
-  </Provider>
+  <MemoryRouter>
+    <MapPositionProvider>
+      <QueryClientProvider client={testQueryClient}>
+        {children}
+      </QueryClientProvider>
+    </MapPositionProvider>
+  </MemoryRouter>
 );
 
 /**

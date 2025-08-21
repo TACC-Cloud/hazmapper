@@ -16,8 +16,9 @@ const MapProjectAccessError: React.FC<MapProjectAccessErrorProps> = ({
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
-
-  const { hasValidTapisToken } = useAuthenticatedUser();
+  const {
+    data: { hasValidTapisToken },
+  } = useAuthenticatedUser();
   const isLoggedIn = !!hasValidTapisToken;
 
   const getMessage = () => {

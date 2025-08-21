@@ -1,5 +1,5 @@
 import React from 'react';
-import useAuthenticatedUser from '@hazmapper/hooks/user/useAuthenticatedUser';
+import { useAuthenticatedUser } from '@hazmapper/hooks';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@tacc/core-components';
 import hazmapperHeaderLogo from '@hazmapper/assets/hazmapper-header-logo.png';
@@ -10,7 +10,9 @@ export const HeaderNavBar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { username } = useAuthenticatedUser();
+  const {
+    data: { username },
+  } = useAuthenticatedUser();
 
   const handleLogin = (e: React.MouseEvent) => {
     e.stopPropagation();

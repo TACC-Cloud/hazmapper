@@ -54,7 +54,9 @@ interface Props {
  */
 const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
   const navigate = useNavigate();
-  const { username, hasValidTapisToken } = useAuthenticatedUser();
+  const {
+    data: { username, hasValidTapisToken },
+  } = useAuthenticatedUser();
 
   const { data: activeProjectUsers } = useProjectUsers({
     projectId: activeProject?.id ?? -1, // Provide a dummy fallback value

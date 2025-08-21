@@ -1,6 +1,4 @@
-import axios from 'axios';
-import store from './redux/store';
-import { AxiosError } from 'axios';
+import axios, { AxiosError } from 'axios';
 import {
   useQuery,
   useMutation,
@@ -8,6 +6,7 @@ import {
   UseMutationOptions,
   QueryKey,
   useQueryClient,
+  AnyUseQueryOptions,
 } from '@tanstack/react-query';
 import { useAppConfiguration } from '@hazmapper/hooks';
 import { useMapillaryToken } from '@hazmapper/context/MapillaryTokenProvider';
@@ -15,9 +14,25 @@ import { useMapillaryToken } from '@hazmapper/context/MapillaryTokenProvider';
 import {
   useEnsureAuthenticatedUserHasValidTapisToken,
   useIsPublicProjectRoute,
+  useAuthenticatedUser,
 } from '@hazmapper/hooks';
-import { ApiService, AppConfiguration, AuthState } from '@hazmapper/types';
+import { ApiService, AppConfiguration } from '@hazmapper/types';
 import { v4 as uuidv4 } from 'uuid';
+
+export const getApiClient = (apiService: ApiService = ApiService.Geoapi) => {
+  const axiosConfig = {
+    timeout: 60 * 1000, // 1 minute
+  };
+  if (apiService === ApiService.Geoapi) {
+    Object.assign(axiosConfig, {
+      xsrfCookieName: 'csrftoken',
+      xsrfHeaderName: 'x-csrftoken',
+      withCredentials: true, // Ensure cookies are sent with requests
+      withXSRFToken: true,
+    });
+  }
+  return axios.create(axiosConfig);
+};
 
 function getBaseApiUrl(
   apiService: ApiService,
@@ -38,31 +53,35 @@ function getBaseApiUrl(
 }
 
 function usesTapisToken(apiService: ApiService) {
-  const servicesUsingTapisToken = [
-    ApiService.Geoapi,
-    ApiService.Tapis,
-    ApiService.DesignSafe,
-  ];
+  const servicesUsingTapisToken = [ApiService.Tapis, ApiService.DesignSafe];
   return servicesUsingTapisToken.includes(apiService);
 }
 
 interface GetHeadersOptions {
   apiService: ApiService;
-  auth: AuthState;
   mapillaryAuthToken?: string | null;
   isPublicRoute?: boolean;
 }
 
-export function getHeaders({
+export function useGetHeaders({
   apiService,
-  auth,
   mapillaryAuthToken,
   isPublicRoute = false,
 }: GetHeadersOptions) {
   const headers: { [key: string]: string } = {};
+  const isTapisTokenRequest = usesTapisToken(apiService);
+  const {
+    data: { authToken },
+  } = useAuthenticatedUser();
 
-  if (usesTapisToken(apiService) && auth.authToken?.token) {
-    headers['X-Tapis-Token'] = auth.authToken.token;
+  // If request uses Tapis token, check auth and redirect if not a public route
+  useEnsureAuthenticatedUserHasValidTapisToken({
+    isTapisTokenRequest,
+    authToken,
+  });
+
+  if (isTapisTokenRequest && authToken?.token) {
+    headers['X-Tapis-Token'] = authToken.token;
   }
 
   if (apiService === ApiService.Geoapi) {
@@ -71,7 +90,7 @@ export function getHeaders({
     headers['X-Geoapi-IsPublicView'] = isPublicRoute ? 'True' : 'False';
 
     // for guest users, add a unique id
-    if (!auth.authToken?.token) {
+    if (!authToken?.token) {
       // get (or create if needed) the guestUserID in local storage
       let guestUuid = localStorage.getItem('guestUuid');
       if (!guestUuid) {
@@ -117,21 +136,16 @@ export function useGet<ResponseType, TransformedResponseType = ResponseType>({
   transform,
   prefetch,
 }: UseGetParams<ResponseType, TransformedResponseType>) {
-  const client = axios;
-  const state = store.getState();
+  const client = getApiClient(apiService);
   const configuration = useAppConfiguration();
   const { accessToken: mapillaryAuthToken } = useMapillaryToken();
 
   const isPublicRoute = useIsPublicProjectRoute();
 
-  // Check auth and redirect only if not a public route
-  useEnsureAuthenticatedUserHasValidTapisToken({ redirect: !isPublicRoute });
-
   const baseUrl = getBaseApiUrl(apiService, configuration);
 
-  const headers = getHeaders({
+  const headers = useGetHeaders({
     apiService,
-    auth: state.auth,
     mapillaryAuthToken,
     isPublicRoute,
   });
@@ -143,10 +157,11 @@ export function useGet<ResponseType, TransformedResponseType = ResponseType>({
     return transform ? transform(request.data) : request.data;
   };
 
-  const query = {
+  const query: AnyUseQueryOptions = {
     queryKey,
     queryFn: getUtil,
     ...options,
+    retry: false,
   };
   const queryClient = useQueryClient();
   if (prefetch) queryClient.ensureQueryData(query);
@@ -159,17 +174,13 @@ export function usePost<RequestType, ResponseType>({
   options = {},
   apiService = ApiService.Geoapi,
 }: UsePostParams<RequestType, ResponseType>) {
-  const client = axios;
-  const state = store.getState();
+  const client = getApiClient(apiService);
   const configuration = useAppConfiguration();
-
-  useEnsureAuthenticatedUserHasValidTapisToken();
 
   const baseUrl = getBaseApiUrl(apiService, configuration);
 
-  const headers = getHeaders({
+  const headers = useGetHeaders({
     apiService,
-    auth: state.auth,
   });
 
   const postUtil = async (requestData: RequestType) => {
@@ -203,16 +214,12 @@ export function useDelete<ResponseType, Variables>({
   options = {},
   apiService = ApiService.Geoapi,
 }: UseDeleteParams<ResponseType, Variables>) {
-  const client = axios;
-  const state = store.getState();
+  const client = getApiClient(apiService);
   const configuration = useAppConfiguration();
 
-  useEnsureAuthenticatedUserHasValidTapisToken();
-
   const baseUrl = getBaseApiUrl(apiService, configuration);
-  const headers = getHeaders({
+  const headers = useGetHeaders({
     apiService,
-    auth: state.auth,
   });
 
   const deleteUtil = async (variables: Variables) => {
@@ -237,15 +244,13 @@ export function usePut<RequestType, ResponseType>({
   options = {},
   apiService = ApiService.Geoapi,
 }: UsePostParams<RequestType, ResponseType>) {
-  const client = axios;
-  const state = store.getState();
+  const client = getApiClient(apiService);
   const configuration = useAppConfiguration();
 
   const baseUrl = getBaseApiUrl(apiService, configuration);
 
-  const headers = getHeaders({
+  const headers = useGetHeaders({
     apiService,
-    auth: state.auth,
   });
 
   const putUtil = async (requestData: RequestType) => {

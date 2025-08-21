@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 // takes antd's ArgProps or just a description and optional message
 type NotificationConfig = ArgsProps | { description: string; message?: string };
 
-type NotificationAPI = {
+export type NotificationAPI = {
   success: (config: NotificationConfig) => void;
   error: (config: NotificationConfig) => void;
   info: (config: NotificationConfig) => void;

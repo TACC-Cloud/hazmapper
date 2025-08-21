@@ -1,30 +1,13 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { logout } from '../../redux/authSlice';
-import { queryClient } from '../../queryClient';
+import React from 'react';
+import { useAppConfiguration } from '@hazmapper/hooks';
 
 function Logout() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const configuration = useAppConfiguration();
+  const GEOAPI_AUTH_URL = `${configuration.geoapiUrl}/auth/logout`;
 
-  const handleLogin = () => {
-    navigate('/login');
-  };
+  window.location.href = GEOAPI_AUTH_URL;
 
-  useEffect(() => {
-    // clear react-query cache
-    queryClient.clear();
-
-    // logout of auth (handled by rtk/redux)
-    dispatch(logout());
-  }, [dispatch]);
-
-  return (
-    <div>
-      <button onClick={handleLogin}>{'Log in'}</button>
-    </div>
-  );
+  return <div>Logging out...</div>;
 }
 
 export default Logout;

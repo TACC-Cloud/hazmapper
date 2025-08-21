@@ -3,13 +3,15 @@ import { useGet, useDelete } from '@hazmapper/requests';
 import { UseQueryResult, useQueryClient } from '@tanstack/react-query';
 import { usePost } from '@hazmapper/requests';
 import { UseMutationResult } from '@tanstack/react-query';
-import { useAuthenticatedUser } from '@hazmapper/hooks/';
+import { useAuthenticatedUser } from '@hazmapper/hooks';
 
 const KEY_MAPILLARY_USER_CONNECTION = 'mapillaryUserConnection';
 
 export const useMapillaryUserConnection =
   (): UseQueryResult<MapillaryUserConnection | null> => {
-    const { hasValidTapisToken } = useAuthenticatedUser();
+    const {
+      data: { hasValidTapisToken },
+    } = useAuthenticatedUser();
     const endpoint = `/streetview/services/`;
 
     return useGet<MapillaryUserConnection[], MapillaryUserConnection | null>({

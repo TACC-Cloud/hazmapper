@@ -9,7 +9,7 @@ import {
   useProject,
   useGetTileServers,
   useFeatureSelection,
-  useGeoapiNotificationsPolling,
+  useGeoapiNotifications,
   useGetSystems,
   useMapillaryViewer,
 } from '@hazmapper/hooks';
@@ -79,8 +79,7 @@ const MapProject: React.FC<MapProjectProps> = ({ isPublicView = false }) => {
 
   /*TODO: notifications are user specific and lacking additional context.  See note in react/src/types/notification.ts and WG-431 */
 
-  /* TODO:  to be replaced by a non-pulling approach via socket-io, WG-278 */
-  useGeoapiNotificationsPolling();
+  useGeoapiNotifications();
 
   const {
     data: activeProject,
