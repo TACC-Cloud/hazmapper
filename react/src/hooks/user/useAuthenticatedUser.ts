@@ -1,20 +1,18 @@
 import { isTokenValid } from '@hazmapper/utils/authUtils';
 import { useSuspenseQuery, queryOptions } from '@tanstack/react-query';
 import { getApiClient } from '@hazmapper/requests';
-import { AuthToken, AuthState } from '@hazmapper/types';
+import { AuthState, AuthToken } from '@hazmapper/types';
 import { useAppConfiguration } from '@hazmapper/hooks';
 
-export type TAuthState = {
-  username: string;
+export type TAuthenticatedUserResponse = {
+  username: string | null;
   authToken: AuthToken | null;
-  hasValidTapisToken: boolean;
-  isAuthenticated: boolean;
 };
 
 async function getAuthenticatedUser(baseUrl: string) {
   const apiClient = getApiClient();
   const endpoint = `${baseUrl}/auth/user/`;
-  const res = await apiClient.get<AuthState>(endpoint);
+  const res = await apiClient.get<TAuthenticatedUserResponse>(endpoint);
   return res.data;
 }
 
@@ -25,14 +23,13 @@ export const getAuthenticatedUserQuery = (baseUrl: string) =>
     staleTime: 1000 * 60 * 60 * 4 - 1000 * 60 * 5, // 3hrs 55 minutes stale time
     refetchInterval: 1000 * 60 * 30, // Refetch every 30 minutes
     refetchIntervalInBackground: true,
-    select: (data): TAuthState => {
-      const hasValidTapisToken =
-        !!data.authToken && isTokenValid(data.authToken);
+    select: (data): AuthState => {
+      const hasValidTapisToken = isTokenValid(data.authToken);
       return {
-        username: data.user?.username || '',
+        username: data.username || '',
         authToken: data.authToken,
         hasValidTapisToken,
-        isAuthenticated: !!data.authToken && !!data.user?.username,
+        isAuthenticated: !!data.authToken && !!data.username,
       };
     },
   });

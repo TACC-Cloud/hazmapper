@@ -3,4 +3,4 @@ export {
   default as useAuthenticatedUser,
   getAuthenticatedUserQuery,
 } from './useAuthenticatedUser';
-export type { TAuthState } from './useAuthenticatedUser';
+export type { TAuthenticatedUserResponse } from './useAuthenticatedUser';
