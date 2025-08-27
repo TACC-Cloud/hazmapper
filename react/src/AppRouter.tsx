@@ -15,6 +15,7 @@ import {
   useAuthenticatedUser,
   getAuthenticatedUserQuery,
   computeAppConfiguration,
+  useGeoapiNotifications,
 } from './hooks';
 
 interface ProtectedRouteProps {
@@ -27,6 +28,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const {
     data: { isAuthenticated },
   } = useAuthenticatedUser();
+
+  /*TODO: notifications are user specific and lacking additional context.
+  See note in react/src/types/notification.ts and WG-431 */
+  useGeoapiNotifications();
 
   if (!isAuthenticated) {
     const url = `/login?to=${encodeURIComponent(location.pathname)}`;
@@ -52,7 +57,7 @@ export const appRouter = createBrowserRouter(
       id: 'root',
       path: ROUTES.MAIN,
       loader: rootLoader(queryClient),
-      // errorElement: <div>Error loading application</div>,
+      errorElement: <div>Error loading application</div>,
       children: [
         {
           path: '',

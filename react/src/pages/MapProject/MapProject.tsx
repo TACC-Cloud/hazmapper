@@ -9,7 +9,6 @@ import {
   useProject,
   useGetTileServers,
   useFeatureSelection,
-  useGeoapiNotifications,
   useGetSystems,
   useMapillaryViewer,
 } from '@hazmapper/hooks';
@@ -76,10 +75,6 @@ const MapProject: React.FC<MapProjectProps> = ({ isPublicView = false }) => {
    * will need it
    */
   useGetSystems({ prefetch: !isPublicView, enabled: !isPublicView });
-
-  /*TODO: notifications are user specific and lacking additional context.  See note in react/src/types/notification.ts and WG-431 */
-
-  useGeoapiNotifications();
 
   const {
     data: activeProject,
