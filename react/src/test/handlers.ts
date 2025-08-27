@@ -11,6 +11,7 @@ import {
 import { users } from '@hazmapper/__fixtures__/usersFixtures';
 import { tileServerLayers } from '@hazmapper/__fixtures__/tileServerLayerFixture';
 import { pointCloudMock } from '@hazmapper/__fixtures__/pointCloudFixtures';
+import { authenticatedUser } from '@hazmapper/__fixtures__/authStateFixtures';
 
 // ArcGIS tiles GET
 export const arcgis_tiles = http.get('https://tiles.arcgis.com/*', () => {
@@ -124,6 +125,11 @@ export const tapis_files_listing = http.get(
     )
 );
 
+export const authenticated_user = http.get(
+  `${testDevConfiguration.geoapiUrl}/auth/user/`,
+  () => HttpResponse.json(authenticatedUser, { status: 200 })
+);
+
 // Export all handlers together for server setup
 export const defaultHandlers = [
   arcgis_tiles,
@@ -140,4 +146,5 @@ export const defaultHandlers = [
   geoapi_project_point_clouds_delete,
   tapis_files_listing,
   tapis_systems,
+  authenticated_user,
 ];

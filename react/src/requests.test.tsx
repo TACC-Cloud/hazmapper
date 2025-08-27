@@ -1,4 +1,4 @@
-import { getHeaders } from './requests';
+import { getHeaders, usesTapisToken } from './requests';
 import { ApiService } from '@hazmapper/types';
 import {
   authenticatedUser,
@@ -7,21 +7,26 @@ import {
 
 describe('getHeaders', () => {
   it('returns Authorization header for Geoapi', () => {
+    const apiService = ApiService.Geoapi;
+    const isTapisTokenRequest = usesTapisToken(apiService);
     const headers = getHeaders({
-      apiService: ApiService.Geoapi,
-      auth: authenticatedUser,
+      apiService,
+      isTapisTokenRequest,
+      authToken: authenticatedUser.authToken,
     });
     expect(headers).toEqual({
-      'X-Tapis-Token': `${authenticatedUser.authToken?.token}`,
       'X-Geoapi-Application': 'hazmapper',
       'X-Geoapi-IsPublicView': 'False',
     });
   });
 
   it('returns no auth-related headers for unauthenticatedUser', () => {
+    const apiService = ApiService.Geoapi;
+    const isTapisTokenRequest = usesTapisToken(apiService);
     const headers = getHeaders({
-      apiService: ApiService.Geoapi,
-      auth: unauthenticatedUser,
+      apiService,
+      isTapisTokenRequest,
+      authToken: unauthenticatedUser.authToken,
     });
     expect(headers).toEqual({
       'X-Geoapi-Application': 'hazmapper',
@@ -31,9 +36,12 @@ describe('getHeaders', () => {
   });
 
   it('returns analytics headers for Geoapi', () => {
+    const apiService = ApiService.Geoapi;
+    const isTapisTokenRequest = usesTapisToken(apiService);
     const headers = getHeaders({
-      apiService: ApiService.Geoapi,
-      auth: authenticatedUser,
+      apiService,
+      isTapisTokenRequest,
+      authToken: authenticatedUser.authToken,
     });
     expect(headers).toMatchObject({
       'X-Geoapi-Application': 'hazmapper',
@@ -42,9 +50,12 @@ describe('getHeaders', () => {
   });
 
   it('returns Authorization header for Mapillary', () => {
+    const apiService = ApiService.Mapillary;
+    const isTapisTokenRequest = usesTapisToken(apiService);
     const headers = getHeaders({
-      apiService: ApiService.Mapillary,
-      auth: authenticatedUser,
+      apiService,
+      isTapisTokenRequest,
+      authToken: authenticatedUser.authToken,
       mapillaryAuthToken: '1234',
     });
     expect(headers).toEqual({

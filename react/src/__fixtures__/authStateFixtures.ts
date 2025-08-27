@@ -1,9 +1,9 @@
-import { TAuthState } from '@hazmapper/hooks';
+import { AuthState } from '@hazmapper/types';
 
 // Convert the timestamp to a Date object
 const expiresAtDate = new Date(3153600000000); //2070
 
-export const authenticatedUser: TAuthState = {
+export const authenticatedUser: AuthState = {
   username: 'test-user',
   authToken: {
     token: 'auth-token',
@@ -13,7 +13,7 @@ export const authenticatedUser: TAuthState = {
   isAuthenticated: true,
 };
 
-export const unauthenticatedUser: TAuthState = {
+export const unauthenticatedUser: AuthState = {
   username: '',
   authToken: null,
   hasValidTapisToken: false,

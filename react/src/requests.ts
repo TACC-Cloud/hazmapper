@@ -16,7 +16,7 @@ import {
   useIsPublicProjectRoute,
   useAuthenticatedUser,
 } from '@hazmapper/hooks';
-import { ApiService, AppConfiguration } from '@hazmapper/types';
+import { ApiService, AppConfiguration, AuthToken } from '@hazmapper/types';
 import { v4 as uuidv4 } from 'uuid';
 
 export const getApiClient = (apiService: ApiService = ApiService.Geoapi) => {
@@ -52,34 +52,27 @@ function getBaseApiUrl(
   }
 }
 
-function usesTapisToken(apiService: ApiService) {
+export function usesTapisToken(apiService: ApiService) {
   const servicesUsingTapisToken = [ApiService.Tapis, ApiService.DesignSafe];
   return servicesUsingTapisToken.includes(apiService);
 }
 
 interface GetHeadersOptions {
   apiService: ApiService;
+  isTapisTokenRequest: boolean;
+  authToken?: AuthToken | null;
   mapillaryAuthToken?: string | null;
   isPublicRoute?: boolean;
 }
 
-export function useGetHeaders({
+export function getHeaders({
   apiService,
+  isTapisTokenRequest,
+  authToken,
   mapillaryAuthToken,
   isPublicRoute = false,
 }: GetHeadersOptions) {
   const headers: { [key: string]: string } = {};
-  const isTapisTokenRequest = usesTapisToken(apiService);
-  const {
-    data: { authToken, hasValidTapisToken },
-  } = useAuthenticatedUser();
-
-  // If request uses Tapis token, check auth and redirect if not a public route
-  useEnsureAuthenticatedUserHasValidTapisToken({
-    isTapisTokenRequest,
-    authToken,
-    hasValidTapisToken,
-  });
 
   if (isTapisTokenRequest && authToken?.token) {
     headers['X-Tapis-Token'] = authToken.token;
@@ -145,8 +138,21 @@ export function useGet<ResponseType, TransformedResponseType = ResponseType>({
 
   const baseUrl = getBaseApiUrl(apiService, configuration);
 
-  const headers = useGetHeaders({
+  const isTapisTokenRequest = usesTapisToken(apiService);
+  const {
+    data: { authToken, hasValidTapisToken },
+  } = useAuthenticatedUser();
+
+  // If request uses Tapis token, check auth and redirect if not a public route
+  useEnsureAuthenticatedUserHasValidTapisToken({
+    isTapisTokenRequest,
+    authToken,
+    hasValidTapisToken,
+  });
+  const headers = getHeaders({
     apiService,
+    isTapisTokenRequest,
+    authToken: authToken,
     mapillaryAuthToken,
     isPublicRoute,
   });
@@ -180,8 +186,21 @@ export function usePost<RequestType, ResponseType>({
 
   const baseUrl = getBaseApiUrl(apiService, configuration);
 
-  const headers = useGetHeaders({
+  const isTapisTokenRequest = usesTapisToken(apiService);
+  const {
+    data: { authToken, hasValidTapisToken },
+  } = useAuthenticatedUser();
+
+  // If request uses Tapis token, check auth and redirect if not a public route
+  useEnsureAuthenticatedUserHasValidTapisToken({
+    isTapisTokenRequest,
+    authToken,
+    hasValidTapisToken,
+  });
+  const headers = getHeaders({
     apiService,
+    isTapisTokenRequest,
+    authToken: authToken,
   });
 
   const postUtil = async (requestData: RequestType) => {
@@ -219,8 +238,21 @@ export function useDelete<ResponseType, Variables>({
   const configuration = useAppConfiguration();
 
   const baseUrl = getBaseApiUrl(apiService, configuration);
-  const headers = useGetHeaders({
+  const isTapisTokenRequest = usesTapisToken(apiService);
+  const {
+    data: { authToken, hasValidTapisToken },
+  } = useAuthenticatedUser();
+
+  // If request uses Tapis token, check auth and redirect if not a public route
+  useEnsureAuthenticatedUserHasValidTapisToken({
+    isTapisTokenRequest,
+    authToken,
+    hasValidTapisToken,
+  });
+  const headers = getHeaders({
     apiService,
+    isTapisTokenRequest,
+    authToken: authToken,
   });
 
   const deleteUtil = async (variables: Variables) => {
@@ -250,8 +282,21 @@ export function usePut<RequestType, ResponseType>({
 
   const baseUrl = getBaseApiUrl(apiService, configuration);
 
-  const headers = useGetHeaders({
+  const isTapisTokenRequest = usesTapisToken(apiService);
+  const {
+    data: { authToken, hasValidTapisToken },
+  } = useAuthenticatedUser();
+
+  // If request uses Tapis token, check auth and redirect if not a public route
+  useEnsureAuthenticatedUserHasValidTapisToken({
+    isTapisTokenRequest,
+    authToken,
+    hasValidTapisToken,
+  });
+  const headers = getHeaders({
     apiService,
+    isTapisTokenRequest,
+    authToken: authToken,
   });
 
   const putUtil = async (requestData: RequestType) => {
