@@ -71,13 +71,14 @@ export function useGetHeaders({
   const headers: { [key: string]: string } = {};
   const isTapisTokenRequest = usesTapisToken(apiService);
   const {
-    data: { authToken },
+    data: { authToken, hasValidTapisToken },
   } = useAuthenticatedUser();
 
   // If request uses Tapis token, check auth and redirect if not a public route
   useEnsureAuthenticatedUserHasValidTapisToken({
     isTapisTokenRequest,
     authToken,
+    hasValidTapisToken,
   });
 
   if (isTapisTokenRequest && authToken?.token) {

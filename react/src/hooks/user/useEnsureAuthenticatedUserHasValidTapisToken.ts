@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { isTokenValid } from '@hazmapper/utils/authUtils';
 import { AuthToken } from '@hazmapper/types';
 
 interface UseEnsureOptions {
   isTapisTokenRequest: boolean;
   authToken: AuthToken | null;
+  hasValidTapisToken: boolean;
 }
 
 /**
@@ -28,6 +28,7 @@ interface UseEnsureOptions {
 export function useEnsureAuthenticatedUserHasValidTapisToken({
   isTapisTokenRequest,
   authToken,
+  hasValidTapisToken,
 }: UseEnsureOptions) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -36,8 +37,14 @@ export function useEnsureAuthenticatedUserHasValidTapisToken({
   // which refetches every 30 minutes to ensure the token is valid.
 
   useEffect(() => {
-    if (isTapisTokenRequest && authToken && !isTokenValid(authToken)) {
+    if (isTapisTokenRequest && authToken && !hasValidTapisToken) {
       navigate(`/login?to=${encodeURIComponent(location.pathname)}`);
     }
-  }, [isTapisTokenRequest, authToken, location.pathname, navigate]);
+  }, [
+    isTapisTokenRequest,
+    authToken,
+    location.pathname,
+    navigate,
+    hasValidTapisToken,
+  ]);
 }
