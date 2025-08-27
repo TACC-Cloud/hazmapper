@@ -35,7 +35,7 @@ export const computeAppConfiguration = (basePath: string): AppConfiguration => {
 
   if (!hostname || !pathname || !origin) {
     throw new Error(
-      'Cannot determine hostname or pathname from window.location'
+      'Cannot determine hostname, pathname, or origin from window.location'
     );
   }
 

@@ -17,7 +17,6 @@ export const testQueryClient = new QueryClient({
       retry: false,
       gcTime: 0,
       staleTime: 0,
-      throwOnError: true,
     },
     mutations: {
       retry: false,

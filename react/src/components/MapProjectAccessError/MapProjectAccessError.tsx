@@ -56,6 +56,7 @@ const MapProjectAccessError: React.FC<MapProjectAccessErrorProps> = ({
               )}`;
               navigate(url);
             }}
+            dataTestid="access-error-login-button"
           >
             Login
           </Button>

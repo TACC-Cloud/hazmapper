@@ -1,15 +1,15 @@
 import React from 'react';
-import { waitFor } from '@testing-library/react';
+import { waitFor, act } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import MapProject from './MapProject';
 import {
   server,
+  renderInTestWaitForQueries,
   renderInTest,
   testQueryClient,
 } from '@hazmapper/test/testUtil';
 import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
-
-import * as UserHooks from '@hazmapper/hooks/user/useAuthenticatedUser';
+import { unauthenticatedUser } from '@hazmapper/__fixtures__/authStateFixtures';
 
 const mockNavigate = jest.fn();
 
@@ -22,15 +22,6 @@ jest.mock('react-router-dom', () => {
     useLocation: () => ({ pathname: '/test-path', search: '' }),
   };
 });
-
-jest.mock('@hazmapper/hooks/user/useAuthenticatedUser', () => ({
-  __esModule: true,
-  default: () => ({
-    data: { username: 'mockUser' },
-    username: 'mockUser',
-    hasValidTapisToken: true,
-  }),
-}));
 
 describe('MapProject', () => {
   beforeEach(() => {
@@ -45,8 +36,14 @@ describe('MapProject', () => {
       })
     );
 
-    const { getByRole } = renderInTest(<MapProject />);
-    expect(getByRole('status')).toBeDefined();
+    let getByRole;
+    await act(async () => {
+      ({ getByRole } = renderInTest(<MapProject />));
+    });
+
+    await waitFor(() => {
+      expect(getByRole('status')).toBeDefined();
+    });
   });
 
   test('shows 404 error when project does not exist', async () => {
@@ -62,7 +59,7 @@ describe('MapProject', () => {
       })
     );
 
-    const { queryByText } = renderInTest(<MapProject />);
+    const { queryByText } = await renderInTestWaitForQueries(<MapProject />);
 
     await waitFor(() => {
       expect(queryByText('This map project does not exist')).toBeDefined();
@@ -82,7 +79,7 @@ describe('MapProject', () => {
       })
     );
 
-    const { queryByText } = renderInTest(<MapProject />);
+    const { queryByText } = await renderInTestWaitForQueries(<MapProject />);
 
     await waitFor(() => {
       expect(
@@ -92,12 +89,6 @@ describe('MapProject', () => {
   });
 
   test('shows login prompt for 403 error when not logged in', async () => {
-    jest.spyOn(UserHooks, 'default').mockImplementation(() => ({
-      data: { username: '' },
-      username: '',
-      hasValidTapisToken: false,
-    }));
-
     server.use(
       http.get(`${testDevConfiguration.geoapiUrl}/projects/`, async () => {
         return new HttpResponse(null, {
@@ -107,19 +98,24 @@ describe('MapProject', () => {
             'Content-Type': 'application/json',
           },
         });
-      })
+      }),
+
+      http.get(`${testDevConfiguration.geoapiUrl}/auth/user/`, () =>
+        HttpResponse.json(unauthenticatedUser, { status: 200 })
+      )
     );
 
-    const { queryByText, queryByRole, getByRole } = renderInTest(
+    const { queryByText, queryByTestId } = await renderInTestWaitForQueries(
       <MapProject />
     );
 
-    await waitFor(() => {
-      expect(queryByText('Please log in.')).toBeDefined();
-      expect(queryByRole('button', { name: 'Login' })).toBeDefined();
-    });
+    expect(queryByText('Please log in.')).toBeDefined();
+    const button = queryByTestId('access-error-login-button');
+    expect(button).toBeDefined();
 
-    getByRole('button', { name: 'Login' }).click();
+    if (button) {
+      button.click();
+    }
     expect(mockNavigate).toHaveBeenCalledWith(
       `/login?to=${encodeURIComponent('/test-path')}`
     );
@@ -138,7 +134,7 @@ describe('MapProject', () => {
       })
     );
 
-    const { queryByText } = renderInTest(<MapProject />);
+    const { queryByText } = await renderInTestWaitForQueries(<MapProject />);
 
     await waitFor(() => {
       expect(
