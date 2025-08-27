@@ -3,8 +3,6 @@ import { render, screen } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import DeleteMapModal from './DeleteMapModal';
-import { Provider } from 'react-redux';
-import store from '../../redux/store';
 import { projectMock } from '../../__fixtures__/projectFixtures';
 import { Project } from '../../types';
 import { useDeleteProject } from '../../hooks/projects';
@@ -38,17 +36,15 @@ const queryClient = new QueryClient();
 const renderComponent = async (projectData: Project = projectMock) => {
   await act(async () => {
     render(
-      <Provider store={store}>
-        <QueryClientProvider client={queryClient}>
-          <Router>
-            <DeleteMapModal
-              isOpen={true}
-              close={toggleMock}
-              project={projectData}
-            />
-          </Router>
-        </QueryClientProvider>
-      </Provider>
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <DeleteMapModal
+            isOpen={true}
+            close={toggleMock}
+            project={projectData}
+          />
+        </Router>
+      </QueryClientProvider>
     );
   });
 };

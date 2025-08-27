@@ -1,7 +1,5 @@
 import React, { act } from 'react';
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import store from '../../redux/store';
 import { http, HttpResponse } from 'msw';
 
 import CreateMapModal from './CreateMapModal';
@@ -64,13 +62,11 @@ const toggleMock = jest.fn();
 const renderComponent = async (isOpen = true) => {
   await act(async () => {
     render(
-      <Provider store={store}>
-        <QueryClientProvider client={testQueryClient}>
-          <Router>
-            <CreateMapModal isOpen={isOpen} closeModal={toggleMock} />
-          </Router>
-        </QueryClientProvider>
-      </Provider>
+      <QueryClientProvider client={testQueryClient}>
+        <Router>
+          <CreateMapModal isOpen={isOpen} closeModal={toggleMock} />
+        </Router>
+      </QueryClientProvider>
     );
   });
 };
