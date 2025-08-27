@@ -9,5 +9,5 @@ test('renders logout', async () => {
       <Logout />
     </BrowserRouter>
   );
-  expect(getByText(/Log in/)).toBeDefined();
+  expect(getByText(/Logging out.../)).toBeDefined();
 });

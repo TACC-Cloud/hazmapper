@@ -10,14 +10,6 @@ import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFi
 import { projectMock } from '@hazmapper/__fixtures__/projectFixtures';
 import { filesMock } from '@hazmapper/__fixtures__/fileFixture';
 
-jest.mock('@hazmapper/hooks/user/useAuthenticatedUser', () => ({
-  __esModule: true,
-  default: () => ({
-    username: 'mockUser',
-    hasValidTapisToken: true,
-  }),
-}));
-
 jest.mock('@hazmapper/hooks/files/useFiles', () => ({
   __esModule: true,
   useFiles: jest.fn(() => ({

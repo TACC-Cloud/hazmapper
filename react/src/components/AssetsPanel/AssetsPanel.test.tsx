@@ -4,7 +4,6 @@ import AssetsPanel from './AssetsPanel';
 import { featureCollection } from '@hazmapper/__fixtures__/featuresFixture';
 import { projectMock } from '@hazmapper/__fixtures__/projectFixtures';
 import {
-  renderInTest,
   WithUseFeatureManager,
   renderInTestWaitForQueries,
 } from '@hazmapper/test/testUtil';
@@ -32,8 +31,10 @@ describe('AssetsPanel', () => {
     jest.restoreAllMocks();
   });
 
-  it('renders all main components', () => {
-    const { getByText } = renderInTest(<AssetsPanel {...defaultProps} />);
+  it('renders all main components', async () => {
+    const { getByText } = await renderInTestWaitForQueries(
+      <AssetsPanel {...defaultProps} />
+    );
 
     // Check for the presence of buttons
     expect(getByText('Import from DesignSafe')).toBeDefined();

@@ -2,7 +2,10 @@ import React from 'react';
 import { within, screen, fireEvent } from '@testing-library/react';
 import ManageMapProjectPanel from './ManageMapProjectPanel';
 import { projectMock } from '@hazmapper/__fixtures__/projectFixtures';
-import { renderInTest, testQueryClient } from '@hazmapper/test/testUtil';
+import {
+  renderInTestWaitForQueries,
+  testQueryClient,
+} from '@hazmapper/test/testUtil';
 
 describe('ManageMapProjectPanel', () => {
   const defaultProps = {
@@ -14,8 +17,10 @@ describe('ManageMapProjectPanel', () => {
     testQueryClient.clear();
   });
 
-  it('renders the default Map tab content initially', () => {
-    renderInTest(<ManageMapProjectPanel {...defaultProps} />);
+  it('renders the default Map tab content initially', async () => {
+    await renderInTestWaitForQueries(
+      <ManageMapProjectPanel {...defaultProps} />
+    );
 
     // Get the active tab container
     const activeTab = screen.getByRole('tabpanel', { hidden: false });
@@ -29,8 +34,10 @@ describe('ManageMapProjectPanel', () => {
     expect(within(activeTab).queryByText(/Save Location/i)).toBeNull();
   });
 
-  it('switches between tabs correctly', () => {
-    renderInTest(<ManageMapProjectPanel {...defaultProps} />);
+  it('switches between tabs correctly', async () => {
+    await renderInTestWaitForQueries(
+      <ManageMapProjectPanel {...defaultProps} />
+    );
 
     // Click "Members" tab
     fireEvent.click(screen.getByRole('tab', { name: 'Members' }));

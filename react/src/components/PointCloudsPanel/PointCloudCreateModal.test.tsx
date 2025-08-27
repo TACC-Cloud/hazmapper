@@ -4,7 +4,7 @@ import PointCloudCreateModal from './PointCloudCreateModal';
 import {
   createSpyHandler,
   server,
-  renderInTest,
+  renderInTestWaitForQueries,
 } from '@hazmapper/test/testUtil';
 import { geoapi_project_point_clouds_create } from '@hazmapper/test/handlers';
 import { pointCloudMock } from '@hazmapper/__fixtures__/pointCloudFixtures';
@@ -14,8 +14,8 @@ describe('PointCloudCreateModal', () => {
   const mockOnClose = jest.fn();
   const projectId = pointCloudMock.project_id;
 
-  it('renders the modal with correct title and description', () => {
-    const { getByText, getAllByRole } = renderInTest(
+  it('renders the modal with correct title and description', async () => {
+    const { getByText, getAllByRole } = await renderInTestWaitForQueries(
       <PointCloudCreateModal projectId={projectId} onClose={mockOnClose} />
     );
 
@@ -37,7 +37,7 @@ describe('PointCloudCreateModal', () => {
     );
     server.use(handler);
 
-    const { getAllByRole, getByText } = renderInTest(
+    const { getAllByRole, getByText } = await renderInTestWaitForQueries(
       <PointCloudCreateModal projectId={projectId} onClose={mockOnClose} />
     );
 

@@ -1,4 +1,4 @@
-import { http, HttpResponse } from 'msw';
+import { http, HttpResponse, ws } from 'msw';
 import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
 import { systems } from '@hazmapper/__fixtures__/systemsFixture';
 import { featureCollection } from '@hazmapper/__fixtures__/featuresFixture';
@@ -125,9 +125,21 @@ export const tapis_files_listing = http.get(
     )
 );
 
-export const authenticated_user = http.get(
+const streetview_services = http.get(
+  `${testDevConfiguration.tapisUrl}/streetview/services/`,
+  () => HttpResponse.json([], { status: 200 })
+);
+
+const authenticated_user = http.get(
   `${testDevConfiguration.geoapiUrl}/auth/user/`,
   () => HttpResponse.json(authenticatedUser, { status: 200 })
+);
+
+const websocket_mock = ws.link('ws://localhost:8000/ws');
+
+const websocket_handler = websocket_mock.addEventListener(
+  'connection',
+  () => {}
 );
 
 // Export all handlers together for server setup
@@ -147,4 +159,6 @@ export const defaultHandlers = [
   tapis_files_listing,
   tapis_systems,
   authenticated_user,
+  websocket_handler,
+  streetview_services,
 ];

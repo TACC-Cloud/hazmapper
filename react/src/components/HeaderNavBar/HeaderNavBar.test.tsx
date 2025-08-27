@@ -1,8 +1,14 @@
-import React from 'react';
-import { fireEvent } from '@testing-library/react';
+import React, { act } from 'react';
+import { fireEvent, waitFor } from '@testing-library/react';
+import { http, HttpResponse } from 'msw';
 import * as ROUTES from '@hazmapper/constants/routes';
-import { renderInTest } from '@hazmapper/test/testUtil';
+import { renderInTest, server } from '@hazmapper/test/testUtil';
 import { HeaderNavBar } from './HeaderNavBar';
+import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
+import {
+  authenticatedUser,
+  unauthenticatedUser,
+} from '@hazmapper/__fixtures__/authStateFixtures';
 
 const mockNavigate = jest.fn();
 
@@ -14,59 +20,56 @@ jest.mock('react-router-dom', () => ({
   }),
 }));
 
-const mockAuthenticatedUser = {
-  username: '',
-  hasValidTapisToken: false,
-};
-
-jest.mock('@hazmapper/hooks/user/useAuthenticatedUser', () => {
-  return {
-    __esModule: true,
-    default: () => {
-      return { ...mockAuthenticatedUser };
-    },
-  };
-});
-
 describe('HeaderNavBar', () => {
   beforeEach(() => {
     mockNavigate.mockClear();
-    mockAuthenticatedUser.username = '';
   });
 
-  test('clicking login button should navigate to login with correct return URL', () => {
-    const { getByText } = renderInTest(<HeaderNavBar />);
-
+  test('clicking login button should navigate to login with correct return URL', async () => {
+    server.use(
+      http.get(`${testDevConfiguration.geoapiUrl}/auth/user/`, () =>
+        HttpResponse.json(unauthenticatedUser, { status: 200 })
+      )
+    );
+    let getByText;
+    await act(async () => {
+      ({ getByText } = renderInTest(<HeaderNavBar />));
+    });
     const loginButton = getByText('Login');
     fireEvent.click(loginButton);
 
     const expectedPath = '/project-public/cd010f4d-3975-4fde-8bbd-b81ffb87273f';
-    const expectedUrl = `${ROUTES.LOGIN}?to=${encodeURIComponent(
-      expectedPath
-    )}`;
+    const expectedUrl = `${ROUTES.LOGIN}?to=${encodeURIComponent(expectedPath)}`;
 
-    expect(mockNavigate).toHaveBeenCalledTimes(1);
-    expect(mockNavigate).toHaveBeenCalledWith(expectedUrl);
-    expect(mockNavigate).not.toHaveBeenCalledWith(ROUTES.MAIN);
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledTimes(1);
+      expect(mockNavigate).toHaveBeenCalledWith(expectedUrl);
+      expect(mockNavigate).not.toHaveBeenCalledWith(ROUTES.MAIN);
+    });
   });
 
-  test('clicking header should navigate to main', () => {
-    const { getByRole } = renderInTest(<HeaderNavBar />);
-
+  test('clicking header should navigate to main', async () => {
+    let getByRole;
+    await act(async () => {
+      ({ getByRole } = renderInTest(<HeaderNavBar />));
+    });
     const header = getByRole('button', { name: 'return to project listings' });
     fireEvent.click(header);
 
-    expect(mockNavigate).toHaveBeenCalledWith(ROUTES.MAIN);
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith(ROUTES.MAIN);
+    });
   });
 
-  test('displays username when user is authenticated', () => {
-    Object.assign(mockAuthenticatedUser, {
-      username: 'testUser',
+  test('displays username when user is authenticated', async () => {
+    let getByText, queryByText;
+    await act(async () => {
+      ({ getByText, queryByText } = renderInTest(<HeaderNavBar />));
     });
 
-    const { getByText, queryByText } = renderInTest(<HeaderNavBar />);
-
-    expect(getByText('testUser')).toBeDefined();
-    expect(queryByText('Login')).toBeNull();
+    await waitFor(() => {
+      expect(getByText(authenticatedUser.username)).toBeDefined();
+      expect(queryByText('Login')).toBeNull();
+    });
   });
 });
