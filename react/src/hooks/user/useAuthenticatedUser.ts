@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import { isTokenValid } from '@hazmapper/utils/authUtils';
 import { useSuspenseQuery, queryOptions } from '@tanstack/react-query';
 import { getApiClient } from '@hazmapper/requests';
@@ -12,8 +13,16 @@ export type TAuthenticatedUserResponse = {
 async function getAuthenticatedUser(baseUrl: string) {
   const apiClient = getApiClient();
   const endpoint = `${baseUrl}/auth/user/`;
-  const res = await apiClient.get<TAuthenticatedUserResponse>(endpoint);
-  return res.data;
+  try {
+    const res = await apiClient.get<TAuthenticatedUserResponse>(endpoint);
+    return res.data;
+  } catch (error) {
+    // Set auth state to unauthenticated on 401 errors
+    if ((error as AxiosError)?.response?.status === 401) {
+      return { username: null, authToken: null };
+    }
+    throw error;
+  }
 }
 
 export const getAuthenticatedUserQuery = (baseUrl: string) =>

@@ -3,3 +3,4 @@ export {
   default as useAppConfiguration,
   computeAppConfiguration,
 } from './useAppConfiguration';
+export { getGeoapiUrl } from './utils';
