@@ -1,4 +1,6 @@
 import axios, { AxiosError } from 'axios';
+import Cookies from 'js-cookie';
+import { v4 as uuidv4 } from 'uuid';
 import {
   useQuery,
   useMutation,
@@ -17,7 +19,9 @@ import {
   useAuthenticatedUser,
 } from '@hazmapper/hooks';
 import { ApiService, AppConfiguration, AuthToken } from '@hazmapper/types';
-import { v4 as uuidv4 } from 'uuid';
+import { sha256 } from '@hazmapper/utils/requestUtils';
+
+const HASHED_SESSION = await sha256(Cookies.get('session'));
 
 export const getApiClient = (apiService: ApiService = ApiService.Geoapi) => {
   const axiosConfig = {
@@ -97,6 +101,10 @@ export function getHeaders({
 
   if (apiService === ApiService.Mapillary && mapillaryAuthToken) {
     headers['authorization'] = `OAuth ${mapillaryAuthToken}`;
+  }
+
+  if (apiService === ApiService.Tapis) {
+    headers['X-Tapis-Tracking-ID'] = `portals.${HASHED_SESSION}`;
   }
 
   return headers;
