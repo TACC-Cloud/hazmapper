@@ -1,5 +1,4 @@
 import axios, { AxiosError } from 'axios';
-import Cookies from 'js-cookie';
 import { v4 as uuidv4 } from 'uuid';
 import {
   useQuery,
@@ -19,9 +18,7 @@ import {
   useAuthenticatedUser,
 } from '@hazmapper/hooks';
 import { ApiService, AppConfiguration, AuthToken } from '@hazmapper/types';
-import { sha256 } from '@hazmapper/utils/requestUtils';
-
-const HASHED_SESSION = await sha256(Cookies.get('session'));
+import { HASHED_SESSION } from '@hazmapper/utils/requestUtils';
 
 export const getApiClient = (apiService: ApiService = ApiService.Geoapi) => {
   const axiosConfig = {

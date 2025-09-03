@@ -17,6 +17,9 @@ import {
   computeAppConfiguration,
   useGeoapiNotifications,
 } from './hooks';
+import { get_hashed_session } from '@hazmapper/utils/requestUtils';
+
+get_hashed_session();
 
 interface ProtectedRouteProps {
   children: ReactElement;
