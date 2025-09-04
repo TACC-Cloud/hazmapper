@@ -5,15 +5,13 @@ import {
 
 /**
  * Retrieves the base hostname for the Hazmapper deployment.
+ *
+ * Note: currently always returns production hostname.
+ * Left as a function in case new hostnames are needed (i.e. this was used
+ * for hazmapper-tmp to hazmapper migration)
  */
 export function getHazmapperBase(): string {
-  const host = window.location.hostname;
-
-  if (host.includes('hazmapper-tmp.tacc.utexas.edu')) {
-    return 'hazmapper-tmp.tacc.utexas.edu';
-  }
-
-  return 'hazmapper.tacc.utexas.edu'; // default
+  return 'hazmapper.tacc.utexas.edu';
 }
 
 /**
