@@ -7,6 +7,7 @@ import {
   KEY_USE_TILE_SERVERS,
   useAuthenticatedUser,
   TAuthenticatedUserResponse,
+  useAppConfiguration,
 } from '@hazmapper/hooks';
 import { useNotification } from './useNotification';
 import { NotificationAPI } from '@hazmapper/context/NotificationProvider';
@@ -63,7 +64,10 @@ export const useGeoapiNotifications = () => {
   const {
     data: { username },
   } = useAuthenticatedUser();
-  const { lastMessage } = useWebSocket('ws://localhost:8000/ws');
+  const { geoapiUrl } = useAppConfiguration();
+  const baseUrl = new URL(geoapiUrl);
+  const protocol = baseUrl.protocol === 'https:' ? 'wss' : 'ws';
+  const { lastMessage } = useWebSocket(`${protocol}://${baseUrl.host}/ws`);
 
   useEffect(() => {
     if (lastMessage !== null) {
