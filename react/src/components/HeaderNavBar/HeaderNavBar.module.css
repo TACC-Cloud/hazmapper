@@ -8,6 +8,9 @@
   height: var(--hazmapper-header-navbar-height);
   padding: 5px;
 }
-.userName {
-  color: white;
+.userButton {
+  color: white !important;
+  &:hover {
+    text-decoration: underline;
+  }
 }

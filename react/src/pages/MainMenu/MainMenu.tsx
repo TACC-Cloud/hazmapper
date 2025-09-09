@@ -2,6 +2,7 @@ import React from 'react';
 import ProjectListing from '@hazmapper/components/Projects/ProjectListing';
 import styles from './layout.module.css';
 import { Button } from '@tacc/core-components';
+import { Row } from 'antd';
 import HeaderNavBar from '@hazmapper/components/HeaderNavBar';
 import hazmapperLogo from '@hazmapper/assets/Hazmapper-Stack@4x.png';
 import nsfLogo from '@hazmapper/assets/nsf.png';
@@ -20,38 +21,42 @@ const MainMenu = () => {
           <div className={styles.version}>{'Version 2.19'}</div>
         </div>
         <ProjectListing />
-        <Button
-          className={styles.userGuide}
-          iconNameBefore="exit"
-          type="link"
-          onClick={(e) => {
-            window.open(
-              'https://www.designsafe-ci.org/user-guide/tools/visualization/#hazmapper-user-guide',
-              '_blank',
-              'noopener,noreferrer'
-            );
-            // To prevent active box around link lingering after click
-            e.currentTarget.blur();
-          }}
-        >
-          User Guide
-        </Button>
-        <Button
-          className={styles.userGuide}
-          iconNameBefore="exit"
-          type="link"
-          onClick={(e) => {
-            window.open(
-              'https://www.designsafe-ci.org/user-guide/tools/visualization/#taggit-user-guide-basic-image-browsing-and-mapping',
-              '_blank',
-              'noopener,noreferrer'
-            );
-            // To prevent active box around link lingering after click
-            e.currentTarget.blur();
-          }}
-        >
-          Taggit User Guide
-        </Button>
+        <Row justify="end">
+          <Button
+            className={styles.userGuide}
+            type="link"
+            iconNameBefore="exit"
+            onClick={(e) => {
+              window.open(
+                'https://www.designsafe-ci.org/user-guide/tools/visualization/#hazmapper-user-guide',
+                '_blank',
+                'noopener,noreferrer'
+              );
+              // To prevent active box around link lingering after click
+              e.currentTarget.blur();
+            }}
+          >
+            User Guide
+          </Button>
+        </Row>
+        <Row justify="end">
+          <Button
+            className={styles.userGuide}
+            type="link"
+            iconNameBefore="exit"
+            onClick={(e) => {
+              window.open(
+                'https://www.designsafe-ci.org/user-guide/tools/visualization/#taggit-user-guide-basic-image-browsing-and-mapping',
+                '_blank',
+                'noopener,noreferrer'
+              );
+              // To prevent active box around link lingering after click
+              e.currentTarget.blur();
+            }}
+          >
+            Taggit User Guide
+          </Button>
+        </Row>
       </div>
       <div className={styles.sponsorContainer}>
         <a href="https://www.nsf.gov/">

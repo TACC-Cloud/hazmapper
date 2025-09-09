@@ -49,7 +49,6 @@ const MapProjectAccessError: React.FC<MapProjectAccessErrorProps> = ({
         {is403AndNotLoggedIn && (
           <Button
             type="link"
-            className={styles.userName}
             onClick={() => {
               const url = `${ROUTES.LOGIN}?to=${encodeURIComponent(
                 location.pathname
