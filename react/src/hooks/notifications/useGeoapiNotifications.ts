@@ -67,7 +67,9 @@ export const useGeoapiNotifications = () => {
   const { geoapiUrl } = useAppConfiguration();
   const baseUrl = new URL(geoapiUrl);
   const protocol = baseUrl.protocol === 'https:' ? 'wss' : 'ws';
-  const { lastMessage } = useWebSocket(`${protocol}://${baseUrl.host}/ws`);
+  const { lastMessage } = useWebSocket(
+    `${protocol}://${baseUrl.host}${baseUrl.pathname}/ws`
+  );
 
   useEffect(() => {
     if (lastMessage !== null) {
