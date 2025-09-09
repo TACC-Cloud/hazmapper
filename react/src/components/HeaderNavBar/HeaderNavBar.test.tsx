@@ -1,5 +1,6 @@
 import React, { act } from 'react';
 import { fireEvent, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import { http, HttpResponse } from 'msw';
 import * as ROUTES from '@hazmapper/constants/routes';
 import { renderInTest, server } from '@hazmapper/test/testUtil';
@@ -53,12 +54,8 @@ describe('HeaderNavBar', () => {
     await act(async () => {
       ({ getByRole } = renderInTest(<HeaderNavBar />));
     });
-    const header = getByRole('button', { name: 'return to project listings' });
-    fireEvent.click(header);
-
-    await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith(ROUTES.MAIN);
-    });
+    const header = getByRole('link', { name: 'return to project listings' });
+    expect(header).toHaveAttribute('href', ROUTES.MAIN);
   });
 
   test('displays username when user is authenticated', async () => {

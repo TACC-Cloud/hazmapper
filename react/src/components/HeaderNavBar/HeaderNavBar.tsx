@@ -24,7 +24,7 @@ export const HeaderNavBar: React.FC = () => {
 
   return (
     <div className={styles.root}>
-      <Link to={ROUTES.MAIN}>
+      <Link to={ROUTES.MAIN} aria-label="return to project listings">
         <img width="150px" src={hazmapperHeaderLogo} alt="Hazmapper Logo" />
       </Link>
       {username ? (
