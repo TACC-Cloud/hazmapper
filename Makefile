@@ -2,13 +2,13 @@ TAG := $(shell git log --format=%h -1)
 
 .PHONY: build-angular
 build-angular:
-	docker build -t taccaci/hazmapper:$(TAG) -f angular/Dockerfile .
-	docker tag taccaci/hazmapper:$(TAG) taccaci/hazmapper:latest
+	docker build -t taccwma/hazmapper:$(TAG) -f angular/Dockerfile .
+	docker tag taccwma/hazmapper:$(TAG) taccwma/hazmapper:latest
 
 .PHONY: build-react
 build-react:
-	docker build -t taccaci/hazmapper-react:$(TAG) -f react/Dockerfile .
-	docker tag taccaci/hazmapper-react:$(TAG) taccaci/hazmapper-react:latest
+	docker build -t taccwma/hazmapper-react:$(TAG) -f react/Dockerfile .
+	docker tag taccwma/hazmapper-react:$(TAG) taccwma/hazmapper-react:latest
 
 .PHONY: build
 build:
@@ -16,5 +16,5 @@ build:
 
 .PHONY: publish
 publish:
-	docker push taccaci/hazmapper:$(TAG)
-	docker push taccaci/hazmapper-react:$(TAG)
+	docker push taccwma/hazmapper:$(TAG)
+	docker push taccwma/hazmapper-react:$(TAG)
