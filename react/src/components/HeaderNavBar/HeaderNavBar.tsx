@@ -34,12 +34,12 @@ export const HeaderNavBar: React.FC = () => {
               {
                 key: 'logout',
                 label: (
-                  <a
-                    href={ROUTES.LOGOUT}
+                  <Link
+                    to={ROUTES.LOGOUT}
                     style={{ color: 'inherit', textDecoration: 'none' }}
                   >
                     Logout
-                  </a>
+                  </Link>
                 ),
               },
             ],
