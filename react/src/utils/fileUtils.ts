@@ -22,6 +22,8 @@ export const IMPORTABLE_FEATURE_ASSET_TYPES = [
 
 export const IMPORTABLE_POINT_CLOUD_TYPES = ['las', 'laz'];
 
+export const IMPORTABLE_GEO_TIFF_TYPES = ['tif', 'tiff', 'geotiff'];
+
 export const serializeToChonkyFile = (
   file: File,
   allowedFileExtensions: string[]

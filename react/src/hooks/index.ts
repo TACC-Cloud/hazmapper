@@ -1,5 +1,5 @@
 export * from './features/';
-export * from './tileServers/useTileServers';
+export * from './tileServers';
 export * from './systems/useSystems';
 export { useFiles } from './files/useFiles';
 export * from './environment';

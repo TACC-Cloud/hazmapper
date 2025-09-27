@@ -20,6 +20,7 @@ import { usePostTileServer } from '@hazmapper/hooks';
 import { tileLayerSchema } from '@hazmapper/pages/MapProject';
 import { TileServerLayer } from '@hazmapper/types';
 import { PrimaryButton } from '@hazmapper/common_components/Button';
+import GeotiffImporter from './GeotiffImporter';
 
 const formTheme: ThemeConfig = {
   components: {
@@ -218,6 +219,10 @@ const CreateLayerModal: React.FC<{
                 <Select
                   options={[
                     { value: 'suggestions', label: <span>Suggestions</span> },
+                    {
+                      value: 'geotiff',
+                      label: <span>Geotiff (tif)</span>,
+                    },
                     { value: 'manual', label: <span>Manual</span> },
                     {
                       value: 'qms',
@@ -247,6 +252,12 @@ const CreateLayerModal: React.FC<{
                       </Flex>
                     ))}
                   </>
+                )}
+                {watch('importMethod') === 'geotiff' && (
+                  <GeotiffImporter
+                    projectId={projectId}
+                    onDone={handleClose} // close modal after
+                  />
                 )}
                 {watch('importMethod') === 'manual' && (
                   <>

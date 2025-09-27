@@ -99,16 +99,18 @@ const ProjectListing: React.FC = () => {
                 </tr>
               ))
             ) : (
-              <td colSpan={3}>
-                <EmptyTablePlaceholder type="info">
-                  No maps found.
-                  <br />
-                  <Button type="link" onClick={() => setIsModalOpen(true)}>
-                    Create New Map
-                  </Button>{' '}
-                  to get started.
-                </EmptyTablePlaceholder>
-              </td>
+              <tr>
+                <td colSpan={3}>
+                  <EmptyTablePlaceholder type="info">
+                    No maps found.
+                    <br />
+                    <Button type="link" onClick={() => setIsModalOpen(true)}>
+                      Create New Map
+                    </Button>{' '}
+                    to get started.
+                  </EmptyTablePlaceholder>
+                </td>
+              </tr>
             )}
           </tbody>
         </table>
