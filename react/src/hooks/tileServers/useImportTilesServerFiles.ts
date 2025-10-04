@@ -16,6 +16,6 @@ export const usePostImportTileServerFiles = ({
   projectId,
 }: UsePostImportTileServerFiles) => {
   return usePost<ImportTileServerFiles, GeoapiMessageAcceptedResponse>({
-    endpoint: `/projects/${projectId}/tile-servers/`,
+    endpoint: `/projects/${projectId}/tile-servers/files/import/`,
   });
 };

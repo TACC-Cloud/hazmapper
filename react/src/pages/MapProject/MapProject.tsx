@@ -38,7 +38,7 @@ export const tileLayerSchema = z.object({
   id: z.number(),
   name: z.string().min(1, 'Required'),
   type: z.string(),
-  url: z.string().url().min(1, 'Required'),
+  url: z.string().min(1, 'Required'), // full URL or relative paths (i.e. /assets)
   attribution: z.string(),
   tileOptions: z.object({
     maxZoom: z.number().nullish(),
@@ -48,11 +48,11 @@ export const tileLayerSchema = z.object({
     layers: z.string().nullish(),
   }),
   uiOptions: z.object({
-    zIndex: z.number(),
+    zIndex: z.number().optional().default(0),
     opacity: z.number(),
     isActive: z.boolean(),
-    showInput: z.boolean().nullish(),
-    showDescription: z.boolean().nullish(),
+    showInput: z.boolean().optional().default(false),
+    showDescription: z.boolean().optional().default(false),
   }),
 });
 
