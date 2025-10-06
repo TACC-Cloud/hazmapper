@@ -196,7 +196,7 @@ const CreateLayerModal: React.FC<{
           htmlType="submit"
           disabled={!isDirty || !isValid}
           type="primary"
-          hidden={watch('importMethod') === 'suggestions'}
+          hidden={['suggestions', 'geotiff'].includes(watch('importMethod'))}
         >
           Create Layer
         </Button>,
