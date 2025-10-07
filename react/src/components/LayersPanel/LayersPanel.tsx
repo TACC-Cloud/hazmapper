@@ -368,6 +368,7 @@ const LayersPanel: React.FC<{
                       Layer options have changed!
                       <br /> Save to persist changes.
                     </span>
+
                     <Form.Item>
                       <Button
                         type="primary"

@@ -247,8 +247,12 @@ const LeafletMap: React.FC = () => {
             attribution={layer.attribution}
             zIndex={layer.uiOptions.zIndex}
             opacity={layer.uiOptions.opacity}
-            maxNativeZoom={layer.tileOptions?.maxZoom || 22}
-            {...layer.tileOptions}
+            {...layer.tileOptions} // e.g. maxZoom, minZoom, maxNativeZoom, and bounds.
+            maxZoom={
+              layer.internal
+                ? MAP_CONFIG.maxZoom
+                : (layer.tileOptions?.maxZoom ?? MAP_CONFIG.maxZoom)
+            }
           />
         )
       )}
