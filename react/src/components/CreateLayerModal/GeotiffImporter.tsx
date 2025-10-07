@@ -1,7 +1,7 @@
 import React from 'react';
 import { Flex, Typography, Button, Divider, message } from 'antd';
 import { CloudUploadOutlined, DeleteOutlined } from '@ant-design/icons';
-import { FileListing } from '../Files'; // <- your component shown above
+import { FileListing } from '../Files';
 import { File, TapisFilePath } from '@hazmapper/types';
 import { convertFilesToTapisPaths } from '@hazmapper/utils/fileUtils';
 import { usePostImportTileServerFiles } from '@hazmapper/hooks';
@@ -48,8 +48,8 @@ const GeotiffImporter: React.FC<Props> = ({ projectId, onDone }) => {
     <Flex vertical gap={12}>
       <Text type="secondary">Select one or more GeoTIFFs.</Text>
 
-      {/* Browser + selector */}
-      <div
+      <Flex
+        vertical
         style={{
           height: 420,
           border: '1px solid #eee',
@@ -63,7 +63,7 @@ const GeotiffImporter: React.FC<Props> = ({ projectId, onDone }) => {
           allowedFileExtensions={IMPORTABLE_GEO_TIFF_TYPES}
           onFileSelect={setSelectedFiles}
         />
-      </div>
+      </Flex>
 
       <Divider style={{ margin: '12px 0' }} />
 
