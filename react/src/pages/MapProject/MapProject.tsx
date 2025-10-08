@@ -23,6 +23,7 @@ import { MapPositionProvider } from '@hazmapper/context/MapContext';
 
 import styles from './MapProject.module.css';
 import QuestionnaireModal from '@hazmapper/components/QuestionnaireModal';
+import TasksViewDemoModal from '@hazmapper/components/Tasks/TasksViewDemoModel';
 import { Spinner } from '@hazmapper/common_components';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -288,6 +289,10 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
                   feature={selectedFeature}
                 />
               )}
+              <TasksViewDemoModal
+                activeProject={activeProject}
+                isPublicView={isPublicView}
+              />
             </Content>
           </Layout>
         </Layout>
