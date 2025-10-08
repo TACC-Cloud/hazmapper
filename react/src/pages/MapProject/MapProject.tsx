@@ -53,6 +53,11 @@ export const tileLayerSchema = z.object({
     isActive: z.boolean(),
     showInput: z.boolean().optional().default(false),
     showDescription: z.boolean().optional().default(false),
+    renderOptions: z
+      .object({
+        colormap_name: z.string().optional(),
+      })
+      .optional(),
   }),
 });
 

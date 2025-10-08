@@ -49,6 +49,10 @@ export interface TileServerLayer {
     showInput?: boolean;
     /** Whether to show the description of the layer or not. Note: handles if opacity ui is shown */
     showDescription?: boolean;
+    /** Render options for backend tiler (titiler) **/
+    renderOptions?: {
+      colormap_name?: string;
+    };
   };
 }
 
