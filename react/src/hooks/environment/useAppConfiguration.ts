@@ -25,91 +25,98 @@ import { getLocalAppConfiguration } from './getLocalAppConfiguration';
  */
 export const useAppConfiguration = (): AppConfiguration => {
   const basePath = getBasePath();
+  return useMemo(() => computeAppConfiguration(basePath), [basePath]);
+};
 
-  const appConfiguration = useMemo(() => {
-    const hostname = window && window.location && window.location.hostname;
-    const pathname = window && window.location && window.location.pathname;
+export const computeAppConfiguration = (basePath: string): AppConfiguration => {
+  const hostname = window && window.location && window.location.hostname;
+  const pathname = window && window.location && window.location.pathname;
+  const origin = window && window.location && window.location.origin;
 
-    const mapillaryConfig: MapillaryConfiguration = {
-      authUrl: 'https://www.mapillary.com/connect',
-      tokenUrl: 'https://graph.mapillary.com/token',
-      apiUrl: 'https://graph.mapillary.com/',
-      tileUrl: 'https://tiles.mapillary.com/',
-      scope:
-        'user:email+user:read+user:write+public:write+public:upload+private:read+private:write+private:upload',
-      clientSecret: '',
-      clientId: '',
-      clientToken: '',
+  if (!hostname || !pathname || !origin) {
+    throw new Error(
+      'Cannot determine hostname, pathname, or origin from window.location'
+    );
+  }
+
+  const mapillaryConfig: MapillaryConfiguration = {
+    authUrl: 'https://www.mapillary.com/connect',
+    tokenUrl: 'https://graph.mapillary.com/token',
+    apiUrl: 'https://graph.mapillary.com/',
+    tileUrl: 'https://tiles.mapillary.com/',
+    scope:
+      'user:email+user:read+user:write+public:write+public:upload+private:read+private:write+private:upload',
+    clientSecret: '',
+    clientId: '',
+    clientToken: '',
+  };
+
+  const hazmapperBase = getHazmapperBase();
+
+  if (/^localhost/.test(hostname) || /^hazmapper.local/.test(hostname)) {
+    return getLocalAppConfiguration(basePath, mapillaryConfig);
+  } else if (hostname === hazmapperBase && pathname.startsWith('/staging')) {
+    const appConfig: AppConfiguration = {
+      basePath: basePath,
+      geoapiEnv: GeoapiBackendEnvironment.Staging,
+      geoapiUrl: getGeoapiUrl(GeoapiBackendEnvironment.Staging),
+      designsafePortalUrl: getDesignsafePortalUrl(
+        DesignSafePortalEnvironment.PPRD
+      ),
+      tapisUrl: 'https://designsafe.tapis.io',
+      mapillary: mapillaryConfig,
+      taggitUrl: origin + '/taggit-staging',
     };
 
-    const hazmapperBase = getHazmapperBase();
+    appConfig.mapillary.clientId = '4936281379826603';
+    appConfig.mapillary.clientSecret =
+      'MLY|4936281379826603|cafd014ccd8cfc983e47c69c16082c7b';
+    appConfig.mapillary.clientToken =
+      'MLY|4936281379826603|f8c4732d3c9d96582b86158feb1c1a7a';
+    return appConfig;
+  } else if (hostname === hazmapperBase && pathname.startsWith('/dev')) {
+    const appConfig: AppConfiguration = {
+      basePath: basePath,
+      geoapiEnv: GeoapiBackendEnvironment.Dev,
+      geoapiUrl: getGeoapiUrl(GeoapiBackendEnvironment.Dev),
+      designsafePortalUrl: getDesignsafePortalUrl(
+        DesignSafePortalEnvironment.PPRD
+      ),
+      tapisUrl: 'https://designsafe.tapis.io',
+      mapillary: mapillaryConfig,
+      taggitUrl: origin + '/taggit-dev',
+    };
 
-    if (/^localhost/.test(hostname) || /^hazmapper.local/.test(hostname)) {
-      return getLocalAppConfiguration(basePath, mapillaryConfig);
-    } else if (hostname === hazmapperBase && pathname.startsWith('/staging')) {
-      const appConfig: AppConfiguration = {
-        basePath: basePath,
-        geoapiEnv: GeoapiBackendEnvironment.Staging,
-        geoapiUrl: getGeoapiUrl(GeoapiBackendEnvironment.Staging),
-        designsafePortalUrl: getDesignsafePortalUrl(
-          DesignSafePortalEnvironment.PPRD
-        ),
-        tapisUrl: 'https://designsafe.tapis.io',
-        mapillary: mapillaryConfig,
-        taggitUrl: origin + '/taggit-staging',
-      };
+    // TODO_REACT mapillary config is currently copy from /staging and not correct for /dev
+    appConfig.mapillary.clientId = '4936281379826603';
+    appConfig.mapillary.clientSecret =
+      'MLY|4936281379826603|cafd014ccd8cfc983e47c69c16082c7b';
+    appConfig.mapillary.clientToken =
+      'MLY|4936281379826603|f8c4732d3c9d96582b86158feb1c1a7a';
+    return appConfig;
+  } else if (hostname === hazmapperBase) {
+    const appConfig: AppConfiguration = {
+      basePath: basePath,
+      geoapiEnv: GeoapiBackendEnvironment.Production,
+      geoapiUrl: getGeoapiUrl(GeoapiBackendEnvironment.Production),
+      designsafePortalUrl: getDesignsafePortalUrl(
+        DesignSafePortalEnvironment.Production
+      ),
+      tapisUrl: 'https://designsafe.tapis.io',
+      mapillary: mapillaryConfig,
+      taggitUrl: origin + '/taggit',
+    };
 
-      appConfig.mapillary.clientId = '4936281379826603';
-      appConfig.mapillary.clientSecret =
-        'MLY|4936281379826603|cafd014ccd8cfc983e47c69c16082c7b';
-      appConfig.mapillary.clientToken =
-        'MLY|4936281379826603|f8c4732d3c9d96582b86158feb1c1a7a';
-      return appConfig;
-    } else if (hostname === hazmapperBase && pathname.startsWith('/dev')) {
-      const appConfig: AppConfiguration = {
-        basePath: basePath,
-        geoapiEnv: GeoapiBackendEnvironment.Dev,
-        geoapiUrl: getGeoapiUrl(GeoapiBackendEnvironment.Dev),
-        designsafePortalUrl: getDesignsafePortalUrl(
-          DesignSafePortalEnvironment.PPRD
-        ),
-        tapisUrl: 'https://designsafe.tapis.io',
-        mapillary: mapillaryConfig,
-        taggitUrl: origin + '/taggit-dev',
-      };
-
-      // TODO_REACT mapillary config is currently copy from /staging and not correct for /dev
-      appConfig.mapillary.clientId = '4936281379826603';
-      appConfig.mapillary.clientSecret =
-        'MLY|4936281379826603|cafd014ccd8cfc983e47c69c16082c7b';
-      appConfig.mapillary.clientToken =
-        'MLY|4936281379826603|f8c4732d3c9d96582b86158feb1c1a7a';
-      return appConfig;
-    } else if (hostname === hazmapperBase) {
-      const appConfig: AppConfiguration = {
-        basePath: basePath,
-        geoapiEnv: GeoapiBackendEnvironment.Production,
-        geoapiUrl: getGeoapiUrl(GeoapiBackendEnvironment.Production),
-        designsafePortalUrl: getDesignsafePortalUrl(
-          DesignSafePortalEnvironment.Production
-        ),
-        tapisUrl: 'https://designsafe.tapis.io',
-        mapillary: mapillaryConfig,
-        taggitUrl: origin + '/taggit',
-      };
-
-      appConfig.mapillary.clientId = '5156692464392931';
-      appConfig.mapillary.clientSecret =
-        'MLY|5156692464392931|6be48c9f4074f4d486e0c42a012b349f';
-      appConfig.mapillary.clientToken =
-        'MLY|5156692464392931|4f1118aa1b06f051a44217cb56bedf79';
-      return appConfig;
-    } else {
-      console.error('Cannot find environment for host name ${hostname}');
-      throw new Error('Cannot find environment for host name ${hostname}');
-    }
-  }, [basePath]);
-  return appConfiguration;
+    appConfig.mapillary.clientId = '5156692464392931';
+    appConfig.mapillary.clientSecret =
+      'MLY|5156692464392931|6be48c9f4074f4d486e0c42a012b349f';
+    appConfig.mapillary.clientToken =
+      'MLY|5156692464392931|4f1118aa1b06f051a44217cb56bedf79';
+    return appConfig;
+  } else {
+    console.error(`Cannot find environment for host name ${hostname}`);
+    throw new Error(`Cannot find environment for host name ${hostname}`);
+  }
 };
 
 export default useAppConfiguration;

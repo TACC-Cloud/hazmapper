@@ -1,5 +1,5 @@
 import { screen } from '@testing-library/react';
-import { renderInTest } from '@hazmapper/test/testUtil';
+import { renderInTestWaitForQueries } from '@hazmapper/test/testUtil';
 import { projectMock } from '@hazmapper/__fixtures__/projectFixtures';
 import MapTabContent from './MapTabContent';
 
@@ -10,8 +10,8 @@ describe('MapTabContent', () => {
     jest.clearAllMocks();
   });
 
-  it('renders project details correctly', () => {
-    renderInTest(
+  it('renders project details correctly', async () => {
+    await renderInTestWaitForQueries(
       <MapTabContent
         project={projectMock}
         onProjectUpdate={mockOnProjectUpdate}

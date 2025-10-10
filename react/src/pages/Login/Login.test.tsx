@@ -8,6 +8,7 @@ beforeAll(() => {
     href: 'http://localhost:4200/login',
     hostname: 'localhost',
     pathname: '/login',
+    origin: 'http:localhost:4200',
     assign: jest.fn(),
     replace: jest.fn(),
     // You can add other properties if needed
@@ -25,9 +26,9 @@ test('renders login', async () => {
   expect(getByText(/Logging in/)).toBeDefined();
 
   await waitFor(() => {
-    // Check that localStorage was set with the correct "toParam"
-    expect(localStorage.getItem('toParam')).toBe('/');
     // Check that the mocked location was set correctly
-    expect(window.location.href).toContain('geoapi');
+    expect(window.location.href).toEqual(
+      'https://geoapi.unittest/auth/login?to=/'
+    );
   });
 });

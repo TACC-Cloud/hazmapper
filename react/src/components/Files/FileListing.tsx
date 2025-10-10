@@ -78,7 +78,9 @@ export const FileListing: React.FC<FileListingProps> = ({
   } = useGetSystems();
   const { systems = [], myDataSystem, communityDataSystem } = systemsData;
 
-  const { username } = useAuthenticatedUser();
+  const {
+    data: { username },
+  } = useAuthenticatedUser();
 
   const [chonkyFiles, setChonkyFiles] = React.useState<any>(
     new Array(8).fill(null)

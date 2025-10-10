@@ -21,7 +21,10 @@ const SaveTabContent: React.FC<SaveTabProps> = ({ project }) => {
     isLoading,
     error,
   } = useDesignSafeProjects();
-  const { username } = useAuthenticatedUser();
+  const {
+    data: { username },
+  } = useAuthenticatedUser();
+
   const dsDataDepotUrl = `${config.designsafePortalUrl}/data/browser/`;
   const dsProj = designSafeProjects?.result?.find(
     (ds_project) =>

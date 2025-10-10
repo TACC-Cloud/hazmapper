@@ -1,35 +1,51 @@
-import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
+import { AxiosError } from 'axios';
 import { isTokenValid } from '@hazmapper/utils/authUtils';
+import { useSuspenseQuery, queryOptions } from '@tanstack/react-query';
+import { getApiClient } from '@hazmapper/requests';
+import { AuthState, AuthToken } from '@hazmapper/types';
+import { useAppConfiguration } from '@hazmapper/hooks';
 
-/**
- * A hook that returns authentication-related user information
- *
- * This hook performs no side effects (e.g., no navigation or redirect).
- * For side-effect-driven authentication, use `useEnsureAuthenticatedUserHasValidTapisToken` instead.
- *
- * @returns An object containing:
- *  - `username`: the authenticated user's username (empty string if unauthenticated),
- *  - `hasValidTapisToken`: a boolean indicating whether the stored auth token is valid.
- */
-
-const useAuthenticatedUser = (): {
-  username: string;
-  hasValidTapisToken: boolean;
-} => {
-  let username = useSelector((state: RootState) => state.auth.user?.username);
-
-  if (!username) {
-    username = '';
-  }
-
-  const authToken = useSelector((state: RootState) => state.auth.authToken);
-  const hasValidTapisToken = !!authToken && isTokenValid(authToken);
-
-  return {
-    username,
-    hasValidTapisToken,
-  };
+export type TAuthenticatedUserResponse = {
+  username: string | null;
+  authToken: AuthToken | null;
 };
+
+async function getAuthenticatedUser(baseUrl: string) {
+  const apiClient = getApiClient();
+  const endpoint = `${baseUrl}/auth/user/`;
+  try {
+    const res = await apiClient.get<TAuthenticatedUserResponse>(endpoint);
+    return res.data;
+  } catch (error) {
+    // Set auth state to unauthenticated on 401 errors
+    if ((error as AxiosError)?.response?.status === 401) {
+      return { username: null, authToken: null };
+    }
+    throw error;
+  }
+}
+
+export const getAuthenticatedUserQuery = (baseUrl: string) =>
+  queryOptions({
+    queryKey: ['authenticated-user'],
+    queryFn: () => getAuthenticatedUser(baseUrl),
+    staleTime: 1000 * 60 * 60 * 4 - 1000 * 60 * 5, // 3hrs 55 minutes stale time
+    refetchInterval: 1000 * 60 * 30, // Refetch every 30 minutes
+    refetchIntervalInBackground: true,
+    select: (data): AuthState => {
+      const hasValidTapisToken = isTokenValid(data.authToken);
+      return {
+        username: data.username || '',
+        authToken: data.authToken,
+        hasValidTapisToken,
+        isAuthenticated: !!data.authToken && !!data.username,
+      };
+    },
+  });
+
+function useAuthenticatedUser() {
+  const { geoapiUrl } = useAppConfiguration();
+  return useSuspenseQuery(getAuthenticatedUserQuery(geoapiUrl));
+}
 
 export default useAuthenticatedUser;

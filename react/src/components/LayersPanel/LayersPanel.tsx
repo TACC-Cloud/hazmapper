@@ -37,11 +37,9 @@ import {
   usePutTileServer,
   useDeleteTileServer,
   UseDeleteTileServerParams,
+  useAuthenticatedUser,
 } from '@hazmapper/hooks';
 import { SortableItem } from './SortableItem';
-import { useSelector } from 'react-redux';
-import { RootState } from '@hazmapper/redux/store';
-import { isTokenValid } from '@hazmapper/utils/authUtils';
 import CreateLayerModal from '../CreateLayerModal';
 
 const formLayerTheme: ThemeConfig = {
@@ -78,9 +76,9 @@ const LayersPanel: React.FC<{
   projectId: number;
   isPublicView: boolean;
 }> = ({ projectId, isPublicView }) => {
-  const isAuthenticated = useSelector((state: RootState) =>
-    isTokenValid(state.auth.authToken)
-  );
+  const {
+    data: { isAuthenticated },
+  } = useAuthenticatedUser();
   const canSaveForm = isAuthenticated && !isPublicView;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();

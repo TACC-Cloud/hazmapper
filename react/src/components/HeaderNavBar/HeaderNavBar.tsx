@@ -1,7 +1,8 @@
 import React from 'react';
-import useAuthenticatedUser from '@hazmapper/hooks/user/useAuthenticatedUser';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Button } from '@tacc/core-components';
+import { useAuthenticatedUser } from '@hazmapper/hooks';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { Button, Dropdown } from 'antd';
+import { UserOutlined, DownOutlined } from '@ant-design/icons';
 import hazmapperHeaderLogo from '@hazmapper/assets/hazmapper-header-logo.png';
 import styles from './HeaderNavBar.module.css';
 import * as ROUTES from '@hazmapper/constants/routes';
@@ -10,7 +11,9 @@ export const HeaderNavBar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { username } = useAuthenticatedUser();
+  const {
+    data: { username },
+  } = useAuthenticatedUser();
 
   const handleLogin = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -20,19 +23,41 @@ export const HeaderNavBar: React.FC = () => {
   };
 
   return (
-    <div
-      className={styles.root}
-      onKeyDown={() => navigate(ROUTES.MAIN)}
-      onClick={() => navigate(ROUTES.MAIN)}
-      role="button"
-      aria-label="return to project listings"
-      tabIndex={0}
-    >
-      <img width="150px" src={hazmapperHeaderLogo} alt="Hazmapper Logo" />
+    <div className={styles.root}>
+      <Link to={ROUTES.MAIN} aria-label="return to project listings">
+        <img width="150px" src={hazmapperHeaderLogo} alt="Hazmapper Logo" />
+      </Link>
       {username ? (
-        <div className={styles.userName}>{username}</div>
+        <Dropdown
+          menu={{
+            items: [
+              {
+                key: 'logout',
+                label: (
+                  <Link
+                    to={ROUTES.LOGOUT}
+                    style={{ color: 'inherit', textDecoration: 'none' }}
+                  >
+                    Logout
+                  </Link>
+                ),
+              },
+            ],
+          }}
+          trigger={['click']}
+        >
+          <Button
+            type="text"
+            icon={<UserOutlined />}
+            className={styles.userButton}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {username}
+            <DownOutlined />
+          </Button>
+        </Dropdown>
       ) : (
-        <Button type="link" className={styles.userName} onClick={handleLogin}>
+        <Button type="text" className={styles.userButton} onClick={handleLogin}>
           Login
         </Button>
       )}

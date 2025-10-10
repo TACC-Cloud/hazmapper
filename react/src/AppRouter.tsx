@@ -1,17 +1,25 @@
 import React, { ReactElement } from 'react';
-import { useSelector } from 'react-redux';
 import { Navigate, useLocation, createBrowserRouter } from 'react-router-dom';
+import { QueryClient } from '@tanstack/react-query';
+import { queryClient } from './queryClient';
 import * as ROUTES from '@hazmapper/constants/routes';
 import MapProject from '@hazmapper/pages/MapProject';
 import MainMenu from '@hazmapper/pages/MainMenu';
 import Logout from '@hazmapper/pages/Logout/Logout';
 import Login from '@hazmapper/pages/Login/Login';
-import Callback from '@hazmapper/pages/Callback/Callback';
-import { RootState } from '@hazmapper/redux/store';
+import LoggedOut from '@hazmapper/pages/LoggedOut/LoggedOut';
 import { MapillaryTokenProvider } from '@hazmapper/context/MapillaryTokenProvider';
 import { MapillaryViewerProvider } from './context/MapillaryViewerContextProvider';
-import { isTokenValid } from '@hazmapper/utils/authUtils';
-import { getBasePath } from './hooks';
+import {
+  getBasePath,
+  useAuthenticatedUser,
+  getAuthenticatedUserQuery,
+  computeAppConfiguration,
+  useGeoapiNotifications,
+} from './hooks';
+import { get_hashed_session } from '@hazmapper/utils/requestUtils';
+
+get_hashed_session();
 
 interface ProtectedRouteProps {
   children: ReactElement;
@@ -19,9 +27,14 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const location = useLocation();
-  const isAuthenticated = useSelector((state: RootState) =>
-    isTokenValid(state.auth.authToken)
-  );
+
+  const {
+    data: { isAuthenticated },
+  } = useAuthenticatedUser();
+
+  /*TODO: notifications are user specific and lacking additional context.
+  See note in react/src/types/notification.ts and WG-431 */
+  useGeoapiNotifications();
 
   if (!isAuthenticated) {
     const url = `/login?to=${encodeURIComponent(location.pathname)}`;
@@ -33,11 +46,21 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
 const basePath = getBasePath();
 
+const rootLoader = (queryClient: QueryClient) => async () => {
+  const { geoapiUrl } = computeAppConfiguration(basePath);
+  const data = await queryClient.ensureQueryData(
+    getAuthenticatedUserQuery(geoapiUrl)
+  );
+  return data;
+};
+
 export const appRouter = createBrowserRouter(
   [
     {
       id: 'root',
       path: ROUTES.MAIN,
+      loader: rootLoader(queryClient),
+      errorElement: <div>Error loading application</div>,
       children: [
         {
           path: '',
@@ -78,8 +101,8 @@ export const appRouter = createBrowserRouter(
           ),
         },
         {
-          path: ROUTES.CALLBACK,
-          element: <Callback />,
+          path: ROUTES.LOGGED_OUT,
+          element: <LoggedOut />,
         },
         {
           path: '*',

@@ -1,7 +1,5 @@
 import React, { act } from 'react';
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import store from '../../redux/store';
 import { http, HttpResponse } from 'msw';
 
 import CreateMapModal from './CreateMapModal';
@@ -11,14 +9,6 @@ import { testQueryClient, server } from '@hazmapper/test/testUtil';
 import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
 import { projectMock } from '@hazmapper/__fixtures__/projectFixtures';
 import { filesMock } from '@hazmapper/__fixtures__/fileFixture';
-
-jest.mock('@hazmapper/hooks/user/useAuthenticatedUser', () => ({
-  __esModule: true,
-  default: () => ({
-    username: 'mockUser',
-    hasValidTapisToken: true,
-  }),
-}));
 
 jest.mock('@hazmapper/hooks/files/useFiles', () => ({
   __esModule: true,
@@ -64,13 +54,11 @@ const toggleMock = jest.fn();
 const renderComponent = async (isOpen = true) => {
   await act(async () => {
     render(
-      <Provider store={store}>
-        <QueryClientProvider client={testQueryClient}>
-          <Router>
-            <CreateMapModal isOpen={isOpen} closeModal={toggleMock} />
-          </Router>
-        </QueryClientProvider>
-      </Provider>
+      <QueryClientProvider client={testQueryClient}>
+        <Router>
+          <CreateMapModal isOpen={isOpen} closeModal={toggleMock} />
+        </Router>
+      </QueryClientProvider>
     );
   });
 };

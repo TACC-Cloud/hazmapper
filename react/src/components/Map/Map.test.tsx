@@ -1,5 +1,5 @@
 import React from 'react';
-import { renderInTest } from '@hazmapper/test/testUtil';
+import { renderInTestWaitForQueries, server } from '@hazmapper/test/testUtil';
 import Map from './Map';
 import { tileServerLayers } from '../../__fixtures__/tileServerLayerFixture';
 import { MapPositionProvider } from '@hazmapper/context/MapContext';
@@ -9,8 +9,15 @@ import { useForm, FormProvider } from 'react-hook-form';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { tileLayerSchema } from '@hazmapper/pages/MapProject';
+import { http, HttpResponse } from 'msw';
 
-test('renders map', () => {
+server.use(
+  http.get('https://geoapi.unittest/streetview/services/', () =>
+    HttpResponse.json([], { status: 200 })
+  )
+);
+
+test('renders map', async () => {
   const Wrapper = () => {
     const formSchema = z.object({
       tileLayers: z.array(
@@ -39,6 +46,6 @@ test('renders map', () => {
     );
   };
 
-  const { getByText } = renderInTest(<Wrapper />);
+  const { getByText } = await renderInTestWaitForQueries(<Wrapper />);
   expect(getByText(/Leaflet/)).toBeDefined();
 });

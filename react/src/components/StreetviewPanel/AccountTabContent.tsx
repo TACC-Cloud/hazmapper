@@ -1,8 +1,7 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Typography, Button, Flex, Spin, Alert } from 'antd';
 import { useLocation } from 'react-router-dom';
 import {
-  useMapillaryTempAuthToken,
   useMapillaryUserConnection,
   useDeleteMapillaryUserConnection,
   useAppConfiguration,
@@ -11,9 +10,6 @@ import {
 const { Text } = Typography;
 
 const AccountTabContent = () => {
-  /* TODO remove after WG-472, the we can just redirect instead of getting a temp token before redirect */
-  const { mutate: getTempToken, isPending: isGettingTempToken } =
-    useMapillaryTempAuthToken();
   const {
     data: mapillaryConnection,
     isLoading,
@@ -30,18 +26,10 @@ const AccountTabContent = () => {
 
   const loggedInAuth = !!mapillaryConnection?.token;
 
-  const handleLoginRedirect = useCallback(() => {
-    getTempToken(undefined, {
-      onSuccess: ({ tempToken }) => {
-        // Redirect with the temporary token on success
-        const toPath = encodeURIComponent(location.pathname);
-        window.location.href = `${configuration.geoapiUrl}/streetview/auth/mapillary/login?to=${toPath}&temp_token=${encodeURIComponent(tempToken)}`;
-      },
-      onError: (error) => {
-        console.error('Failed to get temporary token:', error);
-      },
-    });
-  }, [getTempToken, location.pathname, configuration.geoapiUrl]);
+  const handleLoginRedirect = () => {
+    const toPath = encodeURIComponent(location.pathname);
+    window.location.href = `${configuration.geoapiUrl}/streetview/auth/mapillary/login?to=${toPath}`;
+  };
 
   return (
     <Flex justify="center" align="center" style={{ flexDirection: 'column' }}>
@@ -81,12 +69,7 @@ const AccountTabContent = () => {
             <Text strong style={{ fontSize: '18px', textAlign: 'center' }}>
               You are not <br /> authenticated to <br /> Mapillary!
             </Text>
-            <Button
-              type="primary"
-              size="large"
-              onClick={handleLoginRedirect}
-              loading={isGettingTempToken}
-            >
+            <Button type="primary" size="large" onClick={handleLoginRedirect}>
               Login To Mapillary
             </Button>
           </>

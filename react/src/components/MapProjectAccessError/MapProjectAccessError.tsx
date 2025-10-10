@@ -16,8 +16,9 @@ const MapProjectAccessError: React.FC<MapProjectAccessErrorProps> = ({
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
-
-  const { hasValidTapisToken } = useAuthenticatedUser();
+  const {
+    data: { hasValidTapisToken },
+  } = useAuthenticatedUser();
   const isLoggedIn = !!hasValidTapisToken;
 
   const getMessage = () => {
@@ -48,13 +49,13 @@ const MapProjectAccessError: React.FC<MapProjectAccessErrorProps> = ({
         {is403AndNotLoggedIn && (
           <Button
             type="link"
-            className={styles.userName}
             onClick={() => {
               const url = `${ROUTES.LOGIN}?to=${encodeURIComponent(
                 location.pathname
               )}`;
               navigate(url);
             }}
+            dataTestid="access-error-login-button"
           >
             Login
           </Button>

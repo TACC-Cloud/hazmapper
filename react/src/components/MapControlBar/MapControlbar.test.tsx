@@ -1,27 +1,14 @@
-import { waitFor, screen, fireEvent } from '@testing-library/react';
-import { renderInTest, testQueryClient } from '@hazmapper/test/testUtil';
+import { waitFor, screen, fireEvent, act } from '@testing-library/react';
+import { http, HttpResponse } from 'msw';
+import { renderInTest } from '@hazmapper/test/testUtil';
 import MapControlbar from './MapControlbar';
 import {
   projectMock,
   designSafeProjectMock,
 } from '@hazmapper/__fixtures__/projectFixtures';
-import { authenticatedUser } from '@hazmapper/__fixtures__/authStateFixtures';
 import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
-
-// Mock the useAuthenticatedUser hook BEFORE importing it
-jest.mock('@hazmapper/hooks', () => {
-  const originalModule = jest.requireActual('@hazmapper/hooks');
-  return {
-    ...originalModule, // Keep all other hooks unchanged
-    useAuthenticatedUser: jest.fn(), // Mock only this hook
-  };
-});
-
-// Import AFTER mocking
-import { useAuthenticatedUser } from '@hazmapper/hooks';
-const mockedUseAuthenticatedUser = useAuthenticatedUser as jest.MockedFunction<
-  typeof useAuthenticatedUser
->;
+import { server } from '@hazmapper/test/testUtil';
+import { unauthenticatedUser } from '@hazmapper/__fixtures__/authStateFixtures';
 
 // Mock the Router
 jest.mock('react-router-dom', () => ({
@@ -30,20 +17,6 @@ jest.mock('react-router-dom', () => ({
 }));
 
 describe('MapControlbar', () => {
-  beforeEach(() => {
-    // Clear all mocks before each test
-    jest.clearAllMocks();
-    testQueryClient.clear();
-
-    // mock for all tests (except that alter this) that we
-    // have a logged im uiser
-    mockedUseAuthenticatedUser.mockImplementation(() => ({
-      data: { username: authenticatedUser.user?.username || '' },
-      username: authenticatedUser.user?.username || '',
-      hasValidTapisToken: true,
-    }));
-  });
-
   it('renders non-public MapControlbar with DesignSafe project info when user is authenticated', async () => {
     const { getByText } = renderInTest(
       <MapControlbar activeProject={projectMock} isPublicView={false} />
@@ -75,13 +48,11 @@ describe('MapControlbar', () => {
   });
 
   it('renders public MapControlbar (unauthenticated)', async () => {
-    // Mock no authenticated user
-    mockedUseAuthenticatedUser.mockImplementation(() => ({
-      data: { username: '' },
-      username: '',
-      hasValidTapisToken: false,
-    }));
-
+    server.use(
+      http.get(`${testDevConfiguration.geoapiUrl}/auth/user/`, () =>
+        HttpResponse.json(unauthenticatedUser, { status: 200 })
+      )
+    );
     const { getByText } = renderInTest(
       <MapControlbar activeProject={projectMock} isPublicView={true} />
     );
@@ -98,9 +69,11 @@ describe('MapControlbar', () => {
       .spyOn(window, 'open')
       .mockImplementation(() => null);
 
-    renderInTest(
-      <MapControlbar activeProject={testProject} isPublicView={false} />
-    );
+    await act(async () => {
+      renderInTest(
+        <MapControlbar activeProject={testProject} isPublicView={false} />
+      );
+    });
 
     const taggitButton = screen.getByTestId('taggit-button');
     fireEvent.click(taggitButton);

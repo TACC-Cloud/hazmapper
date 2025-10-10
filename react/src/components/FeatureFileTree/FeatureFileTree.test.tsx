@@ -27,15 +27,19 @@ describe('FeatureFileTree', () => {
   });
 
   it('renders feature list correctly', async () => {
-    await renderInTestWaitForQueries(
-      <WithUseFeatureManager>
-        <FeatureFileTree {...defaultTreeProps} />
-      </WithUseFeatureManager>
-    );
+    await act(async () => {
+      renderInTestWaitForQueries(
+        <WithUseFeatureManager>
+          <FeatureFileTree {...defaultTreeProps} />
+        </WithUseFeatureManager>
+      );
+    });
 
-    expect(screen.getByText('foo')).toBeDefined();
-    expect(screen.getByText('image1.JPG')).toBeDefined();
-    expect(screen.getByText('image2.JPG')).toBeDefined();
+    await waitFor(() => {
+      expect(screen.getByText('foo')).toBeDefined();
+      expect(screen.getByText('image1.JPG')).toBeDefined();
+      expect(screen.getByText('image2.JPG')).toBeDefined();
+    });
   });
 
   it('handles feature deletion for non-public projects', async () => {
@@ -52,15 +56,19 @@ describe('FeatureFileTree', () => {
       )
     );
 
-    await renderInTestWaitForQueries(
-      <WithUseFeatureManager>
-        <FeatureFileTree {...defaultTreeProps} />
-      </WithUseFeatureManager>,
-      `/?selectedFeature=${featureId}`
-    );
-
+    await act(async () => {
+      renderInTestWaitForQueries(
+        <WithUseFeatureManager>
+          <FeatureFileTree {...defaultTreeProps} />
+        </WithUseFeatureManager>,
+        `/?selectedFeature=${featureId}`
+      );
+    });
     // Find and click delete button (as featured is selected)
-    const deleteButton = screen.getByTestId('delete-feature-button');
+    let deleteButton;
+    await waitFor(() => {
+      deleteButton = screen.getByTestId('delete-feature-button');
+    });
     await act(async () => {
       fireEvent.click(deleteButton);
     });

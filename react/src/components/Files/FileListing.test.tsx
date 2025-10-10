@@ -14,6 +14,7 @@ import { serializeToChonkyFile } from '../../utils/fileUtils';
 import { FileBrowser } from '@aperturerobotics/chonky';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { testQueryClient } from '@hazmapper/test/testUtil';
+import { authenticatedUser } from '@hazmapper/__fixtures__/authStateFixtures';
 
 // Mock dependencies
 jest.mock('../../hooks', () => ({
@@ -30,7 +31,7 @@ jest.mock('../../hooks', () => ({
     data: undefined,
     isSuccess: false,
   })),
-  useAuthenticatedUser: jest.fn(() => ({ username: 'test-user' })),
+  useAuthenticatedUser: jest.fn(() => ({ data: authenticatedUser })),
   useGetSystems: jest.fn(() => ({ data: { systems: [] } })),
 }));
 
@@ -111,7 +112,7 @@ describe('FileListing', () => {
       result: [],
     });
     (useAuthenticatedUser as jest.Mock).mockReturnValue({
-      username: 'test-user',
+      data: authenticatedUser,
     });
     (useFiles as jest.Mock).mockReturnValue({ data: [] });
     render(
@@ -148,7 +149,7 @@ describe('FileListing', () => {
       data: undefined,
     });
     (useAuthenticatedUser as jest.Mock).mockReturnValue({
-      username: 'test-user',
+      data: authenticatedUser,
     });
     render(
       <QueryClientProvider client={testQueryClient}>
@@ -179,7 +180,7 @@ describe('FileListing', () => {
       data: [],
     });
     (useAuthenticatedUser as jest.Mock).mockReturnValue({
-      username: 'test-user',
+      data: authenticatedUser,
     });
     render(
       <FileListing
@@ -225,7 +226,7 @@ describe('FileListing', () => {
     });
 
     (useAuthenticatedUser as jest.Mock).mockReturnValue({
-      username: 'test-user',
+      data: authenticatedUser,
     });
 
     (serializeToChonkyFile as jest.Mock).mockImplementation((file) => ({
@@ -273,7 +274,7 @@ describe('FileListing', () => {
     });
 
     (useAuthenticatedUser as jest.Mock).mockReturnValue({
-      username: 'test-user',
+      data: authenticatedUser,
     });
 
     render(<FileListing disableSelection={false} />);
@@ -292,7 +293,7 @@ describe('FileListing', () => {
       isLoading: false,
     });
     (useAuthenticatedUser as jest.Mock).mockReturnValue({
-      username: 'test-user',
+      data: authenticatedUser,
     });
     (useFiles as jest.Mock).mockReturnValue({
       data: [],

@@ -1,6 +1,4 @@
-import { AuthToken, AuthState } from '@hazmapper/types';
-
-export const AUTH_KEY = 'authV3';
+import { AuthToken } from '@hazmapper/types';
 
 export function isTokenValid(authToken: AuthToken | null): boolean {
   if (authToken) {
@@ -14,30 +12,4 @@ export function isTokenValid(authToken: AuthToken | null): boolean {
   } else {
     return false;
   }
-}
-
-/**
- * Retrieves the authentication information (user, token etc) from local storage.
- *
- * If not found in local storage, the function returns `null`.
- */
-export function getAuthenticatedUserFromLocalStorage(): AuthState {
-  try {
-    const authenticatedUserJson = localStorage.getItem(AUTH_KEY);
-    if (authenticatedUserJson) {
-      const authState = JSON.parse(authenticatedUserJson);
-      return authState;
-    }
-  } catch (e) {
-    console.error('Error loading state from localStorage:', e);
-  }
-  return { user: null, authToken: null };
-}
-
-export function setAuthenticatedUserFromLocalStorage(authToken: AuthState) {
-  localStorage.setItem(AUTH_KEY, JSON.stringify(authToken));
-}
-
-export function removeAuthenticatedUserFromLocalStorage() {
-  localStorage.removeItem(AUTH_KEY);
 }

@@ -1,13 +1,11 @@
+import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import {
-  isTokenValid,
-  removeAuthenticatedUserFromLocalStorage,
-} from '@hazmapper/utils/authUtils';
-import { RootState } from '@hazmapper/redux/store';
+import { AuthToken } from '@hazmapper/types';
 
 interface UseEnsureOptions {
-  redirect?: boolean;
+  isTapisTokenRequest: boolean;
+  authToken: AuthToken | null;
+  hasValidTapisToken: boolean;
 }
 
 /**
@@ -28,20 +26,25 @@ interface UseEnsureOptions {
  * @returns {void}
  */
 export function useEnsureAuthenticatedUserHasValidTapisToken({
-  redirect = true,
-}: UseEnsureOptions = {}) {
+  isTapisTokenRequest,
+  authToken,
+  hasValidTapisToken,
+}: UseEnsureOptions) {
   const navigate = useNavigate();
   const location = useLocation();
-  const authToken = useSelector((state: RootState) => state.auth.authToken);
-
   // if user has auth token but is expired, we need to determine if we need
-  // to redirect to login (`redirect`)
-  if (authToken && !isTokenValid(authToken)) {
-    if (redirect) {
+  // to redirect to login. This should no longer occur with `useAuthenticatedUser`
+  // which refetches every 30 minutes to ensure the token is valid.
+
+  useEffect(() => {
+    if (isTapisTokenRequest && authToken && !hasValidTapisToken) {
       navigate(`/login?to=${encodeURIComponent(location.pathname)}`);
-    } else {
-      // if not redirect to login, lets remove the invalid token
-      removeAuthenticatedUserFromLocalStorage();
     }
-  }
+  }, [
+    isTapisTokenRequest,
+    authToken,
+    location.pathname,
+    navigate,
+    hasValidTapisToken,
+  ]);
 }

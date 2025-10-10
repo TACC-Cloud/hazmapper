@@ -65,7 +65,10 @@ const CreateMapModal = ({ isOpen, closeModal }: CreateMapModalProps) => {
   } = methods;
 
   const [errorMessage, setErrorMessage] = useState('');
-  const { username } = useAuthenticatedUser();
+  const {
+    data: { username },
+  } = useAuthenticatedUser();
+
   const { mutate: createProject, isPending: isCreatingProject } =
     useCreateProject();
   const navigate = useNavigate();

@@ -31,8 +31,6 @@
   object-fit: contain;
 }
 .userGuide {
-  width: 100%;
-  justify-content: right;
   font-weight: bold;
   font-size: medium;
   padding-right: 50px;

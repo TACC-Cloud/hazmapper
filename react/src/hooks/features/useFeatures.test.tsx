@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { renderHook, waitFor, act } from '@testing-library/react';
 import { useFeatures, useCurrentFeatures } from './useFeatures';
 import { featureCollection } from '@hazmapper/__fixtures__/featuresFixture';
 import {
@@ -24,14 +24,17 @@ describe('Feature Hooks', () => {
   });
 
   it('useFeatures should fetch features', async () => {
-    const { result } = renderHook(
-      () =>
-        useFeatures({
-          projectId: 80,
-          assetTypes: ['image'],
-        }),
-      { wrapper: TestWrapperWithUseFeatureManager }
-    );
+    let result;
+    await act(async () => {
+      ({ result } = renderHook(
+        () =>
+          useFeatures({
+            projectId: 80,
+            assetTypes: ['image'],
+          }),
+        { wrapper: TestWrapperWithUseFeatureManager }
+      ));
+    });
 
     expect(result.current.isLoading).toBe(true);
 
