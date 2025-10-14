@@ -11,7 +11,6 @@ import {
   ThemeConfig,
   ConfigProvider,
 } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
 import { FormItem } from 'react-hook-form-antd';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -19,8 +18,8 @@ import * as z from 'zod';
 import { usePostTileServer } from '@hazmapper/hooks';
 import { tileLayerSchema } from '@hazmapper/pages/MapProject';
 import { TileServerLayer } from '@hazmapper/types';
-import { PrimaryButton } from '@hazmapper/common_components/Button';
 import GeotiffImporter from './GeotiffImporter';
+import TileServerSuggestions from './TileServerSuggestions';
 
 const formTheme: ThemeConfig = {
   components: {
@@ -139,48 +138,6 @@ const CreateLayerModal: React.FC<{
     }
   }, [resetCreateTileLayer, addTileLayer, handleClose, isSuccess, data]);
 
-  const defaultTileServers: ReadonlyArray<Omit<TileServerLayer, 'id'>> = [
-    {
-      name: 'Roads',
-      type: 'tms',
-      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      uiOptions: {
-        opacity: 1,
-        isActive: true,
-        showDescription: false,
-        showInput: false,
-        zIndex: 0,
-      },
-      tileOptions: {
-        minZoom: 0,
-        maxZoom: 24,
-        maxNativeZoom: 19,
-      },
-    },
-    {
-      name: 'Satellite',
-      type: 'tms',
-      url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-      attribution:
-        'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, \
-      GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
-      uiOptions: {
-        zIndex: 0,
-        opacity: 1,
-        isActive: true,
-        showDescription: false,
-        showInput: false,
-      },
-      tileOptions: {
-        minZoom: 0,
-        maxZoom: 24,
-        maxNativeZoom: 19,
-      },
-    },
-  ];
-
   return (
     <Modal
       title={<Header>Create a Tile Layer</Header>}
@@ -235,24 +192,7 @@ const CreateLayerModal: React.FC<{
 
             <Flex vertical style={{ marginTop: '3rem' }}>
               {importMethod === 'suggestions' && (
-                <>
-                  {defaultTileServers.map((tileServer, index) => (
-                    <Flex
-                      key={`suggestedTile${index}`}
-                      justify="space-between"
-                      align="center"
-                      style={{ marginBottom: '1.5rem' }}
-                    >
-                      <span>{tileServer.name}</span>
-                      <PrimaryButton
-                        onClick={() => createTileLayer(tileServer)}
-                      >
-                        <PlusOutlined />
-                        Import
-                      </PrimaryButton>
-                    </Flex>
-                  ))}
-                </>
+                <TileServerSuggestions onImport={createTileLayer} />
               )}
 
               {importMethod === 'geotiff' && (
