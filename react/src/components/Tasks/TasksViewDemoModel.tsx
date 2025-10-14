@@ -39,6 +39,8 @@ const TasksViewDemoModal: React.FC<TasksViewDemoModalProps> = ({
     projectId: activeProject.id,
     options: {
       enabled: !isPublicView && isVisible,
+      refetchInterval: isVisible ? 5000 : false, // Poll every 5 seconds
+      refetchIntervalInBackground: false, // Stop polling when tab is not active
     },
   });
 
