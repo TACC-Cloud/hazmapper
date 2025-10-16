@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faLock } from '@fortawesome/free-solid-svg-icons';
@@ -54,6 +54,7 @@ interface Props {
  */
 const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const {
     data: { username, hasValidTapisToken },
   } = useAuthenticatedUser();
@@ -133,12 +134,11 @@ const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
           <Tooltip title="View private map">
             <Button
               onClick={() => {
-                const { pathname, search } = window.location;
-                const newPath = pathname.replace(
+                const newPath = location.pathname.replace(
                   '/project-public/',
                   '/project/'
                 );
-                navigate(`${newPath}${search}`);
+                navigate(`${newPath}${location.search}`);
               }}
               type="link"
               title="View private map"
