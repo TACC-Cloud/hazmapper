@@ -5,8 +5,8 @@ const joinUrl = (base: string, path: string) =>
 
 export const resolveTileUrl = (layer: TileServerLayer, geoapiUrl: string) => {
   // If it's a COG, construct TiTiler URL
-  if (layer.kind === 'cog') {
-    const fileUrl = layer.internal ? `file://${layer.url}` : layer.url;
+  if (layer.internal && layer.kind === 'cog') {
+    const fileUrl = `file://${layer.url}`;
     const encodedUrl = encodeURIComponent(fileUrl);
 
     // Build base URL
@@ -27,6 +27,10 @@ export const resolveTileUrl = (layer: TileServerLayer, geoapiUrl: string) => {
   if (layer.internal) {
     // Note: not currently supported; only supporting internal cog at moment
     return joinUrl(geoapiUrl, layer.url);
+  }
+
+  if (layer.url.includes('{ext}')) {
+    return layer.url.replace('{ext}', 'png'); //default to png
   }
 
   return layer.url;
