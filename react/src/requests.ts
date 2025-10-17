@@ -20,14 +20,17 @@ import {
 import { ApiService, AppConfiguration, AuthToken } from '@hazmapper/types';
 import { HASHED_SESSION } from '@hazmapper/utils/requestUtils';
 
-export const getApiClient = (apiService: ApiService = ApiService.Geoapi) => {
+export const getApiClient = (
+  apiService: ApiService = ApiService.Geoapi,
+  geoapiEnv: string
+) => {
   const axiosConfig = {
     timeout: 60 * 1000, // 1 minute
   };
   if (apiService === ApiService.Geoapi) {
     Object.assign(axiosConfig, {
-      xsrfCookieName: 'csrftoken',
-      xsrfHeaderName: 'x-csrftoken',
+      xsrfCookieName: `csrftoken-${geoapiEnv}`,
+      xsrfHeaderName: `x-csrftoken-${geoapiEnv}`,
       withCredentials: true, // Ensure cookies are sent with requests
       withXSRFToken: true,
     });
@@ -135,8 +138,8 @@ export function useGet<ResponseType, TransformedResponseType = ResponseType>({
   transform,
   prefetch,
 }: UseGetParams<ResponseType, TransformedResponseType>) {
-  const client = getApiClient(apiService);
   const configuration = useAppConfiguration();
+  const client = getApiClient(apiService, configuration.geoapiEnv);
   const { accessToken: mapillaryAuthToken } = useMapillaryToken();
 
   const isPublicRoute = useIsPublicProjectRoute();
@@ -186,8 +189,8 @@ export function usePost<RequestType, ResponseType>({
   options = {},
   apiService = ApiService.Geoapi,
 }: UsePostParams<RequestType, ResponseType>) {
-  const client = getApiClient(apiService);
   const configuration = useAppConfiguration();
+  const client = getApiClient(apiService, configuration.geoapiEnv);
 
   const baseUrl = getBaseApiUrl(apiService, configuration);
 
@@ -239,8 +242,8 @@ export function useDelete<ResponseType, Variables>({
   options = {},
   apiService = ApiService.Geoapi,
 }: UseDeleteParams<ResponseType, Variables>) {
-  const client = getApiClient(apiService);
   const configuration = useAppConfiguration();
+  const client = getApiClient(apiService, configuration.geoapiEnv);
 
   const baseUrl = getBaseApiUrl(apiService, configuration);
   const isTapisTokenRequest = usesTapisToken(apiService);
@@ -282,8 +285,8 @@ export function usePut<RequestType, ResponseType>({
   options = {},
   apiService = ApiService.Geoapi,
 }: UsePostParams<RequestType, ResponseType>) {
-  const client = getApiClient(apiService);
   const configuration = useAppConfiguration();
+  const client = getApiClient(apiService, configuration.geoapiEnv);
 
   const baseUrl = getBaseApiUrl(apiService, configuration);
 

@@ -47,9 +47,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 const basePath = getBasePath();
 
 const rootLoader = (queryClient: QueryClient) => async () => {
-  const { geoapiUrl } = computeAppConfiguration(basePath);
+  const { geoapiUrl, geoapiEnv } = computeAppConfiguration(basePath);
   const data = await queryClient.ensureQueryData(
-    getAuthenticatedUserQuery(geoapiUrl)
+    getAuthenticatedUserQuery(geoapiUrl, geoapiEnv)
   );
   return data;
 };
