@@ -19,12 +19,14 @@ import {
   useCurrentFeatures,
   useFeatureSelection,
   useMapillaryViewerMoveToNearestPoint,
+  useAppConfiguration,
 } from '@hazmapper/hooks';
 import { MAP_CONFIG } from './config';
 import FitBoundsHandler from './FitBoundsHandler';
 import PositionTracker from './PositionTracker';
 import { createMarkerIcon, createClusterIcon } from './markerCreators';
 import { calculatePointCloudMarkerPosition } from './utils';
+import { resolveTileUrl } from '@hazmapper/utils/tiles';
 import { getSequenceID } from '@hazmapper/utils/featureUtils';
 import { getPixelBboxAroundPoint } from '@hazmapper/utils/leafletUtils';
 import MapillaryPositionMarker from './MapillaryPositionMarker';
@@ -206,6 +208,8 @@ const LeafletMap: React.FC = () => {
     getFeatureStyle,
   ]);
 
+  const config = useAppConfiguration();
+
   return (
     <MapContainer
       center={MAP_CONFIG.startingCenter}
@@ -239,11 +243,16 @@ const LeafletMap: React.FC = () => {
         ) : (
           <TileLayer
             key={layer.id}
-            url={layer.url}
+            url={resolveTileUrl(layer, config.geoapiUrl)}
             attribution={layer.attribution}
             zIndex={layer.uiOptions.zIndex}
             opacity={layer.uiOptions.opacity}
-            {...layer.tileOptions}
+            {...layer.tileOptions} // e.g. maxZoom, minZoom, maxNativeZoom, and bounds.
+            maxZoom={
+              layer.internal
+                ? MAP_CONFIG.maxZoom
+                : (layer.tileOptions?.maxZoom ?? MAP_CONFIG.maxZoom)
+            }
           />
         )
       )}

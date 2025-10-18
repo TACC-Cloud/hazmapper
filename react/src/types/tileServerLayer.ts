@@ -10,6 +10,12 @@ export interface TileServerLayer {
   name: string;
   /** The type of the layer. */
   type: string;
+  /** The kind/source of the data (e.g., 'cog'). */
+  kind?: string | null;
+  /** Whether this layer is served internally by our stack (e.g., TiTiler). */
+  internal?: boolean;
+  /** UUID for internally managed assets. Required when internal=true. */
+  uuid?: string | null;
   /** The URL template of the layer. */
   url: string;
   /** The attribution text of the layer. */
@@ -22,6 +28,8 @@ export interface TileServerLayer {
     minZoom?: number;
     /** The maximum native zoom level of the layer. */
     maxNativeZoom?: number;
+    /** The bounds of the layer [[south, west], [north, east]]. */
+    bounds?: [[number, number], [number, number]];
     /** The format of the layer. */
     format?: string;
     /** Comma-separated list of layers. */
@@ -41,6 +49,10 @@ export interface TileServerLayer {
     showInput?: boolean;
     /** Whether to show the description of the layer or not. Note: handles if opacity ui is shown */
     showDescription?: boolean;
+    /** Render options for backend tiler (titiler) **/
+    renderOptions?: {
+      colormap_name?: string;
+    };
   };
 }
 

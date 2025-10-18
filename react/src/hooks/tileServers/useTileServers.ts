@@ -1,5 +1,5 @@
 import { UseQueryResult, useQueryClient } from '@tanstack/react-query';
-import { useGet, useDelete, usePost, usePut } from '../../requests';
+import { useGet, useDelete, usePost, usePut } from '@hazmapper/requests';
 import { TileServerLayer } from '@hazmapper/types';
 
 interface UseGetTileServerParams {

@@ -40,6 +40,7 @@ import {
   useAuthenticatedUser,
 } from '@hazmapper/hooks';
 import { SortableItem } from './SortableItem';
+import TileServerStyling from './TileServerStyling';
 import CreateLayerModal from '../CreateLayerModal';
 
 const formLayerTheme: ThemeConfig = {
@@ -348,6 +349,25 @@ const LayersPanel: React.FC<{
                                   `tileLayers.${index}.layer.uiOptions.showDescription`
                                 ) && <Slider min={0} max={1} step={0.1} />}
                               </FormItem>
+
+                              {/* Extra styling available for use of our internal tile serving of cogs */}
+                              {field.layer.internal &&
+                                field.layer.kind === 'cog' &&
+                                watch(
+                                  `tileLayers.${index}.layer.uiOptions.showDescription`
+                                ) && (
+                                  <TileServerStyling
+                                    renderOptions={
+                                      field.layer.uiOptions.renderOptions
+                                    }
+                                    onChange={(renderOptions) => {
+                                      setValue(
+                                        `tileLayers.${index}.layer.uiOptions.renderOptions`,
+                                        renderOptions
+                                      );
+                                    }}
+                                  />
+                                )}
                             </Flex>
                           </SortableItem>
                         );
@@ -368,6 +388,7 @@ const LayersPanel: React.FC<{
                       Layer options have changed!
                       <br /> Save to persist changes.
                     </span>
+
                     <Form.Item>
                       <Button
                         type="primary"
