@@ -67,8 +67,9 @@ export const useGeoapiNotifications = () => {
   const { geoapiUrl } = useAppConfiguration();
   const baseUrl = new URL(geoapiUrl);
   const protocol = baseUrl.protocol === 'https:' ? 'wss' : 'ws';
+  // Only connect to WebSocket after user is authenticated to avoid 403 errors
   const { lastMessage } = useWebSocket(
-    `${protocol}://${baseUrl.host}${baseUrl.pathname}/ws`
+    username ? `${protocol}://${baseUrl.host}${baseUrl.pathname}/ws` : null
   );
 
   useEffect(() => {

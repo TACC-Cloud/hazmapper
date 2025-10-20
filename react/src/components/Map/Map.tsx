@@ -281,7 +281,10 @@ const LeafletMap: React.FC = () => {
       <MapillaryPositionMarker />
 
       {/* Handles zooming to a specific feature or to all features */}
-      <FitBoundsHandler featureCollection={featureCollection} />
+      <FitBoundsHandler
+        featureCollection={featureCollection}
+        activeBaseLayers={activeBaseLayers}
+      />
 
       <ZoomControl position="bottomright" />
 
