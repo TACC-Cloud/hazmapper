@@ -1,5 +1,7 @@
 # Changelog
 
+# Deprecated - No longer supported! #
+
 ## [2.20] - 2024-04-15
 
 ### Changed
