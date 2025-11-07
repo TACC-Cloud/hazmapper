@@ -17,10 +17,15 @@ export const featureCollection: FeatureCollection = {
       assets: [
         {
           id: 2036568,
+          feature_id: 1,
           path: '80/f7c2afa2-f184-40a7-80be-0874a7db755e.jpeg',
           uuid: 'f7c2afa2-f184-40a7-80be-0874a7db755e',
           asset_type: 'image' as AssetType,
+          original_system: 'project-1234',
           original_path: '/foo/image1.JPG',
+          current_system: 'project-1234',
+          current_path: '/foo/image1.JPG',
+          is_on_public_system: false,
           original_name: null,
           display_path: '/foo/image1.JPG',
         },
@@ -39,10 +44,15 @@ export const featureCollection: FeatureCollection = {
       assets: [
         {
           id: 2036569,
+          feature_id: 2,
           path: '80/5a3e7513-2740-4c0f-944d-7b497ceff2ea.jpeg',
           uuid: '5a3e7513-2740-4c0f-944d-7b497ceff2ea',
           asset_type: 'image' as AssetType,
-          original_path: '/foo/image2.JPG',
+          original_system: 'project-1234',
+          original_path: '/foo/image12JPG',
+          current_system: 'project-1234',
+          current_path: '/foo/image2.JPG',
+          is_on_public_system: false,
           original_name: null,
           display_path: '/foo/image2.JPG',
         },

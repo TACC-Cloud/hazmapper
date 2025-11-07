@@ -8,11 +8,13 @@ import {
   Typography,
   Space,
   Alert,
+  Tooltip,
 } from 'antd';
 import {
   LoadingOutlined,
   CheckCircleOutlined,
   SyncOutlined,
+  LinkOutlined,
 } from '@ant-design/icons';
 import { Project } from '@hazmapper/types';
 import {
@@ -23,6 +25,54 @@ import {
 } from '@hazmapper/hooks/';
 
 const { Text } = Typography;
+
+const DesignSafeFileLink: React.FC<{
+  system: string | null;
+  path: string | null;
+}> = ({ system, path }) => {
+  const { designsafePortalUrl } = useAppConfiguration();
+
+  const hasPath = Boolean(system && path);
+
+  const getDesignSafeUrl = (
+    system: string | null,
+    path: string | null
+  ): string | null => {
+    if (!system || !path) return null;
+    if (system.startsWith('project-')) {
+      const projectUUid = system.split('project-')[1]; // get UUID for DS project system (i.e. project-uuid)
+      return `${designsafePortalUrl}/data/browser/projects/${projectUUid}${path}`;
+    } else {
+      return `${designsafePortalUrl}/data/browser/tapis/${system}${path}`;
+    }
+  };
+
+  if (!hasPath) {
+    return (
+      <Text code style={{ fontSize: '11px' }}>
+        N/A
+      </Text>
+    );
+  }
+
+  const dsUrl = getDesignSafeUrl(system, path);
+  const pathText = `${system}${path}`;
+
+  return (
+    <Space size={4}>
+      <Text code style={{ fontSize: '11px' }}>
+        {pathText}
+      </Text>
+      {dsUrl && (
+        <Tooltip title="Open in DesignSafe">
+          <a href={dsUrl} target="_blank" rel="noreferrer">
+            <LinkOutlined style={{ fontSize: '12px' }} />
+          </a>
+        </Tooltip>
+      )}
+    </Space>
+  );
+};
 
 interface FileAccessibilityModalProps {
   project: Project;
@@ -35,8 +85,6 @@ export const FileAccessibilityModal: React.FC<FileAccessibilityModalProps> = ({
   open,
   onClose,
 }) => {
-  const { designsafePortalUrl } = useAppConfiguration();
-
   const { data, isLoading, refetch } = useFileLocationStatus(project.id);
 
   const startRefresh = useStartFileLocationRefresh(project.id);
@@ -62,19 +110,6 @@ export const FileAccessibilityModal: React.FC<FileAccessibilityModalProps> = ({
 
   const getFeatureUrl = (featureId: number): string => {
     return `/project/${project.uuid}/?panel=Assets&selectedFeature=${featureId}`;
-  };
-
-  const getDesignSafeUrl = (
-    system: string | null,
-    path: string | null
-  ): string | null => {
-    if (!system || !path) return null;
-    if (system.startsWith('project-')) {
-      const projectUUid = system.split('project-')[1]; // get UUID for DS project system (i.e. project-uuid)
-      return `${designsafePortalUrl}/data/browser/projects/${projectUUid}${path}`;
-    } else {
-      return `${designsafePortalUrl}/data/browser/tapis/${system}${path}`;
-    }
   };
 
   const columns = [
@@ -105,45 +140,23 @@ export const FileAccessibilityModal: React.FC<FileAccessibilityModalProps> = ({
       title: 'Original Path',
       key: 'original_path',
       width: 250,
-      render: (_: unknown, record: FeatureAssetLocation) => {
-        const hasPath = Boolean(record.original_system && record.original_path);
-        const pathText = hasPath
-          ? `${record.original_system}${record.original_path}`
-          : 'N/A';
-        return (
-          <Text code style={{ fontSize: '11px' }}>
-            {pathText}
-          </Text>
-        );
-      },
+      render: (_: unknown, record: FeatureAssetLocation) => (
+        <DesignSafeFileLink
+          system={record.original_system}
+          path={record.original_path}
+        />
+      ),
     },
     {
       title: 'Current Path',
       key: 'current_path',
       width: 250,
-      render: (_: unknown, record: FeatureAssetLocation) => {
-        const hasPath = Boolean(record.current_system && record.current_path);
-        if (!hasPath) {
-          return <Text type="secondary">N/A</Text>;
-        }
-        const dsUrl = getDesignSafeUrl(
-          record.current_system,
-          record.current_path
-        );
-        const pathText = `${record.current_system}${record.current_path}`;
-        return (
-          <Space direction="vertical" size={0}>
-            <Text code style={{ fontSize: '11px' }}>
-              {pathText}
-            </Text>
-            {dsUrl && (
-              <a href={dsUrl} target="_blank" rel="noreferrer">
-                View in DesignSafe
-              </a>
-            )}
-          </Space>
-        );
-      },
+      render: (_: unknown, record: FeatureAssetLocation) => (
+        <DesignSafeFileLink
+          system={record.current_system}
+          path={record.current_path}
+        />
+      ),
     },
     {
       title: 'Status',
