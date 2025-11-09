@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Project, ProjectRequest } from '@hazmapper/types';
-import { FileAccessibilityModal } from '@hazmapper/components/FileAccessibilityModal';
+import {
+  FileAccessibilityInformation,
+  FileAccessibilityModal,
+} from '@hazmapper/components/FileAccessibilityModal';
 
 import { Flex, Button, Card, Typography, Modal } from 'antd';
 import {
@@ -24,24 +27,24 @@ const PublicTabContent: React.FC<PublicTabProps> = ({
   onProjectUpdate,
   isPending,
 }) => {
-  const togglePublic = () => {
+  const toggleMakePublicModal = () => {
     onProjectUpdate({ public: !project.public });
-    setIsModalOpen(false);
+    setIsMakePublicModalOpen(false);
   };
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isMakePublicModalOpen, setIsMakePublicModalOpen] = useState(false);
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const showFileAccessibility =
+  const showFileAccessibilityModal =
     searchParams.get('showFileAccessibility') === 'true';
 
-  const handleOpenFileAccessibility = () => {
+  const handleOpenFileAccessibilityModal = () => {
     setSearchParams((prev) => {
       prev.set('showFileAccessibility', 'true');
       return prev;
     });
   };
 
-  const handleCloseFileAccessibility = () => {
+  const handleCloseFileAccessibilityModal = () => {
     searchParams.delete('showFileAccessibility');
     setSearchParams(searchParams);
   };
@@ -91,7 +94,7 @@ const PublicTabContent: React.FC<PublicTabProps> = ({
       <Button
         type="primary"
         icon={<GlobalOutlined />}
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => setIsMakePublicModalOpen(true)}
         loading={isPending}
       >
         Make {project.public ? 'Private' : 'Public'}
@@ -100,7 +103,7 @@ const PublicTabContent: React.FC<PublicTabProps> = ({
       <Flex vertical gap="4px" style={{ marginTop: '12px' }}>
         <Button
           icon={<FileSearchOutlined />}
-          onClick={handleOpenFileAccessibility}
+          onClick={handleOpenFileAccessibilityModal}
           type="default"
         >
           View File Accessibility
@@ -110,21 +113,25 @@ const PublicTabContent: React.FC<PublicTabProps> = ({
         </Text>
       </Flex>
 
-      {showFileAccessibility && (
+      {showFileAccessibilityModal && (
         <FileAccessibilityModal
           project={project}
-          open={showFileAccessibility}
-          onClose={handleCloseFileAccessibility}
+          open={showFileAccessibilityModal}
+          onClose={handleCloseFileAccessibilityModal}
         />
       )}
 
       <Modal
-        open={isModalOpen}
+        open={isMakePublicModalOpen}
+        width="80%"
         title={`Make Map ${project.public ? 'Private' : ' Public'}`}
-        onOk={togglePublic}
-        onCancel={() => setIsModalOpen(!isModalOpen)}
+        onOk={toggleMakePublicModal}
+        onCancel={() => setIsMakePublicModalOpen(!isMakePublicModalOpen)}
       >
-        {`Are you sure you want to make this map ${project.public ? 'private' : ' public'}?`}
+        <FileAccessibilityInformation
+          project={project}
+          additionalText={`Are you sure you want to make this map ${project.public ? 'private' : ' public'}?`}
+        />
       </Modal>
     </Flex>
   );
