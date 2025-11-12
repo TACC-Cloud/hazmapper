@@ -52,12 +52,13 @@ export interface Asset {
   path: string;
   uuid: string;
   asset_type: AssetType;
-  original_system?: string | null;
-  original_path: string;
   original_name: string | null;
+  original_system: string | null;
+  original_path: string;
   current_system: string | null;
   current_path: string | null;
-  is_on_public_system: boolean | null;
+  last_public_system_check?: string | null;
+  is_on_public_system?: boolean | null;
   display_path: string;
 }
 
