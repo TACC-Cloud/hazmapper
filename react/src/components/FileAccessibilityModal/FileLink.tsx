@@ -77,3 +77,52 @@ export const DesignSafeFileLink: React.FC<{
     </Tooltip>
   );
 };
+
+/**
+ * Link to a map feature
+ */
+export const FeatureLink: React.FC<{
+  featureId: number;
+  projectUuid: string;
+}> = ({ featureId, projectUuid }) => {
+  const url = `/project/${projectUuid}/?panel=Assets&selectedFeature=${featureId}`;
+  return (
+    <a href={url} target="_blank" rel="noreferrer">
+      Feature {featureId}
+    </a>
+  );
+};
+
+/**
+ * Link to a tile layer (opens Assets panel)
+ */
+export const LayerLink: React.FC<{
+  layerName: string;
+  projectUuid: string;
+}> = ({ layerName, projectUuid }) => {
+  const url = `/project/${projectUuid}/?panel=Assets`;
+
+  return (
+    <Tooltip title={layerName}>
+      <a
+        href={url}
+        target="_blank"
+        rel="noreferrer"
+        style={{ display: 'inline-flex', alignItems: 'center' }}
+      >
+        <span>Layer: </span>
+        <span
+          style={{
+            maxWidth: '130px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            direction: 'rtl',
+          }}
+        >
+          <span style={{ direction: 'ltr' }}>{layerName}</span>
+        </span>
+      </a>
+    </Tooltip>
+  );
+};

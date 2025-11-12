@@ -22,7 +22,7 @@ import {
   FeatureAssetLocation,
   TileServerLocation,
 } from '@hazmapper/hooks/';
-import { DesignSafeFileLink } from './FileLink';
+import { DesignSafeFileLink, FeatureLink, LayerLink } from './FileLink';
 
 const { Text } = Typography;
 
@@ -88,15 +88,6 @@ const FileAccessibilityStatusSummary: React.FC<
   );
 };
 
-/**
- * Extract filename from a path
- */
-const getFilename = (path: string | null): string => {
-  if (!path) return '';
-  const parts = path.split('/');
-  return parts[parts.length - 1] || path;
-};
-
 interface FileAccessibilityInformationProps {
   project: Project;
   hasCheckButton?: boolean;
@@ -128,10 +119,6 @@ export const FileAccessibilityInformation: React.FC<
     }
   }, [isCheckRunning, refetch]);
 
-  const getFeatureUrl = (featureId: number): string => {
-    return `/project/${project.uuid}/?panel=Assets&selectedFeature=${featureId}`;
-  };
-
   const columns = [
     {
       title: 'Related To',
@@ -141,31 +128,17 @@ export const FileAccessibilityInformation: React.FC<
         _: unknown,
         record: FeatureAssetLocation | TileServerLocation
       ) => {
-        // Feature asset - has feature_id
         if ('feature_id' in record && record.feature_id) {
-          const url = getFeatureUrl(record.feature_id);
           return (
-            <a href={url} target="_blank" rel="noreferrer">
-              Feature {record.feature_id}
-            </a>
+            <FeatureLink
+              featureId={record.feature_id}
+              projectUuid={project.uuid}
+            />
           );
         }
-        // Tile server - show just filename with hover for full path
         if ('name' in record && record.name) {
-          const tileName = record.name;
           return (
-            <Tooltip title={tileName}>
-              <Tag
-                color="blue"
-                style={{
-                  maxWidth: '160px',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                }}
-              >
-                Layer: {tileName}
-              </Tag>
-            </Tooltip>
+            <LayerLink layerName={record.name} projectUuid={project.uuid} />
           );
         }
         return <Text type="secondary">Unknown</Text>;
@@ -288,50 +261,55 @@ export const FileAccessibilityInformation: React.FC<
   return (
     <Space direction="vertical" size="large" style={{ width: '100%' }}>
       {/* Status Section */}
-      <div>
-        {data?.check ? (
-          <Space direction="vertical" size="small">
-            <Text strong>Last Check Status:</Text>
-            <Space>
-              {isCheckRunning ? (
-                <>
-                  <Tag color="processing" icon={<LoadingOutlined />}>
-                    Running
-                  </Tag>
-                  <Text type="secondary" style={{ fontSize: '12px' }}>
-                    Started: {new Date(data.check.started_at).toLocaleString()}
-                  </Text>
-                </>
-              ) : (
-                <>
-                  <Tag color="success" icon={<CheckCircleOutlined />}>
-                    Completed
-                  </Tag>
-                  <Text type="secondary" style={{ fontSize: '12px' }}>
-                    {data.check.completed_at
-                      ? new Date(data.check.completed_at).toLocaleString()
-                      : 'N/A'}
-                  </Text>
-                </>
-              )}
-            </Space>
-          </Space>
-        ) : (
-          <Text type="secondary">No checks have been run yet.</Text>
-        )}
-      </div>
-
-      {/* Action Section */}
       {hasCheckButton && (
-        <div>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <div>
+            {data?.check ? (
+              <Space size="small">
+                {isCheckRunning ? (
+                  <>
+                    <Tag
+                      color="processing"
+                      icon={<LoadingOutlined />}
+                      style={{ margin: 0 }}
+                    >
+                      Checking...
+                    </Tag>
+                    <Text type="secondary" style={{ fontSize: '12px' }}>
+                      Started {new Date(data.check.started_at).toLocaleString()}
+                    </Text>
+                  </>
+                ) : (
+                  <>
+                    <Text type="secondary" style={{ fontSize: '12px' }}>
+                      Last checked:{' '}
+                      {data.check.completed_at
+                        ? new Date(data.check.completed_at).toLocaleString()
+                        : 'N/A'}
+                    </Text>
+                  </>
+                )}
+              </Space>
+            ) : (
+              <Text type="secondary" style={{ fontSize: '12px' }}>
+                No checks have been run yet
+              </Text>
+            )}
+          </div>
+
           <Button
-            type="primary"
             icon={<SyncOutlined />}
             onClick={handleRefresh}
             loading={startRefresh.isPending || isCheckRunning}
             disabled={isCheckRunning}
           >
-            {data?.check ? 'Re-check' : 'Check'} File Accessibility
+            {data?.check ? 'Re-check' : 'Check'}
           </Button>
         </div>
       )}
