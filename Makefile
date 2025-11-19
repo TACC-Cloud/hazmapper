@@ -7,15 +7,15 @@ DOCKER_IMAGE_BRANCH_TAG := $(shell git describe --exact-match --tags 2> /dev/nul
 
 .PHONY: build-angular
 build-angular:
-	docker build -t taccaci/hazmapper:$(TAG) -f angular/Dockerfile .
-	docker tag taccaci/hazmapper:$(TAG) taccaci/hazmapper:latest
-	docker tag taccaci/hazmapper:$(TAG) taccaci/hazmapper:$(DOCKER_IMAGE_BRANCH_TAG)
+	docker build -t taccwma/hazmapper:$(TAG) -f angular/Dockerfile .
+	docker tag taccwma/hazmapper:$(TAG) taccwma/hazmapper:latest
+	docker tag taccwma/hazmapper:$(TAG) taccwma/hazmapper:$(DOCKER_IMAGE_BRANCH_TAG)
 
 .PHONY: build-react
 build-react:
-	docker build -t taccaci/hazmapper-react:$(TAG) -f react/Dockerfile .
-	docker tag taccaci/hazmapper-react:$(TAG) taccaci/hazmapper-react:latest
-	docker tag taccaci/hazmapper-react:$(TAG) taccaci/hazmapper-react:$(DOCKER_IMAGE_BRANCH_TAG)
+	docker build -t taccwma/hazmapper-react:$(TAG) -f react/Dockerfile .
+	docker tag taccwma/hazmapper-react:$(TAG) taccwma/hazmapper-react:latest
+	docker tag taccwma/hazmapper-react:$(TAG) taccwma/hazmapper-react:$(DOCKER_IMAGE_BRANCH_TAG)
 
 .PHONY: build
 build:
@@ -23,7 +23,7 @@ build:
 
 .PHONY: publish
 publish:
-	docker push taccaci/hazmapper:$(TAG)
-	docker push taccaci/hazmapper-react:$(TAG)
-	docker push taccaci/hazmapper:${DOCKER_IMAGE_BRANCH_TAG}
-	docker push taccaci/hazmapper-react:${DOCKER_IMAGE_BRANCH_TAG}
+	docker push taccwma/hazmapper:$(TAG)
+	docker push taccwma/hazmapper-react:$(TAG)
+	docker push taccwma/hazmapper:${DOCKER_IMAGE_BRANCH_TAG}
+	docker push taccwma/hazmapper-react:${DOCKER_IMAGE_BRANCH_TAG}
