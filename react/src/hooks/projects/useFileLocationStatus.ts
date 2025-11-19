@@ -8,25 +8,25 @@ export interface StartFileLocationRefreshResponse {
   task_id: number | null;
 }
 interface FileAccessibilityBase {
-  id: number;
+  original_path: string | null;
+  original_system: string | null;
   current_path: string | null;
   current_system: string | null;
+  designsafe_project_id: string | null;
   is_on_public_system: boolean | null;
   last_public_system_check: string | null;
 }
 
 export interface FeatureAssetLocation extends FileAccessibilityBase {
+  id: number;
   feature_id: number;
   asset_type: string;
-  original_path: string | null;
-  original_system: string | null;
 }
 
 export interface TileServerLocation extends FileAccessibilityBase {
+  id: number;
   name: string;
   type: string;
-  original_path: string | null;
-  original_system: string | null;
 }
 
 export interface FileLocationSummary {

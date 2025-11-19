@@ -169,6 +169,7 @@ export const FileAccessibilityInformation: React.FC<
         <DesignSafeFileLink
           system={record.original_system}
           path={record.original_path}
+          designSafeProjectId={record.designsafe_project_id}
         />
       ),
     },
@@ -192,6 +193,7 @@ export const FileAccessibilityInformation: React.FC<
           <DesignSafeFileLink
             system={record.current_system}
             path={record.current_path}
+            designSafeProjectId={record.designsafe_project_id}
           />
         );
       },

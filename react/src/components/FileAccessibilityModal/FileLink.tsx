@@ -23,23 +23,45 @@ const truncateMiddle = (str: string, maxLength: number = 30): string => {
 export const DesignSafeFileLink: React.FC<{
   system: string | null;
   path: string | null;
+  designSafeProjectId: string | null;
   truncate?: boolean;
-}> = ({ system, path, truncate = true }) => {
+}> = ({ system, path, designSafeProjectId, truncate = true }) => {
   const { designsafePortalUrl } = useAppConfiguration();
 
   const hasPath = Boolean(system && path);
 
-  const getDesignSafeUrl = (
+  const getDesignSafeInfo = (
     system: string | null,
-    path: string | null
-  ): string | null => {
-    if (!system || !path) return null;
-    if (system.startsWith('project-')) {
-      const projectUUid = system.split('project-')[1];
-      return `${designsafePortalUrl}/data/browser/projects/${projectUUid}${path}`;
+    path: string | null,
+    designSafeProjectId: string | null
+  ): { url: string | null; displayPath: string } => {
+    if (!system || !path) return { url: null, displayPath: '' };
+
+    let url: string | null = null;
+    let displayPath: string = '';
+
+    if (designSafeProjectId) {
+      if (system === `designsafe.storage.published`) {
+        url = `${designsafePortalUrl}/data/browser/public/${path}`;
+        displayPath = `${designSafeProjectId}${path}`;
+      } else {
+        url = `${designsafePortalUrl}/data/browser/projects/${designSafeProjectId}/workdir${path}`;
+        displayPath = `${designSafeProjectId}/workdir${path}`;
+      }
+    } else if (system.startsWith('project-')) {
+      const projectUuid = system.split('project-')[1];
+      url = `${designsafePortalUrl}/data/browser/projects/${projectUuid}${path}`;
+      displayPath = `PRJ-${projectUuid}/workdir${path}`;
+    } else if (system == `designsafe.storage.default`) {
+      const projectUuid = system.split('project-')[1];
+      url = `${designsafePortalUrl}/data/browser/projects/${projectUuid}${path}`;
+      displayPath = `My Data${path}`;
     } else {
-      return `${designsafePortalUrl}/data/browser/tapis/${system}${path}`;
+      url = `${designsafePortalUrl}/data/browser/tapis/${system}${path}`;
+      displayPath = `${system}${path}`;
     }
+
+    return { url, displayPath };
   };
 
   if (!hasPath) {
@@ -50,29 +72,35 @@ export const DesignSafeFileLink: React.FC<{
     );
   }
 
-  const dsUrl = getDesignSafeUrl(system, path);
-  const fullPath = `${system}${path}`;
-  const displayPath = truncate ? truncateMiddle(fullPath, 40) : fullPath;
+  const { url, displayPath } = getDesignSafeInfo(
+    system,
+    path,
+    designSafeProjectId
+  );
 
-  if (!dsUrl) {
+  const truncatedDisplayPath = truncate
+    ? truncateMiddle(displayPath, 40)
+    : displayPath;
+
+  if (!url) {
     return (
-      <Tooltip title={fullPath}>
+      <Tooltip title={`Open in DesignSafe: ${displayPath}`}>
         <Text code style={{ fontSize: '11px' }}>
-          {displayPath}
+          {truncatedDisplayPath}
         </Text>
       </Tooltip>
     );
   }
 
   return (
-    <Tooltip title={`Open in DesignSafe`}>
+    <Tooltip title={`Open in DesignSafe: ${displayPath}`}>
       <a
-        href={dsUrl}
+        href={url}
         target="_blank"
         rel="noreferrer"
         style={{ fontSize: '11px', fontFamily: 'monospace' }}
       >
-        {displayPath}
+        {truncatedDisplayPath}
       </a>
     </Tooltip>
   );
