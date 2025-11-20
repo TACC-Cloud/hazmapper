@@ -1,21 +1,10 @@
 import React from 'react';
 import { Typography, Tooltip } from 'antd';
 import { useAppConfiguration } from '@hazmapper/hooks/';
+import { buildDesignSafeLink } from '@hazmapper/utils/designsafe';
+import { truncateMiddle } from '@hazmapper/utils/truncateMiddle';
 
 const { Text } = Typography;
-
-/**
- * Truncate middle of string with ellipsis
- */
-const truncateMiddle = (str: string, maxLength: number = 30): string => {
-  if (str.length <= maxLength) return str;
-  const charsToShow = maxLength - 3; // Reserve 3 chars for '...'
-  const frontChars = Math.ceil(charsToShow / 2);
-  const backChars = Math.floor(charsToShow / 2);
-  return (
-    str.substring(0, frontChars) + '...' + str.substring(str.length - backChars)
-  );
-};
 
 /**
  * Clickable link to DesignSafe with truncated display
@@ -30,40 +19,6 @@ export const DesignSafeFileLink: React.FC<{
 
   const hasPath = Boolean(system && path);
 
-  const getDesignSafeInfo = (
-    system: string | null,
-    path: string | null,
-    designSafeProjectId: string | null
-  ): { url: string | null; displayPath: string } => {
-    if (!system || !path) return { url: null, displayPath: '' };
-
-    let url: string | null = null;
-    let displayPath: string = '';
-
-    if (designSafeProjectId) {
-      if (system === `designsafe.storage.published`) {
-        url = `${designsafePortalUrl}/data/browser/public/${path}`;
-        displayPath = `${designSafeProjectId}${path}`;
-      } else {
-        url = `${designsafePortalUrl}/data/browser/projects/${designSafeProjectId}${path}`;
-        displayPath = `${designSafeProjectId}${path}`;
-      }
-    } else if (system.startsWith('project-')) {
-      const projectUuid = system.split('project-')[1];
-      url = `${designsafePortalUrl}/data/browser/projects/${projectUuid}${path}`;
-      displayPath = `PRJ-${projectUuid}/workdir${path}`;
-    } else if (system == `designsafe.storage.default`) {
-      const projectUuid = system.split('project-')[1];
-      url = `${designsafePortalUrl}/data/browser/projects/${projectUuid}${path}`;
-      displayPath = `My Data${path}`;
-    } else {
-      url = `${designsafePortalUrl}/data/browser/tapis/${system}${path}`;
-      displayPath = `${system}${path}`;
-    }
-
-    return { url, displayPath };
-  };
-
   if (!hasPath) {
     return (
       <Text type="secondary" style={{ fontSize: '11px' }}>
@@ -72,10 +27,11 @@ export const DesignSafeFileLink: React.FC<{
     );
   }
 
-  const { url, displayPath } = getDesignSafeInfo(
+  const { url, displayPath } = buildDesignSafeLink(
     system,
     path,
-    designSafeProjectId
+    designSafeProjectId,
+    designsafePortalUrl
   );
 
   const truncatedDisplayPath = truncate
