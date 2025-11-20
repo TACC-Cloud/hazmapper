@@ -45,8 +45,8 @@ export const DesignSafeFileLink: React.FC<{
         url = `${designsafePortalUrl}/data/browser/public/${path}`;
         displayPath = `${designSafeProjectId}${path}`;
       } else {
-        url = `${designsafePortalUrl}/data/browser/projects/${designSafeProjectId}/workdir${path}`;
-        displayPath = `${designSafeProjectId}/workdir${path}`;
+        url = `${designsafePortalUrl}/data/browser/projects/${designSafeProjectId}${path}`;
+        displayPath = `${designSafeProjectId}${path}`;
       }
     } else if (system.startsWith('project-')) {
       const projectUuid = system.split('project-')[1];
