@@ -71,11 +71,7 @@ const FileAccessibilityStatusSummary: React.FC<
           {data.summary.features_without_assets > 0 &&
             data.summary.external_tile_servers > 0 && <> and </>}
           {data.summary.external_tile_servers > 0 && (
-            <>
-              {' '}
-              {data.summary.external_tile_servers} external tile layer
-              {data.summary.external_tile_servers !== 1 ? 's' : ''}
-            </>
+            <> external tile layers</>
           )}{' '}
           {data.summary.features_without_assets > 0 ||
           data.summary.external_tile_servers > 0
