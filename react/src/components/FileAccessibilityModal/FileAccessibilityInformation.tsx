@@ -114,6 +114,13 @@ export const FileAccessibilityInformation: React.FC<
     data?.check && data.check.started_at && !data.check.completed_at
   );
 
+  // Auto-run check on mount if never run before
+  React.useEffect(() => {
+    if (!isLoading && !data?.check && !startRefresh.isPending) {
+      startRefresh.mutate();
+    }
+  }, [startRefresh, data?.check, isLoading]);
+
   // Poll for updates while check is running
   // TODO: Replace with WebSocket connection for real-time updates
   React.useEffect(() => {
