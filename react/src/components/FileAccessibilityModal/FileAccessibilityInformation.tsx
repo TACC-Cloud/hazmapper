@@ -13,6 +13,7 @@ import {
   LoadingOutlined,
   CheckCircleOutlined,
   SyncOutlined,
+  WarningOutlined,
 } from '@ant-design/icons';
 import { Project } from '@hazmapper/types';
 import {
@@ -44,11 +45,14 @@ const AnalysisSummary: React.FC<AnalysisSummaryProps> = ({ data }) => {
   const statusMessage =
     privateAssets > 0 ? (
       <div>
-        <div>
-          • There are {privateAssets} asset{privateAssets !== 1 ? 's' : ''} that
-          are Private.
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <WarningOutlined style={{ color: '#faad14' }} />
+          <span>
+            There are {privateAssets} asset{privateAssets !== 1 ? 's' : ''} that
+            are Private.
+          </span>
         </div>
-        <div style={{ marginTop: '8px' }}>
+        <div style={{ marginTop: '8px', marginLeft: '24px' }}>
           To resolve the identified asset issue(s), please see the documentation{' '}
           <a
             href="https://designsafe-ci.org/user-guide/tools/visualization/hazmapper/#collaboration-public"
@@ -61,11 +65,14 @@ const AnalysisSummary: React.FC<AnalysisSummaryProps> = ({ data }) => {
         </div>
       </div>
     ) : (
-      <div>• All included map assets are Public.</div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <CheckCircleOutlined style={{ color: '#52c41a' }} />
+        <span>All included map assets are Public.</span>
+      </div>
     );
 
   return (
-    <div style={{ marginTop: '16px', marginBottom: '16px' }}>
+    <div>
       <Text strong>Analysis Summary:</Text>
       <Text>{statusMessage}</Text>
 
@@ -119,6 +126,30 @@ export const FileAccessibilityInformation: React.FC<
     }
   }, [isCheckRunning, refetch]);
 
+  // Helper function to determine sort priority
+  const getStatusPriority = (
+    record: FeatureAssetLocation | TileServerLocation
+  ): number => {
+    // Not checked yet - highest priority
+    if (!record.last_public_system_check) return 1;
+
+    // Unknown - needs investigation
+    if (record.is_on_public_system === null) return 2;
+
+    // Private - needs to be fixed
+    if (record.is_on_public_system === false) return 3;
+
+    // Public - all good, lowest priority
+    return 4;
+  };
+
+  // Combine and sort data
+  const sortedTableData = React.useMemo(() => {
+    return [...(data?.featureAssets || []), ...(data?.tileServers || [])].sort(
+      (a, b) => getStatusPriority(a) - getStatusPriority(b)
+    );
+  }, [data?.featureAssets, data?.tileServers]);
+
   const columns = [
     {
       title: 'Related To',
@@ -147,21 +178,21 @@ export const FileAccessibilityInformation: React.FC<
     {
       title: 'Type',
       key: 'type',
-      width: 90,
+      width: 60,
       render: (
         _: unknown,
         record: FeatureAssetLocation | TileServerLocation
       ) => {
         // Use asset_type for feature assets, "Layer" for tile servers
         const displayType =
-          'asset_type' in record ? record.asset_type : 'Layer (GeoTIFF)';
+          'asset_type' in record ? record.asset_type : 'Layer';
         return <Tag>{displayType}</Tag>;
       },
     },
     {
       title: 'Original Path',
       key: 'original_path',
-      width: 220,
+      width: '35%',
       render: (
         _: unknown,
         record: FeatureAssetLocation | TileServerLocation
@@ -176,7 +207,7 @@ export const FileAccessibilityInformation: React.FC<
     {
       title: 'Public Path',
       key: 'public_path',
-      width: 220,
+      width: '35%',
       render: (
         _: unknown,
         record: FeatureAssetLocation | TileServerLocation
@@ -239,7 +270,7 @@ export const FileAccessibilityInformation: React.FC<
       title: 'Last Checked',
       dataIndex: 'last_public_system_check',
       key: 'last_public_system_check',
-      width: 130,
+      width: 90,
       render: (date: string | null) => {
         if (!date) {
           return (
@@ -367,10 +398,7 @@ export const FileAccessibilityInformation: React.FC<
             display: 'block',
           }}
         >
-          Assets & Layers (
-          {(data?.featureAssets?.length || 0) +
-            (data?.tileServers?.length || 0)}
-          )
+          Assets & Layers ({sortedTableData.length})
         </Text>
         {isLoading ? (
           <div style={{ textAlign: 'center', padding: '40px 0' }}>
@@ -378,10 +406,7 @@ export const FileAccessibilityInformation: React.FC<
           </div>
         ) : (
           <Table
-            dataSource={[
-              ...(data?.featureAssets || []),
-              ...(data?.tileServers || []),
-            ]}
+            dataSource={sortedTableData}
             columns={columns}
             rowKey="id"
             scroll={{ y: 150 }}
