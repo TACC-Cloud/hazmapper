@@ -384,7 +384,7 @@ export const FileAccessibilityInformation: React.FC<
             ]}
             columns={columns}
             rowKey="id"
-            scroll={{ y: 400 }}
+            scroll={{ y: 150 }}
             pagination={false}
             locale={{ emptyText: 'No file assets or tile servers found' }}
             size="small"
