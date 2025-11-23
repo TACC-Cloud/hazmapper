@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Typography, Tooltip } from 'antd';
 import { useAppConfiguration } from '@hazmapper/hooks/';
 import { buildDesignSafeLink } from '@hazmapper/utils/designsafe';
@@ -71,9 +72,9 @@ export const FeatureLink: React.FC<{
 }> = ({ featureId, projectUuid }) => {
   const url = `/project/${projectUuid}/?panel=Assets&selectedFeature=${featureId}`;
   return (
-    <a href={url} target="_blank" rel="noreferrer">
+    <Link to={url} target="_blank" rel="noreferrer">
       Feature {featureId}
-    </a>
+    </Link>
   );
 };
 
@@ -88,8 +89,8 @@ export const LayerLink: React.FC<{
 
   return (
     <Tooltip title={layerName}>
-      <a
-        href={url}
+      <Link
+        to={url}
         target="_blank"
         rel="noreferrer"
         style={{ display: 'inline-flex', alignItems: 'center' }}
@@ -106,7 +107,7 @@ export const LayerLink: React.FC<{
         >
           <span style={{ direction: 'ltr' }}>{layerName}</span>
         </span>
-      </a>
+      </Link>
     </Tooltip>
   );
 };
