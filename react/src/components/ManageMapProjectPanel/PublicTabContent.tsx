@@ -121,18 +121,34 @@ const PublicTabContent: React.FC<PublicTabProps> = ({
         />
       )}
 
-      <Modal
-        open={isMakePublicModalOpen}
-        width="80%"
-        title={`Make Map ${project.public ? 'Private' : ' Public'}`}
-        onOk={toggleMakePublicModal}
-        onCancel={() => setIsMakePublicModalOpen(!isMakePublicModalOpen)}
-      >
-        <FileAccessibilityInformation
-          project={project}
-          additionalText={`Are you sure you want to make this map ${project.public ? 'private' : ' public'}?`}
-        />
-      </Modal>
+      {project.public && (
+        <Modal
+          open={isMakePublicModalOpen}
+          width="80%"
+          title="Make Map Private"
+          okText="Make Map Private"
+          onOk={toggleMakePublicModal}
+          onCancel={() => setIsMakePublicModalOpen(!isMakePublicModalOpen)}
+        >
+          Are you sure you want to make this map private
+        </Modal>
+      )}
+
+      {!project.public && (
+        <Modal
+          open={isMakePublicModalOpen}
+          width="80%"
+          title={`Make Map ${project.public ? 'Private' : ' Public'}`}
+          okText="Make Map Public"
+          onOk={toggleMakePublicModal}
+          onCancel={() => setIsMakePublicModalOpen(!isMakePublicModalOpen)}
+        >
+          <FileAccessibilityInformation project={project} />
+          <div style={{ textAlign: 'right', marginTop: '16px' }}>
+            Are you sure you want to make this map public
+          </div>
+        </Modal>
+      )}
     </Flex>
   );
 };

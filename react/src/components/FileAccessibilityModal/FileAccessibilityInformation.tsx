@@ -40,7 +40,6 @@ const AnalysisSummary: React.FC<AnalysisSummaryProps> = ({ data }) => {
       file.is_on_public_system === false || file.is_on_public_system === null
   ).length;
 
-
   // Define statusMessage based on privateAssets count
   const statusMessage =
     privateAssets > 0 ? (
