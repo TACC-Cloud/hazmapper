@@ -26,35 +26,49 @@ import { DesignSafeFileLink, FeatureLink, LayerLink } from './FileLink';
 
 const { Text } = Typography;
 
-interface FileAccessibilityStatusSummaryProps {
+interface AnalysisSummaryProps {
   data: FileLocationStatusResponse;
-  additionalText?: string;
 }
 
-const FileAccessibilityStatusSummary: React.FC<
-  FileAccessibilityStatusSummaryProps
-> = ({ data, additionalText = '' }) => {
+const AnalysisSummary: React.FC<AnalysisSummaryProps> = ({ data }) => {
   const allFiles = [...(data.featureAssets || []), ...(data.tileServers || [])];
 
   if (allFiles.length === 0) return null;
 
-  const totalAssets = allFiles.length;
   const privateAssets = allFiles.filter(
     (file) =>
       file.is_on_public_system === false || file.is_on_public_system === null
   ).length;
 
+
+  // Define statusMessage based on privateAssets count
   const statusMessage =
-    privateAssets === 0
-      ? `All ${totalAssets} map asset${totalAssets !== 1 ? 's are' : ' is'} Public.`
-      : `There ${privateAssets === 1 ? 'is' : 'are'} ${privateAssets} Private asset${privateAssets !== 1 ? 's' : ''} included in this map.`;
+    privateAssets > 0 ? (
+      <div>
+        <div>
+          • There are {privateAssets} asset{privateAssets !== 1 ? 's' : ''} that
+          are Private.
+        </div>
+        <div style={{ marginTop: '8px' }}>
+          To resolve the identified asset issue(s), please see the documentation{' '}
+          <a
+            href="https://designsafe-ci.org/user-guide/tools/visualization/hazmapper/#collaboration-public"
+            target="_blank"
+            rel="noreferrer"
+          >
+            here
+          </a>
+          .
+        </div>
+      </div>
+    ) : (
+      <div>• All included map assets are Public.</div>
+    );
 
   return (
-    <div style={{ textAlign: 'right', marginTop: '16px' }}>
-      <Text strong>
-        {statusMessage}
-        {additionalText && <> {additionalText}</>}
-      </Text>
+    <div style={{ marginTop: '16px', marginBottom: '16px' }}>
+      <Text strong>Analysis Summary:</Text>
+      <Text>{statusMessage}</Text>
 
       {/* Show note about unchecked items if any exist */}
       {(data.summary.features_without_assets > 0 ||
@@ -62,22 +76,14 @@ const FileAccessibilityStatusSummary: React.FC<
         <div style={{ fontSize: '12px', color: '#8c8c8c', marginTop: '4px' }}>
           Note:
           {data.summary.features_without_assets > 0 && (
-            <>
-              {' '}
-              {data.summary.features_without_assets} geometry-only feature
-              {data.summary.features_without_assets !== 1 ? 's' : ''}
-            </>
+            <> geometry-only features </>
           )}
           {data.summary.features_without_assets > 0 &&
-            data.summary.external_tile_servers > 0 && <> and </>}
+            data.summary.external_tile_servers > 0 && <>and</>}
           {data.summary.external_tile_servers > 0 && (
-            <> external tile layers</>
-          )}{' '}
-          {data.summary.features_without_assets > 0 ||
-          data.summary.external_tile_servers > 0
-            ? 'are'
-            : 'is'}{' '}
-          not checked.
+            <> external tile layers </>
+          )}
+          are not checked.
         </div>
       )}
     </div>
@@ -87,12 +93,11 @@ const FileAccessibilityStatusSummary: React.FC<
 interface FileAccessibilityInformationProps {
   project: Project;
   hasCheckButton?: boolean;
-  additionalText?: string;
 }
 
 export const FileAccessibilityInformation: React.FC<
   FileAccessibilityInformationProps
-> = ({ project, hasCheckButton = false, additionalText = '' }) => {
+> = ({ project, hasCheckButton = false }) => {
   const startRefresh = useStartFileLocationRefresh(project.id);
   const handleRefresh = () => {
     startRefresh.mutate();
@@ -389,12 +394,7 @@ export const FileAccessibilityInformation: React.FC<
       </div>
 
       {/* Status Summary */}
-      {data && (
-        <FileAccessibilityStatusSummary
-          data={data}
-          additionalText={additionalText}
-        />
-      )}
+      {data && data.check?.completed_at && <AnalysisSummary data={data} />}
     </Space>
   );
 };
