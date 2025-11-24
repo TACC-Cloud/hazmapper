@@ -95,8 +95,12 @@ export const appRouter = createBrowserRouter(
       id: 'root',
       path: ROUTES.MAIN,
       loader: rootLoader(queryClient),
+      shouldRevalidate: ({ currentUrl, nextUrl }) => {
+        // Only re-run the rootLoader when the path changes.
+        return currentUrl.pathname !== nextUrl.pathname;
+      },
       element: <RootLayout />,
-      errorElement: <RouteError />, // for loader and rout-level errors
+      errorElement: <RouteError />, // for loader and route-level errors
       children: [
         {
           path: '',
