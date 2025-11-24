@@ -27,13 +27,21 @@
   align-items: center;
   gap: 10px;
 }
-.middleSection > div {
-  flex: 0 1 auto;
-  width: 100%;
-  overflow: auto;
-}
-.assetContainer {
+
+.buttonContainer {
   display: flex;
+  flex: 0 0 auto;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+.assetContainer {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  overflow: auto;
   align-content: center;
   justify-content: center;
 }
@@ -83,7 +91,8 @@ th {
   white-space: normal;
 }
 .pointCloud {
-  height: 35em;
+  height: 100%;
+  max-height: 35em;
   width: 100%;
 }
 .caption {
@@ -91,7 +100,34 @@ th {
   font-size: 0.8em;
   padding-bottom: 0.8em;
 }
+.questionnaireContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.questionnaireCarousel {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
 .questionnaireImage {
   width: 100%;
-  height: 30em;
+  height: 100%;
+  max-height: 30em;
+  object-fit: contain;
+}
+
+.questionnaireNav {
+  flex: 0 0 auto;
+  padding: 8px 0;
+}
+
+.assetImage {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
