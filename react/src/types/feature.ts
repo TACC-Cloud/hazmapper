@@ -52,6 +52,7 @@ export interface Asset {
   path: string;
   uuid: string;
   asset_type: AssetType;
+  designsafe_project_id: string;
   original_name: string | null;
   original_system: string | null;
   original_path: string;
