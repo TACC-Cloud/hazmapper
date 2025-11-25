@@ -41,7 +41,7 @@ export const DesignSafeFileLink: React.FC<{
 
   if (!url) {
     return (
-      <Tooltip title={`Open in DesignSafe: ${displayPath}`}>
+      <Tooltip title={`View in DesignSafe: ${displayPath}`}>
         <Text code style={{ fontSize: '11px' }}>
           {truncatedDisplayPath}
         </Text>
@@ -50,7 +50,7 @@ export const DesignSafeFileLink: React.FC<{
   }
 
   return (
-    <Tooltip title={`Open in DesignSafe: ${displayPath}`}>
+    <Tooltip title={`View in DesignSafe: ${displayPath}`}>
       <a
         href={url}
         target="_blank"

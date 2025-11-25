@@ -118,7 +118,7 @@ const AssetButton: React.FC<AssetButtonProps> = ({
           target="_blank"
           rel="noreferrer"
         >
-          Open in DesignSafe
+          View in DesignSafe
         </Button>
       )}
 
