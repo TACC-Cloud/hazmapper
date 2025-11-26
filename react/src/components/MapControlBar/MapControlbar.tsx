@@ -13,6 +13,7 @@ const { Text } = Typography;
 
 import {
   useDesignSafeProject,
+  useDesignSafePublishedProjectDetail,
   useProjectUsers,
   useMapMousePosition,
   useAuthenticatedUser,
@@ -83,6 +84,17 @@ const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
     },
   });
 
+  const { data: publishedProject } = useDesignSafePublishedProjectDetail({
+    designSafeProjectPRJ: activeProject?.designsafe_project_id ?? '',
+    options: {
+      enabled: Boolean(
+        isPublicView &&
+          !hasValidTapisToken &&
+          activeProject?.designsafe_project_id
+      ),
+    },
+  });
+
   const { isFetching: isFeaturesLoading, isError: isFeaturesError } =
     useCurrentFeatures();
 
@@ -124,10 +136,18 @@ const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
         <Text ellipsis>
           {mapPrefix}: {activeProject?.name}
         </Text>
-        {designSafeProject && (
+        {/* Show DesignSafe project info if available from either source */}
+        {(designSafeProject || publishedProject?.baseProject) && (
           <Text ellipsis>
-            Project: {designSafeProject.value.projectId} |{' '}
-            {designSafeProject.value.title}
+            Project:{' '}
+            {activeProject.designsafe_project_id ||
+              designSafeProject?.value.projectId}
+            {/* For authenticated users */}
+            {designSafeProject && <> | {designSafeProject.value.title}</>}
+            {/* For non-authenticated users viewing public/published projects */}
+            {!designSafeProject && publishedProject?.baseProject && (
+              <> | {publishedProject.baseProject.title}</>
+            )}
           </Text>
         )}
         {canSwitchToPrivateMap && (

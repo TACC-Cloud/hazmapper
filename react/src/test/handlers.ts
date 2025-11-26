@@ -33,7 +33,7 @@ export const designsafe_project = http.get(
 
 // DesignSafe published projects listing GET
 export const designsafe_get_published_projects = http.get(
-  `${testDevConfiguration.designsafePortalUrl}/api/publications/v2*`,
+  `${testDevConfiguration.designsafePortalUrl}/api/publications/v2`,
   () =>
     HttpResponse.json(designSafePublishedProjectCollectionMock, { status: 200 })
 );
@@ -147,8 +147,8 @@ export const defaultHandlers = [
   arcgis_tiles,
   designsafe_project,
   designsafe_projects,
-  designsafe_get_published_projects,
   designsafe_get_published_project,
+  designsafe_get_published_projects,
   geoapi_notifications,
   geoapi_get_projects,
   geoapi_project_features,

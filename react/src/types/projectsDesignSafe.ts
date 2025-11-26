@@ -109,4 +109,8 @@ export interface DesignSafePublishedProjectDetail {
   tree: {
     basePath: string;
   };
+  baseProject: {
+    title: string;
+    projectId: string;
+  };
 }

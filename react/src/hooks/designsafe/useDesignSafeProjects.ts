@@ -41,10 +41,15 @@ export const useDesignSafeProjects = (): UseQueryResult<
   return query;
 };
 
+interface UseDesignSafePublishedProjectDetailParams {
+  designSafeProjectPRJ: string | undefined;
+  options?: object;
+}
+
 export const useDesignSafePublishedProjectDetail = ({
   designSafeProjectPRJ,
   options = {},
-}): UseQueryResult<DesignSafePublishedProjectDetail> => {
+}: UseDesignSafePublishedProjectDetailParams): UseQueryResult<DesignSafePublishedProjectDetail> => {
   const query = useGet<DesignSafePublishedProjectDetail>({
     endpoint: `/api/publications/v2/${designSafeProjectPRJ}/`,
     key: ['designsafe-single-published-projectv2', designSafeProjectPRJ],

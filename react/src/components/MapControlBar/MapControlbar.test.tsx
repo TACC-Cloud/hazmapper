@@ -5,6 +5,7 @@ import MapControlbar from './MapControlbar';
 import {
   projectMock,
   designSafeProjectMock,
+  designSafePublishedProjectDetailMock,
 } from '@hazmapper/__fixtures__/projectFixtures';
 import { testDevConfiguration } from '@hazmapper/__fixtures__/appConfigurationFixture';
 import { server } from '@hazmapper/test/testUtil';
@@ -23,11 +24,13 @@ describe('MapControlbar', () => {
     );
 
     await waitFor(() => {
-      expect(getByText(`Map: ${projectMock.name}`)).toBeDefined();
+      expect(getByText(/Map:/)).toBeDefined();
+      expect(getByText(new RegExp(projectMock.name))).toBeDefined();
+    });
+
+    await waitFor(() => {
       expect(
-        getByText(
-          `Project: ${designSafeProjectMock.value.projectId} | ${designSafeProjectMock.value.title}`
-        )
+        getByText(new RegExp(designSafeProjectMock.value.title))
       ).toBeDefined();
     });
   });
@@ -38,11 +41,17 @@ describe('MapControlbar', () => {
     );
 
     await waitFor(() => {
-      expect(getByText(`Public Map: ${projectMock.name}`)).toBeDefined();
+      expect(getByText(/Public Map:/)).toBeDefined();
+      expect(getByText(new RegExp(projectMock.name))).toBeDefined();
+    });
+
+    await waitFor(() => {
+      expect(getByText(/Project:/)).toBeDefined();
       expect(
-        getByText(
-          `Project: ${designSafeProjectMock.value.projectId} | ${designSafeProjectMock.value.title}`
-        )
+        getByText(new RegExp(designSafeProjectMock.value.projectId))
+      ).toBeDefined();
+      expect(
+        getByText(new RegExp(designSafeProjectMock.value.title))
       ).toBeDefined();
     });
   });
@@ -58,7 +67,23 @@ describe('MapControlbar', () => {
     );
 
     await waitFor(() => {
-      expect(getByText(`Public Map: ${projectMock.name}`)).toBeDefined();
+      expect(getByText(/Public Map:/)).toBeDefined();
+      expect(getByText(new RegExp(projectMock.name))).toBeDefined();
+    });
+
+    // For unauthenticated users, project info comes from published project endpoint
+    await waitFor(() => {
+      expect(getByText(/Project:/)).toBeDefined();
+      expect(
+        getByText(
+          new RegExp(designSafePublishedProjectDetailMock.baseProject.projectId)
+        )
+      ).toBeDefined();
+      expect(
+        getByText(
+          new RegExp(designSafePublishedProjectDetailMock.baseProject.title)
+        )
+      ).toBeDefined();
     });
   });
 
