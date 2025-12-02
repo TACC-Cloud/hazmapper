@@ -4,6 +4,10 @@ import { Typography, Tooltip } from 'antd';
 import { useAppConfiguration } from '@hazmapper/hooks/';
 import { buildDesignSafeLink } from '@hazmapper/utils/designsafe';
 import { truncateMiddle } from '@hazmapper/utils/truncateMiddle';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FeatureTypeNullable } from '@hazmapper/types';
+import { featureTypeToIcon } from '@hazmapper/utils/featureIconUtil';
+import { faLayerGroup } from '@fortawesome/free-solid-svg-icons';
 
 const { Text } = Typography;
 
@@ -36,7 +40,7 @@ export const DesignSafeFileLink: React.FC<{
   );
 
   const truncatedDisplayPath = truncate
-    ? truncateMiddle(displayPath, 40)
+    ? truncateMiddle(displayPath, 70)
     : displayPath;
 
   if (!url) {
@@ -69,12 +73,25 @@ export const DesignSafeFileLink: React.FC<{
 export const FeatureLink: React.FC<{
   featureId: number;
   projectUuid: string;
-}> = ({ featureId, projectUuid }) => {
+  featureAssetType?: FeatureTypeNullable;
+}> = ({ featureId, projectUuid, featureAssetType }) => {
   const url = `/project/${projectUuid}/?panel=Assets&selectedFeature=${featureId}`;
+
+  const icon =
+    featureAssetType != null ? (
+      <FontAwesomeIcon
+        icon={featureTypeToIcon(featureAssetType)}
+        style={{ fontSize: 12, marginRight: 6 }}
+      />
+    ) : null;
+
   return (
-    <Link to={url} target="_blank" rel="noreferrer">
-      Feature {featureId}
-    </Link>
+    <Tooltip title={`Feature ${featureId}`}>
+      <Link to={url} target="_blank" rel="noreferrer">
+        {icon}
+        Feature {featureId}
+      </Link>
+    </Tooltip>
   );
 };
 
@@ -93,8 +110,9 @@ export const LayerLink: React.FC<{
         to={url}
         target="_blank"
         rel="noreferrer"
-        style={{ display: 'inline-flex', alignItems: 'center' }}
+        style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}
       >
+        <FontAwesomeIcon icon={faLayerGroup} style={{ fontSize: 12 }} />
         <span>Layer: </span>
         <span
           style={{

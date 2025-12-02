@@ -161,7 +161,7 @@ export const FileAccessibilityInformation: React.FC<
     {
       title: 'Related To',
       key: 'related_to',
-      width: 180,
+      width: 190,
       render: (
         _: unknown,
         record: FeatureAssetLocation | TileServerLocation
@@ -170,6 +170,7 @@ export const FileAccessibilityInformation: React.FC<
           return (
             <FeatureLink
               featureId={record.feature_id}
+              featureAssetType={record.asset_type}
               projectUuid={project.uuid}
             />
           );
@@ -183,23 +184,8 @@ export const FileAccessibilityInformation: React.FC<
       },
     },
     {
-      title: 'Type',
-      key: 'type',
-      width: 60,
-      render: (
-        _: unknown,
-        record: FeatureAssetLocation | TileServerLocation
-      ) => {
-        // Use asset_type for feature assets, "Layer" for tile servers
-        const displayType =
-          'asset_type' in record ? record.asset_type : 'Layer';
-        return <Tag>{displayType}</Tag>;
-      },
-    },
-    {
       title: 'Original Path',
       key: 'original_path',
-      width: '35%',
       render: (
         _: unknown,
         record: FeatureAssetLocation | TileServerLocation
@@ -214,7 +200,6 @@ export const FileAccessibilityInformation: React.FC<
     {
       title: 'Public Path',
       key: 'public_path',
-      width: '35%',
       render: (
         _: unknown,
         record: FeatureAssetLocation | TileServerLocation

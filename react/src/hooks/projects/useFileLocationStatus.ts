@@ -1,6 +1,6 @@
 import { UseQueryResult, useQueryClient } from '@tanstack/react-query';
 import { useGet, usePost } from '@hazmapper/requests';
-import { ApiService } from '@hazmapper/types';
+import { ApiService, AssetType } from '@hazmapper/types';
 
 export interface StartFileLocationRefreshResponse {
   message: string;
@@ -20,7 +20,7 @@ interface FileAccessibilityBase {
 export interface FeatureAssetLocation extends FileAccessibilityBase {
   id: number;
   feature_id: number;
-  asset_type: string;
+  asset_type: AssetType;
 }
 
 export interface TileServerLocation extends FileAccessibilityBase {
