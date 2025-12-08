@@ -3,17 +3,18 @@ import * as turf from '@turf/turf';
 import { useMap } from 'react-leaflet';
 import { FeatureCollection, Feature, TileServerLayer } from '@hazmapper/types';
 import { Feature as TFeature } from 'geojson';
-import { useFeatureSelection } from '@hazmapper/hooks';
+import { useFeatureSelection, useCurrentFeatures } from '@hazmapper/hooks';
 import { MAP_CONFIG } from './config';
 import L from 'leaflet';
 
 const FitBoundsHandler: React.FC<{
-  featureCollection: FeatureCollection | undefined;
   activeBaseLayers: TileServerLayer[];
-}> = ({ featureCollection, activeBaseLayers }) => {
+}> = ({ activeBaseLayers }) => {
   const map = useMap();
-  const hasFeatures = useRef(false);
+  const initialFitDone = useRef(false);
   const { selectedFeatureId } = useFeatureSelection();
+  const { data: featureCollection, isFetching: isFeaturesLoading } =
+    useCurrentFeatures();
 
   const getBoundsFromFeature = useCallback(
     (feature: FeatureCollection | Feature) => {
@@ -94,20 +95,31 @@ const FitBoundsHandler: React.FC<{
 
   // Handle initial bounds when features/layers are loaded
   useEffect(() => {
-    if (!selectedFeatureId && !hasFeatures.current) {
-      const combinedBounds = getCombinedBounds();
-
-      if (combinedBounds) {
-        map.fitBounds(combinedBounds, {
-          maxZoom: MAP_CONFIG.maxFitBoundsInitialZoom,
-          padding: [50, 50],
-        });
-        hasFeatures.current = true;
-      }
+    // Skip if already done initial fit or if a feature is selected
+    if (initialFitDone.current || selectedFeatureId) {
+      return;
     }
+
+    // Wait until features are done loading (even if result is empty)
+    if (isFeaturesLoading || !featureCollection) {
+      return;
+    }
+
+    const combinedBounds = getCombinedBounds();
+
+    if (combinedBounds) {
+      map.fitBounds(combinedBounds, {
+        maxZoom: MAP_CONFIG.maxFitBoundsInitialZoom,
+        padding: [50, 50],
+      });
+    }
+
+    // Mark as done so we don't recalculate on subsequent updates
+    initialFitDone.current = true;
   }, [
     map,
     featureCollection,
+    isFeaturesLoading,
     activeBaseLayers,
     selectedFeatureId,
     getCombinedBounds,
