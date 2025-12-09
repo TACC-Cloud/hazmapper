@@ -54,6 +54,13 @@ export interface TileServerLayer {
       colormap_name?: string;
     };
   };
+  /** File accessibility information  - only relevant for internal layers */
+  original_system?: string | null;
+  original_path?: string;
+  current_system?: string | null;
+  current_path?: string | null;
+  last_public_system_check?: string;
+  is_on_public_system?: boolean | null;
 }
 
 export type TLayerOptionsFormData = {

@@ -57,12 +57,14 @@ const AssetDetail: React.FC<AssetDetailProps> = ({
                   featureSource={featureSource}
                 />
               </div>
-              <AssetButton
-                selectedFeature={selectedFeature}
-                featureSource={featureSource}
-                isPublicView={isPublicView}
-                onQuestionnaireClick={onQuestionnaireClick}
-              />
+              <div className={styles.buttonContainer}>
+                <AssetButton
+                  selectedFeature={selectedFeature}
+                  featureSource={featureSource}
+                  isPublicView={isPublicView}
+                  onQuestionnaireClick={onQuestionnaireClick}
+                />
+              </div>
             </>
           )}
         </Suspense>

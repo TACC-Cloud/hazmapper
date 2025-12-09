@@ -5,6 +5,8 @@ import AssetPointCloud from './AssetPointCloud';
 import AssetQuestionnaire from './AssetQuestionnaire';
 import AssetStreetview from './AssetStreetview';
 
+import styles from './AssetDetail.module.css';
+
 interface AssetRendererProps {
   isPublicView: boolean;
   selectedFeature: Feature;
@@ -24,7 +26,14 @@ const AssetRenderer: React.FC<AssetRendererProps> = ({
 
   switch (featureType) {
     case FeatureType.Image:
-      return <img src={featureSource} alt="Asset" loading="lazy" />;
+      return (
+        <img
+          className={styles.assetImage}
+          src={featureSource}
+          alt="Asset"
+          loading="lazy"
+        />
+      );
     case FeatureType.Video:
       return (
         <video src={featureSource} controls preload="metadata">
@@ -51,12 +60,18 @@ const AssetRenderer: React.FC<AssetRendererProps> = ({
     default:
       if (isGeometry(featureType)) {
         return (
-          <SectionMessage type="info">
-            This feature has no asset.
-          </SectionMessage>
+          <div style={{ flex: '0 0 auto', margin: 'auto' }}>
+            <SectionMessage type="info">
+              This feature has no asset.
+            </SectionMessage>
+          </div>
         );
       }
-      return <SectionMessage type="warn">Unknown asset</SectionMessage>;
+      return (
+        <div style={{ flex: '0 0 auto', margin: 'auto' }}>
+          <SectionMessage type="warn">Unknown asset</SectionMessage>
+        </div>
+      );
   }
 };
 

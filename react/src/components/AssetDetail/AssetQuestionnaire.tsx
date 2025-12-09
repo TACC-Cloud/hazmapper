@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Feature, QuestionnaireAsset } from '@hazmapper/types';
 import { Carousel, Space, Flex } from 'antd';
 import { Button } from '@tacc/core-components';
@@ -15,6 +15,7 @@ export const AssetQuestionnaire: React.FC<QuestionnaireProps> = ({
   featureSource,
 }) => {
   const carouselRef = useRef<CarouselRef>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const processAssetImages = (): QuestionnaireAsset[] => {
     if (feature.properties?._hazmapper?.questionnaire?.assets) {
@@ -41,6 +42,10 @@ export const AssetQuestionnaire: React.FC<QuestionnaireProps> = ({
   };
 
   const assetImages = processAssetImages();
+  const totalImages = assetImages.length;
+  const isFirst = currentIndex === 0;
+  const isLast = currentIndex === totalImages - 1;
+  const showNav = totalImages > 1;
 
   const next = () => {
     carouselRef.current?.next();
@@ -50,31 +55,54 @@ export const AssetQuestionnaire: React.FC<QuestionnaireProps> = ({
     carouselRef.current?.prev();
   };
 
+  const handleChange = (_current: number, next: number) => {
+    setCurrentIndex(next);
+  };
+
   if (assetImages.length === 0) {
     return <div>No images available</div>;
   }
 
   return (
-    <div>
-      <Carousel ref={carouselRef} dots={false} draggable={true}>
-        {assetImages.map((asset, index) => (
-          <div key={`${asset.filename}-${index}`}>
-            <Flex gap="small" vertical>
-              <img
-                className={styles.questionnaireImage}
-                src={asset.previewPath}
-                alt={asset.filename}
-              />
-              <div className={styles.caption}>{asset.filename}</div>
-            </Flex>
-          </div>
-        ))}
-      </Carousel>
+    <div className={styles.questionnaireContainer}>
+      <div className={styles.questionnaireCarousel}>
+        <Carousel
+          ref={carouselRef}
+          dots={false}
+          draggable={showNav}
+          beforeChange={handleChange}
+        >
+          {assetImages.map((asset, index) => (
+            <div key={`${asset.filename}-${index}`}>
+              <Flex gap="small" vertical>
+                <img
+                  className={styles.questionnaireImage}
+                  src={asset.previewPath}
+                  alt={asset.filename}
+                />
+                <div className={styles.caption}>{asset.filename}</div>
+              </Flex>
+            </div>
+          ))}
+        </Carousel>
+      </div>
 
-      <Space size="large">
-        <Button iconNameBefore="push-left" onClick={previous}></Button>
-        <Button iconNameBefore="push-right" onClick={next}></Button>
-      </Space>
+      {showNav && (
+        <div className={styles.questionnaireNav}>
+          <Space size="large">
+            <Button
+              iconNameBefore="push-left"
+              onClick={previous}
+              disabled={isFirst}
+            />
+            <Button
+              iconNameBefore="push-right"
+              onClick={next}
+              disabled={isLast}
+            />
+          </Space>
+        </div>
+      )}
     </div>
   );
 };
