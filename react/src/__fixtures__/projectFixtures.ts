@@ -45,7 +45,7 @@ export const designSafeProjectMock: DesignSafeProject = {
     keywords: [],
     nhEvents: [],
     dataTypes: [],
-    projectId: 'proj-id',
+    projectId: 'PRJ-123',
     tombstone: false,
     facilities: [],
     nhLatitude: '',
@@ -81,6 +81,7 @@ export const projectMock: Project = {
   system_path: '/path/to/sample',
   deletable: true,
   streetview_instances: null,
+  designsafe_project_id: 'PRJ-1234',
   ds_project: designSafeProjectMock,
 };
 
@@ -127,5 +128,9 @@ export const designSafePublishedProjectDetailMock: DesignSafePublishedProjectDet
   {
     tree: {
       basePath: '/published-data/PRJ-1234',
+    },
+    baseProject: {
+      title: 'Some Fixture Project Title',
+      projectId: 'PRJ-1234',
     },
   };

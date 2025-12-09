@@ -1,7 +1,20 @@
 import React, { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Project, ProjectRequest } from '@hazmapper/types';
+import {
+  FileAccessibilityInformation,
+  FileAccessibilityModal,
+} from '@hazmapper/components/FileAccessibilityModal';
+
 import { Flex, Button, Card, Typography, Modal } from 'antd';
-import { CopyFilled, CopyOutlined, GlobalOutlined } from '@ant-design/icons';
+import {
+  CopyFilled,
+  CopyOutlined,
+  GlobalOutlined,
+  FileSearchOutlined,
+} from '@ant-design/icons';
+
+const { Text } = Typography;
 
 interface PublicTabProps {
   project: Project;
@@ -14,11 +27,27 @@ const PublicTabContent: React.FC<PublicTabProps> = ({
   onProjectUpdate,
   isPending,
 }) => {
-  const togglePublic = () => {
+  const toggleMakePublicModal = () => {
     onProjectUpdate({ public: !project.public });
-    setIsModalOpen(false);
+    setIsMakePublicModalOpen(false);
   };
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isMakePublicModalOpen, setIsMakePublicModalOpen] = useState(false);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const showFileAccessibilityModal =
+    searchParams.get('showFileAccessibility') === 'true';
+
+  const handleOpenFileAccessibilityModal = () => {
+    setSearchParams((prev) => {
+      prev.set('showFileAccessibility', 'true');
+      return prev;
+    });
+  };
+
+  const handleCloseFileAccessibilityModal = () => {
+    searchParams.delete('showFileAccessibility');
+    setSearchParams(searchParams);
+  };
 
   const publicPath = `${window.location.origin}${window.location.pathname.replace(
     '/project/',
@@ -65,19 +94,61 @@ const PublicTabContent: React.FC<PublicTabProps> = ({
       <Button
         type="primary"
         icon={<GlobalOutlined />}
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => setIsMakePublicModalOpen(true)}
         loading={isPending}
       >
         Make {project.public ? 'Private' : 'Public'}
       </Button>
-      <Modal
-        open={isModalOpen}
-        title={`Make Map ${project.public ? 'Private' : ' Public'}`}
-        onOk={togglePublic}
-        onCancel={() => setIsModalOpen(!isModalOpen)}
-      >
-        {`Are you sure you want to make this map ${project.public ? 'private' : ' public'}?`}
-      </Modal>
+
+      <Flex vertical gap="4px" style={{ marginTop: '12px' }}>
+        <Button
+          icon={<FileSearchOutlined />}
+          onClick={handleOpenFileAccessibilityModal}
+          type="default"
+        >
+          View File Accessibility
+        </Button>
+        <Text type="secondary" style={{ fontSize: '12px' }}>
+          Check if your project files are accessible to public in DesignSafe.
+        </Text>
+      </Flex>
+
+      {showFileAccessibilityModal && (
+        <FileAccessibilityModal
+          project={project}
+          open={showFileAccessibilityModal}
+          onClose={handleCloseFileAccessibilityModal}
+        />
+      )}
+
+      {project.public && (
+        <Modal
+          open={isMakePublicModalOpen}
+          width="80%"
+          title="Make Map Private"
+          okText="Make Map Private"
+          onOk={toggleMakePublicModal}
+          onCancel={() => setIsMakePublicModalOpen(!isMakePublicModalOpen)}
+        >
+          Are you sure you want to make this map private
+        </Modal>
+      )}
+
+      {!project.public && (
+        <Modal
+          open={isMakePublicModalOpen}
+          width="80%"
+          title={`Make Map ${project.public ? 'Private' : ' Public'}`}
+          okText="Make Map Public"
+          onOk={toggleMakePublicModal}
+          onCancel={() => setIsMakePublicModalOpen(!isMakePublicModalOpen)}
+        >
+          <FileAccessibilityInformation project={project} />
+          <div style={{ textAlign: 'right', marginTop: '16px' }}>
+            Are you sure you want to make this map public
+          </div>
+        </Modal>
+      )}
     </Flex>
   );
 };

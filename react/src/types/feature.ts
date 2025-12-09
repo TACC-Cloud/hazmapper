@@ -48,11 +48,18 @@ export type FeatureTypeNullable = FeatureType | undefined;
  */
 export interface Asset {
   id: number;
+  feature_id: number;
   path: string;
   uuid: string;
   asset_type: AssetType;
-  original_path: string;
+  designsafe_project_id: string;
   original_name: string | null;
+  original_system: string | null;
+  original_path: string;
+  current_system: string | null;
+  current_path: string | null;
+  last_public_system_check?: string | null;
+  is_on_public_system?: boolean | null;
   display_path: string;
 }
 

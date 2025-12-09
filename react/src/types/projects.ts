@@ -10,6 +10,7 @@ export interface Project {
   system_path: string;
   deletable: boolean;
   streetview_instances?: any;
+  designsafe_project_id?: string;
   ds_project?: DesignSafeProject;
 }
 export interface ProjectRequest {
