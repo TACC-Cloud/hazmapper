@@ -13,6 +13,8 @@ const esModules = [
   'react-dnd',
   'dnd-core',
   '@react-dnd',
+  'msw',
+  'until-async',
 ].join('|');
 
 module.exports = {
@@ -160,7 +162,7 @@ module.exports = {
   // runner: "jest-runner",
 
   // The paths to modules that run some code to configure or set up the testing environment before each test
-  // setupFiles: [],
+  setupFiles: ['<rootDir>/jest.polyfills.ts'],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
