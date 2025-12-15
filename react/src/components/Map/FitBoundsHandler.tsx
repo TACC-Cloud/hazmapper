@@ -11,7 +11,7 @@ const FitBoundsHandler: React.FC<{
   activeBaseLayers: TileServerLayer[];
 }> = ({ activeBaseLayers }) => {
   const map = useMap();
-  const initialFitDone = useRef(false);
+  const initialBoundsSet = useRef(false);
   const { selectedFeatureId } = useFeatureSelection();
   const { data: featureCollection, isFetching: isFeaturesLoading } =
     useCurrentFeatures();
@@ -96,7 +96,7 @@ const FitBoundsHandler: React.FC<{
   // Handle initial bounds when features/layers are loaded
   useEffect(() => {
     // Skip if already done initial fit or if a feature is selected
-    if (initialFitDone.current || selectedFeatureId) {
+    if (initialBoundsSet.current || selectedFeatureId) {
       return;
     }
 
@@ -115,7 +115,7 @@ const FitBoundsHandler: React.FC<{
     }
 
     // Mark as done so we don't recalculate on subsequent updates
-    initialFitDone.current = true;
+    initialBoundsSet.current = true;
   }, [
     map,
     featureCollection,
