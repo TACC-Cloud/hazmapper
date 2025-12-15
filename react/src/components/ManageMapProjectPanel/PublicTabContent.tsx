@@ -130,7 +130,7 @@ const PublicTabContent: React.FC<PublicTabProps> = ({
           onOk={toggleMakePublicModal}
           onCancel={() => setIsMakePublicModalOpen(!isMakePublicModalOpen)}
         >
-          Are you sure you want to make this map private
+          Are you sure you want to make this map private?
         </Modal>
       )}
 
@@ -145,7 +145,7 @@ const PublicTabContent: React.FC<PublicTabProps> = ({
         >
           <FileAccessibilityInformation project={project} />
           <div style={{ textAlign: 'right', marginTop: '16px' }}>
-            Are you sure you want to make this map public
+            Are you sure you want to make this map public?
           </div>
         </Modal>
       )}
