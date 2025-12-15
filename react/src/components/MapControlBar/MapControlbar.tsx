@@ -89,8 +89,8 @@ const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
     options: {
       enabled: Boolean(
         isPublicView &&
-          !hasValidTapisToken &&
-          activeProject?.designsafe_project_id
+        !hasValidTapisToken &&
+        activeProject?.designsafe_project_id
       ),
     },
   });
