@@ -280,11 +280,10 @@ const LeafletMap: React.FC = () => {
       {/* This marker will automatically appear when the Mapillary viewer is active */}
       <MapillaryPositionMarker />
 
-      {/* Handles zooming to a specific feature or to all features */}
-      <FitBoundsHandler
-        featureCollection={featureCollection}
-        activeBaseLayers={activeBaseLayers}
-      />
+      {/* Handles zooming to a specific feature or to all features
+        Note: FitBoundsHandler internally uses useCurrentFeatures
+      */}
+      <FitBoundsHandler activeBaseLayers={activeBaseLayers} />
 
       <ZoomControl position="bottomright" />
 
