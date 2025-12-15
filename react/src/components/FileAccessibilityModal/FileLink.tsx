@@ -102,7 +102,7 @@ export const LayerLink: React.FC<{
   layerName: string;
   projectUuid: string;
 }> = ({ layerName, projectUuid }) => {
-  const url = `/project/${projectUuid}/?panel=Assets`;
+  const url = `/project/${projectUuid}/?panel=Layers`;
 
   return (
     <Tooltip title={layerName}>

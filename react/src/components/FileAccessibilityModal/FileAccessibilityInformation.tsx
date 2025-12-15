@@ -47,10 +47,7 @@ const AnalysisSummary: React.FC<AnalysisSummaryProps> = ({ data }) => {
       <div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <WarningOutlined style={{ color: '#faad14' }} />
-          <span>
-            There are {privateAssets} asset{privateAssets !== 1 ? 's' : ''} that
-            are Private.
-          </span>
+          <span>There are {privateAssets} asset(s) that are Private.</span>
         </div>
         <div style={{ marginTop: '8px', marginLeft: '24px' }}>
           To resolve the identified asset issue(s), please see the documentation{' '}
@@ -239,16 +236,10 @@ export const FileAccessibilityInformation: React.FC<
           );
         }
 
-        // Checked but couldn't determine
-        if (isPublic === null) {
-          return (
-            <Tooltip title="Status could not be determined">
-              <Tag color="default">Unknown</Tag>
-            </Tooltip>
-          );
-        }
-
         // Verified status
+        // Note: isPublic could be false or null. If null,
+        // we don't even have enough info to check, so we have to list
+        // as private
         return isPublic ? (
           <Tag color="success" icon={<CheckCircleOutlined />}>
             Public
@@ -401,7 +392,7 @@ export const FileAccessibilityInformation: React.FC<
             dataSource={sortedTableData}
             columns={columns}
             rowKey="id"
-            scroll={{ y: 150 }}
+            scroll={{ y: 220 }}
             pagination={false}
             locale={{ emptyText: 'No file assets or tile servers found' }}
             size="small"
