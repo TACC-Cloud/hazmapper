@@ -237,8 +237,8 @@ export const FileAccessibilityInformation: React.FC<
         }
 
         // Verified status
-        // Note isPublic could be false or null. If null,
-        // we don't have even info to check so have to list
+        // Note: isPublic could be false or null. If null,
+        // we don't even have enough info to check, so we have to list
         // as private
         return isPublic ? (
           <Tag color="success" icon={<CheckCircleOutlined />}>
