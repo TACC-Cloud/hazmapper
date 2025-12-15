@@ -68,6 +68,7 @@ describe('FeatureFileTree', () => {
     let deleteButton;
     await waitFor(() => {
       deleteButton = screen.getByTestId('delete-feature-button');
+      expect(deleteButton.disabled).toBe(false);
     });
     await act(async () => {
       fireEvent.click(deleteButton);

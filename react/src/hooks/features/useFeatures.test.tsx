@@ -36,7 +36,9 @@ describe('Feature Hooks', () => {
       ));
     });
 
-    expect(result.current.isLoading).toBe(true);
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(true);
+    });
 
     await waitFor(() => {
       expect(result.current.isSuccess).toBe(true);
