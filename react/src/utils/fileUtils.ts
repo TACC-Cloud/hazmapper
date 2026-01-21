@@ -27,23 +27,30 @@ export const IMPORTABLE_GEO_TIFF_TYPES = ['tif', 'tiff', 'geotiff'];
 export const serializeToChonkyFile = (
   file: File,
   allowedFileExtensions: string[]
-): FileData => ({
-  id: file.path,
-  name: file.name,
-  size: file.size,
-  modDate: file.lastModified,
-  isDir: file.type === 'dir',
-  ext:
-    file.type !== 'dir' && file.name.lastIndexOf('.') > 0
-      ? file.name.substring(file.name.lastIndexOf('.') + 1)
-      : undefined,
-  icon: file.type === 'dir' ? 'folder' : 'file',
-  selectable:
-    file.type === 'dir' ||
-    allowedFileExtensions.includes(
-      file.name.split('.').pop()?.toLowerCase() || ''
-    ),
-});
+): FileData => {
+  // We also consider symbolic_links as directory as symbolic links were
+  // used in older DS published projects to help convert them to a new file
+  // structure.
+  const isDirectory = file.type === 'dir' || file.type === 'symbolic_link';
+
+  return {
+    id: file.path,
+    name: file.name,
+    size: file.size,
+    modDate: file.lastModified,
+    isDir: isDirectory,
+    ext:
+      !isDirectory && file.name.lastIndexOf('.') > 0
+        ? file.name.substring(file.name.lastIndexOf('.') + 1)
+        : undefined,
+    icon: isDirectory ? 'folder' : 'file',
+    selectable:
+      isDirectory ||
+      allowedFileExtensions.includes(
+        file.name.split('.').pop()?.toLowerCase() || ''
+      ),
+  };
+};
 
 export const convertFilesToTapisPaths = (files: File[]): TapisFilePath[] => {
   return files.map((file) => {
