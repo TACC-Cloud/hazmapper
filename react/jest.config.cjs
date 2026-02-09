@@ -15,6 +15,8 @@ const esModules = [
   '@react-dnd',
   'msw',
   'until-async',
+  '@turf',
+  'kdbush',
 ].join('|');
 
 module.exports = {
