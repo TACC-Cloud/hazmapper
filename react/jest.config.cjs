@@ -17,6 +17,8 @@ const esModules = [
   'until-async',
   '@turf',
   'kdbush',
+  'geokdbush',
+  'tinyqueue',
 ].join('|');
 
 module.exports = {
