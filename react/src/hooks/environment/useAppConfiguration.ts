@@ -55,6 +55,69 @@ export const computeAppConfiguration = (basePath: string): AppConfiguration => {
 
   if (/^localhost/.test(hostname) || /^hazmapper.local/.test(hostname)) {
     return getLocalAppConfiguration(basePath, mapillaryConfig);
+  } else if (
+    hostname === hazmapperBase &&
+    pathname.startsWith('/hazmapper-tmp')
+  ) {
+    const appConfig: AppConfiguration = {
+      basePath: basePath,
+      geoapiEnv: GeoapiBackendEnvironment.ProductionTmp,
+      geoapiUrl: getGeoapiUrl(GeoapiBackendEnvironment.ProductionTmp),
+      designsafePortalUrl: getDesignsafePortalUrl(
+        DesignSafePortalEnvironment.Production
+      ),
+      tapisUrl: 'https://designsafe.tapis.io',
+      mapillary: mapillaryConfig,
+      taggitUrl: origin + '/taggit',
+    };
+
+    appConfig.mapillary.clientId = '4936281379826603';
+    appConfig.mapillary.clientSecret =
+      'MLY|4936281379826603|cafd014ccd8cfc983e47c69c16082c7b';
+    appConfig.mapillary.clientToken =
+      'MLY|4936281379826603|f8c4732d3c9d96582b86158feb1c1a7a';
+    return appConfig;
+  } else if (
+    hostname === hazmapperBase &&
+    pathname.startsWith('/staging-tmp')
+  ) {
+    const appConfig: AppConfiguration = {
+      basePath: basePath,
+      geoapiEnv: GeoapiBackendEnvironment.StagingTmp,
+      geoapiUrl: getGeoapiUrl(GeoapiBackendEnvironment.StagingTmp),
+      designsafePortalUrl: getDesignsafePortalUrl(
+        DesignSafePortalEnvironment.PPRD
+      ),
+      tapisUrl: 'https://designsafe.tapis.io',
+      mapillary: mapillaryConfig,
+      taggitUrl: origin + '/taggit-staging',
+    };
+
+    appConfig.mapillary.clientId = '4936281379826603';
+    appConfig.mapillary.clientSecret =
+      'MLY|4936281379826603|cafd014ccd8cfc983e47c69c16082c7b';
+    appConfig.mapillary.clientToken =
+      'MLY|4936281379826603|f8c4732d3c9d96582b86158feb1c1a7a';
+    return appConfig;
+  } else if (hostname === hazmapperBase && pathname.startsWith('/dev-tmp')) {
+    const appConfig: AppConfiguration = {
+      basePath: basePath,
+      geoapiEnv: GeoapiBackendEnvironment.DevTmp,
+      geoapiUrl: getGeoapiUrl(GeoapiBackendEnvironment.DevTmp),
+      designsafePortalUrl: getDesignsafePortalUrl(
+        DesignSafePortalEnvironment.PPRD
+      ),
+      tapisUrl: 'https://designsafe.tapis.io',
+      mapillary: mapillaryConfig,
+      taggitUrl: origin + '/taggit-dev',
+    };
+
+    appConfig.mapillary.clientId = '4936281379826603';
+    appConfig.mapillary.clientSecret =
+      'MLY|4936281379826603|cafd014ccd8cfc983e47c69c16082c7b';
+    appConfig.mapillary.clientToken =
+      'MLY|4936281379826603|f8c4732d3c9d96582b86158feb1c1a7a';
+    return appConfig;
   } else if (hostname === hazmapperBase && pathname.startsWith('/staging')) {
     const appConfig: AppConfiguration = {
       basePath: basePath,

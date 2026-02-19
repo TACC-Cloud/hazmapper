@@ -12,20 +12,16 @@
       var pathname = window.location.pathname;
       const isHazmapper = hostname === 'hazmapper.tacc.utexas.edu';
       // Set base URL dynamically
-      if (isHazmapper && pathname.startsWith('/staging-react')) {
-        document.getElementById('base').href = '/staging-react/';
-      } else if (isHazmapper && pathname.startsWith('/dev-react')) {
-        document.getElementById('base').href = '/dev-react/';
-      } else if (isHazmapper && pathname.startsWith('/exp-react')) {
-        document.getElementById('base').href = '/exp-react/';
-      } else if (isHazmapper && pathname.startsWith('/hazmapper-react')) {
-        document.getElementById('base').href = '/hazmapper-react/';
+      if (isHazmapper && pathname.startsWith('/staging-tmp')) {
+        document.getElementById('base').href = '/staging-tmp/';
+      } else if (isHazmapper && pathname.startsWith('/dev-tmp')) {
+        document.getElementById('base').href = '/dev-tmp/';
+      } else if (isHazmapper && pathname.startsWith('/hazmapper-tmp')) {
+        document.getElementById('base').href = '/hazmapper-tmp/';
       } else if (isHazmapper && pathname.startsWith('/staging')) {
         document.getElementById('base').href = '/staging/';
       } else if (isHazmapper && pathname.startsWith('/dev')) {
         document.getElementById('base').href = '/dev/';
-      } else if (isHazmapper && pathname.startsWith('/exp')) {
-        document.getElementById('base').href = '/exp/';
       } else if (isHazmapper) {
         document.getElementById('base').href = '/hazmapper/';
       } else {
