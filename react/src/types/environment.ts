@@ -4,7 +4,7 @@
 export enum GeoapiBackendEnvironment {
   ProductionTmp = 'production-tmp',
   StagingTmp = 'staging-tmp',
-  DevTmp = 'dev=tmp',
+  DevTmp = 'dev-tmp',
   Production = 'production',
   Staging = 'staging',
   Dev = 'dev',
