@@ -31,6 +31,12 @@ export function getGeoapiUrl(backend: GeoapiBackendEnvironment): string {
       return `https://${base}/geoapi-staging`;
     case GeoapiBackendEnvironment.Production:
       return `https://${base}/geoapi`;
+    case GeoapiBackendEnvironment.DevTmp:
+      return `https://${base}/geoapi-dev-tmp`;
+    case GeoapiBackendEnvironment.StagingTmp:
+      return `https://${base}/geoapi-staging-tmp`;
+    case GeoapiBackendEnvironment.ProductionTmp:
+      return `https://${base}/geoapi`;
     default:
       throw new Error(
         'Unsupported TARGET/GEOAPI_BACKEND Type. Please check the .env file.'
@@ -46,8 +52,6 @@ export function getDesignsafePortalUrl(
 ): string {
   if (backend === DesignSafePortalEnvironment.Production) {
     return 'https://www.designsafe-ci.org';
-  } else if (backend === DesignSafePortalEnvironment.Next) {
-    return 'https://designsafeci-next.tacc.utexas.edu';
   } else if (backend === DesignSafePortalEnvironment.PPRD) {
     return 'https://pprd.designsafe-ci.org';
   } else {

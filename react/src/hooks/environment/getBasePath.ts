@@ -5,14 +5,12 @@ const getBasePath = (): string => {
   // note that path order matters
   // as we use startsWith to find a match
   const paths: string[] = [
-    '/hazmapper-react',
-    '/staging-react',
-    '/dev-react',
-    '/exp-react',
+    '/hazmapper-tmp',
+    '/staging-tmp',
+    '/dev-tmp',
     '/hazmapper',
     '/staging',
     '/dev',
-    '/exp',
   ];
   const currentPath: string = window.location.pathname;
   const base: string | undefined = paths.find((path) =>

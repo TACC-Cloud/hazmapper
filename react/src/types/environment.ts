@@ -2,10 +2,12 @@
  * Environment for Geoapi Backend
  */
 export enum GeoapiBackendEnvironment {
+  ProductionTmp = 'production-tmp',
+  StagingTmp = 'staging-tmp',
+  DevTmp = 'dev-tmp',
   Production = 'production',
   Staging = 'staging',
   Dev = 'dev',
-  Experimental = 'experimental',
   Local = 'local',
   Test = 'test', // for unit testing
 }
@@ -16,7 +18,6 @@ export enum GeoapiBackendEnvironment {
 export enum DesignSafePortalEnvironment {
   Production = 'production' /* https://www.designsafe-ci.org/ */,
   PPRD = 'PPRD' /* https://pprd.designsafe-ci.org;  This is comparable to Geoapi's staging. */,
-  Next = 'experimental' /* https://designsafeci-next.tacc.utexas.edu/ */,
   Local = 'local' /* not supported but would be designsafe.dev */,
 }
 
