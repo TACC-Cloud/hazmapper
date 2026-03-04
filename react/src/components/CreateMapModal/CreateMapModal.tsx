@@ -142,6 +142,10 @@ const CreateMapModal = ({ isOpen, closeModal }: CreateMapModalProps) => {
       return;
     }
     const values = getValues();
+
+    // Watch users for maps connected to DesignSafe projects
+    const isDesignSafeProject = values.systemId.startsWith('project-');
+
     const projectData: ProjectRequest = {
       name: values.name,
       description: values.description,
@@ -149,7 +153,7 @@ const CreateMapModal = ({ isOpen, closeModal }: CreateMapModalProps) => {
       system_id: values.systemId,
       system_path: values.systemPath,
       watch_content: values.syncFolder,
-      watch_users: values.syncFolder,
+      watch_users: isDesignSafeProject,
     };
     handleCreateProject(projectData);
   };
