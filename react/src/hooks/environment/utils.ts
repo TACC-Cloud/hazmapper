@@ -36,7 +36,7 @@ export function getGeoapiUrl(backend: GeoapiBackendEnvironment): string {
     case GeoapiBackendEnvironment.StagingTmp:
       return `https://${base}/geoapi-staging-tmp`;
     case GeoapiBackendEnvironment.ProductionTmp:
-      return `https://${base}/geoapi`;
+      return `https://${base}/geoapi-tmp`;
     default:
       throw new Error(
         'Unsupported TARGET/GEOAPI_BACKEND Type. Please check the .env file.'
