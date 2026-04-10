@@ -247,6 +247,10 @@ const LeafletMap: React.FC = () => {
             attribution={layer.attribution}
             zIndex={layer.uiOptions.zIndex}
             opacity={layer.uiOptions.opacity}
+            // Don't request tiles during zoom animation — wait until zoom settles.
+            updateWhenZooming={false}
+            // Reduce off-screen tile prefetching from default (2) to 1.
+            keepBuffer={1}
             {...layer.tileOptions} // e.g. maxZoom, minZoom, maxNativeZoom, and bounds.
             maxZoom={
               layer.internal
