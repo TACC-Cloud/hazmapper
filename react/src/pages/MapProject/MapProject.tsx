@@ -198,8 +198,18 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
     () => ({
       tileLayers:
         tileServerLayers
+          // Sort by zIndex (highest first) and normalize to sequential values
+          // (top of list → -1, -2, -3, etc.) to fix any duplicates from backend
           ?.sort((a, b) => b.uiOptions.zIndex - a.uiOptions.zIndex)
-          .map((layer) => ({ layer })) || [],
+          .map((layer, index) => ({
+            layer: {
+              ...layer,
+              uiOptions: {
+                ...layer.uiOptions,
+                zIndex: -(index + 1),
+              },
+            },
+          })) || [],
     }),
     [tileServerLayers]
   );

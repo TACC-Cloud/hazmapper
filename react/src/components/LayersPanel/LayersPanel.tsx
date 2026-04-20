@@ -104,6 +104,7 @@ const LayersPanel: React.FC<{
     setEditLayerField({});
   }, [defaultValues]);
 
+  /** Normalize zIndex for save payload (top of list → -1, -2, -3, etc.) */
   const reorderLayers = (data: TLayerOptionsFormData) =>
     data.tileLayers.map((item, index) => ({
       ...item.layer,
@@ -120,6 +121,14 @@ const LayersPanel: React.FC<{
 
   const addTileLayer = (layer: TileServerLayer) => {
     insert(0, { layer });
+
+    // normalize zIndex for all layers (from top->-1, -2, -3 etc)
+    const values = getValues();
+    values.tileLayers.forEach((_, index) => {
+      setValue(`tileLayers.${index}.layer.uiOptions.zIndex`, -(index + 1));
+    });
+
+    //reset form to update dirty state
     reset(getValues());
   };
 
@@ -140,7 +149,9 @@ const LayersPanel: React.FC<{
     const newIndex = fields.findIndex((item) => item.id === over.id);
     move(oldIndex, newIndex);
     fields.forEach((_, index) => {
-      setValue(`tileLayers.${index}.layer.uiOptions.zIndex`, -(index + 1));
+      setValue(`tileLayers.${index}.layer.uiOptions.zIndex`, -(index + 1), {
+        shouldDirty: true,
+      });
     });
   };
 

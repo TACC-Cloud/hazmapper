@@ -143,6 +143,8 @@ const CreateLayerModal: React.FC<{
       title={<Header>Create a Tile Layer</Header>}
       open={isOpen}
       onCancel={handleClose}
+      width="90vw"
+      style={{ maxWidth: 800 }}
       footer={[
         <Button key="closeModalButton" onClick={handleClose}>
           Cancel
