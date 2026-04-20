@@ -247,10 +247,11 @@ const LeafletMap: React.FC = () => {
             attribution={layer.attribution}
             zIndex={layer.uiOptions.zIndex}
             opacity={layer.uiOptions.opacity}
-            // Don't request tiles during zoom animation — wait until zoom settles.
-            updateWhenZooming={false}
-            // Reduce off-screen tile prefetching from default (2) to 1.
-            keepBuffer={1}
+            //  Reduce amount of tile requests for internal layers (for https://tacc-main.atlassian.net/browse/WG-648):
+            //     * Don't request tiles during zoom animation — wait until zoom settles.
+            //     * Reduce off-screen tile prefetching from default (2) to 1.
+            updateWhenZooming={layer.internal ? false : true}
+            keepBuffer={layer.internal ? 1 : 2}
             {...layer.tileOptions} // e.g. maxZoom, minZoom, maxNativeZoom, and bounds.
             maxZoom={
               layer.internal
