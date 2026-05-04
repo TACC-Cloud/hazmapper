@@ -5,12 +5,6 @@ TAG := $(shell git log --format=%h -1)
 # Note: Special chars are replaced with dashes, e.g. feature/some-feature -> feature-some-feature
 DOCKER_IMAGE_BRANCH_TAG := $(shell git describe --exact-match --tags 2> /dev/null || git symbolic-ref --short HEAD | sed 's/[^[:alnum:]\.\_\-]/-/g')
 
-.PHONY: build-angular
-build-angular:
-	docker build -t taccwma/hazmapper:$(TAG) -f angular/Dockerfile .
-	docker tag taccwma/hazmapper:$(TAG) taccwma/hazmapper:latest
-	docker tag taccwma/hazmapper:$(TAG) taccwma/hazmapper:$(DOCKER_IMAGE_BRANCH_TAG)
-
 .PHONY: build-react
 build-react:
 	docker build -t taccwma/hazmapper-react:$(TAG) -f react/Dockerfile .
@@ -19,7 +13,7 @@ build-react:
 
 .PHONY: build
 build:
-	make build-angular && make build-react
+	make build-react
 
 .PHONY: publish
 publish:
