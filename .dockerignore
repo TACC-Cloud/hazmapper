@@ -2,8 +2,5 @@
 **/node_modules
 **/build
 
-# Angular jwt file
-**/jwt.ts
-
 # React project secrets
 **/secret_local.ts

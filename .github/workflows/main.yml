@@ -7,48 +7,6 @@ on:
     branches: ["**"]
 
 jobs:
-  Angular-Unit-Tests:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js for use with actions
-        uses: actions/setup-node@v4
-        with:
-          node-version: 14
-          cache: npm
-          cache-dependency-path: angular/package-lock.json
-
-      - name: npm ci
-        working-directory: angular
-        run: |
-          touch src/environments/jwt.js
-          npm ci
-
-      - name: Unit Tests
-        working-directory: angular
-        run: npm run test:ci
-
-  Angular-Linting:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js for use with actions
-        uses: actions/setup-node@v4
-        with:
-          node-version: 14
-          cache: npm
-          cache-dependency-path: angular/package-lock.json
-
-      - name: npm ci
-        working-directory: angular
-        run: npm ci
-
-      - name: Linting
-        working-directory: angular
-        run: npm run lint
-
   React-Unit-Tests:
     runs-on: ubuntu-latest
     steps:
