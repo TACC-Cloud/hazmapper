@@ -17,7 +17,5 @@ build:
 
 .PHONY: publish
 publish:
-	docker push taccwma/hazmapper:$(TAG)
 	docker push taccwma/hazmapper-react:$(TAG)
-	docker push taccwma/hazmapper:${DOCKER_IMAGE_BRANCH_TAG}
 	docker push taccwma/hazmapper-react:${DOCKER_IMAGE_BRANCH_TAG}
