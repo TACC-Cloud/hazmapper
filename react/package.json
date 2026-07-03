@@ -54,6 +54,8 @@
     "leaflet": "^1.9.4",
     "leaflet.markercluster": "^1.5.3",
     "mapillary-js": "^4.1.2",
+    "pmtiles": "^3.2.1",
+    "protomaps-leaflet": "^5.1.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-esri-leaflet": "^2.0.1",

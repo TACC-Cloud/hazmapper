@@ -7,6 +7,7 @@ export const AssetType = {
   Questionnaire: 'questionnaire',
   PointCloud: 'point_cloud',
   Streetview: 'streetview',
+  Vector: 'vector',
 } as const;
 
 export type AssetType = (typeof AssetType)[keyof typeof AssetType];

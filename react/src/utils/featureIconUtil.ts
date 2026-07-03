@@ -10,6 +10,7 @@ import {
   faRoad,
   faLayerGroup,
   faQuestionCircle,
+  faShapes,
 } from '@fortawesome/free-solid-svg-icons';
 
 import { FeatureType, FeatureTypeNullable } from '@hazmapper/types';
@@ -21,6 +22,7 @@ const FeatureTypeToIconMap: Record<FeatureType, IconDefinition> = {
   questionnaire: faClipboardList,
   point_cloud: faCloud /* https://tacc-main.atlassian.net/browse/WG-391 */,
   streetview: faRoad,
+  vector: faShapes,
 
   // Geometry types
   Point: faMapMarkerAlt,

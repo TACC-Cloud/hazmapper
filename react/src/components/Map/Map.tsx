@@ -31,6 +31,7 @@ import { getSequenceID } from '@hazmapper/utils/featureUtils';
 import { getPixelBboxAroundPoint } from '@hazmapper/utils/leafletUtils';
 import MapillaryPositionMarker from './MapillaryPositionMarker';
 import EsriTiledMapLayer from './EsriTiledMapLayer';
+import PMTilesLayer from './PMTilesLayer';
 
 import 'leaflet/dist/leaflet.css';
 import 'react-leaflet-markercluster/styles';
@@ -118,56 +119,63 @@ const LeafletMap: React.FC = () => {
       .filter((layer) => layer.uiOptions.isActive);
   }, [baseLayersKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const { generalGeoJsonFeatures, markerFeatures, streetviewFeatures } =
-    useMemo(() => {
-      interface FeatureAccumulator {
-        generalGeoJsonFeatures: Feature[] /* non-point features, includes point cloud outlines */;
-        markerFeatures: Feature[];
-        streetviewFeatures: Feature[];
-      }
+  const {
+    generalGeoJsonFeatures,
+    markerFeatures,
+    streetviewFeatures,
+    vectorFeatures,
+  } = useMemo(() => {
+    interface FeatureAccumulator {
+      generalGeoJsonFeatures: Feature[] /* non-point features, includes point cloud outlines */;
+      markerFeatures: Feature[];
+      streetviewFeatures: Feature[];
+      vectorFeatures: Feature[] /* features backed by a PMTiles vector asset */;
+    }
 
-      // Initial accumulator state
-      const initialAccumulator: FeatureAccumulator = {
-        generalGeoJsonFeatures: [],
-        markerFeatures: [],
-        streetviewFeatures: [],
-      };
+    // Initial accumulator state
+    const initialAccumulator: FeatureAccumulator = {
+      generalGeoJsonFeatures: [],
+      markerFeatures: [],
+      streetviewFeatures: [],
+      vectorFeatures: [],
+    };
 
-      if (featureCollection == undefined) {
-        return initialAccumulator;
-      }
+    if (featureCollection == undefined) {
+      return initialAccumulator;
+    }
 
-      const result = featureCollection?.features.reduce<FeatureAccumulator>(
-        (accumulator, feature: Feature) => {
-          if (feature.geometry.type === FeatureType.Point) {
-            accumulator.markerFeatures.push(feature);
-          } else {
-            if (getFeatureType(feature) === FeatureType.PointCloud) {
-              // Add a marker at the calculated position
-              const markerPosition = calculatePointCloudMarkerPosition(
-                feature.geometry
-              );
-              const pointCloudMarker: Feature = {
-                ...feature,
-                geometry: {
-                  type: 'Point',
-                  coordinates: [markerPosition.lng, markerPosition.lat],
-                },
-              };
+    const result = featureCollection?.features.reduce<FeatureAccumulator>(
+      (accumulator, feature: Feature) => {
+        if (feature.geometry.type === FeatureType.Point) {
+          accumulator.markerFeatures.push(feature);
+        } else if (getFeatureType(feature) === FeatureType.PointCloud) {
+          // Add a marker at the calculated position
+          const markerPosition = calculatePointCloudMarkerPosition(
+            feature.geometry
+          );
+          const pointCloudMarker: Feature = {
+            ...feature,
+            geometry: {
+              type: 'Point',
+              coordinates: [markerPosition.lng, markerPosition.lat],
+            },
+          };
 
-              accumulator.markerFeatures.push(pointCloudMarker);
-              // Also keep the original geometry for rendering
-              accumulator.generalGeoJsonFeatures.push(feature);
-            } else {
-              accumulator.generalGeoJsonFeatures.push(feature);
-            }
-          }
-          return accumulator;
-        },
-        initialAccumulator
-      );
-      return result;
-    }, [featureCollection]);
+          accumulator.markerFeatures.push(pointCloudMarker);
+          // Also keep the original geometry for rendering
+          accumulator.generalGeoJsonFeatures.push(feature);
+        } else if (getFeatureType(feature) === FeatureType.Vector) {
+          // Rendered from its PMTiles asset rather than the bbox geometry
+          accumulator.vectorFeatures.push(feature);
+        } else {
+          accumulator.generalGeoJsonFeatures.push(feature);
+        }
+        return accumulator;
+      },
+      initialAccumulator
+    );
+    return result;
+  }, [featureCollection]);
 
   const markerComponents = useMemo(() => {
     return markerFeatures.map((feature) => {
@@ -264,6 +272,14 @@ const LeafletMap: React.FC = () => {
 
       {/* General GeoJSON Features (including point cloud geometries) */}
       {geoJsonComponents}
+
+      {/* Vector Features rendered from their PMTiles asset */}
+      {vectorFeatures.map((feature) => (
+        <PMTilesLayer
+          key={feature.id}
+          url={`${config.geoapiUrl}/assets/${feature.assets[0].path}`}
+        />
+      ))}
 
       {/* Marker Features with Clustering (also includes point cloud markers) */}
       <MarkerClusterGroup
