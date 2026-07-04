@@ -278,6 +278,8 @@ const LeafletMap: React.FC = () => {
         <PMTilesLayer
           key={feature.id}
           url={`${config.geoapiUrl}/assets/${feature.assets[0].path}`}
+          featureId={feature.id}
+          onSelect={setSelectedFeatureId}
         />
       ))}
 
