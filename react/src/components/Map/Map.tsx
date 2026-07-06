@@ -20,6 +20,7 @@ import {
   useFeatureSelection,
   useMapillaryViewerMoveToNearestPoint,
   useAppConfiguration,
+  useAuthenticatedUser,
 } from '@hazmapper/hooks';
 import { MAP_CONFIG } from './config';
 import FitBoundsHandler from './FitBoundsHandler';
@@ -217,6 +218,7 @@ const LeafletMap: React.FC = () => {
   ]);
 
   const config = useAppConfiguration();
+  const { data: authenticatedUser } = useAuthenticatedUser();
 
   return (
     <MapContainer
@@ -280,6 +282,7 @@ const LeafletMap: React.FC = () => {
           url={`${config.geoapiUrl}/assets/${feature.assets[0].path}`}
           featureId={feature.id}
           onSelect={setSelectedFeatureId}
+          authToken={authenticatedUser?.authToken?.token}
         />
       ))}
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useMap } from 'react-leaflet';
 import type { Layer, LeafletMouseEvent } from 'leaflet';
-import { PMTiles } from 'pmtiles';
+import { PMTiles, FetchSource } from 'pmtiles';
 import {
   leafletLayer,
   PolygonSymbolizer,
@@ -56,6 +56,8 @@ interface PMTilesLayerProps {
   featureId: number;
   /** Called with featureId when the vector data is clicked. */
   onSelect: (featureId: number) => void;
+  /** Tapis token used to authenticate the range requests to /assets. */
+  authToken?: string | null;
 }
 
 /**
@@ -69,6 +71,7 @@ const PMTilesLayer: React.FC<PMTilesLayerProps> = ({
   url,
   featureId,
   onSelect,
+  authToken,
 }) => {
   const map = useMap();
   const layerRef = useRef<ReturnType<typeof leafletLayer> | undefined>(
@@ -80,17 +83,39 @@ const PMTilesLayer: React.FC<PMTilesLayerProps> = ({
 
     (async () => {
       try {
-        const pmtiles = new PMTiles(url);
+        // /assets is auth-gated, so attach the Tapis token to the range
+        // requests (a plain fetch would be rejected with a 401).
+        const source = authToken
+          ? new FetchSource(url, new Headers({ 'X-Tapis-Token': authToken }))
+          : url;
+        const pmtiles = new PMTiles(source);
         const metadata = (await pmtiles.getMetadata()) as {
-          vector_layers?: { id: string }[];
+          vector_layers?: { id: string; maxzoom?: number }[];
         };
         if (cancelled) return;
 
-        const paintRules = (metadata?.vector_layers ?? []).flatMap((vl) =>
+        const vectorLayers = metadata?.vector_layers ?? [];
+        const paintRules = vectorLayers.flatMap((vl) =>
           buildDefaultPaintRules(vl.id)
         );
 
-        const layer = leafletLayer({ url: pmtiles, paintRules });
+        // The archive only contains tiles up to its own max zoom. Tell
+        // protomaps-leaflet so it overzooms (scales the deepest tile) rather
+        // than requesting non-existent deeper tiles — otherwise an extent that
+        // fit-bounds past the data's max zoom renders nothing. (Without this
+        // the library defaults maxDataZoom to 15.) Note maxzoom can legitimately
+        // be 0 (e.g. globally-sparse points), so guard on `undefined`, not
+        // truthiness.
+        const maxzooms = vectorLayers
+          .map((vl) => vl.maxzoom)
+          .filter((z): z is number => typeof z === 'number');
+        const maxDataZoom = maxzooms.length ? Math.max(...maxzooms) : undefined;
+
+        const layer = leafletLayer({
+          url: pmtiles,
+          paintRules,
+          ...(maxDataZoom !== undefined ? { maxDataZoom } : {}),
+        });
         layerRef.current = layer;
         (layer as unknown as Layer).addTo(map);
       } catch (e) {
@@ -106,7 +131,7 @@ const PMTilesLayer: React.FC<PMTilesLayerProps> = ({
         layerRef.current = undefined;
       }
     };
-  }, [map, url]);
+  }, [map, url, authToken]);
 
   // Select the parent feature when its rendered vector data is clicked.
   useEffect(() => {
