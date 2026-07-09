@@ -7,7 +7,7 @@ import { faArrowLeft, faLock } from '@fortawesome/free-solid-svg-icons';
 
 import { LoadingSpinner } from '@tacc/core-components';
 
-import { Typography, Button, Tooltip, Flex } from 'antd';
+import { Typography, Button, Tooltip } from 'antd';
 
 const { Text } = Typography;
 

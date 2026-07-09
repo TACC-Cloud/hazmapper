@@ -1,4 +1,4 @@
-import { waitFor, screen, fireEvent, act } from '@testing-library/react';
+import { waitFor } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import { renderInTest } from '@hazmapper/test/testUtil';
 import MapControlbar from './MapControlbar';
