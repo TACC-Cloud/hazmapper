@@ -46,8 +46,19 @@
 }
 
 .coordinatesDisplay {
-  width: 20rem;
+  width: 23rem;
   margin-left: auto; /* push to right */
+  font-variant-numeric: tabular-nums; /* fixed-width digits so values don't shift */
+  white-space: nowrap; /* keep Lat/Lon on a single line */
+}
+
+.coordinateValue {
+  display: inline-block;
+  width: 5.5rem;
+  margin-right: 0.75rem; /* gap so lat value doesn't crowd "Lon" */
+  text-align: right; /* keep decimals aligned as integer length changes */
+  font-variant-numeric: tabular-nums; /* fixed-width digits + minus sign */
+  font-feature-settings: 'tnum'; /* fallback for fonts that ignore the above */
 }
 
 .taggitButton {
