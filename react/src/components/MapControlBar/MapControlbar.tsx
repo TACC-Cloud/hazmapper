@@ -7,7 +7,7 @@ import { faArrowLeft, faLock } from '@fortawesome/free-solid-svg-icons';
 
 import { LoadingSpinner } from '@tacc/core-components';
 
-import { Typography, Button, Tooltip, Flex } from 'antd';
+import { Typography, Button, Tooltip } from 'antd';
 
 const { Text } = Typography;
 
@@ -18,7 +18,6 @@ import {
   useMapMousePosition,
   useAuthenticatedUser,
   useCurrentFeatures,
-  useAppConfiguration,
 } from '@hazmapper/hooks';
 import { Project } from '@hazmapper/types';
 import * as ROUTES from '@hazmapper/constants/routes';
@@ -108,19 +107,6 @@ const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
       ? true
       : false;
 
-  const config = useAppConfiguration();
-
-  const navigateToCorrespondingTaggitGallery = () => {
-    // We set some info in local storage for Taggit and then navigate to Taggit
-
-    // key for local storage is backend-specific
-    const lastProjectKeyword = `${config.geoapiEnv}LastProject`;
-
-    // note that entire project gets stringified but only `id` is used by taggit
-    localStorage.setItem(lastProjectKeyword, JSON.stringify(activeProject));
-    window.open(config.taggitUrl, '_blank', 'noreferrer noopener');
-  };
-
   return (
     <div className={styles.root}>
       {!isPublicView && (
@@ -180,16 +166,6 @@ const MapControlbar: React.FC<Props> = ({ activeProject, isPublicView }) => {
         )}
       </div>
       <CoordinatesDisplay />
-      <Flex justify="center" gap="small">
-        <Button
-          className={styles.taggitButton}
-          data-testid="taggit-button"
-          type="primary"
-          onClick={() => navigateToCorrespondingTaggitGallery()}
-        >
-          View in Taggit
-        </Button>
-      </Flex>
     </div>
   );
 };
