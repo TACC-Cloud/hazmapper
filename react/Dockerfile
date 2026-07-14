@@ -1,5 +1,7 @@
 FROM node:22-alpine AS node
 
+RUN apk upgrade --no-cache
+
 RUN mkdir /www
 COPY react /www
 WORKDIR /www
