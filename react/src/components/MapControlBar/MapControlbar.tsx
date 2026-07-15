@@ -31,7 +31,14 @@ const CoordinatesDisplay = () => {
   return (
     <div className={styles.coordinatesDisplay}>
       <Text>
-        Lat: {position.lat.toFixed(4)} Lon: {position.lng.toFixed(4)}
+        Lat:{' '}
+        <span className={styles.coordinateValue}>
+          {position.lat.toFixed(4)}
+        </span>{' '}
+        Lon:{' '}
+        <span className={styles.coordinateValue}>
+          {position.lng.toFixed(4)}
+        </span>
       </Text>
     </div>
   );
