@@ -5,6 +5,7 @@ import {
   mockImgFeature,
   mockLineFeature,
   mockPolygonFeature,
+  mockVectorFeature,
 } from '@hazmapper/__fixtures__/featuresFixture';
 
 jest.mock('@hazmapper/hooks', () => ({
@@ -50,5 +51,15 @@ describe('AssetGeometry', () => {
       '4917.50'
     );
     expect(getByText('Bounding Box')).toBeDefined();
+  });
+
+  it('shows only the data extent for a vector feature (no type/area)', () => {
+    const { getByText, queryByText } = render(
+      <AssetGeometry selectedFeature={mockVectorFeature} />
+    );
+    // Geometry is just the PMTiles bbox, so type/area are suppressed.
+    expect(getByText('Data extent')).toBeDefined();
+    expect(queryByText('Geometry: Polygon')).toBeNull();
+    expect(queryByText('Area (m²)')).toBeNull();
   });
 });

@@ -2,7 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import * as turf from '@turf/turf';
 import { Feature as TFeature } from 'geojson';
-import { Feature, FeatureType } from '@hazmapper/types';
+import { Feature, FeatureType, getFeatureType } from '@hazmapper/types';
 import styles from './AssetDetail.module.css';
 
 interface AssetGeometryProps {
@@ -15,6 +15,42 @@ const AssetGeometry: React.FC<AssetGeometryProps> = ({ selectedFeature }) => {
   const bbox = turf.bbox(selectedFeature.geometry);
 
   const geometryType = selectedFeature.geometry.type;
+
+  // A vector feature's geometry is just the bbox of its PMTiles data, so
+  // geometry type and area are meaningless here — show only the extent.
+  const isVector = getFeatureType(selectedFeature) === FeatureType.Vector;
+  if (isVector) {
+    return (
+      <div className={styles.metadataTable}>
+        <table>
+          <thead>
+            <tr>
+              <th colSpan={3} className="text-center">
+                Data extent
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td></td>
+              <td>Latitude</td>
+              <td>Longitude</td>
+            </tr>
+            <tr>
+              <td>Minimum</td>
+              <td>{bbox[1]}</td>
+              <td>{bbox[0]}</td>
+            </tr>
+            <tr>
+              <td>Maximum</td>
+              <td>{bbox[3]}</td>
+              <td>{bbox[2]}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.metadataTable}>
