@@ -6,6 +6,9 @@ import { Feature, FeatureCollection } from '@hazmapper/types';
 import { useAppConfiguration } from '../environment';
 
 const SELECTED_FEATURE_PARAM = 'selectedFeature';
+// TODO(vectorSubId): a `vectorSubId` param would live here to make a clicked
+// vector geometry deep-linkable like the selected feature. Blocked on a stable
+// per-geometry id from ingest — see SelectedVectorFeatureContext.
 
 interface UseFeatureSelectionReturn {
   selectedFeatureId: number | null;

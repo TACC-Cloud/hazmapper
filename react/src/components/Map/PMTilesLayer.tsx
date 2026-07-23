@@ -54,8 +54,11 @@ interface PMTilesLayerProps {
   url: string;
   /** id of the hazmapper Feature this PMTiles asset belongs to. */
   featureId: number;
-  /** Called with featureId when the vector data is clicked. */
-  onSelect: (featureId: number) => void;
+  /**
+   * Called when the vector data is clicked, with the parent featureId and the
+   * attribute values (`props`) of the specific clicked geometry.
+   */
+  onSelect: (featureId: number, properties: Record<string, unknown>) => void;
   /** Tapis token used to authenticate the range requests to /assets. */
   authToken?: string | null;
 }
@@ -144,13 +147,13 @@ const PMTilesLayer: React.FC<PMTilesLayerProps> = ({
         e.latlng.lat,
         PICK_BRUSH_SIZE
       );
-      const hit = Array.from(picked.values()).some((f) => f.length > 0);
-      if (hit) {
-        // TODO(feature-values): surface the attribute values of the specific
-        // geometry that was clicked (the picked protomaps Feature's `props`) —
-        // e.g. a popup or details panel showing that point/segment/polygon's
-        // properties, rather than only selecting the parent feature.
-        onSelect(featureId);
+      // Find the first picked geometry across all vector layers; its `props`
+      // are the attribute values of the specific point/segment/polygon clicked.
+      const firstHit = Array.from(picked.values())
+        .flat()
+        .find((f) => f.feature);
+      if (firstHit) {
+        onSelect(featureId, firstHit.feature.props as Record<string, unknown>);
       }
     };
 

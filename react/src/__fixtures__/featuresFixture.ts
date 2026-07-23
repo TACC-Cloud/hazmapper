@@ -343,6 +343,44 @@ export const mockPolygonFeature: Feature = {
   assets: [],
 };
 
+/* vector feature backed by a PMTiles asset (bbox geometry) */
+export const mockVectorFeature: Feature = {
+  id: 100004,
+  project_id: 100,
+  type: 'Feature',
+  properties: {},
+  geometry: {
+    type: 'Polygon',
+    coordinates: [
+      [
+        [-97.7262, 30.3898],
+        [-97.7248, 30.3898],
+        [-97.7248, 30.3906],
+        [-97.7262, 30.3906],
+        [-97.7262, 30.3898],
+      ],
+    ],
+  },
+  styles: null,
+  assets: [
+    {
+      id: 60934,
+      feature_id: 100004,
+      path: '1027/2c8f0f1e-1111-2222-3333-444455556666.pmtiles',
+      uuid: '2c8f0f1e-1111-2222-3333-444455556666',
+      asset_type: 'vector',
+      original_path: '/test/test/roads.geojson',
+      original_system: 'testSystem',
+      current_system: 'testSystem',
+      current_path: '/test/test/roads.geojson',
+      original_name: null,
+      display_path: '/test/test/roads.geojson',
+      is_on_public_system: false,
+      designsafe_project_id: 'PRJ-123',
+    },
+  ],
+};
+
 /* line along south side of ROC building */
 export const mockLineFeature: Feature = {
   id: 100003,

@@ -56,6 +56,17 @@ const AssetRenderer: React.FC<AssetRendererProps> = ({
           featureSource={featureSource}
         />
       );
+    case FeatureType.Vector:
+      // Vector data is rendered on the map from its PMTiles asset, so there is
+      // no image/video preview to show here.
+      return (
+        <div style={{ flex: '0 0 auto', margin: 'auto' }}>
+          <SectionMessage type="info">
+            This vector layer is displayed on the map. Click a feature on the
+            map to see its attributes.
+          </SectionMessage>
+        </div>
+      );
     case FeatureType.GeometryCollection:
     default:
       if (isGeometry(featureType)) {

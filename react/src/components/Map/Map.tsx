@@ -30,6 +30,7 @@ import { calculatePointCloudMarkerPosition } from './utils';
 import { resolveTileUrl } from '@hazmapper/utils/tiles';
 import { getSequenceID } from '@hazmapper/utils/featureUtils';
 import { getPixelBboxAroundPoint } from '@hazmapper/utils/leafletUtils';
+import { useSelectedVectorFeature } from '@hazmapper/context/SelectedVectorFeatureContext';
 import MapillaryPositionMarker from './MapillaryPositionMarker';
 import EsriTiledMapLayer from './EsriTiledMapLayer';
 import PMTilesLayer from './PMTilesLayer';
@@ -74,9 +75,24 @@ const streetviewStyle = {
  */
 const LeafletMap: React.FC = () => {
   const { data: featureCollection } = useCurrentFeatures();
-  const { setSelectedFeatureId } = useFeatureSelection();
+  const { selectedFeatureId, setSelectedFeatureId } = useFeatureSelection();
+  const { setSelectedVectorFeature } = useSelectedVectorFeature();
   const { moveToImageNearThisPosition } =
     useMapillaryViewerMoveToNearestPoint();
+
+  // Clicking a PMTiles vector selects its parent feature and records the
+  // attributes of the specific clicked geometry (shown in the detail panel).
+  // Unlike setSelectedFeatureId's toggle, re-clicking the same feature keeps it
+  // selected so different segments can be inspected in turn.
+  const handleVectorSelect = useCallback(
+    (featureId: number, properties: Record<string, unknown>) => {
+      setSelectedVectorFeature({ featureId, properties });
+      if (selectedFeatureId !== featureId) {
+        setSelectedFeatureId(featureId);
+      }
+    },
+    [selectedFeatureId, setSelectedFeatureId, setSelectedVectorFeature]
+  );
 
   const getFeatureStyle = useCallback((feature) => {
     if (getFeatureType(feature) === FeatureType.Streetview) {
@@ -281,7 +297,7 @@ const LeafletMap: React.FC = () => {
           key={feature.id}
           url={`${config.geoapiUrl}/assets/${feature.assets[0].path}`}
           featureId={feature.id}
-          onSelect={setSelectedFeatureId}
+          onSelect={handleVectorSelect}
           authToken={authenticatedUser?.authToken?.token}
         />
       ))}
