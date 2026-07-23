@@ -40,14 +40,11 @@ export const SelectedVectorFeatureContext =
  * that segment's attributes in the detail panel.
  *
  * TODO(vectorSubId): make the sub-selection deep-linkable / reload-safe like
- * `selectedFeature`. A clicked geometry has no stable id today: PMTiles
- * geometries are split across tiles and simplified per zoom, and tippecanoe
- * doesn't emit a stable feature id unless the source carries one and we
- * preserve it. To do this properly, stamp a stable per-geometry id into the
- * tiles at ingest (geoapi/tippecanoe — pairs naturally with the per-feature
- * styling work in PMTilesLayer), surface it on the picked feature here, and
- * add a `vectorSubId` URL param alongside SELECTED_FEATURE_PARAM in
- * useFeatureSelection. Until then this stays transient (lost on reload/share).
+ * `selectedFeature`, and enable highlighting the clicked geometry. Both need a
+ * stable per-geometry id stamped at ingest (a clicked geometry has none today:
+ * PMTiles geometries are split across tiles and simplified per zoom, and
+ * tippecanoe doesn't emit a stable id unless the source carries one and we
+ * preserve it). Until then this stays transient (lost on reload/share).
  */
 export const SelectedVectorFeatureProvider = ({
   children,

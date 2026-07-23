@@ -153,6 +153,9 @@ const PMTilesLayer: React.FC<PMTilesLayerProps> = ({
         .flat()
         .find((f) => f.feature);
       if (firstHit) {
+        // TODO(highlight): visually highlight the clicked geometry here (a
+        // filtered PaintRule + rerenderTile). Blocked on a stable per-geometry
+        // id (see SelectedVectorFeatureContext).
         onSelect(featureId, firstHit.feature.props as Record<string, unknown>);
       }
     };
