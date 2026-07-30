@@ -19,6 +19,9 @@ const DEFAULT_VECTOR_COLOR = '#3388ff';
 // Pixel radius used when hit-testing a click against the vector data.
 const PICK_BRUSH_SIZE = 8;
 
+// Minimum gap between hover hit-tests, so fast mouse moves don't over-query.
+const HOVER_SAMPLE_MS = 50;
+
 /**
  * Default paint rules (polygon fill, line, and point circle) in the default
  * blue for a single vector-tile layer.
@@ -80,6 +83,7 @@ const PMTilesLayer: React.FC<PMTilesLayerProps> = ({
   const layerRef = useRef<ReturnType<typeof leafletLayer> | undefined>(
     undefined
   );
+  const hoveringRef = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -165,6 +169,46 @@ const PMTilesLayer: React.FC<PMTilesLayerProps> = ({
       map.off('click', handleClick);
     };
   }, [map, featureId, onSelect]);
+
+  // Show the pointer cursor while hovering rendered vector data. protomaps-leaflet
+  // layers aren't Leaflet "interactive" layers, so Leaflet's built-in cursor swap
+  // never fires.  Se we are doing a hit-test on move and set the cursor ourselves.
+  useEffect(() => {
+    let lastRun = 0;
+    const handleMove = (e: LeafletMouseEvent) => {
+      const layer = layerRef.current;
+      if (!layer) return;
+      // hit-testing every move is wasteful; sample at most every HOVER_SAMPLE_MS
+      const now = e.originalEvent.timeStamp;
+      if (now - lastRun < HOVER_SAMPLE_MS) return;
+      lastRun = now;
+
+      const hit = Array.from(
+        layer
+          .queryTileFeaturesDebug(e.latlng.lng, e.latlng.lat, PICK_BRUSH_SIZE)
+          .values()
+      )
+        .flat()
+        .some((f) => f.feature);
+
+      if (hit) {
+        map.getContainer().style.cursor = 'pointer';
+        hoveringRef.current = true;
+      } else if (hoveringRef.current) {
+        map.getContainer().style.cursor = '';
+        hoveringRef.current = false;
+      }
+    };
+
+    map.on('mousemove', handleMove);
+    return () => {
+      map.off('mousemove', handleMove);
+      if (hoveringRef.current) {
+        map.getContainer().style.cursor = '';
+        hoveringRef.current = false;
+      }
+    };
+  }, [map]);
 
   return null;
 };
