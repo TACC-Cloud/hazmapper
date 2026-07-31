@@ -20,6 +20,7 @@ import { assetTypeOptions } from '@hazmapper/components/FiltersPanel/Filter';
 import { Project } from '@hazmapper/types';
 import HeaderNavBar from '@hazmapper/components/HeaderNavBar';
 import { MapPositionProvider } from '@hazmapper/context/MapContext';
+import { SelectedVectorFeatureProvider } from '@hazmapper/context/SelectedVectorFeatureContext';
 
 import styles from './MapProject.module.css';
 import QuestionnaireModal from '@hazmapper/components/QuestionnaireModal';
@@ -229,83 +230,85 @@ const LoadedMapProject: React.FC<LoadedMapProject> = ({
   return (
     <FormProvider {...methods}>
       <MapPositionProvider>
-        <Layout style={{ height: '100vh' }}>
-          <HeaderNavBar />
-          <MapControlBar
-            activeProject={activeProject}
-            isPublicView={isPublicView}
-          />
-          <Layout>
-            <Sider width="auto">
-              <Flex
-                style={{
-                  height: '100%',
-                }}
-              >
-                <MapProjectNavBar isPublicView={isPublicView} />
-                {!isTileServerLayersLoading && (
-                  <MapProjectPanelContent
-                    isPublicView={isPublicView}
-                    project={activeProject}
-                    selectedAssetTypes={selectedAssetTypes}
-                    onFiltersChange={setSelectedAssetTypes}
-                    startDate={startDate}
-                    setStartDate={setStartDate}
-                    endDate={endDate}
-                    setEndDate={setEndDate}
-                    toggleDateFilter={toggleDateFilter}
-                    setToggleDateFilter={setToggleDateFilter}
+        <SelectedVectorFeatureProvider>
+          <Layout style={{ height: '100vh' }}>
+            <HeaderNavBar />
+            <MapControlBar
+              activeProject={activeProject}
+              isPublicView={isPublicView}
+            />
+            <Layout>
+              <Sider width="auto">
+                <Flex
+                  style={{
+                    height: '100%',
+                  }}
+                >
+                  <MapProjectNavBar isPublicView={isPublicView} />
+                  {!isTileServerLayersLoading && (
+                    <MapProjectPanelContent
+                      isPublicView={isPublicView}
+                      project={activeProject}
+                      selectedAssetTypes={selectedAssetTypes}
+                      onFiltersChange={setSelectedAssetTypes}
+                      startDate={startDate}
+                      setStartDate={setStartDate}
+                      endDate={endDate}
+                      setEndDate={setEndDate}
+                      toggleDateFilter={toggleDateFilter}
+                      setToggleDateFilter={setToggleDateFilter}
+                    />
+                  )}
+                </Flex>
+              </Sider>
+              <Content>
+                <FeatureManager
+                  projectId={activeProject.id}
+                  assetTypes={formattedAssetTypes}
+                  startDate={startDate}
+                  endDate={endDate}
+                  toggleDateFilter={toggleDateFilter}
+                />
+                {isTileServerLayersLoading ? (
+                  <Spinner />
+                ) : (
+                  <Suspense fallback={<Spinner />}>
+                    <Map />
+                  </Suspense>
+                )}
+                {selectedFeature && (
+                  <div className={styles.detailContainer}>
+                    <AssetDetail
+                      selectedFeature={selectedFeature}
+                      onClose={() => toggleSelectedFeature(selectedFeature.id)}
+                      isPublicView={isPublicView}
+                      onQuestionnaireClick={handleQuestionnaireClick}
+                    />
+                  </div>
+                )}
+                {selectedFeature && showMapillaryViewer && (
+                  <div className={styles.mapillaryViewerContainer}>
+                    <MapillaryViewer
+                      feature={selectedFeature}
+                      onClose={() => setShowMapillaryViewer(false)}
+                    />
+                  </div>
+                )}
+                {isQuestionnaireModalOpen && selectedFeature && (
+                  <QuestionnaireModal
+                    isOpen={isQuestionnaireModalOpen}
+                    close={() => setQuestionnaireModalOpen(false)}
+                    feature={selectedFeature}
                   />
                 )}
-              </Flex>
-            </Sider>
-            <Content>
-              <FeatureManager
-                projectId={activeProject.id}
-                assetTypes={formattedAssetTypes}
-                startDate={startDate}
-                endDate={endDate}
-                toggleDateFilter={toggleDateFilter}
-              />
-              {isTileServerLayersLoading ? (
-                <Spinner />
-              ) : (
-                <Suspense fallback={<Spinner />}>
-                  <Map />
-                </Suspense>
-              )}
-              {selectedFeature && (
-                <div className={styles.detailContainer}>
-                  <AssetDetail
-                    selectedFeature={selectedFeature}
-                    onClose={() => toggleSelectedFeature(selectedFeature.id)}
-                    isPublicView={isPublicView}
-                    onQuestionnaireClick={handleQuestionnaireClick}
-                  />
-                </div>
-              )}
-              {selectedFeature && showMapillaryViewer && (
-                <div className={styles.mapillaryViewerContainer}>
-                  <MapillaryViewer
-                    feature={selectedFeature}
-                    onClose={() => setShowMapillaryViewer(false)}
-                  />
-                </div>
-              )}
-              {isQuestionnaireModalOpen && selectedFeature && (
-                <QuestionnaireModal
-                  isOpen={isQuestionnaireModalOpen}
-                  close={() => setQuestionnaireModalOpen(false)}
-                  feature={selectedFeature}
+                <TasksViewDemoModal
+                  activeProject={activeProject}
+                  isPublicView={isPublicView}
                 />
-              )}
-              <TasksViewDemoModal
-                activeProject={activeProject}
-                isPublicView={isPublicView}
-              />
-            </Content>
+              </Content>
+            </Layout>
           </Layout>
-        </Layout>
+        </SelectedVectorFeatureProvider>
       </MapPositionProvider>
     </FormProvider>
   );

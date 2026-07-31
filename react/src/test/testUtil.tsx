@@ -6,6 +6,7 @@ import { setupServer } from 'msw/node';
 import { http } from 'msw';
 import { defaultHandlers } from '@hazmapper/test/handlers';
 import { MapPositionProvider } from '@hazmapper/context/MapContext';
+import { SelectedVectorFeatureProvider } from '@hazmapper/context/SelectedVectorFeatureContext';
 import { FeatureManager } from '@hazmapper/components/FeatureManager';
 import dayjs from 'dayjs';
 
@@ -28,9 +29,11 @@ export function renderInTest(children: ReactElement, path = '/') {
   return render(
     <MemoryRouter initialEntries={[path]}>
       <MapPositionProvider>
-        <QueryClientProvider client={testQueryClient}>
-          {children}
-        </QueryClientProvider>
+        <SelectedVectorFeatureProvider>
+          <QueryClientProvider client={testQueryClient}>
+            {children}
+          </QueryClientProvider>
+        </SelectedVectorFeatureProvider>
       </MapPositionProvider>
     </MemoryRouter>
   );
@@ -55,9 +58,11 @@ export async function renderInTestWaitForQueries(
 export const TestWrapper = ({ children }: { children: React.ReactNode }) => (
   <MemoryRouter>
     <MapPositionProvider>
-      <QueryClientProvider client={testQueryClient}>
-        {children}
-      </QueryClientProvider>
+      <SelectedVectorFeatureProvider>
+        <QueryClientProvider client={testQueryClient}>
+          {children}
+        </QueryClientProvider>
+      </SelectedVectorFeatureProvider>
     </MapPositionProvider>
   </MemoryRouter>
 );

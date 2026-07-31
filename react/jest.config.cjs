@@ -19,6 +19,15 @@ const esModules = [
   'kdbush',
   'geokdbush',
   'tinyqueue',
+  // protomaps-leaflet (PMTiles vector rendering) + its ESM dependency chain
+  'protomaps-leaflet',
+  'pmtiles',
+  '@mapbox',
+  '@protomaps',
+  'pbf',
+  'color2k',
+  'potpack',
+  'rbush',
 ].join('|');
 
 module.exports = {
