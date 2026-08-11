@@ -39,24 +39,6 @@ const MainMenu = () => {
             User Guide
           </Button>
         </Row>
-        <Row justify="end">
-          <Button
-            className={styles.userGuide}
-            type="link"
-            iconNameBefore="exit"
-            onClick={(e) => {
-              window.open(
-                'https://www.designsafe-ci.org/user-guide/tools/visualization/#taggit-user-guide-basic-image-browsing-and-mapping',
-                '_blank',
-                'noopener,noreferrer'
-              );
-              // To prevent active box around link lingering after click
-              e.currentTarget.blur();
-            }}
-          >
-            Taggit User Guide
-          </Button>
-        </Row>
       </div>
       <div className={styles.sponsorContainer}>
         <a href="https://www.nsf.gov/">
