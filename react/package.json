@@ -39,7 +39,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@hookform/resolvers": "^3.10.0",
-    "@tacc/core-components": "^0.0.5",
+    "@tacc/core-components": "^0.0.6",
     "@tacc/core-styles": "^2.58.0",
     "@tanstack/react-query": "^5.64.1",
     "@turf/turf": "^7.2.0",
